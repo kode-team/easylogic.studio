@@ -1,33 +1,26 @@
+import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "sapa";
 
-import {
-  LOAD,
-  CLICK,
-  DOMDIFF,
-  SUBSCRIBE,
-} from "el/sapa/Event";
+import { iconUse } from "elf/editor/icon/icon";
+import { Transition } from "elf/editor/property-parser/Transition";
+import { curveToPath } from "elf/utils/func";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
-
-
-import icon, { iconUse } from "el/editor/icon/icon";
-import { Transition } from "el/editor/property-parser/Transition";
-import { curveToPath } from "el/utils/func";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-
-import './TransitionProperty.scss';
+import "./TransitionProperty.scss";
 
 export default class TransitionProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('transition.property.title');
+    return this.$i18n("transition.property.title");
   }
 
   getBody() {
-    return /*html*/`<div class='elf--transition-list' ref='$transitionList'></div>`;
+    return /*html*/ `<div class='elf--transition-list' ref='$transitionList'></div>`;
   }
 
   getTools() {
-    return /*html*/`
-        <button type="button" ref="$add" title="add Transition">${iconUse("add")}</button>
+    return /*html*/ `
+        <button type="button" ref="$add" title="add Transition">${iconUse(
+          "add"
+        )}</button>
     `;
   }
 
@@ -38,14 +31,14 @@ export default class TransitionProperty extends BaseProperty {
   [LOAD("$transitionList") + DOMDIFF]() {
     var current = this.$selection.current;
 
-    if (!current) return '';
+    if (!current) return "";
 
     return Transition.parseStyle(current.transition).map((it, index) => {
+      const selectedClass =
+        this.state.selectedIndex === index ? "selected" : "";
+      const path = curveToPath(it.timingFunction, 30, 30);
 
-      const selectedClass = this.state.selectedIndex === index ? "selected" : "";
-      const path = curveToPath(it.timingFunction, 30, 30)
-
-      return /*html*/`
+      return /*html*/ `
       <div class='transition-group-item'>
         <div class='transition-item ${selectedClass}' data-index='${index}' ref="transitionIndex${index}">
             <div class='timing preview' data-index='${index}' ref='$preview${index}'>
@@ -56,8 +49,12 @@ export default class TransitionProperty extends BaseProperty {
             <div class='name'>
               <div class='labels'>
                 <span class='property-name' title='Property'>${it.name}</span>
-                <span class='duration' title='Duration'><small>Duration: ${it.duration}</small></span>
-                <span class='delay' title='Delay'><small>Delay: ${it.delay}</small></span>
+                <span class='duration' title='Duration'><small>Duration: ${
+                  it.duration
+                }</small></span>
+                <span class='delay' title='Delay'><small>Delay: ${
+                  it.delay
+                }</small></span>
               </div>
             </div>
             <div class='tools'>
@@ -71,31 +68,31 @@ export default class TransitionProperty extends BaseProperty {
     });
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
+  [SUBSCRIBE("refreshSelection")]() {
     this.refreshShowIsNot([]);
   }
 
-
-  [CLICK("$add")](e) {
+  [CLICK("$add")]() {
     var current = this.$selection.current;
 
     if (current) {
-
-      this.command('setAttributeForMulti', 'add transition', this.$selection.packByValue({
-        transition: (item) => Transition.add(item.transition)
-      }))
+      this.command(
+        "setAttributeForMulti",
+        "add transition",
+        this.$selection.packByValue({
+          transition: (item) => Transition.add(item.transition),
+        })
+      );
 
       this.nextTick(() => {
-        setTimeout(() => {
+        window.setTimeout(() => {
           this.refresh();
-        }, 100)
-      })
+        }, 100);
+      });
     } else {
-      alert('Select a layer');
+      window.alert("Select a layer");
     }
-
   }
-
 
   getCurrentTransition() {
     return this.current.transitions[this.selectedIndex];
@@ -107,13 +104,12 @@ export default class TransitionProperty extends BaseProperty {
     if (!current) return;
 
     current.reset({
-      transition: Transition.remove(current.transition, removeIndex)
-    })  
+      transition: Transition.remove(current.transition, removeIndex),
+    });
 
     this.emit("refreshElement", current);
 
-    this.refresh();    
-  
+    this.refresh();
   }
 
   // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
@@ -131,13 +127,14 @@ export default class TransitionProperty extends BaseProperty {
       this.selectItem(this.selectedIndex, false);
     }
 
-
-
     this.selectedIndex = +$preview.attr("data-index");
     this.current = this.$selection.current;
 
     if (!this.current) return;
-    this.currentTransition = Transition.get(this.current.transition, this.selectedIndex);
+    this.currentTransition = Transition.get(
+      this.current.transition,
+      this.selectedIndex
+    );
 
     this.viewTransitionPropertyPopup();
   }
@@ -147,9 +144,9 @@ export default class TransitionProperty extends BaseProperty {
 
     const transition = this.currentTransition;
     this.emit("showTransitionPropertyPopup", {
-      changeEvent: 'changeTransitionPropertyPopup',
+      changeEvent: "changeTransitionPropertyPopup",
       data: transition.toCloneObject(),
-      instance: this  
+      instance: this,
     });
   }
 
@@ -162,18 +159,19 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("changeTransitionPropertyPopup")](data) {
-
     if (this.currentTransition) {
-
       this.currentTransition.reset({ ...data });
 
       if (this.current) {
-
         this.current.reset({
-          transition: Transition.replace(this.current.transition, this.selectedIndex, this.currentTransition)
-        })
+          transition: Transition.replace(
+            this.current.transition,
+            this.selectedIndex,
+            this.currentTransition
+          ),
+        });
 
-        this.emit("refreshElement", this.current);        
+        this.emit("refreshElement", this.current);
         this.refresh();
       }
     }

@@ -1,6 +1,5 @@
 import {
   DOMDIFF,
-  IF,
   KEYUP,
   LEFT_BUTTON,
   LOAD,
@@ -9,30 +8,27 @@ import {
   POINTERSTART,
   PREVENT,
   SUBSCRIBE,
-} from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { END, MOVE } from "el/editor/types/event";
+} from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { END, MOVE } from "elf/editor/types/event";
 import "./GradientEditorView.scss";
-import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
+import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
+import { CSS_TO_STRING, STRING_TO_CSS } from "elf/utils/func";
 import {
   calculateAngle360,
   calculateAngleForVec3,
   calculateRotationOriginMat4,
-  calculateScaleOriginMat4,
-  degreeToRadian,
-  radianToDegree,
   vertiesMap,
-} from "el/utils/math";
-import { Length } from "el/editor/unit/Length";
+} from "elf/utils/math";
+import { Length } from "elf/editor/unit/Length";
 import {
   GradientType,
   RadialGradientType,
   TimingFunction,
-} from "el/editor/types/model";
+} from "elf/editor/types/model";
 import { mat4, vec3 } from "gl-matrix";
-import { parseOneValue } from "el/utils/css-function-parser";
-import {PathParser} from 'el/editor/parser/PathParser';
+import { parseOneValue } from "elf/utils/css-function-parser";
+import { PathParser } from "elf/editor/parser/PathParser";
 
 var radialTypeList = [
   "circle",
@@ -145,7 +141,7 @@ class GradientTimingStepEditor extends GradientBaseEditor {
 
   moveEndStepPoint(dx, dy) {
     if (dx === 0 && dy === 0) {
-      const { timing, timingCount } = this.localColorStep;
+      const { timing } = this.localColorStep;
 
       switch (timing.name) {
         case TimingFunction.STEPS:
@@ -169,7 +165,9 @@ class GradientTimingStepEditor extends GradientBaseEditor {
               },
             ],
             changeEvent: (key, value) => {
-              this.localColorStep.timing = parseOneValue(`path(${value})`).parsed;
+              this.localColorStep.timing = parseOneValue(
+                `path(${value})`
+              ).parsed;
               this.updateData();
             },
           });
@@ -219,7 +217,7 @@ class GradientResizer extends GradientTimingStepEditor {
     this.isShiftKey = e.shiftKey;
   }
 
-  calculateMovedResizer(dx, dy) {
+  calculateMovedResizer() {
     const targetMousePoint = this.$viewport.getWorldPosition();
 
     // 1. 움직이는 vertex 를 구한다.
@@ -276,7 +274,7 @@ class GradientResizer extends GradientTimingStepEditor {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
   }
 
-  calculateMovedRect(dx, dy) {
+  calculateMovedRect() {
     const targetMousePoint = this.$viewport.getWorldPosition();
 
     // 1. 움직이는 vertex 를 구한다.
@@ -509,9 +507,11 @@ class GradientColorstepEditor extends GradientRotateEditor {
           result.colorsteps[this.$targetIndex].pos
         );
 
+        // eslint-disable-next-line no-case-declarations
         const dist = vec3.subtract([], this.endPoint, this.startPoint);
 
         // 눞혀진 각은 180 도 이다. 그렇다는 이야기는 회전을 하지 않았다는 의미가 되고 -180 을 해서 다시 0도로 맞춰준다.
+        // eslint-disable-next-line no-case-declarations
         const angle = calculateAngle360(dist[0], dist[1]) - 180;
 
         this.rotateInverse = calculateRotationOriginMat4(
@@ -537,7 +537,9 @@ class GradientColorstepEditor extends GradientRotateEditor {
 
         // conic 의 경우 중간 지점에 따라 UI 크기가 달라지기 때문에
         // 마지막 UI 에서 x, y 를 가지고 오도록 한다.
+        // eslint-disable-next-line no-case-declarations
         const x = +$colorstep.data("x");
+        // eslint-disable-next-line no-case-declarations
         const y = +$colorstep.data("y");
         this.screenXY = [x, y, 0];
 
@@ -598,13 +600,16 @@ class GradientColorstepEditor extends GradientRotateEditor {
         break;
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
+        // eslint-disable-next-line no-case-declarations
         const newNextPoint = vec3.subtract([], nextPoint, this.centerPosition);
+        // eslint-disable-next-line no-case-declarations
         let nextAngle = calculateAngle360(newNextPoint[0], newNextPoint[1]);
 
         if (this.$config.get("bodyEvent").shiftKey) {
           nextAngle -= nextAngle % this.$config.get("fixed.gradient.angle");
         }
 
+        // eslint-disable-next-line no-case-declarations
         let newAngle = nextAngle - this.newStartAngle;
 
         newDist = (newAngle / 360) * 100;
@@ -707,7 +712,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.updateColorStepStatus(image, index);
   }
 
-  [POINTEROUT("$el .area-line")](evt) {
+  [POINTEROUT("$el .area-line")]() {
     if (this.state.hoverColorStep) {
       this.state.hoverColorStep = null;
 
@@ -781,22 +786,26 @@ class GradientColorstepEditor extends GradientRotateEditor {
 
         // 먼저 angle 을 돌려준다.
         // centerPoisition 기준으로 다시 angle 을 구한다.
+        // eslint-disable-next-line no-case-declarations
         const newStartPoint = vec3.subtract(
           [],
           this.state.startPoint,
           this.state.centerPosition
         );
 
+        // eslint-disable-next-line no-case-declarations
         const newNextPoint = vec3.subtract(
           [],
           nextPoint,
           this.state.centerPosition
         );
 
+        // eslint-disable-next-line no-case-declarations
         const startAngle = calculateAngle360(
           newStartPoint[0],
           newStartPoint[1]
         );
+        // eslint-disable-next-line no-case-declarations
         const nextAngle = calculateAngle360(newNextPoint[0], newNextPoint[1]);
 
         var newDist = ((nextAngle - startAngle) / 360) * 100;
@@ -996,13 +1005,17 @@ export default class GradientEditorView extends GradientColorstepEditor {
         switch (this.state.gradient.type) {
           case GradientType.RADIAL:
           case GradientType.REPEATING_RADIAL:
+            // eslint-disable-next-line no-case-declarations
             const findKey =
               `${this.state.gradient.image.radialType} ${this.state.gradient.image.radialSize}`.trim();
+            // eslint-disable-next-line no-case-declarations
             const index = radialTypeList.indexOf(findKey);
 
+            // eslint-disable-next-line no-case-declarations
             const [radialType, radialSize] =
               radialTypeList[(index + 1) % radialTypeList.length].split(" ");
 
+            // eslint-disable-next-line no-case-declarations
             const image = this.state.backgroundImages[this.state.index].image;
 
             image.radialType = radialType;
@@ -1069,7 +1082,6 @@ export default class GradientEditorView extends GradientColorstepEditor {
       case TimingFunction.LINEAR:
         return ``;
       case TimingFunction.STEPS:
-        const half = width / 2;
         return (
           <path
             class="timing"
@@ -1148,7 +1160,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
               PathParser.fromSVGString(timing.d)
                 .scale(width, width)
                 .flipX()
-                .translate(-hafl, width).d
+                .translate(-half, width).d
             }
           />
         );
@@ -1172,7 +1184,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
     }
   }
 
-  makeTimingCircle(colorstepIndex, current, prev, size) {
+  makeTimingCircle(colorstepIndex, current, prev) {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
     const stickScreenXY = current.stickScreenXYInStart;
     const { timing, timingCount } = current;
@@ -1581,10 +1593,8 @@ export default class GradientEditorView extends GradientColorstepEditor {
   makeConicCenterPoint(result) {
     const { image } = result.backgroundImage;
 
-    let boxPosition, centerPosition, centerStick;
+    let centerPosition, centerStick;
     let startPoint, endPoint, shapePoint, colorsteps;
-
-    boxPosition = this.$viewport.applyVerties(result.backVerties);
 
     // radial, conic
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
@@ -1714,19 +1724,9 @@ export default class GradientEditorView extends GradientColorstepEditor {
   }
 
   makeRadialCenterPoint(result) {
-    const { image } = result.backgroundImage;
+    // const { image } = result.backgroundImage;
 
-    let boxPosition,
-      centerPosition,
-      colorsteps,
-      startPoint,
-      endPoint,
-      shapePoint;
-
-    boxPosition = this.$viewport.applyVerties(result.backVerties);
-
-    // radial, conic
-    centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+    let colorsteps, startPoint, endPoint, shapePoint;
 
     startPoint = this.$viewport.applyVertex(result.startPoint);
     endPoint = this.$viewport.applyVertex(result.endPoint);
@@ -1830,8 +1830,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
 
   makeLinearCenterPoint(result) {
     // console.log(result);
-    let boxPosition,
-      centerPosition,
+    let centerPosition,
       centerStick,
       startPoint,
       endPoint,
@@ -1839,7 +1838,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
       areaEndPoint,
       colorsteps;
 
-    boxPosition = this.$viewport.applyVerties(result.backVerties);
+    // boxPosition = this.$viewport.applyVerties(result.backVerties);
 
     startPoint = this.$viewport.applyVertex(result.startPoint);
     endPoint = this.$viewport.applyVertex(result.endPoint);

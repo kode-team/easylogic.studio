@@ -1,9 +1,10 @@
 import { createBlankEditor } from "./editor-layouts/index";
-import { ObjectProperty } from "el/editor/ui/property/ObjectProperty";
-import { iconUse } from "el/editor/icon/icon";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { SUBSCRIBE, BIND } from "el/sapa/Event";
-import { MenuItemType } from './el/editor/types/editor';
+import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
+import { iconUse } from "elf/editor/icon/icon";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { BIND } from 'sapa';
+import { SUBSCRIBE } from 'sapa';
+
 
 function startEditor() {
   const idList = ["app"];

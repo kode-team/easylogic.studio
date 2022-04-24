@@ -1,11 +1,10 @@
-import { CLICK, KEYUP, INPUT, IF, PASTE } from 'el/sapa/Event'
-import { EditorElement } from 'el/editor/ui/common/EditorElement';
-import { iconUse } from 'el/editor/icon/icon';
+import { CLICK, KEYUP, INPUT, IF, PASTE } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { iconUse } from "elf/editor/icon/icon";
 
 export default class ColorInformation extends EditorElement {
-
-    template () {
-        return /*html*/`
+  template() {
+    return /*html*/ `
         <div class="information hex">
             <div ref="$informationChange" class="information-change">
                 <button ref="$formatChangeButton" type="button" class="format-change-button">
@@ -57,161 +56,179 @@ export default class ColorInformation extends EditorElement {
                 </div>
             </div>
         </div>
-        `
+        `;
+  }
+
+  get manager() {
+    return this.parent.manager;
+  }
+
+  setCurrentFormat(format) {
+    this.format = format;
+
+    this.initFormat();
+  }
+
+  initFormat() {
+    var current_format = this.format || "hex";
+
+    ["hex", "rgb", "hsl"]
+      .filter((it) => it !== current_format)
+      .forEach((formatString) => {
+        this.$el.removeClass(formatString);
+      });
+
+    this.$el.addClass(current_format);
+  }
+
+  nextFormat() {
+    var current_format = this.format || "hex";
+
+    var next_format = "hex";
+    if (current_format == "hex") {
+      next_format = "rgb";
+    } else if (current_format == "rgb") {
+      next_format = "hsl";
+    } else if (current_format == "hsl") {
+      if (this.parent.alpha == 1) {
+        next_format = "hex";
+      } else {
+        next_format = "rgb";
+      }
     }
 
-    get manager () {
-        return this.parent.manager;
-    }
-    
-    setCurrentFormat (format) {
-        this.format = format
+    this.format = next_format;
 
-        this.initFormat();
-    }
-    
-    initFormat () {
-        var current_format = this.format || 'hex';
-    
-        ['hex', 'rgb', 'hsl'].filter(it => it !== current_format).forEach(formatString => {
-            this.$el.removeClass(formatString);
-        })
+    this.initFormat();
 
-        this.$el.addClass(current_format);
-    }
-    
-    nextFormat() {
-        var current_format = this.format || 'hex';
+    this.parent.changeFormat(this.format);
+  }
 
-        var next_format = 'hex';
-        if (current_format == 'hex') {
-            next_format = 'rgb';
-        } else if (current_format == 'rgb') {
-            next_format = 'hsl';
-        } else if (current_format == 'hsl') {
-            if (this.parent.alpha == 1) {
-                next_format = 'hex';
-            } else {
-                next_format = 'rgb';
-            }
-        }
-
-        this.format = next_format;
-
-        this.initFormat();
-
-        this.parent.changeFormat(this.format)
+  goToFormat(to_format) {
+    this.format = to_format;
+    if (to_format === "rgb" || to_format === "hsl") {
+      this.initFormat();
     }
 
-    goToFormat(to_format) {
-        this.format = to_format;
-        if (to_format === 'rgb' || to_format === 'hsl') {
-            this.initFormat();
-        }
+    this.parent.changeFormat(this.format);
+  }
 
-        this.parent.changeFormat(this.format)        
-    }    
-    
-    getFormat () {
-        return this.format || 'hex';   
+  getFormat() {
+    return this.format || "hex";
+  }
+
+  changeRgbColor() {
+    this.parent.lastUpdateColor({
+      type: "rgb",
+      r: this.refs.$rgb_r.int(),
+      g: this.refs.$rgb_g.int(),
+      b: this.refs.$rgb_b.int(),
+      a: this.refs.$rgb_a.float(),
+    });
+  }
+
+  changeHslColor() {
+    this.parent.lastUpdateColor({
+      type: "hsl",
+      h: this.refs.$hsl_h.int(),
+      s: this.refs.$hsl_s.int(),
+      l: this.refs.$hsl_l.int(),
+      a: this.refs.$hsl_a.float(),
+    });
+  }
+
+  hasValue(e) {
+    if (e.target.value === "") {
+      return false;
     }
 
-    changeRgbColor () {
-        this.parent.lastUpdateColor({
-            type: 'rgb',
-            r : this.refs.$rgb_r.int(),
-            g : this.refs.$rgb_g.int(),
-            b : this.refs.$rgb_b.int(),
-            a : this.refs.$rgb_a.float()
-        })
+    return true;
+  }
+
+  [INPUT("$rgb_r") + IF("hasValue")]() {
+    this.changeRgbColor();
+  }
+  [INPUT("$rgb_g") + IF("hasValue")]() {
+    this.changeRgbColor();
+  }
+  [INPUT("$rgb_b") + IF("hasValue")]() {
+    this.changeRgbColor();
+  }
+  [INPUT("$rgb_a") + IF("hasValue")]() {
+    this.changeRgbColor();
+  }
+
+  [INPUT("$hsl_h") + IF("hasValue")]() {
+    this.changeHslColor();
+  }
+  [INPUT("$hsl_s") + IF("hasValue")]() {
+    this.changeHslColor();
+  }
+  [INPUT("$hsl_l") + IF("hasValue")]() {
+    this.changeHslColor();
+  }
+  [INPUT("$hsl_a") + IF("hasValue")]() {
+    this.changeHslColor();
+  }
+
+  [KEYUP("$hexCode") + IF("hasValue")]() {
+    var code = this.refs.$hexCode.val();
+
+    if (code.charAt(0) == "#" && (code.length == 7 || code.length === 9)) {
+      this.parent.lastUpdateColor(code);
     }
+  }
 
-    changeHslColor () {
-        this.parent.lastUpdateColor({
-            type: 'hsl',
-            h : this.refs.$hsl_h.int(),
-            s : this.refs.$hsl_s.int(),
-            l : this.refs.$hsl_l.int(),
-            a : this.refs.$hsl_a.float()
-        })        
-    }    
+  [PASTE("$hexCode") + IF("hasValue")]() {
+    var code = this.refs.$hexCode.val();
 
-    hasValue(e) {
-        if (e.target.value === '') {
-            return false; 
-        }
-
-        return true; 
+    if (code.charAt(0) == "#" && (code.length == 7 || code.length === 9)) {
+      this.parent.lastUpdateColor(code);
     }
+  }
 
-    [INPUT('$rgb_r') + IF('hasValue')] (e) {  this.changeRgbColor(); }
-    [INPUT('$rgb_g') + IF('hasValue')] (e) {  this.changeRgbColor(); }
-    [INPUT('$rgb_b') + IF('hasValue')] (e) {  this.changeRgbColor(); }
-    [INPUT('$rgb_a') + IF('hasValue')] (e) {  this.changeRgbColor(); }  
-    
-    [INPUT('$hsl_h') + IF('hasValue')] (e) {  this.changeHslColor(); }
-    [INPUT('$hsl_s') + IF('hasValue')] (e) {  this.changeHslColor(); }
-    [INPUT('$hsl_l') + IF('hasValue')] (e) {  this.changeHslColor(); }
-    [INPUT('$hsl_a') + IF('hasValue')] (e) {  this.changeHslColor(); }      
+  [CLICK("$formatChangeButton")]() {
+    this.nextFormat();
+  }
 
-    [KEYUP('$hexCode') + IF('hasValue')] (e) {
-        var code = this.refs.$hexCode.val();
-    
-        if(code.charAt(0) == '#' && (code.length == 7 || code.length === 9)) {
-            this.parent.lastUpdateColor(code);
-        }
-    }
+  [CLICK("$el .information-item.hex .input-field .title")]() {
+    this.goToFormat("hex");
+  }
 
-    [PASTE('$hexCode') + IF('hasValue')] (e) {
-        var code = this.refs.$hexCode.val();
+  [CLICK("$el .information-item.rgb .input-field .title")]() {
+    this.goToFormat("hsl");
+  }
 
-        if(code.charAt(0) == '#' && (code.length == 7 || code.length === 9)) {
-            this.parent.lastUpdateColor(code);
-        }
-    }
-    
-    [CLICK('$formatChangeButton')] (e) {
-        this.nextFormat();        
-    }
+  [CLICK("$el .information-item.hsl .input-field .title")]() {
+    this.goToFormat("rgb");
+  }
 
-    [CLICK('$el .information-item.hex .input-field .title')] (e) {
-        this.goToFormat('hex');
-    }    
+  setRGBInput() {
+    this.refs.$rgb_r.val(this.manager.rgb.r);
+    this.refs.$rgb_g.val(this.manager.rgb.g);
+    this.refs.$rgb_b.val(this.manager.rgb.b);
+    this.refs.$rgb_a.val(this.manager.alpha);
+  }
 
-    [CLICK('$el .information-item.rgb .input-field .title')] (e) {
-        this.goToFormat('hsl');
-    }    
+  setHSLInput() {
+    this.refs.$hsl_h.val(this.manager.hsl.h);
+    this.refs.$hsl_s.val(this.manager.hsl.s);
+    this.refs.$hsl_l.val(this.manager.hsl.l);
+    this.refs.$hsl_a.val(this.manager.alpha);
+  }
 
-    [CLICK('$el .information-item.hsl .input-field .title')] (e) {
-        this.goToFormat('rgb');
-    }        
+  setHexInput() {
+    this.refs.$hexCode.val(this.manager.toString("hex"));
+  }
 
-    setRGBInput() {
-        this.refs.$rgb_r.val(this.manager.rgb.r);
-        this.refs.$rgb_g.val(this.manager.rgb.g);
-        this.refs.$rgb_b.val(this.manager.rgb.b);
-        this.refs.$rgb_a.val(this.manager.alpha);
-    }
-    
-    setHSLInput() {
-        this.refs.$hsl_h.val(this.manager.hsl.h);
-        this.refs.$hsl_s.val(this.manager.hsl.s);
-        this.refs.$hsl_l.val(this.manager.hsl.l);
-        this.refs.$hsl_a.val(this.manager.alpha);
-    }    
+  setValue() {
+    this.refresh();
+  }
 
-    setHexInput () {
-        this.refs.$hexCode.val(this.manager.toString('hex'));
-    }
-
-    setValue () {
-        this.refresh();
-    }
-
-    refresh () {
-        this.setCurrentFormat(this.manager.format);
-        this.setRGBInput();
-        this.setHSLInput();
-        this.setHexInput();
-    }
+  refresh() {
+    this.setCurrentFormat(this.manager.format);
+    this.setRGBInput();
+    this.setHSLInput();
+    this.setHexInput();
+  }
 }

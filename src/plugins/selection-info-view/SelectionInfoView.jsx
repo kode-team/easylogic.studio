@@ -1,16 +1,10 @@
-import {
-  DOMDIFF,
-  LEFT_BUTTON,
-  LOAD,
-  POINTERSTART,
-  SUBSCRIBE,
-} from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { DOMDIFF, LEFT_BUTTON, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
-import { END, MOVE } from "el/editor/types/event";
+import { END, MOVE } from "elf/editor/types/event";
 import "./SelectionInfoView.scss";
-import { calculateAngle360 } from "el/utils/math";
-import { iconUse } from "el/editor/icon/icon";
+import { calculateAngle360 } from "elf/utils/math";
+import { iconUse } from "elf/editor/icon/icon";
 
 export default class SelectionInfoView extends EditorElement {
   template() {
@@ -116,7 +110,7 @@ export default class SelectionInfoView extends EditorElement {
     this.$el.$(`[data-artboard-title-id='${id}']`)?.text(title);
   }
 
-  calculateEndedElement(dx, dy) {
+  calculateEndedElement() {
     this.command(
       "setAttributeForMulti",
       "move item",
@@ -166,7 +160,10 @@ export default class SelectionInfoView extends EditorElement {
   getIcon(item) {
     if (item.hasLayout() || item.hasChildren() || item.is("artboard")) {
       if (item.isLayout("flex")) {
-        return iconUse("layout_flex", item['flex-direction'] === 'column' ? "rotate(90 12 12)" : "");
+        return iconUse(
+          "layout_flex",
+          item["flex-direction"] === "column" ? "rotate(90 12 12)" : ""
+        );
       } else if (item.isLayout("grid")) {
         return iconUse("layout_grid");
       }

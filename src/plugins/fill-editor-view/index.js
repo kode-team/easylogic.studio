@@ -1,13 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
-import FillEditorView from './FillEditorView';
-
+// import { Editor } from "elf/editor/manager/Editor";
+import FillEditorView from "./FillEditorView";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('canvas.view', {
-        FillEditorView         
-    })
+  editor.registerUI("canvas.view", {
+    FillEditorView,
+  });
 }

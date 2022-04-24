@@ -1,12 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
+// import { Editor } from "elf/editor/manager/Editor";
 import BorderImageProperty from "./BorderImageProperty";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerElement({
-        BorderImageProperty        
-    })
+  editor.registerElement({
+    BorderImageProperty,
+  });
 }

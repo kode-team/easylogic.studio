@@ -1,25 +1,24 @@
 import {
-  AlignContent,
   AlignItems,
   FlexDirection,
   JustifyContent,
   Layout,
-} from "el/editor/types/model";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
-import { clone } from "el/sapa/functions/func";
+} from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { DOMDIFF, LOAD, SUBSCRIBE } from "sapa";
+import { clone } from "sapa";
 import {
   intersectRectRect,
   polyPoly,
   toRectVerties,
   vertiesToPath,
   vertiesToRectangle,
-} from "el/utils/collision";
+} from "elf/utils/collision";
 import { vec3 } from "gl-matrix";
 
 import "./GhostToolView.scss";
-import { TargetActionType } from '../../el/editor/types/model';
-import {IntersectEpsilonType} from "../../el/editor/types/editor";
+import { TargetActionType } from "../../elf/editor/types/model";
+import { IntersectEpsilonType } from "../../elf/editor/types/editor";
 
 const CHECK_RATE = 0.5;
 
@@ -36,7 +35,7 @@ export default class GhostToolView extends EditorElement {
     );
   }
 
-  [SUBSCRIBE("startGhostToolView")](verties) {
+  [SUBSCRIBE("startGhostToolView")]() {
     const screenVerties = this.$selection.verties;
 
     this.isLayoutItem = this.$selection.isLayoutItem;
@@ -79,17 +78,33 @@ export default class GhostToolView extends EditorElement {
     );
 
     // drop target 아이템
+    // TODO: drop target 을 어디로 둬야할지 체크해야함
+    // TODO: 기본적으로 selection 을 제외한 모든 layer 의 위치를 체크 하기 때문에
+    // TODO: 현재 layer 가 속한 상위 container layer 가 있긴 하지만  마지막에 나올 가능성이 크다.
+    // TODO: 그렇기 때문에 항상 첫번째 레이어를 체크하는건 target 이 명확하지 않다.
+    // TODO: 규칙이 필요하다.
     this.targetItem = filteredLayers[0];
 
     if (this.targetItem) {
-      // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
-      if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
-        // flex 레이아웃 일 때는 마지막 item 을 targetItem 으로 인식한다.
-        if (this.targetItem.isLayout(Layout.FLEX)) {
-          this.targetItem =
-            this.targetItem.layers[this.targetItem.layers.length - 1];
-        } else if (this.targetItem.isLayout(Layout.GRID)) {
-          // grid layout 의 경우 ?
+      const currentParent = this.$selection.current?.parent;
+
+      if (
+        currentParent.isNot("project") &&
+        currentParent?.isLayout(Layout.GRID)
+      ) {
+        // 내가 움직이는 영역이 grid layout 인 경우
+        // 나의 부모로 고정시킨다.
+        this.targetItem = this.$selection.current.parent;
+      } else {
+        // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
+        if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
+          // flex 레이아웃 일 때는 마지막 item 을 targetItem 으로 인식한다.
+          if (this.targetItem.isLayout(Layout.FLEX)) {
+            this.targetItem =
+              this.targetItem.layers[this.targetItem.layers.length - 1];
+          } else if (this.targetItem.isLayout(Layout.GRID)) {
+            // grid layout 의 경우 ?
+          }
         }
       }
 
@@ -328,6 +343,7 @@ export default class GhostToolView extends EditorElement {
             return this.renderLayoutFlexColumnArea();
         }
       } else if (this.targetParent.isLayout(Layout.GRID)) {
+        // noop
       }
     }
 
@@ -348,6 +364,7 @@ export default class GhostToolView extends EditorElement {
           this.targetItem["flex-direction"]
         );
       } else if (this.targetItem.isLayout(Layout.GRID)) {
+        //noop
       }
     }
 
@@ -529,17 +546,20 @@ export default class GhostToolView extends EditorElement {
     const currentVerties = this.ghostVerties.filter((_, index) => index < 4);
     const targetRect = vertiesToRectangle(currentVerties);
 
-    const checkedItems = items?.filter((it) => {
-      return polyPoly(it.originVerties, currentVerties);
-    }).filter(it => { // 겹친 영역이 rect 
-      // console.log(it.originRect, targetRect)
-      const intersect = intersectRectRect( it.originRect, targetRect);
+    const checkedItems = items
+      ?.filter((it) => {
+        return polyPoly(it.originVerties, currentVerties);
+      })
+      .filter((it) => {
+        // 겹친 영역이 rect
+        // console.log(it.originRect, targetRect)
+        const intersect = intersectRectRect(it.originRect, targetRect);
 
-      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
-    });
-
-
-    // console.log(items)
+        return (
+          Math.floor(intersect.width) > IntersectEpsilonType.RECT &&
+          Math.floor(intersect.height) > IntersectEpsilonType.RECT
+        );
+      });
 
     if (checkedItems?.length) {
       const columnList = checkedItems.map((it) => it.column);
@@ -635,15 +655,13 @@ export default class GhostToolView extends EditorElement {
 
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {
-
-
       const isCtrl = this.$keyboardManager.isCtrl();
 
       // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행
       if (
         this.targetItem?.hasChildren() === false &&
         this.targetItem.isLayout(Layout.FLEX) &&
-        isCtrl === false    // ctrl 이 눌러져 있으면 다음 로직으로 넘김 
+        isCtrl === false // ctrl 이 눌러져 있으면 다음 로직으로 넘김
       ) {
         this.command(
           "moveLayerToTarget",
@@ -654,22 +672,23 @@ export default class GhostToolView extends EditorElement {
         );
         return;
       } else {
-
         if (isCtrl) {
-          // ctrl 을 누른 상태로 drop 을 하면 
-          // targetItem 이 달라짐 
-          // targetItem 은 어디를 봐야할까?  
+          // ctrl 을 누른 상태로 drop 을 하면
+          // targetItem 이 달라짐
+          // targetItem 은 어디를 봐야할까?
 
           // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
-          const { info, items } = this.$selection.gridInformation || { items: [] };
+          const { info } = this.$selection.gridInformation || {
+            items: [],
+          };
 
-          // grid 가 있을 때는 grid 를 보는 걸로 하자. 
+          // grid 가 있을 때는 grid 를 보는 걸로 하자.
           if (info?.current) {
             this.insertToGridItem();
             return;
           }
 
-          // 그 외는 targetItem 을 그대로 보는 걸로 하자. 
+          // 그 외는 targetItem 을 그대로 보는 걸로 하자.
         } else {
           // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
           if (this.targetItem.isLayout(Layout.GRID)) {
@@ -677,7 +696,6 @@ export default class GhostToolView extends EditorElement {
             return;
           }
         }
-
       }
     }
 

@@ -1,63 +1,60 @@
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
 
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
-
-
-import icon from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from "el/sapa/functions/jsx";
-
+import icon from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
 export default class PerspectiveOriginProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('perspective.origin.property.title')
+    return this.$i18n("perspective.origin.property.title");
   }
 
-  getKeyframeProperty () {
-    return 'perspective-origin'
+  getKeyframeProperty() {
+    return "perspective-origin";
   }
 
   getTools() {
-    return /*html*/`
+    return /*html*/ `
         <button type="button" class="remove" ref='$remove'>${icon.remove}</button>
-    `
+    `;
   }
 
-  [CLICK('$remove')] () {
-    this.trigger('changePerspectiveOrigin', '');
-  }  
+  [CLICK("$remove")]() {
+    this.trigger("changePerspectiveOrigin", "");
+  }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="property-item full perspective-origin-item" ref='$body'></div>
     `;
   }
 
-  [LOAD('$body')] () {
-    var current = this.$selection.current || {}; 
-    var value = current['perspective-origin'] || ''
+  [LOAD("$body")]() {
+    var current = this.$selection.current || {};
+    var value = current["perspective-origin"] || "";
 
-    return createComponent("PerspectiveOriginEditor" , {
-      ref: '$1',
+    return createComponent("PerspectiveOriginEditor", {
+      ref: "$1",
       value,
-      onchange: 'changePerspectiveOrigin' 
-    })
+      onchange: "changePerspectiveOrigin",
+    });
   }
 
   get editableProperty() {
-    return 'perspective-origin';
+    return "perspective-origin";
   }
 
-
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100) + IF("checkShow")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE_SELF('changePerspectiveOrigin')] (value) {
-
-    this.command('setAttributeForMulti',  'change perspective origin', this.$selection.packByValue({ 
-      'perspective-origin': value 
-    }))
+  [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
+    this.command(
+      "setAttributeForMulti",
+      "change perspective origin",
+      this.$selection.packByValue({
+        "perspective-origin": value,
+      })
+    );
   }
-
 }

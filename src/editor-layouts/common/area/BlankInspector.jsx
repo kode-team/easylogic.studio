@@ -1,9 +1,9 @@
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { BIND } from "el/sapa/Event";
-import { Tabs } from "el/editor/ui/view/Tabs";
-import { TabPanel } from "el/editor/ui/view/TabPanel";
-import { DesignMode } from "el/editor/types/editor";
-import { createElement } from 'el/sapa/functions/jsx';
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { BIND } from "sapa";
+import { Tabs } from "elf/editor/ui/view/Tabs";
+import { TabPanel } from "elf/editor/ui/view/TabPanel";
+import { DesignMode } from "elf/editor/types/editor";
+import { createElement } from "sapa";
 
 export default class BlankInspector extends EditorElement {
   afterRender() {
@@ -13,10 +13,9 @@ export default class BlankInspector extends EditorElement {
   [BIND("$el")]() {
     return {
       style: {
-        display:
-          this.$config.is("editor.design.mode", DesignMode.DESIGN)
-            ? "block"
-            : "none",
+        display: this.$config.is("editor.design.mode", DesignMode.DESIGN)
+          ? "block"
+          : "none",
       },
     };
   }
@@ -32,21 +31,19 @@ export default class BlankInspector extends EditorElement {
               this.$config.set("inspector.selectedValue", value);
             }}
           >
-            {this.$injectManager
-              .getTargetUI("inspector.tab")
-              .map((it) => {
-                const { value, title, icon, loadElements = [] } = it.class;
+            {this.$injectManager.getTargetUI("inspector.tab").map((it) => {
+              const { value, title, icon, loadElements = [] } = it.class;
 
-                return (
-                  <TabPanel value={value} title={title} icon={icon}>
-                    <div style="display: flex: flex-direction: column;">
-                      {loadElements?.map((element) => createElement(element))}
-                      {this.$injectManager.generate("inspector.tab." + value)}
-                      <div class="empty" style="order: 1000000;"></div>
-                    </div>
-                  </TabPanel>
-                );
-              })}
+              return (
+                <TabPanel value={value} title={title} icon={icon}>
+                  <div style="display: flex: flex-direction: column;">
+                    {loadElements?.map((element) => createElement(element))}
+                    {this.$injectManager.generate("inspector.tab." + value)}
+                    <div class="empty" style="order: 1000000;"></div>
+                  </div>
+                </TabPanel>
+              );
+            })}
           </Tabs>
         </div>
       </div>

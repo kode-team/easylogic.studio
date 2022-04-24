@@ -1,12 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
+// import { Editor } from "elf/editor/manager/Editor";
 import SVGTextProperty from "./SVGTextProperty";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('inspector.tab.style', {
-        SVGTextProperty
-    })
+  editor.registerUI("inspector.tab.style", {
+    SVGTextProperty,
+  });
 }

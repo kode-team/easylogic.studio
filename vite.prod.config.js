@@ -1,17 +1,23 @@
 import { defineConfig } from 'vite'
 
 const path = require('path');
-const alias = require('./alias');
 
 // https://vitejs.dev/config/
 export default defineConfig({
   esbuild: {
     jsxFactory: 'createElementJsx',
     jsxFragment: 'FragmentInstance',
-    jsxInject: `import { createElementJsx, FragmentInstance } from "el/sapa/functions/jsx"`    
+    jsxInject: `import { createElementJsx, FragmentInstance } from "sapa"`    
   },
   resolve: {
-    alias,
+    alias: {
+      'elf': path.resolve(__dirname, "./src/elf"),
+      'sapa': path.resolve(__dirname, "./src/sapa"),
+      'style': path.resolve(__dirname, "./src/scss"),
+      'plugins': path.resolve(__dirname, "./src/plugins"),
+      'export-library': path.resolve(__dirname, "./src/export-library"),
+      'editor-layouts': path.resolve(__dirname, "./src/editor-layouts"),
+    }
   },
   build: {
     outDir: path.join(__dirname, './docs'),

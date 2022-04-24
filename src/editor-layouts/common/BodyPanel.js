@@ -1,37 +1,35 @@
-import { BIND, CONFIG, SUBSCRIBE } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { BIND, CONFIG, SUBSCRIBE } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import HorizontalRuler from "./body-panel/HorizontalRuler";
 import VerticalRuler from "./body-panel/VerticalRuler";
 import CanvasView from "./body-panel/CanvasView";
 
-import './BodyPanel.scss';
-import PageSubEditor from './body-panel/PageSubEditor';
-import { createComponent } from "el/sapa/functions/jsx";
-
+import "./BodyPanel.scss";
+import PageSubEditor from "./body-panel/PageSubEditor";
+import { createComponent } from "sapa";
 
 export default class BodyPanel extends EditorElement {
-
   components() {
     return {
       CanvasView,
       VerticalRuler,
       HorizontalRuler,
-      PageSubEditor
-    }
+      PageSubEditor,
+    };
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--body-panel">
         <div class="submenu-area">
-          ${createComponent('PageSubEditor')}
+          ${createComponent("PageSubEditor")}
         </div>
         <div class='editing-area'>
-          ${createComponent('HorizontalRuler')}
-          ${createComponent('VerticalRuler')}
+          ${createComponent("HorizontalRuler")}
+          ${createComponent("VerticalRuler")}
           <div class="canvas-layout">
-            ${createComponent('CanvasView')}
+            ${createComponent("CanvasView")}
           </div>
 
         </div>
@@ -39,17 +37,17 @@ export default class BodyPanel extends EditorElement {
     `;
   }
 
-  [BIND('$el')] () { 
+  [BIND("$el")]() {
     return {
-        class: `elf--body-panel ${this.$config.get('show.ruler') ? 'ruler' : ''}`
-    }
-  }  
+      class: `elf--body-panel ${this.$config.get("show.ruler") ? "ruler" : ""}`,
+    };
+  }
 
-  [CONFIG('show.ruler')] () {
+  [CONFIG("show.ruler")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE('bodypanel.toggle.fullscreen')] () {
+  [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
     this.refs.$el.toggleFullscreen();
   }
 }

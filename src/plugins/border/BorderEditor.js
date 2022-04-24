@@ -1,46 +1,48 @@
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { Border } from "el/editor/property-parser/Border";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { LOAD, SUBSCRIBE_SELF } from "sapa";
+import { Border } from "elf/editor/property-parser/Border";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './BorderEditor.scss';
-import { createComponent } from "el/sapa/functions/jsx";
+import "./BorderEditor.scss";
+import { createComponent } from "sapa";
 
 const borderTypeList = [
-  "border", 
-  // "border-top", 
-  // "border-right", 
-  // "border-bottom", 
+  "border",
+  // "border-top",
+  // "border-right",
+  // "border-bottom",
   // "border-left"
-]
+];
 const borderTypeTitle = {
-  "border":  'all', 
-  "border-top": 'top', 
-  "border-right": 'right', 
-  "border-bottom": 'bottom', 
-  "border-left": 'left'
-}
-
+  border: "all",
+  "border-top": "top",
+  "border-right": "right",
+  "border-bottom": "bottom",
+  "border-left": "left",
+};
 
 export default class BorderEditor extends EditorElement {
-
   initState() {
-
-    var borders = Border.parseStyle(this.props.value)
-    var direction = Object.keys(borders)[0] || 'border'
+    var borders = Border.parseStyle(this.props.value);
+    var direction = Object.keys(borders)[0] || "border";
 
     return {
       direction,
-      borders
-    }
+      borders,
+    };
   }
 
   updateData(obj) {
     this.setState(obj, false);
-    this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params);  
+    this.parent.trigger(
+      this.props.onchange,
+      this.props.key,
+      this.getValue(),
+      this.props.params
+    );
   }
 
   getValue() {
-    return Border.join(this.state.borders)
+    return Border.join(this.state.borders);
   }
 
   setValue(value) {
@@ -48,28 +50,27 @@ export default class BorderEditor extends EditorElement {
     this.refresh();
   }
 
+  [LOAD("$editorArea")]() {
+    return borderTypeList.map((type) => {
+      var label = borderTypeTitle[type] || type;
 
-  [LOAD('$editorArea')] () {
-    return borderTypeList.map(type => {
-      var label = borderTypeTitle[type] || type; 
-
-      label = this.$i18n('border.editor.' + label);
-      return /*html*/`
+      label = this.$i18n("border.editor." + label);
+      return /*html*/ `
       <div>
-        ${createComponent('BorderValueEditor', {
+        ${createComponent("BorderValueEditor", {
           ref: `$${type}`,
           label,
           key: type,
           value: this.state.borders[type],
-          onchange: "changeKeyValue"
+          onchange: "changeKeyValue",
         })}
       </div>
-      `
-    })
+      `;
+    });
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--border-editor">
         <div class='editor-area' ref='$editorArea'>
 
@@ -78,12 +79,10 @@ export default class BorderEditor extends EditorElement {
     `;
   }
 
-
-  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
     var borders = this.state.borders;
-    borders[key] = value; 
+    borders[key] = value;
 
-    this.updateData({ borders })
+    this.updateData({ borders });
   }
-
 }

@@ -1,75 +1,72 @@
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
 
-import {
-  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
-} from "el/sapa/Event";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from 'el/sapa/functions/jsx';
-
-import './BackgroundImageProperty.scss';
-import { iconUse } from "el/editor/icon/icon";
+import "./BackgroundImageProperty.scss";
+import { iconUse } from "elf/editor/icon/icon";
 
 export default class BackgroundImageProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('background.image.property.title');
+    return this.$i18n("background.image.property.title");
   }
-
 
   afterRender() {
     this.show();
   }
 
   getClassName() {
-    return 'background-image'
+    return "background-image";
   }
 
   getBodyClassName() {
-    return 'no-padding';
+    return "no-padding";
   }
 
   getBody() {
-    return <div class='full' ref='$property'></div>
+    return <div class="full" ref="$property"></div>;
   }
 
-
   getTools() {
-    return <div class="fill-sample-list" ref='$add'>
-      <button type="button" class='fill' data-value="static-gradient">{iconUse('add')}</button>
-      {/* <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
+    return (
+      <div class="fill-sample-list" ref="$add">
+        <button type="button" class="fill" data-value="static-gradient">
+          {iconUse("add")}
+        </button>
+        {/* <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
       <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
       <button type="button" class='fill' data-value="radial-gradient" data-tooltip="Radial" ></button>
       <button type="button" class='fill' data-value="repeating-radial-gradient" data-tooltip="R Radial" ></button>
       <button type="button" class='fill' data-value="conic-gradient" data-tooltip="Conic" ></button>
       <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>
       <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>         */}
-    </div>
+      </div>
+    );
   }
 
-  [CLICK('$add [data-value]')](e) {
-    this.children.$backgroundImageEditor.trigger('add', e.$dt.data('value'));
+  [CLICK("$add [data-value]")](e) {
+    this.children.$backgroundImageEditor.trigger("add", e.$dt.data("value"));
   }
 
-  [LOAD('$property')]() {
+  [LOAD("$property")]() {
     var current = this.$selection.current || {};
-    var value = current['background-image'] || ''
+    var value = current["background-image"] || "";
 
-    return createComponent('BackgroundImageEditor', {
-      ref: '$backgroundImageEditor',
-      key: 'background-image',
+    return createComponent("BackgroundImageEditor", {
+      ref: "$backgroundImageEditor",
+      key: "background-image",
       value,
-      onchange: 'changeBackgroundImage'
+      onchange: "changeBackgroundImage",
     });
   }
 
   get editableProperty() {
-    return 'background-image';
+    return "background-image";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
     this.refresh();
   }
-
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
     if (this.$selection.current) {
@@ -79,13 +76,15 @@ export default class BackgroundImageProperty extends BaseProperty {
     }
   }
 
-  [SUBSCRIBE_SELF('changeBackgroundImage')](key, value) {
+  [SUBSCRIBE_SELF("changeBackgroundImage")](key, value) {
     this.nextTick(() => {
-      this.command('setAttributeForMulti', 'change background image', this.$selection.packByValue({
-        [key]: value
-      }))
-    }, 10)
-
+      this.command(
+        "setAttributeForMulti",
+        "change background image",
+        this.$selection.packByValue({
+          [key]: value,
+        })
+      );
+    }, 10);
   }
-
 }

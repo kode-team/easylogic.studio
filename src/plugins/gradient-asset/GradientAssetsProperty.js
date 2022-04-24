@@ -1,129 +1,132 @@
-import { CLICK, DEBOUNCE, DRAGSTART, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import gradients from "el/editor/preset/gradients";
-import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import {
+  CLICK,
+  DEBOUNCE,
+  DRAGSTART,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+} from "sapa";
+import gradients from "elf/editor/preset/gradients";
+import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 import "./GradientAssetsProperty.scss";
-import { iconUse } from "el/editor/icon/icon";
-import { createComponent } from "el/sapa/functions/jsx";
+import { iconUse } from "elf/editor/icon/icon";
+import { createComponent } from "sapa";
 
-const options = gradients.map(it => {
-  return { value: it.key, text: it.title } 
+const options = gradients.map((it) => {
+  return { value: it.key, text: it.title };
 });
 
-
 export default class GradientAssetsProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('gradient.asset.property.title');
+    return this.$i18n("gradient.asset.property.title");
   }
 
   initState() {
     return {
-      mode: 'grid',
-      preset: 'linear',
-    }
+      mode: "grid",
+      preset: "linear",
+    };
   }
 
   getTools() {
-    return /*html*/`<div ref="$tools"></div>`
+    return /*html*/ `<div ref="$tools"></div>`;
   }
 
-  [LOAD('$tools')]() {
+  [LOAD("$tools")]() {
     return createComponent("SelectEditor", {
-      ref:'$preset',
+      ref: "$preset",
       key: "preset",
       value: this.state.preset,
-      options, 
-      onchange: "changePreset"
-    })
-  }  
+      options,
+      onchange: "changePreset",
+    });
+  }
 
-  [SUBSCRIBE_SELF('changePreset')] (key, value) {
-
+  [SUBSCRIBE_SELF("changePreset")](key, value) {
     this.setState({
-      [key]: value
-    })
+      [key]: value,
+    });
   }
 
   getClassName() {
-    return 'elf--gradient-assets-property'
+    return "elf--gradient-assets-property";
   }
 
-
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)] () {
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.show();
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class='property-item gradient-assets'>
         <div class='gradient-list' ref='$gradientList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
   }
 
-  [DRAGSTART('$gradientList .gradient-item')] (e) {
-    const gradient = e.$dt.attr('data-gradient');
+  [DRAGSTART("$gradientList .gradient-item")](e) {
+    const gradient = e.$dt.attr("data-gradient");
     e.dataTransfer.effectAllowed = "copy";
     e.dataTransfer.setData("text/gradient", gradient);
   }
 
   [LOAD("$gradientList")]() {
-    var preset = gradients.find(it => it.key === this.state.preset);
+    var preset = gradients.find((it) => it.key === this.state.preset);
 
     if (!preset) {
-      return '';
+      return "";
     }
 
-    var results = preset.execute().map( (item, index) => { 
-
-      return /*html*/`
+    var results = preset.execute().map((item, index) => {
+      return /*html*/ `
         <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}' data-custom="${item.custom}">
           <div class='preview' title="${item.gradient}" draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
         </div>
-      `
-    })
+      `;
+    });
 
     if (preset.edit) {
-      results.push(/*html*/`<div class='add-gradient-item'><butto type="button">${iconUse("add")}</button></div>`)
+      results.push(
+        /*html*/ `<div class='add-gradient-item'><butto type="button">${iconUse(
+          "add"
+        )}</button></div>`
+      );
     }
 
-    return results
+    return results;
   }
 
- 
-  executeGradient (callback, isRefresh = true, isEmit = true ) {
+  executeGradient(callback, isRefresh = true, isEmit = true) {
     var project = this.$selection.currentProject;
 
-    if(project) {
-
-      callback && callback (project) 
+    if (project) {
+      callback && callback(project);
 
       if (isRefresh) this.refresh();
-      if (isEmit) this.emit('refreshGradientAssets');
+      if (isEmit) this.emit("refreshGradientAssets");
     } else {
-      alert('Please select a project.')
+      window.alert("Please select a project.");
     }
-  } 
-  
-  [CLICK('$gradientList .add-gradient-item')] () {
+  }
 
-    this.executeGradient(project => {
+  [CLICK("$gradientList .add-gradient-item")]() {
+    this.executeGradient((project) => {
       project.createGradient({
         gradient: Gradient.random(),
-        name: '',
-        variable: ''
-      })
-    })
+        name: "",
+        variable: "",
+      });
+    });
   }
 
   [CLICK("$gradientList .preview")](e) {
-    var $item = e.$dt.closest('gradient-item');    
-    var gradient = $item.attr('data-gradient')
+    var $item = e.$dt.closest("gradient-item");
+    var gradient = $item.attr("data-gradient");
 
-    this.emit('drop.asset', { gradient })    
+    this.emit("drop.asset", { gradient });
   }
 }

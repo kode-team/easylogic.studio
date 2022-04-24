@@ -1,12 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
+// import { Editor } from "elf/editor/manager/Editor";
 import LayerAppendView from "./LayerAppendView";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('canvas.view', {
-        LayerAppendView         
-    })
+  editor.registerUI("canvas.view", {
+    LayerAppendView,
+  });
 }

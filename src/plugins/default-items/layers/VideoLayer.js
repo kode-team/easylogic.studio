@@ -1,45 +1,42 @@
-import icon from "el/editor/icon/icon";
-import { Layer } from "el/editor/model/LayerModel";
-
+import icon from "elf/editor/icon/icon";
+import { Layer } from "elf/editor/model/LayerModel";
 
 export class VideoLayer extends Layer {
-
-  static getIcon () {
+  static getIcon() {
     return icon.video;
-  }  
+  }
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      itemType: 'video',
+      itemType: "video",
       name: "New Video",
-      elementType: 'video',
+      elementType: "video",
 
       /** source property */
-      src: '',
-      srcType: 'video/mp4',
+      src: "",
+      srcType: "video/mp4",
 
       /** video property */
       controls: false,
-      preload: "auto",  // none, metadata
+      preload: "auto", // none, metadata
       poster: "",
       autoplay: false,
-      buffered: false, 
-      crossorigin: 'anonymous',   // or "use-credentials"
+      buffered: false,
+      crossorigin: "anonymous", // or "use-credentials"
       loop: false,
-      muted: false, 
+      muted: false,
       played: false,
       currentTime: 0,
       playbackRate: 1.0,
 
       //
-      playTime: '0:1:1',      // 0 is first,  1 is last
-      ...obj
+      playTime: "0:1:1", // 0 is first,  1 is last
+      ...obj,
     });
   }
 
   enableHasChildren() {
-    return false; 
+    return false;
   }
- 
 
   getDefaultTitle() {
     return "Video";
@@ -52,15 +49,14 @@ export class VideoLayer extends Layer {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      ...this.attrs('src'),
-    }
+      ...this.attrs("src"),
+    };
   }
 
   resize() {
     this.reset({
       width: this.json.naturalWidth.clone(),
-      height: this.json.naturalHeight.clone()
-    })
-
+      height: this.json.naturalHeight.clone(),
+    });
   }
 }

@@ -1,30 +1,26 @@
+import { LOAD, SUBSCRIBE } from "sapa";
+import { SVGFilter } from "elf/editor/property-parser/SVGFilter";
+import { isNotUndefined } from "sapa";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
-import { LOAD, SUBSCRIBE } from "el/sapa/Event";
-import { SVGFilter } from "el/editor/property-parser/SVGFilter";
-import { isNotUndefined } from "el/sapa/functions/func";
-import BasePopup from "el/editor/ui/popup/BasePopup";
-
-import './SVGFilterPopup.scss';
-import { variable } from "el/sapa/functions/registElement";
-import { createComponent } from "el/sapa/functions/jsx";
+import "./SVGFilterPopup.scss";
+import { createComponent } from "sapa";
 
 export default class SVGFilterPopup extends BasePopup {
-
   getTitle() {
-    return this.$i18n('svgfilter.popup.title');
+    return this.$i18n("svgfilter.popup.title");
   }
 
-
   getClassName() {
-    return 'transparent'
+    return "transparent";
   }
 
   initState() {
     return {
-      changeEvent: 'changeSVGFilterPopup',
-      id: '',
+      changeEvent: "changeSVGFilterPopup",
+      id: "",
       preview: true,
-      filters: []
+      filters: [],
     };
   }
 
@@ -34,7 +30,7 @@ export default class SVGFilterPopup extends BasePopup {
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
     <div class='elf--svg-filter-popup' ref='$popup'>
       <div class="box">
         <div class='editor' ref='$editor'></div>
@@ -42,26 +38,24 @@ export default class SVGFilterPopup extends BasePopup {
     </div>`;
   }
 
-  [LOAD('$editor')]() {
-
+  [LOAD("$editor")]() {
     return createComponent("SVGFilterEditor", {
-      ref: '$filter',
-      title: 'Filter Type',
+      ref: "$filter",
+      title: "Filter Type",
       key: "filter",
       value: this.state.filters,
       onchange: (key, filters) => {
         this.updateData({
-          filters
-        })
-      }
-    })
-
+          filters,
+        });
+      },
+    });
   }
 
   [SUBSCRIBE("showSVGFilterPopup")](data) {
-    data.filters = data.filters.map(it => {
+    data.filters = data.filters.map((it) => {
       return SVGFilter.parse(it);
-    })
+    });
 
     data.preview = isNotUndefined(data.preview) ? data.preview : true;
 

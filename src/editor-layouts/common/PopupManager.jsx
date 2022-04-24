@@ -1,26 +1,26 @@
-import "el/editor/ui/window-list";
+import "elf/editor/ui/window-list";
 
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import NotificationView from "el/editor/ui/view/NotificationView";
-import { createComponent } from "el/sapa/functions/jsx";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import NotificationView from "elf/editor/ui/view/NotificationView";
+import { createComponent } from "sapa";
 
 export default class PopupManager extends EditorElement {
-
-  components(){
+  components() {
     return {
-      NotificationView
-    }
+      NotificationView,
+    };
   }
 
   template() {
-    return <div class="popup-manger">
-        {createComponent('ExportWindow')}
-        {createComponent('EmbedEditorWindow')}
-        {createComponent('ProjectWindow')}
-        {createComponent('ShortcutWindow')}
-        {createComponent('NotificationView')}
-        {this.$injectManager.generate('popup')}
+    return (
+      <div class="popup-manger">
+        {createComponent("ExportWindow")}
+        {createComponent("EmbedEditorWindow")}
+        {createComponent("ProjectWindow")}
+        {createComponent("ShortcutWindow")}
+        {createComponent("NotificationView")}
+        {this.$injectManager.generate("popup")}
       </div>
-    
+    );
   }
 }

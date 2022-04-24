@@ -1,62 +1,68 @@
-import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "el/sapa/Event";
+import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "sapa";
 
-import { second, timecode } from "el/utils/time";
-import { isUndefined } from "el/sapa/functions/func";
-import icon from "el/editor/icon/icon";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { createComponent } from "el/sapa/functions/jsx";
-
+import { second, timecode } from "elf/utils/time";
+import { isUndefined } from "sapa";
+import icon from "elf/editor/icon/icon";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { createComponent } from "sapa";
 
 export default class TimelineValueEditor extends EditorElement {
-
   initState() {
     return {
       time: 0,
-      timing: 'linear',
-      selectedIndex: 1  
-
+      timing: "linear",
+      selectedIndex: 1,
     };
   }
 
   updateData(opt) {
-    this.setState(opt, false); 
+    this.setState(opt, false);
     this.parent.trigger(this.props.onchange, this.state);
   }
 
   getProperties() {
-    return [{
+    return [
+      {
         key: this.state.property,
-        value: isUndefined(this.state.value) ? '10px' : this.state.value ,
-        editor: this.state.editor
-    }].filter(it => it.key);
+        value: isUndefined(this.state.value) ? "10px" : this.state.value,
+        editor: this.state.editor,
+      },
+    ].filter((it) => it.key);
   }
 
-  refresh () {
-
-    var project = this.$selection.currentProject; 
-    var code = '00:00:00:00';
+  refresh() {
+    var project = this.$selection.currentProject;
+    var code = "00:00:00:00";
     if (project) {
       var timeline = project.getSelectedTimeline();
       if (timeline) {
-        code = timecode(timeline.fps, this.state.time)
+        code = timecode(timeline.fps, this.state.time);
       }
     }
 
-    this.refs.$offsetTime.val(code)
-    this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.getProperties());      
-    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', this.state.timing);
+    this.refs.$offsetTime.val(code);
+    this.children.$propertyEditor.trigger(
+      "showCSSPropertyEditor",
+      this.getProperties()
+    );
+    this.children.$cubicBezierEditor.trigger(
+      "showCubicBezierEditor",
+      this.state.timing
+    );
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
     <div class='timeline-value-editor'>
         <div class="tab number-tab" ref="$tab">
             <div class="tab-header full" ref="$header">
                 <div class="tab-item selected" data-value="1">
-                    <label>${this.$i18n('timeline.value.editor.value')}</label>
+                    <label>${this.$i18n("timeline.value.editor.value")}</label>
                 </div>          
                 <div class="tab-item" data-value="2">
-                    <label>${this.$i18n('timeline.value.editor.timing')}</label> 
+                    <label>${this.$i18n(
+                      "timeline.value.editor.timing"
+                    )}</label> 
                 </div>                            
             </div>
             <div class="tab-body" ref="$body">
@@ -73,146 +79,157 @@ export default class TimelineValueEditor extends EditorElement {
     `;
   }
 
-
   [CLICK("$header .tab-item")](e) {
-    var selectedIndex = +e.$dt.attr('data-value')
+    var selectedIndex = +e.$dt.attr("data-value");
     if (this.state.selectedIndex === selectedIndex) {
-      return; 
+      return;
     }
 
-    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
-    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
+    this.$el
+      .$$(`[data-value="${this.state.selectedIndex}"]`)
+      .forEach((it) => it.removeClass("selected"));
+    this.$el
+      .$$(`[data-value="${selectedIndex}"]`)
+      .forEach((it) => it.addClass("selected"));
     this.setState({ selectedIndex }, false);
 
     this.refresh();
   }
 
-
-  checkNumberOrTimecode (e) {
+  checkNumberOrTimecode(e) {
     var value = e.target.value.trim();
-    if ((+value) + '' === value) {
-        return true; 
+    if (+value + "" === value) {
+      return true;
     } else if (value.match(/^[0-9:]+$/)) {
-        return true; 
+      return true;
     }
 
     return false;
-}
+  }
 
-checkKey (e) {
+  checkKey(e) {
     if (e.key.match(/^[0-9:]+$/)) {
-        return true; 
-    } else if (e.code === 'Backspace' || e.code === 'ArrowRight' || e.code === 'ArrowLeft') {
-        return true; 
+      return true;
+    } else if (
+      e.code === "Backspace" ||
+      e.code === "ArrowRight" ||
+      e.code === "ArrowLeft"
+    ) {
+      return true;
     }
 
-    return false; 
-}
+    return false;
+  }
 
-[KEYDOWN('$offsetTime')] (e) {
+  [KEYDOWN("$offsetTime")](e) {
     if (!this.checkKey(e)) {
-        e.preventDefault();
-        e.stopPropagation()
-        return false;
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
     }
-}
+  }
 
-[KEYUP('$offsetTime') + ENTER + IF('checkNumberOrTimecode') + PREVENT] (e) {
-    var frame = this.refs.$offsetTime.value
+  [KEYUP("$offsetTime") + ENTER + IF("checkNumberOrTimecode") + PREVENT]() {
+    var frame = this.refs.$offsetTime.value;
 
     var project = this.$selection.currentProject;
     if (project) {
       var timeline = project.getSelectedTimeline();
 
       this.updateData({
-        time: second(timeline.fps, frame)
+        time: second(timeline.fps, frame),
       });
     }
-
-}
-
+  }
 
   templateForOffset() {
-    return /*html*/`
+    return /*html*/ `
       <div class='offset-input'>
-        <label>${this.$i18n('timeline.value.editor.time')}</label>
+        <label>${this.$i18n("timeline.value.editor.time")}</label>
         <div class='input-area'>
-          <input type="text" ref='$offsetTime' title="${this.$i18n('timeline.value.editor.offset.message')}" />
+          <input type="text" ref='$offsetTime' title="${this.$i18n(
+            "timeline.value.editor.offset.message"
+          )}" />
         </div>
-        <button type="button" ref='$seek' title='Seek timeline'>${icon.gps_fixed}</button>
+        <button type="button" ref='$seek' title='Seek timeline'>${
+          icon.gps_fixed
+        }</button>
       </div>
-    `
-  }    
+    `;
+  }
 
-  [CLICK('$seek')] () {
+  [CLICK("$seek")]() {
     var project = this.$selection.currentProject;
 
     if (project) {
-      project.seek(this.refs.$offsetTime.value, (it => {
-
-        if ( it.layer.id === this.state.layerId && it.property === this.state.property) {
-          return true; 
+      project.seek(this.refs.$offsetTime.value, (it) => {
+        if (
+          it.layer.id === this.state.layerId &&
+          it.property === this.state.property
+        ) {
+          return true;
         }
 
-        return false; 
-      }))
-      this.emit('playTimeline');
+        return false;
+      });
+      this.emit("playTimeline");
     }
   }
 
   templateForProperty() {
-    return createComponent('CSSPropertyEditor', {
-      ref: '$propertyEditor',
-      hideTitle: true, 
-      onchange: 'changePropertyEditor'
-    })
-  }    
-
-  templateForTimingFunction () {
-    return /*html*/`
-    <div class='timing-function'>
-      ${createComponent("CubicBezierEditor" , {
-        ref: '$cubicBezierEditor',
-        key: "timing",
-        value: this.state.timingFunction || 'linear',
-        onChange: 'changeCubicBezier'
-      })}
-    </div>
-    `
+    return createComponent("CSSPropertyEditor", {
+      ref: "$propertyEditor",
+      hideTitle: true,
+      onchange: "changePropertyEditor",
+    });
   }
 
-  [SUBSCRIBE('refreshPropertyValue')] () {
+  templateForTimingFunction() {
+    return /*html*/ `
+    <div class='timing-function'>
+      ${createComponent("CubicBezierEditor", {
+        ref: "$cubicBezierEditor",
+        key: "timing",
+        value: this.state.timingFunction || "linear",
+        onChange: "changeCubicBezier",
+      })}
+    </div>
+    `;
+  }
 
+  [SUBSCRIBE("refreshPropertyValue")]() {
     var project = this.$selection.currentProject;
     if (project) {
-      var selectedLayer = this.$model.get(this.state.layerId); 
+      var selectedLayer = this.$model.get(this.state.layerId);
 
       if (selectedLayer) {
-        var value = selectedLayer[this.state.property] + ''
-        this.trigger('refreshOffsetValue', { value })
-        this.updateData({ value })
+        var value = selectedLayer[this.state.property] + "";
+        this.trigger("refreshOffsetValue", { value });
+        this.updateData({ value });
       }
     }
   }
 
-  [SUBSCRIBE('refreshOffsetValue')] (offset) {
-    this.setState({
-        ...offset
-    }, false)
+  [SUBSCRIBE("refreshOffsetValue")](offset) {
+    this.setState(
+      {
+        ...offset,
+      },
+      false
+    );
     this.refresh();
   }
 
-  [SUBSCRIBE('changeCubicBezier')] (key, value) {
-    this.updateData({ [key]: value + '' })
+  [SUBSCRIBE("changeCubicBezier")](key, value) {
+    this.updateData({ [key]: value + "" });
   }
 
-  [SUBSCRIBE('changePropertyEditor')] (obj) {
-    if (obj.length)  {
-        var it = obj[0]
-        this.updateData({
-            value: it.value + ''
-        })
+  [SUBSCRIBE("changePropertyEditor")](obj) {
+    if (obj.length) {
+      var it = obj[0];
+      this.updateData({
+        value: it.value + "",
+      });
     }
   }
-
 }

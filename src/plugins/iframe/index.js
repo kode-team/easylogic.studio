@@ -1,4 +1,4 @@
-import { Editor } from "el/editor/manager/Editor";
+import { Editor } from "elf/editor/manager/Editor";
 import AddIFrame from "./AddIFrame";
 import { IFrameLayer } from "./IFrameLayer";
 import IFrameProperty from "./IFrameProperty";

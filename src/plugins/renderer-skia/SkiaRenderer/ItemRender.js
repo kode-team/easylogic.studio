@@ -1,4 +1,4 @@
-import { Item } from "el/editor/items/Item";
+import { Item } from "elf/editor/items/Item";
 import { mat4 } from "gl-matrix";
 
 export default class ItemRender {

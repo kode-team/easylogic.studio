@@ -1,12 +1,12 @@
 
 import {
   LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DOMDIFF, IF,
-} from "el/sapa/Event";
+} from "sapa";
 
 
-import icon, { iconUse } from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from "el/sapa/functions/jsx";
+import icon, { iconUse } from "elf/editor/icon/icon";
+import {BaseProperty} from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
 
 var transformList = [

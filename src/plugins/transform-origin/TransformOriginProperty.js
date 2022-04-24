@@ -1,12 +1,10 @@
-
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from "el/sapa/functions/jsx";
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
 export default class TransformOriginProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('transform.origin.property.title');
+    return this.$i18n("transform.origin.property.title");
   }
 
   hasKeyframe() {
@@ -14,44 +12,45 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   getKeyframeProperty() {
-    return 'transform-origin'
+    return "transform-origin";
   }
 
-  [CLICK('$remove')]() {
-    this.trigger('changeTransformOrigin', '');
+  [CLICK("$remove")]() {
+    this.trigger("changeTransformOrigin", "");
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="property-item full transform-origin-item" ref='$body'></div>
     `;
   }
 
-  [LOAD('$body')]() {
+  [LOAD("$body")]() {
     var current = this.$selection.current || {};
-    var value = current['transform-origin'] || ''
+    var value = current["transform-origin"] || "";
 
-    return createComponent("TransformOriginEditor", { 
-      ref:'$1',
-      value, 
-      onchange: 'changeTransformOrigin' 
+    return createComponent("TransformOriginEditor", {
+      ref: "$1",
+      value,
+      onchange: "changeTransformOrigin",
     });
   }
 
   get editableProperty() {
-    return 'transform-origin';
+    return "transform-origin";
   }
 
-
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100) + IF("checkShow")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE_SELF('changeTransformOrigin')](key, value) {
-
-    this.command('setAttributeForMulti', 'change transform-origin', this.$selection.packByValue({
-      'transform-origin': value
-    }))
+  [SUBSCRIBE_SELF("changeTransformOrigin")](key, value) {
+    this.command(
+      "setAttributeForMulti",
+      "change transform-origin",
+      this.$selection.packByValue({
+        "transform-origin": value,
+      })
+    );
   }
-
 }

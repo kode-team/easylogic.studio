@@ -1,18 +1,16 @@
-import { Editor } from "el/editor/manager/Editor";
 import TransitionProperty from "./TransitionProperty";
 import TransitionPropertyPopup from "./TransitionPropertyPopup";
 
-
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('inspector.tab.transition', {
-        TransitionProperty
-    })
+  editor.registerUI("inspector.tab.transition", {
+    TransitionProperty,
+  });
 
-    editor.registerUI('popup', {
-        TransitionPropertyPopup
-    })
+  editor.registerUI("popup", {
+    TransitionPropertyPopup,
+  });
 }

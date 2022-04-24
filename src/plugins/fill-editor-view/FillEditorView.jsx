@@ -6,26 +6,25 @@ import {
   POINTEROUT,
   POINTERSTART,
   SUBSCRIBE,
-} from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+} from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import "./FillEditorView.scss";
 import {
   GradientType,
   RadialGradientType,
   SpreadMethodType,
   TimingFunction,
-} from "el/editor/types/model";
+} from "elf/editor/types/model";
 import { mat4, vec3 } from "gl-matrix";
 import {
   calculateAngle360,
   calculateRotationOriginMat4,
   vertiesMap,
-} from "el/utils/math";
-import { END, MOVE } from "el/editor/types/event";
-import { Length } from "el/editor/unit/Length";
-import { repeat } from "el/utils/func";
-import { parseOneValue } from "el/utils/css-function-parser";
-import {PathParser} from 'el/editor/parser/PathParser';
+} from "elf/utils/math";
+import { END, MOVE } from "elf/editor/types/event";
+import { Length } from "elf/editor/unit/Length";
+import { parseOneValue } from "elf/utils/css-function-parser";
+import { PathParser } from "elf/editor/parser/PathParser";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
@@ -112,7 +111,7 @@ class FillTimingStepEditor extends FillBaseEditor {
 
   moveEndStepPoint(dx, dy) {
     if (dx === 0 && dy === 0) {
-      const { timing, timingCount } = this.localColorStep;
+      const { timing } = this.localColorStep;
 
       switch (timing.name) {
         case TimingFunction.STEPS:
@@ -144,7 +143,9 @@ class FillTimingStepEditor extends FillBaseEditor {
               },
             ],
             changeEvent: (key, value) => {
-              this.localColorStep.timing = parseOneValue(`path(${value})`).parsed;
+              this.localColorStep.timing = parseOneValue(
+                `path(${value})`
+              ).parsed;
 
               this.command(
                 "setAttributeForMulti",
@@ -348,8 +349,10 @@ class FillColorstepEditor extends FillTimingStepEditor {
     let newX, newY;
     switch (image.type) {
       case GradientType.RADIAL:
+        // eslint-disable-next-line no-case-declarations
         const dist = vec3.dist(this.startPoint, nextPoint);
 
+        // eslint-disable-next-line no-case-declarations
         const lastPoint = vec3.lerp(
           [],
           this.startPoint,
@@ -357,6 +360,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
           dist / this.shapeDist
         );
 
+        // eslint-disable-next-line no-case-declarations
         const [worldPosition] = vertiesMap(
           [this.$viewport.applyVertexInverse(lastPoint)],
           this.state.currentMatrix.absoluteMatrixInverse
@@ -570,15 +574,16 @@ class FillColorstepEditor extends FillTimingStepEditor {
                 });
                 break;
               case RadialGradientType.ELLIPSE:
+                // eslint-disable-next-line no-case-declarations
                 const lastDist = vec3.dist(this.startPoint, this.endPoint);
-
+                // eslint-disable-next-line no-case-declarations
                 const unitVector = vec3.lerp(
                   [],
                   this.startPoint,
                   this.endPoint,
                   1 / lastDist
                 );
-
+                // eslint-disable-next-line no-case-declarations
                 const nextShapePoint = vec3.lerp(
                   [],
                   this.startPoint,
@@ -588,13 +593,14 @@ class FillColorstepEditor extends FillTimingStepEditor {
                   )[0],
                   lastDist
                 );
-
+                // eslint-disable-next-line no-case-declarations
                 const [newShapePosition] = vertiesMap(
                   [this.$viewport.applyVertexInverse(nextShapePoint)],
                   this.state.currentMatrix.absoluteMatrixInverse
                 );
-
+                // eslint-disable-next-line no-case-declarations
                 const x3 = Length.makePercent(newShapePosition[0], width);
+                // eslint-disable-next-line no-case-declarations
                 const y3 = Length.makePercent(newShapePosition[1], height);
 
                 image.reset({
@@ -608,10 +614,13 @@ class FillColorstepEditor extends FillTimingStepEditor {
             break;
           }
 
+        // eslint-disable-next-line no-fallthrough
         default:
+          // eslint-disable-next-line no-case-declarations
           const index = spreadMethodList.findIndex(
             (it) => image.spreadMethod === it
           );
+          // eslint-disable-next-line no-case-declarations
           const nextIndex = (index + 1) % spreadMethodList.length;
 
           image.reset({
@@ -657,12 +666,16 @@ class FillColorstepEditor extends FillTimingStepEditor {
 
         // conic 의 경우 중간 지점에 따라 UI 크기가 달라지기 때문에
         // 마지막 UI 에서 x, y 를 가지고 오도록 한다.
+        // eslint-disable-next-line no-case-declarations
         const x = +$colorstep.data("x");
+        // eslint-disable-next-line no-case-declarations
         const y = +$colorstep.data("y");
         this.screenXY = [x, y, 0];
 
+        // eslint-disable-next-line no-case-declarations
         const dist = vec3.subtract([], this.endPoint, this.startPoint);
         // 눞혀진 각은 180 도 이다. 그렇다는 이야기는 회전을 하지 않았다는 의미가 되고 -180 을 해서 다시 0도로 맞춰준다.
+        // eslint-disable-next-line no-case-declarations
         const angle = calculateAngle360(dist[0], dist[1]) - 180;
 
         this.rotateInverse = calculateRotationOriginMat4(
@@ -785,7 +798,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.updateColorStepStatus(image, index);
   }
 
-  [POINTEROUT("$el .area-line")](evt) {
+  [POINTEROUT("$el .area-line")]() {
     if (this.state.hoverColorStep) {
       this.state.hoverColorStep = null;
 
@@ -902,7 +915,7 @@ export default class FillEditorView extends FillColorstepEditor {
       case TimingFunction.LINEAR:
         return ``;
       case TimingFunction.STEPS:
-        const half = width / 2;
+        // const half = width / 2;
         return (
           <path
             class="timing"
@@ -948,7 +961,7 @@ export default class FillEditorView extends FillColorstepEditor {
     }
   }
 
-  makeTimingCircle(colorstepIndex, current, prev, size) {
+  makeTimingCircle(colorstepIndex, current, prev) {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
     const stickScreenXY = current.stickScreenXYInStart;
     const { timing, timingCount } = current;

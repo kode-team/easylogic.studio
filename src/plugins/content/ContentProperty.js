@@ -1,22 +1,18 @@
+import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "sapa";
 
-import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
-
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import './ContentProperty.scss';
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import "./ContentProperty.scss";
 export default class ContentProperty extends BaseProperty {
   getTitle() {
     return "Content";
   }
 
-
-  [SUBSCRIBE('refreshSelection', 'refreshContent') + DEBOUNCE(100)]() {
-
-    this.refreshShow(['text'])
-
-  }  
+  [SUBSCRIBE("refreshSelection", "refreshContent") + DEBOUNCE(100)]() {
+    this.refreshShow(["text"]);
+  }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="property-item elf--content-item">
         <textarea ref="$contentItem"></textarea>
       </div>
@@ -26,14 +22,14 @@ export default class ContentProperty extends BaseProperty {
   [BIND("$contentItem")]() {
     var current = this.$selection.current;
 
-    if (!current) return '';
+    if (!current) return "";
 
     return {
-      value: current.content || ""
+      value: current.content || "",
     };
   }
 
-  [INPUT("$contentItem")](e) {
+  [INPUT("$contentItem")]() {
     this.setContent();
   }
 
@@ -41,10 +37,10 @@ export default class ContentProperty extends BaseProperty {
     var current = this.$selection.current;
     if (current) {
       var data = {
-        content: this.refs.$contentItem.value
-      }
+        content: this.refs.$contentItem.value,
+      };
       current.reset(data);
-      this.emit('refreshSelectionStyleView', current);
+      this.emit("refreshSelectionStyleView", current);
     }
   }
 }

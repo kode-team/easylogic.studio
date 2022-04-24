@@ -1,13 +1,12 @@
-import { iconUse } from "el/editor/icon/icon";
-import { Grid } from "el/editor/property-parser/Grid";
-import { END, FIRSTMOVE, MOVE } from "el/editor/types/event";
-import { Layout } from "el/editor/types/model";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { Length } from "el/editor/unit/Length";
+import { iconUse } from "elf/editor/icon/icon";
+import { Grid } from "elf/editor/property-parser/Grid";
+import { END, FIRSTMOVE, MOVE } from "elf/editor/types/event";
+import { Layout } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 import {
   BIND,
   CLICK,
-  CONFIG,
   DEBOUNCE,
   DOMDIFF,
   IF,
@@ -15,47 +14,55 @@ import {
   POINTERSTART,
   SUBSCRIBE,
   SUBSCRIBE_SELF,
-  THROTTLE,
-} from "el/sapa/Event";
-import { isString } from "el/sapa/functions/func";
-import { rectToVerties, vertiesToRectangle } from "el/utils/collision";
-import { calculateAngle360, vertiesMap } from "el/utils/math";
+} from "sapa";
+import { isString } from "sapa";
+import { rectToVerties, vertiesToRectangle } from "elf/utils/collision";
+import { calculateAngle360, vertiesMap } from "elf/utils/math";
 import { vec3 } from "gl-matrix";
 
 import "./GridGrowToolView.scss";
 
 class GridGrowBaseView extends EditorElement {
   updateRows(current, newRows) {
-    const data = {}
-    current.layers.forEach(it => {
+    const data = {};
+    current.layers.forEach((it) => {
       data[it.id] = {
-        "grid-row-start" : Math.max(1, Math.min(newRows.length, it['grid-row-start'])),
-        "grid-row-end" : Math.min(newRows.length + 1, it['grid-row-end']),
+        "grid-row-start": Math.max(
+          1,
+          Math.min(newRows.length, it["grid-row-start"])
+        ),
+        "grid-row-end": Math.min(newRows.length + 1, it["grid-row-end"]),
       };
-    })
+    });
 
     this.command("setAttributeForMulti", "change grid rows", {
       ...data,
       [current.id]: {
         "grid-template-rows": Grid.join(newRows),
-      }
+      },
     });
   }
 
   updateColumns(current, newColumns) {
-    const data = {}
-    current.layers.forEach(it => {
+    const data = {};
+    current.layers.forEach((it) => {
       data[it.id] = {
-        "grid-column-start" : Math.max(1, Math.min(newColumns.length, it['grid-column-start'])),
-        "grid-column-end" : Math.min(newColumns.length + 1, it['grid-column-end']),
+        "grid-column-start": Math.max(
+          1,
+          Math.min(newColumns.length, it["grid-column-start"])
+        ),
+        "grid-column-end": Math.min(
+          newColumns.length + 1,
+          it["grid-column-end"]
+        ),
       };
-    })
+    });
 
     this.command("setAttributeForMulti", "change grid columns", {
       ...data,
       [current.id]: {
         "grid-template-columns": Grid.join(newColumns),
-      }
+      },
     });
   }
 
@@ -408,7 +415,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
   moveEndColumn() {
     const targetPosition = this.$viewport.getWorldPosition();
-    const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
+    // const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
 
     const realDistance = vec3.dist(targetPosition, this.initMousePosition);
 
@@ -533,8 +540,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const current = this.getGridTargetLayer();
 
     return {
-      'data-drag-target-item': Boolean(this.$selection.dragTargetItem),
-      'data-grid-layout-own': this.$selection.current?.id === current?.id,
+      "data-drag-target-item": Boolean(this.$selection.dragTargetItem),
+      "data-grid-layout-own": this.$selection.current?.id === current?.id,
       style: {
         display: current ? "block" : "none",
       },
@@ -634,7 +641,6 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   }
 
   getGridTargetLayer() {
-
     if (this.$selection.dragTargetItem) {
       return this.$selection.dragTargetItem;
     }
@@ -714,7 +720,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         info.current.absoluteMatrix
       );
 
-      const originVerties = verties.filter((_, index) => index < 4)
+      const originVerties = verties.filter((_, index) => index < 4);
 
       return {
         row,
@@ -761,8 +767,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const rowItems = items.filter((it) => it.column === 1);
     const columnItems = items.filter((it) => it.row === 1);
 
-    const minY = Math.min(...rowItems.map(it => it.verties[0][1]));
-    const maxY = Math.max(...rowItems.map(it => it.verties[2][1]));
+    const minY = Math.min(...rowItems.map((it) => it.verties[0][1]));
+    const maxY = Math.max(...rowItems.map((it) => it.verties[2][1]));
     const h = maxY - minY;
 
     for (
@@ -789,8 +795,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     // collect row gap box area
 
-    const minX = Math.min(...columnItems.map(it => it.verties[0][0]));
-    const maxX = Math.max(...columnItems.map(it => it.verties[2][0]));
+    const minX = Math.min(...columnItems.map((it) => it.verties[0][0]));
+    const maxX = Math.max(...columnItems.map((it) => it.verties[2][0]));
     const w = maxX - minX;
 
     for (var rowIndex = 1, len = rows.length; rowIndex < len; rowIndex++) {
@@ -845,14 +851,19 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   isSelectedColumn(index) {
     const current = this.$selection.current;
 
-    return current['grid-column-start'] <= index &&   index < current['grid-column-end'];
+    return (
+      current["grid-column-start"] <= index &&
+      index < current["grid-column-end"]
+    );
   }
 
   isSelectedRow(index) {
     const current = this.$selection.current;
 
-    return current['grid-row-start'] <= index &&   index < current['grid-row-end'];
-  }  
+    return (
+      current["grid-row-start"] <= index && index < current["grid-row-end"]
+    );
+  }
 
   [LOAD("$grid") + DOMDIFF]() {
     const current = this.getGridTargetLayer();
@@ -865,13 +876,13 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     const totalCount = info.columns.length * info.rows.length;
 
-
-    const isChild  = this.$selection.current?.id !== info.current.id;
+    const isChild = this.$selection.current?.id !== info.current.id;
 
     return (
       <>
         {Array.from(Array(info.columns.length).keys()).map((index) => {
-          const selected = isChild && this.isSelectedColumn(index + 1) ? 'selected' : "";
+          const selected =
+            isChild && this.isSelectedColumn(index + 1) ? "selected" : "";
 
           return (
             <div
@@ -919,7 +930,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         </div>
 
         {Array.from(Array(info.rows.length).keys()).map((index) => {
-          const selected = isChild  && this.isSelectedRow(index + 1) ? 'selected' : "";          
+          const selected =
+            isChild && this.isSelectedRow(index + 1) ? "selected" : "";
           return (
             <>
               <div
@@ -988,7 +1000,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     );
   }
 
-  [SUBSCRIBE('refreshGridToolInfo')] () {
+  [SUBSCRIBE("refreshGridToolInfo")]() {
     this.refresh();
   }
 

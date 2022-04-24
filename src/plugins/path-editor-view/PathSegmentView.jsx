@@ -1,10 +1,10 @@
-import {PathParser} from 'el/editor/parser/PathParser';
-import { Segment } from "el/editor/parser/Segment";
-import { END, MOVE } from "el/editor/types/event";
-import { PathSegmentType } from "el/editor/types/model";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { Length } from "el/editor/unit/Length";
-import { DOMDIFF, IF, LOAD, POINTERSTART, SUBSCRIBE } from "el/sapa/Event";
+import {PathParser} from 'elf/editor/parser/PathParser';
+import { Segment } from "elf/editor/parser/Segment";
+import { END, MOVE } from "elf/editor/types/event";
+import { PathSegmentType } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
+import { DOMDIFF, IF, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
 import { vec3 } from "gl-matrix";
 
 import "./PathSegmentView.scss";

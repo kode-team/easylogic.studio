@@ -1,71 +1,75 @@
-import { Length } from "el/editor/unit/Length";
-import { CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import './DrawManager.scss';
-import { createComponent } from "el/sapa/functions/jsx";
+import { Length } from "elf/editor/unit/Length";
+import { CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import "./DrawManager.scss";
+import { createComponent } from "sapa";
 
 export default class DrawManager extends EditorElement {
-
   initState() {
-      return {
-          tolerance: 1,
-          stroke: 'black',
-          'stroke-width': 2,
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          msg: this.$i18n('path.manager.msg')
-      }
+    return {
+      tolerance: 1,
+      stroke: "black",
+      "stroke-width": 2,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      msg: this.$i18n("path.manager.msg"),
+    };
   }
 
-
-  [SUBSCRIBE('refreshSelection')]() {
-
+  [SUBSCRIBE("refreshSelection")]() {
     var current = this.$selection.current;
 
     if (current) {
-      this.children.$stroke?.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
-      this.children.$strokeWidth?.setValue(current['stroke-width'] || Length.number(1))
+      this.children.$stroke?.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
+      this.children.$strokeWidth?.setValue(
+        current["stroke-width"] || Length.number(1)
+      );
     }
+  }
 
-  }  
-
-  [SUBSCRIBE('setColorAsset')] ({ color }) {
-
+  [SUBSCRIBE("setColorAsset")]({ color }) {
     if (this.$el.isShow()) {
-      this.setState({
-        stroke: color
-      }, false)
+      this.setState(
+        {
+          stroke: color,
+        },
+        false
+      );
       this.children.$stroke.setValue(color);
       this.updateData({
-        stroke: color
-      })    
+        stroke: color,
+      });
     }
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class='elf--draw-manager'>
         <div class="tools left" ref="$left">
-            <button type="button" class="primary" data-value='DrawEditorDone' title='${this.$i18n('draw.manager.mode.modify')}' >Done</button>
+            <button type="button" class="primary" data-value='DrawEditorDone' title='${this.$i18n(
+              "draw.manager.mode.modify"
+            )}' >Done</button>
         </div>      
         <div class='tools'>   
           <div >        
-            <label data-tooltip="${this.$i18n('draw.manager.tolerance')}">Tolerance</label>       
-            ${createComponent("NumberInputEditor"  , {
-              ref: '$tolerance',
-              key: 'tolerance',
+            <label data-tooltip="${this.$i18n(
+              "draw.manager.tolerance"
+            )}">Tolerance</label>       
+            ${createComponent("NumberInputEditor", {
+              ref: "$tolerance",
+              key: "tolerance",
               value: 1,
               min: 0,
               max: 100,
               step: 0.01,
               unit: "number",
-              onchange: "changeValue" 
+              onchange: "changeValue",
             })}
           </div>              
           <div >
-            <label>${this.$i18n('svg.item.property.stroke')}</label>          
+            <label>${this.$i18n("svg.item.property.stroke")}</label>          
             ${createComponent("FillSingleEditor", {
-              ref: '$stroke',
+              ref: "$stroke",
               simple: true,
               value: this.state.stroke,
               key: "stroke",
@@ -74,35 +78,40 @@ export default class DrawManager extends EditorElement {
           </div>
 
           <div >
-            <label>${this.$i18n('svg.item.property.strokeWidth')}</label>          
-            ${createComponent("NumberInputEditor"  , {
-              ref: '$strokeWidth',
+            <label>${this.$i18n(
+              "svg.item.property.strokeWidth"
+            )}</label>          
+            ${createComponent("NumberInputEditor", {
+              ref: "$strokeWidth",
               key: "stroke-width",
-              value: this.state['stroke-width'],
-              onchange: 'changeValue'
-
+              value: this.state["stroke-width"],
+              onchange: "changeValue",
             })}
           </div>      
           
 
           <div>
-            <label data-tooltip="${this.$i18n('svg.item.property.lineCap')}">Cap</label>          
-            ${createComponent("SelectEditor"  , {
-              ref: '$strokeLineCap',
+            <label data-tooltip="${this.$i18n(
+              "svg.item.property.lineCap"
+            )}">Cap</label>          
+            ${createComponent("SelectEditor", {
+              ref: "$strokeLineCap",
               key: "stroke-linecap",
-              value: this.state['stroke-linecap'],
-              options: ["butt","round","square"],
-              onchange: "changeValue"
+              value: this.state["stroke-linecap"],
+              options: ["butt", "round", "square"],
+              onchange: "changeValue",
             })}
           </div> 
           <div>
-            <label data-tooltip="${this.$i18n('svg.item.property.lineJoin')}">Join</label>          
-            ${createComponent("SelectEditor"  , {
-              ref: '$strokeLineJoin',
+            <label data-tooltip="${this.$i18n(
+              "svg.item.property.lineJoin"
+            )}">Join</label>          
+            ${createComponent("SelectEditor", {
+              ref: "$strokeLineJoin",
               key: "stroke-linejoin",
-              value: this.state['stroke-linejoin'],
-              options: ["miter","bevel","round" ],
-              onchange: "changeValue" 
+              value: this.state["stroke-linejoin"],
+              options: ["miter", "bevel", "round"],
+              onchange: "changeValue",
             })}
           </div>
         </div>
@@ -110,39 +119,37 @@ export default class DrawManager extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
+  [SUBSCRIBE_SELF("changeValue")](key, value) {
     this.updateData({
-      [key]: value
-    })
-  }  
+      [key]: value,
+    });
+  }
 
   updateData(obj = {}) {
-    this.setState(obj, false)
+    this.setState(obj, false);
     this.state.instance.trigger(this.state.changeEvent, obj);
   }
 
-  [SUBSCRIBE('changePathManager')] (mode) {
-    this.setState({ mode })
+  [SUBSCRIBE("changePathManager")](mode) {
+    this.setState({ mode });
   }
 
-  [SUBSCRIBE('showDrawManager')] (obj = {}) {
-      obj.changeEvent = obj.changeEvent || 'changeDrawManager';
-      this.setState(obj)
-      this.$el.show();
+  [SUBSCRIBE("showDrawManager")](obj = {}) {
+    obj.changeEvent = obj.changeEvent || "changeDrawManager";
+    this.setState(obj);
+    this.$el.show();
 
-      this.emit('addStatusBarMessage', this.state.msg)
-      this.emit('hidePathManager');
+    this.emit("addStatusBarMessage", this.state.msg);
+    this.emit("hidePathManager");
   }
 
-  [SUBSCRIBE('hideDrawManager')] () {
-      this.$el.hide();
+  [SUBSCRIBE("hideDrawManager")]() {
+    this.$el.hide();
   }
 
+  [CLICK("$left button")](e) {
+    var message = e.$dt.attr("data-value");
 
-  [CLICK('$left button')] (e) {
-    var message = e.$dt.attr('data-value');
-
-    this.emit(message);  
-  }    
-
+    this.emit(message);
+  }
 }

@@ -1,5 +1,4 @@
-
-import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, SUBSCRIBE } from "el/sapa/Event";
+import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, SUBSCRIBE } from "sapa";
 
 import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import TimelinePlayControl from "./timeline/TimelinePlayControl";
@@ -9,14 +8,10 @@ import KeyframeTimeView from "./timeline/KeyframeTimeView";
 import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
 import TimelineObjectList from "./timeline/TimelineObjectList";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from "el/sapa/functions/jsx";
-
-
-
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
 export default class TimelineProperty extends BaseProperty {
-
   components() {
     return {
       TimelineKeyframeList,
@@ -26,8 +21,8 @@ export default class TimelineProperty extends BaseProperty {
       KeyframeTimeGridView,
       TimelineValueEditor,
       TimelinePlayControl,
-      TimelineAnimationProperty
-    }
+      TimelineAnimationProperty,
+    };
   }
 
   isFirstShow() {
@@ -35,19 +30,19 @@ export default class TimelineProperty extends BaseProperty {
   }
 
   getTitle() {
-    return this.$i18n('timeline.property.title'); 
-  } 
+    return this.$i18n("timeline.property.title");
+  }
 
   getTools() {
     return createComponent("TimelinePlayControl");
   }
 
   getClassName() {
-    return 'timeline full managed-tool'
+    return "timeline full managed-tool";
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class='timeline-animation-area'>
         ${createComponent("TimelineAnimationProperty")}
       </div>
@@ -57,7 +52,7 @@ export default class TimelineProperty extends BaseProperty {
             ${createComponent("TimelineTopToolbar")}
           </div>
           <div class='timeline-keyframe-toolbar' ref='$keyframeToolBar'>
-            ${createComponent("KeyframeTimeView", {ref: '$keyframeTimeView'})}
+            ${createComponent("KeyframeTimeView", { ref: "$keyframeTimeView" })}
           </div>
         </div>
         <div class='timeline-body'>
@@ -65,49 +60,49 @@ export default class TimelineProperty extends BaseProperty {
             ${createComponent("TimelineObjectList")}
           </div>
           <div class='timeline-keyframe-area' ref='$keyframeArea'>
-            ${createComponent("TimelineKeyframeList", {ref: '$keyframeList'})}
+            ${createComponent("TimelineKeyframeList", { ref: "$keyframeList" })}
           </div>
-            ${createComponent("KeyframeTimeGridView", {ref: '$keyframeTimeGridView'})}
+            ${createComponent("KeyframeTimeGridView", {
+              ref: "$keyframeTimeGridView",
+            })}
         </div>
       </div>
       <div class='timeline-value-area'>
       ${createComponent("TimelineValueEditor", {
-        ref: '$valueEditor',
-        onchange: 'changeKeyframeValue'
+        ref: "$valueEditor",
+        onchange: "changeKeyframeValue",
       })}
       </div>
     `;
   }
 
-  [SCROLL('$keyframeArea')] (e) {
-      this.refs.$area.setScrollTop(this.refs.$keyframeArea.scrollTop())
-  }  
+  [SCROLL("$keyframeArea")]() {
+    this.refs.$area.setScrollTop(this.refs.$keyframeArea.scrollTop());
+  }
 
-  [SCROLL('$area')] (e) {
-    this.refs.$keyframeArea.setScrollTop(this.refs.$area.scrollTop())
-  }    
+  [SCROLL("$area")]() {
+    this.refs.$keyframeArea.setScrollTop(this.refs.$area.scrollTop());
+  }
 
-  [SUBSCRIBE('refreshValueEditor') + DEBOUNCE(100)] () {
+  [SUBSCRIBE("refreshValueEditor") + DEBOUNCE(100)]() {
     this.children.$valueEditor.refresh();
   }
 
   afterRender() {
-    this.trigger('refreshValueEditor');
-    
+    this.trigger("refreshValueEditor");
   }
 
-  [SUBSCRIBE('changeKeyframeValue')] (obj) {
-    this.emit('setTimelineOffset', obj);
+  [SUBSCRIBE("changeKeyframeValue")](obj) {
+    this.emit("setTimelineOffset", obj);
   }
 
-  [DRAGOVER('$area') + PREVENT] (e) { }
-  [DROP('$area') + PREVENT] (e) {
-    this.emit('addTimelineItem', e.dataTransfer.getData('layer/id'));
+  [DRAGOVER("$area") + PREVENT]() {}
+  [DROP("$area") + PREVENT](e) {
+    this.emit("addTimelineItem", e.dataTransfer.getData("layer/id"));
   }
 
   onToggleShow() {
-    this.emit('toggleFooter', this.isPropertyShow())    
-    this.emit('timeline.view', this.isPropertyShow())    
+    this.emit("toggleFooter", this.isPropertyShow());
+    this.emit("timeline.view", this.isPropertyShow());
   }
-
 }

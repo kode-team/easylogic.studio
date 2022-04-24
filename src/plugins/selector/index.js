@@ -1,18 +1,16 @@
-import { Editor } from "el/editor/manager/Editor";
 import SelectorPopup from "./SelectorPopup";
 import SelectorProperty from "./SelectorProperty";
 
-
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('inspector.tab.transition', {
-        SelectorProperty   
-    })
+  editor.registerUI("inspector.tab.transition", {
+    SelectorProperty,
+  });
 
-    editor.registerUI('popup', {
-        SelectorPopup
-    })
+  editor.registerUI("popup", {
+    SelectorPopup,
+  });
 }

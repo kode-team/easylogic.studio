@@ -1,13 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
+// import { Editor } from "elf/editor/manager/Editor";
 import DepthProperty from "./DepthProperty";
 
-
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('inspector.tab.style', {
-        DepthProperty
-    })
+  editor.registerUI("inspector.tab.style", {
+    DepthProperty,
+  });
 }

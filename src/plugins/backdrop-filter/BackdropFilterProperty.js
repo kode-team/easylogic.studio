@@ -1,124 +1,113 @@
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF, DEBOUNCE } from "sapa";
 
-import {
-  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF, DEBOUNCE
-} from "el/sapa/Event";
-
-import icon, { iconUse } from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import { iconUse } from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
-import { createComponent } from "el/sapa/functions/jsx";
+import { createComponent } from "sapa";
 
 import "./BackdropFilterProperty.scss";
 export default class BackdropFilterProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('backdrop.filter.property.title');
+    return this.$i18n("backdrop.filter.property.title");
   }
 
   getTitleClassName() {
-    return 'filter'
+    return "filter";
   }
 
   getBodyClassName() {
-    return 'no-padding';
+    return "no-padding";
   }
 
   getBody() {
-    return /*html*/`<div class='full filter-property' ref='$body'></div>`;
+    return /*html*/ `<div class='full filter-property' ref='$body'></div>`;
   }
 
   getTools() {
-    return /*html*/`
+    return /*html*/ `
       <select class="filter-select" ref="$filterSelect"></select>
-      <button type="button" ref="$add" title="add Filter">${iconUse("add")}</button>
-    `
+      <button type="button" ref="$add" title="add Filter">${iconUse(
+        "add"
+      )}</button>
+    `;
   }
-  
 
   [CLICK("$add")]() {
     var filterType = this.refs.$filterSelect.value;
 
-    this.children.$filterEditor.trigger('add', filterType)
+    this.children.$filterEditor.trigger("add", filterType);
   }
 
-  [LOAD('$filterSelect')] () {
-    var list = filter_list.map(it => { 
-      return {title: this.$i18n(`filter.property.${it}`), value: it}
-    })
+  [LOAD("$filterSelect")]() {
+    var list = filter_list.map((it) => {
+      return { title: this.$i18n(`filter.property.${it}`), value: it };
+    });
 
-    var svgFilterList = this.getSVGFilterList()
+    var svgFilterList = this.getSVGFilterList();
 
-    var totalList = []
+    var totalList = [];
 
     if (svgFilterList.length) {
-      totalList = [
-        ...list,
-        { title: '-------' , value: ''},
-        ...svgFilterList
-      ]
+      totalList = [...list, { title: "-------", value: "" }, ...svgFilterList];
     } else {
-      totalList = [
-        ...list
-      ]
+      totalList = [...list];
     }
 
-    return totalList.map(it => {
-      var {title, value} = it;
-      
-      return `<option value='${value}'>${title}</option>`
-    })
+    return totalList.map((it) => {
+      var { title, value } = it;
+
+      return `<option value='${value}'>${title}</option>`;
+    });
   }
 
-
-  getSVGFilterList () {
-     
+  getSVGFilterList() {
     var current = this.$selection.currentProject;
-    var arr = [] 
+    var arr = [];
 
     if (current) {
-      arr = current.svgfilters
-        .map(it => {
-          return {
-            title : `svg - #${it.id}`,
-            value: it.id
-          }
-        })
+      arr = current.svgfilters.map((it) => {
+        return {
+          title: `svg - #${it.id}`,
+          value: it.id,
+        };
+      });
     }
 
-    return arr
-  }  
+    return arr;
+  }
 
+  [LOAD("$body")]() {
+    var current = this.$selection.current || {};
+    var value = current["backdrop-filter"];
 
-  [LOAD('$body')] () {
-    var current = this.$selection.current || {} 
-    var value = current['backdrop-filter'];
-
-    return /*html*/`
+    return /*html*/ `
       <div>
         ${createComponent("FilterEditor", {
-          ref: '$filterEditor',
+          ref: "$filterEditor",
           key: "backdrop-filter",
           value,
           hideLabel: true,
-          onchange: 'changeFilterEditor'
+          onchange: "changeFilterEditor",
         })}
       </div>
-    `
+    `;
   }
 
-  [SUBSCRIBE_SELF('changeFilterEditor')] (key, filter) {
-
-    this.command("setAttributeForMulti", "change backdrop filter", this.$selection.packByValue({
-      [key]: filter
-    }))  
-
+  [SUBSCRIBE_SELF("changeFilterEditor")](key, filter) {
+    this.command(
+      "setAttributeForMulti",
+      "change backdrop filter",
+      this.$selection.packByValue({
+        [key]: filter,
+      })
+    );
   }
 
   get editableProperty() {
     return "backdrop-filter";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(1000)] () {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow") + DEBOUNCE(1000)]() {
     this.refresh();
   }
 }

@@ -1,45 +1,48 @@
-import { CLICK, BIND, SUBSCRIBE } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { CLICK, BIND } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './ColorSingleEditor.scss';
+import "./ColorSingleEditor.scss";
 
 export default class ColorSingleEditor extends EditorElement {
+  initState() {
+    return {
+      params: this.props.params,
+      color: this.props.color || "rgba(0, 0, 0, 1)",
+    };
+  }
 
-    initState() { 
-        return {
-            params: this.props.params,
-            color: this.props.color || 'rgba(0, 0, 0, 1)'
-        }
-    }
+  updateData(opt = {}) {
+    this.setState(opt, false);
+    this.modifyColor();
+  }
 
-    updateData(opt = {}) {
-        this.setState(opt, false);
-        this.modifyColor();
-    }
+  modifyColor() {
+    this.parent.trigger(
+      this.props.onchange,
+      this.props.key,
+      this.state.color,
+      this.state.params
+    );
+  }
 
-    modifyColor() {
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.color, this.state.params);
-    }
+  changeColor(color) {
+    this.setState({ color });
+  }
 
-    changeColor (color) {
-        this.setState({ color })
-    }
+  setValue(color) {
+    this.changeColor(color);
+  }
 
-    setValue (color) {
-        this.changeColor(color);
-    }
+  [BIND("$miniView")]() {
+    return {
+      style: {
+        "background-color": this.state.color,
+      },
+    };
+  }
 
-    [BIND('$miniView')] () {
-        return {
-            style: {
-                'background-color': this.state.color
-            }
-        }
-    }
-
-    template() {
-
-        return /*html*/`
+  template() {
+    return /*html*/ `
             <div class='elf--color-single-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
@@ -47,22 +50,21 @@ export default class ColorSingleEditor extends EditorElement {
                     </div>
                 </div>
             </div>
-        `
-    }
+        `;
+  }
 
+  [CLICK("$preview")]() {
+    this.viewColorPicker();
+  }
 
-    [CLICK("$preview")](e) {
-        this.viewColorPicker();
-    }
-
-    viewColorPicker() {
-        this.emit("showColorPickerPopup", {
-            target: this,
-            changeEvent: (color) => {
-                this.refs.$miniView.cssText(`background-color: ${color}`);
-                this.updateData({ color })                
-            },
-            color: this.state.color
-        });
-    }
+  viewColorPicker() {
+    this.emit("showColorPickerPopup", {
+      target: this,
+      changeEvent: (color) => {
+        this.refs.$miniView.cssText(`background-color: ${color}`);
+        this.updateData({ color });
+      },
+      color: this.state.color,
+    });
+  }
 }

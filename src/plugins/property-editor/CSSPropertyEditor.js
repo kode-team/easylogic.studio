@@ -1,43 +1,38 @@
-import { Length } from "el/editor/unit/Length";
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import icon from "elf/editor/icon/icon";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './CSSPropertyEditor.scss';
-import { variable } from 'el/sapa/functions/registElement';
-import { createComponent } from "el/sapa/functions/jsx";
+import "./CSSPropertyEditor.scss";
+import { variable } from "sapa";
+import { createComponent } from "sapa";
 
 export default class CSSPropertyEditor extends EditorElement {
-
   initState() {
     return {
-      hideTitle: this.props['hide-title'] === 'true',
-      hideRefresh: this.props['hide-refresh'] === 'true',
-      properties: [] 
+      hideTitle: this.props["hide-title"] === "true",
+      hideRefresh: this.props["hide-refresh"] === "true",
+      properties: [],
     };
   }
 
   updateData(opt) {
-    this.setState(opt, false); 
+    this.setState(opt, false);
     this.modifyProperty();
   }
 
-  modifyProperty () {
-
+  modifyProperty() {
     this.parent.trigger(this.props.onchange, this.state.properties);
   }
 
-
   template() {
+    const hideTitleClass = this.state.hideTitle ? "hide-title" : "";
+    const hideRefreshClass = this.state.hideRefresh ? "hide-refresh" : "";
 
-
-    const hideTitleClass = this.state.hideTitle ? 'hide-title' : '';
-    const hideRefreshClass = this.state.hideRefresh ? 'hide-refresh' : '';
-
-    return /*html*/`
+    return /*html*/ `
       <div class='elf--css-property-editor ${hideTitleClass} ${hideRefreshClass}'>
         <div class='title'>
-          <label>${this.$i18n('css.property.editor.properties')}</label>
+          <label>${this.$i18n("css.property.editor.properties")}</label>
           <div class='tools'>
             ${this.makePropertySelect()}
             <button type="button" ref='$addProperty'>${icon.add}</button>
@@ -45,196 +40,195 @@ export default class CSSPropertyEditor extends EditorElement {
         </div>
         <div class='input grid-1 css-property-list' ref='$property'></div>
       </div>
-    `
-  }  
-
-  getPropertyDefaultValue (key) {
-
-      switch(key) {
-        case 'animation-timing-function':
-        case 'box-shadow':
-        case 'text-shadow':
-        case 'color':
-        case 'background-image':
-        case 'background-color':
-        case 'text-fill-color':
-        case 'text-stroke-color':
-        case 'filter':      
-        case 'backdrop-filter':      
-        case 'var':
-        case 'transform':          
-        case 'transform-origin':
-        case 'perspective-origin':
-        case 'playTime':
-          return Length.string('');          
-        case 'offset-distance': 
-          return Length.percent(0);
-        case 'rotate':
-          return Length.deg(0);
-        case 'mix-blend-mode': 
-          return 'normal';
-        case 'clip-path':
-          return '';
-        case 'opacity':
-          return 1; 
-        default: 
-          return 0;
-      }
+    `;
   }
 
-  [CLICK('$addProperty')] (e) {
-    var key = this.getRef('$propertySelect').value;
+  getPropertyDefaultValue(key) {
+    switch (key) {
+      case "animation-timing-function":
+      case "box-shadow":
+      case "text-shadow":
+      case "color":
+      case "background-image":
+      case "background-color":
+      case "text-fill-color":
+      case "text-stroke-color":
+      case "filter":
+      case "backdrop-filter":
+      case "var":
+      case "transform":
+      case "transform-origin":
+      case "perspective-origin":
+      case "playTime":
+        return Length.string("");
+      case "offset-distance":
+        return Length.percent(0);
+      case "rotate":
+        return Length.deg(0);
+      case "mix-blend-mode":
+        return "normal";
+      case "clip-path":
+        return "";
+      case "opacity":
+        return 1;
+      default:
+        return 0;
+    }
+  }
 
+  [CLICK("$addProperty")]() {
+    var key = this.getRef("$propertySelect").value;
 
     var searchItem = this.state.properties.find((it) => {
-      return it.key === key 
-    })
+      return it.key === key;
+    });
 
     if (searchItem) {
-      alert(`${key} is already added.`)
-      return; 
+      window.alert(`${key} is already added.`);
+      return;
     }
 
-    var value = this.getPropertyDefaultValue(key)
+    var value = this.getPropertyDefaultValue(key);
 
-    var current = this.$selection.current;  
+    var current = this.$selection.current;
 
     if (current) {
-      value = current[key]
+      value = current[key];
     }
 
-    this.state.properties.push({ key, value })
+    this.state.properties.push({ key, value });
 
     this.refresh();
     this.modifyProperty();
-
   }
 
-
-  makeIndivisualPropertyColorEditor (property, index) {
-
-    var key = property.key.split('-').join('');
-    return /*html*/`
+  makeIndivisualPropertyColorEditor(property, index) {
+    var key = property.key.split("-").join("");
+    return /*html*/ `
       <div class='property-editor'>
         <object refClass="ColorViewEditor" ref='$${key}${index}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
       </div>
-    `
+    `;
   }
 
-  makeCustomePropertyEditor (property, index) {
-    return /*html*/`
+  makeCustomePropertyEditor(property, index) {
+    return /*html*/ `
       <div class='property-editor'>
         ${createComponent(property.editor, {
           onchange: "changeSelect",
           ref: `$customProperty${index}`,
           key: property.key,
-          value: property.value
+          value: property.value,
         })}
       </div>
-    `
+    `;
   }
 
-  makeIndivisualPropertyEditor (property, index) {
-
-    if (property.key === 'background-image') {
-      return /*html*/`
+  makeIndivisualPropertyEditor(property, index) {
+    if (property.key === "background-image") {
+      return /*html*/ `
         <div class='property-editor'>
           ${createComponent("BackgroundImageEditor", {
-            ref: `$backgroundImage${index}`, 
-            key: property.key, 
-            'hide-title': this.state.hideTitle, 
+            ref: `$backgroundImage${index}`,
+            key: property.key,
+            "hide-title": this.state.hideTitle,
             value: property.value,
-            onchange: "changeKeyValue"
+            onchange: "changeKeyValue",
           })}
         </div>
-      `
-    } else if (property.key === 'filter') {
-      return /*html*/`
+      `;
+    } else if (property.key === "filter") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="FilterEditor" ref='$filter${index}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
         </div>
-      `
-    } else if (property.key === 'backdrop-filter') {
-      return /*html*/`
+      `;
+    } else if (property.key === "backdrop-filter") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="FilterEditor" ref='$backdropFilter${index}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
         </div>
-      `      
-    } else if (property.key === 'box-shadow') {
-      return /*html*/`
+      `;
+    } else if (property.key === "box-shadow") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="BoxShadowEditor" ref='$boxshadow${index}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
         </div>
-      `      
-    } else if (property.key === 'text-shadow') {
-      return /*html*/`
+      `;
+    } else if (property.key === "text-shadow") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="TextShadowEditor" ref='$textshadow${index}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
         </div>
-      `            
-    } else if (property.key === 'var') {
-      return /*html*/`
+      `;
+    } else if (property.key === "var") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="VarEditor" ref='$var${index}' value="${property.value}" onChange="changeVar" />
         </div>
-      `       
-    } else if (property.key === 'transform') {
-      return /*html*/`
+      `;
+    } else if (property.key === "transform") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="TransformEditor" ref='$transform${index}' value="${property.value}" onChange="changeTransform" />
         </div>
-      `                  
-    } else if (property.key === 'transform-origin') {
-      return /*html*/`
+      `;
+    } else if (property.key === "transform-origin") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="TransformOriginEditor" ref='$transformOrigin${index}' value="${property.value}" onChange="changeTransformOrigin" />
         </div>
-      `                  
-    } else if (property.key === 'perspective-origin') {
-      return /*html*/`
+      `;
+    } else if (property.key === "perspective-origin") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="PerspectiveOriginEditor" ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
-      `               
-    } else if (property.key === 'fill-rule') {
-      return /*html*/`
+      `;
+    } else if (property.key === "fill-rule") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="SelectEditor"  
           ref='$fillRule${index}' 
           key='fill-rule' 
           icon="true" 
-          options=${variable(["nonzero","evenodd" ])}
+          options=${variable(["nonzero", "evenodd"])}
           value="${property.value}"
           onchange="changeSelect" />
         </div>
-      `       
-    } else if (property.key === 'stroke-linecap') {
-      return /*html*/`
+      `;
+    } else if (property.key === "stroke-linecap") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="SelectEditor"  
           ref='$strokeLinecap${index}' 
           key='stroke-linecap' 
           icon="true" 
-          options=${variable(["butt","round","square" ])}          
+          options=${variable(["butt", "round", "square"])}          
           value="${property.value}"
           onchange="changeSelect" />
         </div>
-      `       
-      
-    } else if (property.key === 'stroke-linejoin') {
-      return /*html*/`
+      `;
+    } else if (property.key === "stroke-linejoin") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="SelectEditor"  
           ref='$strokeLinejoin${index}' 
           key='stroke-linejoin' 
           icon="true" 
-          options=${variable(["miter","arcs","bevel","miter-clip","round" ])}                    
+          options=${variable([
+            "miter",
+            "arcs",
+            "bevel",
+            "miter-clip",
+            "round",
+          ])}                    
           value="${property.value}"
           onchange="changeSelect" />
         </div>
-      `             
-    } else if (property.key === 'mix-blend-mode') {
-      return /*html*/`
+      `;
+    } else if (property.key === "mix-blend-mode") {
+      return /*html*/ `
         <div class='property-editor'>
           <object refClass="BlendSelectEditor" 
           ref='$mixBlendMode${index}' 
@@ -243,171 +237,168 @@ export default class CSSPropertyEditor extends EditorElement {
           value="${property.value}"
           onchange="changeSelect" />
         </div>
-      `   
-    } else if (property.key === 'stroke-dasharray') {
-      return /*html*/`
+      `;
+    } else if (property.key === "stroke-dasharray") {
+      return /*html*/ `
         <object refClass="StrokeDashArrayEditor" 
           ref='$strokeDashArray${index}' 
           key='stroke-dasharray'
           value='${property.value}' 
           onchange='changeSelect' 
         />
-      `      
-    } else if (property.key === 'border-radius') {
-      return /*html*/`
+      `;
+    } else if (property.key === "border-radius") {
+      return /*html*/ `
         <object refClass="BorderRadiusEditor"
           ref='$borderRadius${index}' 
           key='border-radius'
           value='${property.value}' 
           onchange='changeBorderRadius' 
         />
-      `
-    } else if (property.key === 'border') {
-      return /*html*/`
+      `;
+    } else if (property.key === "border") {
+      return /*html*/ `
         <object refClass="BorderEditor"
           ref='$border${index}' 
           key='border'
           value='${property.value}' 
           onchange='changeKeyValue' 
         />
-      `      
-    } else if (property.key === 'clip-path') {
-      return /*html*/`
+      `;
+    } else if (property.key === "clip-path") {
+      return /*html*/ `
         <object refClass="ClipPathEditor"
           ref='$clipPath${index}' 
           key='clip-path'
           value='${property.value}' 
           onchange='changeClipPath' 
         />
-      `      
-    } else if (property.key === 'd') {
-      return /*html*/`
+      `;
+    } else if (property.key === "d") {
+      return /*html*/ `
         <object refClass="PathDataEditor" ref='$pathData${index}' key='d' value='${property.value}' onchange='changeSelect' />
-      `            
-    } else if (property.key === 'points') {
-      return /*html*/`
+      `;
+    } else if (property.key === "points") {
+      return /*html*/ `
         <object refClass="PolygonDataEditor" ref='$polygonData${index}' key='points' value='${property.value}' onchange='changeSelect' />
-      `    
-    } else if (property.key === 'playTime') {
-      return /*html*/`
+      `;
+    } else if (property.key === "playTime") {
+      return /*html*/ `
         <object refClass="MediaProgressEditor" ref='$playTime${index}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
-      `                   
+      `;
     }
 
-    return /*html*/`
+    return /*html*/ `
       <div class='property-editor'>
         ???
 
       </div>
-    `
-
+    `;
   }
 
-  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
     this.modifyPropertyValue(key, value);
   }
 
-
-  [SUBSCRIBE_SELF('changeBorderRadius')] (value) {
-    this.modifyPropertyValue('border-radius', value);
+  [SUBSCRIBE_SELF("changeBorderRadius")](value) {
+    this.modifyPropertyValue("border-radius", value);
   }
 
-  [SUBSCRIBE_SELF('changeClipPath')] (value) {
-    this.modifyPropertyValue('clip-path', value);
-  }  
+  [SUBSCRIBE_SELF("changeClipPath")](value) {
+    this.modifyPropertyValue("clip-path", value);
+  }
 
-  [SUBSCRIBE_SELF('changeColorProperty')] (key, color) {
+  [SUBSCRIBE_SELF("changeColorProperty")](key, color) {
     this.modifyPropertyValue(key, color);
-  }  
+  }
 
-  [SUBSCRIBE_SELF('changeBackgroundImageProperty')] (key, backgroundImage) {
+  [SUBSCRIBE_SELF("changeBackgroundImageProperty")](key, backgroundImage) {
     this.modifyPropertyValue(key, backgroundImage);
-  }  
+  }
 
-  [SUBSCRIBE_SELF('changeFilterProperty')] (filter) {
-    this.modifyPropertyValue('filter', filter);
-  }    
+  [SUBSCRIBE_SELF("changeFilterProperty")](filter) {
+    this.modifyPropertyValue("filter", filter);
+  }
 
-  [SUBSCRIBE_SELF('changeBackdropFilterProperty')] (filter) {
-    this.modifyPropertyValue('backdrop-filter', filter);
-  }      
+  [SUBSCRIBE_SELF("changeBackdropFilterProperty")](filter) {
+    this.modifyPropertyValue("backdrop-filter", filter);
+  }
 
-  [SUBSCRIBE_SELF('changeBoxShadowProperty')] (boxshadow) {
-    this.modifyPropertyValue('box-shadow', boxshadow);
-  }   
-  [SUBSCRIBE_SELF('changeTextShadowProperty')] (textShadow) {
-    this.modifyPropertyValue('text-shadow', textShadow);
-  }     
-  
-  [SUBSCRIBE_SELF('changeVar')] (value) {
-    this.modifyPropertyValue('var', value);
-  }     
+  [SUBSCRIBE_SELF("changeBoxShadowProperty")](boxshadow) {
+    this.modifyPropertyValue("box-shadow", boxshadow);
+  }
+  [SUBSCRIBE_SELF("changeTextShadowProperty")](textShadow) {
+    this.modifyPropertyValue("text-shadow", textShadow);
+  }
 
-  [SUBSCRIBE_SELF('changeTransform')] (value) {
-    this.modifyPropertyValue('transform', value);
-  }       
+  [SUBSCRIBE_SELF("changeVar")](value) {
+    this.modifyPropertyValue("var", value);
+  }
 
-  [SUBSCRIBE_SELF('changeTransformOrigin')] (value) {
-    this.modifyPropertyValue('transform-origin', value);
-  }         
+  [SUBSCRIBE_SELF("changeTransform")](value) {
+    this.modifyPropertyValue("transform", value);
+  }
 
-  [SUBSCRIBE_SELF('changePerspectiveOrigin')] (value) {
-    this.modifyPropertyValue('perspective-origin', value);
-  }         
+  [SUBSCRIBE_SELF("changeTransformOrigin")](value) {
+    this.modifyPropertyValue("transform-origin", value);
+  }
 
-  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+  [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
+    this.modifyPropertyValue("perspective-origin", value);
+  }
+
+  [SUBSCRIBE_SELF("changeSelect")](key, value) {
     this.modifyPropertyValue(key, value);
   }
 
-
-  makePropertyEditor (property, index) {
-
+  makePropertyEditor(property, index) {
     if (property.editor) {
       return this.makeCustomePropertyEditor(property, index);
     }
 
-    switch(property.key) {
-
-      case 'animation-timing-function':
-      case 'box-shadow':
-      case 'text-shadow':
-      case 'background-image':
-      case 'filter':
-      case 'backdrop-filter':
-      case 'var':
-      case 'transform':
-      case 'transform-origin':
-      case 'perspective-origin':
-      case 'mix-blend-mode':  
-      case 'border':
-      case 'border-radius':   
-      case 'clip-path':   
-      case 'fill-rule':
-      case 'stroke-linecap':
-      case 'stroke-linejoin':
-      case 'stroke-dasharray':
-      case 'd':
-      case 'points':
-      case 'offset-path':
-      case 'playTime':
+    switch (property.key) {
+      case "animation-timing-function":
+      case "box-shadow":
+      case "text-shadow":
+      case "background-image":
+      case "filter":
+      case "backdrop-filter":
+      case "var":
+      case "transform":
+      case "transform-origin":
+      case "perspective-origin":
+      case "mix-blend-mode":
+      case "border":
+      case "border-radius":
+      case "clip-path":
+      case "fill-rule":
+      case "stroke-linecap":
+      case "stroke-linejoin":
+      case "stroke-dasharray":
+      case "d":
+      case "points":
+      case "offset-path":
+      case "playTime":
         return this.makeIndivisualPropertyEditor(property, index);
-      case 'color':
-      case 'background-color':
-      case 'text-fill-color':
-      case 'text-stroke-color':
-      case 'stroke':
-      case 'fill':
+      case "color":
+      case "background-color":
+      case "text-fill-color":
+      case "text-stroke-color":
+      case "stroke":
+      case "fill":
         return this.makeIndivisualPropertyColorEditor(property, index);
-      case 'opacity':
-      case 'fill-opacity':        
-      case 'stroke-dashoffset':
-      case 'offset-distance':
-
+      case "opacity":
+      case "fill-opacity":
+      case "stroke-dashoffset":
+      case "offset-distance":
+        // eslint-disable-next-line no-case-declarations
         let min = 0;
-        let max = 1; 
-        let step = 0.01; 
+        // eslint-disable-next-line no-case-declarations
+        let max = 1;
+        // eslint-disable-next-line no-case-declarations
+        let step = 0.01;
 
-        return /*html*/`
+        return /*html*/ `
           <div class='property-editor'>
             <object refClass="NumberRangeEditor"  
               ref='$opacity${index}' 
@@ -420,9 +411,9 @@ export default class CSSPropertyEditor extends EditorElement {
               removable="true"
               onchange="changeRangeEditor" />
           </div>
-        `
-      case 'rotate':
-        return /*html*/`
+        `;
+      case "rotate":
+        return /*html*/ `
           <div class='property-editor'>
             <object refClass="RangeEditor"  
               ref='rangeEditor${index}' 
@@ -433,53 +424,46 @@ export default class CSSPropertyEditor extends EditorElement {
               units="deg" 
               onChange="changeRangeEditor" />
           </div>
-        `
-      case 'left': 
-      case 'margin-top': 
-      case 'margin-bottom': 
-      case 'margin-left': 
-      case 'margin-right': 
-      case 'padding-top': 
-      case 'padding-bottom': 
-      case 'padding-left': 
-      case 'padding-right': 
-
-      case 'font-size': 
-      case 'width': 
-      case 'height':   
-      case 'perspective':  
-      case 'offset-distance':
-      case 'text-stroke-width':
-      default: 
-        return /*html*/`
+        `;
+      case "left":
+      case "margin-top":
+      case "margin-bottom":
+      case "margin-left":
+      case "margin-right":
+      case "padding-top":
+      case "padding-bottom":
+      case "padding-left":
+      case "padding-right":
+      case "width":
+      case "height":
+      case "perspective":
+      case "text-stroke-width":
+      default:
+        return /*html*/ `
           <div class='property-editor'>
             <object refClass="RangeEditor"  ref='rangeEditor${index}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
           </div>
-        `
+        `;
     }
-
   }
 
-  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
     this.modifyPropertyValue(key, value + "");
   }
 
-  searchKey (key, callback) {
-    this.state.properties.filter(it => it.key === key).forEach(callback)
+  searchKey(key, callback) {
+    this.state.properties.filter((it) => it.key === key).forEach(callback);
   }
 
-  modifyPropertyValue (key, value) {
-
+  modifyPropertyValue(key, value) {
     this.searchKey(key, (it) => {
-      it.value = value; 
-    })
-    this.modifyProperty()    
-
+      it.value = value;
+    });
+    this.modifyProperty();
   }
-
 
   makePropertySelect() {
-    return /*html*/`
+    return /*html*/ `
       <select class='property-select' ref='$propertySelect'>
         <optgroup label='Position'>
           <option value='x'>x</option>
@@ -526,30 +510,34 @@ export default class CSSPropertyEditor extends EditorElement {
           <option value='animation-timing-function'>timing-function</option>
         </optgroup>        
       </select>
-    `
+    `;
   }
 
-  [LOAD('$property')] () {
-    return this.state.properties.map( (it, index) => {
-      return /*html*/`
+  [LOAD("$property")]() {
+    return this.state.properties.map((it, index) => {
+      return /*html*/ `
         <div class='css-property-item'>
           <div class='title'>
             <label>${it.key}</label>
             <div class='tools'>
-              <button type="button" class='remove' data-index="${index}">${icon.remove2}</button>
+              <button type="button" class='remove' data-index="${index}">${
+        icon.remove2
+      }</button>
             </div>
           </div>
           <div class='title-2'>
             <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index}">${icon.refresh}</button> Refresh</label>
+              <label><button type="button" class='refresh' data-index="${index}">${
+        icon.refresh
+      }</button> Refresh</label>
             </div>
           </div>
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index)}
           </div>
         </div>
-      `
-    })
+      `;
+    });
   }
 
   [SUBSCRIBE("showCSSPropertyEditor")](properties = []) {
@@ -557,15 +545,15 @@ export default class CSSPropertyEditor extends EditorElement {
     this.refresh();
   }
 
-  [CLICK('$property .remove')] (e) {
-    var index = +e.$dt.attr('data-index')
+  [CLICK("$property .remove")](e) {
+    var index = +e.$dt.attr("data-index");
 
     this.state.properties.splice(index, 1);
     this.refresh();
     this.modifyProperty();
   }
 
-  [CLICK('$property .refresh')] (e) {
-    this.parent.trigger('refreshPropertyValue');
-  }  
+  [CLICK("$property .refresh")]() {
+    this.parent.trigger("refreshPropertyValue");
+  }
 }

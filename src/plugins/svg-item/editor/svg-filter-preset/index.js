@@ -5,9 +5,9 @@ import stroke from "./stroke";
 import dancingStroke from "./dancing-stroke";
 
 export default {
-    dancingStroke,
-    stroke,
-    grayscale,
-    shadow,
-    innerShadow
-}
+  dancingStroke,
+  stroke,
+  grayscale,
+  shadow,
+  innerShadow,
+};

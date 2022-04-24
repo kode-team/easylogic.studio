@@ -1,104 +1,105 @@
-import { LOAD, CLICK, SUBSCRIBE } from "el/sapa/Event";
-import colors from "el/editor/preset/colors";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { LOAD, CLICK, SUBSCRIBE } from "sapa";
+import colors from "elf/editor/preset/colors";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './ColorAssetsEditor.scss';
-import { variable } from 'el/sapa/functions/registElement';
-import { createComponent } from "el/sapa/functions/jsx";
+import "./ColorAssetsEditor.scss";
+import { createComponent } from "sapa";
 
 export default class ColorAssetsEditor extends EditorElement {
-  
   initState() {
     return {
-      mode: 'grid',
-      preset: 'random',
-      isLoaded : false, 
-      colors
-    }
+      mode: "grid",
+      preset: "random",
+      isLoaded: false,
+      colors,
+    };
   }
-
 
   getTools() {
-    return /*html*/`<div ref="$tools"></div>`
+    return /*html*/ `<div ref="$tools"></div>`;
   }
 
-  [LOAD('$tools')] () {
-    const options = this.state.colors.map(it => {
-      return { value: it.key, text: it.title } 
+  [LOAD("$tools")]() {
+    const options = this.state.colors.map((it) => {
+      return { value: it.key, text: it.title };
     });
 
     return createComponent("SelectEditor", {
       key: "preset",
       value: this.state.preset,
       options,
-      onchange: "changePreset"
+      onchange: "changePreset",
     });
   }
 
-  [SUBSCRIBE('changePreset')] (key, value) {
+  [SUBSCRIBE("changePreset")](key, value) {
     this.setState({
-      [key]: value
-    })
+      [key]: value,
+    });
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class='elf--color-assets-editor'>
         <div class='color-assets-head'>
           <div class='tools'>${this.getTools()}</div>
         </div>
-        <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
+        <div class='color-list' ref='$colorList' data-view-mode='${
+          this.state.mode
+        }'></div>
       </div>
     `;
   }
 
-  [CLICK('$title')] () {
-    this.$el.toggleClass('is-open')
+  [CLICK("$title")]() {
+    this.$el.toggleClass("is-open");
   }
 
   [LOAD("$colorList")]() {
-    var preset = this.state.colors.find(it => it.key === this.state.preset);
+    var preset = this.state.colors.find((it) => it.key === this.state.preset);
 
     if (!preset) {
-      return '';
+      return "";
     }
 
-    var results = preset.execute().map( (item, index) => {
-
-      return /*html*/`
+    var results = preset.execute().map((item, index) => {
+      return /*html*/ `
         <div class='color-item' data-index="${index}" data-color="${item.color}">
           <div class='preview' title="${item.color}" data-index="${index}">
             <div class='color-view' style='background-color: ${item.color};'></div>
           </div>
         </div>
-      `
-    })
+      `;
+    });
 
-    return results
+    return results;
   }
 
-  executeColor (callback, isRefresh = true, isEmit = true ) {
+  executeColor(callback, isRefresh = true, isEmit = true) {
     var project = this.$selection.currentProject;
 
-    if(project) {
-
-      callback && callback (project) 
+    if (project) {
+      callback && callback(project);
 
       if (isRefresh) this.refresh();
-      if (isEmit) this.emit('refreshColorAssets');
-    } else{
-      alert('Please select a project.')
+      if (isEmit) this.emit("refreshColorAssets");
+    } else {
+      window.alert("Please select a project.");
     }
   }
 
   [CLICK("$colorList .preview")](e) {
-
-    const color = e.$dt.$('.color-view').css('background-color');
+    const color = e.$dt.$(".color-view").css("background-color");
 
     this.modifyColorPicker(color);
   }
 
   modifyColorPicker(color) {
-    this.parent.trigger(this.props.onchange, this.props.key, color, this.props.params);
+    this.parent.trigger(
+      this.props.onchange,
+      this.props.key,
+      color,
+      this.props.params
+    );
   }
 }

@@ -1,25 +1,23 @@
+import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "sapa";
 
-import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "el/sapa/Event";
+import icon from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import revokeObjectUrl from "elf/editor/util/revokeObjectUrl";
 
-import icon from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import revokeObjectUrl from "el/editor/util/revokeObjectUrl";
-
-import './ImageAssetsProperty.scss';
+import "./ImageAssetsProperty.scss";
 export default class ImageAssetsProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('image.asset.property.title');
+    return this.$i18n("image.asset.property.title");
   }
 
   initState() {
     return {
-      mode: 'grid'
-    }
+      mode: "grid",
+    };
   }
 
   getClassNamef() {
-    return 'elf--image-assets-property'
+    return "elf--image-assets-property";
   }
 
   afterRender() {
@@ -27,7 +25,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class='property-item image-assets'>
         <div class='image-list' ref='$imageList' data-view-mode='${this.state.mode}'></div>
       </div>
@@ -35,13 +33,12 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$imageList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { images: [] }
+    var current = this.$selection.currentProject || { images: [] };
 
-    var images = current.images;   
+    var images = current.images;
 
-    var results = images.map( (image, index) => {
-
-      return /*html*/`
+    var results = images.map((image, index) => {
+      return /*html*/ `
         <div class='image-item' data-index="${index}">
           <div class='preview' draggable="true">
             <img src="${image.local}" />
@@ -51,80 +48,74 @@ export default class ImageAssetsProperty extends BaseProperty {
             <button type="button" class='remove'>${icon.remove}</button>
           </div>
         </div>
-      `
-    })
+      `;
+    });
 
-    return /*html*/`
+    return /*html*/ `
       <div class='loaded-list'>
-        ${results.join('')}
+        ${results.join("")}
         <div class='add-image-item'>
           <input type='file' accept='image/*' ref='$file' />
           <button type="button">${icon.add}</button>
         </div>        
       </div>
 
-    `
+    `;
   }
 
-  executeImage (callback, isRefresh = true, isEmit = true ) {
+  executeImage(callback, isRefresh = true, isEmit = true) {
     var project = this.$selection.currentProject;
 
-    if(project) {
-
-      callback && callback (project) 
+    if (project) {
+      callback && callback(project);
 
       if (isRefresh) this.refresh();
-      if (isEmit) this.emit('refreshImageAssets');
+      if (isEmit) this.emit("refreshImageAssets");
     } else {
-      alert('Please select a project.')
+      window.alert("Please select a project.");
     }
   }
 
-  [DRAGSTART('$imageList .preview img')] (e) { 
-    var index = +e.$dt.closest('image-item').attr('data-index');
+  [DRAGSTART("$imageList .preview img")](e) {
+    var index = +e.$dt.closest("image-item").attr("data-index");
 
     var project = this.$selection.currentProject;
 
-    if(project) {
-      var imageInfo  =  project.images[index];
+    if (project) {
+      var imageInfo = project.images[index];
 
-      e.dataTransfer.setData('image/info',  imageInfo.local);
+      e.dataTransfer.setData("image/info", imageInfo.local);
     }
-
-  }
-  
-  [CHANGE('$imageList .add-image-item input[type=file]')] (e) {
-    this.executeImage(project => {
-      [...e.target.files].forEach(item => {
-        this.emit('updateImageAssetItem', item);
-      })
-    })
-
-    
   }
 
-  [CLICK('$imageList .remove')] (e) {
-    var $item = e.$dt.closest('image-item');
-    var index = +$item.attr('data-index');
+  [CHANGE("$imageList .add-image-item input[type=file]")](e) {
+    this.executeImage(() => {
+      [...e.target.files].forEach((item) => {
+        this.emit("updateImageAssetItem", item);
+      });
+    });
+  }
 
-    this.executeImage(project => {
+  [CLICK("$imageList .remove")](e) {
+    var $item = e.$dt.closest("image-item");
+    var index = +$item.attr("data-index");
+
+    this.executeImage((project) => {
       project.removeImage(index);
-      revokeObjectUrl($item.$('.preview img').attr('src'))
-    })
+      revokeObjectUrl($item.$(".preview img").attr("src"));
+    });
   }
 
+  [CLICK("$imageList .copy")](e) {
+    var $item = e.$dt.closest("image-item");
+    var index = +$item.attr("data-index");
 
-  [CLICK('$imageList .copy')] (e) {
-    var $item = e.$dt.closest('image-item');
-    var index = +$item.attr('data-index');
-
-    this.executeImage(project => {
+    this.executeImage((project) => {
       project.copyImage(index);
-    })
-  }  
+    });
+  }
 
-  [SUBSCRIBE('addImageAsset')] () {
+  [SUBSCRIBE("addImageAsset")]() {
     this.refresh();
   }
-
 }

@@ -1,4 +1,4 @@
-import Dom from "el/sapa/functions/Dom";
+import {Dom} from "sapa";
 import LayerRender from "./LayerRender";
 
 export default class ImageRender extends LayerRender {

@@ -1,5 +1,3 @@
 import DomRender from "./DomRender";
 
-export default class LayerRender extends DomRender {
-    
-}
+export default class LayerRender extends DomRender {}

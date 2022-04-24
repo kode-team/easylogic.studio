@@ -4,149 +4,158 @@ import ColorView from "./colorpicker/control/ColorView";
 import ColorInformation from "./colorpicker/ColorInformation";
 import Palette from "./colorpicker/ColorPalette";
 import ColorManagerV2 from "plugins/color/ColorManagerV2";
-import { SUBSCRIBE_SELF } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { createComponent } from 'el/sapa/functions/jsx';
-
+import { SUBSCRIBE_SELF } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { createComponent } from "sapa";
 
 export default class ColorPickerEditor extends EditorElement {
+  created() {
+    this.manager = new ColorManagerV2();
+  }
 
-    created ()  {
-        this.manager = new ColorManagerV2();
-    }
+  initState() {
+    const value = this.props.value || "rgba(0, 0, 0, 1)";
 
-    initState () {
+    this.manager.initColor(value);
 
-        const value = this.props.value || 'rgba(0, 0, 0, 1)'
+    return {
+      key: this.props.key,
+      value: this.manager.toString(),
+    };
+  }
 
-        this.manager.initColor(value);
+  updateData(opt = {}) {
+    this.setState(opt, false);
+    this.modifyColorPicker();
+  }
 
-        return {
-            key: this.props.key,
-            value: this.manager.toString()
-        }
-    }
+  modifyColorPicker() {
+    this.parent.trigger(
+      this.props.onchange,
+      this.props.key,
+      this.state.value,
+      this.props.params
+    );
+  }
 
-    updateData(opt = {}) {
-        this.setState(opt, false);
-        this.modifyColorPicker();
-    }
+  /**
+   *
+   * initialize color for colorpicker
+   *
+   * @param {String|Object} newColor
+   * @param {String} format  hex, rgb, hsl
+   */
+  initColor(newColor, format) {
+    this.manager.changeColor(newColor, format);
 
-    modifyColorPicker() {
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
-    }
+    this.refresh();
+  }
 
-    /**
-     * 
-     * initialize color for colorpicker
-     * 
-     * @param {String|Object} newColor 
-     * @param {String} format  hex, rgb, hsl
-     */
-    initColor(newColor, format) {
-        this.manager.changeColor(newColor, format);
+  changeColor(newColor, format) {
+    this.manager.changeColor(newColor, format);
 
-        this.refresh();
-    }
+    this.refresh();
 
-    changeColor(newColor, format) {
-        this.manager.changeColor(newColor, format);        
+    this.updateData({
+      value: this.manager.toColor(),
+    });
+  }
 
-        this.refresh();
+  [SUBSCRIBE_SELF("selectColorAssets")](key, color) {
+    this.lastUpdateColor(color);
+  }
 
-        this.updateData({
-            value: this.manager.toColor()
-        })
-    }    
+  changeFormat(format) {
+    this.manager.changeFormat(format);
 
-    [SUBSCRIBE_SELF('selectColorAssets')] (key, color) {
-        this.lastUpdateColor(color);
-    }
+    this.setState(
+      {
+        value: this.manager.toColor(),
+      },
+      false
+    );
 
-    changeFormat (format) {        
-        this.manager.changeFormat(format)
+    this.modifyColorPicker();
+    this.changeEndColor();
+  }
 
-        this.setState({
-            value: this.manager.toColor()
-        }, false)        
+  lastUpdateColor(newColor, format) {
+    this.manager.changeColor(newColor, format);
 
-        this.modifyColorPicker();
-        this.changeEndColor();
-    }
+    this.refresh();
 
+    this.setState(
+      {
+        value: this.manager.toColor(),
+      },
+      false
+    );
 
-    lastUpdateColor(newColor, format) {
-        this.manager.changeColor(newColor, format);        
+    this.modifyColorPicker();
+    this.changeEndColor();
+  }
 
-        this.refresh();
+  changeEndColor() {
+    this.parent.trigger(
+      this.props.onchangeend,
+      this.props.key,
+      this.state.value,
+      this.props.params
+    );
+  }
 
-        this.setState({
-            value: this.manager.toColor()
-        }, false)
+  refresh() {
+    const color = this.manager.toColor();
 
-        this.modifyColorPicker();        
-        this.changeEndColor();
-    }        
+    this.children.$palette.setValue(
+      this.manager.hsv.s,
+      this.manager.hsv.v,
+      this.manager.getHueColor()
+    );
+    this.children.$opacity.setValue(this.manager.rgb, this.manager.alpha);
+    this.children.$hue.setValue(this.manager.hsv.h);
+    this.children.$colorview.setValue(color);
 
-    changeEndColor() {
-        this.parent.trigger(this.props.onchangeend, this.props.key, this.state.value, this.props.params);
-    }
+    this.children.$information.setValue();
+  }
 
+  components() {
+    return {
+      Hue,
+      Opacity,
+      ColorView,
+      Palette,
+      ColorInformation,
+      // ColorAssetsEditor,
+      // CurrentColorSets,
+      // ColorSetsChooser,
+      // ContextMenu
+    };
+  }
 
-    refresh() {
-
-        const color = this.manager.toColor()
-
-        this.children.$palette.setValue(
-            this.manager.hsv.s, 
-            this.manager.hsv.v,
-            this.manager.getHueColor()
-        );
-        this.children.$opacity.setValue(
-            this.manager.rgb, 
-            this.manager.alpha
-        );
-        this.children.$hue.setValue(
-            this.manager.hsv.h
-        );
-        this.children.$colorview.setValue(
-            color
-        );
-
-        this.children.$information.setValue();
-    }
-
-
-    components () {
-        return {
-            Hue,
-            Opacity,
-            ColorView,
-            Palette,
-            ColorInformation,
-            // ColorAssetsEditor,
-            // CurrentColorSets,
-            // ColorSetsChooser,
-            // ContextMenu
-        }
-    }
-
-    template () {
-        return /*html*/`
+  template() {
+    return /*html*/ `
         <div class='colorpicker sketch inline'>
             <div class='colorpicker-body'>
-                ${createComponent("Palette", {ref: '$palette'})}
+                ${createComponent("Palette", { ref: "$palette" })}
                 <div class="control">
-                    ${createComponent("Hue", {ref: '$hue'})}
-                    ${createComponent("Opacity", {ref: '$opacity'})}
+                    ${createComponent("Hue", { ref: "$hue" })}
+                    ${createComponent("Opacity", { ref: "$opacity" })}
                     <div class="empty"></div>
-                    ${createComponent("ColorView", {ref: '$colorview'})}                    
+                    ${createComponent("ColorView", {
+                      ref: "$colorview",
+                    })}                    
                 </div>
-                ${createComponent("ColorInformation", {ref: '$information'})}                
-                ${createComponent("ColorAssetsEditor", {ref: '$colorAsset', key: 'colorAssets', onchange: "selectColorAssets"})}
+                ${createComponent("ColorInformation", {
+                  ref: "$information",
+                })}                
+                ${createComponent("ColorAssetsEditor", {
+                  ref: "$colorAsset",
+                  key: "colorAssets",
+                  onchange: "selectColorAssets",
+                })}
             </div>
         </div>
       `;
-    }
-
+  }
 }

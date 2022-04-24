@@ -1,13 +1,11 @@
-import { Editor } from "el/editor/manager/Editor";
-import SelectionInfoView from './SelectionInfoView';
-
+import SelectionInfoView from "./SelectionInfoView";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('canvas.view', {
-        SelectionInfoView         
-    })
+  editor.registerUI("canvas.view", {
+    SelectionInfoView,
+  });
 }

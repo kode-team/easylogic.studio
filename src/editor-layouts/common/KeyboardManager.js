@@ -1,14 +1,14 @@
-import Dom from "el/sapa/functions/Dom";
+import { Dom } from "sapa";
 
-import { KEYDOWN, KEYUP, IF, PREVENT } from "el/sapa/Event";
+import { KEYDOWN, KEYUP, IF } from "sapa";
 
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
+const formElements = ["TEXTAREA", "INPUT", "SELECT"];
 
 export default class KeyboardManager extends EditorElement {
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="keyboard-manager"></div>
     `;
   }
@@ -16,17 +16,18 @@ export default class KeyboardManager extends EditorElement {
   isNotFormElement(e) {
     var tagName = e.target.tagName;
 
-    if (formElements.includes(tagName)) return false; 
-    else if (Dom.create(e.target).attr('contenteditable') === 'true') return false; 
+    if (formElements.includes(tagName)) return false;
+    else if (Dom.create(e.target).attr("contenteditable") === "true")
+      return false;
 
     return true;
-  }  
-
-  [KEYDOWN('document') + IF('isNotFormElement')] (e) {
-    this.emit('keymap.keydown', e);
   }
 
-  [KEYUP('document') + IF('isNotFormElement')] (e) {
-    this.emit('keymap.keyup', e);
+  [KEYDOWN("document") + IF("isNotFormElement")](e) {
+    this.emit("keymap.keydown", e);
+  }
+
+  [KEYUP("document") + IF("isNotFormElement")](e) {
+    this.emit("keymap.keyup", e);
   }
 }

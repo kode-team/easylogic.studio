@@ -1,7 +1,7 @@
-import Dom from 'el/sapa/functions/Dom';
-import { isFunction } from 'el/sapa/functions/func';
-import { Item } from 'el/editor/items/Item';
-import { Editor } from 'el/editor/manager/Editor';
+import {Dom} from 'sapa';
+import { isFunction } from 'sapa';
+import { Item } from 'elf/editor/items/Item';
+import { Editor } from 'elf/editor/manager/Editor';
 
 
 export default class SkiaRenderer {

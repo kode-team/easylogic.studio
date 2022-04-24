@@ -1,23 +1,22 @@
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { createComponent } from "el/sapa/functions/jsx";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { createComponent } from "sapa";
 
-import './LibraryItems.scss';
+import "./LibraryItems.scss";
 
 export default class LibraryItems extends EditorElement {
-
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class='elf--library-items'>
         <div>
-          ${createComponent('TextEditor', {
-            label: "Search", 
-            key: "search", 
+          ${createComponent("TextEditor", {
+            label: "Search",
+            key: "search",
             onchange: this.subscribe((key, value) => {
-              this.broadcast('search', value);
-            }, 300)
+              this.broadcast("search", value);
+            }, 300),
           })}
         </div>
-        ${this.$injectManager.generate('library')}
+        ${this.$injectManager.generate("library")}
       </div>
     `;
   }

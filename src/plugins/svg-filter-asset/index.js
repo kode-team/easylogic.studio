@@ -1,12 +1,11 @@
-import { Editor } from "el/editor/manager/Editor";
 import SVGFilterAssetsProperty from "./SVGFilterAssetsProperty";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerElement({
-        SVGFilterAssetsProperty
-    })
+  editor.registerElement({
+    SVGFilterAssetsProperty,
+  });
 }

@@ -1,35 +1,32 @@
-import {PathParser} from 'el/editor/parser/PathParser';
-import icon from "el/editor/icon/icon";
+import { PathParser } from "elf/editor/parser/PathParser";
+import icon from "elf/editor/icon/icon";
 import { SVGItem } from "./SVGItem";
-import { vec3 } from "gl-matrix";
-
 
 export class SVGPathItem extends SVGItem {
-
-  getIcon () {
+  getIcon() {
     return icon.edit;
-  }  
+  }
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      itemType: 'svg-path',
-      name: "New Path",   
-      'stroke-width': 1,
-      d: '',        // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다. 
+      itemType: "svg-path",
+      name: "New Path",
+      "stroke-width": 1,
+      d: "", // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다.
       totalLength: 0,
-      ...obj
+      ...obj,
     });
   }
 
   enableHasChildren() {
-    return false; 
+    return false;
   }
 
-  reset(json, context = {origin: '*'}) {
+  reset(json, context = { origin: "*" }) {
     const isChanged = super.reset(json, context);
 
-    if (this.hasChangedField('d')) {
-      // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다. 
-      // 이때 width, height 를 같이 해둬야 한다. 
+    if (this.hasChangedField("d")) {
+      // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다.
+      // 이때 width, height 를 같이 해둬야 한다.
       this.cachePath = new PathParser(this.json.d);
       this.cacheWidth = this.json.width;
       this.cacheHeight = this.json.height;
@@ -43,28 +40,32 @@ export class SVGPathItem extends SVGItem {
   refreshMatrixCache() {
     super.refreshMatrixCache();
 
-    if (this.hasChangedField('d')) {
+    if (this.hasChangedField("d")) {
       this.cachePath = new PathParser(this.json.d);
       this.cacheWidth = this.json.width;
       this.cacheHeight = this.json.height;
-    } else if (this.hasChangedField('width', 'height')) {
-      this.json.d = this.cachePath.clone().scale(this.json.width/this.cacheWidth, this.json.height/this.cacheHeight).d;
-      this.modelManager.setChanged('reset', this.id, { d : this.json.d });
+    } else if (this.hasChangedField("width", "height")) {
+      this.json.d = this.cachePath
+        .clone()
+        .scale(
+          this.json.width / this.cacheWidth,
+          this.json.height / this.cacheHeight
+        ).d;
+      this.modelManager.setChanged("reset", this.id, { d: this.json.d });
     }
 
-    // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })                
+    // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })
   }
 
-  setCache () {
+  setCache() {
     super.setCache();
 
     this.cachePath = new PathParser(this.json.d);
     this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;    
+    this.cacheHeight = this.json.height;
   }
 
   get d() {
-
     if (!this.json.d) {
       return null;
     }
@@ -72,18 +73,22 @@ export class SVGPathItem extends SVGItem {
     if (!this.cachePath) {
       this.cachePath = new PathParser(this.json.d);
       this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;          
+      this.cacheHeight = this.json.height;
     }
 
-    return this.cachePath.clone().scale(this.json.width/this.cacheWidth, this.json.height/this.cacheHeight).d;
+    return this.cachePath
+      .clone()
+      .scale(
+        this.json.width / this.cacheWidth,
+        this.json.height / this.cacheHeight
+      ).d;
   }
- 
 
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      d: this.json.d
-    }
+      d: this.json.d,
+    };
   }
 
   getDefaultTitle() {

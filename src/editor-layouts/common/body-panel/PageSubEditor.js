@@ -1,14 +1,12 @@
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './PageSubEditor.scss';
-
+import "./PageSubEditor.scss";
 
 export default class PageSubEditor extends EditorElement {
-
   template() {
-    return/*html*/`
+    return /*html*/ `
       <div class='elf--page-subeditor'>
-        ${this.$injectManager.generate('page.subeditor.view')}         
+        ${this.$injectManager.generate("page.subeditor.view")}         
       </div>
     `;
   }

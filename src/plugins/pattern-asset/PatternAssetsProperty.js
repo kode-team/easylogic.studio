@@ -1,111 +1,110 @@
+import {
+  LOAD,
+  DEBOUNCE,
+  DRAGSTART,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+} from "sapa";
 
-import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
+import patterns from "elf/editor/preset/patterns";
+import { Pattern } from "elf/editor/property-parser/Pattern";
+import { CSS_TO_STRING } from "elf/utils/func";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
-import patterns from "el/editor/preset/patterns";
-import { Pattern } from "el/editor/property-parser/Pattern";
-import { CSS_TO_STRING } from "el/utils/func";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-
-import './PatternAssetsProperty.scss';
-import { variable } from 'el/sapa/functions/registElement';
-import { createComponent } from "el/sapa/functions/jsx";
+import "./PatternAssetsProperty.scss";
+import { variable } from "sapa";
+import { createComponent } from "sapa";
 
 export default class PatternAssetsProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('pattern.asset.property.title');
+    return this.$i18n("pattern.asset.property.title");
   }
 
   initState() {
     return {
-      mode: 'grid',
-      preset: 'check'      
-    }
+      mode: "grid",
+      preset: "check",
+    };
   }
 
-
   getTools() {
-
-    const options = variable(patterns.map(it => {
-      return { value: it.key, text: it.title } 
-    }));
+    const options = variable(
+      patterns.map((it) => {
+        return { value: it.key, text: it.title };
+      })
+    );
 
     return createComponent("SelectEditor", {
       ref: "$assets",
       key: "preset",
       value: this.state.preset,
-      options, 
-      onchange: "changePreset"
-    })
-  }  
+      options,
+      onchange: "changePreset",
+    });
+  }
 
-
-  [SUBSCRIBE_SELF('changePreset')] (key, value) {
-
+  [SUBSCRIBE_SELF("changePreset")](key, value) {
     this.setState({
-      [key]: value
-    })
+      [key]: value,
+    });
   }
 
   getClassName() {
-    return 'elf--pattern-assets-property'
+    return "elf--pattern-assets-property";
   }
 
   get editableProperty() {
     return "pattern";
   }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')] () {
-    
-  }
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100) + IF("checkShow")]() {}
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class='property-item pattern-assets'>
         <div class='pattern-list' ref='$patternList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
   }
 
-  [DRAGSTART('$patternList .pattern-item')] (e) {
-    const pattern = e.$dt.attr('data-pattern');
+  [DRAGSTART("$patternList .pattern-item")](e) {
+    const pattern = e.$dt.attr("data-pattern");
     e.dataTransfer.effectAllowed = "copy";
     e.dataTransfer.setData("text/pattern", pattern);
   }
 
   [LOAD("$patternList")]() {
-    var preset = patterns.find(it => it.key === this.state.preset);
+    var preset = patterns.find((it) => it.key === this.state.preset);
 
     if (!preset) {
-      return '';
+      return "";
     }
 
-    var results = preset.execute().map( (item, index) => { 
+    var results = preset.execute().map((item, index) => {
       const cssText = CSS_TO_STRING(Pattern.toCSS(item.pattern));
 
-      return /*html*/`
+      return /*html*/ `
         <div class='pattern-item' data-index="${index}" data-pattern="${item.pattern}">
           <div class='preview' title="${item.title}" draggable="true">
             <div class='pattern-view' style='${cssText}'></div>
           </div>
         </div>
-      `
-    })
+      `;
+    });
 
-    return results
+    return results;
   }
 
-
   [CLICK("$patternList .pattern-item")](e) {
+    const pattern = e.$dt.attr("data-pattern");
 
-    const pattern = e.$dt.attr('data-pattern')
-
-    // view 에 따라 다른 속성을 가진다. 
-    if (this.$modeView.isCurrentMode('CanvasView')) { 
-      this.emit('addBackgroundImagePattern', pattern);
+    // view 에 따라 다른 속성을 가진다.
+    if (this.$modeView.isCurrentMode("CanvasView")) {
+      this.emit("addBackgroundImagePattern", pattern);
     } else {
-      this.emit('setPatternAsset', pattern)
+      this.emit("setPatternAsset", pattern);
     }
-  }  
-
+  }
 }

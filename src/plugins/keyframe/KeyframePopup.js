@@ -1,29 +1,28 @@
-import { INPUT, SUBSCRIBE } from "el/sapa/Event";
-import BasePopup from "el/editor/ui/popup/BasePopup";
+import { INPUT, SUBSCRIBE } from "sapa";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
-import './KeyframePopup.scss';
-import { createComponent } from "el/sapa/functions/jsx";
+import "./KeyframePopup.scss";
+import { createComponent } from "sapa";
 
 export default class KeyframePopup extends BasePopup {
-
-  getTitle () {
-    return this.$i18n('keyframe.popup.title')
+  getTitle() {
+    return this.$i18n("keyframe.popup.title");
   }
 
   initState() {
     return {
-      name: 'none',
-      offsets: []
+      name: "none",
+      offsets: [],
     };
   }
 
   updateData(opt) {
-    this.setState(opt, false); 
+    this.setState(opt, false);
     this.emit("changeKeyframePopup", this.state);
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
     <div class='elf--keyframe-popup' ref='$popup'>
       <div class="box">
         ${this.templateForName()}
@@ -32,48 +31,47 @@ export default class KeyframePopup extends BasePopup {
     </div>`;
   }
 
-  templateForOffset () {
-    return /*html*/`
+  templateForOffset() {
+    return /*html*/ `
       <div>
-        ${createComponent("OffsetEditor",  { ref: '$offsetEditor' })}
+        ${createComponent("OffsetEditor", { ref: "$offsetEditor" })}
       </div>
-    `
+    `;
   }
 
   templateForName() {
-    return /*html*/`
+    return /*html*/ `
       <div class='name'>
         <label>Name</label>
         <div class='input grid-1'>
           <input type='text' value='${this.state.name}' ref='$name'/>
         </div>
       </div>
-    `
+    `;
   }
 
-  [INPUT('$name')] (e) {
+  [INPUT("$name")](e) {
     if (this.refs.$name.value.match(/^[a-zA-Z0-9\b]+$/)) {
-      this.updateData({name : this.refs.$name.value })
+      this.updateData({ name: this.refs.$name.value });
     } else {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
       return false;
     }
   }
-  
-  getOffsetData () {
-    var offsets = this.state.offsets.map(it => it)
 
-    return { offsets }
+  getOffsetData() {
+    var offsets = this.state.offsets.map((it) => it);
+
+    return { offsets };
   }
 
   refresh() {
-
     this.refs.$name.val(this.state.name);
-    this.emit('showOffsetEditor', this.getOffsetData())
+    this.emit("showOffsetEditor", this.getOffsetData());
   }
 
-  [SUBSCRIBE('changeOffsetEditor')] (data) {
+  [SUBSCRIBE("changeOffsetEditor")](data) {
     this.updateData(data);
   }
 
@@ -82,7 +80,6 @@ export default class KeyframePopup extends BasePopup {
     this.refresh();
 
     this.show(240);
-
   }
 
   [SUBSCRIBE("hideKeyframePopup")]() {

@@ -1,17 +1,15 @@
+import { BIND, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
 
-import { BIND, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
-import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import BasePopup from "el/editor/ui/popup/BasePopup";
-
-import './GradientPickerPopup.scss';
-import { createComponent } from "el/sapa/functions/jsx";
-import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { isString } from "el/sapa/functions/func";
-import { GradientType } from "el/editor/types/model";
+import "./GradientPickerPopup.scss";
+import { createComponent } from "sapa";
+import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
+import { isString } from "sapa";
+import { GradientType } from "elf/editor/types/model";
 
 export default class GradientPickerPopup extends BasePopup {
-
   getTitle() {
     return createComponent("SelectEditor", {
       ref: "$select",
@@ -20,37 +18,37 @@ export default class GradientPickerPopup extends BasePopup {
       options: [
         {
           value: GradientType.STATIC,
-          text: "Static"
+          text: "Static",
         },
         {
           value: GradientType.LINEAR,
-          text: "Linear Gradient"
+          text: "Linear Gradient",
         },
         {
           value: GradientType.RADIAL,
-          text: "Radial Gradient"
+          text: "Radial Gradient",
         },
         {
           value: GradientType.CONIC,
-          text: "Conic Gradient"
+          text: "Conic Gradient",
         },
         {
           value: GradientType.REPEATING_LINEAR,
-          text: "Repeating Linear Gradient"
+          text: "Repeating Linear Gradient",
         },
         {
           value: GradientType.REPEATING_RADIAL,
-          text: "Repeating Radial Gradient"
+          text: "Repeating Radial Gradient",
         },
         {
           value: GradientType.REPEATING_CONIC,
-          text: "Repeating Conic Gradient"
+          text: "Repeating Conic Gradient",
         },
         {
           value: GradientType.URL,
-          text: "Image"
-        }
-      ]
+          text: "Image",
+        },
+      ],
     });
   }
 
@@ -61,30 +59,32 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   getClassName() {
-    return 'fill-picker-popup';
+    return "fill-picker-popup";
   }
 
   getBody() {
-    return /*html*/`
-      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${this.state.image?.type}'>
+    return /*html*/ `
+      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${
+        this.state.image?.type
+      }'>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            ${createComponent('EmbedColorPicker', {
+            ${createComponent("EmbedColorPicker", {
               ref: "$color",
               onchange: "changeColor",
             })}
           </div>
           <div class='assetpicker'>
-            ${createComponent('ImageSelectEditor', {
+            ${createComponent("ImageSelectEditor", {
               ref: "$image",
-              key: 'image',
+              key: "image",
               value: this.state.image?.url,
               onchange: "changeImageUrl",
             })}
-            ${createComponent('ImageAssetPicker', {
+            ${createComponent("ImageAssetPicker", {
               ref: "$asset",
               onchange: "changeImageUrl",
             })}
@@ -96,50 +96,53 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   getColorString() {
-    var value = '' ;
+    var value = "";
     if (this.state.image instanceof Gradient) {
-      value = this.state.image.getColorString()
+      value = this.state.image.getColorString();
     }
 
-
-    return value; 
+    return value;
   }
 
   getCurrentColor() {
-    return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color; 
+    return this.state.image.colorsteps[this.state.selectColorStepIndex || 0]
+      .color;
   }
 
-  [BIND('$body')] () {
+  [BIND("$body")]() {
     return {
-      'data-selected-editor': this.state.image?.type
-    }
+      "data-selected-editor": this.state.image?.type,
+    };
   }
 
-  [LOAD('$gradientEditor') + DOMDIFF] () {
+  [LOAD("$gradientEditor") + DOMDIFF]() {
     if (this.state.image?.type === GradientType.URL) {
       return "";
     }
 
     return createComponent("GradientEditor", {
       ref: "$g",
-      value: `${this.state.image ? this.state.image.toString() : ''}`,
+      value: `${this.state.image ? this.state.image.toString() : ""}`,
       index: this.state.selectColorStepIndex,
-      onchange: 'changeGradientEditor'
-    })
+      onchange: "changeGradientEditor",
+    });
   }
 
-  [SUBSCRIBE('updateGradientEditor')] (data, targetColorStep) {
-
+  [SUBSCRIBE("updateGradientEditor")](data, targetColorStep) {
     this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
 
-    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex(it => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
+    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex(
+      (it) =>
+        it.color === targetColorStep.color &&
+        it.percent === targetColorStep.percent
+    );
 
     this.children.$color.setValue(targetColorStep.color);
 
     this.refresh();
   }
 
-  [SUBSCRIBE_SELF('changeGradientEditor')] (data) {
+  [SUBSCRIBE_SELF("changeGradientEditor")](data) {
     this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
 
     this.updateTitle();
@@ -147,70 +150,65 @@ export default class GradientPickerPopup extends BasePopup {
     this.updateData();
   }
 
-  [SUBSCRIBE_SELF('changeTabType')] (key, type) {
-    this.children.$g.trigger('changeTabType', type);
-    this.refs.$body.attr('data-selected-editor', type);
+  [SUBSCRIBE_SELF("changeTabType")](key, type) {
+    this.children.$g.trigger("changeTabType", type);
+    this.refs.$body.attr("data-selected-editor", type);
   }
 
-  [SUBSCRIBE_SELF('changeColor')] (color) {
-    this.children.$g.trigger('setColorStepColor', color);
+  [SUBSCRIBE_SELF("changeColor")](color) {
+    this.children.$g.trigger("setColorStepColor", color);
   }
 
-  [SUBSCRIBE_SELF('changeImageUrl')] (key, url) {
-
+  [SUBSCRIBE_SELF("changeImageUrl")](key, url) {
     if (this.state.image) {
       this.state.image.reset({
-        url
-      })
+        url,
+      });
 
-      this.trigger('changeGradientEditor', this.state.image);
+      this.trigger("changeGradientEditor", this.state.image);
     }
   }
 
-  updateTitle () {
-
+  updateTitle() {
     this.children.$select.setValue(this.state.image.type);
 
     // this.setTitle(this.$i18n(`gradient.picker.popup.${this.state.image.type}`))
   }
 
-  [SUBSCRIBE("showGradientPickerPopup")](data, params, rect) {    
-    data.changeEvent = data.changeEvent || 'changeFillPopup'
-    data.image = data.gradient
+  [SUBSCRIBE("showGradientPickerPopup")](data, params, rect) {
+    data.changeEvent = data.changeEvent || "changeFillPopup";
+    data.image = data.gradient;
     data.params = params;
 
     this.showByRect(this.makeRect(248, 560, rect));
 
-    this.setState(data);    
+    this.setState(data);
 
     this.updateTitle();
 
-    this.emit('showGradientEditorView', {
-      index: data.index
-    })
+    this.emit("showGradientEditorView", {
+      index: data.index,
+    });
   }
-
 
   [SUBSCRIBE("hideGradientickerPopup")]() {
     this.hide();
 
-    this.emit('hideGradientEditorView')
+    this.emit("hideGradientEditorView");
   }
 
   onClose() {
-    this.emit('hideGradientEditorView')
-  }    
+    this.emit("hideGradientEditorView");
+  }
 
   [SUBSCRIBE("selectColorStep")](color) {
     this.children.$color.setValue(color);
   }
 
-
   [SUBSCRIBE("changeColorStep")](data = {}) {
-
     this.state.image.reset({
-      ...data
-    })
+      ...data,
+    });
 
     this.updateData();
   }
@@ -221,12 +219,15 @@ export default class GradientPickerPopup extends BasePopup {
     }
   }
 
-  getValue () {
-    return `${this.state.image}`
+  getValue() {
+    return `${this.state.image}`;
   }
 
   updateData() {
-    this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
+    this.state.instance.trigger(
+      this.state.changeEvent,
+      this.getValue(),
+      this.state.params
+    );
   }
-
 }

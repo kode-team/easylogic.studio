@@ -1,20 +1,17 @@
-import { Editor } from "el/editor/manager/Editor";
-import PathDrawView from './PathDrawView';
-import DrawManager from './DrawManager';
-
+// import { Editor } from "elf/editor/manager/Editor";
+import PathDrawView from "./PathDrawView";
+import DrawManager from "./DrawManager";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('canvas.view', {
-        PathDrawView        
-    })
+  editor.registerUI("canvas.view", {
+    PathDrawView,
+  });
 
-    editor.registerUI('page.subeditor.view', {
-        DrawManager        
-    })
-
-
+  editor.registerUI("page.subeditor.view", {
+    DrawManager,
+  });
 }

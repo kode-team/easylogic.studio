@@ -1,5 +1,5 @@
-import icon from "el/editor/icon/icon";
-import { Component } from "el/editor/model/Component";
+import icon from "elf/editor/icon/icon";
+import { Component } from "elf/editor/model/Component";
 
 export class IFrameLayer extends Component {
 

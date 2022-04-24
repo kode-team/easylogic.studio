@@ -1,93 +1,90 @@
-
-
-
-import Color from 'el/utils/Color'
-import { BIND, POINTERSTART } from 'el/sapa/Event';
-import { clone } from 'el/sapa/functions/func';
-import { EditorElement } from 'el/editor/ui/common/EditorElement';
-import { Length } from 'el/editor/unit/Length';
-import { END, MOVE } from 'el/editor/types/event';
+import Color from "elf/utils/Color";
+import { BIND, POINTERSTART } from "sapa";
+import { clone } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
+import { END, MOVE } from "elf/editor/types/event";
 
 export default class Opacity extends EditorElement {
+  initState() {
+    return {
+      colorbar: Color.parse("rgba(0, 0, 0, 1)"),
+      opacity: 0,
+      minValue: 0,
+      maxValue: 100,
+    };
+  }
 
-    initState() {
-        return {
-            colorbar: Color.parse('rgba(0, 0, 0, 1)'),
-            opacity: 0,
-            minValue: 0,
-            maxValue: 100
-        }
-    }
-
-    template () {
-        return /*html*/`
+  template() {
+    return /*html*/ `
         <div class="opacity">
             <div ref="$container" class="opacity-container">
                 <div ref="$colorbar" class="color-bar"></div>
                 <div ref="$bar" class="drag-bar2"></div>
             </div>
         </div>
-        `
-    }
+        `;
+  }
 
-    [BIND('$colorbar')] () {
-        const rgb = clone(this.state.colorbar);
-    
-        rgb.a = 0;
-        const start = Color.format(rgb, 'rgb');
-    
-        rgb.a = 1;
-        const end = Color.format(rgb, 'rgb');
-    
-        return {
-            style: {
-                background:  `linear-gradient(to right, ${start}, ${end})`
-            }
-        }
-    }
+  [BIND("$colorbar")]() {
+    const rgb = clone(this.state.colorbar);
 
-    [BIND('$bar')] () {
+    rgb.a = 0;
+    const start = Color.format(rgb, "rgb");
 
-        const opacity = this.state.opacity * 100
+    rgb.a = 1;
+    const end = Color.format(rgb, "rgb");
 
-        return {
-            style: {
-                left: Length.percent(opacity),
-            },
-            class: {
-                first: opacity <= this.state.minValue,
-                last: opacity >= this.state.maxValue
-            }
-        }
-    }
+    return {
+      style: {
+        background: `linear-gradient(to right, ${start}, ${end})`,
+      },
+    };
+  }
 
-    [POINTERSTART('$container') + MOVE('movePointer') + END('moveEndPointer')] (e) {
-        this.rect = this.refs.$container.rect();
+  [BIND("$bar")]() {
+    const opacity = this.state.opacity * 100;
 
-        this.refreshColorUI();
-    }
+    return {
+      style: {
+        left: Length.percent(opacity),
+      },
+      class: {
+        first: opacity <= this.state.minValue,
+        last: opacity >= this.state.maxValue,
+      },
+    };
+  }
 
-    movePointer() {
-        this.refreshColorUI();
-    }
+  [POINTERSTART("$container") + MOVE("movePointer") + END("moveEndPointer")]() {
+    this.rect = this.refs.$container.rect();
 
-    refreshColorUI () {
-        const minX = this.rect.left;
-        const maxX = this.rect.right; 
+    this.refreshColorUI();
+  }
 
-        const currentX = Math.max(Math.min(maxX, this.$config.get('bodyEvent').clientX), minX); 
-        const rate = (currentX - minX) / (maxX - minX);
+  movePointer() {
+    this.refreshColorUI();
+  }
 
-        this.parent.changeColor({
-            a: (rate).toFixed(2),
-        })
-    }
+  refreshColorUI() {
+    const minX = this.rect.left;
+    const maxX = this.rect.right;
 
-    setValue (colorbar, opacity) {
-        this.setState({ 
-            opacity,
-            colorbar 
-        })
-    }
+    const currentX = Math.max(
+      Math.min(maxX, this.$config.get("bodyEvent").clientX),
+      minX
+    );
+    const rate = (currentX - minX) / (maxX - minX);
 
+    this.parent.changeColor({
+      a: rate.toFixed(2),
+    });
+  }
+
+  setValue(colorbar, opacity) {
+    this.setState({
+      opacity,
+      colorbar,
+    });
+  }
 }

@@ -1,33 +1,32 @@
-
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { BIND } from "el/sapa/Event";
-import { createComponent } from 'el/sapa/functions/jsx';
-
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { BIND, createComponent } from "sapa";
 export default class SingleInspector extends EditorElement {
-
   afterRender() {
-    this.$el.toggle(this.$config.get('editor.design.mode') === 'item');
+    this.$el.toggle(this.$config.get("editor.design.mode") === "item");
   }
 
-  [BIND('$el')] () {
+  [BIND("$el")]() {
     return {
       style: {
-        display: this.$config.get('editor.design.mode') === 'item' ? 'block' : 'none'
-      }
-    }
+        display:
+          this.$config.get("editor.design.mode") === "item" ? "block" : "none",
+      },
+    };
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="feature-control inspector">
         <div>
-              ${createComponent('AlignmentProperty')}
-              ${createComponent('DepthProperty')}
-              ${createComponent('PathToolProperty')}
-              ${createComponent('PositionProperty')}
-              ${createComponent('AppearanceProperty')}
+              ${createComponent("AlignmentProperty")}
+              ${createComponent("DepthProperty")}
+              ${createComponent("PathToolProperty")}
+              ${createComponent("PositionProperty")}
+              ${createComponent("AppearanceProperty")}
 
-              ${this.$injectManager.generate('inspector.tab.style')}                             
+              ${this.$injectManager.generate(
+                "inspector.tab.style"
+              )}                             
               <div class='empty'></div>
         </div>
       </div>

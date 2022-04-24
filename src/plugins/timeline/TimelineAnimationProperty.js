@@ -1,38 +1,49 @@
-import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import {
+  LOAD,
+  CLICK,
+  DOUBLECLICK,
+  FOCUSOUT,
+  PREVENT,
+  STOP,
+  DOMDIFF,
+  KEYDOWN,
+  DEBOUNCE,
+  ENTER,
+  SUBSCRIBE,
+} from "sapa";
+import icon from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
-import './TimelineAnimationProperty.scss';
+import "./TimelineAnimationProperty.scss";
 
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {
-    return this.$i18n('timeline.animation.property.title');
+    return this.$i18n("timeline.animation.property.title");
   }
 
   getClassName() {
-    return 'full'
+    return "full";
   }
 
   getTools() {
-    return /*html*/`
+    return /*html*/ `
       <button type='button' ref='$add' title="Add an animation">${icon.add}</button>
-    `
+    `;
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--timeline-animation-list" ref="$timelineAnimationList"></div>
     `;
   }
 
   [LOAD("$timelineAnimationList") + DOMDIFF]() {
+    var project = this.$selection.currentProject;
+    if (!project) return "";
 
-    var project = this.$selection.currentProject;    
-    if (!project) return ''
-
-    return project.timeline.map( (timeline, index) => {
-      var selected = timeline.selected ? 'selected' : ''
-      return /*html*/`
+    return project.timeline.map((timeline) => {
+      var selected = timeline.selected ? "selected" : "";
+      return /*html*/ `
         <div class='timeline-animation-item ${selected}'>
           <div class='preview icon'>
             ${icon.local_movie}
@@ -44,67 +55,70 @@ export default class TimelineAnimationProperty extends BaseProperty {
             </div>
           </div>
         </div>
-      `
-    })
+      `;
+    });
   }
 
-
-  [DOUBLECLICK('$timelineAnimationList .timeline-animation-item')] (e) {
-    this.startInputEditing(e.$dt.$('label'))
+  [DOUBLECLICK("$timelineAnimationList .timeline-animation-item")](e) {
+    this.startInputEditing(e.$dt.$("label"));
   }
 
-  modifyDoneInputEditing (input) {
+  modifyDoneInputEditing(input) {
     this.endInputEditing(input, (index, text) => {
-      var id = input.attr('data-id');
+      var id = input.attr("data-id");
 
-      var project = this.$selection.currentProject
+      var project = this.$selection.currentProject;
       if (project) {
         project.setTimelineTitle(id, text);
       }
-    });    
+    });
   }
 
-  [KEYDOWN('$timelineAnimationList .timeline-animation-item label') + ENTER + PREVENT + STOP] (e) {
+  [KEYDOWN("$timelineAnimationList .timeline-animation-item label") +
+    ENTER +
+    PREVENT +
+    STOP](e) {
     this.modifyDoneInputEditing(e.$dt);
   }
 
-  [FOCUSOUT('$timelineAnimationList .timeline-animation-item label') + PREVENT  + STOP ] (e) {
+  [FOCUSOUT("$timelineAnimationList .timeline-animation-item label") +
+    PREVENT +
+    STOP](e) {
     this.modifyDoneInputEditing(e.$dt);
   }
 
-  [CLICK('$add')] (e) {
-    this.emit('addTimelineItem');
+  [CLICK("$add")]() {
+    this.emit("addTimelineItem");
   }
 
-  [CLICK('$timelineAnimationList .timeline-animation-item .remove')] (e) {
-    var id = e.$dt.attr('data-id');
-    this.emit('removeAnimationItem', id);
+  [CLICK("$timelineAnimationList .timeline-animation-item .remove")](e) {
+    var id = e.$dt.attr("data-id");
+    this.emit("removeAnimationItem", id);
     // this.refresh();
   }
 
-  [CLICK('$timelineAnimationList .timeline-animation-item label')] (e) {
-    var id = e.$dt.attr('data-id');
+  [CLICK("$timelineAnimationList .timeline-animation-item label")](e) {
+    var id = e.$dt.attr("data-id");
 
     var project = this.$selection.currentProject;
 
     if (project) {
-      project.selectTimeline(id);                 
+      project.selectTimeline(id);
 
-  
-      var $item = e.$dt.closest('timeline-animation-item');
-      $item.onlyOneClass('selected');
+      var $item = e.$dt.closest("timeline-animation-item");
+      $item.onlyOneClass("selected");
 
-      this.emit('refreshTimeline');
-      this.emit('selectTimeline');          
+      this.emit("refreshTimeline");
+      this.emit("selectTimeline");
     }
-
   }
 
-  [SUBSCRIBE('addTimeline', 'removeTimeline', 'removeAnimation')] () {
+  [SUBSCRIBE("addTimeline", "removeTimeline", "removeAnimation")]() {
     this.refresh();
   }
-    
-  [SUBSCRIBE('refreshTimeline', 'refreshSelection', 'refreshArtboard') + DEBOUNCE(100)] () {
+
+  [SUBSCRIBE("refreshTimeline", "refreshSelection", "refreshArtboard") +
+    DEBOUNCE(100)]() {
     this.refresh();
   }
 }

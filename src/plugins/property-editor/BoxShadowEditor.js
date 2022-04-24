@@ -1,23 +1,29 @@
-import { CLICK, DRAGOVER, DRAGSTART, DROP, LOAD, PREVENT, SUBSCRIBE } from "el/sapa/Event";
-import icon, { iconUse } from "el/editor/icon/icon";
-import { BoxShadow } from "el/editor/property-parser/BoxShadow";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { Length } from "el/editor/unit/Length";
+import {
+  CLICK,
+  DRAGOVER,
+  DRAGSTART,
+  DROP,
+  LOAD,
+  PREVENT,
+  SUBSCRIBE,
+} from "sapa";
+import { iconUse } from "elf/editor/icon/icon";
+import { BoxShadow } from "elf/editor/property-parser/BoxShadow";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './BoxShadowEditor.scss';
-import { createComponent } from "el/sapa/functions/jsx";
-import { BoxShadowStyle } from "el/editor/types/model";
+import "./BoxShadowEditor.scss";
+import { createComponent } from "sapa";
+import { BoxShadowStyle } from "elf/editor/types/model";
 
 export default class BoxShadowEditor extends EditorElement {
-
   initState() {
     return {
-      boxShadows: BoxShadow.parseStyle(this.props.value || '')
-    }
+      boxShadows: BoxShadow.parseStyle(this.props.value || ""),
+    };
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--box-shadow-editor" >
         <div class='box-shadow-list' ref='$shadowList'></div>
       </div>
@@ -26,114 +32,109 @@ export default class BoxShadowEditor extends EditorElement {
 
   [LOAD("$shadowList")]() {
     var arr = this.state.boxShadows.map((shadow, index) => {
-      return /*html*/`
+      return /*html*/ `
         <div class="shadow-item real" data-index="${index}">
-            <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
-            ${createComponent('ColorViewEditor', {
+            <label draggable="true" data-index="${index}">${iconUse(
+        "drag_indicator"
+      )}</label>
+            ${createComponent("ColorViewEditor", {
               mini: true,
-              key: 'color',
+              key: "color",
               value: shadow.color,
               params: index,
-              onchange: 'changeKeyValue'
+              onchange: "changeKeyValue",
             })}
-            ${createComponent('ToggleButton', {
+            ${createComponent("ToggleButton", {
               mini: true,
-              key: 'inset',
+              key: "inset",
               value: shadow.inset,
               params: index,
-              onchange: 'changeKeyValue',
+              onchange: "changeKeyValue",
               checkedValue: BoxShadowStyle.INSET,
-              toggleLabels: ['border_style', 'border_style'],
+              toggleLabels: ["border_style", "border_style"],
               toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
-              toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET],              
+              toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET],
             })}            
-            ${createComponent('NumberInputEditor', {
+            ${createComponent("NumberInputEditor", {
               mini: true,
-              key: 'offsetX',
-              label: 'X',
+              key: "offsetX",
+              label: "X",
               value: shadow.offsetX,
               params: index,
-              onchange: 'changeKeyValue'
+              onchange: "changeKeyValue",
             })}          
-            ${createComponent('NumberInputEditor', {
+            ${createComponent("NumberInputEditor", {
               mini: true,
-              key: 'offsetY',
-              label: 'Y',
+              key: "offsetY",
+              label: "Y",
               value: shadow.offsetY,
               params: index,
-              onchange: 'changeKeyValue'
+              onchange: "changeKeyValue",
             })}                    
-            ${createComponent('NumberInputEditor', {
+            ${createComponent("NumberInputEditor", {
               mini: true,
-              label: 'B',
-              key: 'blurRadius',
+              label: "B",
+              key: "blurRadius",
               value: shadow.blurRadius,
               params: index,
-              onchange: 'changeKeyValue'
+              onchange: "changeKeyValue",
             })} 
-            ${createComponent('NumberInputEditor', {
+            ${createComponent("NumberInputEditor", {
               mini: true,
-              label: 'S',
-              key: 'spreadRadius',
+              label: "S",
+              key: "spreadRadius",
               value: shadow.spreadRadius,
               params: index,
-              onchange: 'changeKeyValue'
+              onchange: "changeKeyValue",
             })}             
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
-              ${iconUse('remove2')}
+              ${iconUse("remove2")}
             </button>
           </div>
         </div>
       `;
     });
 
-
-    return arr.join('');
+    return arr.join("");
   }
 
   modifyBoxShadow() {
-    var value = this.state.boxShadows.join(', ');
+    var value = this.state.boxShadows.join(", ");
 
-    this.parent.trigger(this.props.onchange, this.props.key, value)
+    this.parent.trigger(this.props.onchange, this.props.key, value);
   }
 
-  [SUBSCRIBE('add')](shadow = '') {
-
+  [SUBSCRIBE("add")](shadow = "") {
     if (shadow) {
       this.state.boxShadows = BoxShadow.parseStyle(shadow);
     } else {
       const shadowObj = new BoxShadow({
-        color: 'black',
+        color: "black",
         inset: BoxShadowStyle.OUTSET,
         offsetX: 2,
         offsetY: 2,
         blurRadius: 3,
-        spreadRadius: 1
-      })
-  
-      this.state.boxShadows.push(shadowObj)
+        spreadRadius: 1,
+      });
+
+      this.state.boxShadows.push(shadowObj);
     }
-
-
 
     this.refresh();
 
-    this.modifyBoxShadow()
+    this.modifyBoxShadow();
   }
 
   [CLICK("$add")]() {
-    this.trigger('add');
+    this.trigger("add");
   }
-
-
 
   [DRAGSTART("$shadowList .shadow-item > label")](e) {
     this.startIndex = +e.$dt.attr("data-index");
   }
 
-  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e) { }
-
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT]() {}
 
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(
@@ -154,10 +155,8 @@ export default class BoxShadowEditor extends EditorElement {
 
     this.refresh();
 
-    this.modifyBoxShadow()    
-
+    this.modifyBoxShadow();
   }
-
 
   [CLICK("$shadowList .remove")](e) {
     var index = +e.$dt.attr("data-index");
@@ -166,19 +165,16 @@ export default class BoxShadowEditor extends EditorElement {
 
     this.refresh();
 
-    this.modifyBoxShadow()
+    this.modifyBoxShadow();
   }
 
-
   [SUBSCRIBE("changeKeyValue")](key, value, index) {
-
-    var shadow = this.state.boxShadows[index]
+    var shadow = this.state.boxShadows[index];
 
     shadow.reset({
-      [key]: value
-    })
+      [key]: value,
+    });
 
     this.modifyBoxShadow();
-
   }
 }

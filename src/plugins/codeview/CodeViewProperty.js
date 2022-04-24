@@ -1,29 +1,30 @@
-import { CONFIG, LOAD, DOMDIFF, SUBSCRIBE, IF, DEBOUNCE } from "el/sapa/Event";
+import { CONFIG, LOAD, DOMDIFF, SUBSCRIBE, IF, DEBOUNCE } from "sapa";
 
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
-import './CodeViewProperty.scss';
+import "./CodeViewProperty.scss";
 
 export default class CodeViewProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('code.view.property.title');
+    return this.$i18n("code.view.property.title");
   }
 
   checkConfig() {
-    return this.$config.is("inspector.selectedValue", 'code');
+    return this.$config.is("inspector.selectedValue", "code");
   }
 
-  [CONFIG('inspector.selectedValue')] () {
+  [CONFIG("inspector.selectedValue")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshSelectionStyleView', 'refreshSelection') + IF('checkConfig') + DEBOUNCE(100)]() {
+  [SUBSCRIBE("refreshSelectionStyleView", "refreshSelection") +
+    IF("checkConfig") +
+    DEBOUNCE(100)]() {
     this.refresh();
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="property-item elf--code-view-item" ref='$body'>
         <div class="elf--code-view-item-code" ref='$code'></div>
         <div class="elf--code-view-item-svg" ref='$svg'></div>
@@ -31,15 +32,11 @@ export default class CodeViewProperty extends BaseProperty {
     `;
   }
 
-  [LOAD('$code') + DOMDIFF] () {
-    return [
-      this.$editor.html.codeview(this.$selection.current)
-    ]
+  [LOAD("$code") + DOMDIFF]() {
+    return [this.$editor.html.codeview(this.$selection.current)];
   }
 
-  [LOAD('$svg') + DOMDIFF] () {
-    return [
-      this.$editor.svg.codeview(this.$selection.current)
-    ]
+  [LOAD("$svg") + DOMDIFF]() {
+    return [this.$editor.svg.codeview(this.$selection.current)];
   }
 }

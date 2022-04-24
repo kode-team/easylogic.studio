@@ -1,5 +1,5 @@
-import { LOAD, CLICK, CHANGE, SUBSCRIBE } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { LOAD, CLICK, CHANGE, SUBSCRIBE } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./ImageSelectEditor.scss";
 
@@ -28,8 +28,7 @@ export default class ImageSelectEditor extends EditorElement {
 
     if (!project) return;
 
-    const imageUrl =
-      project.getImageValueById(this.state.value);
+    const imageUrl = project.getImageValueById(this.state.value);
 
     return (
       <>
@@ -38,7 +37,9 @@ export default class ImageSelectEditor extends EditorElement {
           <input type="file" ref="$file" accept="image/*" />
         </div>
         <div class="select-container">
-          <button type="button" ref="$select">{this.$i18n('image.select.editor.button')}</button>
+          <button type="button" ref="$select">
+            {this.$i18n("image.select.editor.button")}
+          </button>
         </div>
       </>
     );

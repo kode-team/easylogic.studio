@@ -1,12 +1,11 @@
-import { Editor } from "el/editor/manager/Editor";
 import BackgroundClipProperty from "./BackgroundClipProperty";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerElement({
-        BackgroundClipProperty
-    })
+  editor.registerElement({
+    BackgroundClipProperty,
+  });
 }

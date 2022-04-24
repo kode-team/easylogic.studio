@@ -1,4 +1,6 @@
-export default [{
-    type: 'Saturate',
-    values: '0'
-}]
+export default [
+  {
+    type: "Saturate",
+    values: "0",
+  },
+];

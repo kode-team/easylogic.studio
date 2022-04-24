@@ -1,5 +1,6 @@
 export class DomTemplateEngine {
-    static compile (template, params = []) {
-        return template;
-    }
+  // eslint-disable-next-line no-unused-vars
+  static compile(template, params = []) {
+    return template;
+  }
 }

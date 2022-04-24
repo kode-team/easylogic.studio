@@ -1,4 +1,4 @@
-import { Editor } from "el/editor/manager/Editor";
+import { Editor } from "elf/editor/manager/Editor";
 import SkiaRenderer from "./SkiaRenderer";
 import ArtBoardRender from "./SkiaRenderer/ArtBoardRender";
 // import CircleRender from "./SkiaRenderer/CircleRender";

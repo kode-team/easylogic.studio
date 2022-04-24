@@ -1,21 +1,21 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { DirectionLength } from "el/editor/unit/DirectionLength";
-import './DirectionEditor.scss';
-import { createComponent } from "el/sapa/functions/jsx";
+import { CLICK, LOAD, SUBSCRIBE } from "sapa";
+import icon from "elf/editor/icon/icon";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { DirectionLength } from "elf/editor/unit/DirectionLength";
+import "./DirectionEditor.scss";
+import { createComponent } from "sapa";
 const typeList = [
   { key: "top", title: "Top" },
   { key: "right", title: "Right" },
   { key: "bottom", title: "Bottom" },
-  { key: "left", title: "Left" }
+  { key: "left", title: "Left" },
 ];
 
 export default class DirectionEditor extends EditorElement {
-
   initState() {
-
-    var [count, top, right, bottom, left] = DirectionLength.parse(this.props.value)
+    var [count, top, right, bottom, left] = DirectionLength.parse(
+      this.props.value
+    );
 
     return {
       isAll: count === 1,
@@ -23,35 +23,33 @@ export default class DirectionEditor extends EditorElement {
       top: top.clone(),
       right: right.clone(),
       bottom: bottom.clone(),
-      left: left.clone()
-    }
+      left: left.clone(),
+    };
   }
 
   template() {
-    return `<div class='elf--direction-editor' ref='$body'></div>`
+    return `<div class='elf--direction-editor' ref='$body'></div>`;
   }
 
-  [SUBSCRIBE('changeBorderRadius')] (key, value) {
-
-    if (key === 'all') {
-      typeList.forEach(it => {
+  [SUBSCRIBE("changeBorderRadius")](key, value) {
+    if (key === "all") {
+      typeList.forEach((it) => {
         this.state[it.key] = value.clone();
-        this.children[`$${it.key}`].setValue(value.clone())
-      })
+        this.children[`$${it.key}`].setValue(value.clone());
+      });
     }
 
     this.updateData({
-      [key]: value
-    })
+      [key]: value,
+    });
   }
 
-  [LOAD('$body')] () {
-
-    var selectedValue = this.state.isAll ? 'all' : 'partitial'
+  [LOAD("$body")]() {
+    var selectedValue = this.state.isAll ? "all" : "partitial";
     var direction = this.state.all;
-    var display = selectedValue === 'all' ? 'display:none' : 'display:block';
+    var display = selectedValue === "all" ? "display:none" : "display:block";
 
-    return /*html*/`
+    return /*html*/ `
       <div class="property-item direction-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -61,10 +59,10 @@ export default class DirectionEditor extends EditorElement {
         </div>
         <div class="radius-value">
           ${createComponent("RangeEditor", {
-            ref: '$all',
-            key: 'all',
+            ref: "$all",
+            key: "all",
             value: direction,
-            onchange: 'changeBorderRadius'
+            onchange: "changeBorderRadius",
           })}
         </div>
       </div>
@@ -74,34 +72,48 @@ export default class DirectionEditor extends EditorElement {
         style="${display}"
       >
         <div class="radius-setting-box">
-          ${typeList.map(it => {
-            var value = this.state[it.key]
-            return /*html*/`
+          ${typeList
+            .map((it) => {
+              var value = this.state[it.key];
+              return /*html*/ `
               <div>
                   ${createComponent("RangeEditor", {
                     ref: `$${it.key}`,
                     label: it.title,
-                    key: it.key, 
-                    value, 
-                    onchange: 'changeBorderRadius'
+                    key: it.key,
+                    value,
+                    onchange: "changeBorderRadius",
                   })}
               </div>  
             `;
-          }).join('')}
+            })
+            .join("")}
         </div>
       </div>
     `;
   }
 
-  updateData (opt = {}) {
+  updateData(opt = {}) {
     this.setState(opt, false);
 
     var value = [];
 
     if (this.state.isAll) {
-      value = [1, this.state.all,this.state.all,this.state.all,this.state.all]
+      value = [
+        1,
+        this.state.all,
+        this.state.all,
+        this.state.all,
+        this.state.all,
+      ];
     } else {
-      value = [4, this.state.top,this.state.right,this.state.bottom,this.state.left]
+      value = [
+        4,
+        this.state.top,
+        this.state.right,
+        this.state.bottom,
+        this.state.left,
+      ];
     }
 
     this.parent.trigger(this.props.onchange, value);
@@ -118,9 +130,7 @@ export default class DirectionEditor extends EditorElement {
     }
 
     this.updateData({
-      isAll: type === 'all'
+      isAll: type === "all",
     });
   }
-
-
 }

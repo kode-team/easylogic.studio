@@ -1,47 +1,39 @@
-import Dom from "el/sapa/functions/Dom";
 import { TemplateEngine } from "plugins/renderer-html/HTMLRenderer/template-engine/TemplateEngine";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class TemplateRender extends SVGLayerRender {
+  /**
+   *
+   * @param {Item} item
+   * @param {Dom} currentElement
+   */
+  update(item, currentElement) {
+    const compiledTemplate = this.compile(item);
+    let $innerHTML = currentElement.$(".inner-html");
 
-    /**
-     * 
-     * @param {Item} item 
-     * @param {Dom} currentElement 
-     */
-     update(item, currentElement) {
-
-        const compiledTemplate = this.compile(item);
-        let $innerHTML = currentElement.$(".inner-html");
-    
-        // TODO: template, engine, params 가 변경 된 시점에  변경 상태를 기록한다. 
-        // TODO: 그렇게 해서 변경이 없는 부분은 최대한 다시 그리지 않도록 한다. 
-        if ($innerHTML) {
-          $innerHTML.updateDiff(compiledTemplate);
-        }
-    
-
-        super.update(item, currentElement);
-    } 
-
-
-    compile (item) {
-        return TemplateEngine.compile('dom', item.template, item.params);
+    // TODO: template, engine, params 가 변경 된 시점에  변경 상태를 기록한다.
+    // TODO: 그렇게 해서 변경이 없는 부분은 최대한 다시 그리지 않도록 한다.
+    if ($innerHTML) {
+      $innerHTML.updateDiff(compiledTemplate);
     }
 
+    super.update(item, currentElement);
+  }
 
-    /**
-     * 
-     * @param {*} item 
-     */
-    render (item) {
+  compile(item) {
+    return TemplateEngine.compile("dom", item.template, item.params);
+  }
 
-        const {id, width, height } = item;
-        const compiledTemplate = this.compile(item); 
+  /**
+   *
+   * @param {*} item
+   */
+  render(item) {
+    const { id, width, height } = item;
+    const compiledTemplate = this.compile(item);
 
-
-        return this.wrappedRender(item, () => {
-          return /*html*/`
+    return this.wrappedRender(item, () => {
+      return /*html*/ `
             <foreignObject
                 width="${width}"
                 height="${height}"
@@ -66,9 +58,7 @@ export default class TemplateRender extends SVGLayerRender {
                     </div>
                 </div>
             </foreignObject>              
-          `  
-            
-        })      
-
-    }
+          `;
+    });
+  }
 }

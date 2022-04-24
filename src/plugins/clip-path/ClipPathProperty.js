@@ -1,174 +1,196 @@
-import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "el/sapa/Event";
-import icon, { iconUse } from "el/editor/icon/icon";
-import { ClipPath } from "el/editor/property-parser/ClipPath";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "sapa";
+import icon, { iconUse } from "elf/editor/icon/icon";
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
-import './ClipPathProperty.scss';
-import {PathParser} from 'el/editor/parser/PathParser';
-import { vertiesToRectangle } from "el/utils/collision";
-import { ClipPathType } from "el/editor/types/model";
-import polygon from "el/editor/preset/clip-path/polygon";
-import { createComponent } from "el/sapa/functions/jsx";
+import "./ClipPathProperty.scss";
+import { PathParser } from "elf/editor/parser/PathParser";
+import { vertiesToRectangle } from "elf/utils/collision";
+import { ClipPathType } from "elf/editor/types/model";
+import polygon from "elf/editor/preset/clip-path/polygon";
+import { createComponent } from "sapa";
 
 const ClipPathSample = {
-  [ClipPathType.CIRCLE]: 'circle(50% at 50% 50%)',
-  [ClipPathType.ELLIPSE]: 'ellipse(50% 50% at 50% 50%)',
-  [ClipPathType.INSET]: 'inset(0% 0% 0% 0%)',
-  [ClipPathType.POLYGON]: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-  [ClipPathType.PATH]: 'path()',
-}
-
-
+  [ClipPathType.CIRCLE]: "circle(50% at 50% 50%)",
+  [ClipPathType.ELLIPSE]: "ellipse(50% 50% at 50% 50%)",
+  [ClipPathType.INSET]: "inset(0% 0% 0% 0%)",
+  [ClipPathType.POLYGON]: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+  [ClipPathType.PATH]: "path()",
+};
 
 export default class ClipPathProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('clippath.property.title');
+    return this.$i18n("clippath.property.title");
   }
 
   getClassName() {
-    return 'clip-path-property'
+    return "clip-path-property";
   }
 
   getBody() {
-    return /*html*/`<div class='elf--clip-path-list' ref='$clippathList'></div>`;
+    return /*html*/ `<div class='elf--clip-path-list' ref='$clippathList'></div>`;
   }
 
   getTools() {
-    return /*html*/`
+    return /*html*/ `
       <div ref="$tools" class="add-tools">
-        <button type="button" data-value='circle' data-tooltip="Circle">${iconUse('outline_circle')}</button>
-        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse('outline_circle', "scale(1 0.7) translate(0 5)")}</button>
-        <button type="button" data-value='inset' data-tooltip="Inset">${iconUse('outline_rect')}</button>
-        <button type="button" data-value='polygon' data-tooltip="Polygon">${iconUse('polygon')}</button>
-        <button type="button" data-value='path' data-tooltip="Path">${iconUse('pentool')}</button>
-        <button type="button" data-value='svg' data-tooltip="SVG">${iconUse('image')}</button>
+        <button type="button" data-value='circle' data-tooltip="Circle">${iconUse(
+          "outline_circle"
+        )}</button>
+        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse(
+          "outline_circle",
+          "scale(1 0.7) translate(0 5)"
+        )}</button>
+        <button type="button" data-value='inset' data-tooltip="Inset">${iconUse(
+          "outline_rect"
+        )}</button>
+        <button type="button" data-value='polygon' data-tooltip="Polygon">${iconUse(
+          "polygon"
+        )}</button>
+        <button type="button" data-value='path' data-tooltip="Path">${iconUse(
+          "pentool"
+        )}</button>
+        <button type="button" data-value='svg' data-tooltip="SVG">${iconUse(
+          "image"
+        )}</button>
       </div>
     `;
   }
 
   makeClipPathTemplate(clippath, func) {
+    const isPath = clippath === "path";
+    const isPolygon = clippath === "polygon";
 
-    const isPath = clippath === 'path';
-    const isPolygon = clippath === 'polygon';
-
-    let newPathString = '';
+    let newPathString = "";
     if (isPath) {
-      const pathString = func.split('(')[1].split(')')[0];
+      const pathString = func.split("(")[1].split(")")[0];
 
       let pathObject = PathParser.fromSVGString(pathString);
       const bbox = pathObject.getBBox();
-      const rectangle = vertiesToRectangle(bbox)
+      const rectangle = vertiesToRectangle(bbox);
 
       const rate = 260 / rectangle.width;
       const hRate = 150 / rectangle.height;
 
       const lastRate = Math.min(rate, hRate);
 
-      pathObject = pathObject.translate(-bbox[0][0], -bbox[0][1]).scale(lastRate, lastRate);
+      pathObject = pathObject
+        .translate(-bbox[0][0], -bbox[0][1])
+        .scale(lastRate, lastRate);
 
       const newBBox = pathObject.getBBox();
       const newRectangle = vertiesToRectangle(newBBox);
 
-      newPathString = pathObject.translate(260 / 2 - newRectangle.width / 2, 0).d;
+      newPathString = pathObject.translate(
+        260 / 2 - newRectangle.width / 2,
+        0
+      ).d;
     }
 
-    let polygonSelect = ''
+    let polygonSelect = "";
     if (isPolygon) {
       const polygonList = polygon.execute();
 
-      polygonSelect = createComponent('SelectEditor', {
-        ref: '$polygonSelect',
-        options: ['', ...polygonList.map(it => it.name)],
+      polygonSelect = createComponent("SelectEditor", {
+        ref: "$polygonSelect",
+        options: ["", ...polygonList.map((it) => it.name)],
         onchange: (key, value) => {
-
-          const polygon = polygonList.find(it => it.name === value)
+          const polygon = polygonList.find((it) => it.name === value);
 
           if (polygon) {
             this.updatePathInfo({
-              'clip-path': `polygon(${polygon.polygon})`
-            })
+              "clip-path": `polygon(${polygon.polygon})`,
+            });
           }
-
-        }
-      })
+        },
+      });
     }
 
-    return /*html*/`
+    return /*html*/ `
       <div>
         <div class='clippath-item'>
-          <label>${iconUse('drag_indicator')}</label>
+          <label>${iconUse("drag_indicator")}</label>
           <div class='title'>
             <div class='name'>${clippath}</div>
-            ${isPolygon ? polygonSelect : ''}
+            ${isPolygon ? polygonSelect : ""}
           </div>
           <div class='tools'>
             <button type="button" class="del">${icon.remove2}</button>
           </div>        
         </div>
-        ${isPath ? `<svg><path d="${newPathString}" fill="transparent" stroke="currentColor" /></svg>` : ''}
+        ${
+          isPath
+            ? `<svg><path d="${newPathString}" fill="transparent" stroke="currentColor" /></svg>`
+            : ""
+        }
       </div>
 
-    `
+    `;
   }
 
-  [CLICK('$clippathList .clippath-item .title .name')](e) {
+  [CLICK("$clippathList .clippath-item .title .name")]() {
     var current = this.$selection.current;
     if (!current) return;
-
 
     this.viewClipPathPicker();
-
   }
 
-  [CLICK('$clippathList .del') + PREVENT](e) {
+  [CLICK("$clippathList .del") + PREVENT]() {
     var current = this.$selection.current;
     if (!current) return;
 
-    this.command('setAttributeForMulti', 'delete clip-path', this.$selection.packByValue({
-      'clip-path': ''
-    }));
-    this.emit('hideClipPathPopup');
+    this.command(
+      "setAttributeForMulti",
+      "delete clip-path",
+      this.$selection.packByValue({
+        "clip-path": "",
+      })
+    );
+    this.emit("hideClipPathPopup");
 
-    setTimeout(() => {
+    window.setTimeout(() => {
       this.refresh();
-    }, 100)
+    }, 100);
   }
 
   get editableProperty() {
     return "clip-path";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
     this.refresh();
   }
 
-
   [LOAD("$clippathList")]() {
     var current = this.$selection.current;
-    if (!current) return '';
-    if (!current['clip-path']) return ''
+    if (!current) return "";
+    if (!current["clip-path"]) return "";
 
-    return this.makeClipPathTemplate(current['clip-path'].split('(')[0], current['clip-path']);
+    return this.makeClipPathTemplate(
+      current["clip-path"].split("(")[0],
+      current["clip-path"]
+    );
   }
 
   [CLICK("$tools [data-value]")](e) {
-
     var current = this.$selection.current;
 
     if (!current) return;
-    if (current['clip-path']) {
-      alert('clip-path is already exists.');
+    if (current["clip-path"]) {
+      window.alert("clip-path is already exists.");
       return;
     }
 
     if (current) {
-
       current.reset({
-        'clip-path': ClipPathSample[e.$dt.data('value')]
-      })
+        "clip-path": ClipPathSample[e.$dt.data("value")],
+      });
 
-      this.command("setAttributeForMulti", 'change clip-path', this.$selection.pack('clip-path'));
+      this.command(
+        "setAttributeForMulti",
+        "change clip-path",
+        this.$selection.pack("clip-path")
+      );
     }
 
     this.refresh();
@@ -178,31 +200,30 @@ export default class ClipPathProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return;
 
-    var obj = ClipPath.parseStyle(current['clip-path'])
+    var obj = ClipPath.parseStyle(current["clip-path"]);
 
     switch (obj.type) {
-      case 'path':
-        var d = current.absolutePath(current.clipPathString).d
-        var mode = d ? 'modify' : 'path'
+      case "path":
+        var d = current.absolutePath(current.clipPathString).d;
+        var mode = d ? "modify" : "path";
 
-        this.emit('showPathEditor', mode, {
+        this.emit("showPathEditor", mode, {
           changeEvent: (data) => {
             data.d = current.invertPath(data.d).d;
 
             this.updatePathInfo({
-              'clip-path': `path(${data.d})`
+              "clip-path": `path(${data.d})`,
             });
           },
           current,
           d,
-        })
+        });
         break;
-      case 'svg':
-        // TODO: clip art 선택하기 
+      case "svg":
+        // TODO: clip art 선택하기
         break;
     }
   }
-
 
   updatePathInfo(data) {
     if (!data) return;
@@ -212,7 +233,10 @@ export default class ClipPathProperty extends BaseProperty {
     current.reset(data);
 
     this.refresh();
-    this.command('setAttributeForMulti', 'change clip-path', this.$selection.packByValue(data));
+    this.command(
+      "setAttributeForMulti",
+      "change clip-path",
+      this.$selection.packByValue(data)
+    );
   }
-
 }

@@ -1,19 +1,17 @@
-
-import { CLICK, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { Position } from "el/editor/unit/Length";
-import icon from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent, createElementJsx } from "el/sapa/functions/jsx";
+import { CLICK, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import { Position } from "elf/editor/unit/Length";
+import icon from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
 const typeList = [
   { key: "top", title: "Top" },
   { key: "bottom", title: "Bottom" },
   { key: "left", title: "Left" },
-  { key: "right", title: "Right" }
+  { key: "right", title: "Right" },
 ];
 
-const keyList = typeList.map(it => it.key);
-
+const keyList = typeList.map((it) => it.key);
 
 const names = {
   image: "Image",
@@ -23,9 +21,10 @@ const names = {
   "radial-gradient": "Radial",
   "repeating-radial-gradient": `${icon.repeat} Radial`,
   "conic-gradient": "Conic",
-  "repeating-conic-gradient": `${icon.repeat} Conic`
+  "repeating-conic-gradient": `${icon.repeat} Conic`,
 };
 
+// eslint-disable-next-line no-unused-vars
 const types = {
   image: "image",
   "static-gradient": "gradient",
@@ -34,43 +33,40 @@ const types = {
   "radial-gradient": "gradient",
   "repeating-radial-gradient": "gradient",
   "conic-gradient": "gradient",
-  "repeating-conic-gradient": "gradient"
+  "repeating-conic-gradient": "gradient",
 };
 
-
-
 export default class BorderImageProperty extends BaseProperty {
-
   getTitle() {
     return "Border Image";
   }
 
-  [SUBSCRIBE('refreshSelection', )] () {
-    this.refresh()
+  [SUBSCRIBE("refreshSelection")]() {
+    this.refresh();
   }
 
   getTools() {
-    var current = this.$selection.current || {} 
+    var current = this.$selection.current || {};
 
-    var appliedBorderImage = current.appliedBorderImage || false 
+    var appliedBorderImage = current.appliedBorderImage || false;
 
     return `
-      <label><input type='checkbox' ${appliedBorderImage ? 'checked' : ''} ref='$apply' /> Apply</label>
-    `
+      <label><input type='checkbox' ${
+        appliedBorderImage ? "checked" : ""
+      } ref='$apply' /> Apply</label>
+    `;
   }
 
-  [CLICK('$apply')] () {
+  [CLICK("$apply")]() {
     var current = this.$selection.current;
     if (!current) return;
 
-    var applyBorderImage = this.refs.$apply.checked()
+    var applyBorderImage = this.refs.$apply.checked();
 
-    current.reset({applyBorderImage});
+    current.reset({ applyBorderImage });
 
     this.emit("refreshElement", current);
-
   }
-
 
   getColorStepList(image) {
     switch (image.type) {
@@ -84,26 +80,24 @@ export default class BorderImageProperty extends BaseProperty {
         return this.getColorStepString(image.colorsteps);
     }
 
-    return '';
+    return "";
   }
 
   getColorStepString(colorsteps) {
     return colorsteps
-      .map(step => {
-        return `<div class='step' data-colorstep-id="${
-          step.id
-        }" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
+      .map((step) => {
+        return `<div class='step' data-colorstep-id="${step.id}" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
       })
-      .join('');
+      .join("");
   }
 
-  [LOAD('$borderImageView')] () {
-    var current  = this.$selection.current || {borderImage: { image: {}}} ;
+  [LOAD("$borderImageView")]() {
+    var current = this.$selection.current || { borderImage: { image: {} } };
     var borderImage = current.borderImage;
-    
-    var backgroundTypeName = borderImage.type ?  names[borderImage.type] : '';
 
-    const imageCSS = `background-image: ${borderImage.image.toString()}; background-size: cover;`;    
+    var backgroundTypeName = borderImage.type ? names[borderImage.type] : "";
+
+    const imageCSS = `background-image: ${borderImage.image.toString()}; background-size: cover;`;
     return ` 
       <div class='preview' ref="$preview">
         <div class='mini-view'>
@@ -118,23 +112,21 @@ export default class BorderImageProperty extends BaseProperty {
           </div>
         </div>
       </div>
-    `
+    `;
   }
 
-  [SUBSCRIBE_SELF('changeBorderImage')] (key, value) {
-
-    if (key === 'border-image-slice') {
-      keyList.forEach(type => {
-        this.children[`$${type}Slice`].setValue(value)
+  [SUBSCRIBE_SELF("changeBorderImage")](key, value) {
+    if (key === "border-image-slice") {
+      keyList.forEach((type) => {
+        this.children[`$${type}Slice`].setValue(value);
       });
     }
 
-    this.setBorderImageProperty()
+    this.setBorderImageProperty();
   }
 
   getBody() {
-
-    return /*html*/`
+    return /*html*/ `
       <div class="property-item border-image-item" ref='$borderImageView'></div>    
       <div class="property-item border-slice-item">
         <div class="slice-selector" data-selected-value="all" ref="$selector">
@@ -144,10 +136,10 @@ export default class BorderImageProperty extends BaseProperty {
           </button>
         </div>
         <div class="slice-value">
-          ${createComponent('RangeEditor', {
-            ref: '$allSlice',
-            key: 'border-image-slice', 
-            onchange: 'changeBorderImage'
+          ${createComponent("RangeEditor", {
+            ref: "$allSlice",
+            key: "border-image-slice",
+            onchange: "changeBorderImage",
           })}
         </div>
       </div>
@@ -157,56 +149,57 @@ export default class BorderImageProperty extends BaseProperty {
         style="display: none;"
       >
         <div class="slice-setting-box" ref="$sliceSettingBox">
-          ${typeList.map(it => {
-            return /*html*/`
+          ${typeList
+            .map((it) => {
+              return /*html*/ `
               <div>
                 <label class='title'>${it.title}</label>
               </div>
               <div>
-                ${createComponent('RangeEditor', {
+                ${createComponent("RangeEditor", {
                   ref: `$${it.key}Slice`,
-                  label: 'Slice',
+                  label: "Slice",
                   key: `border-image-slice-${it.key}`,
-                  onchange: 'changeBorderImage'
+                  onchange: "changeBorderImage",
                 })}
               </div>  
               <div>
-                ${createComponent('RangeEditor', {
+                ${createComponent("RangeEditor", {
                   ref: `$${it.key}Width`,
-                  label: 'Width',
+                  label: "Width",
                   key: `border-image-width-${it.key}`,
-                  onchange: 'changeBorderImage'
+                  onchange: "changeBorderImage",
                 })}              
               </div>                
             `;
-          }).join('')}
+            })
+            .join("")}
         </div>
       </div>
     `;
   }
 
-
-  [CHANGE("$sliceSettingBox select")](e) {
+  [CHANGE("$sliceSettingBox select")]() {
     this.setBorderImageProperty();
   }
 
-  [CLICK('$borderImageView .preview')] () {
-    this.viewFillPopup(this.refs.$preview, '');
+  [CLICK("$borderImageView .preview")]() {
+    this.viewFillPopup(this.refs.$preview, "");
   }
 
   [CLICK("$borderImageView .colorsteps .step")](e) {
-
-    this.refs.$colorsteps.$(`[data-selected="true"]`).removeAttr('data-selected')
+    this.refs.$colorsteps
+      .$(`[data-selected="true"]`)
+      .removeAttr("data-selected");
     var selectColorStepId = e.$dt.attr("data-colorstep-id");
-    e.$dt.attr('data-selected', true);
+    e.$dt.attr("data-selected", true);
     var $preview = e.$dt.closest("border-image-item").$(".preview");
     this.viewFillPopup($preview, selectColorStepId);
   }
 
-
   getFillData(borderImage) {
     let data = {
-      type: borderImage.type
+      type: borderImage.type,
     };
 
     switch (data.type) {
@@ -235,24 +228,22 @@ export default class BorderImageProperty extends BaseProperty {
     return data;
   }
 
-
   viewFillPopup($preview, selectColorStepId) {
-
     var current = this.$selection.current;
 
     if (!current) return;
 
     this.emit("showFillPopup", {
-      changeEvent: 'changeBorderImageFillPopup',
+      changeEvent: "changeBorderImageFillPopup",
       ...this.getFillData(current.borderImage),
       selectColorStepId,
-      refresh: true
+      refresh: true,
     });
   }
 
-  viewChangeImage(data) {
+  viewChangeImage() {
     var current = this.$selection.current;
-    if (!current) return; 
+    if (!current) return;
 
     var borderImage = current.borderImage;
 
@@ -260,8 +251,8 @@ export default class BorderImageProperty extends BaseProperty {
     var $el = this.getRef("$miniView");
     if ($el && borderImage.image) {
       $el.css({
-        'background-image': borderImage.image.toString(),
-        "background-size": "cover"
+        "background-image": borderImage.image.toString(),
+        "background-size": "cover",
       });
     }
 
@@ -277,9 +268,8 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   setImage(data) {
-
     var current = this.$selection.current;
-    if (!current) return; 
+    if (!current) return;
 
     current.borderImage.setImageUrl(data);
 
@@ -290,7 +280,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   viewChangeGradient(data) {
     var current = this.$selection.current;
-    if (!current) return; 
+    if (!current) return;
 
     var borderImage = current.borderImage;
 
@@ -298,9 +288,9 @@ export default class BorderImageProperty extends BaseProperty {
     var $el = this.getRef("$miniView");
     if ($el) {
       $el.css({
-        'background-image': borderImage.image.toString(),
-        "background-size": "cover"
-      });      
+        "background-image": borderImage.image.toString(),
+        "background-size": "cover",
+      });
     }
 
     var $el = this.getRef("$fillTitle");
@@ -314,19 +304,15 @@ export default class BorderImageProperty extends BaseProperty {
     }
   }
 
-
   setGradient(data) {
-
     var current = this.$selection.current;
-    if (!current) return; 
-  
+    if (!current) return;
 
-    current.borderImage.setGradient(data);   
+    current.borderImage.setGradient(data);
 
     this.viewChangeGradient(data);
 
     this.emit("refreshElement", current);
-
   }
 
   [SUBSCRIBE("changeBorderImageFillPopup")](data) {
@@ -348,20 +334,19 @@ export default class BorderImageProperty extends BaseProperty {
     var type = this.refs.$selector.attr("data-selected-value");
 
     if (type === "all") {
-      var len = this.children.$allSlice.getValue()
+      var len = this.children.$allSlice.getValue();
       borderImage.reset({
         slice: {
           top: len.clone(),
           right: len.clone(),
           bottom: len.clone(),
-          left: len.clone()
-        }
-      })
-
+          left: len.clone(),
+        },
+      });
     } else {
-      keyList.forEach(type => {
-        borderImage.slice[type] = this.children[`$${type}Slice`].getValue()
-        borderImage.width[type] = this.children[`$${type}Width`].getValue()
+      keyList.forEach((type) => {
+        borderImage.slice[type] = this.children[`$${type}Slice`].getValue();
+        borderImage.width[type] = this.children[`$${type}Width`].getValue();
       });
     }
 
@@ -380,5 +365,4 @@ export default class BorderImageProperty extends BaseProperty {
 
     this.setBorderImageProperty();
   }
-
 }

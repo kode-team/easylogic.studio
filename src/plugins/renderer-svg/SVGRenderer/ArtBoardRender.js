@@ -1,40 +1,37 @@
-import { CSS_TO_STRING } from "el/utils/func";
+import { CSS_TO_STRING } from "elf/utils/func";
 import SVGRender from "./SVGRender";
 
 export default class ArtBoardRender extends SVGRender {
+  toCSS(item) {
+    const css = Object.assign(
+      {},
+      this.toDefaultCSS(item),
+      this.toClipPathCSS(item),
+      this.toWebkitCSS(item),
+      this.toTextClipCSS(item),
+      this.toBackgroundImageCSS(item)
+    );
 
-    toCSS(item) {
+    delete css.left;
+    delete css.top;
+    delete css.width;
+    delete css.height;
+    delete css.position;
 
-        const css = Object.assign(
-            {},
-            this.toDefaultCSS(item),
-            this.toClipPathCSS(item),
-            this.toWebkitCSS(item), 
-            this.toTextClipCSS(item),
-            this.toBackgroundImageCSS(item),            
-        );
+    return css;
+  }
+  /**
+   *
+   * @param {Item} item
+   * @param {SVGRenderer} renderer
+   */
+  render(item, renderer, encoding = true) {
+    const { width, height } = item;
 
-        delete css.left;
-        delete css.top;
-        delete css.width;
-        delete css.height;
-        delete css.position;
+    let css = this.toCSS(item);
 
-        return css; 
-    }
-    /**
-     * 
-     * @param {Item} item 
-     * @param {SVGRenderer} renderer 
-     */
-    render(item, renderer, encoding = true) {
-
-        const {x, y, width, height} = item;
-
-        let css = this.toCSS(item);
-
-        return /*html*/`
-${encoding ? `<?xml version="1.0"?>` : ''}
+    return /*html*/ `
+${encoding ? `<?xml version="1.0"?>` : ""}
 <svg 
     xmlns="http://www.w3.org/2000/svg"
     width="${width}"
@@ -43,11 +40,12 @@ ${encoding ? `<?xml version="1.0"?>` : ''}
     style="${CSS_TO_STRING(css)}"
 >
     ${this.toDefString(item)}
-    ${item.layers.map(it => {
-        return renderer.render(it, renderer)
-    }).join('')}
+    ${item.layers
+      .map((it) => {
+        return renderer.render(it, renderer);
+      })
+      .join("")}
 </svg>      
-        `       
-
-    }
+        `;
+  }
 }

@@ -1,27 +1,22 @@
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { Tabs } from 'el/editor/ui/view/Tabs';
-import { TabPanel } from 'el/editor/ui/view/TabPanel';
-
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Tabs } from "elf/editor/ui/view/Tabs";
+import { TabPanel } from "elf/editor/ui/view/TabPanel";
+import { createElement } from "sapa";
 
 export default class BlankLayerTab extends EditorElement {
-
-
   template() {
-
-    return <div class='layer-tab'>
-
-      <Tabs
-        ref="$tab"
-        type="side"
-        direction="left"
-        selectedValue={this.$config.get("layertab.selectedValue")}
-        onchange={(value) => {
-          this.$config.set("layertab.selectedValue", value);
-        }}
-      >
-        {this.$injectManager
-          .getTargetUI("layertab.tab")
-          .map((it) => {
+    return (
+      <div class="layer-tab">
+        <Tabs
+          ref="$tab"
+          type="side"
+          direction="left"
+          selectedValue={this.$config.get("layertab.selectedValue")}
+          onchange={(value) => {
+            this.$config.set("layertab.selectedValue", value);
+          }}
+        >
+          {this.$injectManager.getTargetUI("layertab.tab").map((it) => {
             const { value, title, icon, loadElements = [] } = it.class;
 
             return (
@@ -34,7 +29,8 @@ export default class BlankLayerTab extends EditorElement {
               </TabPanel>
             );
           })}
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    );
   }
 }

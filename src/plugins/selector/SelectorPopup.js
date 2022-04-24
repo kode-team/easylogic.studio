@@ -1,30 +1,28 @@
+import { INPUT, SUBSCRIBE } from "sapa";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
-import { INPUT, SUBSCRIBE } from "el/sapa/Event";
-import BasePopup from "el/editor/ui/popup/BasePopup";
-
-import './SelectorPopup.scss';
-import { createComponent } from "el/sapa/functions/jsx";
+import "./SelectorPopup.scss";
+import { createComponent } from "sapa";
 
 export default class SelectorPopup extends BasePopup {
-
   getTitle() {
-    return this.$i18n('selector.popup.title')
+    return this.$i18n("selector.popup.title");
   }
 
   initState() {
     return {
-      selector: '',
-      properties: []
+      selector: "",
+      properties: [],
     };
   }
 
   updateData(opt) {
-    this.setState(opt, false); 
+    this.setState(opt, false);
     this.emit("changeSelectorPopup", this.state);
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
     <div class='elf--selector-popup' ref='$popup'>
       <div class="box">
         ${this.templateForSelector()}
@@ -33,53 +31,54 @@ export default class SelectorPopup extends BasePopup {
     </div>`;
   }
 
-
   templateForProperty() {
-    return createComponent("CSSPropertyEditor", { 
-      ref: '$propertyEditor',
-      onchange: 'changePropertyEditor'
+    return createComponent("CSSPropertyEditor", {
+      ref: "$propertyEditor",
+      onchange: "changePropertyEditor",
     });
-  }    
-
+  }
 
   templateForSelector() {
-    return /*html*/`
+    return /*html*/ `
       <div class='name'>
-        <label>${this.$i18n('selector.popup.selector')}</label>
+        <label>${this.$i18n("selector.popup.selector")}</label>
         <div class='input grid-1'>
           <input type='text' value='${this.state.selector}' ref='$selector'/>
         </div>
       </div>
-    `
+    `;
   }
 
-  [INPUT('$selector')] (e) {
-    if (this.refs.$selector.value.match(/^[a-zA-Z0-9\:\_\-\.\b]+$/)) {
-      this.updateData({selector : this.refs.$selector.value })
+  [INPUT("$selector")](e) {
+    if (this.refs.$selector.value.match(/^[a-zA-Z0-9:_\-.\b]+$/)) {
+      this.updateData({ selector: this.refs.$selector.value });
     } else {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
       return false;
     }
   }
-  
+
   refresh() {
-    super.refresh()
+    super.refresh();
 
     this.refs.$selector.val(this.state.selector);
-    this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.state.properties);
+    this.children.$propertyEditor.trigger(
+      "showCSSPropertyEditor",
+      this.state.properties
+    );
   }
 
-  [SUBSCRIBE('changePropertyEditor')] (properties) {
+  [SUBSCRIBE("changePropertyEditor")](properties) {
     this.updateData({
-      properties
+      properties,
     });
   }
 
   [SUBSCRIBE("showSelectorPopup")](data) {
     this.setState(data);
-    this.refresh()
+    this.refresh();
 
-    this.show(250)
+    this.show(250);
   }
 }

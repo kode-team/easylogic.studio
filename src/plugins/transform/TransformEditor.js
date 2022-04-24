@@ -1,4 +1,4 @@
-import icon, { iconUse } from "el/editor/icon/icon";
+import icon, { iconUse } from "elf/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -6,81 +6,94 @@ import {
   DRAGOVER,
   DROP,
   PREVENT,
-  SUBSCRIBE,
   SUBSCRIBE_SELF,
-  DOMDIFF
-} from "el/sapa/Event";
+  DOMDIFF,
+} from "sapa";
 
-import { Transform } from "el/editor/property-parser/Transform";
-import { Length } from "el/editor/unit/Length";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { Transform } from "elf/editor/property-parser/Transform";
+import { Length } from "elf/editor/unit/Length";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './TransformEditor.scss';
-import { isNotUndefined } from "el/sapa/functions/func";
-import { TransformValue } from "el/editor/types/model";
-import { createComponent } from "el/sapa/functions/jsx";
-
+import "./TransformEditor.scss";
+import { isNotUndefined } from "sapa";
+import { TransformValue } from "elf/editor/types/model";
+import { createComponent } from "sapa";
 
 var transformList = [
-  TransformValue.PERSPECTIVE,  
+  TransformValue.PERSPECTIVE,
   TransformValue.ROTATE,
   TransformValue.ROTATE_X,
   TransformValue.ROTATE_Y,
-  TransformValue.ROTATE_Z,  
+  TransformValue.ROTATE_Z,
   TransformValue.SKEW,
   TransformValue.SKEW_X,
-  TransformValue.SKEW_Y,  
+  TransformValue.SKEW_Y,
   TransformValue.TRANSLATE,
   TransformValue.TRANSLATE_X,
   TransformValue.TRANSLATE_Y,
-  TransformValue.TRANSLATE_Z,  
-  TransformValue.TRANSLATE_3D,  
+  TransformValue.TRANSLATE_Z,
+  TransformValue.TRANSLATE_3D,
   TransformValue.SCALE,
   TransformValue.SCALE_X,
   TransformValue.SCALE_Y,
-  TransformValue.SCALE_Z,  
-  TransformValue.SCALE_3D,  
+  TransformValue.SCALE_Z,
+  TransformValue.SCALE_3D,
   TransformValue.MATRIX,
   TransformValue.MATRIX_3D,
 ];
 
 const labels = {
-  'scale': [ 'X', 'Y'] ,
-  'skew': [ 'X', 'Y'] ,  
-  'translate' : ['X', 'Y'], 
-  'translate3d': ['tx','ty', 'tz'],
-  'matrix': ['a','b','c','d','tx','ty'],
-  'matrix3d': [
-    'a1', 'b1', 'c1', 'd1', 
-    'a2', 'b2', 'c2', 'd2', 
-    'a3', 'b3', 'c3', 'd3', 
-    'a4', 'b4', 'c4', 'd4'
-  ]
-}
+  scale: ["X", "Y"],
+  skew: ["X", "Y"],
+  translate: ["X", "Y"],
+  translate3d: ["tx", "ty", "tz"],
+  matrix: ["a", "b", "c", "d", "tx", "ty"],
+  matrix3d: [
+    "a1",
+    "b1",
+    "c1",
+    "d1",
+    "a2",
+    "b2",
+    "c2",
+    "d2",
+    "a3",
+    "b3",
+    "c3",
+    "d3",
+    "a4",
+    "b4",
+    "c4",
+    "d4",
+  ],
+};
 
 export default class TransformEditor extends EditorElement {
-
   initState() {
     return {
-      hideLabel: this.props.hideLabel === 'true' ? true: false, 
-      transforms: Transform.parseStyle(this.props.value)
-    }
+      hideLabel: this.props.hideLabel === "true" ? true : false,
+      transforms: Transform.parseStyle(this.props.value),
+    };
   }
 
   template() {
-    var labelClass = this.state.hideLabel ? 'hide' : '' 
-    return /*html*/`
+    var labelClass = this.state.hideLabel ? "hide" : "";
+    return /*html*/ `
       <div class='elf--transform-editor transform-list'>
           <div class='label ${labelClass}' >
               <label>Transform</label>
               <div class='tools'>
                 <select ref="$transformSelect">
-                  ${transformList.map(transform => {
-                    var label = this.$i18n('css.item.' + transform)
-                    return `<option value='${transform}'>${label}</option>`;
-                  }).join('')}
+                  ${transformList
+                    .map((transform) => {
+                      var label = this.$i18n("css.item." + transform);
+                      return `<option value='${transform}'>${label}</option>`;
+                    })
+                    .join("")}
                 </select>
-                <button type="button" ref="$add" title="add Transform">${icon.add}</button>
+                <button type="button" ref="$add" title="add Transform">${
+                  icon.add
+                }</button>
               </div>
           </div>
           <div class='transform-list' ref='$transformList'></div>
@@ -88,88 +101,93 @@ export default class TransformEditor extends EditorElement {
   }
 
   getLabel(type, index) {
-    switch(type) {
-      case 'scale':
-      case 'translate':
-      case 'translate3d':        
-      case 'matrix':
-      case 'matrix3d': 
-      case 'skew':
+    switch (type) {
+      case "scale":
+      case "translate":
+      case "translate3d":
+      case "matrix":
+      case "matrix3d":
+      case "skew":
         return labels[type][index];
-      }
+    }
     return type;
   }
 
-  isMultiValue (type) {
-    switch(type) {
-      case 'translate3d':        
-      case 'matrix':
-      case 'matrix3d': 
-      case 'skew':
+  isMultiValue(type) {
+    switch (type) {
+      case "translate3d":
+      case "matrix":
+      case "matrix3d":
+      case "skew":
         return true;
-      }
-    return false; 
+    }
+    return false;
   }
 
   getRange(type) {
-
-    switch(type) {
-      case 'translateX': 
-      case 'translateY': 
-      case 'translateZ': 
-      case 'translate':      
-      case 'translate3d':            
-        return { min: -100, max : 100, step: 1, units: 'px,%,em'}
-      case 'matrix':
-      case 'matrix3d':     
-        return { min: -100, max : 100, step: 0.01,units: 'number'}
-      case 'rotateX': 
-      case 'rotateY': 
-      case 'rotateZ': 
-      case 'rotate':  
-      case 'skew':      
-      case 'skewY':
-      case 'skewX':            
-        return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad', editorType: 'RangeEditor'}
-      case 'perspective':
-          return { min: 0, max : 10000, step: 1, units: 'px,%,em'}
-      case 'scale': 
-      case 'scaleX': 
-      case 'scaleY': 
-        return { min: 0, max : 10, step: 0.1,units: 'number'}           
+    switch (type) {
+      case "translateX":
+      case "translateY":
+      case "translateZ":
+      case "translate":
+      case "translate3d":
+        return { min: -100, max: 100, step: 1, units: "px,%,em" };
+      case "matrix":
+      case "matrix3d":
+        return { min: -100, max: 100, step: 0.01, units: "number" };
+      case "rotateX":
+      case "rotateY":
+      case "rotateZ":
+      case "rotate":
+      case "skew":
+      case "skewY":
+      case "skewX":
+        return {
+          min: -360,
+          max: 360,
+          step: 0.1,
+          units: "deg,turn,rad",
+          editorType: "RangeEditor",
+        };
+      case "perspective":
+        return { min: 0, max: 10000, step: 1, units: "px,%,em" };
+      case "scale":
+      case "scaleX":
+      case "scaleY":
+        return { min: 0, max: 10, step: 0.1, units: "number" };
     }
 
-
-    return { min: 0, max : 100, step : 1,units: 'px,%,em' }
+    return { min: 0, max: 100, step: 1, units: "px,%,em" };
   }
 
   makeOneTransformTemplate(type, transform, index) {
-    return /*html*/`
+    return /*html*/ `
       <div class="transform-item" data-index="${index}">
         <div class="title" data-index="${index}">
           <div class="transform-ui ${type}">
-          ${transform.value.map( (it, tindex) => {
-  
-            var label = this.getLabel(type, tindex);
-            var {min, max, step, units} = this.getRange(type);
-  
-            return /*html*/`
+          ${transform.value
+            .map((it, tindex) => {
+              var label = this.getLabel(type, tindex);
+              var { min, max, step, units } = this.getRange(type);
+
+              return /*html*/ `
               <div>
-                ${createComponent("InputRangeEditor" , { 
-                      ref: `$range_${type}_${index}_${tindex}`,
-                      min,
-                      max,
-                      wide: true,
-                      step: step,
-                      label,
-                      key: index,
-                      params: tindex,
-                      value: it,
-                      units,
-                      onchange: "changeRangeEditor"
-                 })}
-              </div>`
-            }).join('')}      
+                ${createComponent("InputRangeEditor", {
+                  ref: `$range_${type}_${index}_${tindex}`,
+                  min,
+                  max,
+                  wide: true,
+                  step: step,
+                  label,
+                  key: index,
+                  params: tindex,
+                  value: it,
+                  units,
+                  onchange: "changeRangeEditor",
+                })}
+              </div>`;
+            })
+            .join("")}      
           </div>        
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
@@ -183,13 +201,11 @@ export default class TransformEditor extends EditorElement {
     `;
   }
 
-
-
   makeMultiTransformTemplate(type, transform, index) {
-    return /*html*/`
+    return /*html*/ `
       <div class="transform-item" data-index="${index}">
         <div class="title" data-index="${index}">
-          <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
+          <label draggable="true" >${this.$i18n("css.item." + type)}</label>
           <div></div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
@@ -199,36 +215,54 @@ export default class TransformEditor extends EditorElement {
         </div>
         <div class="transform-ui ${type}">
 
-          ${type === 'translate3d' ? `
+          ${
+            type === "translate3d"
+              ? `
             <pre>
   1 | 0 | 0 | tx
   0 | 1 | 0 | ty	
   0 | 0 | 1 | tz	
   0 | 0 | 0 | 1</pre>
-          `: ''}
+          `
+              : ""
+          }
 
-          ${type === 'matrix' ? `
+          ${
+            type === "matrix"
+              ? `
             <pre>
   a | c | tx	
   b | d | ty	
   0 | 0 | 1</pre>
-          `: ''}    
+          `
+              : ""
+          }    
           
-          ${type === 'matrix3d' ? `
+          ${
+            type === "matrix3d"
+              ? `
             <pre>
   a1 | a2 | a3 | a4	
   b1 | b2 | b3 | b4	
   c1 | c2 | c3 | c4	
   d1 | d2 | d3 | d4</pre>
-          `: ''}     
+          `
+              : ""
+          }     
           
           <div class='${type}'>
-          ${transform.value.map( (it, tindex) => {
+          ${transform.value
+            .map((it, tindex) => {
+              var label = this.getLabel(type, tindex);
+              var {
+                min,
+                max,
+                step,
+                units,
+                editorType = "NumberInputEditor",
+              } = this.getRange(type);
 
-            var label = this.getLabel(type, tindex);
-            var {min, max, step, units, editorType = 'NumberInputEditor'} = this.getRange(type);
-
-            return /*html*/`
+              return /*html*/ `
               <div>
                 ${createComponent(editorType, {
                   ref: `$range_${type}_${index}_${tindex}`,
@@ -238,12 +272,13 @@ export default class TransformEditor extends EditorElement {
                   label,
                   key: index,
                   params: tindex,
-                  value: it, 
+                  value: it,
                   units,
-                  onchange: "changeRangeEditor"
+                  onchange: "changeRangeEditor",
                 })}
-              </div>`
-          }).join('')}   
+              </div>`;
+            })
+            .join("")}   
           </div>       
         </div>
       </div>
@@ -252,21 +287,10 @@ export default class TransformEditor extends EditorElement {
 
   makeTransformTemplate(transform, index) {
     if (this.isMultiValue(transform.type)) {
-
-      return this.makeMultiTransformTemplate(
-        transform.type,
-        transform,
-        index
-      );
+      return this.makeMultiTransformTemplate(transform.type, transform, index);
     } else {
-
-      return this.makeOneTransformTemplate(
-        transform.type,
-        transform,
-        index
-      );
+      return this.makeOneTransformTemplate(transform.type, transform, index);
     }
-
   }
 
   [LOAD("$transformList") + DOMDIFF]() {
@@ -277,7 +301,7 @@ export default class TransformEditor extends EditorElement {
 
   setValue(transform) {
     this.setState({
-      transforms: Transform.parseStyle(transform)
+      transforms: Transform.parseStyle(transform),
     });
   }
 
@@ -285,7 +309,7 @@ export default class TransformEditor extends EditorElement {
     this.startIndex = +e.$dt.parent().attr("data-index");
   }
 
-  [DRAGOVER("$transformList .transform-item") + PREVENT](e) {}
+  [DRAGOVER("$transformList .transform-item") + PREVENT]() {}
 
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(
@@ -296,7 +320,7 @@ export default class TransformEditor extends EditorElement {
   }
 
   sortTransform(startIndex, targetIndex) {
-      this.sortItem(this.state.transforms, startIndex, targetIndex);
+    this.sortItem(this.state.transforms, startIndex, targetIndex);
   }
 
   [DROP("$transformList .transform-item") + PREVENT](e) {
@@ -308,51 +332,50 @@ export default class TransformEditor extends EditorElement {
 
     this.refresh();
 
-    this.modifyTransform()
+    this.modifyTransform();
   }
 
-  modifyTransform () {
-    var value = this.state.transforms.join(' ');
+  modifyTransform() {
+    var value = this.state.transforms.join(" ");
 
-    this.parent.trigger(this.props.onchange, value)
+    this.parent.trigger(this.props.onchange, value);
   }
 
-  getDefaultValue (type) {
-
-    switch(type) {
-      case 'translateX': 
-      case 'translateY': 
-      case 'translateZ': 
-        return [0]            
-      case 'rotateX': 
-      case 'rotateY': 
-      case 'rotateZ': 
-      case 'rotate':  
-      case 'skewY':
-      case 'skewX':
-      case 'perspective':
-        return [Length.deg(0)]            
-      case 'translate': 
-        return [0,0]
-      case 'translate3d': 
-        return [0,0, 0]        
-      case 'scale': 
-        return [Length.number(1),Length.number(1)]
-      case 'skew': 
-        return [Length.deg(0),Length.deg(0)]
-      case 'scaleX': 
-      case 'scaleY': 
-        return [Length.number(1)]
-      case 'matrix':
+  getDefaultValue(type) {
+    switch (type) {
+      case "translateX":
+      case "translateY":
+      case "translateZ":
+        return [0];
+      case "rotateX":
+      case "rotateY":
+      case "rotateZ":
+      case "rotate":
+      case "skewY":
+      case "skewX":
+      case "perspective":
+        return [Length.deg(0)];
+      case "translate":
+        return [0, 0];
+      case "translate3d":
+        return [0, 0, 0];
+      case "scale":
+        return [Length.number(1), Length.number(1)];
+      case "skew":
+        return [Length.deg(0), Length.deg(0)];
+      case "scaleX":
+      case "scaleY":
+        return [Length.number(1)];
+      case "matrix":
         return [
           Length.number(1),
           Length.number(0),
           Length.number(0),
           Length.number(1),
           Length.number(0),
-          Length.number(0)          
-        ]
-      case 'matrix3d':
+          Length.number(0),
+        ];
+      case "matrix3d":
         return [
           Length.number(1),
           Length.number(0),
@@ -368,37 +391,35 @@ export default class TransformEditor extends EditorElement {
           Length.number(0),
           Length.number(1),
           Length.number(0),
-          
+
           Length.number(0),
           Length.number(0),
-          Length.number(0), 
-          Length.number(1)                   
-        ]        
+          Length.number(0),
+          Length.number(1),
+        ];
     }
 
-
-    return [Length.number(0)]
+    return [Length.number(0)];
   }
 
   makeTransform(type, opt = {}) {
-
-    var value = this.getDefaultValue(type)
+    var value = this.getDefaultValue(type);
 
     return Transform.parse({ ...opt, type, value });
   }
 
-  [SUBSCRIBE_SELF('add')] (transformType) { 
-    this.state.transforms.push(this.makeTransform(transformType))
+  [SUBSCRIBE_SELF("add")](transformType) {
+    this.state.transforms.push(this.makeTransform(transformType));
 
     this.refresh();
 
-    this.modifyTransform()
+    this.modifyTransform();
   }
 
   [CLICK("$add")]() {
     var transformType = this.refs.$transformSelect.value;
 
-    this.trigger('add', transformType)
+    this.trigger("add", transformType);
   }
 
   [CLICK("$transformList .transform-menu .del")](e) {
@@ -407,18 +428,17 @@ export default class TransformEditor extends EditorElement {
 
     this.refresh();
 
-    this.modifyTransform()
+    this.modifyTransform();
   }
 
-  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value, params) {
+  [SUBSCRIBE_SELF("changeRangeEditor")](key, value, params) {
     if (isNotUndefined(params)) {
-      this.state.transforms[+key].value[+params] = value; 
+      this.state.transforms[+key].value[+params] = value;
     } else {
-      this.state.transforms[+key].reset({ 
-        value 
+      this.state.transforms[+key].reset({
+        value,
       });
     }
-    
 
     this.modifyTransform();
   }

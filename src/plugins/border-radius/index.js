@@ -1,17 +1,17 @@
-import { Editor } from "el/editor/manager/Editor";
+// import { Editor } from "elf/editor/manager/Editor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
 import BorderRadiusProperty from "./BorderRadiusProperty";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerElement({
-        BorderRadiusEditor,
-    });
+  editor.registerElement({
+    BorderRadiusEditor,
+  });
 
-    editor.registerUI('inspector.tab.style', {
-        BorderRadiusProperty
-    });
+  editor.registerUI("inspector.tab.style", {
+    BorderRadiusProperty,
+  });
 }

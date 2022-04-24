@@ -1,28 +1,21 @@
+import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "sapa";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
-
-import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "el/sapa/Event";
-import BasePopup from "el/editor/ui/popup/BasePopup";
-import { Length } from "el/editor/unit/Length";
-
-
-import './ImageSelectPopup.scss';
+import "./ImageSelectPopup.scss";
 export default class ImageSelectPopup extends BasePopup {
-
   getTitle() {
-    return 'Select a image'
+    return "Select a image";
   }
 
   getClassName() {
-    return 'compact'
+    return "compact";
   }
 
   initState() {
-
     return {
-      value: ''
-    }
+      value: "",
+    };
   }
-
 
   updateData(opt = {}) {
     this.setState(opt, false);
@@ -31,13 +24,12 @@ export default class ImageSelectPopup extends BasePopup {
       width: this.state.width,
       height: this.state.height,
       naturalWidth: this.state.naturalWidth,
-      naturalHeight: this.state.naturalHeight      
+      naturalHeight: this.state.naturalHeight,
     });
   }
 
-
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--image-select-popup">
         <div class='box' ref='$imageBox'>
           
@@ -46,8 +38,8 @@ export default class ImageSelectPopup extends BasePopup {
     `;
   }
 
-  [LOAD('$imageBox') + DOMDIFF] () {
-    var project = this.$selection.currentProject || { images: [] }
+  [LOAD("$imageBox") + DOMDIFF]() {
+    // var project = this.$selection.currentProject || { images: [] };
 
     return "";
 
@@ -56,27 +48,30 @@ export default class ImageSelectPopup extends BasePopup {
     // })
   }
 
-  [CLICK('$imageBox .image-item')] (e) {
-    var $img = e.$dt.$('img');
+  [CLICK("$imageBox .image-item")](e) {
+    var $img = e.$dt.$("img");
 
     this.updateData({
-      value: $img.attr('data-id'),
+      value: $img.attr("data-id"),
       naturalWidth: $img.naturalWidth,
-      naturalHeight: $img.naturalHeight, 
+      naturalHeight: $img.naturalHeight,
       width: $img.naturalWidth,
-      height: $img.naturalHeight
+      height: $img.naturalHeight,
     });
 
-    this.trigger('hideImageSelectPopup')
+    this.trigger("hideImageSelectPopup");
   }
 
   [SUBSCRIBE("showImageSelectPopup")](data, params) {
-    this.setState({
-      context: data.context,
-      changeEvent: data.changeEvent,
-      value: data.value,
-      params
-    }, false);
+    this.setState(
+      {
+        context: data.context,
+        changeEvent: data.changeEvent,
+        value: data.value,
+        params,
+      },
+      false
+    );
     this.refresh();
 
     this.show(500);
@@ -85,6 +80,4 @@ export default class ImageSelectPopup extends BasePopup {
   [SUBSCRIBE("hideImageSelectPopup")]() {
     this.hide();
   }
-
-
 }

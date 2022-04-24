@@ -1,34 +1,40 @@
-import { DRAGOVER, DROP, PREVENT, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
+import {
+  DRAGOVER,
+  DROP,
+  PREVENT,
+  POINTERSTART,
+  BIND,
+  SUBSCRIBE,
+  CONFIG,
+} from "sapa";
 
-import { Length } from "el/editor/unit/Length";
+import { Length } from "elf/editor/unit/Length";
 
-import BaseLayout from "../common/BaseLayout"; 
+import BaseLayout from "../common/BaseLayout";
 import PopupManager from "../common/PopupManager";
 import KeyboardManager from "../common/KeyboardManager";
 
-import { END, MOVE } from "el/editor/types/event";
-import { isFunction } from 'el/sapa/functions/func';
-import IconManager from '../common/IconManager';
-import { createComponent } from "el/sapa/functions/jsx";
+import { END, MOVE } from "elf/editor/types/event";
+import { isFunction } from "sapa";
+import IconManager from "../common/IconManager";
+import { createComponent } from "sapa";
 
-import './layout.scss';
-import BlankBodyPanel from '../common/BlankBodyPanel';
+import "./layout.scss";
+import BlankBodyPanel from "../common/BlankBodyPanel";
 import BlankToolBar from "editor-layouts/common/area/tool-bar/BlankToolBar";
 import blankEditorPlugins from "plugins/blank-editor-plugins";
-import BlankInspector from '../common/area/BlankInspector';
-import BlankLayerTab from '../common/area/BlankLayerTab';
+import BlankInspector from "../common/area/BlankInspector";
+import BlankLayerTab from "../common/area/BlankLayerTab";
 
 export default class BlankEditor extends BaseLayout {
-
   afterRender() {
     super.afterRender();
 
-    this.$config.init('editor.layout.elements', this.refs);    
+    this.$config.init("editor.layout.elements", this.refs);
 
-    // 데이타 로드 
+    // 데이타 로드
     // this.loadDataFromJSON();
   }
-
 
   components() {
     return {
@@ -39,16 +45,16 @@ export default class BlankEditor extends BaseLayout {
       PopupManager,
       KeyboardManager,
       IconManager,
-    }
+    };
   }
 
   /**
-   * 
+   *
    * @protected
    * @returns {function[]}
    */
   getPlugins() {
-    return blankEditorPlugins
+    return blankEditorPlugins;
   }
 
   initState() {
@@ -56,26 +62,26 @@ export default class BlankEditor extends BaseLayout {
       leftSize: 340,
       rightSize: 280,
       bottomSize: 0,
-      lastBottomSize: 150
-    }
+      lastBottomSize: 150,
+    };
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf-studio blank-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            ${createComponent('BlankToolBar')}
+            ${createComponent("BlankToolBar")}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
-              ${createComponent('BlankBodyPanel') }
+              ${createComponent("BlankBodyPanel")}
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${createComponent('BlankLayerTab') }
+              ${createComponent("BlankLayerTab")}
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${createComponent("BlankInspector") }
+              ${createComponent("BlankInspector")}
             </div>
             <div class='splitter' ref='$splitter'></div>            
           </div>
@@ -87,152 +93,149 @@ export default class BlankEditor extends BaseLayout {
     `;
   }
 
-  [BIND('$el')] () {
+  [BIND("$el")]() {
     return {
-      'data-design-mode': this.$config.get('editor.design.mode')
-    }
+      "data-design-mode": this.$config.get("editor.design.mode"),
+    };
   }
 
-  [BIND('$splitter')] () {
-    let left = this.state.leftSize
-    if (this.$config.false('show.left.panel')) {
-      left = 0
+  [BIND("$splitter")]() {
+    let left = this.state.leftSize;
+    if (this.$config.false("show.left.panel")) {
+      left = 0;
     }
 
     return {
-      style: { 
-        left: left 
-      }
-    }
+      style: {
+        left: left,
+      },
+    };
   }
 
-  [BIND('$leftArrow')] () {
-    let left = this.state.leftSize
-    if (this.$config.false('show.left.panel')) {
-      left = 0
+  [BIND("$leftArrow")]() {
+    let left = this.state.leftSize;
+    if (this.$config.false("show.left.panel")) {
+      left = 0;
     }
 
     return {
-      style: { 
-        left: left
-      }
-    }
-  }  
+      style: {
+        left: left,
+      },
+    };
+  }
 
-  [BIND('$leftPanel')] () {
-    let left = `0px`    
+  [BIND("$leftPanel")]() {
+    let left = `0px`;
     let width = this.state.leftSize;
     let bottom = this.state.bottomSize;
-    if (this.$config.false('show.left.panel')) {
-      left = `-${this.state.leftSize}px`    
+    if (this.$config.false("show.left.panel")) {
+      left = `-${this.state.leftSize}px`;
     }
 
     return {
-      style: { left, width, bottom }
-    }
-  }  
-
-  [BIND('$rightPanel')] () {
-    let right = 0    
-    let bottom = this.state.bottomSize;    
-    if (this.$config.false('show.right.panel')) {
-      right = -this.state.rightSize
-    }
-
-    return {
-      style: { 
-        right: right, 
-        bottom 
-      }
-    }
-  }    
-
-
-  [BIND('$bodyPanel')] () {
-   
-    let left = this.state.leftSize
-    let right = this.state.rightSize
-    let bottom = this.state.bottomSize
-
-    if (this.$config.false('show.left.panel')) {
-      left = 0
-    }
-
-    if (this.$config.false('show.right.panel')) {
-      right = 0
-    }
-
-    return {
-      style: { 
-        left: left, 
-        right: right, 
-        bottom: bottom
-      }
-    }
-  }  
-
-  [POINTERSTART('$splitter') + MOVE('moveSplitter') + END('moveEndSplitter')] () {
-
-    this.minSize = this.$theme('left_size');
-    this.maxSize = this.$theme('left_max_size');
-    this.leftSize = Length.parse(this.refs.$splitter.css('left')).value;
-    this.refs.$splitter.addClass('selected');
+      style: { left, width, bottom },
+    };
   }
 
-  moveSplitter (dx) {
+  [BIND("$rightPanel")]() {
+    let right = 0;
+    let bottom = this.state.bottomSize;
+    if (this.$config.false("show.right.panel")) {
+      right = -this.state.rightSize;
+    }
+
+    return {
+      style: {
+        right: right,
+        bottom,
+      },
+    };
+  }
+
+  [BIND("$bodyPanel")]() {
+    let left = this.state.leftSize;
+    let right = this.state.rightSize;
+    let bottom = this.state.bottomSize;
+
+    if (this.$config.false("show.left.panel")) {
+      left = 0;
+    }
+
+    if (this.$config.false("show.right.panel")) {
+      right = 0;
+    }
+
+    return {
+      style: {
+        left: left,
+        right: right,
+        bottom: bottom,
+      },
+    };
+  }
+
+  [POINTERSTART("$splitter") +
+    MOVE("moveSplitter") +
+    END("moveEndSplitter")]() {
+    this.minSize = this.$theme("left_size");
+    this.maxSize = this.$theme("left_max_size");
+    this.leftSize = Length.parse(this.refs.$splitter.css("left")).value;
+    this.refs.$splitter.addClass("selected");
+  }
+
+  moveSplitter(dx) {
     this.setState({
-      leftSize: Math.max(Math.min(this.leftSize + dx, this.maxSize), this.minSize)
-    })
-
+      leftSize: Math.max(
+        Math.min(this.leftSize + dx, this.maxSize),
+        this.minSize
+      ),
+    });
   }
 
-
-
-  moveEndSplitter () {
-    this.refs.$splitter.removeClass('selected');
+  moveEndSplitter() {
+    this.refs.$splitter.removeClass("selected");
   }
 
-  refresh () {
+  refresh() {
+    this.bindData("$el");
+    this.bindData("$splitter");
+    this.bindData("$headerPanel");
+    this.bindData("$leftPanel");
+    this.bindData("$rightPanel");
+    this.bindData("$bodyPanel");
 
-    this.bindData('$el');
-    this.bindData('$splitter');
-    this.bindData('$headerPanel');    
-    this.bindData('$leftPanel');
-    this.bindData('$rightPanel');
-    this.bindData('$bodyPanel');  
-    
-    this.emit('resizeEditor');    
-
+    this.emit("resizeEditor");
   }
 
-  [CONFIG('show.left.panel')]() {
+  [CONFIG("show.left.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit('resizeCanvas');
-    })
+      this.emit("resizeCanvas");
+    });
   }
 
-  [CONFIG('show.right.panel')]() {
+  [CONFIG("show.right.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit('resizeCanvas');
-    })
-  }  
+      this.emit("resizeCanvas");
+    });
+  }
 
-  [CONFIG('editor.design.mode')] () {
-    this.bindData('$el');
+  [CONFIG("editor.design.mode")]() {
+    this.bindData("$el");
   }
 
   /** 드랍존 설정을 위해서 남겨놔야함 */
-  [DRAGOVER('$middle') + PREVENT] (e) {}
-  [DROP('$middle') + PREVENT] (e) {}
-  /** 드랍존 설정을 위해서 남겨놔야함 */  
+  [DRAGOVER("$middle") + PREVENT]() {}
+  [DROP("$middle") + PREVENT]() {}
+  /** 드랍존 설정을 위해서 남겨놔야함 */
 
-  [SUBSCRIBE('toggle.fullscreen')] () {
+  [SUBSCRIBE("toggle.fullscreen")]() {
     this.$el.toggleFullscreen();
   }
 
-  [SUBSCRIBE('getLayoutElement')] (callback) {
+  [SUBSCRIBE("getLayoutElement")](callback) {
     if (isFunction(callback)) {
       callback(this.refs);
     }

@@ -1,25 +1,19 @@
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
 
-import {
-  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF
-} from "el/sapa/Event";
-
-
-import { iconUse } from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import { iconUse } from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
-import { createComponent } from "el/sapa/functions/jsx";
+import { createComponent } from "sapa";
 
-import './FilterProperty.scss';
+import "./FilterProperty.scss";
 
 export default class FilterProperty extends BaseProperty {
-
-  getTitle () {
-    return this.$i18n('filter.property.title');
+  getTitle() {
+    return this.$i18n("filter.property.title");
   }
 
-
-  hasKeyframe () {
-    return true; 
+  hasKeyframe() {
+    return true;
   }
 
   isFirstShow() {
@@ -30,17 +24,16 @@ export default class FilterProperty extends BaseProperty {
     this.show();
   }
 
-  getKeyframeProperty () {
-    return 'filter';
+  getKeyframeProperty() {
+    return "filter";
   }
 
-
   getTitleClassName() {
-    return 'filter'
+    return "filter";
   }
 
   getBodyClassName() {
-    return 'no-padding';
+    return "no-padding";
   }
 
   getBody() {
@@ -48,96 +41,91 @@ export default class FilterProperty extends BaseProperty {
   }
 
   getTools() {
-    return /*html*/`
+    return /*html*/ `
       <select class='filter-select' ref="$filterSelect">      
       </select>
-      <button type="button" ref="$add" title="add Filter">${iconUse("add")}</button>
-    `
+      <button type="button" ref="$add" title="add Filter">${iconUse(
+        "add"
+      )}</button>
+    `;
   }
-  
 
   [CLICK("$add")]() {
     var filterType = this.refs.$filterSelect.value;
 
-    this.children.$filterEditor.trigger('add', filterType)
+    this.children.$filterEditor.trigger("add", filterType);
   }
 
-  [LOAD('$filterSelect')] () {
-    var list = filter_list.map(it => { 
-      return {title: this.$i18n(`filter.property.${it}`), value: it}
-    })
+  [LOAD("$filterSelect")]() {
+    var list = filter_list.map((it) => {
+      return { title: this.$i18n(`filter.property.${it}`), value: it };
+    });
 
-    var svgFilterList = this.getSVGFilterList()
+    var svgFilterList = this.getSVGFilterList();
 
-    var totalList = []
+    var totalList = [];
 
     if (svgFilterList.length) {
-      totalList = [
-        ...list,
-        { title: '-------' , value: ''},
-        ...svgFilterList
-      ]
+      totalList = [...list, { title: "-------", value: "" }, ...svgFilterList];
     } else {
-      totalList = [
-        ...list
-      ]
+      totalList = [...list];
     }
 
-    return totalList.map(it => {
-      var {title, value} = it;
-      
-      return `<option value='${value}'>${title}</option>`
-    })
+    return totalList.map((it) => {
+      var { title, value } = it;
+
+      return `<option value='${value}'>${title}</option>`;
+    });
   }
 
-
-  getSVGFilterList () {
-     
+  getSVGFilterList() {
     var current = this.$selection.currentProject;
-    var arr = [] 
+    var arr = [];
 
     if (current) {
-      arr = current.svgfilters
-        .map(it => {
-          var id = it.id; 
-          return {
-            title : `svg - #${id}`,
-            value: id
-          }
-        })
+      arr = current.svgfilters.map((it) => {
+        var id = it.id;
+        return {
+          title: `svg - #${id}`,
+          value: id,
+        };
+      });
     }
 
-    return arr
-  }  
+    return arr;
+  }
 
-  [LOAD('$body')] () {
-    var current = this.$selection.current || {} 
+  [LOAD("$body")]() {
+    var current = this.$selection.current || {};
     var value = current.filter;
 
     return createComponent("FilterEditor", {
-      ref: '$filterEditor',
+      ref: "$filterEditor",
       key: "filter",
       value,
-      onchange: 'changeFilterEditor' 
-    })
+      onchange: "changeFilterEditor",
+    });
   }
 
-  [SUBSCRIBE_SELF('changeFilterEditor')] (key, filter) {
-
-    this.command('setAttributeForMulti', 'change filter', this.$selection.packByValue({ 
-      [key]: filter 
-    }))
+  [SUBSCRIBE_SELF("changeFilterEditor")](key, filter) {
+    this.command(
+      "setAttributeForMulti",
+      "change filter",
+      this.$selection.packByValue({
+        [key]: filter,
+      })
+    );
   }
 
   get editableProperty() {
     return "filter";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(100)] () {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow") + DEBOUNCE(100)]() {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(100)] () {
-    this.load('$filterSelect');
+  [SUBSCRIBE("refreshSVGArea") + DEBOUNCE(100)]() {
+    this.load("$filterSelect");
   }
 }

@@ -7,7 +7,7 @@
 
 에디터에서 사용되는 커맨드 목록은 아래 위치를 참고하세요. 
 
-src/el/editor/commands/command_list
+src/elf/editor/commands/command_list
 
 ## 커맨드 정의 
 

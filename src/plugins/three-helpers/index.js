@@ -1,11 +1,11 @@
-import ViewportHelper from './ViewportHelper';
+// import ViewportHelper from "./ViewportHelper";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
-export default function(editor) {
-    editor.registerUI('render.view', {
-        // ViewportHelper
-    })
+export default function (editor) {
+  editor.registerUI("render.view", {
+    // ViewportHelper
+  });
 }

@@ -1,31 +1,29 @@
-import { SUBSCRIBE } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { SUBSCRIBE } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import BlankCanvasView from "./body-panel/BlankCanvasView";
 
-import './BlankBodyPanel.scss';
-import PageSubEditor from './body-panel/PageSubEditor';
-import { createComponent } from "el/sapa/functions/jsx";
-
+import "./BlankBodyPanel.scss";
+import PageSubEditor from "./body-panel/PageSubEditor";
+import { createComponent } from "sapa";
 
 export default class BlankBodyPanel extends EditorElement {
-
   components() {
     return {
       BlankCanvasView,
-      PageSubEditor
-    }
+      PageSubEditor,
+    };
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--body-panel">
         <div class="submenu-area">
-          ${createComponent('PageSubEditor')}
+          ${createComponent("PageSubEditor")}
         </div>
         <div class='editing-area'>
           <div class="canvas-layout">
-            ${createComponent('BlankCanvasView')}
+            ${createComponent("BlankCanvasView")}
           </div>
 
         </div>
@@ -33,8 +31,7 @@ export default class BlankBodyPanel extends EditorElement {
     `;
   }
 
-
-  [SUBSCRIBE('bodypanel.toggle.fullscreen')] () {
+  [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
     this.refs.$el.toggleFullscreen();
   }
 }

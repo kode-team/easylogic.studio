@@ -1,39 +1,38 @@
-import { CSS_TO_STRING } from "el/utils/func";
+import { CSS_TO_STRING } from "elf/utils/func";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class VideoRender extends SVGLayerRender {
-    
+  /**
+   *
+   * @param {Project} item
+   */
+  getUrl(item) {
+    var { src } = item;
+    var project = item.project;
 
-    /**
-     * 
-     * @param {Project} item 
-     */
-    getUrl (item) {
-        var {src} = item;     
-        var project = item.project;
-        
-        return project.getVideoValueById(src);
-    }    
+    return project.getVideoValueById(src);
+  }
 
-    /**
-     * 
-     * @param {Item} item 
-     * @param {SVGRenderer} renderer 
-     */
-    render (item, renderer) {
-        var {
-            width, height,
-            controls,
-            muted,
-            poster,
-            loop,
-            crossorigin,
-            autoplay
-        } = item;        
-        let css = this.toCSS(item);
+  /**
+   *
+   * @param {Item} item
+   * @param {SVGRenderer} renderer
+   */
+  render(item) {
+    var {
+      width,
+      height,
+      controls,
+      muted,
+      poster,
+      loop,
+      crossorigin,
+      autoplay,
+    } = item;
+    let css = this.toCSS(item);
 
-        return this.wrappedRender(item, ()=> {
-            return /*html*/`
+    return this.wrappedRender(item, () => {
+      return /*html*/ `
             <foreignObject 
                 width="${width}"
                 height="${height}"
@@ -48,10 +47,11 @@ export default class VideoRender extends SVGLayerRender {
                     loop="${loop}"
                     crossorigin="${crossorigin}"
                     autoplay="${autoplay}"
-                    style="${CSS_TO_STRING(css)};width:100%;height:100%;"></video>
+                    style="${CSS_TO_STRING(
+                      css
+                    )};width:100%;height:100%;"></video>
             </foreignObject>    
-            `            
-        })
-
-    }
+            `;
+    });
+  }
 }

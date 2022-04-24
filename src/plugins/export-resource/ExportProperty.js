@@ -1,14 +1,12 @@
+import { CLICK } from "sapa";
 
-import { DEBOUNCE, CLICK, SUBSCRIBE } from "el/sapa/Event";
-
-import icon, { iconUse } from "el/editor/icon/icon";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import './ExportProperty.scss';
+import { iconUse } from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import "./ExportProperty.scss";
 
 export default class ExportProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('export.property.title');
+    return this.$i18n("export.property.title");
   }
 
   isFirstShow() {
@@ -16,28 +14,31 @@ export default class ExportProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'elf--export-property'
+    return "elf--export-property";
   }
 
-
   getBody() {
-    return /*html*/`
+    return /*html*/ `
         <div class='export-item svg'>
           <label>SVG</label>
-          <button ref='$svg'>${iconUse("archive")} ${this.$i18n('export.property.download')}</button>
+          <button ref='$svg'>${iconUse("archive")} ${this.$i18n(
+      "export.property.download"
+    )}</button>
         </div>
         <div class='export-item png'>
           <label>PNG</label>
-          <button ref='$png'>${iconUse("archive")} ${this.$i18n('export.property.download')}</button>
+          <button ref='$png'>${iconUse("archive")} ${this.$i18n(
+      "export.property.download"
+    )}</button>
         </div> 
       `;
-  }  
-
-  [CLICK('$svg')] () {
-    this.emit('downloadSVG');
   }
 
-  [CLICK('$png')] () {
-    this.emit('downloadPNG');
-  }  
+  [CLICK("$svg")]() {
+    this.emit("downloadSVG");
+  }
+
+  [CLICK("$png")]() {
+    this.emit("downloadPNG");
+  }
 }

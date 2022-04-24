@@ -1,52 +1,47 @@
-import Dom from "el/sapa/functions/Dom";
-import { CSS_TO_STRING } from "el/utils/func";
+import { CSS_TO_STRING } from "elf/utils/func";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class TextRender extends SVGLayerRender {
+  /**
+   *
+   * @param {Item} item
+   */
+  toCSS(item) {
+    let css = super.toCSS(item);
 
-    /**
-     * 
-     * @param {Item} item 
-     */
-    toCSS(item) {
+    css.margin = css.margin || "0px";
+    css.height = "auto";
 
-        let css = super.toCSS(item)
+    return css;
+  }
 
-        css.margin = css.margin || '0px'
-        css.height = 'auto';
+  /**
+   *
+   * @param {Item} item
+   */
+  render(item) {
+    const { content, width, height } = item;
+    let css = this.toCSS(item);
 
-        return css
-    }
-    
-
-    /**
-     * 
-     * @param {Item} item 
-     */
-    render (item) {
-        const {content, width, height} = item;
-        let css = this.toCSS(item);
-
-        return this.wrappedRender(item, () => {
-          return /*html*/`
+    return this.wrappedRender(item, () => {
+      return /*html*/ `
             <foreignObject width="${width}" height="${height}">
-                <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)}">${content}</p>
+                <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(
+                  css
+                )}">${content}</p>
             </foreignObject>              
-          `  
-        })      
+          `;
+    });
+  }
 
-        
-    }
+  /**
+   *
+   * @param {Item} item
+   * @param {Dom} currentElement
+   */
+  update(item, currentElement) {
+    var { content } = item;
 
-    /**
-     * 
-     * @param {Item} item 
-     * @param {Dom} currentElement
-     */
-    update (item, currentElement) {
-        var {content} = item;
-
-        currentElement.updateDiff(content);
-    }
-
+    currentElement.updateDiff(content);
+  }
 }

@@ -1,27 +1,24 @@
-import OrderDown from "el/editor/ui/menu-items/OrderDown";
-import OrderFirst from "el/editor/ui/menu-items/OrderFirst";
-import OrderLast from "el/editor/ui/menu-items/OrderLast";
-import OrderTop from "el/editor/ui/menu-items/OrderTop";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from "el/sapa/functions/jsx";
+import OrderDown from "elf/editor/ui/menu-items/OrderDown";
+import OrderFirst from "elf/editor/ui/menu-items/OrderFirst";
+import OrderLast from "elf/editor/ui/menu-items/OrderLast";
+import OrderTop from "elf/editor/ui/menu-items/OrderTop";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
-import './DepthProperty.scss';
+import "./DepthProperty.scss";
 
 export default class DepthProperty extends BaseProperty {
-
   components() {
     return {
       OrderTop,
       OrderDown,
       OrderFirst,
-      OrderLast,      
-      OrderTop,
-      OrderDown
-    }
+      OrderLast,
+    };
   }
 
   getTitle() {
-    return this.$i18n('alignment.property.title');
+    return this.$i18n("alignment.property.title");
   }
 
   isHideHeader() {
@@ -29,7 +26,7 @@ export default class DepthProperty extends BaseProperty {
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class="elf--depth-item">
         ${createComponent("OrderTop")}
         ${createComponent("OrderDown")}

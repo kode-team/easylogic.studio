@@ -1,13 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
-import GuideLineView from './GuideLineView';
-
+// import { Editor } from "elf/editor/manager/Editor";
+import GuideLineView from "./GuideLineView";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerUI('canvas.view', {
-        GuideLineView         
-    })
+  editor.registerUI("canvas.view", {
+    GuideLineView,
+  });
 }

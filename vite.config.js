@@ -1,35 +1,44 @@
-
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 import { replaceCodePlugin } from "vite-plugin-replace";
+import eslintPlugin from "vite-plugin-eslint";
 
-const alias = require('./alias');
-const pkgJSON = require('./package.json');
+import path from "path";
+// eslint-disable-next-line no-undef
+const pkgJSON = require("./package.json");
 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
     open: true,
     watch: {
-      usePolling: true
-    },    
+      usePolling: true,
+    },
     hmr: {
-      protocol: 'ws',
-      host: 'localhost'
-    }
+      protocol: "ws",
+      host: "localhost",
+    },
   },
   test: {
-    environment: 'happy-dom',
+    environment: "happy-dom",
     global: true,
   },
   esbuild: {
-    jsxFactory: 'createElementJsx',
-    jsxFragment: 'FragmentInstance',
-    jsxInject: `import { createElementJsx, FragmentInstance } from "el/sapa/functions/jsx"`    
+    jsxFactory: "createElementJsx",
+    jsxFragment: "FragmentInstance",
+    jsxInject: `import { createElementJsx, FragmentInstance } from "sapa/functions/jsx"`,
   },
   resolve: {
-    alias,
+    alias: {
+      elf: path.resolve(__dirname, "./src/elf"),
+      sapa: path.resolve(__dirname, "./src/sapa"),
+      style: path.resolve(__dirname, "./src/scss"),
+      plugins: path.resolve(__dirname, "./src/plugins"),
+      "export-library": path.resolve(__dirname, "./src/export-library"),
+      "editor-layouts": path.resolve(__dirname, "./src/editor-layouts"),
+    },
   },
   plugins: [
+    eslintPlugin(),
     replaceCodePlugin({
       replacements: [
         {
@@ -38,6 +47,5 @@ export default defineConfig({
         },
       ],
     }),
-  ]
-
-})
+  ],
+});

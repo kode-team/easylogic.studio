@@ -1,11 +1,11 @@
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { createComponent } from "el/sapa/functions/jsx";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { createComponent } from "sapa";
 
-import './ObjectItems.scss';
+import "./ObjectItems.scss";
 
 export default class SingleObjectItems extends EditorElement {
   template() {
-    return /*html*/`
+    return /*html*/ `
         <div class="object-items single">
           <div>
             ${createComponent("LayerTreeProperty")}
@@ -13,5 +13,4 @@ export default class SingleObjectItems extends EditorElement {
         </div>
     `;
   }
-
 }

@@ -1,7 +1,7 @@
 
-import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
-import { createComponent } from "el/sapa/functions/jsx";
+import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import {BaseProperty} from "elf/editor/ui/property/BaseProperty";
+import { createComponent } from "sapa";
 
 export default class IFrameProperty extends BaseProperty {
 

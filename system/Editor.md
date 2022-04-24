@@ -6,7 +6,7 @@ Editor 스토어는 여러가지 Manager 를 통해서 데이타를 관리합니
 
 자세힌 코드는 아래를 참고하세요. 
 
-src/el/editor/manager
+src/elf/editor/manager
 
 * AssetManager - 에셋 관리 매니저 
 * ClipboardManager - 클립보드 관리 매니저 

@@ -1,50 +1,43 @@
-import Dom from "el/sapa/functions/Dom";
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "el/utils/func";
-import { Item } from "el/editor/items/Item";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "elf/utils/func";
 import SVGItemRender from "./SVGItemRender";
 
 export default class SVGStarRender extends SVGItemRender {
-    
   /**
    * @param {Item} item
-   * @param {Dom} currentElement 
+   * @param {Dom} currentElement
    */
-  update (item, currentElement) {
+  update(item, currentElement) {
+    if (!currentElement) return;
 
-    if (!currentElement) return; 
-
-    var $path = currentElement.$('path');
+    var $path = currentElement.$("path");
 
     if ($path) {
       $path.setAttr({
-        'd':  item.d,
-        'filter': this.toFilterValue(item),
-        'fill': this.toFillValue(item),
-        'stroke': this.toStrokeValue(item)
-      })  
+        d: item.d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item),
+      });
     }
 
-    this.updateDefString(item, currentElement)
-
-  }    
-
-
-  render (item) {
-    var {d} = item;
-
-    return this.wrappedRender(item, () => {
-      return /*html*/`
-<path ${OBJECT_TO_PROPERTY({
-  'class': 'star-item', 
-  d, 
-  filter: this.toFilterValue(item),
-  fill: this.toFillValue(item),
-  stroke: this.toStrokeValue(item),
-  ...this.toSVGAttribute(item),
-  style: CSS_TO_STRING(this.toCSS(item))      
-})} />
-    `
-    }) 
+    this.updateDefString(item, currentElement);
   }
 
+  render(item) {
+    var { d } = item;
+
+    return this.wrappedRender(item, () => {
+      return /*html*/ `
+<path ${OBJECT_TO_PROPERTY({
+        class: "star-item",
+        d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item),
+        ...this.toSVGAttribute(item),
+        style: CSS_TO_STRING(this.toCSS(item)),
+      })} />
+    `;
+    });
+  }
 }

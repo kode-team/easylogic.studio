@@ -1,214 +1,220 @@
-import Color from "../../el/utils/Color";
-import HueColor from "../../el/utils/HueColor";
+import Color from "../../elf/utils/Color";
+import HueColor from "../../elf/utils/HueColor";
 
 export default class ColorManagerV2 {
+  constructor() {
+    this.initialize();
+  }
 
+  initialize() {
+    this.state = {
+      rgb: {},
+      hsl: {},
+      hsv: {},
+      alpha: 1,
+      format: "hex",
+      // colorSetsList: [
+      //     {   name : "Material",
+      //         edit: true,
+      //         colors: [
+      //             '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5',
+      //             '#2196F3', '#03A9F4', '#00BCD4',  '#009688', '#4CAF50',
+      //             '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800',
+      //             '#FF5722',  '#795548', '#9E9E9E', '#607D8B'
+      //         ]
+      //     },
+      //     { name : "Custom", "edit" : true, "colors" : [ ] },
+      //     { name: "Color Scale", "scale" : ['red', 'yellow', 'black' ], count : 5 }
+      // ],
+      // userList: [],
+      // currentColorSets: {}
+    };
+  }
 
-    constructor () {
-        this.initialize();
+  get hsv() {
+    return this.state.hsv;
+  }
 
+  get rgb() {
+    return this.state.rgb;
+  }
+
+  get hsl() {
+    return this.state.hsl;
+  }
+
+  get hex() {
+    return this.state.hex;
+  }
+
+  get alpha() {
+    if (typeof this.state.alpha === "undefined") return 1;
+    return this.state.alpha;
+  }
+
+  get format() {
+    return this.state.format;
+  }
+
+  changeFormat(format) {
+    this.state.format = format;
+  }
+
+  initColor(colorObj) {
+    this.changeColor(colorObj);
+  }
+
+  changeColor(colorObj) {
+    colorObj = colorObj || "#FF0000";
+
+    if (typeof colorObj === "string") {
+      colorObj = Color.parse(colorObj);
     }
 
-    initialize () {
+    this.state.alpha =
+      typeof colorObj.a !== "undefined" ? colorObj.a : this.state.alpha;
+    this.state.format =
+      colorObj.type != "hsv"
+        ? colorObj.type || this.state.format
+        : this.state.format;
 
-        this.state = {
-            rgb: {},
-            hsl: {},
-            hsv: {},
-            alpha: 1, 
-            format: 'hex',
-            // colorSetsList: [
-            //     {   name : "Material", 
-            //         edit: true,
-            //         colors: [ 
-            //             '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', 
-            //             '#2196F3', '#03A9F4', '#00BCD4',  '#009688', '#4CAF50', 
-            //             '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', 
-            //             '#FF5722',  '#795548', '#9E9E9E', '#607D8B' 
-            //         ]
-            //     },
-            //     { name : "Custom", "edit" : true, "colors" : [ ] },
-            //     { name: "Color Scale", "scale" : ['red', 'yellow', 'black' ], count : 5 }
-            // ],
-            // userList: [],
-            // currentColorSets: {}    
-        }
+    // if (this.state.format == 'hex' && this.state.alpha < 1) {
+    //     this.state.format = 'rgb';
+    // }
 
+    if (colorObj.type == "hsl") {
+      this.state.hsl = { ...this.state.hsl, ...colorObj };
+      this.state.rgb = Color.HSLtoRGB(this.state.hsl);
+      this.state.hsv = Color.HSLtoHSV(colorObj);
+    } else if (colorObj.type == "hex") {
+      this.state.rgb = { ...this.state.rgb, ...colorObj };
+      this.state.hsl = Color.RGBtoHSL(this.state.rgb);
+      this.state.hsv = Color.RGBtoHSV(colorObj);
+    } else if (colorObj.type == "rgb") {
+      this.state.rgb = { ...this.state.rgb, ...colorObj };
+      this.state.hsl = Color.RGBtoHSL(this.state.rgb);
+      this.state.hsv = Color.RGBtoHSV(colorObj);
+    } else if (colorObj.type == "hsv") {
+      this.state.hsv = { ...this.state.hsv, ...colorObj };
+      this.state.rgb = Color.HSVtoRGB(this.state.hsv);
+      this.state.hsl = Color.HSVtoHSL(this.state.hsv);
     }
+  }
 
-    get hsv () {return this.state.hsv; }
+  getHueColor() {
+    return HueColor.checkHueColor(this.state.hsv.h / 360);
+  }
 
-    get rgb () {return this.state.rgb; }
-    
-    get hsl () {return this.state.hsl; }
-    
-    get hex () {return this.state.hex; }    
+  toString(type) {
+    type = type || this.state.format;
+    var colorObj = this.state[type] || this.state.rgb;
+    return Color.format({ ...colorObj, a: this.state.alpha }, type);
+  }
 
-    get alpha () { 
-        if (typeof this.state.alpha === 'undefined') return 1;
-        return this.state.alpha; 
-    }        
+  toColor(type) {
+    type = (type || this.state.format).toLowerCase();
+    return this.toString(type);
+  }
 
-    get format () { return this.state.format; }        
+  // /** manager for colorsets */
 
-    changeFormat (format) {
-        this.state.format = format
-    }
+  // setUserPalette(list) {
+  //     this.state.userList = list || [];
 
-    initColor (colorObj) {
-        this.changeColor(colorObj)
-    }
+  //     this.resetUserPalette();
+  //     this.setCurrentColorSets();
+  // }
 
-    changeColor(colorObj) {
-        colorObj = colorObj || '#FF0000'
+  // resetUserPalette () {
 
-        if (typeof colorObj === 'string') {
-            colorObj = Color.parse(colorObj);
-        }
-        
-        this.state.alpha = typeof colorObj.a !== 'undefined' ? colorObj.a : this.state.alpha; 
-        this.state.format = colorObj.type != 'hsv' ? (colorObj.type || this.state.format) : this.state.format;
+  //     this.state.userList = this.state.userList.map( (element, index) => {
 
-        // if (this.state.format == 'hex' && this.state.alpha < 1) {
-        //     this.state.format = 'rgb';
-        // }
+  //         if (isFunction( element.colors )) {
+  //             const makeCallback = element.colors;
 
-        if (colorObj.type == 'hsl') {
-            this.state.hsl = {...this.state.hsl, ...colorObj}; 
-            this.state.rgb = Color.HSLtoRGB(this.state.hsl);
-            this.state.hsv = Color.HSLtoHSV(colorObj);            
-        } else if (colorObj.type == 'hex') {
-            this.state.rgb = {...this.state.rgb, ...colorObj};
-            this.state.hsl = Color.RGBtoHSL(this.state.rgb);
-            this.state.hsv = Color.RGBtoHSV(colorObj);            
-        } else if (colorObj.type == 'rgb') {
-            this.state.rgb = {...this.state.rgb, ...colorObj};
-            this.state.hsl = Color.RGBtoHSL(this.state.rgb);            
-            this.state.hsv = Color.RGBtoHSV(colorObj);            
-        } else if (colorObj.type == 'hsv') {
-            this.state.hsv = {...this.state.hsv, ...colorObj};
-            this.state.rgb = Color.HSVtoRGB(this.state.hsv);
-            this.state.hsl = Color.HSVtoHSL(this.state.hsv);
-        }
-    }
+  //             element.colors = makeCallback(this.state);
+  //             element._colors = makeCallback;
+  //         }
 
-    getHueColor () {
-        return HueColor.checkHueColor(this.state.hsv.h/360);
-    }
+  //         return {
+  //             name: `color-${index}`,
+  //             colors : [],
+  //             ...element
+  //         }
+  //     })
 
-    toString(type) {
-        type = type || this.state.format
-        var colorObj = this.state[type] || this.state.rgb
-        return Color.format({...colorObj, a: this.state.alpha}, type);
-    }
+  // }
 
-    toColor (type) {
-        type = (type || this.state.format).toLowerCase(); 
-        return this.toString(type)
-    }
+  // setCurrentColorSets(nameOrIndex) {
 
+  //     const _list = this.getUserList();
 
-    // /** manager for colorsets */
+  //     if (isUndefined(nameOrIndex)) {
+  //         this.state.currentColorSets = _list[0];
+  //     } else if (isNumber(nameOrIndex)) {
+  //         this.state.currentColorSets = _list[nameOrIndex];
+  //     } else {
+  //         this.state.currentColorSets = _list.filter(function (obj) {
+  //             return obj.name == nameOrIndex;
+  //         })[0];
+  //     }
+  // }
 
+  // getCurrentColorSets () {
+  //     return this.state.currentColorSets;
+  // }
 
-    // setUserPalette(list) {
-    //     this.state.userList = list || []; 
+  // addCurrentColor (color) {
+  //     if (Array.isArray(this.state.currentColorSets.colors)) {
+  //         this.state.currentColorSets.colors.push(color);
+  //     }
+  // }
 
-    //     this.resetUserPalette();
-    //     this.setCurrentColorSets();
-    // }
+  // setCurrentColorAll (colors = []) {
+  //     this.state.currentColorSets.colors = colors;
+  // }
 
-    // resetUserPalette () {
+  // removeCurrentColor (index) {
+  //     if (this.state.currentColorSets.colors[index]) {
+  //         this.state.currentColorSets.colors.splice(index, 1);
+  //     }
+  // }
 
-    //     this.state.userList = this.state.userList.map( (element, index) => {
+  // removeCurrentColorToTheRight (index) {
+  //     if (this.state.currentColorSets.colors[index]) {
+  //         this.state.currentColorSets.colors.splice(index, Number.MAX_VALUE);
+  //     }
+  // }
 
-    //         if (isFunction( element.colors )) {
-    //             const makeCallback = element.colors; 
+  // clearPalette () {
+  //     if (this.state.currentColorSets.colors) {
+  //         this.state.currentColorSets.colors = [];
+  //     }
+  // }
 
-    //             element.colors = makeCallback(this.state);
-    //             element._colors = makeCallback;
-    //         }
+  // getUserList() {
+  //     return Array.isArray(this.state.userList) && this.state.userList.length ? this.state.userList : this.state.colorSetsList;
+  // }
 
-    //         return { 
-    //             name: `color-${index}`,
-    //             colors : [],
-    //             ...element
-    //         }
-    //     })
+  // getCurrentColors () {
+  //     return this.getColors(this.state.currentColorSets)
+  // }
 
-    // }
+  // getColors (element) {
+  //     if (element.scale) {
+  //         return Color.scale(element.scale, element.count);
+  //     }
 
-    // setCurrentColorSets(nameOrIndex) {
+  //     return element.colors || [];
+  // }
 
-    //     const _list = this.getUserList();
-
-    //     if (isUndefined(nameOrIndex)) {
-    //         this.state.currentColorSets = _list[0];
-    //     } else if (isNumber(nameOrIndex)) {
-    //         this.state.currentColorSets = _list[nameOrIndex];
-    //     } else {
-    //         this.state.currentColorSets = _list.filter(function (obj) {
-    //             return obj.name == nameOrIndex;
-    //         })[0];
-    //     }
-    // }
-
-    // getCurrentColorSets () {
-    //     return this.state.currentColorSets;
-    // }
-
-    // addCurrentColor (color) {
-    //     if (Array.isArray(this.state.currentColorSets.colors)) {
-    //         this.state.currentColorSets.colors.push(color);
-    //     } 
-    // }
-
-    // setCurrentColorAll (colors = []) {
-    //     this.state.currentColorSets.colors = colors;
-    // }
-
-    // removeCurrentColor (index) {
-    //     if (this.state.currentColorSets.colors[index]) {
-    //         this.state.currentColorSets.colors.splice(index, 1);
-    //     }
-    // }
-
-    // removeCurrentColorToTheRight (index) {
-    //     if (this.state.currentColorSets.colors[index]) {
-    //         this.state.currentColorSets.colors.splice(index, Number.MAX_VALUE);
-    //     }
-    // }    
-
-    // clearPalette () {
-    //     if (this.state.currentColorSets.colors) {
-    //         this.state.currentColorSets.colors = [];
-    //     }
-    // }
-
-    // getUserList() {
-    //     return Array.isArray(this.state.userList) && this.state.userList.length ? this.state.userList : this.state.colorSetsList;
-    // }    
-
-    // getCurrentColors () {
-    //     return this.getColors(this.state.currentColorSets)
-    // }
-
-    // getColors (element) {
-    //     if (element.scale) {
-    //         return Color.scale(element.scale, element.count);
-    //     }
-        
-    //     return element.colors || []; 
-    // }
-
-    // getColorSetsList () {
-    //     return this.getUserList().map(element => {
-    //        return {
-    //            name : element.name,
-    //            edit : element.edit,
-    //            colors : this.getColors(element)
-    //        } 
-    //     });
-    // }
-
+  // getColorSetsList () {
+  //     return this.getUserList().map(element => {
+  //        return {
+  //            name : element.name,
+  //            edit : element.edit,
+  //            colors : this.getColors(element)
+  //        }
+  //     });
+  // }
 }

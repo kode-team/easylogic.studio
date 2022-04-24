@@ -1,4 +1,4 @@
-import * as App from 'el/sapa/App'
+import { start } from "sapa";
 import "../scss/index.scss";
 import DesignEditor from "./designeditor";
 import ThreeEditor from "./three-editor";
@@ -8,32 +8,32 @@ import DataEditor from "./dataeditor";
 export * from "export-library/index";
 
 function createDesignEditor(opts) {
-  return App.start(DesignEditor, opts);
+  return start(DesignEditor, opts);
 }
 
 function createThreeEditor(opts) {
-  return App.start(ThreeEditor, opts);
+  return start(ThreeEditor, opts);
 }
 
 function createBlankEditor(opts) {
-  return App.start(BlankEditor, opts);
+  return start(BlankEditor, opts);
 }
 
-function createDataEditor (opts) {
-  return App.start(DataEditor, opts)
+function createDataEditor(opts) {
+  return start(DataEditor, opts);
 }
 
 // createPageBuilder (opts = {}) {
 //   return App.start(PageBuilder as any, opts)
-// },  
-function createWhiteBoard (opts) {
-  return App.start(WhiteBoard, opts)
-}    
+// },
+function createWhiteBoard(opts) {
+  return start(WhiteBoard, opts);
+}
 
 export {
   createDesignEditor,
   createThreeEditor,
   createDataEditor,
   createWhiteBoard,
-  createBlankEditor
+  createBlankEditor,
 };

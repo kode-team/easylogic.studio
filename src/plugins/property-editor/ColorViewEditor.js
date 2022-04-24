@@ -1,96 +1,107 @@
-import { CLICK, INPUT, BIND, FOCUS, BLUR, FOCUSIN, FOCUSOUT } from "el/sapa/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { CLICK, INPUT, BIND, FOCUSIN, FOCUSOUT } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
-import './ColorViewEditor.scss';
-import Color from "el/utils/Color";
-import { clone, isBoolean } from "el/sapa/functions/func";
-import { round } from "el/utils/math";
+import "./ColorViewEditor.scss";
+import Color from "elf/utils/Color";
+import { isBoolean } from "sapa";
+import { round } from "elf/utils/math";
 
 export default class ColorViewEditor extends EditorElement {
+  initState() {
+    const value = this.props.value || "rgba(0, 0, 0, 1)";
+    const compact = isBoolean(this.props.compact)
+      ? this.props.compact
+      : this.props.compact === "true";
+    const mini = isBoolean(this.props.mini)
+      ? this.props.mini
+      : this.props.mini === "true";
 
-    initState() {
-        const value = this.props.value || 'rgba(0, 0, 0, 1)';
-        const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === 'true';
-        const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === 'true';
+    return {
+      label: this.props.label,
+      value,
+      compact,
+      mini,
+      color: Color.parse(value),
+      colorFocus: false,
+      opacityFocus: false,
+    };
+  }
 
-        return {
-            label: this.props.label,
-            value,
-            compact,
-            mini,
-            color: Color.parse(value),
-            colorFocus: false,
-            opacityFocus: false,
-        }
-    }
+  updateData(opt = {}) {
+    this.setState(opt);
+    this.modifyColor();
+  }
 
-    updateData(opt = {}) {
-        this.setState(opt);
-        this.modifyColor();
-    }
+  updateEndData(opt = {}) {
+    this.setState(opt);
+    this.modifyEndColor();
+  }
 
-    updateEndData(opt = {}) {
-        this.setState(opt);
-        this.modifyEndColor();
-    }
+  getValue() {
+    return this.state.value;
+  }
 
-    getValue() {
-        return this.state.value;
-    }
+  setValue(value) {
+    this.changeColor(value);
+  }
 
-    setValue(value) {
-        this.changeColor(value)
-    }
+  modifyColor() {
+    this.parent.trigger(
+      this.props.onchange,
+      this.props.key,
+      this.state.value,
+      this.props.params
+    );
+  }
 
-    modifyColor() {
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
-    }
+  modifyEndColor() {
+    this.parent.trigger(
+      this.props.onchangeend,
+      this.props.key,
+      this.state.value,
+      this.props.params
+    );
+  }
 
-    modifyEndColor() {
-        this.parent.trigger(this.props.onchangeend, this.props.key, this.state.value, this.props.params);
-    }
+  changeColor(value) {
+    this.setState({
+      value,
+      color: Color.parse(value),
+    });
+  }
 
+  get alpha() {
+    return this.state.color.a * 100;
+  }
 
-    changeColor(value) {
-        this.setState({
-            value,
-            color: Color.parse(value)
-        })
-    }
+  get hexColor() {
+    return Color.formatWithoutAlpha(this.state.color, "hex");
+  }
 
-    get alpha() {
-        return this.state.color.a * 100;
-    }
+  get fullColor() {
+    return Color.format(this.state.color, this.state.color.type);
+  }
 
-    get hexColor() {
-        return Color.formatWithoutAlpha(this.state.color, 'hex');
-    }
+  refresh() {
+    this.refreshColorView();
+    this.refs.$colorCode.val(this.state.value);
+    this.refs.$opacityCode.val(this.alpha);
+  }
 
-    get fullColor() {
-        return Color.format(this.state.color, this.state.color.type);
-    }
+  refreshColorView() {
+    this.bindData("$miniView1");
+    this.bindData("$miniView2");
+  }
 
-    refresh() {
-        this.refreshColorView();
-        this.refs.$colorCode.val(this.state.value);
-        this.refs.$opacityCode.val(this.alpha);
-    }
+  template() {
+    var { label, compact, mini } = this.state;
+    var hasLabel = label ? "has-label" : "";
+    var hasCompact = compact ? "compact" : "";
+    var hasMini = mini ? "mini" : "";
 
-
-    refreshColorView() {
-        this.bindData('$miniView1')
-        this.bindData('$miniView2')
-    }
-
-    template() {
-        var { label, compact, mini } = this.state;
-        var hasLabel = !!label ? 'has-label' : ''
-        var hasCompact = !!compact ? 'compact' : ''
-        var hasMini = !!mini ? 'mini' : ''
-
-        return /*html*/`
+    return /*html*/ `
             <div class='elf--color-view-editor ${hasLabel} ${hasCompact} ${hasMini}'>
-                ${label ? `<label>${label}</label>` : ''}            
+                ${label ? `<label>${label}</label>` : ""}            
                 <div class='color-code' ref="$container">
                     <div class='preview' ref='$preview'>
                         <div class='mini-view'>
@@ -99,126 +110,132 @@ export default class ColorViewEditor extends EditorElement {
                         </div>
                     </div>                
                     <div class="color-input">
-                        <input type="text" ref='$colorCode' value='${this.state.value}' tabIndex="1" />
+                        <input type="text" ref='$colorCode' value='${
+                          this.state.value
+                        }' tabIndex="1" />
                     </div>
                     <div class="opacity-input">                    
-                        <input type="number" ref='$opacityCode' value='${this.alpha}' tabIndex="2" max="100" min="0" step="0.1" />
+                        <input type="number" ref='$opacityCode' value='${
+                          this.alpha
+                        }' tabIndex="2" max="100" min="0" step="0.1" />
                     </div>                    
                 </div>
             </div>
-        `
-    }
+        `;
+  }
 
-    [BIND('$el')]() {
-        return {
-            class: {
-                'focused': this.state.colorFocus || this.state.opacityFocus,
-            }
-        }
-    }
+  [BIND("$el")]() {
+    return {
+      class: {
+        focused: this.state.colorFocus || this.state.opacityFocus,
+      },
+    };
+  }
 
-    [BIND('$miniView1')]() {
-        return {
-            style: {
-                'background-color': this.hexColor
-            }
-        }
-    }
+  [BIND("$miniView1")]() {
+    return {
+      style: {
+        "background-color": this.hexColor,
+      },
+    };
+  }
 
-    [BIND('$miniView2')]() {
-        return {
-            style: {
-                'background-color': this.fullColor
-            }
-        }
-    }
+  [BIND("$miniView2")]() {
+    return {
+      style: {
+        "background-color": this.fullColor,
+      },
+    };
+  }
 
-    [BIND('$colorCode')]() {
-        return {
-            value: this.props.format ? this.hexColor : this.state.value
-        }
-    }
+  [BIND("$colorCode")]() {
+    return {
+      value: this.props.format ? this.hexColor : this.state.value,
+    };
+  }
 
-    [BIND('$opacityCode')]() {
-        return {
-            value: this.alpha
-        }
-    }
+  [BIND("$opacityCode")]() {
+    return {
+      value: this.alpha,
+    };
+  }
 
-    [FOCUSIN('$colorCode')](e) {
-        this.setState({
-            colorFocus: true
-        })
-        this.refs.$colorCode.select();
-    }
+  [FOCUSIN("$colorCode")]() {
+    this.setState({
+      colorFocus: true,
+    });
+    this.refs.$colorCode.select();
+  }
 
-    [FOCUSOUT('$colorCode')](e) {
-        this.setState({
-            colorFocus: false
-        })
-    }
+  [FOCUSOUT("$colorCode")]() {
+    this.setState({
+      colorFocus: false,
+    });
+  }
 
-    [FOCUSIN('$opacityCode')](e) {
-        this.setState({
-            opacityFocus: true
-        })
-        this.refs.$opacityCode.select();
-    }
+  [FOCUSIN("$opacityCode")]() {
+    this.setState({
+      opacityFocus: true,
+    });
+    this.refs.$opacityCode.select();
+  }
 
-    [FOCUSOUT('$opacityCode')](e) {
-        this.setState({
-            opacityFocus: false
-        })
-    }
+  [FOCUSOUT("$opacityCode")]() {
+    this.setState({
+      opacityFocus: false,
+    });
+  }
 
-    [CLICK("$preview")](e) {
-        this.viewColorPicker();
-    }
+  [CLICK("$preview")]() {
+    this.viewColorPicker();
+  }
 
-    viewColorPicker() {
+  viewColorPicker() {
+    this.emit(
+      "showColorPickerPopup",
+      {
+        target: this,
+        changeEvent: (color) => {
+          this.updateData({ value: color, color: Color.parse(color) });
+        },
+        changeEndEvent: (color) => {
+          this.updateEndData({ value: color, color: Color.parse(color) });
+        },
+        color: this.state.value,
+      },
+      null,
+      this.$el.rect()
+    );
+  }
 
-        this.emit("showColorPickerPopup", {
-            target: this,
-            changeEvent: (color) => {
-                this.updateData({ value: color, color: Color.parse(color) })
-            },
-            changeEndEvent: (color) => {
-                this.updateEndData({ value: color, color: Color.parse(color) })
-            },
-            color: this.state.value
-        }, null, this.$el.rect());
-    }
+  [CLICK("$remove")]() {
+    this.updateData({ value: "" });
+  }
 
+  [INPUT("$el .color-input input")](e) {
+    var color = e.$dt.value;
+    this.updateData({
+      value: color,
+      color: Color.parse(color),
+    });
 
-    [CLICK('$remove')](e) {
-        this.updateData({ value: '' })
-    }
+    this.refreshColorView();
+  }
 
-    [INPUT("$el .color-input input")](e) {
-        var color = e.$dt.value;
-        this.updateData({
-            value: color,
-            color: Color.parse(color)
-        })
+  [INPUT("$el .opacity-input input")](e) {
+    var opacity = +e.$dt.value;
 
-        this.refreshColorView();
-    }
+    opacity = Math.max(0, Math.min(100, opacity));
 
-    [INPUT("$el .opacity-input input")](e) {
-        var opacity = +e.$dt.value;
+    const color = Color.parse(this.state.value);
+    color.a = round(opacity / 100, 1000);
 
-        opacity = Math.max(0, Math.min(100, opacity));
+    const value = Color.format(color, color.type);
+    this.updateData({
+      value: value,
+      color,
+    });
 
-        const color = Color.parse(this.state.value);
-        color.a = round(opacity / 100, 1000);
-
-        const value = Color.format(color, color.type)
-        this.updateData({
-            value: value,
-            color
-        })
-
-        this.refreshColorView();
-    }
-
+    this.refreshColorView();
+  }
 }

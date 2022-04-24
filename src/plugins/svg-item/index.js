@@ -1,309 +1,316 @@
-import { Editor } from "el/editor/manager/Editor";
-import { StrokeLineCap, StrokeLineJoin } from "el/editor/types/model";
-import {ObjectProperty} from "el/editor/ui/property/ObjectProperty";
+// import { Editor } from "elf/editor/manager/Editor";
+import { StrokeLineCap, StrokeLineJoin } from "elf/editor/types/model";
+import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 import ColorMatrixEditor from "./editor/ColorMatrixEditor";
 import FuncFilterEditor from "./editor/FuncFilterEditor";
 import SVGFilterEditor from "./SVGFilterEditor";
 import SVGFilterPopup from "./SVGFilterPopup";
 import SVGFilterSelectEditor from "./SVGFilterSelectEditor";
 
-
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-
   editor.registerElement({
     ColorMatrixEditor,
     FuncFilterEditor,
     SVGFilterSelectEditor,
-    SVGFilterEditor
-  })
+    SVGFilterEditor,
+  });
 
-
-  editor.registerUI('inspector.tab.style', {
+  editor.registerUI("inspector.tab.style", {
     SVGItemProperty: ObjectProperty.create({
-      title: editor.$i18n('svg.item.property.title'),
-      editableProperty: 'svg-item',
-      preventUpdate: true     // 마우스를 드래그 하는 동안은 업데이트 하지 않음. 
-    })
-  })
+      title: editor.$i18n("svg.item.property.title"),
+      editableProperty: "svg-item",
+      preventUpdate: true, // 마우스를 드래그 하는 동안은 업데이트 하지 않음.
+    }),
+  });
 
-  editor.registerUI('popup', {
-    SVGFilterPopup
-  })
+  editor.registerUI("popup", {
+    SVGFilterPopup,
+  });
 
-  editor.registerInspector('svg-item', current => {
+  editor.registerInspector("svg-item", (current) => {
     return [
       {
-        key: 'edit',
-        editor: 'Button',
+        key: "edit",
+        editor: "Button",
         editorOptions: {
-          text: 'Edit',
-          action: ['open.editor', current]
+          text: "Edit",
+          action: ["open.editor", current],
         },
       },
       {
-        type: 'column',
+        type: "column",
         size: [2, 1],
         columns: [
-          { type: 'label', label: editor.$i18n('svg.item.property.fill') },
+          { type: "label", label: editor.$i18n("svg.item.property.fill") },
           {
-            key: 'fill-rule',
-            editor: 'ToggleCheckBox',
+            key: "fill-rule",
+            editor: "ToggleCheckBox",
             editorOptions: {
               toggleLabels: ["join_full", "join_right"],
-              toggleValues: ["nonzero", "evenodd"]
+              toggleValues: ["nonzero", "evenodd"],
             },
-            defaultValue: current['fill-rule'] || "nonzero"
-          }          
-        ]
+            defaultValue: current["fill-rule"] || "nonzero",
+          },
+        ],
       },
       {
-        type: 'column',
+        type: "column",
         size: [2, 1],
         columns: [
-          
           {
-            key: 'fill',
-            editor: 'FillSingleEditor',
+            key: "fill",
+            editor: "FillSingleEditor",
             editorOptions: {
               wide: true,
             },
-            defaultValue: current['fill']
+            defaultValue: current["fill"],
           },
           {
-            key: 'fill-opacity',
-            editor: 'number-input',
+            key: "fill-opacity",
+            editor: "number-input",
             editorOptions: {
               compact: true,
-              label: 'opacity',
+              label: "opacity",
               min: 0,
               max: 1,
-              step: 0.01
+              step: 0.01,
             },
-            defaultValue: current['fill-opacity']
-          }
-        ]
+            defaultValue: current["fill-opacity"],
+          },
+        ],
       },
       {
-        type: 'column',
+        type: "column",
         size: [2, 1],
         columns: [
-          { type: 'label', label: editor.$i18n('svg.item.property.stroke') },
-        ]
+          { type: "label", label: editor.$i18n("svg.item.property.stroke") },
+        ],
       },
       {
-        type: 'column',
+        type: "column",
         size: [2, 1],
         columns: [
           {
-            key: 'stroke',
-            editor: 'fill-single',
+            key: "stroke",
+            editor: "fill-single",
             editorOptions: {
-              wide: true
+              wide: true,
             },
-            defaultValue: current['stroke']
+            defaultValue: current["stroke"],
           },
           {
-            key: 'stroke-width',
-            editor: 'number-input',
+            key: "stroke-width",
+            editor: "number-input",
             editorOptions: {
               compact: true,
-              label: 'line_weight',
+              label: "line_weight",
             },
-            defaultValue: current['stroke-width']
-          },          
-        ]
-      },   
+            defaultValue: current["stroke-width"],
+          },
+        ],
+      },
       {
-        type: 'column',
+        type: "column",
         size: [2, 1],
         columns: [
           {
-            key: 'stroke-dasharray',
-            editor: 'StrokeDashArrayEditor',
+            key: "stroke-dasharray",
+            editor: "StrokeDashArrayEditor",
             editorOptions: {
-              label: editor.$i18n('svg.item.property.dashArray'),
+              label: editor.$i18n("svg.item.property.dashArray"),
             },
-            defaultValue: current['stroke-dasharray'] || ""
+            defaultValue: current["stroke-dasharray"] || "",
           },
           {
-            key: 'stroke-dashoffset',
-            editor: 'number-input',
+            key: "stroke-dashoffset",
+            editor: "number-input",
             editorOptions: {
               compact: true,
-              label: 'power_input',
+              label: "power_input",
               min: -1000,
               max: 1000,
-              step: 1
+              step: 1,
             },
-            defaultValue: current['stroke-dashoffset']
+            defaultValue: current["stroke-dashoffset"],
           },
-        ]
+        ],
       },
 
       {
-        key: 'stroke-linecap',
-        editor: 'ToggleCheckBox',
+        key: "stroke-linecap",
+        editor: "ToggleCheckBox",
         editorOptions: {
-          label: editor.$i18n('svg.item.property.lineCap'),
+          label: editor.$i18n("svg.item.property.lineCap"),
           toggleLabels: ["line_cap_butt", "line_cap_round", "line_cap_square"],
-          toggleValues: [StrokeLineCap.BUTT, StrokeLineJoin.ROUND, StrokeLineCap.SQUARE],
+          toggleValues: [
+            StrokeLineCap.BUTT,
+            StrokeLineJoin.ROUND,
+            StrokeLineCap.SQUARE,
+          ],
         },
-        defaultValue: current['stroke-linecap'] || StrokeLineCap.BUTT
+        defaultValue: current["stroke-linecap"] || StrokeLineCap.BUTT,
       },
       {
-        key: 'stroke-linejoin',
-        editor: 'ToggleCheckBox',
+        key: "stroke-linejoin",
+        editor: "ToggleCheckBox",
         editorOptions: {
-          label: editor.$i18n('svg.item.property.lineJoin'),
-          toggleLabels: ["line_join_miter", "line_join_round", "line_join_bevel"],
-          toggleValues: [StrokeLineJoin.MITER, StrokeLineJoin.ROUND, StrokeLineJoin.BEVEL]
+          label: editor.$i18n("svg.item.property.lineJoin"),
+          toggleLabels: [
+            "line_join_miter",
+            "line_join_round",
+            "line_join_bevel",
+          ],
+          toggleValues: [
+            StrokeLineJoin.MITER,
+            StrokeLineJoin.ROUND,
+            StrokeLineJoin.BEVEL,
+          ],
         },
-        defaultValue: current['stroke-linejoin'] || StrokeLineJoin.MITER
+        defaultValue: current["stroke-linejoin"] || StrokeLineJoin.MITER,
       },
       {
-        key: 'mix-blend-mode',
-        editor: 'BlendSelectEditor',
+        key: "mix-blend-mode",
+        editor: "BlendSelectEditor",
         editorOptions: {
-          label: editor.$i18n('svg.item.property.blend'),
+          label: editor.$i18n("svg.item.property.blend"),
         },
-        defaultValue: current['mix-blend-mode']
+        defaultValue: current["mix-blend-mode"],
       },
-    ]
-  })
+    ];
+  });
 
-  editor.registerInspector('polygon', (item) => {
+  editor.registerInspector("polygon", (item) => {
     return [
       {
-        key: 'count',
-        editor: 'NumberInputEditor',
+        key: "count",
+        editor: "NumberInputEditor",
         editorOptions: {
-          label: 'Count',
+          label: "Count",
           min: 3,
           max: 100,
-          step: 1
+          step: 1,
         },
-        defaultValue: item.count
+        defaultValue: item.count,
       },
       {
-        key: 'button',
-        editor: 'Button',
+        key: "button",
+        editor: "Button",
         editorOptions: {
-          label: 'Copy ',
-          text: 'as path',
-          action: "copy.path"
-        }
+          label: "Copy ",
+          text: "as path",
+          action: "copy.path",
+        },
       },
 
       {
-        key: 'button2',
-        editor: 'Button',
+        key: "button2",
+        editor: "Button",
         editorOptions: {
-          label: 'Test Popup',
+          label: "Test Popup",
           action: [
-            'showComponentPopup',
+            "showComponentPopup",
             {
-              title: 'Sample Test Popup',
+              title: "Sample Test Popup",
               width: 400,
               inspector: [
                 {
-                  key: 'test',
-                  editor: 'Button',
+                  key: "test",
+                  editor: "Button",
                   editorOptions: {
-                    label: 'Test',
-                    text: 'text',
+                    label: "Test",
+                    text: "text",
                     onClick: () => {
-                      alert('yellow');
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
-    ]
-  })
+                      window.alert("yellow");
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+  });
 
-  editor.registerInspector('spline', (item) => {
+  editor.registerInspector("spline", () => {
     return [
       {
-        key: 'boundary',
-        editor: 'SelectIconEditor',
+        key: "boundary",
+        editor: "SelectIconEditor",
         editorOptions: {
-          label: 'Boundary',
-          options: ["clamped", "open", "closed"]
-        }
+          label: "Boundary",
+          options: ["clamped", "open", "closed"],
+        },
       },
       {
-        key: 'button',
-        editor: 'Button',
+        key: "button",
+        editor: "Button",
         editorOptions: {
-          label: 'Copy ',
-          text: 'as path',
-          action: "copy.path"
-        }
-      }
-    ]
-  })
+          label: "Copy ",
+          text: "as path",
+          action: "copy.path",
+        },
+      },
+    ];
+  });
 
-  editor.registerInspector('star', (item) => {
+  editor.registerInspector("star", (item) => {
     return [
       {
-        key: 'isCurve',
-        editor: 'ToggleCheckBox',
+        key: "isCurve",
+        editor: "ToggleCheckBox",
         editorOptions: {
-          label: 'Curve',
+          label: "Curve",
           // toggleLabels: ['Curve', 'Not Curve'],
           defaultValue: item.isCurve,
-        }
+        },
       },
       {
-        key: 'count',
-        editor: 'NumberInputEditor',
+        key: "count",
+        editor: "NumberInputEditor",
         editorOptions: {
-          label: 'Count',
+          label: "Count",
           min: 1,
           max: 100,
           step: 1,
-          wide: "true"          
-        }
+          wide: "true",
+        },
       },
       {
-        key: 'radius',
-        editor: 'NumberInputEditor',
+        key: "radius",
+        editor: "NumberInputEditor",
         editorOptions: {
-          label: 'Inner Radius',
+          label: "Inner Radius",
           min: -1,
           max: 1,
           step: 0.01,
-          wide: "true"
-        }
+          wide: "true",
+        },
       },
       {
-        key: 'tension',
-        editor: 'NumberInputEditor',
+        key: "tension",
+        editor: "NumberInputEditor",
         editorOptions: {
-          label: 'Tension',
+          label: "Tension",
           min: 0,
           max: 1,
           step: 0.01,
-          wide: "true"
-        }
+          wide: "true",
+        },
       },
       {
-        key: 'button',
-        editor: 'Button',
+        key: "button",
+        editor: "Button",
         editorOptions: {
-          label: 'Copy ',
-          text: 'as path',
-          action: "copy.path"
-        }
-      }
-
-    ]
-  })
+          label: "Copy ",
+          text: "as path",
+          action: "copy.path",
+        },
+      },
+    ];
+  });
 }

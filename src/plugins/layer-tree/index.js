@@ -1,12 +1,12 @@
-import { Editor } from "el/editor/manager/Editor";
+// import { Editor } from "elf/editor/manager/Editor";
 import LayerTreeProperty from "./LayerTreeProperty";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
-    editor.registerElement({
-        LayerTreeProperty
-    })
+  editor.registerElement({
+    LayerTreeProperty,
+  });
 }
