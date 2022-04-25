@@ -1,5 +1,5 @@
-import { Length } from "elf/editor/unit/Length";
 import { PathParser } from "elf/editor/parser/PathParser";
+import { Length } from "elf/editor/unit/Length";
 export default {
   command: "convert.stroke.to.path",
   execute: async (editor) => {

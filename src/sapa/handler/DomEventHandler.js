@@ -1,12 +1,12 @@
-import BaseHandler from "./BaseHandler";
 import Event, { SAPARATOR, NAME_SAPARATOR } from "../Event";
+import { Dom } from "../functions/Dom";
 import {
   debounce,
   throttle,
   isNotUndefined,
   isFunction,
 } from "../functions/func";
-import { Dom } from "../functions/Dom";
+import BaseHandler from "./BaseHandler";
 
 const scrollBlockingEvents = {
   touchstart: true,
@@ -94,9 +94,16 @@ export default class DomEventHandler extends BaseHandler {
       return;
     }
 
-    if (!this._domEvents || this._domEvents.length === 0) {
+    if (
+      !this._domEvents ||
+      this._domEvents.length === 0 ||
+      this._bindings.length === 0
+    ) {
       this._domEvents = this.context.filterProps("domevent", true);
+    }
 
+    // binding 되어 있지 않고, domEvents 에 정의된 것만 있는 경우
+    if (!this._bindings?.length && this._domEvents?.length) {
       this._domEvents.forEach((it) => this.parseDomEvent(it));
     }
   }
@@ -138,6 +145,7 @@ export default class DomEventHandler extends BaseHandler {
 
   initBindings() {
     this._bindings = [];
+    // this._domEvents = [];
   }
 
   matchPath(el, selector) {

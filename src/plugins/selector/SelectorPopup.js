@@ -1,8 +1,8 @@
-import { INPUT, SUBSCRIBE } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import { INPUT, SUBSCRIBE, createComponent } from "sapa";
 
 import "./SelectorPopup.scss";
-import { createComponent } from "sapa";
+
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class SelectorPopup extends BasePopup {
   getTitle() {

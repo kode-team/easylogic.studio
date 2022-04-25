@@ -1,5 +1,6 @@
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "elf/utils/func";
 import SVGItemRender from "./SVGItemRender";
+
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "elf/core/func";
 
 export default class SVGPolygonRender extends SVGItemRender {
   /**

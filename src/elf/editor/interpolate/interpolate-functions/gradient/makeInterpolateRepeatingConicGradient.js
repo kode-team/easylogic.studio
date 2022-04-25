@@ -1,4 +1,5 @@
 import { makeInterpolateConicGradient } from "./makeInterpolateConicGradient";
+
 import { RepeatingConicGradient } from "elf/editor/property-parser/image-resource/RepeatingConicGradient";
 
 export function makeInterpolateRepeatingConicGradient(layer, property, s, e) {

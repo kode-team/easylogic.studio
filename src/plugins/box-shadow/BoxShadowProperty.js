@@ -1,10 +1,10 @@
-import { CLICK, DEBOUNCE, IF, LOAD, SUBSCRIBE } from "sapa";
-import icon from "elf/editor/icon/icon";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
-import boxShadow from "elf/editor/preset/box-shadow";
+import { CLICK, DEBOUNCE, IF, LOAD, SUBSCRIBE, createComponent } from "sapa";
 
 import "./BoxShadowProperty.scss";
+
+import icon from "elf/editor/icon/icon";
+import boxShadow from "elf/editor/preset/box-shadow";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class BoxShadowProperty extends BaseProperty {
   getTitle() {

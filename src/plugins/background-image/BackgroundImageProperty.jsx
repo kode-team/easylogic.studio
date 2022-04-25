@@ -1,10 +1,16 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
-
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+  createComponent,
+} from "sapa";
 
 import "./BackgroundImageProperty.scss";
+
 import { iconUse } from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class BackgroundImageProperty extends BaseProperty {
   getTitle() {

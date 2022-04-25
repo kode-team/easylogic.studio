@@ -1,10 +1,17 @@
-import { CLICK, IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "sapa";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { Length } from "elf/editor/unit/Length";
+import {
+  CLICK,
+  IF,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  THROTTLE,
+  createComponent,
+} from "sapa";
 
 import "./PositionProperty.scss";
-import { createComponent } from "sapa";
-import { round } from "elf/utils/math";
+
+import { round } from "elf/core/math";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { Length } from "elf/editor/unit/Length";
 
 const DEFAULT_SIZE = 0;
 

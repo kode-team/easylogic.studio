@@ -1,16 +1,17 @@
 // import { Editor } from "elf/editor/manager/Editor";
+import DefaultLayoutItemProperty from "./DefaultLayoutItemProperty";
+import FlexGrowToolView from "./FlexGrowToolView";
 import FlexLayoutEditor from "./FlexLayoutEditor";
 // import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
 import GridBoxEditor from "./GridBoxEditor";
 import GridGapEditor from "./GridGapEditor";
+import GridGrowToolView from "./GridGrowToolView";
 import GridLayoutEditor from "./GridLayoutEditor";
 // import GridLayoutItemProperty from "./GridLayoutItemProperty";
 import LayoutProperty from "./LayoutProperty";
-import DefaultLayoutItemProperty from "./DefaultLayoutItemProperty";
-import ResizingProperty from "./ResizingProperty";
 import ResizingItemProperty from "./ResizingItemProperty";
-import FlexGrowToolView from "./FlexGrowToolView";
-import GridGrowToolView from "./GridGrowToolView";
+import ResizingProperty from "./ResizingProperty";
+
 import { CanvasViewToolLevel } from "elf/editor/types/editor";
 
 /**

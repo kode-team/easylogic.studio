@@ -1,6 +1,7 @@
 // import { Editor } from "elf/editor/manager/Editor";
 import HTMLRenderer from "./HTMLRenderer";
 import ArtBoardRender from "./HTMLRenderer/ArtBoardRender";
+import BooleanPathRender from "./HTMLRenderer/BooleanPathRender";
 import CircleRender from "./HTMLRenderer/CircleRender";
 import CubeRender from "./HTMLRenderer/CubeRender";
 import ImageRender from "./HTMLRenderer/ImageRender";
@@ -15,7 +16,6 @@ import SVGTextRender from "./HTMLRenderer/SVGTextRender";
 import TemplateRender from "./HTMLRenderer/TemplateRender";
 import TextRender from "./HTMLRenderer/TextRender";
 import VideoRender from "./HTMLRenderer/VideoRender";
-import BooleanPathRender from "./HTMLRenderer/BooleanPathRender";
 
 /**
  *

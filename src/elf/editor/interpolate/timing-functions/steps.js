@@ -1,4 +1,4 @@
-import { round } from "elf/utils/math";
+import { round } from "elf/core/math";
 
 /**
  * step timing function

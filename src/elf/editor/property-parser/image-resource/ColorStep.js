@@ -1,11 +1,11 @@
-import { Length } from "elf/editor/unit/Length";
-
-import { convertMatches } from "elf/utils/parser";
-import { repeat } from "elf/utils/func";
-import { randomNumber } from "elf/utils/create";
-import Color from "elf/utils/Color";
-import { uuidShort } from "elf/utils/math";
 import { TimingFunction } from "../../types/model";
+
+import * as Color from "elf/core/color";
+import { randomNumber } from "elf/core/color/create";
+import { convertMatches } from "elf/core/color/parser";
+import { repeat } from "elf/core/func";
+import { uuidShort } from "elf/core/math";
+import { Length } from "elf/editor/unit/Length";
 import { parseOneValue, parseValue } from "elf/utils/css-function-parser";
 
 export class ColorStep {

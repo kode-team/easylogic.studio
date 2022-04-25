@@ -1,5 +1,5 @@
-import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { Transform } from "../../property-parser/Transform";
+import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
 import { makeInterpolateTransformLength } from "./transform/makeInterpolateTransformLength";
 import { makeInterpolateTransformNumber } from "./transform/makeInterpolateTransformNumber";

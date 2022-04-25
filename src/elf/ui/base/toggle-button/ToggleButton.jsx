@@ -1,4 +1,13 @@
-import { LOAD, CLICK, SUBSCRIBE_SELF, BIND } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  SUBSCRIBE_SELF,
+  BIND,
+  DOMDIFF,
+  PREVENT,
+  STOP,
+} from "sapa";
+
 import { BaseUI } from "../BaseUI";
 import "./ToggleButton.scss";
 
@@ -19,7 +28,7 @@ export class ToggleButton extends BaseUI {
     return <div class="small-editor button" ref="$body"></div>;
   }
 
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var { checked, checkedValue } = this.state;
     return /*html*/ `
         <div class='elf--toggle-button'>
@@ -27,7 +36,7 @@ export class ToggleButton extends BaseUI {
                 ${this.state.toggleValues
                   .map((it, index) => {
                     let label = this.state.toggleLabels[index];
-                    let title = this.state.toggleTitles[index] || label;
+                    let title = this.state.toggleTitles[index];
 
                     return (
                       <div
@@ -73,7 +82,7 @@ export class ToggleButton extends BaseUI {
     return this.state.checked;
   }
 
-  [CLICK("$el button")](e) {
+  [CLICK("$el button") + PREVENT + STOP](e) {
     const value = e.$dt.value;
     const selectedIndex = this.state.toggleValues.findIndex((v) => v === value);
 

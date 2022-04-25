@@ -1,4 +1,3 @@
-import icon from "elf/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -9,13 +8,14 @@ import {
   DEBOUNCE,
   STOP,
   SUBSCRIBE,
+  createComponent,
 } from "sapa";
 
+import "./SelectorProperty.scss";
+
+import icon from "elf/editor/icon/icon";
 import { Selector } from "elf/editor/property-parser/Selector";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./SelectorProperty.scss";
-import { createComponent } from "sapa";
 
 const selectorList = [
   "", // custom

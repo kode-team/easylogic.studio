@@ -59,3 +59,8 @@ export const MenuItemType = {
   SUBMENU: "submenu",
   DROPDOWN: "dropdown",
 };
+
+export const ViewModeType = {
+  CanvasView: "CanvasView",
+  PathEditorView: "PathEditorView",
+};

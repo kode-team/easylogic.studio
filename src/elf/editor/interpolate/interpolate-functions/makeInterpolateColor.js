@@ -1,5 +1,5 @@
-import Color from "elf/utils/Color";
-import { interpolateRGB } from "elf/utils/mixin";
+import * as Color from "elf/core/color";
+import { interpolateRGB } from "elf/core/color/mixin";
 
 export function makeInterpolateColor(layer, property, startColor, endColor) {
   var s = Color.parse(startColor || "rgba(0, 0, 0, 1)");

@@ -1,7 +1,8 @@
-import { Length } from "elf/editor/unit/Length";
-import { PropertyItem } from "elf/editor/items/PropertyItem";
-import { convertMatches, reverseMatches } from "elf/utils/parser";
 import { isNumber } from "sapa";
+
+import { convertMatches, reverseMatches } from "elf/core/color/parser";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { Length } from "elf/editor/unit/Length";
 
 export class TextShadow extends PropertyItem {
   static parse(obj) {

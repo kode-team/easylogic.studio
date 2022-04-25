@@ -1,5 +1,5 @@
+import { repeat } from "elf/core/func";
 import { ColorStep } from "elf/editor/property-parser/image-resource/ColorStep";
-import { repeat } from "elf/utils/func";
 
 export default {
   title: "Random Radial",

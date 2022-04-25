@@ -1,9 +1,10 @@
 import { CLICK, BIND } from "sapa";
+
+import "./PatternSizeEditor.scss";
+
 import { Pattern } from "elf/editor/property-parser/Pattern";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
-
-import "./PatternSizeEditor.scss";
 
 export default class PatternSizeEditor extends EditorElement {
   initState() {

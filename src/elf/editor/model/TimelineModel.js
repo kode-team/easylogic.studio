@@ -1,10 +1,11 @@
-import { uuidShort } from "elf/utils/math";
-import { clone, isNotUndefined, isUndefined } from "sapa";
-import { second, timecode, framesToTimecode } from "elf/utils/time";
+import { clone, isNotUndefined, isUndefined, Dom } from "sapa";
+
 import { createTimingFunction } from "../interpolate/index";
-import { Dom } from "sapa";
-import { AssetModel } from "./AssetModel";
 import { createInterpolateFunction } from "../interpolate/interpolate-functions";
+import { AssetModel } from "./AssetModel";
+
+import { uuidShort } from "elf/core/math";
+import { second, timecode, framesToTimecode } from "elf/core/time";
 
 export class TimelineModel extends AssetModel {
   getDefaultObject(obj = {}) {

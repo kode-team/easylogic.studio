@@ -1,10 +1,10 @@
-import { INPUT, CHANGE, LOAD, SUBSCRIBE_SELF } from "sapa";
+import { INPUT, CHANGE, LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
+
+import "./BorderRadiusEditor.scss";
+
 import { iconUse } from "elf/editor/icon/icon";
 import BorderRadius from "elf/editor/property-parser/BorderRadius";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-
-import "./BorderRadiusEditor.scss";
-import { createComponent } from "sapa";
 
 const typeList = [
   { key: "border-top-left-radius", title: "topLeft", label: "TL" },
@@ -66,7 +66,7 @@ export default class BorderRadiusEditor extends EditorElement {
             key: "border-all",
             checkedValue: BorderGroup.PARTITIAL,
             value: BorderGroup.ALL,
-            toggleLabels: ["border_inner", "border_inner"],
+            toggleLabels: [iconUse("border_inner"), iconUse("border_inner")],
             toggleValues: [BorderGroup.ALL, BorderGroup.PARTITIAL],
             onchange: "changeKeyValue",
           })}

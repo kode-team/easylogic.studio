@@ -1,0 +1,63 @@
+.elf--text-shadow-editor {
+  grid-template-columns: 1fr !important;
+  margin-bottom: 10px;
+  margin-left: -6px;
+
+
+  .label {
+    height: 20px;
+    // margin: 5px 0px;
+    &.hide {
+      display: none;
+    }
+    label {
+      padding: 2px 6px 2px 0px;
+      vertical-align: middle;
+
+    }
+  }
+
+  .tools {
+      vertical-align: middle;
+      text-align: right;
+      float:right;
+
+    select {
+      width: 100px !important;
+      display: inline-block ;
+    }
+  }
+
+
+  .shadow-item {
+    // height: 20px;
+    display: grid;
+    grid-template-columns: 18px 1.5fr 1fr 1fr 1fr 30px;
+    grid-column-gap: 2px;
+    text-align: center;
+    // margin-top: 5px;
+
+    > label {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    &.desc {
+      color: var(--elf--input-font-color);
+       > * {
+         text-align: left;
+       }
+    }
+
+    .tools {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: var(--elf--input-inactive-color);
+      }
+    }
+  }
+}

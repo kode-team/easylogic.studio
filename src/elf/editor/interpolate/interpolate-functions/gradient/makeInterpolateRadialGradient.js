@@ -1,6 +1,7 @@
-import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
-import { makeInterpolateString } from "../makeInterpolateString";
 import { makeInterpolateLength } from "../makeInterpolateLength";
+import { makeInterpolateString } from "../makeInterpolateString";
+import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
+
 import { RadialGradient } from "elf/editor/property-parser/image-resource/RadialGradient";
 
 function convertPercent(value, type) {

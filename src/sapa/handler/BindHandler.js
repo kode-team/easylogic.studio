@@ -1,6 +1,6 @@
-import BaseHandler from "./BaseHandler";
-import { isNumber, isObject } from "../functions/func";
 import { BIND_CHECK_FUNCTION, BIND_CHECK_DEFAULT_FUNCTION } from "../Event";
+import { isNumber, isObject } from "../functions/func";
+import BaseHandler from "./BaseHandler";
 
 const convertToPx = (key, value) => {
   if (isNumber(value)) {

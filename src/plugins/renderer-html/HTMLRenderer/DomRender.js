@@ -1,7 +1,9 @@
-import { Dom } from "sapa";
-import { isNotUndefined } from "sapa";
-import { CSS_TO_STRING, STRING_TO_CSS } from "elf/utils/func";
+import { Dom, isNotUndefined } from "sapa";
+
 import ItemRender from "./ItemRender";
+
+import { CSS_TO_STRING, STRING_TO_CSS } from "elf/core/func";
+import { Grid } from "elf/editor/property-parser/Grid";
 import { SVGFilter } from "elf/editor/property-parser/SVGFilter";
 import {
   AlignItems,
@@ -12,7 +14,6 @@ import {
   ResizingMode,
 } from "elf/editor/types/model";
 import { Length } from "elf/editor/unit/Length";
-import { Grid } from "elf/editor/property-parser/Grid";
 
 const WEBKIT_ATTRIBUTE_FOR_CSS = [
   "text-fill-color",

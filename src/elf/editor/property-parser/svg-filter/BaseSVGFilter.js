@@ -1,6 +1,7 @@
-import { PropertyItem } from "elf/editor/items/PropertyItem";
-import { uuidShort } from "elf/utils/math";
 import { SVGFilterClassName } from "../SVGFilter";
+
+import { uuidShort } from "elf/core/math";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
 
 const Primitive =
   "SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint".split(

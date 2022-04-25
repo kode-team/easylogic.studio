@@ -1,11 +1,14 @@
-import SegmentManager from "./SegmentManager";
-import { getDist, getXYInCircle, calculateAngle360 } from "elf/utils/math";
-import Point from "./Point";
-import PathStringManager from "./PathStringManager";
 import { mat4, vec3 } from "gl-matrix";
+
 import { clone } from "sapa";
+
 import { PathParser } from "./PathParser";
-import { toRectVerties } from "elf/utils/collision";
+import PathStringManager from "./PathStringManager";
+import Point from "./Point";
+import SegmentManager from "./SegmentManager";
+
+import { toRectVerties } from "elf/core/collision";
+import { getDist, getXYInCircle, calculateAngle360 } from "elf/core/math";
 
 const SEGMENT_DIRECTION = ["startPoint", "endPoint", "reversePoint"];
 

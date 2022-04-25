@@ -1,8 +1,8 @@
-import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./BackgroundImagePositionPopup.scss";
-import { createComponent } from "sapa";
+
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class BackgroundImagePositionPopup extends BasePopup {
   getTitle() {

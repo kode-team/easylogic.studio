@@ -1,5 +1,6 @@
-import { CSS_TO_STRING } from "elf/utils/func";
 import DomRender from "./DomRender";
+
+import { CSS_TO_STRING } from "elf/core/func";
 
 export default class ProjectRender extends DomRender {
   /**

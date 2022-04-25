@@ -1,5 +1,5 @@
-import { uuidShort } from "./uuid";
 import { isString } from "./func";
+import { uuidShort } from "./uuid";
 
 const map = {};
 const aliasMap = {};

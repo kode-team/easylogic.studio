@@ -1,10 +1,10 @@
-import { CLICK, LOAD, SUBSCRIBE_SELF } from "sapa";
-import { Length } from "elf/editor/unit/Length";
-import icon from "elf/editor/icon/icon";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { CLICK, LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./PerspectiveOriginEditor.scss";
-import { createComponent } from "sapa";
+
+import icon from "elf/editor/icon/icon";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 const typeList = [
   { key: "perspective-origin-x", title: "X" },

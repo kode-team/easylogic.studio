@@ -1,11 +1,19 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF, DEBOUNCE } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+  DEBOUNCE,
+  createComponent,
+} from "sapa";
+
+import "./BackdropFilterProperty.scss";
+import { filter_list } from "./util";
 
 import { iconUse } from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { filter_list } from "./util";
-import { createComponent } from "sapa";
 
-import "./BackdropFilterProperty.scss";
 export default class BackdropFilterProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("backdrop.filter.property.title");

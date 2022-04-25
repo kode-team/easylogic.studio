@@ -1,46 +1,18 @@
 import { UIElement } from "sapa";
+
+// eslint-disable-next-line no-unused-vars
+// import { SceneManager } from "../../manager/manager-items/SceneManager";
+
+// eslint-disable-next-line no-unused-vars
+import { MenuManager } from "elf/editor/manager/manager-items/MenuManager";
+import { NotifyType } from "elf/editor/types/editor";
 import {
   ADD_BODY_FIRST_MOUSEMOVE,
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP,
 } from "elf/editor/types/event";
-import { NotifyType } from "elf/editor/types/editor";
-// eslint-disable-next-line no-unused-vars
-import { SceneManager } from "../../manager/manager-items/SceneManager";
-// eslint-disable-next-line no-unused-vars
-import { MenuManager } from "elf/editor/manager/manager-items/MenuManager";
 
 export class EditorElement extends UIElement {
-  initialize() {
-    super.initialize();
-
-    // EditorElement 내부에서 i18n 을 바로 설정 할 수 있도록 셋팅한다.
-    this.$editor.registerI18nMessageWithLocale(this.initializeI18nMessage());
-  }
-
-  /**
-   * i18n 메세지 로드
-   *
-   * @example
-   *
-   * ```json
-   * {
-   *     en_US: {
-   *         "toolbar.add.rect.name": "add Rectangle"
-   *     }
-   * }
-   *
-   * ```
-   * ```js
-   * console.log(this.i18n("toolbar.add.rect.name"));
-   * ```
-   *
-   * @override
-   */
-  initializeI18nMessage() {
-    return {};
-  }
-
   /**
    * DomEventHandler 에서 이벤트 재정의를 할지 설정합니다.
    *
@@ -55,12 +27,24 @@ export class EditorElement extends UIElement {
   /**
    * Editor 루트를 재정의 해서 사용
    *
+   * UIElement 기반의 컴포넌트가 오더라도 최상위 editor 를 찾도록 한다.
+   *
+   * TODO: editor 객체를 주입하는 다른 방법을 조금 찾아봐야겠다.
+   *
    * @override
    * @returns {Editor}
    */
   get $editor() {
     if (!this.__cacheParentEditor) {
-      this.__cacheParentEditor = this.parent.$editor;
+      let parentElement = this.parent;
+
+      while (parentElement) {
+        if (parentElement.$editor) {
+          this.__cacheParentEditor = parentElement.$editor;
+          break;
+        }
+        parentElement = parentElement.parent;
+      }
     }
 
     return this.__cacheParentEditor;

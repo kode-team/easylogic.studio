@@ -1,5 +1,6 @@
-import { GradientType } from "elf/editor/types/model";
 import { ImageResource } from "./ImageResource";
+
+import { GradientType } from "elf/editor/types/model";
 
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
 

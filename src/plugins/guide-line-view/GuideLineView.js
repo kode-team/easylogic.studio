@@ -1,11 +1,13 @@
-import { BIND, SUBSCRIBE } from "sapa";
-import { toRectVerties } from "elf/utils/collision";
-import { makeGuidePoint } from "elf/utils/math";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
+import { BIND, SUBSCRIBE } from "sapa";
+
 import "./GuideLineView.scss";
+
+import { toRectVerties } from "elf/core/collision";
+import { makeGuidePoint } from "elf/core/math";
 import { PathParser } from "elf/editor/parser/PathParser";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const line = (source, target, className = "base-line") => {
   return /*html*/ `<line x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`;

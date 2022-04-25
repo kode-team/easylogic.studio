@@ -1,7 +1,7 @@
-import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { Offset } from "./Offset";
 
-import { reverseMatches, convertMatches } from "elf/utils/parser";
+import { reverseMatches, convertMatches } from "elf/core/color/parser";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { Length } from "elf/editor/unit/Length";
 
 export class Keyframe extends PropertyItem {

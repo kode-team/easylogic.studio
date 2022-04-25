@@ -1,4 +1,4 @@
-import { os } from "elf/utils/detect";
+import { os } from "elf/core/detect";
 
 export const KEY_CODE = {
   backspace: 0x08, // 8

@@ -1,9 +1,6 @@
+import { SUBSCRIBE, registElement } from "sapa";
+
 import BaseWindow from "./BaseWindow";
-
-import { SUBSCRIBE } from "sapa";
-
-import { registElement } from "sapa";
-
 import "./ProjectWindow.scss";
 
 export default class ProjectWindow extends BaseWindow {

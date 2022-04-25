@@ -1,8 +1,10 @@
-import { Length } from "elf/editor/unit/Length";
-import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { mat4 } from "gl-matrix";
-import { degreeToRadian } from "elf/utils/math";
+
 import { TransformCache } from "./TransformCache";
+
+import { degreeToRadian } from "elf/core/math";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { Length } from "elf/editor/unit/Length";
 
 const TRANSFORM_REG =
   /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)?|matrix(3d)?|perspective)\(([^)]*)\))/gi;

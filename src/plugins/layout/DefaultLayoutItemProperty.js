@@ -5,14 +5,14 @@ import {
   LOAD,
   SUBSCRIBE,
   SUBSCRIBE_SELF,
+  createComponent,
 } from "sapa";
 
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
 import "./DefaultLayoutItemProperty.scss";
-import { Constraints, ConstraintsDirection } from "elf/editor/types/model";
+
 import { iconUse } from "elf/editor/icon/icon";
-import { createComponent } from "sapa";
+import { Constraints, ConstraintsDirection } from "elf/editor/types/model";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class DefaultLayoutItemProperty extends BaseProperty {
   getTitle() {

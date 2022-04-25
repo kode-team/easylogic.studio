@@ -1,4 +1,4 @@
-import { getVertiesCenterY } from "elf/utils/math";
+import { getVertiesCenterY } from "elf/core/math";
 
 export default {
   command: "sort.middle",

@@ -1,7 +1,9 @@
-import { Gradient } from "./Gradient";
 import { isNumber } from "sapa";
-import { parseOneValue } from "elf/utils/css-function-parser";
+
+import { Gradient } from "./Gradient";
+
 import { FuncType } from "elf/editor/types/model";
+import { parseOneValue } from "elf/utils/css-function-parser";
 
 const DEFINED_DIRECTIONS = {
   0: "to top",

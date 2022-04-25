@@ -7,18 +7,21 @@ import {
   BIND,
   DOMDIFF,
   SUBSCRIBE_SELF,
+  isFunction,
+  isNotUndefined,
+  initializeGroupVariables,
+  variable,
+  Dom,
+  createComponent,
+  isArray,
+  isString,
 } from "sapa";
-import { EditorElement } from "../common/EditorElement";
 
+import { EditorElement } from "../common/EditorElement";
 import "./DropdownMenu.scss";
-import { isFunction, isNotUndefined } from "sapa";
-import { initializeGroupVariables, variable } from "sapa";
+
 import { iconUse } from "elf/editor/icon/icon";
-import { Dom } from "sapa";
 import { Length } from "elf/editor/unit/Length";
-import { createComponent } from "sapa";
-import { isArray } from "sapa";
-import { isString } from "sapa";
 
 function makeMenuItem(it) {
   if (it === "-") {

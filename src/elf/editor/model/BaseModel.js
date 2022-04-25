@@ -1,5 +1,6 @@
 import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "sapa";
-import { uuid } from "elf/utils/math";
+
+import { uuid } from "elf/core/math";
 
 /**
  * Item , 그리기를 위한 기본 모델

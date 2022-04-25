@@ -1,12 +1,13 @@
 // import { Editor } from "elf/editor/manager/Editor";
-import { iconUse } from "elf/editor/icon/icon";
-import { StrokeLineCap, StrokeLineJoin } from "elf/editor/types/model";
-import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 import ColorMatrixEditor from "./editor/ColorMatrixEditor";
 import FuncFilterEditor from "./editor/FuncFilterEditor";
 import SVGFilterEditor from "./SVGFilterEditor";
 import SVGFilterPopup from "./SVGFilterPopup";
 import SVGFilterSelectEditor from "./SVGFilterSelectEditor";
+
+import { iconUse } from "elf/editor/icon/icon";
+import { StrokeLineCap, StrokeLineJoin } from "elf/editor/types/model";
+import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 
 /**
  *

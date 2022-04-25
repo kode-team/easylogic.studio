@@ -1,4 +1,5 @@
 import { isFunction } from "sapa";
+
 import { iconUse } from "elf/editor/icon/icon";
 
 export class IconManager {

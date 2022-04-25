@@ -1,4 +1,4 @@
-import Color from "elf/utils/Color";
+import * as Color from "elf/core/color";
 
 export default {
   title: "random",

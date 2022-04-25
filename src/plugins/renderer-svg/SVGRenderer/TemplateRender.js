@@ -1,5 +1,6 @@
-import { TemplateEngine } from "plugins/renderer-html/HTMLRenderer/template-engine/TemplateEngine";
 import SVGLayerRender from "./SVGLayerRender";
+
+import { TemplateEngine } from "plugins/renderer-html/HTMLRenderer/template-engine/TemplateEngine";
 
 export default class TemplateRender extends SVGLayerRender {
   /**

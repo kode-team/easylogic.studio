@@ -1,11 +1,10 @@
-import BaseWindow from "./BaseWindow";
+import { registElement, SUBSCRIBE } from "sapa";
+
 import shortcuts from "../../shortcuts";
-import { os } from "elf/utils/detect";
-
-import { registElement } from "sapa";
-import { SUBSCRIBE } from "sapa";
-
+import BaseWindow from "./BaseWindow";
 import "./ShortcutWindow.scss";
+
+import { os } from "elf/core/detect";
 
 const categories = new Set();
 

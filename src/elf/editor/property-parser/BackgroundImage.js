@@ -1,17 +1,19 @@
-import { Length } from "elf/editor/unit/Length";
-import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { combineKeyArray, isString, keyEach, keyMap } from "sapa";
+
+import { ConicGradient } from "./image-resource/ConicGradient";
+import { Gradient } from "./image-resource/Gradient";
+import { LinearGradient } from "./image-resource/LinearGradient";
+import { RadialGradient } from "./image-resource/RadialGradient";
+import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
+import { RepeatingLinearGradient } from "./image-resource/RepeatingLinearGradient";
+import { RepeatingRadialGradient } from "./image-resource/RepeatingRadialGradient";
 import { StaticGradient } from "./image-resource/StaticGradient";
 import { URLImageResource } from "./image-resource/URLImageResource";
-import { LinearGradient } from "./image-resource/LinearGradient";
-import { RepeatingLinearGradient } from "./image-resource/RepeatingLinearGradient";
-import { RadialGradient } from "./image-resource/RadialGradient";
-import { RepeatingRadialGradient } from "./image-resource/RepeatingRadialGradient";
-import { ConicGradient } from "./image-resource/ConicGradient";
-import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
-import { Gradient } from "./image-resource/Gradient";
-import { combineKeyArray, isString, keyEach, keyMap } from "sapa";
-import { CSS_TO_STRING } from "elf/utils/func";
+
+import { CSS_TO_STRING } from "elf/core/func";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { GradientType, VisibilityType } from "elf/editor/types/model";
+import { Length } from "elf/editor/unit/Length";
 import { parseGroupValue, parseOneValue } from "elf/utils/css-function-parser";
 
 const RepeatList = [

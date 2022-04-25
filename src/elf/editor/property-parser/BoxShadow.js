@@ -1,8 +1,9 @@
-import { Length } from "elf/editor/unit/Length";
-import { PropertyItem } from "elf/editor/items/PropertyItem";
-import { convertMatches, reverseMatches } from "elf/utils/parser";
-import { BoxShadowStyle } from "elf/editor/types/model";
 import { isNumber } from "sapa";
+
+import { convertMatches, reverseMatches } from "elf/core/color/parser";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { BoxShadowStyle } from "elf/editor/types/model";
+import { Length } from "elf/editor/unit/Length";
 
 export class BoxShadow extends PropertyItem {
   static parse(obj) {

@@ -10,9 +10,9 @@ const pkgJSON = require("./package.json");
 export default defineConfig({
   server: {
     open: true,
-    watch: {
-      usePolling: true,
-    },
+    // watch: {
+    //   usePolling: true,
+    // },
     hmr: {
       protocol: "ws",
       host: "localhost",
@@ -30,12 +30,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "elf/ui": path.resolve(__dirname, "./src/elf/ui"),
+      "elf/core": path.resolve(__dirname, "./src/elf/core"),
       elf: path.resolve(__dirname, "./src/elf"),
       sapa: path.resolve(__dirname, "./src/sapa"),
       style: path.resolve(__dirname, "./src/scss"),
       plugins: path.resolve(__dirname, "./src/plugins"),
       "export-library": path.resolve(__dirname, "./src/export-library"),
-      "editor-layouts": path.resolve(__dirname, "./src/editor-layouts"),
+      "apps/common": path.resolve(__dirname, "./src/apps/common"),
+      apps: path.resolve(__dirname, "./src/apps"),
     },
   },
   plugins: [

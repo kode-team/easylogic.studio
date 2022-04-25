@@ -1,8 +1,9 @@
-import { PathParser } from "elf/editor/parser/PathParser";
-import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
-import { Length } from "elf/editor/unit/Length";
-import { calculateAngle } from "elf/utils/math";
 import { Transform } from "../../property-parser/Transform";
+import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
+
+import { calculateAngle } from "elf/core/math";
+import { PathParser } from "elf/editor/parser/PathParser";
+import { Length } from "elf/editor/unit/Length";
 
 export function makeInterpolateOffsetPath(
   layer,

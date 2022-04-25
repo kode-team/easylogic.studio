@@ -1,10 +1,10 @@
-import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
-import { makeInterpolateLinearGradient } from "./gradient/makeInterpolateLinearGradient";
-import { makeInterpolateRepeatingLinearGradient } from "./gradient/makeInterpolateRepeatingLinearGradient";
-import { makeInterpolateRadialGradient } from "./gradient/makeInterpolateRadialGradient";
-import { makeInterpolateRepeatingRadialGradient } from "./gradient/makeInterpolateRepeatingRadialGradient";
 import { makeInterpolateConicGradient } from "./gradient/makeInterpolateConicGradient";
+import { makeInterpolateLinearGradient } from "./gradient/makeInterpolateLinearGradient";
+import { makeInterpolateRadialGradient } from "./gradient/makeInterpolateRadialGradient";
 import { makeInterpolateRepeatingConicGradient } from "./gradient/makeInterpolateRepeatingConicGradient";
+import { makeInterpolateRepeatingLinearGradient } from "./gradient/makeInterpolateRepeatingLinearGradient";
+import { makeInterpolateRepeatingRadialGradient } from "./gradient/makeInterpolateRepeatingRadialGradient";
+import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 // import { makeInterpolateRepeatingLinearGradient } from "./gradient/makeInterpolateRepeatingLinearGradient";
 // import { makeInterpolateRepeatingRadialGradient } from "./gradient/makeInterpolateRepeatingRadialGradient";
 // import { makeInterpolateRepeatingConicGradient } from "./gradient/makeInterpolateRepeatingConicGradient";

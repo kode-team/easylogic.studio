@@ -1,7 +1,8 @@
-import Color from "elf/utils/Color";
-import { CSS_TO_STRING } from "elf/utils/func";
 import { SampleLayer } from "./SampleLayer";
 import SampleRender from "./SampleRender";
+
+import * as Color from "elf/core/color";
+import { CSS_TO_STRING } from "elf/core/func";
 
 /**
  *

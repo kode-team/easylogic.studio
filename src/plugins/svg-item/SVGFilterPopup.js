@@ -1,10 +1,9 @@
-import { LOAD, SUBSCRIBE } from "sapa";
-import { SVGFilter } from "elf/editor/property-parser/SVGFilter";
-import { isNotUndefined } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import { LOAD, SUBSCRIBE, isNotUndefined, createComponent } from "sapa";
 
 import "./SVGFilterPopup.scss";
-import { createComponent } from "sapa";
+
+import { SVGFilter } from "elf/editor/property-parser/SVGFilter";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class SVGFilterPopup extends BasePopup {
   getTitle() {

@@ -1,20 +1,28 @@
-import { rgb } from "elf/utils/formatter";
-import { LinearGradient } from "../../property-parser/image-resource/LinearGradient";
-import { ColorStep } from "../../property-parser/image-resource/ColorStep";
-import { RadialGradient } from "../../property-parser/image-resource/RadialGradient";
-import { Length } from "elf/editor/unit/Length";
-import { ConicGradient } from "../../property-parser/image-resource/ConicGradient";
-import { Project } from "plugins/default-items/layers/Project";
-import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
-import { Layer } from "elf/editor/model/LayerModel";
+// import { SVGEllipseLayer } from "@items/layers/SVGEllipseLayer";
+// import { SVGRectLayer } from "@items/layers/SVGRectLayer";
+
+// import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "sapa";
+
+import { combineKeyArray, isString, keyEach } from "sapa";
+
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
+import { ColorStep } from "../../property-parser/image-resource/ColorStep";
+import { ConicGradient } from "../../property-parser/image-resource/ConicGradient";
+import { LinearGradient } from "../../property-parser/image-resource/LinearGradient";
+import { RadialGradient } from "../../property-parser/image-resource/RadialGradient";
 import { FileImageResource } from "../../property-parser/image-resource/URLImageResource";
-import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "sapa";
-import { calculateAngle } from "elf/utils/math";
-import { SVGPathItem } from "plugins/default-items/layers/SVGPathItem";
-import { SVGRectLayer } from "@items/layers/SVGRectLayer";
-import { SVGEllipseLayer } from "@items/layers/SVGEllipseLayer";
+
+import { rgb } from "elf/core/color/formatter";
+import { CSS_TO_STRING } from "elf/core/func";
+import { calculateAngle } from "elf/core/math";
+// import { Layer } from "elf/editor/model/LayerModel";
+import { Length } from "elf/editor/unit/Length";
+import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
+import { Project } from "plugins/default-items/layers/Project";
 import { SVGItem } from "plugins/default-items/layers/SVGItem";
+import { SVGPathItem } from "plugins/default-items/layers/SVGPathItem";
+
+CSS_TO_STRING, keyEach;
 
 export const Sketch = {
   Style: {
@@ -312,16 +320,16 @@ export const SketchUtil = {
   },
 
   newOriginLayerClass(layer) {
-    var LayerClass = Layer;
+    var LayerClass = layer || {};
 
     if (layer._class === "shapeGroup") {
       LayerClass = SVGItem;
     } else if (layer._class === "shapePath") {
       LayerClass = SVGPathItem;
     } else if (layer._class === "rectangle") {
-      LayerClass = SVGRectLayer;
+      // LayerClass = SVGRectLayer;
     } else if (layer._class === "oval") {
-      LayerClass = SVGEllipseLayer;
+      // LayerClass = SVGEllipseLayer;
     }
 
     return LayerClass;

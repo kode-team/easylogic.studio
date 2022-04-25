@@ -1,6 +1,6 @@
 // import { Editor } from "elf/editor/manager/Editor";
-import PathDrawView from "./PathDrawView";
 import DrawManager from "./DrawManager";
+import PathDrawView from "./PathDrawView";
 
 /**
  *

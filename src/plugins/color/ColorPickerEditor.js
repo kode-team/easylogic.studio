@@ -1,12 +1,13 @@
-import Hue from "./colorpicker/control/Hue";
-import Opacity from "./colorpicker/control/Opacity";
-import ColorView from "./colorpicker/control/ColorView";
+import { SUBSCRIBE_SELF, createComponent } from "sapa";
+
 import ColorInformation from "./colorpicker/ColorInformation";
 import Palette from "./colorpicker/ColorPalette";
-import ColorManagerV2 from "plugins/color/ColorManagerV2";
-import { SUBSCRIBE_SELF } from "sapa";
+import ColorView from "./colorpicker/control/ColorView";
+import Hue from "./colorpicker/control/Hue";
+import Opacity from "./colorpicker/control/Opacity";
+
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { createComponent } from "sapa";
+import ColorManagerV2 from "plugins/color/ColorManagerV2";
 
 export default class ColorPickerEditor extends EditorElement {
   created() {

@@ -1,9 +1,10 @@
+import { IntersectEpsilonType } from "../types/editor";
+
 import {
   intersectRectRect,
   polyPoly,
   vertiesToRectangle,
-} from "elf/utils/collision";
-import { IntersectEpsilonType } from "../types/editor";
+} from "elf/core/collision";
 
 export default {
   startCache() {},

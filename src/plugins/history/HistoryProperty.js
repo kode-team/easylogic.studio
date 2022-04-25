@@ -1,8 +1,9 @@
 import { LOAD, DOMDIFF, SUBSCRIBE } from "sapa";
-import icon from "elf/editor/icon/icon";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 import "./HistoryProperty.scss";
+
+import icon from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class HistoryProperty extends BaseProperty {
   afterRender() {

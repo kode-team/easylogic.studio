@@ -1,4 +1,5 @@
 import { BIND } from "sapa";
+
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class ColorView extends EditorElement {

@@ -1,14 +1,16 @@
+import { vec3 } from "gl-matrix";
+
+import { isArray } from "sapa";
+
 import { Gradient } from "./Gradient";
 
-import { Length, Position } from "elf/editor/unit/Length";
+import { rectToVerties } from "elf/core/collision";
 import {
   FuncType,
   RadialGradientSizeType,
   RadialGradientType,
 } from "elf/editor/types/model";
-import { vec3 } from "gl-matrix";
-import { isArray } from "sapa";
-import { rectToVerties } from "elf/utils/collision";
+import { Length, Position } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
 
 const DEFINED_POSITIONS = {

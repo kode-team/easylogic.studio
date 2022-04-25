@@ -1,8 +1,8 @@
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY, repeat } from "sapa";
-import { getXYInCircle, getDist } from "elf/utils/math";
-import { Length } from "elf/editor/unit/Length";
+import { CSS_TO_STRING, repeat, OBJECT_TO_PROPERTY } from "elf/core/func";
+import { getXYInCircle, getDist } from "elf/core/math";
 import icon from "elf/editor/icon/icon";
 import { Component } from "elf/editor/model/Component";
+import { Length } from "elf/editor/unit/Length";
 
 // eslint-disable-next-line no-unused-vars
 const customKeyValue = {

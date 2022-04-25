@@ -1,7 +1,7 @@
-import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { Filter } from "../../property-parser/Filter";
-import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
+import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { makeInterpolateFilterItem } from "./makeInterpolateFilterItem";
+import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
 
 export function makeInterpolateFilter(layer, property, startValue, endValue) {
   var s = Filter.parseStyle(startValue);

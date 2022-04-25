@@ -1,4 +1,4 @@
-import { getBezierPointOne } from "elf/utils/bezier";
+import { getBezierPointOne } from "elf/core/bezier";
 
 export default function makeInterpolateCubic(
   sx,

@@ -3,12 +3,14 @@
     "baseUrl": ".",
     "paths": {
       "elf/ui": ["./src/elf/ui"],      
+      "elf/core": ["./src/elf/core"],      
       "elf/*": ["./src/elf/*"],
       "sapa": ["./src/sapa"],
       "style/*": ["./src/scss/*"],
       "export-library/*": ["./src/export-library/*"],
       "plugins/*": ["./src/plugins/*"],
-      "editor-layouts/*": ["src/editor-layouts/*"]
+      "apps/common": ["src/apps/common/*"],      
+      "apps/*": ["src/apps/*"]
     }
   }
 }

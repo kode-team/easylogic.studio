@@ -1,5 +1,6 @@
-import { timecode } from "elf/utils/time";
 import _currentProject from "./_currentProject";
+
+import { timecode } from "elf/core/time";
 
 export default {
   command: "nextTimelineItem",

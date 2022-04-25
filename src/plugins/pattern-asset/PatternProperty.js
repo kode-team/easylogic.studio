@@ -1,10 +1,17 @@
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  DEBOUNCE,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+  createComponent,
+} from "sapa";
+
+import "./PatternProperty.scss";
 
 import { iconUse } from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./PatternProperty.scss";
-import { createComponent } from "sapa";
 
 export default class PatternProperty extends BaseProperty {
   getTitle() {

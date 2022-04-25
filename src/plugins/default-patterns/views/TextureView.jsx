@@ -1,23 +1,14 @@
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-
 import "./TextureView.scss";
-import { Tabs } from "elf/editor/ui/view/Tabs";
-// import { variable } from "sapa";
 
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { TabPanel, Tabs } from "elf/ui";
 export default class TextureView extends EditorElement {
-  components() {
-    return {
-      Tabs,
-    };
-  }
-
   template() {
     const isItemMode = this.$config.get("editor.design.mode") === "item";
 
     return (
       <div class="elf--texture">
-        <object
-          refClass="Tabs"
+        <Tabs
           ref="$tab"
           selectedValue={isItemMode ? "svg" : "css"}
           onchange={(value) => {
@@ -27,15 +18,15 @@ export default class TextureView extends EditorElement {
           {isItemMode ? (
             ""
           ) : (
-            <object refClass="TabPanel" value="css" title="CSS">
+            <TabPanel value="css" title="CSS">
               <object refClass="CSSTextureView" />
-            </object>
+            </TabPanel>
           )}
 
-          <object refClass="TabPanel" value="svg" title="SVG">
+          <TabPanel value="svg" title="SVG">
             <object refClass="SVGTextureView" />
-          </object>
-        </object>
+          </TabPanel>
+        </Tabs>
       </div>
     );
   }

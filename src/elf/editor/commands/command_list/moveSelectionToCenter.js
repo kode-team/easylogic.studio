@@ -1,4 +1,4 @@
-import { itemsToRectVerties, rectToVerties } from "elf/utils/collision";
+import { itemsToRectVerties, rectToVerties } from "elf/core/collision";
 
 export default {
   command: "moveSelectionToCenter",

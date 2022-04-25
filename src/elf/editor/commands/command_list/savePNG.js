@@ -1,6 +1,6 @@
-import loadOriginalImage from "elf/editor/util/loadOriginalImage";
-import createImagePng from "elf/editor/util/createImagePng";
 import ExportManager from "elf/editor/manager/manager-items/ExportManager";
+import createImagePng from "elf/editor/util/createImagePng";
+import loadOriginalImage from "elf/editor/util/loadOriginalImage";
 
 export default {
   command: "savePNG",

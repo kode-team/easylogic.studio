@@ -1,6 +1,6 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import { SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
+
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
 
 export default class SVGTextProperty extends BaseProperty {
   getTitle() {

@@ -1,3 +1,5 @@
+import { vec3 } from "gl-matrix";
+
 import {
   POINTERSTART,
   BIND,
@@ -12,11 +14,12 @@ import {
   DOUBLETAB,
   DELAY,
   SUBSCRIBE,
+  Dom,
+  isFunction,
 } from "sapa";
-import PathGenerator from "elf/editor/parser/PathGenerator";
-import { Dom } from "sapa";
-import { PathParser } from "elf/editor/parser/PathParser";
-import { Length } from "elf/editor/unit/Length";
+
+import "./PathEditorView.scss";
+
 import {
   getBezierPoints,
   recoverBezier,
@@ -24,14 +27,14 @@ import {
   getBezierPointsQuard,
   recoverBezierLine,
   getBezierPointsLine,
-} from "elf/utils/bezier";
-import { isFunction } from "sapa";
-import { vec3 } from "gl-matrix";
-import { getDist } from "elf/utils/math";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+} from "elf/core/bezier";
+import { vertiesToRectangle } from "elf/core/collision";
+import { getDist } from "elf/core/math";
+import PathGenerator from "elf/editor/parser/PathGenerator";
+import { PathParser } from "elf/editor/parser/PathParser";
 import { END, MOVE } from "elf/editor/types/event";
-import "./PathEditorView.scss";
-import { vertiesToRectangle } from "elf/utils/collision";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 /**
  * convert array[x, y] to object{x, y}

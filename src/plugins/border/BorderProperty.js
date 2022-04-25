@@ -1,8 +1,15 @@
-import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import {
+  LOAD,
+  DEBOUNCE,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+  createComponent,
+} from "sapa";
 
 import "./BorderProperty.scss";
-import { createComponent } from "sapa";
+
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class BorderProperty extends BaseProperty {
   getTitle() {

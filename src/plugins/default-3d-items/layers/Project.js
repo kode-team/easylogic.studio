@@ -1,6 +1,7 @@
 import { mat4 } from "gl-matrix";
-import { calculateMatrix } from "elf/utils/math";
-import { itemsToRectVerties } from "elf/utils/collision";
+
+import { itemsToRectVerties } from "elf/core/collision";
+import { calculateMatrix } from "elf/core/math";
 import { TimelineModel } from "elf/editor/model/TimelineModel";
 
 const identity = mat4.create();

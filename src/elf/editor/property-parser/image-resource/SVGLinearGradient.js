@@ -1,10 +1,11 @@
 import { SVGGradient } from "./SVGGradient";
-import { Length } from "elf/editor/unit/Length";
+
 import {
   FuncType,
   GradientType,
   SpreadMethodType,
 } from "elf/editor/types/model";
+import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
 
 const SpreadMethodList = [

@@ -1,8 +1,8 @@
 import texture from "./icons/texture";
-import TextureView from "./views/TextureView";
 // import { Editor } from "elf/editor/manager/Editor";
 import CSSTextureView from "./views/CSSTextureView";
 import SVGTextureView from "./views/SVGTextureView";
+import TextureView from "./views/TextureView";
 
 /**
  *

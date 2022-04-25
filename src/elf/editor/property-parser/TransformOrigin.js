@@ -1,5 +1,6 @@
-import { Length } from "elf/editor/unit/Length";
 import { TransformOriginCache } from "./TransformOriginCache";
+
+import { Length } from "elf/editor/unit/Length";
 
 export class TransformOrigin {
   /**

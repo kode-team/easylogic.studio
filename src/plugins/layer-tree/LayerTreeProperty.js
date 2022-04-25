@@ -16,16 +16,17 @@ import {
   SUBSCRIBE_SELF,
   THROTTLE,
   CONFIG,
+  Dom,
 } from "sapa";
-import { iconUse, iconUseForPath } from "elf/editor/icon/icon";
-import { Length } from "elf/editor/unit/Length";
-import { KEY_CODE } from "elf/editor/types/key";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 import "./LayerTreeProperty.scss";
-import { Dom } from "sapa";
+
+import { iconUse, iconUseForPath } from "elf/editor/icon/icon";
 import { PathParser } from "elf/editor/parser/PathParser";
-import { TargetActionType } from "../../elf/editor/types/model";
+import { KEY_CODE } from "elf/editor/types/key";
+import { TargetActionType } from "elf/editor/types/model";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { Length } from "elf/editor/unit/Length";
 
 const DRAG_START_CLASS = "drag-start";
 

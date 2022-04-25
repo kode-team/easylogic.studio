@@ -1,8 +1,15 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DEBOUNCE, IF } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  DEBOUNCE,
+  IF,
+  createComponent,
+} from "sapa";
 
 import icon from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
 
 export default class PerspectiveProperty extends BaseProperty {
   getTitle() {

@@ -1,5 +1,6 @@
-import { CSS_TO_STRING } from "elf/utils/func";
 import LayerRender from "./LayerRender";
+
+import { CSS_TO_STRING } from "elf/core/func";
 
 const faceKeys = ["front", "back", "left", "right", "top", "bottom"];
 

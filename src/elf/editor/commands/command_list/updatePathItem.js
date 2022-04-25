@@ -1,11 +1,12 @@
 import { mat4, vec3 } from "gl-matrix";
-import { PathParser } from "elf/editor/parser/PathParser";
-import { rectToVerties } from "elf/utils/collision";
+
+import { rectToVerties } from "elf/core/collision";
 import {
   vertiesMap,
   calculateMatrix,
   calculateMatrixInverse,
-} from "elf/utils/math";
+} from "elf/core/math";
+import { PathParser } from "elf/editor/parser/PathParser";
 import { Transform } from "elf/editor/property-parser/Transform";
 
 export default {

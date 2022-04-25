@@ -1,11 +1,10 @@
-import { LOAD, CLICK, SUBSCRIBE, IF, DEBOUNCE } from "sapa";
-
-import icon from "elf/editor/icon/icon";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
-import textShadow from "elf/editor/preset/text-shadow";
+import { LOAD, CLICK, SUBSCRIBE, IF, DEBOUNCE, createComponent } from "sapa";
 
 import "./TextShadowProperty.scss";
+
+import icon from "elf/editor/icon/icon";
+import textShadow from "elf/editor/preset/text-shadow";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class TextShadowProperty extends BaseProperty {
   getTitle() {

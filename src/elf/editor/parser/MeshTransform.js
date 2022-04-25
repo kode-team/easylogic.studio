@@ -1,5 +1,5 @@
-import { getClosestPointBylineLine, polyPoint } from "elf/utils/collision";
-import { createBezier } from "elf/utils/bezier";
+import { createBezier } from "elf/core/bezier";
+import { getClosestPointBylineLine, polyPoint } from "elf/core/collision";
 
 export class MeshTransform {
   /**

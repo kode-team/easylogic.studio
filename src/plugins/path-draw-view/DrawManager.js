@@ -1,8 +1,9 @@
-import { Length } from "elf/editor/unit/Length";
-import { CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { CLICK, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
+
 import "./DrawManager.scss";
-import { createComponent } from "sapa";
+
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 export default class DrawManager extends EditorElement {
   initState() {

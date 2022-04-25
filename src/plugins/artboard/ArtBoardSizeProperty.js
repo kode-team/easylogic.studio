@@ -1,9 +1,17 @@
-import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
+import {
+  LOAD,
+  DOMDIFF,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+  createComponent,
+} from "sapa";
+
+import "./ArtBoardSizeProperty.scss";
+import artboardSize from "./preset/artboard.size";
 
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import artboardSize from "./preset/artboard.size";
-import "./ArtBoardSizeProperty.scss";
-import { createComponent } from "sapa";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
   getClassName() {

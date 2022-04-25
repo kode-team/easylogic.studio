@@ -1,4 +1,4 @@
-import { uuid } from "elf/utils/math";
+import { uuid } from "elf/core/math";
 
 /**
  * localStorage Manager

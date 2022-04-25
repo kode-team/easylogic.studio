@@ -1,9 +1,9 @@
-import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./LayoutProperty.scss";
-import { createComponent } from "sapa";
+
 import { Layout } from "elf/editor/types/model";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class LayoutProperty extends BaseProperty {
   getTitle() {

@@ -1,6 +1,8 @@
-import { toRectVertiesWithoutTransformOrigin } from "elf/utils/collision";
-import { isNotZero } from "sapa";
 import { vec3 } from "gl-matrix";
+
+import { isNotZero } from "sapa";
+
+import { toRectVertiesWithoutTransformOrigin } from "elf/core/collision";
 
 const MAX_SNAP_DISTANCE = 3;
 const DEFAULT_DIST_VECTOR = vec3.fromValues(0, 0, 0);

@@ -1,9 +1,9 @@
-import Color from "elf/utils/Color";
-import { BIND, POINTERSTART } from "sapa";
-import { clone } from "sapa";
+import { BIND, POINTERSTART, clone } from "sapa";
+
+import * as Color from "elf/core/color";
+import { END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
-import { END, MOVE } from "elf/editor/types/event";
 
 export default class Opacity extends EditorElement {
   initState() {

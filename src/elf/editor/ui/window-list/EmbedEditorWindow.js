@@ -1,9 +1,9 @@
-import BaseWindow from "./BaseWindow";
+import { registElement, SUBSCRIBE } from "sapa";
 
-import { registElement } from "sapa";
-import { SUBSCRIBE } from "sapa";
+import { createDesignEditor } from "apps/";
+
+import BaseWindow from "./BaseWindow";
 import "./ExportWindow.scss";
-import { createDesignEditor } from "editor-layouts/";
 
 export default class EmbedEditorWindow extends BaseWindow {
   getClassName() {

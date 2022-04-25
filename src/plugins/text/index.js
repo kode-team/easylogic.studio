@@ -1,4 +1,5 @@
 // import { Editor } from "elf/editor/manager/Editor";
+import { iconUse } from "elf/editor/icon/icon";
 import {
   TextClip,
   TextDecoration,
@@ -91,7 +92,7 @@ export default function (editor) {
             editor: "ToggleButton",
             editorOptions: {
               checkedValue: TextClip.TEXT,
-              toggleLabels: ["vignette", "vignette"],
+              toggleLabels: [iconUse("vignette"), iconUse("vignette")],
               toggleTitles: ["", "Text Clip"],
               toggleValues: [TextClip.NONE, TextClip.TEXT],
             },

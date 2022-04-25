@@ -1,5 +1,5 @@
-import { makeInterpolateLength } from "./makeInterpolateLength";
 import BorderRadius from "../../property-parser/BorderRadius";
+import { makeInterpolateLength } from "./makeInterpolateLength";
 
 const getBorderRadiusList = (radiusValue) => {
   var startObject = [];

@@ -1,5 +1,6 @@
 import { ImageResource } from "./ImageResource";
-import { OBJECT_TO_PROPERTY } from "elf/utils/func";
+
+import { OBJECT_TO_PROPERTY } from "elf/core/func";
 import { Length } from "elf/editor/unit/Length";
 
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];

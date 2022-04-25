@@ -1,3 +1,5 @@
+import { mat4, vec3 } from "gl-matrix";
+
 import {
   POINTERSTART,
   POINTEROUT,
@@ -5,11 +7,12 @@ import {
   IF,
   PREVENT,
   SUBSCRIBE,
+  clone,
 } from "sapa";
-import { Length } from "elf/editor/unit/Length";
-import { clone } from "sapa";
-import { mat4, vec3 } from "gl-matrix";
-import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
+
+import "./SelectionView.scss";
+
+import { getRotatePointer, rectToVerties } from "elf/core/collision";
 import {
   calculateAngle,
   calculateAngle360,
@@ -19,11 +22,11 @@ import {
   calculateRotationOriginMat4,
   round,
   vertiesMap,
-} from "elf/utils/math";
-import { getRotatePointer, rectToVerties } from "elf/utils/collision";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+} from "elf/core/math";
+import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { END, MOVE } from "elf/editor/types/event";
-import "./SelectionView.scss";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 var directionType = {
   1: "to top left",
@@ -37,11 +40,19 @@ var directionType = {
 };
 
 const SelectionToolEvent = class extends EditorElement {
-  [SUBSCRIBE("refreshSelectionTool")](isInitializeMatrix = true) {
+  checkViewMode() {
+    return this.$modeView.isCurrentMode("CanvasView");
+  }
+
+  [SUBSCRIBE("refreshSelectionTool") + IF("checkViewMode")](
+    isInitializeMatrix = true
+  ) {
     this.initSelectionTool(isInitializeMatrix);
   }
 
-  [SUBSCRIBE("updateViewport")](isInitializeMatrix = true) {
+  [SUBSCRIBE("updateViewport") + IF("checkViewMode")](
+    isInitializeMatrix = true
+  ) {
     if (this.$selection.isMany) {
       this.initSelectionTool(isInitializeMatrix);
     }
@@ -915,20 +926,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
   checkShow() {
     if (this.state.show && this.$selection.isMany) {
-      if (
-        this.$selection.hasChangedField(
-          "x",
-          "y",
-          "width",
-          "height",
-          "transform",
-          "transform-origin",
-          "perspective",
-          "perspective-origin"
-        )
-      ) {
-        return true;
-      }
+      return true;
     }
 
     return false;

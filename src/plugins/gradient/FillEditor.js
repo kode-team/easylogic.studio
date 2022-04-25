@@ -7,19 +7,19 @@ import {
   SUBSCRIBE,
   SUBSCRIBE_SELF,
   KEYUP,
+  isUndefined,
+  createComponent,
 } from "sapa";
-import { Length } from "elf/editor/unit/Length";
-
-import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
-import { SVGFill } from "elf/editor/property-parser/SVGFill";
-import { SVGStaticGradient } from "elf/editor/property-parser/image-resource/SVGStaticGradient";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { isUndefined } from "sapa";
-import { END, MOVE } from "elf/editor/types/event";
 
 import "./FillEditor.scss";
+
+import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
+import { SVGStaticGradient } from "elf/editor/property-parser/image-resource/SVGStaticGradient";
+import { SVGFill } from "elf/editor/property-parser/SVGFill";
+import { END, MOVE } from "elf/editor/types/event";
 import { GradientType } from "elf/editor/types/model";
-import { createComponent } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 export default class FillEditor extends EditorElement {
   initState() {

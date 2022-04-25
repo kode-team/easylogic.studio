@@ -1,10 +1,11 @@
 import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "sapa";
 
+import "./ImageAssetsProperty.scss";
+
 import icon from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 import revokeObjectUrl from "elf/editor/util/revokeObjectUrl";
 
-import "./ImageAssetsProperty.scss";
 export default class ImageAssetsProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("image.asset.property.title");

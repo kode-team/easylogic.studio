@@ -1,7 +1,7 @@
-import { CLICK, DOMDIFF, LOAD, SUBSCRIBE_SELF } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { CLICK, DOMDIFF, LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./FlexLayoutEditor.scss";
+
 import { iconUse } from "elf/editor/icon/icon";
 import {
   AlignItems,
@@ -9,7 +9,7 @@ import {
   FlexWrap,
   JustifyContent,
 } from "elf/editor/types/model";
-import { createComponent } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class FlexLayoutEditor extends EditorElement {
   getDirectionOptions() {
@@ -125,7 +125,7 @@ export default class FlexLayoutEditor extends EditorElement {
                           ref: "$wrap",
                           checkedValue: "wrap",
                           value: this.state["flex-wrap"] || FlexWrap.NOWRAP,
-                          toggleLabels: ["wrap", "wrap"],
+                          toggleLabels: [iconUse("wrap"), iconUse("wrap")],
                           toggleValues: [FlexWrap.NOWRAP, FlexWrap.WRAP],
                           onchange: "changeKeyValue",
                         })}

@@ -1,4 +1,4 @@
-import { getVertiesMaxY } from "elf/utils/math";
+import { getVertiesMaxY } from "elf/core/math";
 
 export default {
   command: "sort.bottom",

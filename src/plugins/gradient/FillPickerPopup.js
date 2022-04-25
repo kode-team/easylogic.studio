@@ -1,14 +1,19 @@
-import { BIND, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import {
+  BIND,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  isString,
+  createComponent,
+} from "sapa";
+
+import "./GradientPickerPopup";
 
 import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
 import { SVGStaticGradient } from "elf/editor/property-parser/image-resource/SVGStaticGradient";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
-import { isString } from "sapa";
-import { GradientType } from "elf/editor/types/model";
-import { createComponent } from "sapa";
 import { SVGFill } from "elf/editor/property-parser/SVGFill";
-
-import "./GradientPickerPopup";
+import { GradientType } from "elf/editor/types/model";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class FillPickerPopup extends BasePopup {
   getTitle() {

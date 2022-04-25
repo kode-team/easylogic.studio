@@ -62,7 +62,7 @@ orderNumber 를 지정하게 되면  오름차순으로 정렬이 됩니다.
 
 에디터의 레이아웃은 현재 하나만 구현되어져 있습니다. 
 
-src/editor-layouts/designeditor 
+src/apps/designeditor 
 
 현재는 design editor 용 하나만 구현되어져 있습니다. 하지만 필요에 따라 designeditor 와 다른 레이아웃을 만들 수 있습니다. 
 

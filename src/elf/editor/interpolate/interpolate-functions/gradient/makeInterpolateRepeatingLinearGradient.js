@@ -1,4 +1,5 @@
 import { makeInterpolateLinearGradient } from "./makeInterpolateLinearGradient";
+
 import { RepeatingLinearGradient } from "elf/editor/property-parser/image-resource/RepeatingLinearGradient";
 
 export function makeInterpolateRepeatingLinearGradient(layer, property, s, e) {

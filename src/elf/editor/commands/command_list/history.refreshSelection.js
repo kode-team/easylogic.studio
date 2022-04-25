@@ -1,4 +1,4 @@
-import { isArrayEquals } from "elf/utils/func";
+import { isArrayEquals } from "elf/core/func";
 
 export default {
   command: "history.refreshSelection",

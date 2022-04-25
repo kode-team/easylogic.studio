@@ -8,7 +8,7 @@ import {
   SUBSCRIBE,
 } from "sapa";
 import { Length } from "elf/editor/unit/Length";
-import { second, framesToTimecode } from "elf/utils/time";
+import { second, framesToTimecode } from "elf/core/time";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const PADDING = 20;

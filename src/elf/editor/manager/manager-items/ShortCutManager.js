@@ -1,7 +1,8 @@
-import { os } from "elf/utils/detect";
-import { KEY_CODE } from "elf/editor/types/key";
 import { isBoolean } from "sapa";
+
+import { os } from "elf/core/detect";
 import shortcuts from "elf/editor/shortcuts";
+import { KEY_CODE } from "elf/editor/types/key";
 
 function joinKeys(...args) {
   return args.filter(Boolean).join("+");

@@ -1,12 +1,12 @@
-import { Length } from "elf/editor/unit/Length";
-import { Border } from "elf/editor/property-parser/Border";
-import { SUBSCRIBE_SELF } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./BorderValueEditor.scss";
-import { BorderStyle } from "elf/editor/types/model";
+
 import { iconUse } from "elf/editor/icon/icon";
-import { createComponent } from "sapa";
+import { Border } from "elf/editor/property-parser/Border";
+import { BorderStyle } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 const borderStyleList = [
   BorderStyle.NONE,

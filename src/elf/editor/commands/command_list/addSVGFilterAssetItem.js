@@ -1,4 +1,4 @@
-import { uuidShort } from "elf/utils/math";
+import { uuidShort } from "elf/core/math";
 
 export default {
   command: "addSVGFilterAssetItem",

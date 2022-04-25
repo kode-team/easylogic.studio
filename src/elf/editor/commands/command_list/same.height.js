@@ -1,4 +1,4 @@
-import { vertiesToRectangle } from "elf/utils/collision";
+import { vertiesToRectangle } from "elf/core/collision";
 
 export default {
   command: "same.height",

@@ -1,10 +1,11 @@
+import { CONFIG, DOMDIFF, LOAD, POINTERSTART, SUBSCRIBE, THROTTLE } from "sapa";
+
+import "./FlexGrowToolView.scss";
+
 import { END, MOVE } from "elf/editor/types/event";
 import { FlexDirection, Layout, ResizingMode } from "elf/editor/types/model";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
-import { CONFIG, DOMDIFF, LOAD, POINTERSTART, SUBSCRIBE, THROTTLE } from "sapa";
-
-import "./FlexGrowToolView.scss";
 
 export default class FlexGrowToolView extends EditorElement {
   template() {

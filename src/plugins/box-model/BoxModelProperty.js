@@ -1,8 +1,9 @@
 import { DEBOUNCE, DOMDIFF, IF, INPUT, LOAD, SUBSCRIBE } from "sapa";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { Length } from "elf/editor/unit/Length";
 
 import "./BoxModelProperty.scss";
+
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { Length } from "elf/editor/unit/Length";
 
 const fields = ["margin", "padding"];
 let styleKeys = [];

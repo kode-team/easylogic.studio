@@ -1,9 +1,10 @@
 import { CLICK, BIND, SUBSCRIBE } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./GradientSingleEditor.scss";
-import { GradientType, RadialGradientType } from "elf/editor/types/model";
+
 import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
+import { GradientType, RadialGradientType } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class GradientSingleEditor extends EditorElement {
   initState() {

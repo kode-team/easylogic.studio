@@ -1,6 +1,6 @@
+import { CSS_TO_STRING } from "elf/core/func";
 import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { Length } from "elf/editor/unit/Length";
-import { CSS_TO_STRING } from "elf/utils/func";
 
 export class Offset extends PropertyItem {
   static parse(obj) {

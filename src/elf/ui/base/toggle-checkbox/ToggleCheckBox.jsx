@@ -1,4 +1,5 @@
 import { LOAD, CLICK, SUBSCRIBE_SELF, BIND } from "sapa";
+
 import { BaseUI } from "../BaseUI";
 import "./ToggleCheckBox.scss";
 

@@ -1,11 +1,11 @@
 import { LOAD, CLICK, DEBOUNCE, DOMDIFF, SUBSCRIBE } from "sapa";
 
+import "./AnimationProperty.scss";
+
+import { curveToPath } from "elf/core/func";
 import { iconUse } from "elf/editor/icon/icon";
 import { Animation } from "elf/editor/property-parser/Animation";
-import { curveToPath } from "elf/utils/func";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./AnimationProperty.scss";
 
 export default class AnimationProperty extends BaseProperty {
   getTitle() {

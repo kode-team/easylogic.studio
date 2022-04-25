@@ -1,6 +1,6 @@
 // import { Editor } from "elf/editor/manager/Editor";
-import ComponentProperty from "./ComponentProperty";
 import ComponentPopup from "./ComponentPopup";
+import ComponentProperty from "./ComponentProperty";
 
 /**
  *

@@ -1,6 +1,6 @@
-import { randomNumber } from "elf/utils/create";
+import { randomNumber } from "elf/core/color/create";
+import { repeat } from "elf/core/func";
 import { ColorStep } from "elf/editor/property-parser/image-resource/ColorStep";
-import { repeat } from "elf/utils/func";
 
 export default {
   title: "Conic",

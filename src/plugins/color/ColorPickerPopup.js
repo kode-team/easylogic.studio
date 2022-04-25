@@ -1,9 +1,9 @@
-import { UIElement } from "sapa";
-import { LOAD, CLICK, SUBSCRIBE } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import { UIElement, LOAD, CLICK, SUBSCRIBE, createComponent } from "sapa";
 
 import "./ColorPickerPopup.scss";
-import { createComponent } from "sapa";
+
+import BasePopup from "elf/editor/ui/popup/BasePopup";
+
 export default class ColorPickerPopup extends BasePopup {
   getTitle() {
     return this.$i18n("colorpicker.popup.title");

@@ -1,7 +1,7 @@
-import { LOAD, SUBSCRIBE_SELF } from "sapa";
+import { LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
+
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
-import { createComponent } from "sapa";
 
 export default class GridGapEditor extends EditorElement {
   initState() {

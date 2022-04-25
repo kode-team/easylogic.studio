@@ -1,9 +1,16 @@
-import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import { isFunction, isString } from "sapa";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import {
+  DEBOUNCE,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  isFunction,
+  isString,
+  createComponent,
+} from "sapa";
 
 import "./ComponentProperty.scss";
-import { createComponent } from "sapa";
+
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class ComponentProperty extends BaseProperty {
   getClassName() {

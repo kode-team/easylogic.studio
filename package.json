@@ -36,6 +36,8 @@
     "cssnano": "^5.0.13",
     "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-jsconfig": "^1.1.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx": "^0.1.0",
     "happy-dom": "^2.25.1",
     "postcss": "^8.4.4",

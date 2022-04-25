@@ -1,3 +1,5 @@
+import { mat4, vec3 } from "gl-matrix";
+
 import {
   DOMDIFF,
   KEYUP,
@@ -7,24 +9,25 @@ import {
   POINTERSTART,
   SUBSCRIBE,
 } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+
 import "./FillEditorView.scss";
+
+import {
+  calculateAngle360,
+  calculateRotationOriginMat4,
+  vertiesMap,
+} from "elf/core/math";
+import { PathParser } from "elf/editor/parser/PathParser";
+import { END, MOVE } from "elf/editor/types/event";
 import {
   GradientType,
   RadialGradientType,
   SpreadMethodType,
   TimingFunction,
 } from "elf/editor/types/model";
-import { mat4, vec3 } from "gl-matrix";
-import {
-  calculateAngle360,
-  calculateRotationOriginMat4,
-  vertiesMap,
-} from "elf/utils/math";
-import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
-import { PathParser } from "elf/editor/parser/PathParser";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,

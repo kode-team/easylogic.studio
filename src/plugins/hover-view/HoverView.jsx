@@ -1,10 +1,11 @@
-import { CONFIG, SUBSCRIBE, IF } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import "./HoverView.scss";
-import { Dom } from "sapa";
-// import { calculateMatrix } from "elf/utils/math";
 import { vec3 } from "gl-matrix";
-import { vertiesToPath } from "elf/utils/collision";
+
+import { CONFIG, SUBSCRIBE, IF, Dom } from "sapa";
+
+import "./HoverView.scss";
+
+import { vertiesToPath } from "elf/core/collision";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class HoverView extends EditorElement {
   template() {

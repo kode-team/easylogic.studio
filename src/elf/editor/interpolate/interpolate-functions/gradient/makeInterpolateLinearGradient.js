@@ -1,6 +1,7 @@
-import { LinearGradient } from "elf/editor/property-parser/image-resource/LinearGradient";
-import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
 import { makeInterpolateNumber } from "../makeInterpolateNumber";
+import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
+
+import { LinearGradient } from "elf/editor/property-parser/image-resource/LinearGradient";
 
 export function makeInterpolateLinearGradient(layer, property, s, e) {
   // angle 이랑

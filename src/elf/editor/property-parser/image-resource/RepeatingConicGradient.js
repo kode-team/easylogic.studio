@@ -1,5 +1,6 @@
-import { Position } from "elf/editor/unit/Length";
 import { ConicGradient } from "./ConicGradient";
+
+import { Position } from "elf/editor/unit/Length";
 
 export class RepeatingConicGradient extends ConicGradient {
   getDefaultObject() {

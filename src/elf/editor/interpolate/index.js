@@ -1,5 +1,6 @@
-import { createBezierForPattern } from "elf/utils/bezier";
 import timingFunctions from "./timing-functions";
+
+import { createBezierForPattern } from "elf/core/bezier";
 
 export function createTimingFunction(timing = "linear") {
   var [funcName] = timing.split("(").map((it) => it.trim());

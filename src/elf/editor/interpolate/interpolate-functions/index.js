@@ -1,23 +1,23 @@
-import { makeInterpolateLength } from "./makeInterpolateLength";
+import { makeInterpolateBackgroundImage } from "./makeInterpolateBackgroundImage";
 import { makeInterpolateBorderRadius } from "./makeInterpolateBorderRadius";
 import { makeInterpolateBoxShadow } from "./makeInterpolateBoxShadow";
-import { makeInterpolateColor } from "./makeInterpolateColor";
-import { makeInterpolateString } from "./makeInterpolateString";
-import { makeInterpolateRotate } from "./makeInterpolateRotate";
-import { makeInterpolateTextShadow } from "./makeInterpolateTextShadow";
-import { makeInterpolateBackgroundImage } from "./makeInterpolateBackgroundImage";
-import { makeInterpolateFilter } from "./makeInterpolateFilter";
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
 import { makeInterpolateClipPath } from "./makeInterpolateClipPath";
+import { makeInterpolateColor } from "./makeInterpolateColor";
+import { makeInterpolateFilter } from "./makeInterpolateFilter";
+import { makeInterpolateLength } from "./makeInterpolateLength";
+import { makeInterpolateNumber } from "./makeInterpolateNumber";
+import { makeInterpolateOffsetPath } from "./makeInterpolateOffsetPath";
+import { makeInterpolatePerspectiveOrigin } from "./makeInterpolatePerspectiveOrigin";
+import { makeInterpolatePlayTime } from "./makeInterpolatePlayTime";
+import { makeInterpolateRotate } from "./makeInterpolateRotate";
+import { makeInterpolateString } from "./makeInterpolateString";
+import { makeInterpolateStrokeDashArrray } from "./makeInterpolateStrokeDashArray";
+import { makeInterpolateText } from "./makeInterpolateText";
+import { makeInterpolateTextShadow } from "./makeInterpolateTextShadow";
 import { makeInterpolateTransform } from "./makeInterpolateTransform";
 import { makeInterpolateTransformOrigin } from "./makeInterpolateTransformOrigin";
-import { makeInterpolatePerspectiveOrigin } from "./makeInterpolatePerspectiveOrigin";
-import { makeInterpolateStrokeDashArrray } from "./makeInterpolateStrokeDashArray";
 import { makeInterpolatePath } from "./svg/makeInterpolatePath";
 import { makeInterpolatePolygon } from "./svg/makeInterpolatePolygon";
-import { makeInterpolateOffsetPath } from "./makeInterpolateOffsetPath";
-import { makeInterpolateText } from "./makeInterpolateText";
-import { makeInterpolatePlayTime } from "./makeInterpolatePlayTime";
 
 const DEFAULT_FUCTION = () => () => {};
 

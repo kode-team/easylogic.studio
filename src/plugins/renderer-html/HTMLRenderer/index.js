@@ -1,5 +1,6 @@
-import { CSS_TO_STRING, TAG_TO_STRING } from "elf/utils/func";
 import { isFunction } from "sapa";
+
+import { CSS_TO_STRING, TAG_TO_STRING } from "elf/core/func";
 
 const char_list = [/\(/gi, /\)/gi];
 

@@ -1,25 +1,27 @@
-import { Length } from "elf/editor/unit/Length";
-import { GroupModel } from "./GroupModel";
+import { vec3 } from "gl-matrix";
+
 import { Selector } from "../property-parser/Selector";
-import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { GroupModel } from "./GroupModel";
+
+import { rectToVerties } from "elf/core/collision";
+import { STRING_TO_CSS } from "elf/core/func";
+import {
+  calculateRotationOriginMat4,
+  degreeToRadian,
+  vertiesMap,
+} from "elf/core/math";
 import { PathParser } from "elf/editor/parser/PathParser";
-import { Pattern } from "elf/editor/property-parser/Pattern";
 import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
-import { STRING_TO_CSS } from "elf/utils/func";
+import { Border } from "elf/editor/property-parser/Border";
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { Pattern } from "elf/editor/property-parser/Pattern";
 import {
   Constraints,
   GradientType,
   Layout,
   VisibilityType,
 } from "elf/editor/types/model";
-import { rectToVerties } from "elf/utils/collision";
-import {
-  calculateRotationOriginMat4,
-  degreeToRadian,
-  vertiesMap,
-} from "elf/utils/math";
-import { vec3 } from "gl-matrix";
-import { Border } from "elf/editor/property-parser/Border";
+import { Length } from "elf/editor/unit/Length";
 
 const editableList = [
   "appearance",

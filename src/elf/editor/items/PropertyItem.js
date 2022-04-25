@@ -1,5 +1,6 @@
 import { Item } from "./Item";
-import { CSS_TO_STRING } from "elf/utils/func";
+
+import { CSS_TO_STRING } from "elf/core/func";
 
 export class PropertyItem extends Item {
   getDefaultObject(obj = {}) {

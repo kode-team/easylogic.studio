@@ -1,7 +1,9 @@
 import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 import "./ImageSelectPopup.scss";
+
+import BasePopup from "elf/editor/ui/popup/BasePopup";
+
 export default class ImageSelectPopup extends BasePopup {
   getTitle() {
     return "Select a image";

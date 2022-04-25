@@ -1,15 +1,6 @@
 import { Dom } from "./functions/Dom";
-import {
-  isFunction,
-  // Array.isArray,
-  // html,
-  keyEach,
-  collectProps,
-  isObject,
-} from "./functions/func";
-
-import DomEventHandler from "./handler/DomEventHandler";
-import BindHandler from "./handler/BindHandler";
+import { isFunction, keyEach, collectProps, isObject } from "./functions/func";
+import { MagicMethod } from "./functions/MagicMethod";
 import {
   getVariable,
   hasVariable,
@@ -18,8 +9,9 @@ import {
   spreadVariable,
 } from "./functions/registElement";
 import { uuid } from "./functions/uuid";
+import BindHandler from "./handler/BindHandler";
 import CallbackHandler from "./handler/CallbackHandler";
-import { MagicMethod } from "./functions/MagicMethod";
+import DomEventHandler from "./handler/DomEventHandler";
 
 const REFERENCE_PROPERTY = "ref";
 const BIND_PROPERTY = "bind";

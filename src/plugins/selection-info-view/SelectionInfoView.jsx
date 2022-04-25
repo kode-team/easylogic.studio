@@ -1,10 +1,13 @@
-import { DOMDIFF, LEFT_BUTTON, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
-import { END, MOVE } from "elf/editor/types/event";
+
+import { DOMDIFF, LEFT_BUTTON, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
+
 import "./SelectionInfoView.scss";
-import { calculateAngle360 } from "elf/utils/math";
+
+import { calculateAngle360 } from "elf/core/math";
 import { iconUse } from "elf/editor/icon/icon";
+import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class SelectionInfoView extends EditorElement {
   template() {

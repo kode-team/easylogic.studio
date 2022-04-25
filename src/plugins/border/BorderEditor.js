@@ -1,9 +1,9 @@
-import { LOAD, SUBSCRIBE_SELF } from "sapa";
-import { Border } from "elf/editor/property-parser/Border";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./BorderEditor.scss";
-import { createComponent } from "sapa";
+
+import { Border } from "elf/editor/property-parser/Border";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const borderTypeList = [
   "border",

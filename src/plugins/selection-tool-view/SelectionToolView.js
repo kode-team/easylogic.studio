@@ -1,8 +1,18 @@
-import { POINTERSTART, POINTEROVER, POINTEROUT, IF, SUBSCRIBE } from "sapa";
-import { Length } from "elf/editor/unit/Length";
-import { clone } from "sapa";
 import { mat4, vec3 } from "gl-matrix";
-import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
+
+import {
+  POINTERSTART,
+  POINTEROVER,
+  POINTEROUT,
+  IF,
+  SUBSCRIBE,
+  clone,
+} from "sapa";
+
+import "./SelectionView.scss";
+
+import { getRotatePointer } from "elf/core/collision";
+import { objectFloor } from "elf/core/func";
 import {
   calculateAngle360,
   calculateAngleForVec3,
@@ -10,15 +20,13 @@ import {
   calculateMatrixInverse,
   round,
   vertiesMap,
-} from "elf/utils/math";
-import { getRotatePointer } from "elf/utils/collision";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { END, MOVE } from "elf/editor/types/event";
-
-import "./SelectionView.scss";
-import { objectFloor } from "elf/utils/func";
-import { ResizingMode } from "elf/editor/types/model";
+} from "elf/core/math";
 import GridLayoutEngine from "elf/editor/layout-engine/GridLayoutEngine";
+import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
+import { END, MOVE } from "elf/editor/types/event";
+import { ResizingMode } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 var directionType = {
   1: "to top left",
@@ -41,11 +49,20 @@ var directionType = {
  */
 
 const SelectionToolEvent = class extends EditorElement {
-  [SUBSCRIBE("refreshSelectionTool")](isShow = true) {
-    this.initSelectionTool(isShow);
+  checkViewMode() {
+    return this.$modeView.isCurrentMode("CanvasView");
   }
 
-  [SUBSCRIBE("updateViewport")]() {
+  /**
+   * 업데이트 할 때마다 선택된 영역을 그린다.
+   *
+   * @param {*} isShow
+   */
+  [SUBSCRIBE("refreshSelectionTool") + IF("checkViewMode")]() {
+    this.initSelectionTool();
+  }
+
+  [SUBSCRIBE("updateViewport") + IF("checkViewMode")]() {
     if (this.$selection.isOne) {
       this.initSelectionTool();
     }
@@ -1078,25 +1095,12 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   checkShow() {
+    if (this.$modeView.isCurrentMode("CanvasView") === false) {
+      return false;
+    }
+
     if (this.state.show && this.$selection.isOne) {
-      if (
-        this.$selection.hasChangedField(
-          "x",
-          "y",
-          "width",
-          "height",
-          "angle",
-          "constraints-horizontal",
-          "constraints-vertical",
-          "resizingHorizontal",
-          "resizingVertical",
-          "transform-origin",
-          "perspective",
-          "perspective-origin"
-        )
-      ) {
-        return true;
-      }
+      return true;
     }
 
     return false;

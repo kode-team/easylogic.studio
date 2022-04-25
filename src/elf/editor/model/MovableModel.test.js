@@ -1,7 +1,7 @@
 import { MovableModel } from './MovableModel';
 import { Length } from 'elf/editor/unit/Length';
 import { ModelManager } from 'elf/editor/manager/ModelManager';
-import { vertiesToRectangle } from 'elf/utils/collision';
+import { vertiesToRectangle } from 'elf/core/collision';
 import { beforeAll, expect, test, vi } from 'vitest';
 
 let modelManager;

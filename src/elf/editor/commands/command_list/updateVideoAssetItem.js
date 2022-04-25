@@ -1,5 +1,6 @@
-import { uuidShort } from "elf/utils/math";
 import { isFunction } from "sapa";
+
+import { uuidShort } from "elf/core/math";
 
 export default {
   command: "updateVideoAssetItem",

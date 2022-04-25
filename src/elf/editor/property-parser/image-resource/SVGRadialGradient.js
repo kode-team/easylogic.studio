@@ -1,14 +1,16 @@
-import { SVGGradient } from "./SVGGradient";
-import { OBJECT_TO_PROPERTY } from "elf/utils/func";
-import { Length } from "elf/editor/unit/Length";
-import { calculateAngle360, degreeToRadian } from "elf/utils/math";
 import { mat3, vec3 } from "gl-matrix";
+
+import { SVGGradient } from "./SVGGradient";
+
+import { OBJECT_TO_PROPERTY } from "elf/core/func";
+import { calculateAngle360, degreeToRadian } from "elf/core/math";
 import {
   FuncType,
   GradientType,
   RadialGradientType,
   SpreadMethodType,
 } from "elf/editor/types/model";
+import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
 
 const RadialTypeList = [RadialGradientType.CIRCLE, RadialGradientType.ELLIPSE];

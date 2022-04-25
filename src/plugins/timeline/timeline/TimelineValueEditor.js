@@ -1,6 +1,6 @@
 import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "sapa";
 
-import { second, timecode } from "elf/utils/time";
+import { second, timecode } from "elf/core/time";
 import { isUndefined } from "sapa";
 import icon from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";

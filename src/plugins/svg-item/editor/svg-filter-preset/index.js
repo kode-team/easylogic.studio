@@ -1,8 +1,8 @@
-import grayscale from "./grayscale";
-import shadow from "./shadow";
-import innerShadow from "./inner-shadow";
-import stroke from "./stroke";
 import dancingStroke from "./dancing-stroke";
+import grayscale from "./grayscale";
+import innerShadow from "./inner-shadow";
+import shadow from "./shadow";
+import stroke from "./stroke";
 
 export default {
   dancingStroke,

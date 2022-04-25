@@ -1,3 +1,5 @@
+import { vec3 } from "gl-matrix";
+
 import {
   POINTERSTART,
   BIND,
@@ -11,17 +13,18 @@ import {
   CHANGE,
   SUBSCRIBE,
   KEYDOWN,
+  Dom,
 } from "sapa";
-import PathStringManager from "elf/editor/parser/PathStringManager";
-import { rectToVerties, vertiesToRectangle } from "elf/utils/collision";
-import { vec3 } from "gl-matrix";
-import { Dom } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { END, MOVE } from "elf/editor/types/event";
+
 import "./LayerAppendView.scss";
-import { CSS_TO_STRING } from "elf/utils/func";
+
+import { rectToVerties, vertiesToRectangle } from "elf/core/collision";
+import { CSS_TO_STRING } from "elf/core/func";
 import { PathParser } from "elf/editor/parser/PathParser";
+import PathStringManager from "elf/editor/parser/PathStringManager";
 import { EditingMode } from "elf/editor/types/editor";
+import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
 export default class LayerAppendView extends EditorElement {

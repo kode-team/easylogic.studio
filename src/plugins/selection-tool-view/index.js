@@ -1,7 +1,8 @@
 // import { Editor } from "elf/editor/manager/Editor";
-import SelectionToolView from "./SelectionToolView";
-import GroupSelectionToolView from "./GroupSelectionToolView";
 import GhostToolView from "./GhostToolView";
+import GroupSelectionToolView from "./GroupSelectionToolView";
+import SelectionToolView from "./SelectionToolView";
+
 import { CanvasViewToolLevel } from "elf/editor/types/editor";
 
 /**

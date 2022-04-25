@@ -1,5 +1,6 @@
-import { Gradient } from "./Gradient";
 import { ColorStep } from "./ColorStep";
+import { Gradient } from "./Gradient";
+
 import { parseOneValue } from "elf/utils/css-function-parser";
 
 export class StaticGradient extends Gradient {

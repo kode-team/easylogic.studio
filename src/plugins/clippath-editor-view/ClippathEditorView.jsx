@@ -1,9 +1,10 @@
-import { CLICK, DEBOUNCE, DOMDIFF, IF, LOAD, SUBSCRIBE } from "sapa";
+import { CLICK, DEBOUNCE, DOMDIFF, IF, LOAD, SUBSCRIBE, Dom } from "sapa";
+
 import "./ClippathEditorView.scss";
-import { ClipPathType } from "elf/editor/types/model";
-import { ClipPath } from "elf/editor/property-parser/ClipPath";
 import ClippathEllipseEditorView from "./ClippathEllipseEditorView";
-import { Dom } from "sapa";
+
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { ClipPathType } from "elf/editor/types/model";
 
 export default class ClippathEditorView extends ClippathEllipseEditorView {
   template() {

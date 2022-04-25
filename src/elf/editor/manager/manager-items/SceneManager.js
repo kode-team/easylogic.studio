@@ -1,5 +1,6 @@
-import { isArray } from "sapa";
 import * as THREE from "three";
+
+import { isArray } from "sapa";
 
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera(3, 1, 0.01, 1000);
 _DEFAULT_CAMERA.name = "Camera";

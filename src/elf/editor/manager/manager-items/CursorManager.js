@@ -1,4 +1,5 @@
 import { isFunction } from "sapa";
+
 import icon from "elf/editor/icon/icon";
 
 export class CursorManager {

@@ -1,8 +1,6 @@
+import { CLICK, SUBSCRIBE, registElement } from "sapa";
+
 import BaseWindow from "./BaseWindow";
-
-import { CLICK, SUBSCRIBE } from "sapa";
-import { registElement } from "sapa";
-
 import "./ExportWindow.scss";
 
 export default class ExportWindow extends BaseWindow {

@@ -1,6 +1,6 @@
-import { makeInterpolateLength } from "./makeInterpolateLength";
-import { makeInterpolateColor } from "./makeInterpolateColor";
 import { TextShadow } from "../../property-parser/TextShadow";
+import { makeInterpolateColor } from "./makeInterpolateColor";
+import { makeInterpolateLength } from "./makeInterpolateLength";
 
 export function makeInterpolateTextShadow(
   layer,

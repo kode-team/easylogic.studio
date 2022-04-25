@@ -1,13 +1,19 @@
-import { BIND, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-
-import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import {
+  BIND,
+  DOMDIFF,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+  isString,
+} from "sapa";
 
 import "./GradientPickerPopup.scss";
-import { createComponent } from "sapa";
+
 import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
-import { isString } from "sapa";
+import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
 import { GradientType } from "elf/editor/types/model";
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class GradientPickerPopup extends BasePopup {
   getTitle() {

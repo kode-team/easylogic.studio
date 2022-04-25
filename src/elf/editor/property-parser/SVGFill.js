@@ -1,8 +1,9 @@
-import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { SVGImageResource } from "./image-resource/SVGImageResource";
 import { SVGLinearGradient } from "./image-resource/SVGLinearGradient";
 import { SVGRadialGradient } from "./image-resource/SVGRadialGradient";
 import { SVGStaticGradient } from "./image-resource/SVGStaticGradient";
-import { SVGImageResource } from "./image-resource/SVGImageResource";
+
+import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { GradientType } from "elf/editor/types/model";
 import { parseOneValue } from "elf/utils/css-function-parser";
 

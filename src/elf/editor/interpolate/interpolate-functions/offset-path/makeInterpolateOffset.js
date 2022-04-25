@@ -1,9 +1,10 @@
-import { getDist } from "elf/utils/math";
-import Point from "elf/editor/parser/Point";
-import makeInterpolateLine from "./makeInterpolateLine";
-import { getCurveDist, getQuardDist } from "elf/utils/bezier";
-import makeInterpolateQuard from "./makeInterpolateQuard";
 import makeInterpolateCubic from "./makeInterpolateCubic";
+import makeInterpolateLine from "./makeInterpolateLine";
+import makeInterpolateQuard from "./makeInterpolateQuard";
+
+import { getCurveDist, getQuardDist } from "elf/core/bezier";
+import { getDist } from "elf/core/math";
+import Point from "elf/editor/parser/Point";
 
 export default function makeInterpolateOffset(segments) {
   var interpolateList = [];

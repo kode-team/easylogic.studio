@@ -1,8 +1,15 @@
-import { BIND, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import { isFunction } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import {
+  BIND,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  isFunction,
+  createComponent,
+} from "sapa";
+
 import "./ComponentPopup.scss";
-import { createComponent } from "sapa";
+
+import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class ComponentPopup extends BasePopup {
   getClassName() {

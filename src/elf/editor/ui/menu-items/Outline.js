@@ -1,4 +1,5 @@
 import { CONFIG } from "sapa";
+
 import MenuItem from "./MenuItem";
 
 export default class Outline extends MenuItem {

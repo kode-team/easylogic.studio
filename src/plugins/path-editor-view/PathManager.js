@@ -1,7 +1,9 @@
 import { CLICK, BIND, SUBSCRIBE } from "sapa";
+
+import "./PathManager.scss";
+
 import { iconUse } from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import "./PathManager.scss";
 
 const MODES = {
   "segment-move": "modify",

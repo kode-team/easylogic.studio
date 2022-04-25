@@ -1,3 +1,12 @@
+import fitCurve from "fit-curve";
+import { mat4, vec2, vec3 } from "gl-matrix";
+import arcToBezier from "svg-arc-to-cubic-bezier";
+
+import { isNotUndefined, clone } from "sapa";
+
+import Point from "./Point";
+import { Segment } from "./Segment";
+
 import {
   createBezier,
   getBezierPoints,
@@ -15,15 +24,9 @@ import {
   splitBezierPointsByCount,
   splitBezierPointsLineByCount,
   splitBezierPointsQuardByCount,
-} from "elf/utils/bezier";
-import { isNotUndefined, clone } from "sapa";
-import { degreeToRadian, getDist, round } from "elf/utils/math";
-import { mat4, vec2, vec3 } from "gl-matrix";
-import Point from "./Point";
-import { Segment } from "./Segment";
-import fitCurve from "fit-curve";
-import { vertiesToRectangle } from "elf/utils/collision";
-import arcToBezier from "svg-arc-to-cubic-bezier";
+} from "elf/core/bezier";
+import { vertiesToRectangle } from "elf/core/collision";
+import { degreeToRadian, getDist, round } from "elf/core/math";
 import { PathSegmentType } from "elf/editor/types/model";
 
 const REG_PARSE_NUMBER_FOR_PATH =

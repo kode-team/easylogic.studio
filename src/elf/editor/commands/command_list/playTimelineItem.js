@@ -1,5 +1,6 @@
-import { makeTimer, timecode } from "elf/utils/time";
 import _currentProject from "./_currentProject";
+
+import { makeTimer, timecode } from "elf/core/time";
 
 export default {
   command: "playTimelineItem",

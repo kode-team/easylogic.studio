@@ -1,8 +1,6 @@
-import { BIND } from "sapa";
-import { isFunction } from "sapa";
+import { BIND, isFunction } from "sapa";
 
 import { EditorElement } from "../common/EditorElement";
-
 import "./BaseProperty.scss";
 
 export class BaseProperty extends EditorElement {

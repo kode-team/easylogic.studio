@@ -6,16 +6,16 @@ import {
   SUBSCRIBE,
   SUBSCRIBE_SELF,
   IF,
+  variable,
+  createComponent,
 } from "sapa";
 
+import "./PatternAssetsProperty.scss";
+
+import { CSS_TO_STRING } from "elf/core/func";
 import patterns from "elf/editor/preset/patterns";
 import { Pattern } from "elf/editor/property-parser/Pattern";
-import { CSS_TO_STRING } from "elf/utils/func";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./PatternAssetsProperty.scss";
-import { variable } from "sapa";
-import { createComponent } from "sapa";
 
 export default class PatternAssetsProperty extends BaseProperty {
   getTitle() {

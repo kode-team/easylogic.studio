@@ -7,15 +7,15 @@ import {
   PREVENT,
   DEBOUNCE,
   SUBSCRIBE,
+  createComponent,
 } from "sapa";
-import { iconUse } from "elf/editor/icon/icon";
-import { Pattern } from "elf/editor/property-parser/Pattern";
-import patterns from "elf/editor/preset/patterns";
-
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./PatternEditor.scss";
-import { createComponent } from "sapa";
+
+import { iconUse } from "elf/editor/icon/icon";
+import patterns from "elf/editor/preset/patterns";
+import { Pattern } from "elf/editor/property-parser/Pattern";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class PatternEditor extends EditorElement {
   initState() {

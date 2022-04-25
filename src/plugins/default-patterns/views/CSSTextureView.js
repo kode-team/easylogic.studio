@@ -1,7 +1,8 @@
 import { CLICK, LOAD } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./TextureView.scss";
+
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const cssPatterns = [
   {

@@ -1,8 +1,15 @@
-import { CLICK, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import { Position } from "elf/editor/unit/Length";
+import {
+  CLICK,
+  CHANGE,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+} from "sapa";
+
 import icon from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
+import { Position } from "elf/editor/unit/Length";
 
 const typeList = [
   { key: "top", title: "Top" },

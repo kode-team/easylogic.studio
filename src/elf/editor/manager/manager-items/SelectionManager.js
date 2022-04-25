@@ -1,13 +1,15 @@
+import { vec3 } from "gl-matrix";
+
+import { isFunction, isString, isObject } from "sapa";
+
 import {
   itemsToRectVerties,
   polyPoint,
   rectToVerties,
   targetItemsToRectVerties,
   toRectVerties,
-} from "elf/utils/collision";
-import { vec3 } from "gl-matrix";
-import { isFunction, isString, isObject } from "sapa";
-import { area } from "elf/utils/math";
+} from "elf/core/collision";
+import { area } from "elf/core/math";
 
 export class SelectionManager {
   constructor(editor) {

@@ -1,6 +1,7 @@
+import { CONFIG, SUBSCRIBE } from "sapa";
+
 import MenuItem from "./MenuItem";
 
-import { CONFIG, SUBSCRIBE } from "sapa";
 import { EditingMode } from "elf/editor/types/editor";
 
 export default class SelectTool extends MenuItem {

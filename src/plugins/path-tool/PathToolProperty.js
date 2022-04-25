@@ -1,3 +1,8 @@
+import { CLICK, SUBSCRIBE } from "sapa";
+
+import "./PathToolProperty.scss";
+
+import { iconUse } from "elf/editor/icon/icon";
 import BottomAlign from "elf/editor/ui/menu-items/BottomAlign";
 import CenterAlign from "elf/editor/ui/menu-items/CenterAlign";
 import LeftAlign from "elf/editor/ui/menu-items/LeftAlign";
@@ -7,10 +12,6 @@ import SameHeight from "elf/editor/ui/menu-items/SameHeight";
 import SameWidth from "elf/editor/ui/menu-items/SameWidth";
 import TopAlign from "elf/editor/ui/menu-items/TopAlign";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { CLICK, SUBSCRIBE } from "sapa";
-
-import "./PathToolProperty.scss";
-import { iconUse } from "elf/editor/icon/icon";
 
 export default class PathToolProperty extends BaseProperty {
   components() {

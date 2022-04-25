@@ -1,5 +1,6 @@
 import { clone, isFunction, isNumber, isUndefined } from "sapa";
-import { uuid, uuidShort } from "elf/utils/math";
+
+import { uuid, uuidShort } from "elf/core/math";
 
 const identity = () => true;
 

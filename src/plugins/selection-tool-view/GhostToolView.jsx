@@ -1,24 +1,25 @@
-import {
-  AlignItems,
-  FlexDirection,
-  JustifyContent,
-  Layout,
-} from "elf/editor/types/model";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { DOMDIFF, LOAD, SUBSCRIBE } from "sapa";
-import { clone } from "sapa";
+import { vec3 } from "gl-matrix";
+
+import { DOMDIFF, LOAD, SUBSCRIBE, clone } from "sapa";
+
+import "./GhostToolView.scss";
+
 import {
   intersectRectRect,
   polyPoly,
   toRectVerties,
   vertiesToPath,
   vertiesToRectangle,
-} from "elf/utils/collision";
-import { vec3 } from "gl-matrix";
-
-import "./GhostToolView.scss";
-import { TargetActionType } from "../../elf/editor/types/model";
-import { IntersectEpsilonType } from "../../elf/editor/types/editor";
+} from "elf/core/collision";
+import { IntersectEpsilonType } from "elf/editor/types/editor";
+import {
+  AlignItems,
+  FlexDirection,
+  JustifyContent,
+  Layout,
+  TargetActionType,
+} from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const CHECK_RATE = 0.5;
 

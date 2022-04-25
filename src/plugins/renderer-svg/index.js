@@ -1,5 +1,6 @@
 import SVGRenderer from "./SVGRenderer";
 import ArtBoardRender from "./SVGRenderer/ArtBoardRender";
+import BooleanPathRender from "./SVGRenderer/BooleanPathRender";
 import CircleRender from "./SVGRenderer/CircleRender";
 import IFrameRender from "./SVGRenderer/IFrameRender";
 import ImageRender from "./SVGRenderer/ImageRender";
@@ -14,7 +15,6 @@ import SVGTextRender from "./SVGRenderer/SVGTextRender";
 import TemplateRender from "./SVGRenderer/TemplateRender";
 import TextRender from "./SVGRenderer/TextRender";
 import VideoRender from "./SVGRenderer/VideoRender";
-import BooleanPathRender from "./SVGRenderer/BooleanPathRender";
 
 /**
  *

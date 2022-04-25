@@ -1,8 +1,10 @@
 import { CLICK, LOAD } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./TextureView.scss";
+
 import { PathParser } from "elf/editor/parser/PathParser";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+
 // import { repeat } from "elf/utils/func";
 // import PathStringManager from "elf/editor/parser/PathStringManager";
 // import math from "./data/math";

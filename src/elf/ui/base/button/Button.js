@@ -1,4 +1,5 @@
 import { LOAD, CLICK, DOMDIFF } from "sapa";
+
 import { BaseUI } from "../BaseUI";
 import "./Button.scss";
 

@@ -1,8 +1,8 @@
 import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
-import { makeInterpolateLength } from "./makeInterpolateLength";
-import { makeInterpolateString } from "./makeInterpolateString";
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
 import { makeInterpolateColor } from "./makeInterpolateColor";
+import { makeInterpolateLength } from "./makeInterpolateLength";
+import { makeInterpolateNumber } from "./makeInterpolateNumber";
+import { makeInterpolateString } from "./makeInterpolateString";
 
 export function makeInterpolateFilterItem(
   layer,

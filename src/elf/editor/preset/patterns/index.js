@@ -1,10 +1,10 @@
 import check from "./check";
-import grid from "./grid";
-import dot from "./dot";
 import crossdot from "./cross-dot";
 import diagonalLine from "./diagonal-line";
-import verticalLine from "./vertical-line";
+import dot from "./dot";
+import grid from "./grid";
 import horizontalLine from "./horizontal-line";
+import verticalLine from "./vertical-line";
 
 export default [
   check,

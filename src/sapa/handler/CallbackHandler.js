@@ -1,5 +1,5 @@
-import BaseHandler from "./BaseHandler";
 import { debounce, throttle } from "../functions/func";
+import BaseHandler from "./BaseHandler";
 
 export default class CallbackHandler extends BaseHandler {
   initialize() {

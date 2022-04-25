@@ -1,9 +1,5 @@
-import { iconUse } from "elf/editor/icon/icon";
-import { Grid } from "elf/editor/property-parser/Grid";
-import { END, FIRSTMOVE, MOVE } from "elf/editor/types/event";
-import { Layout } from "elf/editor/types/model";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { Length } from "elf/editor/unit/Length";
+import { vec3 } from "gl-matrix";
+
 import {
   BIND,
   CLICK,
@@ -14,13 +10,19 @@ import {
   POINTERSTART,
   SUBSCRIBE,
   SUBSCRIBE_SELF,
+  isString,
 } from "sapa";
-import { isString } from "sapa";
-import { rectToVerties, vertiesToRectangle } from "elf/utils/collision";
-import { calculateAngle360, vertiesMap } from "elf/utils/math";
-import { vec3 } from "gl-matrix";
 
 import "./GridGrowToolView.scss";
+
+import { rectToVerties, vertiesToRectangle } from "elf/core/collision";
+import { calculateAngle360, vertiesMap } from "elf/core/math";
+import { iconUse } from "elf/editor/icon/icon";
+import { Grid } from "elf/editor/property-parser/Grid";
+import { END, FIRSTMOVE, MOVE } from "elf/editor/types/event";
+import { Layout } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 class GridGrowBaseView extends EditorElement {
   updateRows(current, newRows) {

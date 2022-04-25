@@ -1,7 +1,14 @@
-import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import {
+  IF,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  isFunction,
+  isUndefined,
+  createComponent,
+} from "sapa";
+
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { isFunction, isUndefined } from "sapa";
-import { createComponent } from "sapa";
 
 export class ObjectProperty {
   /**

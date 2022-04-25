@@ -1,7 +1,9 @@
-import Color from "elf/utils/Color";
 import { Dom } from "sapa";
-import { SVGFill } from "elf/editor/property-parser/SVGFill";
+
 import SVGLayerRender from "./SVGLayerRender";
+
+import * as Color from "elf/core/color";
+import { SVGFill } from "elf/editor/property-parser/SVGFill";
 
 export default class SVGItemRender extends SVGLayerRender {
   /**

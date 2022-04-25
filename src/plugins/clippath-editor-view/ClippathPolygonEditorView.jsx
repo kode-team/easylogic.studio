@@ -1,20 +1,22 @@
-import { LEFT_BUTTON, POINTERSTART } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { END, MOVE } from "elf/editor/types/event";
-import "./ClippathEditorView.scss";
-import { vertiesMap } from "elf/utils/math";
-import { Length } from "elf/editor/unit/Length";
-import { ClipPathType } from "elf/editor/types/model";
-import { ClipPath } from "elf/editor/property-parser/ClipPath";
 import { vec3 } from "gl-matrix";
-import { toRectVerties } from "elf/utils/collision";
-import { clone } from "sapa";
+
+import { POINTERSTART, clone } from "sapa";
+
+import "./ClippathEditorView.scss";
+
+import { toRectVerties } from "elf/core/collision";
+import { vertiesMap } from "elf/core/math";
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { END, MOVE } from "elf/editor/types/event";
+import { ClipPathType } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 export default class ClippathPolygonEditorView extends EditorElement {
   initializePolygon() {
     const current = this.$selection.current;
 
-    this.state.current;
+    this.state.current = current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
     this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
@@ -40,7 +42,6 @@ export default class ClippathPolygonEditorView extends EditorElement {
   }
 
   [POINTERSTART("$el .polygon .polygon-pointer") +
-    LEFT_BUTTON +
     MOVE("movePolygonPointer") +
     END("moveEndPolygonPointer")](e) {
     this.initializePolygon();
@@ -68,14 +69,12 @@ export default class ClippathPolygonEditorView extends EditorElement {
     );
   }
 
-  [POINTERSTART("$el .polygon .polygon-line") + LEFT_BUTTON](e) {
+  [POINTERSTART("$el .polygon .polygon-line")](e) {
     this.initializePolygon();
 
     const index = +e.$dt.data("index");
 
     this.polygonTargetIndex = index;
-
-    console.log(index);
 
     const current = this.screenPoints[this.polygonTargetIndex];
     const next =
@@ -114,7 +113,6 @@ export default class ClippathPolygonEditorView extends EditorElement {
   }
 
   [POINTERSTART("$el .polygon .polygon-center") +
-    LEFT_BUTTON +
     MOVE("movePolygonCenter") +
     END("moveEndPolygonCenter")]() {
     this.initializePolygon();

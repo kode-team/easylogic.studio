@@ -1,12 +1,13 @@
-import { POINTERSTART, BIND, KEYUP, IF, ESCAPE, ENTER, SUBSCRIBE } from "sapa";
-import { PathParser } from "elf/editor/parser/PathParser";
-
-import { SVGFill } from "elf/editor/property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { END, MOVE } from "elf/editor/types/event";
+
+import { POINTERSTART, BIND, KEYUP, IF, ESCAPE, ENTER, SUBSCRIBE } from "sapa";
 
 import "./PathDrawView.scss";
+
+import { PathParser } from "elf/editor/parser/PathParser";
+import { SVGFill } from "elf/editor/property-parser/SVGFill";
+import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const FIELDS = [
   "fill",

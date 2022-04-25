@@ -1,5 +1,5 @@
-import { STRING_TO_CSS } from "elf/utils/func";
-import Color from "elf/utils/Color";
+import * as Color from "elf/core/color";
+import { STRING_TO_CSS } from "elf/core/func";
 import { Length } from "elf/editor/unit/Length";
 
 var BorderStyles = {

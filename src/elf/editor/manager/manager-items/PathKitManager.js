@@ -50,9 +50,11 @@ These are only needed for PathKit.FromCmds().
 
 */
 
-import { PathParser } from "elf/editor/parser/PathParser";
 import PathKitInit from "pathkit-wasm/bin/pathkit";
+
 import { isArray } from "sapa";
+
+import { PathParser } from "elf/editor/parser/PathParser";
 
 export class PathKitManager {
   constructor(editor) {

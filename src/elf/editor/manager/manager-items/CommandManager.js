@@ -1,4 +1,5 @@
 import { isObject, isFunction } from "sapa";
+
 import commands from "../../commands";
 
 export class CommandManager {

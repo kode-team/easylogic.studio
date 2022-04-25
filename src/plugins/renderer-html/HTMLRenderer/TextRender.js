@@ -1,4 +1,5 @@
 import LayerRender from "./LayerRender";
+
 import { Overflow } from "elf/editor/types/model";
 
 export default class TextRender extends LayerRender {

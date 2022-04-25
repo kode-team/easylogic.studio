@@ -1,5 +1,5 @@
+import { STRING_TO_CSS } from "elf/core/func";
 import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
-import { STRING_TO_CSS } from "elf/utils/func";
 
 export default {
   command: "addBackgroundImageGradient",

@@ -1,11 +1,11 @@
 import { LOAD, CLICK, INPUT, DEBOUNCE, SUBSCRIBE } from "sapa";
 
+import "./SVGFilterAssetsProperty.scss";
+
+import { uuidShort } from "elf/core/math";
 import icon from "elf/editor/icon/icon";
 import { SVGFilter } from "elf/editor/property-parser/SVGFilter";
-import { uuidShort } from "elf/utils/math";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./SVGFilterAssetsProperty.scss";
 
 export default class SVGFilterAssetsProperty extends BaseProperty {
   getTitle() {

@@ -1,4 +1,4 @@
-import { getBezierPointOneQuard } from "elf/utils/bezier";
+import { getBezierPointOneQuard } from "elf/core/bezier";
 
 export default function makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey) {
   var points = [

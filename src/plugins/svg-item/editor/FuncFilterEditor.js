@@ -1,8 +1,8 @@
-import { LOAD, SUBSCRIBE } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { LOAD, SUBSCRIBE, createComponent } from "sapa";
 
 import "./FuncFilterEditor.scss";
-import { createComponent } from "sapa";
+
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class FuncFilterEditor extends EditorElement {
   initState() {

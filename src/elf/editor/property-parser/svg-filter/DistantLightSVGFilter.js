@@ -1,5 +1,6 @@
 import { BaseSVGFilter } from "./BaseSVGFilter";
-import { OBJECT_TO_PROPERTY } from "elf/utils/func";
+
+import { OBJECT_TO_PROPERTY } from "elf/core/func";
 import { Length } from "elf/editor/unit/Length";
 
 export class DistantLightSVGFilter extends BaseSVGFilter {

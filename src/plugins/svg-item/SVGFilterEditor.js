@@ -1,4 +1,3 @@
-import { iconUse } from "elf/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -8,21 +7,25 @@ import {
   DROP,
   DRAGSTART,
   SUBSCRIBE_SELF,
+  Dom,
+  clone,
+  isFunction,
+  keyMapJoin,
+  createComponent,
 } from "sapa";
 
+import svgFilterPreset from "./editor/svg-filter-preset";
+import "./SVGFilterEditor.scss";
+
+import { mapjoin, repeat } from "elf/core/func";
+import { iconUse } from "elf/editor/icon/icon";
+import PathStringManager from "elf/editor/parser/PathStringManager";
 import {
   SVGFilter,
   SVGFilterSpecList,
 } from "elf/editor/property-parser/SVGFilter";
-import { Dom } from "sapa";
-import PathStringManager from "elf/editor/parser/PathStringManager";
-import svgFilterPreset from "./editor/svg-filter-preset";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import "./SVGFilterEditor.scss";
-import { mapjoin, repeat } from "elf/utils/func";
-import { clone, isFunction, keyMapJoin } from "sapa";
 import { END, MOVE } from "elf/editor/types/event";
-import { createComponent } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const filterTypes = [
   {

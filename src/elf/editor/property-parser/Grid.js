@@ -1,5 +1,5 @@
-import { parseValue } from "elf/utils/css-function-parser";
 import { FuncType } from "elf/editor/types/model";
+import { parseValue } from "elf/utils/css-function-parser";
 
 export class Grid {
   static parseStyle(value) {

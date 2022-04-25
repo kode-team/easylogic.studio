@@ -1,9 +1,10 @@
 import { CLICK, BIND, SUBSCRIBE } from "sapa";
-import { SVGFill } from "elf/editor/property-parser/SVGFill";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./FillSingleEditor.scss";
+
+import { SVGFill } from "elf/editor/property-parser/SVGFill";
 import { GradientType } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class FillSingleEditor extends EditorElement {
   initState() {

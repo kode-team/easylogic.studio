@@ -1,6 +1,8 @@
 import { CLICK } from "sapa";
-import icon from "elf/editor/icon/icon";
+
 import { EditorElement } from "../common/EditorElement";
+
+import icon from "elf/editor/icon/icon";
 
 const DEFAULT_TITLE = "";
 const DEFAULT_ICON = "";

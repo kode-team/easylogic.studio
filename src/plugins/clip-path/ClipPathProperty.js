@@ -1,14 +1,14 @@
-import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "sapa";
-import icon, { iconUse } from "elf/editor/icon/icon";
-import { ClipPath } from "elf/editor/property-parser/ClipPath";
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF, createComponent } from "sapa";
 
 import "./ClipPathProperty.scss";
+
+import { vertiesToRectangle } from "elf/core/collision";
+import icon, { iconUse } from "elf/editor/icon/icon";
 import { PathParser } from "elf/editor/parser/PathParser";
-import { vertiesToRectangle } from "elf/utils/collision";
-import { ClipPathType } from "elf/editor/types/model";
 import polygon from "elf/editor/preset/clip-path/polygon";
-import { createComponent } from "sapa";
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { ClipPathType } from "elf/editor/types/model";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 const ClipPathSample = {
   [ClipPathType.CIRCLE]: "circle(50% at 50% 50%)",

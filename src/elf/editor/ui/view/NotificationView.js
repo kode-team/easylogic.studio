@@ -1,9 +1,9 @@
-import { iconUse } from "elf/editor/icon/icon";
-import { Dom } from "sapa";
-import { TRANSITIONEND, CLICK, SUBSCRIBE } from "sapa";
-import { EditorElement } from "../common/EditorElement";
+import { Dom, TRANSITIONEND, CLICK, SUBSCRIBE } from "sapa";
 
+import { EditorElement } from "../common/EditorElement";
 import "./NotificationView.scss";
+
+import { iconUse } from "elf/editor/icon/icon";
 
 export default class NotificationView extends EditorElement {
   template() {

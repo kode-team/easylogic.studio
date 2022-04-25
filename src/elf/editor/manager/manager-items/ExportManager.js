@@ -1,4 +1,4 @@
-import { CSS_TO_STRING } from "elf/utils/func";
+import { CSS_TO_STRING } from "elf/core/func";
 
 export default {
   makeProjectStyle(item) {

@@ -1,9 +1,9 @@
-import { Length } from "elf/editor/unit/Length";
-import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
-import BasePopup from "elf/editor/ui/popup/BasePopup";
+import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./AnimationPropertyPopup.scss";
-import { createComponent } from "sapa";
+
+import BasePopup from "elf/editor/ui/popup/BasePopup";
+import { Length } from "elf/editor/unit/Length";
 
 export default class AnimationPropertyPopup extends BasePopup {
   getTitle() {

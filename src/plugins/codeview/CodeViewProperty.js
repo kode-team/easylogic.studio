@@ -1,8 +1,8 @@
 import { CONFIG, LOAD, DOMDIFF, SUBSCRIBE, IF, DEBOUNCE } from "sapa";
 
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
 import "./CodeViewProperty.scss";
+
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class CodeViewProperty extends BaseProperty {
   getTitle() {

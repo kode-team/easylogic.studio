@@ -2,6 +2,10 @@
 import { isFunction, isArray, isString, UIElement } from "sapa";
 
 export class BaseUI extends UIElement {
+  get notEventRedefine() {
+    return true;
+  }
+
   getValue() {
     return this.props.defaultValue;
   }

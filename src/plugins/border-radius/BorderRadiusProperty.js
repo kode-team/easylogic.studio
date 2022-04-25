@@ -1,6 +1,13 @@
-import { DEBOUNCE, IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import {
+  DEBOUNCE,
+  IF,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+} from "sapa";
+
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
 
 export default class BorderRadiusProperty extends BaseProperty {
   getTitle() {

@@ -5,14 +5,15 @@ import {
   LOAD,
   SUBSCRIBE,
   SUBSCRIBE_SELF,
+  createComponent,
 } from "sapa";
+
+import "./GradientAssetsProperty.scss";
+
+import { iconUse } from "elf/editor/icon/icon";
 import gradients from "elf/editor/preset/gradients";
 import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./GradientAssetsProperty.scss";
-import { iconUse } from "elf/editor/icon/icon";
-import { createComponent } from "sapa";
 
 const options = gradients.map((it) => {
   return { value: it.key, text: it.title };

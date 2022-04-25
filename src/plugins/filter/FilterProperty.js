@@ -1,11 +1,18 @@
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  DEBOUNCE,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  IF,
+  createComponent,
+} from "sapa";
+
+import "./FilterProperty.scss";
+import { filter_list } from "./util";
 
 import { iconUse } from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { filter_list } from "./util";
-import { createComponent } from "sapa";
-
-import "./FilterProperty.scss";
 
 export default class FilterProperty extends BaseProperty {
   getTitle() {

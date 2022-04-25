@@ -1,6 +1,7 @@
 import { BaseSVGFilter } from "./BaseSVGFilter";
+
+import { OBJECT_TO_PROPERTY } from "elf/core/func";
 import { Length } from "elf/editor/unit/Length";
-import { OBJECT_TO_PROPERTY } from "elf/utils/func";
 
 export class ImageSVGFilter extends BaseSVGFilter {
   getDefaultObject() {

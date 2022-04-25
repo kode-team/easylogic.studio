@@ -1,6 +1,9 @@
 import { CLICK, BIND, SUBSCRIBE } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+
 import "./BackgroundPositionEditor.scss";
+
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+
 export default class BackgroundPositionEditor extends EditorElement {
   initState() {
     return {

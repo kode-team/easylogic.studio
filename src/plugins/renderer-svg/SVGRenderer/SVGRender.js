@@ -1,5 +1,6 @@
 import { isFunction } from "sapa";
-import { CSS_TO_STRING } from "elf/utils/func";
+
+import { CSS_TO_STRING } from "elf/core/func";
 import DomRender from "plugins/renderer-html/HTMLRenderer/DomRender";
 
 export default class SVGRender extends DomRender {

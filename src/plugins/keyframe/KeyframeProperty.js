@@ -1,10 +1,10 @@
-import icon from "elf/editor/icon/icon";
 import { LOAD, CLICK, PREVENT, DEBOUNCE, SUBSCRIBE } from "sapa";
 
+import "./KeyframeProperty.scss";
+
+import icon from "elf/editor/icon/icon";
 import { Keyframe } from "elf/editor/property-parser/Keyframe";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./KeyframeProperty.scss";
 
 export default class KeyframeProperty extends BaseProperty {
   getTitle() {

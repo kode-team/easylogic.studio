@@ -1,7 +1,7 @@
 import { BoxShadow } from "../../property-parser/BoxShadow";
 import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
-import { makeInterpolateLength } from "./makeInterpolateLength";
 import { makeInterpolateColor } from "./makeInterpolateColor";
+import { makeInterpolateLength } from "./makeInterpolateLength";
 
 export function makeInterpolateBoxShadow(
   layer,

@@ -1,9 +1,16 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  clone,
+  createComponent,
+} from "sapa";
+
+import "./GridBoxEditor.scss";
+
 import icon, { iconUse } from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import "./GridBoxEditor.scss";
-import { clone } from "sapa";
-import { createComponent } from "sapa";
 
 const REG_CSS_UNIT =
   /(auto)|(repeat\([^)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;

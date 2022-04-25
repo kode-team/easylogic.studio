@@ -1,7 +1,17 @@
-import { Length } from "elf/editor/unit/Length";
-import { Transform } from "../property-parser/Transform";
-import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
+
+import { isFunction, isNotUndefined, isUndefined } from "sapa";
+
+import { Transform } from "../property-parser/Transform";
+import { BaseAssetModel } from "./BaseAssetModel";
+
+import {
+  itemsToRectVerties,
+  polyPoint,
+  polyPoly,
+  rectToVerties,
+  toRectVerties,
+} from "elf/core/collision";
 import {
   area,
   calculateMatrix,
@@ -10,17 +20,10 @@ import {
   radianToDegree,
   round,
   vertiesMap,
-} from "elf/utils/math";
-import { isFunction, isNotUndefined, isUndefined } from "sapa";
+} from "elf/core/math";
 import { PathParser } from "elf/editor/parser/PathParser";
-import {
-  itemsToRectVerties,
-  polyPoint,
-  polyPoly,
-  rectToVerties,
-  toRectVerties,
-} from "elf/utils/collision";
-import { BaseAssetModel } from "./BaseAssetModel";
+import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
+import { Length } from "elf/editor/unit/Length";
 
 export class MovableModel extends BaseAssetModel {
   getDefaultObject(obj = {}) {
@@ -271,6 +274,28 @@ export class MovableModel extends BaseAssetModel {
     }
 
     return isChanged;
+  }
+
+  changed() {
+    super.changed();
+
+    this.changedRect = this.hasChangedField(
+      "children",
+      "x",
+      "y",
+      "width",
+      "height",
+      "box-model",
+      "angle",
+      "transform-origin",
+      "transform",
+      "perspective",
+      "perspective-origin",
+      "resizingVertical",
+      "resizingHorizontal",
+      "contraints-vertical",
+      "contraints-horizontal"
+    );
   }
 
   /**

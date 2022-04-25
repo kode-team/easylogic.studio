@@ -1,7 +1,8 @@
 import { POINTERSTART, BIND } from "sapa";
+
 // import { Length } from "elf/editor/unit/Length";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class ColorPalette extends EditorElement {
   initState() {

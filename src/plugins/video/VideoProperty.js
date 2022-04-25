@@ -6,13 +6,13 @@ import {
   CHANGEINPUT,
   SUBSCRIBE,
   SUBSCRIBE_SELF,
+  createComponent,
 } from "sapa";
+
+import "./VideoProperty.scss";
 
 import icon from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
-import "./VideoProperty.scss";
-import { createComponent } from "sapa";
 
 // const video_dom_property = [
 //   // 'audioTracks',

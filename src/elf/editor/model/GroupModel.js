@@ -1,4 +1,7 @@
+import DefaultLayoutEngine from "../layout-engine/DefaultLayoutEngine";
+import GridLayoutEngine from "../layout-engine/GridLayoutEngine";
 import { MovableModel } from "./MovableModel";
+
 import {
   AlignContent,
   AlignItems,
@@ -9,8 +12,6 @@ import {
   Layout,
   ResizingMode,
 } from "elf/editor/types/model";
-import DefaultLayoutEngine from "../layout-engine/DefaultLayoutEngine";
-import GridLayoutEngine from "../layout-engine/GridLayoutEngine";
 
 const LayoutEngine = {
   [Layout.DEFAULT]: DefaultLayoutEngine,

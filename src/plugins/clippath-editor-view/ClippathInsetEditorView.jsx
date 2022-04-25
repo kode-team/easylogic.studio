@@ -1,12 +1,15 @@
-import { LEFT_BUTTON, POINTERSTART } from "sapa";
-import { END, MOVE } from "elf/editor/types/event";
-import "./ClippathEditorView.scss";
-import { vertiesMap } from "elf/utils/math";
-import { Length } from "elf/editor/unit/Length";
-import { ClipPathType } from "elf/editor/types/model";
-import { ClipPath } from "elf/editor/property-parser/ClipPath";
 import { vec3 } from "gl-matrix";
+
+import { LEFT_BUTTON, POINTERSTART } from "sapa";
+
+import "./ClippathEditorView.scss";
 import ClippathPolygonEditorView from "./ClippathPolygonEditorView";
+
+import { vertiesMap } from "elf/core/math";
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { END, MOVE } from "elf/editor/types/event";
+import { ClipPathType } from "elf/editor/types/model";
+import { Length } from "elf/editor/unit/Length";
 
 export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
   initializeInset() {

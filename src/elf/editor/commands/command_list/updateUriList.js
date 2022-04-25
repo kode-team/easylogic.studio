@@ -1,5 +1,5 @@
+import { uuidShort } from "elf/core/math";
 import AssetParser from "elf/editor/parser/AssetParser";
-import { uuidShort } from "elf/utils/math";
 
 export default {
   command: "updateUriList",

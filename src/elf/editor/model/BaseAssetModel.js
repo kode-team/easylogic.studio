@@ -1,6 +1,7 @@
-import { uuidShort } from "elf/utils/math";
 import { Keyframe } from "../property-parser/Keyframe";
 import { BaseModel } from "./BaseModel";
+
+import { uuidShort } from "elf/core/math";
 
 export class BaseAssetModel extends BaseModel {
   getDefaultObject(obj = {}) {

@@ -10,9 +10,10 @@ import {
   ENTER,
   SUBSCRIBE,
 } from "sapa";
-import icon from "elf/editor/icon/icon";
 
 import "./ProjectProperty.scss";
+
+import icon from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class ProjectProperty extends BaseProperty {

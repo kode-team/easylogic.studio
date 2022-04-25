@@ -1,6 +1,7 @@
 import SVGItemRender from "./SVGItemRender";
+
+import * as Color from "elf/core/color";
 import { SVGFill } from "elf/editor/property-parser/SVGFill";
-import Color from "elf/utils/Color";
 import { BooleanOperation } from "elf/editor/types/model";
 
 export default class BooleanPathRender extends SVGItemRender {

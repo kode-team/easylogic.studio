@@ -5,15 +5,14 @@ import {
   LOAD,
   SUBSCRIBE,
   SUBSCRIBE_SELF,
+  createComponent,
 } from "sapa";
 
-import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-
 import "./ResizingProperty.scss";
-import { ResizingMode } from "elf/editor/types/model";
-import { iconUse } from "elf/editor/icon/icon";
-import { createComponent } from "sapa";
 
+import { iconUse } from "elf/editor/icon/icon";
+import { ResizingMode } from "elf/editor/types/model";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 export default class ResizingProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("layout.property.resizing.title");

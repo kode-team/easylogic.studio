@@ -1,4 +1,3 @@
-import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
 import {
   LOAD,
   CLICK,
@@ -9,14 +8,17 @@ import {
   SUBSCRIBE,
   DOMDIFF,
   SUBSCRIBE_SELF,
+  createComponent,
+  createComponentList,
 } from "sapa";
-import { iconUse } from "elf/editor/icon/icon";
-import { CSS_TO_STRING, STRING_TO_CSS } from "elf/utils/func";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 import "./BackgroundImageEditor.scss";
-import { createComponent, createComponentList } from "sapa";
+
+import { CSS_TO_STRING, STRING_TO_CSS } from "elf/core/func";
+import { iconUse } from "elf/editor/icon/icon";
+import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
 import { VisibilityType } from "elf/editor/types/model";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 // eslint-disable-next-line no-unused-vars
 const names = {

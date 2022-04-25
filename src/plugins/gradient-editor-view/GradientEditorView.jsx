@@ -1,3 +1,5 @@
+import { mat4, vec3 } from "gl-matrix";
+
 import {
   DOMDIFF,
   KEYUP,
@@ -9,26 +11,27 @@ import {
   PREVENT,
   SUBSCRIBE,
 } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { END, MOVE } from "elf/editor/types/event";
+
 import "./GradientEditorView.scss";
-import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
-import { CSS_TO_STRING, STRING_TO_CSS } from "elf/utils/func";
+
+import { CSS_TO_STRING, STRING_TO_CSS } from "elf/core/func";
 import {
   calculateAngle360,
   calculateAngleForVec3,
   calculateRotationOriginMat4,
   vertiesMap,
-} from "elf/utils/math";
-import { Length } from "elf/editor/unit/Length";
+} from "elf/core/math";
+import { PathParser } from "elf/editor/parser/PathParser";
+import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
+import { END, MOVE } from "elf/editor/types/event";
 import {
   GradientType,
   RadialGradientType,
   TimingFunction,
 } from "elf/editor/types/model";
-import { mat4, vec3 } from "gl-matrix";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
-import { PathParser } from "elf/editor/parser/PathParser";
 
 var radialTypeList = [
   "circle",

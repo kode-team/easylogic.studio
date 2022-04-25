@@ -1,8 +1,9 @@
 import { CLICK } from "sapa";
 
+import "./ExportProperty.scss";
+
 import { iconUse } from "elf/editor/icon/icon";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import "./ExportProperty.scss";
 
 export default class ExportProperty extends BaseProperty {
   getTitle() {

@@ -1,8 +1,9 @@
-import { Length } from "elf/editor/unit/Length";
-import { PropertyItem } from "elf/editor/items/PropertyItem";
 import { BackgroundImage } from "./BackgroundImage";
-import { STRING_TO_CSS } from "elf/utils/func";
 import { PatternCache } from "./PatternCache";
+
+import { STRING_TO_CSS } from "elf/core/func";
+import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { Length } from "elf/editor/unit/Length";
 import { makeGroupFunction, parseValue } from "elf/utils/css-function-parser";
 
 const customFuncMap = {

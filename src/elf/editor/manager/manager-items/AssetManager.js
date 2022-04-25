@@ -1,4 +1,5 @@
 import { isObject, isString } from "sapa";
+
 import AssetParser from "elf/editor/parser/AssetParser";
 
 export class AssetManager {

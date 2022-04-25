@@ -1,5 +1,5 @@
-import Color from "../../elf/utils/Color";
-import HueColor from "../../elf/utils/HueColor";
+import * as Color from "elf/core/color";
+import * as HueColor from "elf/core/color/HueColor";
 
 export default class ColorManagerV2 {
   constructor() {

@@ -1,13 +1,14 @@
-import { ImageResource } from "./ImageResource";
-import { ColorStep } from "./ColorStep";
-
-import Color from "elf/utils/Color";
 import { isUndefined } from "sapa";
-import { parseOneValue } from "elf/utils/css-function-parser";
-import { FuncType, TimingFunction } from "elf/editor/types/model";
+
+import { ColorStep } from "./ColorStep";
+import { ImageResource } from "./ImageResource";
+
+import * as Color from "elf/core/color";
 import { createTimingFunction } from "elf/editor/interpolate";
 import { step } from "elf/editor/interpolate/timing-functions/steps";
 import { PathParser } from "elf/editor/parser/PathParser";
+import { FuncType, TimingFunction } from "elf/editor/types/model";
+import { parseOneValue } from "elf/utils/css-function-parser";
 
 const DEFINED_ANGLES = {
   "to top": 0,

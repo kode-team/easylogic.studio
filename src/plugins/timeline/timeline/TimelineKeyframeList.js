@@ -14,7 +14,7 @@ import {
 } from "sapa";
 import { Length } from "elf/editor/unit/Length";
 import { OBJECT_TO_CLASS, isUndefined } from "sapa";
-import { timecode, second } from "elf/utils/time";
+import { timecode, second } from "elf/core/time";
 import { Dom } from "sapa";
 import { PathParser } from "elf/editor/parser/PathParser";
 import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";

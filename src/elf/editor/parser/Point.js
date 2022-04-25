@@ -1,5 +1,6 @@
-import { clone } from "sapa";
 import { vec3 } from "gl-matrix";
+
+import { clone } from "sapa";
 
 /**
  * 상수 정리

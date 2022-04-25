@@ -1,10 +1,11 @@
-import { rectToVerties, rectToVertiesForArea } from "elf/utils/collision";
+import { mat4, vec3 } from "gl-matrix";
+
+import { rectToVerties, rectToVertiesForArea } from "elf/core/collision";
 import {
   calculateMatrix,
   calculateMatrixInverse,
   vertiesMap,
-} from "elf/utils/math";
-import { mat4, vec3 } from "gl-matrix";
+} from "elf/core/math";
 
 /**
  * editor 의 viewport 를 관리한다.

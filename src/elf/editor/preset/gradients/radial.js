@@ -1,4 +1,4 @@
-import { repeat } from "elf/utils/func";
+import { repeat } from "elf/core/func";
 import { ColorStep } from "elf/editor/property-parser/image-resource/ColorStep";
 
 export default {

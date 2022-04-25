@@ -1,9 +1,10 @@
-import { makeInterpolateLength } from "./makeInterpolateLength";
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
-import { STRING_TO_CSS } from "elf/utils/func";
-import { makeInterpolateString } from "./makeInterpolateString";
-import { makeInterpolateImageResource } from "./makeInterpolateImageResource";
 import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
+import { makeInterpolateImageResource } from "./makeInterpolateImageResource";
+import { makeInterpolateLength } from "./makeInterpolateLength";
+import { makeInterpolateString } from "./makeInterpolateString";
+
+import { STRING_TO_CSS } from "elf/core/func";
 // import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
 
 export function makeInterpolateBackgroundImage(

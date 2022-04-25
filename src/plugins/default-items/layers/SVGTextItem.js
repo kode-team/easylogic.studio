@@ -1,6 +1,7 @@
 import { SVGItem } from "./SVGItem";
-import { Length } from "elf/editor/unit/Length";
+
 import icon from "elf/editor/icon/icon";
+import { Length } from "elf/editor/unit/Length";
 
 export class SVGTextItem extends SVGItem {
   getIcon() {

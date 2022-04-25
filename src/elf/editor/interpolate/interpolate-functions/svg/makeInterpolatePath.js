@@ -1,7 +1,8 @@
-import { PathParser } from "elf/editor/parser/PathParser";
+import { makeInterpolateBoolean } from "../makeInterpolateBoolean";
 import { makeInterpolateIdentity } from "../makeInterpolateIdentity";
 import { makeInterpolatePathValues } from "./makeInterpolatePathValues";
-import { makeInterpolateBoolean } from "../makeInterpolateBoolean";
+
+import { PathParser } from "elf/editor/parser/PathParser";
 
 export function makeInterpolatePath(layer, property, startValue, endValue) {
   var returnParser = new PathParser();

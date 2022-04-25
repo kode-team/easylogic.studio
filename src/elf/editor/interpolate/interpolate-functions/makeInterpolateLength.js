@@ -1,6 +1,7 @@
-import { Length } from "elf/editor/unit/Length";
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
 import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
+import { makeInterpolateNumber } from "./makeInterpolateNumber";
+
+import { Length } from "elf/editor/unit/Length";
 
 function getRealAttributeValue(
   layer,

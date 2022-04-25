@@ -1,8 +1,9 @@
+import { isArray } from "sapa";
+
+import * as Color from "elf/core/color";
+import ColorNames from "elf/core/color/ColorNames";
 import { FuncType, GradientType, TimingFunction } from "elf/editor/types/model";
 import { Length } from "elf/editor/unit/Length";
-import { isArray } from "sapa";
-import Color from "./Color";
-import ColorNames from "./ColorNames";
 
 // order is very important (number, length, 8 digit color, 6 digit color, 3 digit color, keyword, color name)
 const CSS_FUNC_REGEXP =

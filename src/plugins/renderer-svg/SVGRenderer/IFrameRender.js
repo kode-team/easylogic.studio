@@ -1,5 +1,6 @@
-import { CSS_TO_STRING } from "elf/utils/func";
 import SVGLayerRender from "./SVGLayerRender";
+
+import { CSS_TO_STRING } from "elf/core/func";
 
 export default class IFrameRender extends SVGLayerRender {
   /**

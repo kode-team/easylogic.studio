@@ -1,4 +1,4 @@
-import { getDist } from "elf/utils/math";
+import { getDist } from "elf/core/math";
 
 export default class SegmentManager {
   /**

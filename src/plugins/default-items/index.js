@@ -1,21 +1,21 @@
 // import { Editor } from "elf/editor/manager/Editor";
 import { ArtBoard } from "./layers/ArtBoard";
+import { BooleanPathItem } from "./layers/BooleanPathItem";
 import { CircleLayer } from "./layers/CircleLayer";
 // import { CubeLayer } from "./layers/CubeLayer";
 // import { CylinderLayer } from "./layers/CylinderLayer";
 import { ImageLayer } from "./layers/ImageLayer";
 import { Project } from "./layers/Project";
 import { RectLayer } from "./layers/RectLayer";
+import { SplineItem } from "./layers/SplineItem";
 import { SVGPathItem } from "./layers/SVGPathItem";
+import { SVGPolygonItem } from "./layers/SVGPolygonItem";
+import { SVGStarItem } from "./layers/SVGStarItem";
 import { SVGTextItem } from "./layers/SVGTextItem";
 import { SVGTextPathItem } from "./layers/SVGTextPathItem";
 import { TemplateLayer } from "./layers/TemplateLayer";
 import { TextLayer } from "./layers/TextLayer";
 // import { VideoLayer } from "./layers/VideoLayer";
-import { SVGPolygonItem } from "./layers/SVGPolygonItem";
-import { SVGStarItem } from "./layers/SVGStarItem";
-import { SplineItem } from "./layers/SplineItem";
-import { BooleanPathItem } from "./layers/BooleanPathItem";
 
 /**
  *

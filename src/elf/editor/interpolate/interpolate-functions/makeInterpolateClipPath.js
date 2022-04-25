@@ -1,9 +1,9 @@
 import { ClipPath } from "../../property-parser/ClipPath";
-import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { makeInterpolateClipPathCircle } from "./clip-path/makeInterpolateClipPathCircle";
 import { makeInterpolateClipPathEllipse } from "./clip-path/makeInterpolateClipPathEllipse";
-import { makeInterpolateClipPathPolygon } from "./clip-path/makeInterpolateClipPathPolygon";
 import { makeInterpolateClipPathInset } from "./clip-path/makeInterpolateClipPathInset";
+import { makeInterpolateClipPathPolygon } from "./clip-path/makeInterpolateClipPathPolygon";
+import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 
 export function makeInterpolateClipPath(layer, property, startValue, endValue) {
   var startObject = ClipPath.parseStyle(startValue);

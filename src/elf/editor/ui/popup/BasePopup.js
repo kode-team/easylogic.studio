@@ -1,10 +1,11 @@
 import { POINTERSTART, CLICK, SUBSCRIBE } from "sapa";
-import { Length } from "elf/editor/unit/Length";
-import { iconUse } from "elf/editor/icon/icon";
-import { EditorElement } from "../common/EditorElement";
-import { END, MOVE } from "elf/editor/types/event";
 
 import "./BasePopup.scss";
+
+import { iconUse } from "elf/editor/icon/icon";
+import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 export default class BasePopup extends EditorElement {
   template() {

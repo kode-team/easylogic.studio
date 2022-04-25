@@ -1,5 +1,6 @@
-import { Length } from "elf/editor/unit/Length";
 import { makeInterpolateLength } from "./makeInterpolateLength";
+
+import { Length } from "elf/editor/unit/Length";
 
 export function makeInterpolatePerspectiveOrigin(
   layer,
