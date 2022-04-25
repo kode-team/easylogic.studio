@@ -1,11 +1,10 @@
 import { LOAD, CLICK, SUBSCRIBE_SELF, BIND } from "sapa";
-import BaseUI from "./BaseUI";
+import { BaseUI } from "../BaseUI";
 import "./ToggleButton.scss";
-import icon, { iconUse } from "elf/editor/icon/icon";
 
 const DEFAULT_LABELS = ["True", "False"];
 
-export default class ToggleButton extends BaseUI {
+export class ToggleButton extends BaseUI {
   initState() {
     return {
       checkedValue: this.props.checkedValue || this.props.value,
@@ -17,7 +16,7 @@ export default class ToggleButton extends BaseUI {
   }
 
   template() {
-    return `<div class='small-editor button' ref='$body'></div>`;
+    return <div class="small-editor button" ref="$body"></div>;
   }
 
   [LOAD("$body")]() {
@@ -29,10 +28,6 @@ export default class ToggleButton extends BaseUI {
                   .map((it, index) => {
                     let label = this.state.toggleLabels[index];
                     let title = this.state.toggleTitles[index] || label;
-
-                    if (icon[label]) {
-                      label = iconUse(label, "", { width: 30, height: 30 });
-                    }
 
                     return (
                       <div

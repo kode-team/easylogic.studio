@@ -1,1 +1,0 @@
-import{c as n}from"./index.8e0ef455.js";function o(){return["app"].map(t=>n({container:document.getElementById(t),config:{"editor.theme":"light"},plugins:[function(i){i.on("changed",()=>{})}]}))}window.EasylogicEditor=o();

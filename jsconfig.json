@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "elf/ui": ["./src/elf/ui"],      
       "elf/*": ["./src/elf/*"],
       "sapa": ["./src/sapa"],
       "style/*": ["./src/scss/*"],

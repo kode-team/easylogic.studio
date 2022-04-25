@@ -29,6 +29,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "elf/ui": path.resolve(__dirname, "./src/elf/ui"),
       elf: path.resolve(__dirname, "./src/elf"),
       sapa: path.resolve(__dirname, "./src/sapa"),
       style: path.resolve(__dirname, "./src/scss"),
@@ -42,7 +43,7 @@ export default defineConfig({
     replaceCodePlugin({
       replacements: [
         {
-          from: /\@\@VERSION\@\@/g,
+          from: /@@VERSION@@/g,
           to: pkgJSON.version,
         },
       ],

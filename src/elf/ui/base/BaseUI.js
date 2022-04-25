@@ -1,10 +1,7 @@
 // import { LOAD, CLICK } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { isFunction, isArray, isString } from "sapa";
+import { isFunction, isArray, isString, UIElement } from "sapa";
 
-import "./Button.scss";
-
-export default class BaseUI extends EditorElement {
+export class BaseUI extends UIElement {
   getValue() {
     return this.props.defaultValue;
   }
@@ -29,7 +26,7 @@ export default class BaseUI extends EditorElement {
     // 아무것도 없을 때는 선택할 수 있는 버튼 처럼 동작한다.
     // key, value 를 던질 수 있도록 한다.
     else {
-      this.parent.trigger(this.props.onchange, key, value, params);
+      this.parent.trigger(this.props.onChange, key, value, params);
     }
   }
 }

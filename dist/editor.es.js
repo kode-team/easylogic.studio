@@ -59109,8 +59109,7 @@ function backgroundImage(editor) {
     BackgroundImagePositionPopup
   });
 }
-var Button$1 = "";
-class BaseUI extends EditorElement {
+class BaseUI extends UIElement {
   getValue() {
     return this.props.defaultValue;
   }
@@ -59125,10 +59124,11 @@ class BaseUI extends EditorElement {
     } else if (isArray(this.props.action)) {
       this.emit(...this.props.action, key, value, params);
     } else {
-      this.parent.trigger(this.props.onchange, key, value, params);
+      this.parent.trigger(this.props.onChange, key, value, params);
     }
   }
 }
+var Button$1 = "";
 class Button extends BaseUI {
   initState() {
     return {
@@ -59159,12 +59159,12 @@ class Button extends BaseUI {
     this.sendEvent();
   }
 }
-var ToggleCheckBox$1 = "";
+var ToggleButton$1 = "";
 const DEFAULT_LABELS$1 = ["True", "False"];
-class ToggleCheckBox extends BaseUI {
+class ToggleButton extends BaseUI {
   initState() {
     return {
-      label: this.props.label || "",
+      checkedValue: this.props.checkedValue || this.props.value,
       checked: this.props.value || "false",
       toggleLabels: this.props.toggleLabels || DEFAULT_LABELS$1,
       toggleTitles: this.props.toggleTitles || [],
@@ -59172,75 +59172,10 @@ class ToggleCheckBox extends BaseUI {
     };
   }
   template() {
-    return `<div class='small-editor button' ref='$body'></div>`;
-  }
-  [LOAD("$body")]() {
-    var { label, checked } = this.state;
-    var hasLabel = label ? "has-label" : "";
-    return `
-        <div class='elf--toggle-checkbox ${hasLabel}'>
-            ${label ? `<label title="${label}">${label}</label>` : ""}
-            <div class='area' ref="$area">
-                ${this.state.toggleValues.map((it, index2) => {
-      let label2 = this.state.toggleLabels[index2];
-      if (obj[label2]) {
-        label2 = iconUse(label2, "", { width: 30, height: 30 });
-      }
-      return createElementJsx("div", null, createElementJsx("button", {
-        type: "button",
-        class: `${it === checked ? "checked" : ""}`,
-        "data-index": index2,
-        value: it,
-        style: "--elf--toggle-checkbox-tooltip-top: -20%;"
-      }, label2));
-    }).join("")}
-            </div>
-        </div>
-    `;
-  }
-  [BIND("$area")]() {
-    const selectedIndex = this.state.toggleValues.findIndex((v) => v === this.state.checked);
-    const unit = 100 / this.state.toggleValues.length;
-    return {
-      "data-selected-index": selectedIndex,
-      cssText: `
-                --unit-count: ${this.state.toggleValues.length};
-                --button-font-size: ${13 - this.state.toggleValues.length}px ;
-                --selected-button-size: ${1 / this.state.toggleValues.length * 100}%;
-                --selected-button-position: ${selectedIndex * unit}%;
-            `
-    };
-  }
-  setValue(checked) {
-    this.setState({
-      checked
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "small-editor button",
+      ref: "$body"
     });
-  }
-  getValue() {
-    return this.state.checked;
-  }
-  [CLICK("$el button")](e) {
-    this.setValue(e.$dt.value);
-    this.trigger("change");
-  }
-  [SUBSCRIBE_SELF("change")]() {
-    this.sendEvent();
-  }
-}
-var ToggleButton$1 = "";
-const DEFAULT_LABELS = ["True", "False"];
-class ToggleButton extends BaseUI {
-  initState() {
-    return {
-      checkedValue: this.props.checkedValue || this.props.value,
-      checked: this.props.value || "false",
-      toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
-      toggleTitles: this.props.toggleTitles || [],
-      toggleValues: this.props.toggleValues || ["true", "false"]
-    };
-  }
-  template() {
-    return `<div class='small-editor button' ref='$body'></div>`;
   }
   [LOAD("$body")]() {
     var { checked, checkedValue } = this.state;
@@ -59250,9 +59185,6 @@ class ToggleButton extends BaseUI {
                 ${this.state.toggleValues.map((it, index2) => {
       let label = this.state.toggleLabels[index2];
       let title2 = this.state.toggleTitles[index2] || label;
-      if (obj[label]) {
-        label = iconUse(label, "", { width: 30, height: 30 });
-      }
       return createElementJsx("div", {
         class: `${it === checked ? "visible" : ""} ${it === checkedValue ? "checked" : ""}`
       }, createElementJsx("button", {
@@ -59293,11 +59225,81 @@ class ToggleButton extends BaseUI {
     this.sendEvent();
   }
 }
+var ToggleCheckBox$1 = "";
+const DEFAULT_LABELS = ["True", "False"];
+class ToggleCheckBox extends BaseUI {
+  initState() {
+    return {
+      label: this.props.label || "",
+      checked: this.props.value || "false",
+      toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
+      toggleTitles: this.props.toggleTitles || [],
+      toggleValues: this.props.toggleValues || ["true", "false"]
+    };
+  }
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "small-editor button",
+      ref: "$body"
+    });
+  }
+  [LOAD("$body")]() {
+    var { label, checked } = this.state;
+    var hasLabel = label ? "has-label" : "";
+    return `
+        <div class='elf--toggle-checkbox ${hasLabel}'>
+            ${label ? `<label title="${label}">${label}</label>` : ""}
+            <div class='area' ref="$area">
+                ${this.state.toggleValues.map((it, index2) => {
+      let label2 = this.state.toggleLabels[index2];
+      let title2 = this.state.toggleTitles[index2];
+      return createElementJsx("div", null, createElementJsx("button", {
+        type: "button",
+        class: `${it === checked ? "checked" : ""}`,
+        "data-index": index2,
+        title: title2,
+        value: it,
+        style: "--elf--toggle-checkbox-tooltip-top: -20%;"
+      }, label2));
+    }).join("")}
+            </div>
+        </div>
+    `;
+  }
+  [BIND("$area")]() {
+    const selectedIndex = this.state.toggleValues.findIndex((v) => v === this.state.checked);
+    const unit = 100 / this.state.toggleValues.length;
+    return {
+      "data-selected-index": selectedIndex,
+      cssText: `
+                --unit-count: ${this.state.toggleValues.length};
+                --button-font-size: ${13 - this.state.toggleValues.length}px ;
+                --selected-button-size: ${1 / this.state.toggleValues.length * 100}%;
+                --selected-button-position: ${selectedIndex * unit}%;
+            `
+    };
+  }
+  setValue(checked) {
+    this.setState({
+      checked
+    });
+  }
+  getValue() {
+    return this.state.checked;
+  }
+  [CLICK("$el button")](e) {
+    this.setValue(e.$dt.value);
+    this.trigger("change");
+  }
+  [SUBSCRIBE_SELF("change")]() {
+    this.sendEvent();
+  }
+}
 function baseEditor(editor) {
   editor.registerElement({
-    ToggleCheckBox,
+    Button,
     ToggleButton,
-    Button
+    ToggleCheckBox
   });
   editor.registerAlias({
     "toggle-checkbox": "ToggleCheckBox",
@@ -84293,7 +84295,7 @@ function svgItem(editor) {
             key: "fill-rule",
             editor: "ToggleCheckBox",
             editorOptions: {
-              toggleLabels: ["join_full", "join_right"],
+              toggleLabels: [iconUse("join_full"), iconUse("join_right")],
               toggleValues: ["nonzero", "evenodd"]
             },
             defaultValue: current["fill-rule"] || "nonzero"
@@ -84387,7 +84389,11 @@ function svgItem(editor) {
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineCap"),
-          toggleLabels: ["line_cap_butt", "line_cap_round", "line_cap_square"],
+          toggleLabels: [
+            iconUse("line_cap_butt"),
+            iconUse("line_cap_round"),
+            iconUse("line_cap_square")
+          ],
           toggleValues: [
             StrokeLineCap.BUTT,
             StrokeLineJoin.ROUND,
@@ -84402,9 +84408,9 @@ function svgItem(editor) {
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineJoin"),
           toggleLabels: [
-            "line_join_miter",
-            "line_join_round",
-            "line_join_bevel"
+            iconUse("line_join_miter"),
+            iconUse("line_join_round"),
+            iconUse("line_join_bevel")
           ],
           toggleValues: [
             StrokeLineJoin.MITER,

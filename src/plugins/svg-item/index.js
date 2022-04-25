@@ -1,4 +1,5 @@
 // import { Editor } from "elf/editor/manager/Editor";
+import { iconUse } from "elf/editor/icon/icon";
 import { StrokeLineCap, StrokeLineJoin } from "elf/editor/types/model";
 import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 import ColorMatrixEditor from "./editor/ColorMatrixEditor";
@@ -50,7 +51,7 @@ export default function (editor) {
             key: "fill-rule",
             editor: "ToggleCheckBox",
             editorOptions: {
-              toggleLabels: ["join_full", "join_right"],
+              toggleLabels: [iconUse("join_full"), iconUse("join_right")],
               toggleValues: ["nonzero", "evenodd"],
             },
             defaultValue: current["fill-rule"] || "nonzero",
@@ -145,7 +146,11 @@ export default function (editor) {
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineCap"),
-          toggleLabels: ["line_cap_butt", "line_cap_round", "line_cap_square"],
+          toggleLabels: [
+            iconUse("line_cap_butt"),
+            iconUse("line_cap_round"),
+            iconUse("line_cap_square"),
+          ],
           toggleValues: [
             StrokeLineCap.BUTT,
             StrokeLineJoin.ROUND,
@@ -160,9 +165,9 @@ export default function (editor) {
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineJoin"),
           toggleLabels: [
-            "line_join_miter",
-            "line_join_round",
-            "line_join_bevel",
+            iconUse("line_join_miter"),
+            iconUse("line_join_round"),
+            iconUse("line_join_bevel"),
           ],
           toggleValues: [
             StrokeLineJoin.MITER,

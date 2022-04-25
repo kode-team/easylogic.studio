@@ -1,11 +1,10 @@
 import { LOAD, CLICK, SUBSCRIBE_SELF, BIND } from "sapa";
-import BaseUI from "./BaseUI";
+import { BaseUI } from "../BaseUI";
 import "./ToggleCheckBox.scss";
-import icon, { iconUse } from "elf/editor/icon/icon";
 
 const DEFAULT_LABELS = ["True", "False"];
 
-export default class ToggleCheckBox extends BaseUI {
+export class ToggleCheckBox extends BaseUI {
   initState() {
     return {
       label: this.props.label || "",
@@ -17,7 +16,7 @@ export default class ToggleCheckBox extends BaseUI {
   }
 
   template() {
-    return `<div class='small-editor button' ref='$body'></div>`;
+    return <div class="small-editor button" ref="$body"></div>;
   }
 
   [LOAD("$body")]() {
@@ -31,11 +30,7 @@ export default class ToggleCheckBox extends BaseUI {
                 ${this.state.toggleValues
                   .map((it, index) => {
                     let label = this.state.toggleLabels[index];
-                    // let title = this.state.toggleTitles[index];
-
-                    if (icon[label]) {
-                      label = iconUse(label, "", { width: 30, height: 30 });
-                    }
+                    let title = this.state.toggleTitles[index];
 
                     return (
                       <div>
@@ -43,6 +38,7 @@ export default class ToggleCheckBox extends BaseUI {
                           type="button"
                           class={`${it === checked ? "checked" : ""}`}
                           data-index={index}
+                          title={title}
                           value={it}
                           style="--elf--toggle-checkbox-tooltip-top: -20%;"
                         >

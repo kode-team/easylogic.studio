@@ -1,8 +1,8 @@
 import { LOAD, CLICK, DOMDIFF } from "sapa";
-import BaseUI from "./BaseUI";
+import { BaseUI } from "../BaseUI";
 import "./Button.scss";
 
-export default class Button extends BaseUI {
+export class Button extends BaseUI {
   initState() {
     return {
       label: this.props.label || "",

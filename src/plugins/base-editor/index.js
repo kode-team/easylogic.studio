@@ -1,6 +1,4 @@
-import Button from "./Button";
-import ToggleCheckBox from "./ToggleCheckBox";
-import ToggleButton from "./ToggleButton";
+import { Button, ToggleButton, ToggleCheckBox } from "elf/ui";
 
 /**
  *
@@ -8,9 +6,9 @@ import ToggleButton from "./ToggleButton";
  */
 export default function (editor) {
   editor.registerElement({
-    ToggleCheckBox,
-    ToggleButton,
     Button,
+    ToggleButton,
+    ToggleCheckBox,
   });
 
   editor.registerAlias({
