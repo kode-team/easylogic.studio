@@ -106,22 +106,6 @@ export default class SVGFilterSelectEditor extends EditorElement {
     });
   }
 
-  sendMessage(type) {
-    if (type === "new") {
-      this.emit(
-        "addStatusBarMessage",
-        this.$i18n("svgfilter.select.editor.message.create")
-      );
-    } else if (type === "-") {
-      this.emit(
-        "addStatusBarMessage",
-        this.$i18n("svgfilter.select.editor.message.select")
-      );
-    } else {
-      this.emit("addStatusBarMessage", "");
-    }
-  }
-
   [CHANGE("$options")]() {
     var value = this.refs.$options.value;
 

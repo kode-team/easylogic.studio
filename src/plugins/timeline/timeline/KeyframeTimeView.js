@@ -1,15 +1,9 @@
-import {
-  DEBOUNCE,
-  POINTERSTART,
-  MOVE,
-  THROTTLE,
-  IF,
-  END,
-  SUBSCRIBE,
-} from "sapa";
-import { Length } from "elf/editor/unit/Length";
+import { DEBOUNCE, POINTERSTART, THROTTLE, IF, SUBSCRIBE } from "sapa";
+
 import { second, framesToTimecode } from "elf/core/time";
+import { MOVE, END } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 const PADDING = 20;
 

@@ -28,7 +28,7 @@ import { PopupManager } from "apps/common/PopupManager";
 import { END, MOVE } from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
-export default class DesignEditor extends BaseLayout {
+export class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
 

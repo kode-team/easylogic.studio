@@ -1,26 +1,32 @@
-import {BaseProperty} from "./BaseProperty";
-import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "sapa";
+import {
+  LOAD,
+  CLICK,
+  DOMDIFF,
+  DRAGSTART,
+  CHANGE,
+  SUBSCRIBE,
+  registElement,
+} from "sapa";
+
+import { BaseProperty } from "./BaseProperty";
+import "./VideoAssetsProperty.scss";
 
 import icon from "elf/editor/icon/icon";
 import revokeObjectUrl from "elf/editor/util/revokeObjectUrl";
-import { registElement } from "sapa";
-
-import './VideoAssetsProperty.scss';
 
 export default class VideoAssetsProperty extends BaseProperty {
-
   getTitle() {
-    return this.$i18n('video.asset.property.title');
+    return this.$i18n("video.asset.property.title");
   }
 
   initState() {
     return {
-      mode: 'grid'
-    }
+      mode: "grid",
+    };
   }
 
   getClassName() {
-    return 'elf--video-assets-property'
+    return "elf--video-assets-property";
   }
 
   afterRender() {
@@ -28,7 +34,7 @@ export default class VideoAssetsProperty extends BaseProperty {
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       <div class='property-item video-assets'>
         <div class='video-list' ref='$videoList' data-view-mode='${this.state.mode}'></div>
       </div>
@@ -36,13 +42,12 @@ export default class VideoAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$videoList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { videos: [] }
+    var current = this.$selection.currentProject || { videos: [] };
 
-    var videos = current.videos;   
+    var videos = current.videos;
 
-    var results = videos.map( (video, index) => {
-
-      return /*html*/`
+    var results = videos.map((video, index) => {
+      return /*html*/ `
         <div class='video-item' data-index="${index}">
           <div class='preview' draggable="true">
             <img src="${video.local}" />
@@ -52,82 +57,76 @@ export default class VideoAssetsProperty extends BaseProperty {
             <button type="button" class='remove'>${icon.remove}</button>
           </div>
         </div>
-      `
-    })
+      `;
+    });
 
-    return /*html*/`
+    return /*html*/ `
       <div class='loaded-list'>
-        ${results.join('')}
+        ${results.join("")}
         <div class='add-video-item'>
           <input type='file' accept='video/*' ref='$file' />
           <button type="button">${icon.add}</button>
         </div>        
       </div>
 
-    `
+    `;
   }
 
-  executeVideo (callback, isRefresh = true, isEmit = true ) {
+  executeVideo(callback, isRefresh = true, isEmit = true) {
     var project = this.$selection.currentProject;
 
-    if(project) {
-
-      callback && callback (project) 
+    if (project) {
+      callback && callback(project);
 
       if (isRefresh) this.refresh();
-      if (isEmit) this.emit('refreshVideoAssets');
+      if (isEmit) this.emit("refreshVideoAssets");
     } else {
-      alert('Please select a project.')
+      window.alert("Please select a project.");
     }
   }
 
-  [DRAGSTART('$videoList .preview img')] (e) { 
-    var index = +e.$dt.closest('video-item').attr('data-index');
+  [DRAGSTART("$videoList .preview img")](e) {
+    var index = +e.$dt.closest("video-item").attr("data-index");
 
     var project = this.$selection.currentProject;
 
-    if(project) {
-      var videoInfo  =  project.videos[index];
+    if (project) {
+      var videoInfo = project.videos[index];
 
-      e.dataTransfer.setData('video/info',  videoInfo.local);
+      e.dataTransfer.setData("video/info", videoInfo.local);
     }
-
-  }
-  
-  [CHANGE('$videoList .add-video-item input[type=file]')] (e) {
-    this.executeVideo(project => {
-      [...e.target.files].forEach(item => {
-        this.emit('updateVideoAssetItem', item);
-      })
-    })
-
-    
   }
 
-  [CLICK('$videoList .remove')] (e) {
-    var $item = e.$dt.closest('video-item');
-    var index = +$item.attr('data-index');
+  [CHANGE("$videoList .add-video-item input[type=file]")](e) {
+    this.executeVideo(() => {
+      [...e.target.files].forEach((item) => {
+        this.emit("updateVideoAssetItem", item);
+      });
+    });
+  }
 
-    this.executeVideo(project => {
+  [CLICK("$videoList .remove")](e) {
+    var $item = e.$dt.closest("video-item");
+    var index = +$item.attr("data-index");
+
+    this.executeVideo((project) => {
       project.removeVideo(index);
-      revokeObjectUrl($item.$('.preview img').attr('src'))
-    })
+      revokeObjectUrl($item.$(".preview img").attr("src"));
+    });
   }
 
+  [CLICK("$videoList .copy")](e) {
+    var $item = e.$dt.closest("video-item");
+    var index = +$item.attr("data-index");
 
-  [CLICK('$videoList .copy')] (e) {
-    var $item = e.$dt.closest('video-item');
-    var index = +$item.attr('data-index');
-
-    this.executeVideo(project => {
+    this.executeVideo((project) => {
       project.copyVideo(index);
-    })
-  }  
+    });
+  }
 
-  [SUBSCRIBE('addVideoAsset')] () {
+  [SUBSCRIBE("addVideoAsset")]() {
     this.refresh();
   }
-
 }
 
-registElement({ VideoAssetsProperty })
+registElement({ VideoAssetsProperty });

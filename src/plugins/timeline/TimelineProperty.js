@@ -1,15 +1,23 @@
-import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, SUBSCRIBE } from "sapa";
+import {
+  DRAGOVER,
+  DROP,
+  PREVENT,
+  DEBOUNCE,
+  SCROLL,
+  SUBSCRIBE,
+  createComponent,
+} from "sapa";
 
-import TimelineAnimationProperty from "./TimelineAnimationProperty";
-import TimelinePlayControl from "./timeline/TimelinePlayControl";
-import TimelineValueEditor from "./timeline/TimelineValueEditor";
 import KeyframeTimeGridView from "./timeline/KeyframeTimeGridView";
 import KeyframeTimeView from "./timeline/KeyframeTimeView";
-import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
 import TimelineObjectList from "./timeline/TimelineObjectList";
+import TimelinePlayControl from "./timeline/TimelinePlayControl";
+import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
+import TimelineValueEditor from "./timeline/TimelineValueEditor";
+import TimelineAnimationProperty from "./TimelineAnimationProperty";
+
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
 
 export default class TimelineProperty extends BaseProperty {
   components() {

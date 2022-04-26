@@ -1,7 +1,7 @@
 import icon from "elf/editor/icon/icon";
-import { Layer } from "elf/editor/model/LayerModel";
+import { LayerModel } from "elf/editor/model/LayerModel";
 
-export class VideoLayer extends Layer {
+export class VideoLayer extends LayerModel {
   static getIcon() {
     return icon.video;
   }

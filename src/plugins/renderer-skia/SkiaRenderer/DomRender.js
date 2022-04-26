@@ -1,12 +1,14 @@
-import { Dom } from "sapa";
-import { CSS_TO_STRING, isNotUndefined, STRING_TO_CSS } from "sapa";
-import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
-import { ClipPath } from "elf/editor/property-parser/ClipPath";
-import { Pattern } from "elf/editor/property-parser/Pattern";
-import { Border } from "elf/editor/property-parser/Border";
 import { mat4 } from "gl-matrix";
+
+import { Dom, isNotUndefined } from "sapa";
+
 import ItemRender from "./ItemRender";
 
+import { CSS_TO_STRING, STRING_TO_CSS } from "elf/core/func";
+import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
+import { Border } from "elf/editor/property-parser/Border";
+import { ClipPath } from "elf/editor/property-parser/ClipPath";
+import { Pattern } from "elf/editor/property-parser/Pattern";
 import { Length } from "elf/editor/unit/Length";
 
 const ZERO_CONFIG = {};

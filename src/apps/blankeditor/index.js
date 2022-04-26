@@ -24,7 +24,7 @@ import { PopupManager } from "apps/common/PopupManager";
 import { END, MOVE } from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
-export default class BlankEditor extends BaseLayout {
+export class BlankEditor extends BaseLayout {
   afterRender() {
     super.afterRender();
 

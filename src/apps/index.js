@@ -1,11 +1,11 @@
 import { start } from "sapa";
 
 import "../scss/index.scss";
-import BlankEditor from "./blankeditor";
-import DataEditor from "./dataeditor";
-import DesignEditor from "./designeditor";
-import ThreeEditor from "./three-editor";
-import WhiteBoard from "./whiteboard";
+import { BlankEditor } from "./blankeditor";
+import { DataEditor } from "./dataeditor";
+import { DesignEditor } from "./designeditor";
+import { ThreeEditor } from "./three-editor";
+import { WhiteBoard } from "./whiteboard";
 export * from "export-library/index";
 
 export function createDesignEditor(opts) {

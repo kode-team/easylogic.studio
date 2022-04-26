@@ -1,7 +1,7 @@
-import { FilterClass } from "./Filter";
 import { BackgroundImage } from "./BackgroundImage";
-import { BoxShadow } from "./BoxShadow";
 import { BorderImage } from "./BorderImage";
+import { BoxShadow } from "./BoxShadow";
+import { FilterClass } from "./Filter";
 import { PatternClass } from "./Pattern";
 
 export default {

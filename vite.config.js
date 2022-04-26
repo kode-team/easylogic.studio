@@ -1,10 +1,7 @@
 import { defineConfig } from "vite";
-import { replaceCodePlugin } from "vite-plugin-replace";
-import eslintPlugin from "vite-plugin-eslint";
+
 
 import path from "path";
-// eslint-disable-next-line no-undef
-const pkgJSON = require("./package.json");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -41,14 +38,14 @@ export default defineConfig({
     },
   },
   plugins: [
-    eslintPlugin(),
-    replaceCodePlugin({
-      replacements: [
-        {
-          from: /@@VERSION@@/g,
-          to: pkgJSON.version,
-        },
-      ],
-    }),
+    // eslintPlugin(),
+    // replaceCodePlugin({
+    //   replacements: [
+    //     {
+    //       from: /@@VERSION@@/g,
+    //       to: pkgJSON.version,
+    //     },
+    //   ],
+    // }),
   ],
 });

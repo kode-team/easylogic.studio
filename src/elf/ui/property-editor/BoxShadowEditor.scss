@@ -35,11 +35,17 @@
 
   .shadow-item {
     display: grid;
-    grid-template-columns: 20px 30px 30px 1fr 1fr 1fr 1fr 30px;
+    grid-template-columns: 20px 1fr 30px;
     grid-column-gap: 2px;
     text-align: center;
     // margin-top: 5px;
     // font-size: 12px;
+
+    .shadow-content {
+      display: grid;
+      grid-template-columns: 60px 1fr 1fr;
+      grid-template-rows: auto;
+    }
 
     > label {
       display: flex;

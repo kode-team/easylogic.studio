@@ -39,6 +39,7 @@ export default class BoxShadowEditor extends EditorElement {
             <label draggable="true" data-index="${index}">${iconUse(
         "drag_indicator"
       )}</label>
+            <div class="shadow-content">
             ${createComponent("ColorViewEditor", {
               mini: true,
               key: "color",
@@ -46,17 +47,6 @@ export default class BoxShadowEditor extends EditorElement {
               params: index,
               onchange: "changeKeyValue",
             })}
-            ${createComponent("ToggleButton", {
-              mini: true,
-              key: "inset",
-              value: shadow.inset,
-              params: index,
-              onChange: "changeKeyValue",
-              checkedValue: BoxShadowStyle.INSET,
-              toggleLabels: [iconUse("border_style"), iconUse("border_style")],
-              toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
-              toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET],
-            })}            
             ${createComponent("NumberInputEditor", {
               mini: true,
               key: "offsetX",
@@ -73,6 +63,18 @@ export default class BoxShadowEditor extends EditorElement {
               params: index,
               onchange: "changeKeyValue",
             })}                    
+            ${createComponent("ToggleButton", {
+              mini: true,
+              key: "inset",
+              value: shadow.inset,
+              params: index,
+              onChange: "changeKeyValue",
+              checkedValue: BoxShadowStyle.INSET,
+              toggleLabels: [iconUse("border_style"), iconUse("border_style")],
+              toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
+              toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET],
+            })}            
+
             ${createComponent("NumberInputEditor", {
               mini: true,
               label: "B",
@@ -89,6 +91,7 @@ export default class BoxShadowEditor extends EditorElement {
               params: index,
               onchange: "changeKeyValue",
             })}             
+          </div>
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
               ${iconUse("remove2")}

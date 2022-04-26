@@ -1,9 +1,10 @@
+import { BIND, SUBSCRIBE } from "sapa";
+
 import { createBlankEditor } from "apps";
-import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
+
 import { iconUse } from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { BIND } from "sapa";
-import { SUBSCRIBE } from "sapa";
+import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 
 function startEditor() {
   const idList = ["app"];

@@ -1,9 +1,9 @@
-import { CLICK, LOAD, SUBSCRIBE_SELF } from "sapa";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { Length } from "elf/editor/unit/Length";
+import { CLICK, LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
 
 import "./TransformOriginEditor.scss";
-import { createComponent } from "sapa";
+
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 const typeList = [
   { key: "transform-origin-x", title: "X" },

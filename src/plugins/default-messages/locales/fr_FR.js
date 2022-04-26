@@ -1,5 +1,5 @@
 export default {
-  "app.title": "EASYLOGIC",
+  "app.title": "elf",
   "app.sample": (a, b, c) => {
     return `${a}-${b}-${c}`;
   },

@@ -10,14 +10,13 @@ import {
   createComponent,
 } from "sapa";
 
+import Body3DPanel from "./area/Body3DPanel";
+import ThreeInspector from "./area/ThreeInspector";
+import ThreeToolBar from "./area/tool-bar/ThreeToolBar";
 import "./layout.scss";
-import e3dEditorPlugins from "./plugins/three-editor-plugins";
+import threeEditorPlugins from "./plugins/three-editor-plugins";
 
-import ThreeToolBar from "apps/common-3d/area/tool-bar/ThreeToolBar";
-import Body3DPanel from "apps/common-3d/Body3DPanel";
-import ItemLayerTab from "apps/common/area/ItemLayerTab";
 import LayerTab from "apps/common/area/LayerTab";
-import ThreeInspector from "apps/common/area/ThreeInspector";
 import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
@@ -25,7 +24,7 @@ import { PopupManager } from "apps/common/PopupManager";
 import { END, MOVE } from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
-export default class ThreeEditor extends BaseLayout {
+export class ThreeEditor extends BaseLayout {
   afterRender() {
     super.afterRender();
 
@@ -39,7 +38,6 @@ export default class ThreeEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      ItemLayerTab,
       ThreeToolBar,
       ThreeInspector,
       Body3DPanel,
@@ -55,7 +53,7 @@ export default class ThreeEditor extends BaseLayout {
    * @returns {function[]}
    */
   getPlugins() {
-    return e3dEditorPlugins;
+    return threeEditorPlugins;
   }
 
   initState() {

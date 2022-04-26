@@ -8,13 +8,13 @@ import {
 } from "sapa";
 
 import "./layout.scss";
+import whiteboardPlugins from "./plugins/whiteboard-plugins";
 
 import { BaseLayout } from "apps/common/BaseLayout";
 import BodyPanel from "apps/common/BodyPanel";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { PopupManager } from "apps/common/PopupManager";
-import designEditorPlugins from "apps/designeditor/plugins/design-editor-plugins";
 
 /**
  * whiteboard system
@@ -25,7 +25,7 @@ import designEditorPlugins from "apps/designeditor/plugins/design-editor-plugins
  * 2. attribute property
  *
  */
-export default class WhiteBoard extends BaseLayout {
+export class WhiteBoard extends BaseLayout {
   initialize() {
     super.initialize();
 
@@ -50,7 +50,7 @@ export default class WhiteBoard extends BaseLayout {
    * @returns {function[]}
    */
   getPlugins() {
-    return designEditorPlugins;
+    return whiteboardPlugins;
   }
 
   template() {
@@ -58,8 +58,8 @@ export default class WhiteBoard extends BaseLayout {
       <div class="elf-studio whiteboard">
         <div class="layout-main">
           <div class="layout-middle" ref='$middle'>      
-            <div class="layout-body" ref='$bodyPanel'>
-              ${createComponent("BodyPanel", { ref: "$bodyPanelView" })}
+            <div class="layout-body">
+              ${createComponent("BodyPanel")}
             </div>                           
           </div>
           ${createComponent("KeyboardManager")}

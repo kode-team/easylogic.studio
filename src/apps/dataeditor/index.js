@@ -25,7 +25,7 @@ import { Editor } from "elf/editor/manager/Editor";
  *
  */
 
-export default class DataEditor extends BaseLayout {
+export class DataEditor extends BaseLayout {
   components() {
     return {
       PopupManager,

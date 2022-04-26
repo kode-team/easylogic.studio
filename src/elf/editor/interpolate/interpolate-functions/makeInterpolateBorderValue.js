@@ -1,7 +1,8 @@
-import Border from "../../property-parser/Border";
 import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
-import { makeInterpolateLength } from "./makeInterpolateLength";
 import { makeInterpolateColor } from "./makeInterpolateColor";
+import { makeInterpolateLength } from "./makeInterpolateLength";
+
+import { Border } from "elf/editor/property-parser/Border";
 
 export function makeInterpolateBorderValue(
   layer,

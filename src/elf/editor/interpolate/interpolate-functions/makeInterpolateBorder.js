@@ -1,5 +1,6 @@
-import Border from "../../property-parser/Border";
 import { makeInterpolateBorderValue } from "./makeInterpolateBorderValue";
+
+import { Border } from "elf/editor/property-parser/Border";
 
 const border_type = [
   "border",

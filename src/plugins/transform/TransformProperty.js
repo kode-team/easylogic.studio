@@ -1,126 +1,128 @@
-
 import {
-  LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DOMDIFF, IF,
+  LOAD,
+  DEBOUNCE,
+  CLICK,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  DOMDIFF,
+  IF,
+  createComponent,
 } from "sapa";
 
-
-import icon, { iconUse } from "elf/editor/icon/icon";
-import {BaseProperty} from "elf/editor/ui/property/BaseProperty";
-import { createComponent } from "sapa";
-
+import { iconUse } from "elf/editor/icon/icon";
+import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 var transformList = [
-
-  'rotate',
-  'rotateX',
-  'rotateY',
-  'rotateZ',
-  'rotate3d',    
-  'skew',      
-  'skewX',    
-  'skewY',   
-  'translate',
-  'translateX',  
-  'translateY',
-  'translateZ',
-  'translate3d',
-  'perspective',    
-  'scale',
-  'scaleX',
-  'scaleY',
-  'scaleZ',
-  'scale3d',
-  'matrix',
-  'matrix3d',  
+  "rotate",
+  "rotateX",
+  "rotateY",
+  "rotateZ",
+  "rotate3d",
+  "skew",
+  "skewX",
+  "skewY",
+  "translate",
+  "translateX",
+  "translateY",
+  "translateZ",
+  "translate3d",
+  "perspective",
+  "scale",
+  "scaleX",
+  "scaleY",
+  "scaleZ",
+  "scale3d",
+  "matrix",
+  "matrix3d",
 ];
 
-
 export default class TransformProperty extends BaseProperty {
-
   isFirstShow() {
-    return true; 
+    return true;
   }
 
   getTitle() {
-    return this.$i18n('transform.property.title')
+    return this.$i18n("transform.property.title");
   }
 
   getBody() {
-    return /*html*/`
+    return /*html*/ `
       ${createComponent("RotateEditorView")}
       <div class='full transform-property' ref='$body'></div>
     `;
   }
 
   hasKeyframe() {
-    return true; 
+    return true;
   }
 
-  getKeyframeProperty () {
-    return 'transform'
+  getKeyframeProperty() {
+    return "transform";
   }
 
   getTools() {
-    return /*html*/`
+    return /*html*/ `
       <select ref="$transformSelect">
-      ${transformList.map(transform => {
-        var label = this.$i18n('css.item.' + transform)
-        return `<option value='${transform}'>${label}</option>`;
-      }).join('')}
+      ${transformList
+        .map((transform) => {
+          var label = this.$i18n("css.item." + transform);
+          return `<option value='${transform}'>${label}</option>`;
+        })
+        .join("")}
       </select>
-      <button type="button" ref="$add" title="add Filter">${iconUse('add')}</button>
-    `
+      <button type="button" ref="$add" title="add Filter">${iconUse(
+        "add"
+      )}</button>
+    `;
   }
-  
 
   [CLICK("$add")]() {
     var transformType = this.refs.$transformSelect.value;
 
-    this.children.$transformEditor.trigger('add', transformType)
+    this.children.$transformEditor.trigger("add", transformType);
   }
 
-  [LOAD('$body') + DOMDIFF] () {
-    var current = this.$selection.current || {} 
+  [LOAD("$body") + DOMDIFF]() {
+    var current = this.$selection.current || {};
     var value = current.transform;
 
-    return createComponent("TransformEditor", { 
-      ref: '$transformEditor',
-      value, 
-      hideLabel: true, 
-      onchange: 'changeTransformEditor' 
+    return createComponent("TransformEditor", {
+      ref: "$transformEditor",
+      value,
+      hideLabel: true,
+      onchange: "changeTransformEditor",
     });
   }
 
-  [SUBSCRIBE_SELF('changeTransformEditor')] (transform) {
-    this.command('setAttributeForMulti', 'change transform property', this.$selection.packByValue({ 
-      transform
-    }))
+  [SUBSCRIBE_SELF("changeTransformEditor")](transform) {
+    this.command(
+      "setAttributeForMulti",
+      "change transform property",
+      this.$selection.packByValue({
+        transform,
+      })
+    );
   }
 
-  refresh () {
+  refresh() {
     this.children.$transformEditor.setValue(this.$selection.current.transform);
   }
 
   get editableProperty() {
-    return 'transform';
+    return "transform";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshSelectionStyleView') + DEBOUNCE(100)] () {
-
-    const current = this.$selection.current
+  [SUBSCRIBE("refreshSelectionStyleView") + DEBOUNCE(100)]() {
+    const current = this.$selection.current;
 
     if (current) {
-
-      if (current.hasChangedField('transform')) {
+      if (current.hasChangedField("transform")) {
         this.refresh();
       }
-
     }
-
   }
-
 }

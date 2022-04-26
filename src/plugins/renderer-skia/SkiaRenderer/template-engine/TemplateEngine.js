@@ -1,14 +1,13 @@
 import { DomTemplateEngine } from "./DomTemplateEngine";
 
 const EngineList = {
-    'dom' : DomTemplateEngine,
-}
+  dom: DomTemplateEngine,
+};
 
 export class TemplateEngine {
-    static compile (engine, template, params = []) {
+  static compile(engine, template, params = []) {
+    const currentEngine = EngineList[engine] || EngineList["dom"];
 
-        const currentEngine = EngineList[engine] || EngineList['dom'];
-
-        return currentEngine.compile(template, params);
-    }
-};
+    return currentEngine.compile(template, params);
+  }
+}

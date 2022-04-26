@@ -1,24 +1,24 @@
-import { Editor } from "elf/editor/manager/Editor";
 import AddIFrame from "./AddIFrame";
+import HTMLIFrameRender from "./HTMLIFrameRender";
 import { IFrameLayer } from "./IFrameLayer";
 import IFrameProperty from "./IFrameProperty";
-import HTMLIFrameRender from "./HTMLIFrameRender";
+
+// import { Editor } from "elf/editor/manager/Editor";
 
 /**
- * 
- * @param {Editor} editor 
+ *
+ * @param {Editor} editor
  */
 export default function (editor) {
+  editor.registerComponent("iframe", IFrameLayer);
 
-    editor.registerComponent('iframe', IFrameLayer);
+  editor.registerUI("inspector.tab.style", {
+    IFrameProperty,
+  });
 
-    editor.registerUI('inspector.tab.style', {
-        IFrameProperty
-    })
+  editor.registerRenderer("html", "iframe", new HTMLIFrameRender());
 
-    editor.registerRenderer('html', 'iframe', new HTMLIFrameRender());
-
-    editor.registerUI('tool.menu.css', {
-        AddIFrame
-    })
+  editor.registerUI("tool.menu.css", {
+    AddIFrame,
+  });
 }

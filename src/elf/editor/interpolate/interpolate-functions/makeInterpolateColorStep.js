@@ -1,8 +1,9 @@
-import { ColorStep } from "elf/editor/property-parser/image-resource/ColorStep";
 import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { makeInterpolateColor } from "./makeInterpolateColor";
 import { makeInterpolateNumber } from "./makeInterpolateNumber";
 import { makeInterpolateString } from "./makeInterpolateString";
+
+import { ColorStep } from "elf/editor/property-parser/image-resource/ColorStep";
 
 export function makeInterpolateColorStep(
   layer,

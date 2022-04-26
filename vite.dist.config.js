@@ -1,7 +1,9 @@
 import { defineConfig } from "vite";
 import copy from "rollup-plugin-copy";
 
+
 import path from "path";
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -27,6 +29,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "src/apps/index.js"),
       name: "elf",
+      manifest: true,
       fileName: (format) => `editor.${format}.js`,
     },
   },
@@ -34,6 +37,6 @@ export default defineConfig({
     copy({
       targets: [{ src: "index.d.ts", dest: "dist/" }],
       hook: "writeBundle",
-    }),
+    })
   ],
 });

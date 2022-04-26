@@ -2,18 +2,18 @@ import MenuItem from "./MenuItem";
 
 export default class KeyBoard extends MenuItem {
   getIconString() {
-    return 'keyboard';
+    return "keyboard";
   }
 
   getTitle() {
-    return this.$i18n('menu.item.shortcuts.title');
+    return this.$i18n("menu.item.shortcuts.title");
   }
 
-  clickButton(e) {
-    this.emit('showShortcutWindow')
+  clickButton() {
+    this.emit("showShortcutWindow");
   }
 
   isHideTitle() {
-    return true; 
+    return true;
   }
 }

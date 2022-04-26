@@ -140,7 +140,6 @@ export default class DrawManager extends EditorElement {
     this.setState(obj);
     this.$el.show();
 
-    this.emit("addStatusBarMessage", this.state.msg);
     this.emit("hidePathManager");
   }
 

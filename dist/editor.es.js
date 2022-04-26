@@ -7719,7 +7719,7 @@ function defaultIcons(editor) {
   editor.registerIcon("rect", "rect");
 }
 var en_US = {
-  "app.title": "EASYLOGIC",
+  "app.title": "elf",
   "app.sample": (a, b, c) => {
     return `${a}-${b}-${c}`;
   },
@@ -8137,7 +8137,7 @@ var en_US = {
   "image.select.editor.button": "Select Image"
 };
 var fr_FR = {
-  "app.title": "EASYLOGIC",
+  "app.title": "elf",
   "app.sample": (a, b, c) => {
     return `${a}-${b}-${c}`;
   },
@@ -8546,7 +8546,7 @@ var fr_FR = {
   "viewport.panning.enable": "You can move the area by holding down space and dragging the screen."
 };
 var ko_KR = {
-  "app.title": "EASYLOGIC",
+  "app.title": "elf",
   "app.sample": (a, b, c) => {
     return `${a}-${b}-${c}`;
   },
@@ -11065,6 +11065,7 @@ class BoxShadowEditor extends EditorElement {
       return `
         <div class="shadow-item real" data-index="${index2}">
             <label draggable="true" data-index="${index2}">${iconUse("drag_indicator")}</label>
+            <div class="shadow-content">
             ${createComponent("ColorViewEditor", {
         mini: true,
         key: "color",
@@ -11072,17 +11073,6 @@ class BoxShadowEditor extends EditorElement {
         params: index2,
         onchange: "changeKeyValue"
       })}
-            ${createComponent("ToggleButton", {
-        mini: true,
-        key: "inset",
-        value: shadow2.inset,
-        params: index2,
-        onChange: "changeKeyValue",
-        checkedValue: BoxShadowStyle.INSET,
-        toggleLabels: [iconUse("border_style"), iconUse("border_style")],
-        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
-        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
-      })}            
             ${createComponent("NumberInputEditor", {
         mini: true,
         key: "offsetX",
@@ -11099,6 +11089,18 @@ class BoxShadowEditor extends EditorElement {
         params: index2,
         onchange: "changeKeyValue"
       })}                    
+            ${createComponent("ToggleButton", {
+        mini: true,
+        key: "inset",
+        value: shadow2.inset,
+        params: index2,
+        onChange: "changeKeyValue",
+        checkedValue: BoxShadowStyle.INSET,
+        toggleLabels: [iconUse("border_style"), iconUse("border_style")],
+        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
+        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
+      })}            
+
             ${createComponent("NumberInputEditor", {
         mini: true,
         label: "B",
@@ -11115,6 +11117,7 @@ class BoxShadowEditor extends EditorElement {
         params: index2,
         onchange: "changeKeyValue"
       })}             
+          </div>
           <div class="tools">
             <button type="button" class="remove" data-index="${index2}">
               ${iconUse("remove2")}
@@ -78769,7 +78772,6 @@ class DrawManager extends EditorElement {
     obj2.changeEvent = obj2.changeEvent || "changeDrawManager";
     this.setState(obj2);
     this.$el.show();
-    this.emit("addStatusBarMessage", this.state.msg);
     this.emit("hidePathManager");
   }
   [SUBSCRIBE("hideDrawManager")]() {
@@ -80743,7 +80745,6 @@ class PathManager extends EditorElement {
     obj2.changeEvent = obj2.changeEvent || "changePathManager";
     this.setState(obj2);
     this.$el.show();
-    this.emit("addStatusBarMessage", this.state.msg);
   }
   [SUBSCRIBE("hidePathManager")]() {
     this.$el.hide();
@@ -89581,15 +89582,6 @@ class SVGFilterSelectEditor extends EditorElement {
       options: options2.split(this.state.splitChar).map((it) => it.trim())
     });
   }
-  sendMessage(type) {
-    if (type === "new") {
-      this.emit("addStatusBarMessage", this.$i18n("svgfilter.select.editor.message.create"));
-    } else if (type === "-") {
-      this.emit("addStatusBarMessage", this.$i18n("svgfilter.select.editor.message.select"));
-    } else {
-      this.emit("addStatusBarMessage", "");
-    }
-  }
   [CHANGE("$options")]() {
     var value = this.refs.$options.value;
     if (value == "new") {
@@ -93472,221 +93464,6 @@ class DesignEditor extends BaseLayout {
     }
   }
 }
-var layout$1 = "";
-function threeHelpers(editor) {
-  editor.registerUI("render.view", {});
-}
-var e3dEditorPlugins = [
-  defaultConfigs,
-  defaultIcons,
-  defaultMessages,
-  baseEditor,
-  propertyEditor,
-  component,
-  layerTree,
-  project,
-  threeHelpers
-];
-var ThreeToolBar$1 = "";
-var ToolbarMenuItem$1 = "";
-class ToolbarMenuItem extends EditorElement {
-  initialize() {
-    super.initialize();
-    const events = this.props.events || [];
-    if (events.length) {
-      events.forEach((event) => {
-        this.on(event, () => this.refresh());
-      });
-    }
-  }
-  template() {
-    return `
-        <button type="button"  class='elf--toolbar-menu-item' >
-            <span class="icon" ref="$icon"></span>
-        </button>
-        `;
-  }
-  [CLICK("$el")]() {
-    if (this.props.command) {
-      this.emit(this.props.command, ...this.props.args);
-    } else if (this.props.action) {
-      this.props.action(this.$editor);
-    }
-  }
-  [LOAD("$icon") + DOMDIFF]() {
-    return iconUse(this.props.icon);
-  }
-  [BIND("$el")]() {
-    const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false;
-    return {
-      "data-selected": selected
-    };
-  }
-}
-class ToolBarRenderer extends EditorElement {
-  components() {
-    return {
-      DropdownMenu,
-      ToolbarMenuItem
-    };
-  }
-  template() {
-    return `<div class="toolbar-renderer"></div>`;
-  }
-  [LOAD("$el")]() {
-    return this.props.items.map((item, index2) => {
-      return this.renderMenuItem(item, index2);
-    });
-  }
-  renderMenuItem(item, index2) {
-    switch (item.type) {
-      case MenuItemType.LINK:
-        return this.renderLink(item, index2);
-      case MenuItemType.DROPDOWN:
-        return this.renderDropdown(item, index2);
-      default:
-        return this.renderButton(item, index2);
-    }
-  }
-  renderButton(item, index2) {
-    return createComponent("ToolbarMenuItem", {
-      ref: "$button-" + index2,
-      title: item.title,
-      icon: item.icon,
-      command: item.command,
-      shortcut: item.shortcut,
-      args: item.args,
-      nextTick: item.nextTick,
-      disabled: item.disabled,
-      selected: item.selected,
-      selectedKey: item.selectedKey,
-      action: item.action,
-      events: item.events
-    });
-  }
-  renderDropdown(item, index2) {
-    return createComponent("DropdownMenu", {
-      ref: "$dropdown-" + index2,
-      items: item.items,
-      icon: item.icon,
-      events: item.events,
-      selected: item.selected,
-      selectedKey: item.selectedKey,
-      action: item.action,
-      style: item.style,
-      dy: 6
-    }, [item.content]);
-  }
-}
-class ThreeToolBar extends EditorElement {
-  initState() {
-    return {
-      items: [
-        {
-          title: "menu.item.fullscreen.title",
-          command: "toggle.fullscreen",
-          shortcut: "ALT+/"
-        },
-        { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
-        "-",
-        { title: "menu.item.export.title", command: "showExportView" },
-        { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
-        { title: "menu.item.download.title", command: "downloadJSON" },
-        {
-          title: "menu.item.save.title",
-          command: "saveJSON",
-          nextTick: () => {
-            this.emit("notify", "alert", "Save", "Save the content on localStorage", 2e3);
-          }
-        },
-        {
-          title: "menu.item.language.title",
-          items: [
-            {
-              title: "English",
-              command: "setLocale",
-              args: [Language.EN],
-              checked: () => this.$editor.locale === Language.EN
-            },
-            {
-              title: "Fran\xE7ais",
-              command: "setLocale",
-              args: [Language.FR],
-              checked: () => this.$editor.locale === Language.FR
-            },
-            {
-              title: "Korean",
-              command: "setLocale",
-              args: [Language.KO],
-              checked: () => this.$editor.locale === Language.KO
-            }
-          ]
-        },
-        "-",
-        {
-          title: "EasyLogic Studio",
-          items: [
-            {
-              type: "link",
-              title: "Github",
-              href: "https://github.com/easylogic/editor"
-            },
-            {
-              type: "link",
-              title: "Learn",
-              href: "https://www.easylogic.studio"
-            }
-          ]
-        }
-      ]
-    };
-  }
-  components() {
-    return {
-      ToolBarRenderer,
-      ThemeChanger,
-      Outline,
-      SelectTool,
-      ExportView,
-      Download,
-      Save,
-      Undo,
-      Redo,
-      DropdownMenu,
-      Projects
-    };
-  }
-  template() {
-    return `
-            <div class='elf--tool-bar'>
-                ${createComponent("ToolBarRenderer", {
-      items: ToolbarMenu.left(this.$editor)
-    })}
-                ${createComponent("ToolBarRenderer", {
-      items: ToolbarMenu.center(this.$editor)
-    })}
-                <div class='right'>
-                    ${this.$injectManager.generate("toolbar.right")}
-                    ${createComponent("ThemeChanger")}
-                </div>
-            </div>
-        `;
-  }
-  [LOAD("$logo")]() {
-    return `
-            <div class="logo-item">           
-                ${createComponent("DropdownMenu", {
-      ref: "$menu",
-      items: this.state.items,
-      dy: 6
-    }, [createElement("label", { class: "logo" })])}
-            </div>                                
-        `;
-  }
-  [CONFIG("language.locale")]() {
-    this.refresh();
-  }
-}
 var Canvas3DView$1 = "";
 const _changeEvent$1 = { type: "change" };
 const _startEvent = { type: "start" };
@@ -95520,6 +95297,221 @@ class ThreeInspector extends EditorElement {
     }))));
   }
 }
+var ThreeToolBar$1 = "";
+var ToolbarMenuItem$1 = "";
+class ToolbarMenuItem extends EditorElement {
+  initialize() {
+    super.initialize();
+    const events = this.props.events || [];
+    if (events.length) {
+      events.forEach((event) => {
+        this.on(event, () => this.refresh());
+      });
+    }
+  }
+  template() {
+    return `
+        <button type="button"  class='elf--toolbar-menu-item' >
+            <span class="icon" ref="$icon"></span>
+        </button>
+        `;
+  }
+  [CLICK("$el")]() {
+    if (this.props.command) {
+      this.emit(this.props.command, ...this.props.args);
+    } else if (this.props.action) {
+      this.props.action(this.$editor);
+    }
+  }
+  [LOAD("$icon") + DOMDIFF]() {
+    return iconUse(this.props.icon);
+  }
+  [BIND("$el")]() {
+    const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false;
+    return {
+      "data-selected": selected
+    };
+  }
+}
+class ToolBarRenderer extends EditorElement {
+  components() {
+    return {
+      DropdownMenu,
+      ToolbarMenuItem
+    };
+  }
+  template() {
+    return `<div class="toolbar-renderer"></div>`;
+  }
+  [LOAD("$el")]() {
+    return this.props.items.map((item, index2) => {
+      return this.renderMenuItem(item, index2);
+    });
+  }
+  renderMenuItem(item, index2) {
+    switch (item.type) {
+      case MenuItemType.LINK:
+        return this.renderLink(item, index2);
+      case MenuItemType.DROPDOWN:
+        return this.renderDropdown(item, index2);
+      default:
+        return this.renderButton(item, index2);
+    }
+  }
+  renderButton(item, index2) {
+    return createComponent("ToolbarMenuItem", {
+      ref: "$button-" + index2,
+      title: item.title,
+      icon: item.icon,
+      command: item.command,
+      shortcut: item.shortcut,
+      args: item.args,
+      nextTick: item.nextTick,
+      disabled: item.disabled,
+      selected: item.selected,
+      selectedKey: item.selectedKey,
+      action: item.action,
+      events: item.events
+    });
+  }
+  renderDropdown(item, index2) {
+    return createComponent("DropdownMenu", {
+      ref: "$dropdown-" + index2,
+      items: item.items,
+      icon: item.icon,
+      events: item.events,
+      selected: item.selected,
+      selectedKey: item.selectedKey,
+      action: item.action,
+      style: item.style,
+      dy: 6
+    }, [item.content]);
+  }
+}
+class ThreeToolBar extends EditorElement {
+  initState() {
+    return {
+      items: [
+        {
+          title: "menu.item.fullscreen.title",
+          command: "toggle.fullscreen",
+          shortcut: "ALT+/"
+        },
+        { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
+        "-",
+        { title: "menu.item.export.title", command: "showExportView" },
+        { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
+        { title: "menu.item.download.title", command: "downloadJSON" },
+        {
+          title: "menu.item.save.title",
+          command: "saveJSON",
+          nextTick: () => {
+            this.emit("notify", "alert", "Save", "Save the content on localStorage", 2e3);
+          }
+        },
+        {
+          title: "menu.item.language.title",
+          items: [
+            {
+              title: "English",
+              command: "setLocale",
+              args: [Language.EN],
+              checked: () => this.$editor.locale === Language.EN
+            },
+            {
+              title: "Fran\xE7ais",
+              command: "setLocale",
+              args: [Language.FR],
+              checked: () => this.$editor.locale === Language.FR
+            },
+            {
+              title: "Korean",
+              command: "setLocale",
+              args: [Language.KO],
+              checked: () => this.$editor.locale === Language.KO
+            }
+          ]
+        },
+        "-",
+        {
+          title: "EasyLogic Studio",
+          items: [
+            {
+              type: "link",
+              title: "Github",
+              href: "https://github.com/easylogic/editor"
+            },
+            {
+              type: "link",
+              title: "Learn",
+              href: "https://www.easylogic.studio"
+            }
+          ]
+        }
+      ]
+    };
+  }
+  components() {
+    return {
+      ToolBarRenderer,
+      ThemeChanger,
+      Outline,
+      SelectTool,
+      ExportView,
+      Download,
+      Save,
+      Undo,
+      Redo,
+      DropdownMenu,
+      Projects
+    };
+  }
+  template() {
+    return `
+            <div class='elf--tool-bar'>
+                ${createComponent("ToolBarRenderer", {
+      items: ToolbarMenu.left(this.$editor)
+    })}
+                ${createComponent("ToolBarRenderer", {
+      items: ToolbarMenu.center(this.$editor)
+    })}
+                <div class='right'>
+                    ${this.$injectManager.generate("toolbar.right")}
+                    ${createComponent("ThemeChanger")}
+                </div>
+            </div>
+        `;
+  }
+  [LOAD("$logo")]() {
+    return `
+            <div class="logo-item">           
+                ${createComponent("DropdownMenu", {
+      ref: "$menu",
+      items: this.state.items,
+      dy: 6
+    }, [createElement("label", { class: "logo" })])}
+            </div>                                
+        `;
+  }
+  [CONFIG("language.locale")]() {
+    this.refresh();
+  }
+}
+var layout$1 = "";
+function threeHelpers(editor) {
+  editor.registerUI("render.view", {});
+}
+var threeEditorPlugins = [
+  defaultConfigs,
+  defaultIcons,
+  defaultMessages,
+  baseEditor,
+  propertyEditor,
+  component,
+  layerTree,
+  project,
+  threeHelpers
+];
 class ThreeEditor extends BaseLayout {
   afterRender() {
     super.afterRender();
@@ -95531,7 +95523,6 @@ class ThreeEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      ItemLayerTab,
       ThreeToolBar,
       ThreeInspector,
       Body3DPanel,
@@ -95541,7 +95532,7 @@ class ThreeEditor extends BaseLayout {
     };
   }
   getPlugins() {
-    return e3dEditorPlugins;
+    return threeEditorPlugins;
   }
   initState() {
     return {
@@ -95714,6 +95705,30 @@ class ThreeEditor extends BaseLayout {
   }
 }
 var layout = "";
+var whiteboardPlugins = [
+  defaultConfigs,
+  defaultIcons,
+  defaultMessages,
+  defaultItems,
+  defaultPatterns,
+  rendererHtml,
+  rendererJson,
+  rendererSvg,
+  baseEditor,
+  propertyEditor,
+  color,
+  gradient,
+  history,
+  selectionInfoView,
+  selectionToolView,
+  guideLineView,
+  layerAppendView,
+  hoverView,
+  pathDrawView,
+  pathEditorView,
+  gradientEditorView,
+  fillEditorView
+];
 class WhiteBoard extends BaseLayout {
   initialize() {
     super.initialize();
@@ -95729,15 +95744,15 @@ class WhiteBoard extends BaseLayout {
     };
   }
   getPlugins() {
-    return designEditorPlugins;
+    return whiteboardPlugins;
   }
   template() {
     return `
       <div class="elf-studio whiteboard">
         <div class="layout-main">
           <div class="layout-middle" ref='$middle'>      
-            <div class="layout-body" ref='$bodyPanel'>
-              ${createComponent("BodyPanel", { ref: "$bodyPanelView" })}
+            <div class="layout-body">
+              ${createComponent("BodyPanel")}
             </div>                           
           </div>
           ${createComponent("KeyboardManager")}

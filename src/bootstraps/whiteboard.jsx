@@ -11,7 +11,7 @@ function startEditor() {
         // 'editor.layout.mode': 'svg',
         // 'show.left.panel': false,
         // 'show.right.panel': false,
-        // 'show.ruler': false,
+        "show.ruler": false,
       },
       plugins: [],
     });

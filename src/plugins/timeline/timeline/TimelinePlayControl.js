@@ -1,4 +1,5 @@
 import { CLICK, INPUT, BIND, SUBSCRIBE } from "sapa";
+
 import icon from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 

@@ -4,21 +4,22 @@ import {
   DOMDIFF,
   DEBOUNCE,
   POINTERSTART,
-  MOVE,
   IF,
-  END,
   DOUBLECLICK,
   KEYUP,
   KEY,
   SUBSCRIBE,
+  isUndefined,
+  Dom,
 } from "sapa";
-import { Length } from "elf/editor/unit/Length";
-import { OBJECT_TO_CLASS, isUndefined } from "sapa";
+
+import { OBJECT_TO_CLASS } from "elf/core/func";
 import { timecode, second } from "elf/core/time";
-import { Dom } from "sapa";
-import { PathParser } from "elf/editor/parser/PathParser";
 import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
+import { PathParser } from "elf/editor/parser/PathParser";
+import { MOVE, END } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 const PADDING = 20;
 
@@ -123,9 +124,7 @@ export default class TimelineKeyframeList extends EditorElement {
                           (subOffset.length / subOffset.totalLength) * width;
                         return /*html*/ `
                         <div 
-                            class='${OBJECT_TO_CLASS({
-                              "sub-offset": true,
-                            })}'    
+                            class='sub-offset'    
                             style='left: ${subOffsetLeft}'
                             data-offset-id="${it.id}"
                             data-layer-id="${layerId}"

@@ -1,7 +1,7 @@
-import VideoAssetsProperty from "./VideoAssetsProperty";
 import ProjectInformationProperty from "./ProjectInformationProperty";
+import VideoAssetsProperty from "./VideoAssetsProperty";
 
-export default {  
+export default {
   ProjectInformationProperty,
   VideoAssetsProperty,
 };

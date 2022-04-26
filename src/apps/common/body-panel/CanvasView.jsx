@@ -102,13 +102,11 @@ export default class CanvasView extends EditorElement {
       this.emit("refreshCursor", "grab");
     } else {
       this.emit("recoverCursor", "auto");
-      // this.emit('addStatusBarMessage', '');
     }
   }
 
   startMovePan() {
     this.lastDist = vec3.create();
-    // this.emit('addStatusBarMessage', this.$i18n('viewport.panning.enable'));
   }
 
   movePan(dx, dy) {
@@ -127,7 +125,6 @@ export default class CanvasView extends EditorElement {
   refreshCursor() {
     if (this.$config.get("set.tool.hand") === false) {
       this.emit("refreshCursor", "auto");
-      // this.emit('addStatusBarMessage', '');
     } else {
       this.emit("refreshCursor", "grab");
     }

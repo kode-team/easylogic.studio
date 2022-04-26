@@ -1,8 +1,8 @@
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { LOAD, DOMDIFF, SUBSCRIBE } from "sapa";
+
 import "./ViewportHelper.scss";
-import { LOAD } from "sapa";
-import { DOMDIFF } from "sapa";
-import { SUBSCRIBE } from "sapa";
+
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class ViewportHelper extends EditorElement {
   template() {

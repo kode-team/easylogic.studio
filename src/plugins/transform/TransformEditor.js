@@ -1,4 +1,3 @@
-import icon, { iconUse } from "elf/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -8,16 +7,17 @@ import {
   PREVENT,
   SUBSCRIBE_SELF,
   DOMDIFF,
+  isNotUndefined,
+  createComponent,
 } from "sapa";
 
-import { Transform } from "elf/editor/property-parser/Transform";
-import { Length } from "elf/editor/unit/Length";
-import { EditorElement } from "elf/editor/ui/common/EditorElement";
-
 import "./TransformEditor.scss";
-import { isNotUndefined } from "sapa";
+
+import icon, { iconUse } from "elf/editor/icon/icon";
+import { Transform } from "elf/editor/property-parser/Transform";
 import { TransformValue } from "elf/editor/types/model";
-import { createComponent } from "sapa";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { Length } from "elf/editor/unit/Length";
 
 var transformList = [
   TransformValue.PERSPECTIVE,

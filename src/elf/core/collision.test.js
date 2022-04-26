@@ -1,4 +1,5 @@
 import { expect, test } from "vitest";
+
 import { intersectRectRect, Rect } from "./collision";
 
 test("collision", () => {

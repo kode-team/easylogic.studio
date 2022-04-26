@@ -1,4 +1,5 @@
 import { DEBOUNCE, THROTTLE, SUBSCRIBE } from "sapa";
+
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class KeyframeTimeGridView extends EditorElement {

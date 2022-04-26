@@ -1,10 +1,18 @@
-import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "sapa";
+import {
+  CLICK,
+  KEYDOWN,
+  KEYUP,
+  IF,
+  PREVENT,
+  ENTER,
+  SUBSCRIBE,
+  isUndefined,
+  createComponent,
+} from "sapa";
 
 import { second, timecode } from "elf/core/time";
-import { isUndefined } from "sapa";
 import icon from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { createComponent } from "sapa";
 
 export default class TimelineValueEditor extends EditorElement {
   initState() {

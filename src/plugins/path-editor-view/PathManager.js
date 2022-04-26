@@ -132,8 +132,6 @@ export default class PathManager extends EditorElement {
     obj.changeEvent = obj.changeEvent || "changePathManager";
     this.setState(obj);
     this.$el.show();
-
-    this.emit("addStatusBarMessage", this.state.msg);
   }
 
   [SUBSCRIBE("hidePathManager")]() {

@@ -1,8 +1,10 @@
-import { Length } from "elf/editor/unit/Length";
 import { isUndefined } from "sapa";
-import { DirectionLength } from "elf/editor/unit/DirectionLength";
-import { PropertyItem } from "elf/editor/items/PropertyItem";
+
 import { ClipPath } from "./ClipPath";
+
+import { PropertyItem } from "elf/editor/items/PropertyItem";
+import { DirectionLength } from "elf/editor/unit/DirectionLength";
+import { Length } from "elf/editor/unit/Length";
 const CLIPPATH_REG =
   /(content-box|padding-box|border-box|margin-box|view-box|stroke-box|fill-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^)]*)\))?)/gi;
 export class Shape extends PropertyItem {
