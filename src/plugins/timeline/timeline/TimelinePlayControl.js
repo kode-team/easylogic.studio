@@ -136,26 +136,18 @@ export default class TimelinePlayControl extends EditorElement {
 
   first() {
     this.emit("firstTimelineItem");
-    this.$editor.changeMode("SELECTION");
-    this.emit("afterChangeMode");
   }
 
   prev() {
     this.emit("prevTimelineItem");
-    this.$editor.changeMode("SELECTION");
-    this.emit("afterChangeMode");
   }
 
   next() {
     this.emit("nextTimelineItem");
-    this.$editor.changeMode("SELECTION");
-    this.emit("afterChangeMode");
   }
 
   last() {
     this.emit("lastTimelineItem");
-    this.$editor.changeMode("SELECTION");
-    this.emit("afterChangeMode");
   }
 
   play() {
@@ -169,8 +161,6 @@ export default class TimelinePlayControl extends EditorElement {
 
   pause() {
     this.emit("pauseTimelineItem");
-    this.$editor.changeMode("SELECTION");
-    this.emit("afterChangeMode");
   }
 
   [SUBSCRIBE("stopTimeline")]() {

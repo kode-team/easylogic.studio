@@ -2,9 +2,10 @@
   "name": "@easylogic/editor",
   "version": "0.12.2",
   "description": "Fantastic Web Design Tool ",
-  "types": "./dist/index.d.ts",
+  "types": "./index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "index.d.ts"
   ],
   "main": "./dist/editor.umd.js",
   "module": "./dist/editor.es.js",
@@ -31,6 +32,8 @@
     "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
     "adorable-css": "^0.5.2",
     "autoprefixer": "^9.8.6",
     "cssnano": "^5.0.13",
@@ -40,6 +43,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx": "^0.1.0",
     "happy-dom": "^2.25.1",
+    "husky": "^7.0.4",
     "postcss": "^8.4.4",
     "prettier": "2.6.2",
     "release-it": "^14.6.2",
@@ -56,10 +60,12 @@
   "scripts": {
     "vite:dev": "vite --config=vite.config.js",
     "vite:dist": "vite build --config=vite.dist.config.js",
+    "vite:dist:watch": "vite build --config=vite.dist.config.js --watch",
     "vite:prod": "vite build --config=vite.prod.config.js && npm run copy:resource",
     "release": "release-it *",
     "copy:resource": "cp CNAME docs/",
     "build": "npm run vite:prod && npm run vite:dist",
+    "build:watch": "npm run vite:dist:watch",
     "dev": "npm run vite:dev",
     "test": "vitest",
     "coverage": "vitest --coverage",

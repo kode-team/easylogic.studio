@@ -58,6 +58,7 @@ function makeMenuItem(it) {
     command: it.command,
     args: it.args || [],
     disabled: it.disabled,
+    direction: it.direction,
     icon: it.icon,
     nextTick: it.nextTick,
     onClick: it.onClick,

@@ -12,8 +12,6 @@ export default {
       project.seek();
 
       editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
     });
   },
 };

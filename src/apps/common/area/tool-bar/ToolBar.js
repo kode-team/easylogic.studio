@@ -117,8 +117,18 @@ export default class ToolBar extends EditorElement {
                 ${createComponent("ToolBarRenderer", {
                   items: ToolbarMenu.left(this.$editor),
                 })}
-                <div class='center'></div>
+                <div class='center'>
+                  ${createComponent("ToolBarRenderer", {
+                    items: this.$menu.getTargetMenu("toolbar.center"),
+                  })}       
+                  ${this.$injectManager.generate(
+                    "toolbar.center"
+                  )}                
+                </div>
                 <div class='right'>
+                    ${createComponent("ToolBarRenderer", {
+                      items: this.$menu.getTargetMenu("toolbar.right"),
+                    })}                                
                     ${this.$injectManager.generate("toolbar.right")}
                     ${createComponent("ThemeChanger")}
                 </div>

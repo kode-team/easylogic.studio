@@ -596,6 +596,8 @@ class Dom {
     DomDiff(this, Dom.create(rootElement).html(`<svg>${html}</svg>`).firstChild.firstChild);
   }
   find(selector2) {
+    if (this.isTextNode)
+      return void 0;
     return this.el.querySelector(selector2);
   }
   $(selector2) {
@@ -603,6 +605,8 @@ class Dom {
     return node ? Dom.create(node) : null;
   }
   findAll(selector2) {
+    if (this.isTextNode)
+      return [];
     return Array.from(this.el.querySelectorAll(selector2));
   }
   $$(selector2) {
@@ -852,6 +856,9 @@ class Dom {
   get files() {
     return this.el.files ? [...this.el.files] : [];
   }
+  get isTextNode() {
+    return this.el.nodeType === 3;
+  }
   realVal() {
     switch (this.el.nodeType) {
       case "INPUT":
@@ -973,6 +980,16 @@ class Dom {
       element = element.nextElementSibling;
     } while (element);
     return results;
+  }
+  get childNodes() {
+    const result = [];
+    if (this.el.hasChildNodes()) {
+      const childNodes = this.el.childNodes;
+      for (let i = 0; i < childNodes.length; i++) {
+        result.push(Dom.create(childNodes[i]));
+      }
+    }
+    return result;
   }
   childLength() {
     return this.el.children.length;
@@ -1101,13 +1118,156 @@ class Dom {
     }
   }
 }
-const start$1 = async (ElementClass, opt) => {
-  const $container = Dom.create(opt.container || document.body);
-  const app = new ElementClass(opt, opt);
-  await app.render($container);
-  registRootElementInstance(app);
-  return app;
-};
+class BaseStore {
+  constructor(editor) {
+    this.id = uuidShort$1();
+    this.cachedCallback = {};
+    this.callbacks = {};
+    this.editor = editor;
+    this.promiseProxy = new window.Proxy(this, {
+      get: (target, key) => {
+        return this.makePromiseEvent(key);
+      }
+    });
+  }
+  getCallbacks(event) {
+    if (!this.callbacks[event]) {
+      this.callbacks[event] = [];
+    }
+    return this.callbacks[event];
+  }
+  setCallbacks(event, list2 = []) {
+    this.callbacks[event] = list2;
+  }
+  debug() {
+  }
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
+    var callback = originalCallback;
+    if (debounceDelay > 0)
+      callback = debounce(originalCallback, debounceDelay);
+    else if (throttleDelay > 0)
+      callback = throttle(originalCallback, throttleDelay);
+    if (beforeMethods.length) {
+      callback = ifCheck(callback, context, beforeMethods);
+    }
+    if (frame) {
+      callback = makeRequestAnimationFrame(callback, context);
+    }
+    this.getCallbacks(event).push({
+      event,
+      callback,
+      context,
+      originalCallback,
+      enableAllTrigger,
+      enableSelfTrigger
+    });
+    return () => {
+      this.off(event, originalCallback);
+    };
+  }
+  off(event, originalCallback) {
+    this.debug("off message event", event);
+    if (arguments.length == 1) {
+      this.setCallbacks(event);
+    } else if (arguments.length == 2) {
+      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
+        return f.originalCallback !== originalCallback;
+      }));
+    }
+  }
+  offAll(context) {
+    Object.keys(this.callbacks).forEach((event) => {
+      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
+        return f.context !== context;
+      }));
+    });
+    this.debug("off all message", context.sourceName);
+  }
+  getCachedCallbacks(event) {
+    return this.getCallbacks(event);
+  }
+  get promise() {
+    return this.promiseProxy;
+  }
+  get p() {
+    return this.promise;
+  }
+  makePromiseEvent(event) {
+    var list2 = this.getCachedCallbacks(event);
+    const source2 = this.source;
+    return (...args2) => window.Promise.all(list2.filter((f) => {
+      return !f.enableSelfTrigger;
+    }).filter((f) => {
+      return f.enableAllTrigger || f.originalCallback.source !== source2;
+    }).map((f) => {
+      return new window.Promise((resolve) => {
+        resolve(f.callback.apply(f.context, args2));
+      });
+    }));
+  }
+  sendMessage(source2, event, ...args2) {
+    this.sendMessageList(source2, [[event, ...args2]]);
+  }
+  sendMessageList(source2, messages = []) {
+    window.Promise.resolve().then(() => {
+      messages.forEach(([event, ...args2]) => {
+        var list2 = this.getCachedCallbacks(event);
+        if (list2 && list2.length) {
+          const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
+          for (let i = 0, len2 = runnableFunctions.length; i < len2; i++) {
+            const f = runnableFunctions[i];
+            const result = f.callback.apply(f.context, args2);
+            if (isNotUndefined(result)) {
+              if (result === false) {
+                return;
+              } else if (isFunction(result)) {
+                result();
+                return;
+              }
+            }
+          }
+        }
+      });
+    });
+  }
+  nextSendMessage(source2, callback, ...args2) {
+    window.Promise.resolve().then(() => {
+      callback(...args2);
+    });
+  }
+  triggerMessage(source2, event, ...args2) {
+    window.Promise.resolve().then(() => {
+      var list2 = this.getCachedCallbacks(event);
+      if (list2) {
+        const runnableFunctions = list2.filter((f) => f.originalCallback.source === source2);
+        runnableFunctions.forEach((f) => {
+          f.callback.apply(f.context, args2);
+        });
+      } else {
+        console.warn(event, " is not valid event");
+      }
+    });
+  }
+  emit(event, ...args2) {
+    if (isFunction(event)) {
+      event(...args2);
+    } else if (isArray(event)) {
+      this.sendMessageList(this.source, event);
+    } else {
+      this.sendMessage(this.source, event, ...args2);
+    }
+  }
+  nextTick(callback) {
+    this.nextSendMessage(this.source, callback);
+  }
+  trigger(event, ...args2) {
+    if (isFunction(event)) {
+      event(...args2);
+    } else {
+      this.triggerMessage(this.source, event, ...args2);
+    }
+  }
+}
 const MAGIC_METHOD_REG = /^@magic:([a-zA-Z][a-zA-Z0-9]*)[\W]{1}(.*)*$/g;
 const MAGIC_METHOD = "@magic:";
 const SPLITTER = "|";
@@ -1451,156 +1611,6 @@ var Event = {
     };
   }
 };
-class BaseStore {
-  constructor(editor) {
-    this.id = uuidShort$1();
-    this.cachedCallback = {};
-    this.callbacks = {};
-    this.editor = editor;
-    this.promiseProxy = new window.Proxy(this, {
-      get: (target, key) => {
-        return this.makePromiseEvent(key);
-      }
-    });
-  }
-  getCallbacks(event) {
-    if (!this.callbacks[event]) {
-      this.callbacks[event] = [];
-    }
-    return this.callbacks[event];
-  }
-  setCallbacks(event, list2 = []) {
-    this.callbacks[event] = list2;
-  }
-  debug() {
-  }
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
-    var callback = originalCallback;
-    if (debounceDelay > 0)
-      callback = debounce(originalCallback, debounceDelay);
-    else if (throttleDelay > 0)
-      callback = throttle(originalCallback, throttleDelay);
-    if (beforeMethods.length) {
-      callback = ifCheck(callback, context, beforeMethods);
-    }
-    if (frame) {
-      callback = makeRequestAnimationFrame(callback, context);
-    }
-    this.getCallbacks(event).push({
-      event,
-      callback,
-      context,
-      originalCallback,
-      enableAllTrigger,
-      enableSelfTrigger
-    });
-    return () => {
-      this.off(event, originalCallback);
-    };
-  }
-  off(event, originalCallback) {
-    this.debug("off message event", event);
-    if (arguments.length == 1) {
-      this.setCallbacks(event);
-    } else if (arguments.length == 2) {
-      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
-        return f.originalCallback !== originalCallback;
-      }));
-    }
-  }
-  offAll(context) {
-    Object.keys(this.callbacks).forEach((event) => {
-      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
-        return f.context !== context;
-      }));
-    });
-    this.debug("off all message", context.sourceName);
-  }
-  getCachedCallbacks(event) {
-    return this.getCallbacks(event);
-  }
-  get promise() {
-    return this.promiseProxy;
-  }
-  get p() {
-    return this.promise;
-  }
-  makePromiseEvent(event) {
-    var list2 = this.getCachedCallbacks(event);
-    const source2 = this.source;
-    return (...args2) => window.Promise.all(list2.filter((f) => {
-      return !f.enableSelfTrigger;
-    }).filter((f) => {
-      return f.enableAllTrigger || f.originalCallback.source !== source2;
-    }).map((f) => {
-      return new window.Promise((resolve) => {
-        resolve(f.callback.apply(f.context, args2));
-      });
-    }));
-  }
-  sendMessage(source2, event, ...args2) {
-    this.sendMessageList(source2, [[event, ...args2]]);
-  }
-  sendMessageList(source2, messages = []) {
-    window.Promise.resolve().then(() => {
-      messages.forEach(([event, ...args2]) => {
-        var list2 = this.getCachedCallbacks(event);
-        if (list2 && list2.length) {
-          const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
-          for (let i = 0, len2 = runnableFunctions.length; i < len2; i++) {
-            const f = runnableFunctions[i];
-            const result = f.callback.apply(f.context, args2);
-            if (isNotUndefined(result)) {
-              if (result === false) {
-                return;
-              } else if (isFunction(result)) {
-                result();
-                return;
-              }
-            }
-          }
-        }
-      });
-    });
-  }
-  nextSendMessage(source2, callback, ...args2) {
-    window.Promise.resolve().then(() => {
-      callback(...args2);
-    });
-  }
-  triggerMessage(source2, event, ...args2) {
-    window.Promise.resolve().then(() => {
-      var list2 = this.getCachedCallbacks(event);
-      if (list2) {
-        const runnableFunctions = list2.filter((f) => f.originalCallback.source === source2);
-        runnableFunctions.forEach((f) => {
-          f.callback.apply(f.context, args2);
-        });
-      } else {
-        console.warn(event, " is not valid event");
-      }
-    });
-  }
-  emit(event, ...args2) {
-    if (isFunction(event)) {
-      event(...args2);
-    } else if (isArray(event)) {
-      this.sendMessageList(this.source, event);
-    } else {
-      this.sendMessage(this.source, event, ...args2);
-    }
-  }
-  nextTick(callback) {
-    this.nextSendMessage(this.source, callback);
-  }
-  trigger(event, ...args2) {
-    if (isFunction(event)) {
-      event(...args2);
-    } else {
-      this.triggerMessage(this.source, event, ...args2);
-    }
-  }
-}
 class BaseHandler {
   constructor(context, options2 = {}) {
     this.context = context;
@@ -2043,7 +2053,7 @@ class DomEventHandler extends BaseHandler {
       customEventName: this.getCustomEventName(eventName),
       callback
     };
-    const [_, __, ...delegates] = magicMethod.args;
+    const [, , ...delegates] = magicMethod.args;
     obj2.dom = this.getDefaultDomElement(dom);
     obj2.delegate = delegates.join(SAPARATOR);
     obj2.beforeMethods = [];
@@ -2323,7 +2333,7 @@ const _EventMachine = class {
       html = html.join("");
     }
     html = (html || "").trim();
-    const list2 = TEMP_DIV$1.html(html).children() || [];
+    const list2 = TEMP_DIV$1.html(html).childNodes || [];
     for (var i = 0, len2 = list2.length; i < len2; i++) {
       const $el = list2[i];
       var ref = $el.attr(REFERENCE_PROPERTY);
@@ -2769,10 +2779,29 @@ const _UIElement = class extends EventMachine {
   createFunctionComponent(EventMachineComponent, targetElement, props, baseClass = _UIElement) {
     return super.createFunctionComponent(EventMachineComponent, targetElement, props, baseClass);
   }
+  static createElementInstance(ElementClass, props) {
+    if (ElementClass.__proto__.name === "") {
+      class FunctionElement extends _UIElement {
+        template() {
+          return ElementClass.call(this, this.props);
+        }
+      }
+      return new FunctionElement(props, props);
+    } else {
+      return new ElementClass(props, props);
+    }
+  }
 };
 let UIElement = _UIElement;
 _subscribes = new WeakMap();
 _storeInstance = new WeakMap();
+const start$1 = (ElementClass, opt) => {
+  const $container = Dom.create(opt.container || document.body);
+  const app = UIElement.createElementInstance(ElementClass, opt);
+  app.render($container);
+  registRootElementInstance(app);
+  return app;
+};
 function CSS_TO_STRING$1(style, postfix = "") {
   var newStyle = style || {};
   return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
@@ -4225,9 +4254,6 @@ class EditorElement extends UIElement {
   }
   get $stateManager() {
     return this.$editor.stateManager;
-  }
-  get $sceneManager() {
-    return this.$editor.sceneManager;
   }
   get $menu() {
     return this.$editor.menuManager;
@@ -6943,6 +6969,7 @@ function makeMenuItem(it) {
     command: it.command,
     args: it.args || [],
     disabled: it.disabled,
+    direction: it.direction,
     icon: it.icon,
     nextTick: it.nextTick,
     onClick: it.onClick,
@@ -7238,18 +7265,20 @@ class ToolBarRenderer$1 extends EditorElement {
     });
   }
   renderDropdown(item, index2) {
-    return createComponent("DropdownMenu", {
-      ref: "$dropdown-" + index2,
+    return createComponent("DropdownMenu", __spreadProps(__spreadValues({
+      ref: "$dropdown-" + index2
+    }, item), {
       items: item.items,
       icon: item.icon,
       title: item.title,
+      direction: item.direction,
       events: item.events || [],
       selected: item.selected,
       selectedKey: item.selectedKey,
       action: item.action,
       style: item.style,
       dy: 6
-    }, [item.content]);
+    }), [item.content]);
   }
 }
 const DEFAULT_TITLE = "";
@@ -49423,7 +49452,6 @@ var addImageAssetItem = {
           width: width2,
           height: height2
         }), containerItem);
-        editor.changeMode(EDIT_MODE_SELECTION);
       });
     }
   }
@@ -49651,7 +49679,6 @@ var addVideoAssetItem = {
       editor.emit("addVideoAsset");
       loadOriginalVideo(videoObject, (info) => {
         editor.emit("addVideo", __spreadValues(__spreadValues({ src: videoObject.id }, info), rect2), containerItem);
-        editor.changeMode(EDIT_MODE_SELECTION);
       });
     }
   }
@@ -51260,7 +51287,6 @@ var dropImageUrl = {
   execute: function(editor, imageUrl) {
     loadOriginalImage({ local: imageUrl }, (info) => {
       editor.emit("addImage", __spreadValues({ src: info.local }, info));
-      editor.changeMode(EDIT_MODE_SELECTION);
     });
   }
 };
@@ -51464,8 +51490,6 @@ var firstTimelineItem = {
       project2.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
       project2.seek();
       editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
     });
   }
 };
@@ -52268,8 +52292,6 @@ var lastTimelineItem = {
       project2.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
       project2.seek();
       editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
     });
   }
 };
@@ -52393,7 +52415,6 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
   }
   const newObjAttrs = __spreadValues({ itemType }, obj2);
   editor.command("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
-  editor.changeMode(EDIT_MODE_SELECTION);
 }
 var __glob_0_76 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -52407,8 +52428,6 @@ var nextTimelineItem = {
       project2.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
       project2.seek();
       editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
     });
   }
 };
@@ -52668,8 +52687,6 @@ var playTimelineItem = {
   execute: function(editor, speed2 = 1, iterationCount = 1, direction = "normal") {
     editor.selection.empty();
     editor.emit("refreshSelection");
-    editor.changeMode("play");
-    editor.emit("afterChangeMode");
     _currentProject(editor, (project2, timeline) => {
       var lastTime = project2.getSelectedTimelineLastTime();
       if (editor.timer) {
@@ -52698,15 +52715,11 @@ var playTimelineItem = {
           editor.emit("playTimeline");
           editor.nextTick(() => {
             editor.emit("stopTimeline");
-            editor.changeMode("SELECTION");
-            editor.emit("afterChangeMode");
           });
         },
         stop: (elapsed) => {
           project2.stop(timecode(timeline.fps, elapsed / 1e3));
           editor.emit("stopTimeline");
-          editor.changeMode("SELECTION");
-          editor.emit("afterChangeMode");
         }
       });
     });
@@ -52734,8 +52747,6 @@ var prevTimelineItem = {
       project2.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
       project2.seek();
       editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
     });
   }
 };
@@ -56700,333 +56711,6 @@ class RendererManager {
     return typedRenderer[name];
   }
 }
-var _DEFAULT_CAMERA = new PerspectiveCamera(3, 1, 0.01, 1e3);
-_DEFAULT_CAMERA.name = "Camera";
-_DEFAULT_CAMERA.position.set(0, 5, 10);
-_DEFAULT_CAMERA.lookAt(new Vector3());
-class SceneManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.camera = _DEFAULT_CAMERA.clone();
-    this.scene = new Scene();
-    this.scene.name = "Scene";
-    this.sceneHelpers = new Scene();
-    this.object = {};
-    this.geometries = {};
-    this.materials = {};
-    this.textures = {};
-    this.scripts = {};
-    this.materialsRefCounter = /* @__PURE__ */ new Map();
-    this.mixer = new AnimationMixer(this.scene);
-    this.selected = null;
-    this.helpers = {};
-    this.cameras = {};
-    this.viewportCamera = this.camera;
-    this.addCamera(this.camera);
-  }
-  emit(event, ...args2) {
-    this.editor.emit(event, ...args2);
-  }
-  setScene(scene) {
-    this.scene.uuid = scene.uuid;
-    this.scene.name = scene.name;
-    this.scene.background = scene.background;
-    this.scene.environment = scene.environment;
-    this.scene.fog = scene.fog;
-    this.scene.userData = JSON.parse(JSON.stringify(scene.userData));
-    while (scene.children.length > 0) {
-      this.addObject(scene.children[0], void 0, void 0, false);
-    }
-    this.emit("sceneChanged", this.scene);
-  }
-  addObject(object, parent, index2, hasEmit = true) {
-    object.traverse((child) => {
-      if (child.geometry !== void 0)
-        this.addGeometry(child.geometry);
-      if (child.material !== void 0)
-        this.addMaterial(child.material);
-      this.addCamera(child);
-      this.addHelper(child);
-    });
-    if (parent === void 0) {
-      this.scene.add(object);
-    } else {
-      parent.children.splice(index2, 0, object);
-      object.parent = parent;
-    }
-    this.emit("objectAdded", object);
-    this.emit("sceneGraphChanged");
-  }
-  moveObject(object, parent, before) {
-    if (parent === void 0) {
-      parent = this.scene;
-    }
-    parent.add(object);
-    if (before !== void 0) {
-      var index2 = parent.children.indexOf(before);
-      parent.children.splice(index2, 0, object);
-      parent.children.pop();
-    }
-    this.emit("sceneGraphChanged");
-  }
-  nameObject(object, name) {
-    object.name = name;
-    this.emit("sceneGraphChanged");
-  }
-  removeObject(object) {
-    if (object.parent === null)
-      return;
-    object.traverse((child) => {
-      this.removeCamera(child);
-      this.removeHelper(child);
-      if (child.material !== void 0)
-        this.removeMaterial(child.material);
-    });
-    object.parent.remove(object);
-    this.emit("objectRemoved", object);
-    this.emit("sceneGraphChanged");
-  }
-  addGeometry(geometry) {
-    this.geometries[geometry.uuid] = geometry;
-  }
-  setGeometryName(geometry, name) {
-    geometry.name = name;
-    this.emit("sceneGraphChanged");
-  }
-  addMaterial(material) {
-    if (isArray(material)) {
-      for (var i = 0, l = material.length; i < l; i++) {
-        this.addMaterialToRefCounter(material[i]);
-      }
-    } else {
-      this.addMaterialToRefCounter(material);
-    }
-    this.emit("materialAdded");
-  }
-  addMaterialToRefCounter(material) {
-    var materialsRefCounter = this.materialsRefCounter;
-    var count = materialsRefCounter.get(material);
-    if (count === void 0) {
-      materialsRefCounter.set(material, 1);
-      this.materials[material.uuid] = material;
-    } else {
-      count++;
-      materialsRefCounter.set(material, count);
-    }
-  }
-  removeMaterial(material) {
-    if (isArray(material)) {
-      for (var i = 0, l = material.length; i < l; i++) {
-        this.removeMaterialFromRefCounter(material[i]);
-      }
-    } else {
-      this.removeMaterialFromRefCounter(material);
-    }
-    this.emit("materialRemoved");
-  }
-  removeMaterialFromRefCounter(material) {
-    var materialsRefCounter = this.materialsRefCounter;
-    var count = materialsRefCounter.get(material);
-    count--;
-    if (count === 0) {
-      materialsRefCounter.delete(material);
-      delete this.materials[material.uuid];
-    } else {
-      materialsRefCounter.set(material, count);
-    }
-  }
-  getMaterialById(id) {
-    return Object.values(this.materials).find((m) => m.id === id);
-  }
-  setMaterialName(material, name) {
-    material.name = name;
-    this.emit("sceneGraphChanged");
-  }
-  addTexture(texture2) {
-    this.textures[texture2.uuid] = texture2;
-  }
-  addCamera(camera) {
-    if (camera.isCamera) {
-      this.cameras[camera.uuid] = camera;
-      this.emit("cameraAdded", camera);
-    }
-  }
-  removeCamera(camera) {
-    if (this.cameras[camera.uuid] !== void 0) {
-      delete this.cameras[camera.uuid];
-      this.emit("cameraRemoved", camera);
-    }
-  }
-  addHelper(object, helper) {
-    var _a;
-    var geometry = new SphereGeometry(2, 4, 2);
-    var material = new MeshBasicMaterial({
-      color: 16711680,
-      visible: false
-    });
-    if (helper === void 0) {
-      if (object.isCamera) {
-        helper = new CameraHelper(object);
-      } else if (object.isPointLight) {
-        helper = new PointLightHelper(object, 1);
-      } else if (object.isDirectionalLight) {
-        helper = new DirectionalLightHelper(object, 1);
-      } else if (object.isSpotLight) {
-        helper = new SpotLightHelper(object);
-      } else if (object.isHemisphereLight) {
-        helper = new HemisphereLightHelper(object, 1);
-      } else if (object.isSkinnedMesh) {
-        helper = new SkeletonHelper(object.skeleton.bones[0]);
-      } else if (object.isBone === true && ((_a = object.parent) == null ? void 0 : _a.isBone) !== true) {
-        helper = new SkeletonHelper(object);
-      } else {
-        return;
-      }
-      const picker = new Mesh(geometry, material);
-      picker.name = "picker";
-      picker.userData.object = object;
-      helper.add(picker);
-    }
-    this.sceneHelpers.add(helper);
-    this.helpers[object.id] = helper;
-    this.emit("helperAdded", helper);
-  }
-  removeHelper(object) {
-    if (this.helpers[object.id] !== void 0) {
-      var helper = this.helpers[object.id];
-      helper.parent.remove(helper);
-      delete this.helpers[object.id];
-      this.emit("helperRemoved", helper);
-    }
-  }
-  addScript(object, script) {
-    if (this.scripts[object.uuid] === void 0) {
-      this.scripts[object.uuid] = [];
-    }
-    this.scripts[object.uuid].push(script);
-    this.emit("scriptAdded", script);
-  }
-  removeScript(object, script) {
-    if (this.scripts[object.uuid] === void 0)
-      return;
-    var index2 = this.scripts[object.uuid].indexOf(script);
-    if (index2 !== -1) {
-      this.scripts[object.uuid].splice(index2, 1);
-    }
-    this.emit("scriptRemoved", script);
-  }
-  getObjectMaterial(object, slot) {
-    var material = object.material;
-    if (isArray(material) && slot !== void 0) {
-      material = material[slot];
-    }
-    return material;
-  }
-  setObjectMaterial(object, slot, newMaterial) {
-    if (isArray(object.material) && slot !== void 0) {
-      object.material[slot] = newMaterial;
-    } else {
-      object.material = newMaterial;
-    }
-  }
-  setViewportCamera(uuid2) {
-    this.viewportCamera = this.cameras[uuid2];
-    this.emit("viewportCameraChanged");
-  }
-  select(object) {
-    if (this.selected === object)
-      return;
-    var uuid2 = null;
-    if (object !== null) {
-      uuid2 = object.uuid;
-    }
-    this.selected = object;
-    this.editor.config.set("selected", uuid2);
-    this.emit("objectSelected", object);
-  }
-  selectById(id) {
-    if (id === this.camera.id) {
-      this.select(this.camera);
-      return;
-    }
-    this.select(this.scene.getObjectById(id));
-  }
-  selectByUuid(uuid2) {
-    this.scene.traverse((child) => {
-      if (child.uuid === uuid2) {
-        this.select(child);
-      }
-    });
-  }
-  deselect() {
-    this.select(null);
-  }
-  focus(object) {
-    if (object !== void 0) {
-      this.emit("objectFocused", object);
-    }
-  }
-  focusById(id) {
-    this.focus(this.scene.getObjectById(id));
-  }
-  clear() {
-    this.camera.copy(_DEFAULT_CAMERA);
-    this.emit("cameraChanged");
-    this.scene.name = "Scene";
-    this.scene.userData = {};
-    this.scene.background = null;
-    this.scene.environment = null;
-    this.scene.fog = null;
-    var objects = this.scene.children;
-    while (objects.length > 0) {
-      this.removeObject(objects[0]);
-    }
-    this.geometries = {};
-    this.materials = {};
-    this.textures = {};
-    this.scripts = {};
-    this.materialsRefCounter.clear();
-    this.animations = {};
-    this.mixer.stopAllAction();
-    this.deselect();
-    this.emit("editorCleared");
-  }
-  async fromJSON(json) {
-    var loader = new ObjectLoader();
-    var camera = await loader.parseAsync(json.camera);
-    this.camera.copy(camera);
-    this.emit("cameraResetted");
-    this.scripts = json.scripts;
-    this.setScene(await loader.parseAsync(json.scene));
-  }
-  toJSON() {
-    var scene = this.scene;
-    var scripts = this.scripts;
-    for (var key in scripts) {
-      var script = scripts[key];
-      if (script.length === 0 || scene.getObjectByProperty("uuid", key) === void 0) {
-        delete scripts[key];
-      }
-    }
-    return {
-      metadata: {},
-      project: {
-        shadows: this.editor.config.get("project/renderer/shadows"),
-        shadowType: this.editor.config.get("project/renderer/shadowType"),
-        vr: this.editor.config.get("project/vr"),
-        physicallyCorrectLights: this.editor.config.get("project/renderer/physicallyCorrectLights"),
-        toneMapping: this.editor.config.get("project/renderer/toneMapping"),
-        toneMappingExposure: this.editor.config.get("project/renderer/toneMappingExposure")
-      },
-      camera: this.camera.toJSON(),
-      scene: this.scene.toJSON(),
-      scripts: this.scripts
-    };
-  }
-  objectByUuid(uuid2) {
-    return this.scene.getObjectByProperty("uuid", uuid2, true);
-  }
-}
 class SegmentSelectionManager {
   constructor(editor) {
     this.$editor = editor;
@@ -58906,8 +58590,6 @@ var theme = {
   dark,
   light
 };
-const EDIT_MODE_SELECTION = "SELECTION";
-const EDIT_MODE_ADD = "ADD";
 class Editor {
   constructor(opt = {}) {
     this.EDITOR_ID = uuid();
@@ -58916,43 +58598,55 @@ class Editor {
     this.symbols = {};
     this.images = {};
     this.openRightPanel = true;
-    this.mode = EDIT_MODE_SELECTION;
     this.ignoreManagers = opt.ignoreManagers || [];
     this.loadManagers();
   }
   loadManagers() {
-    this.store = new BaseStore(this);
-    this.config = new ConfigManager(this);
-    this.snapManager = new SnapManager(this);
-    this.commands = new CommandManager(this);
-    if (this.ignoreManagers.includes("ShortCutManager") === false)
-      this.shortcuts = new ShortCutManager(this);
-    this.selection = new SelectionManager(this);
-    this.segmentSelection = new SegmentSelectionManager(this);
-    this.timeline = new TimelineSelectionManager(this);
-    this.history = new HistoryManager(this);
-    this.keyboardManager = new KeyBoardManager(this);
-    this.viewport = new ViewportManager(this);
-    this.storageManager = new StorageManager(this);
-    this.cursorManager = new CursorManager(this);
-    this.assetManager = new AssetManager(this);
-    this.injectManager = new InjectManager(this);
-    this.components = new ComponentManager(this);
-    this.pluginManager = new PluginManager(this);
-    this.renderers = new RendererManager(this);
-    this.i18n = new I18nManager(this);
-    this.modelManager = new ModelManager(this);
-    this.modeViewManager = new ModeViewManager(this);
-    this.pathKitManager = new PathKitManager(this);
-    this.lockManager = new LockManager(this);
-    this.visibleManager = new VisibleManager(this);
-    this.clipboard = new ClipboardManager(this);
-    this.iconManager = new IconManager$1(this);
-    this.stateManager = new StateManager(this);
-    this.sceneManager = new SceneManager(this);
-    this.menuManager = new MenuManager(this);
+    this.registerManager({
+      store: BaseStore,
+      config: ConfigManager,
+      snapManager: SnapManager,
+      commands: CommandManager,
+      selection: SelectionManager,
+      segmentSelection: SegmentSelectionManager,
+      timeline: TimelineSelectionManager,
+      history: HistoryManager,
+      keyboardManager: KeyBoardManager,
+      viewport: ViewportManager,
+      storageManager: StorageManager,
+      cursorManager: CursorManager,
+      assetManager: AssetManager,
+      injectManager: InjectManager,
+      components: ComponentManager,
+      pluginManager: PluginManager,
+      renderers: RendererManager,
+      i18n: I18nManager,
+      modelManager: ModelManager,
+      modeViewManager: ModeViewManager,
+      pathKitManager: PathKitManager,
+      lockManager: LockManager,
+      visibleManager: VisibleManager,
+      clipboard: ClipboardManager,
+      iconManager: IconManager$1,
+      stateManager: StateManager,
+      menuManager: MenuManager
+    });
+    if (this.ignoreManagers.includes("ShortCutManager") === false) {
+      this.registerManager({
+        shortcuts: ShortCutManager
+      });
+    }
     this.initPlugins();
     this.initStorage();
+  }
+  registerManager(obj2 = {}) {
+    Object.keys(obj2).forEach((name) => {
+      const DataManagerClass = obj2[name];
+      Object.defineProperty(this, name, {
+        value: new DataManagerClass(this),
+        writable: false
+      });
+    });
   }
   initStorage() {
     this.locale = this.loadItem("locale") || "en_US";
@@ -58992,15 +58686,6 @@ class Editor {
   }
   themeValue(key, defaultValue2 = "") {
     return theme[this.config.get("editor.theme")][key] || defaultValue2;
-  }
-  changeMode(mode = EDIT_MODE_SELECTION) {
-    this.mode = mode;
-  }
-  isMode(mode) {
-    return this.mode === mode;
-  }
-  isAddMode() {
-    return this.isMode(EDIT_MODE_ADD);
   }
   get zIndex() {
     return this.popupZIndex++;
@@ -59154,6 +58839,7 @@ const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
 const MOVE_CHECK_MS = 0;
 class BaseLayout extends EditorElement {
   async created() {
+    this.$editor.registerManager(__spreadValues({}, this.getManagers()));
     this.$editor.registerPluginList(this.getPlugins());
     if (Array.isArray(this.opt.plugins)) {
       this.$editor.registerPluginList(this.opt.plugins);
@@ -59192,6 +58878,9 @@ class BaseLayout extends EditorElement {
   }
   getPlugins() {
     return [];
+  }
+  getManagers() {
+    return {};
   }
   __initBodyMoves() {
     this.__firstMove = /* @__PURE__ */ new Set();
@@ -91818,8 +91507,16 @@ class ToolBar extends EditorElement {
                 ${createComponent("ToolBarRenderer", {
       items: ToolbarMenu.left(this.$editor)
     })}
-                <div class='center'></div>
+                <div class='center'>
+                  ${createComponent("ToolBarRenderer", {
+      items: this.$menu.getTargetMenu("toolbar.center")
+    })}       
+                  ${this.$injectManager.generate("toolbar.center")}                
+                </div>
                 <div class='right'>
+                    ${createComponent("ToolBarRenderer", {
+      items: this.$menu.getTargetMenu("toolbar.right")
+    })}                                
                     ${this.$injectManager.generate("toolbar.right")}
                     ${createComponent("ThemeChanger")}
                 </div>
@@ -95087,7 +94784,7 @@ class ThreeRenderView extends EditorElement {
     }, 100);
   }
   renderCanvas() {
-    this.renderer.render(this.$sceneManager.scene, this.$sceneManager.viewportCamera);
+    this.renderer.render(this.$editor.sceneManager.scene, this.$editor.sceneManager.viewportCamera);
   }
   initializeCamera(rect2) {
     const camera = new PerspectiveCamera(75, rect2.width / rect2.height, 0.1, 1e3);
@@ -95095,22 +94792,22 @@ class ThreeRenderView extends EditorElement {
     camera.position.y = 3;
     camera.position.z = 1;
     camera.lookAt(0, 0, 0);
-    this.$sceneManager.camera = camera;
-    this.$sceneManager.addCamera(camera);
-    this.$sceneManager.setViewportCamera(camera.uuid);
+    this.$editor.sceneManager.camera = camera;
+    this.$editor.sceneManager.addCamera(camera);
+    this.$editor.sceneManager.setViewportCamera(camera.uuid);
   }
   initializeRenderer() {
     const rect2 = this.refs.$view.offsetRect();
     this.state.rect = rect2;
     this.initializeCamera(rect2);
-    console.log(this.$sceneManager.viewportCamera);
+    console.log(this.$editor.sceneManager.viewportCamera);
     const renderer = new WebGLRenderer({
       canvas: this.refs.$view.el,
       antialias: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(rect2.width, rect2.height);
-    const controls = new OrbitControls(this.$sceneManager.viewportCamera, this.refs.$body.el);
+    const controls = new OrbitControls(this.$editor.sceneManager.viewportCamera, this.refs.$body.el);
     controls.addEventListener("change", () => {
       this.renderCanvas();
     });
@@ -95125,20 +94822,20 @@ class ThreeRenderView extends EditorElement {
     grid22.material.vertexColors = false;
     grid2.add(grid22);
     this.grid = grid2;
-    this.$sceneManager.addObject(this.grid, void 0, void 0, false);
+    this.$editor.sceneManager.addObject(this.grid, void 0, void 0, false);
     const light2 = new DirectionalLight(16777215, 2);
     light2.position.set(1, 1, 1);
-    this.$sceneManager.scene.add(light2);
+    this.$editor.sceneManager.scene.add(light2);
     const box = new Box3();
     const selectionBox = new Box3Helper(box);
     selectionBox.material.depthTest = false;
     selectionBox.material.transparent = true;
     selectionBox.visible = false;
-    this.$sceneManager.sceneHelpers.add(selectionBox);
+    this.$editor.sceneManager.sceneHelpers.add(selectionBox);
     let objectPositionOnDown = null;
     let objectRotationOnDown = null;
     let objectScaleOnDown = null;
-    const transformControls = new TransformControls(this.$sceneManager.viewportCamera, this.refs.$view.el);
+    const transformControls = new TransformControls(this.$editor.sceneManager.viewportCamera, this.refs.$view.el);
     this.transformControls = transformControls;
     transformControls.addEventListener("change", () => {
       this.renderCanvas();
@@ -95173,7 +94870,7 @@ class ThreeRenderView extends EditorElement {
       }
       controls.enabled = true;
     });
-    this.$sceneManager.scene.add(transformControls);
+    this.$editor.sceneManager.scene.add(transformControls);
     return renderer;
   }
   refresh() {
@@ -95191,13 +94888,13 @@ class ThreeRenderView extends EditorElement {
   refreshCanvasSize() {
     const rect2 = this.refs.$view.offsetRect();
     this.state.rect = rect2;
-    this.$sceneManager.viewportCamera.aspect = rect2.width / rect2.height;
-    this.$sceneManager.viewportCamera.updateProjectionMatrix();
+    this.$editor.sceneManager.viewportCamera.aspect = rect2.width / rect2.height;
+    this.$editor.sceneManager.viewportCamera.updateProjectionMatrix();
     this.renderer.setSize(rect2.width, rect2.height);
     this.renderCanvas(0);
   }
   [SUBSCRIBE("objectSelected")]() {
-    this.transformControls.attach(this.$sceneManager.selected);
+    this.transformControls.attach(this.$editor.sceneManager.selected);
   }
   [SUBSCRIBE("objectAdded")]() {
     this.renderCanvas(0);
@@ -95498,6 +95195,333 @@ class ThreeToolBar extends EditorElement {
   }
 }
 var layout$1 = "";
+var _DEFAULT_CAMERA = new PerspectiveCamera(3, 1, 0.01, 1e3);
+_DEFAULT_CAMERA.name = "Camera";
+_DEFAULT_CAMERA.position.set(0, 5, 10);
+_DEFAULT_CAMERA.lookAt(new Vector3());
+class SceneManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.camera = _DEFAULT_CAMERA.clone();
+    this.scene = new Scene();
+    this.scene.name = "Scene";
+    this.sceneHelpers = new Scene();
+    this.object = {};
+    this.geometries = {};
+    this.materials = {};
+    this.textures = {};
+    this.scripts = {};
+    this.materialsRefCounter = /* @__PURE__ */ new Map();
+    this.mixer = new AnimationMixer(this.scene);
+    this.selected = null;
+    this.helpers = {};
+    this.cameras = {};
+    this.viewportCamera = this.camera;
+    this.addCamera(this.camera);
+  }
+  emit(event, ...args2) {
+    this.editor.emit(event, ...args2);
+  }
+  setScene(scene) {
+    this.scene.uuid = scene.uuid;
+    this.scene.name = scene.name;
+    this.scene.background = scene.background;
+    this.scene.environment = scene.environment;
+    this.scene.fog = scene.fog;
+    this.scene.userData = JSON.parse(JSON.stringify(scene.userData));
+    while (scene.children.length > 0) {
+      this.addObject(scene.children[0], void 0, void 0, false);
+    }
+    this.emit("sceneChanged", this.scene);
+  }
+  addObject(object, parent, index2, hasEmit = true) {
+    object.traverse((child) => {
+      if (child.geometry !== void 0)
+        this.addGeometry(child.geometry);
+      if (child.material !== void 0)
+        this.addMaterial(child.material);
+      this.addCamera(child);
+      this.addHelper(child);
+    });
+    if (parent === void 0) {
+      this.scene.add(object);
+    } else {
+      parent.children.splice(index2, 0, object);
+      object.parent = parent;
+    }
+    this.emit("objectAdded", object);
+    this.emit("sceneGraphChanged");
+  }
+  moveObject(object, parent, before) {
+    if (parent === void 0) {
+      parent = this.scene;
+    }
+    parent.add(object);
+    if (before !== void 0) {
+      var index2 = parent.children.indexOf(before);
+      parent.children.splice(index2, 0, object);
+      parent.children.pop();
+    }
+    this.emit("sceneGraphChanged");
+  }
+  nameObject(object, name) {
+    object.name = name;
+    this.emit("sceneGraphChanged");
+  }
+  removeObject(object) {
+    if (object.parent === null)
+      return;
+    object.traverse((child) => {
+      this.removeCamera(child);
+      this.removeHelper(child);
+      if (child.material !== void 0)
+        this.removeMaterial(child.material);
+    });
+    object.parent.remove(object);
+    this.emit("objectRemoved", object);
+    this.emit("sceneGraphChanged");
+  }
+  addGeometry(geometry) {
+    this.geometries[geometry.uuid] = geometry;
+  }
+  setGeometryName(geometry, name) {
+    geometry.name = name;
+    this.emit("sceneGraphChanged");
+  }
+  addMaterial(material) {
+    if (isArray(material)) {
+      for (var i = 0, l = material.length; i < l; i++) {
+        this.addMaterialToRefCounter(material[i]);
+      }
+    } else {
+      this.addMaterialToRefCounter(material);
+    }
+    this.emit("materialAdded");
+  }
+  addMaterialToRefCounter(material) {
+    var materialsRefCounter = this.materialsRefCounter;
+    var count = materialsRefCounter.get(material);
+    if (count === void 0) {
+      materialsRefCounter.set(material, 1);
+      this.materials[material.uuid] = material;
+    } else {
+      count++;
+      materialsRefCounter.set(material, count);
+    }
+  }
+  removeMaterial(material) {
+    if (isArray(material)) {
+      for (var i = 0, l = material.length; i < l; i++) {
+        this.removeMaterialFromRefCounter(material[i]);
+      }
+    } else {
+      this.removeMaterialFromRefCounter(material);
+    }
+    this.emit("materialRemoved");
+  }
+  removeMaterialFromRefCounter(material) {
+    var materialsRefCounter = this.materialsRefCounter;
+    var count = materialsRefCounter.get(material);
+    count--;
+    if (count === 0) {
+      materialsRefCounter.delete(material);
+      delete this.materials[material.uuid];
+    } else {
+      materialsRefCounter.set(material, count);
+    }
+  }
+  getMaterialById(id) {
+    return Object.values(this.materials).find((m) => m.id === id);
+  }
+  setMaterialName(material, name) {
+    material.name = name;
+    this.emit("sceneGraphChanged");
+  }
+  addTexture(texture2) {
+    this.textures[texture2.uuid] = texture2;
+  }
+  addCamera(camera) {
+    if (camera.isCamera) {
+      this.cameras[camera.uuid] = camera;
+      this.emit("cameraAdded", camera);
+    }
+  }
+  removeCamera(camera) {
+    if (this.cameras[camera.uuid] !== void 0) {
+      delete this.cameras[camera.uuid];
+      this.emit("cameraRemoved", camera);
+    }
+  }
+  addHelper(object, helper) {
+    var _a;
+    var geometry = new SphereGeometry(2, 4, 2);
+    var material = new MeshBasicMaterial({
+      color: 16711680,
+      visible: false
+    });
+    if (helper === void 0) {
+      if (object.isCamera) {
+        helper = new CameraHelper(object);
+      } else if (object.isPointLight) {
+        helper = new PointLightHelper(object, 1);
+      } else if (object.isDirectionalLight) {
+        helper = new DirectionalLightHelper(object, 1);
+      } else if (object.isSpotLight) {
+        helper = new SpotLightHelper(object);
+      } else if (object.isHemisphereLight) {
+        helper = new HemisphereLightHelper(object, 1);
+      } else if (object.isSkinnedMesh) {
+        helper = new SkeletonHelper(object.skeleton.bones[0]);
+      } else if (object.isBone === true && ((_a = object.parent) == null ? void 0 : _a.isBone) !== true) {
+        helper = new SkeletonHelper(object);
+      } else {
+        return;
+      }
+      const picker = new Mesh(geometry, material);
+      picker.name = "picker";
+      picker.userData.object = object;
+      helper.add(picker);
+    }
+    this.sceneHelpers.add(helper);
+    this.helpers[object.id] = helper;
+    this.emit("helperAdded", helper);
+  }
+  removeHelper(object) {
+    if (this.helpers[object.id] !== void 0) {
+      var helper = this.helpers[object.id];
+      helper.parent.remove(helper);
+      delete this.helpers[object.id];
+      this.emit("helperRemoved", helper);
+    }
+  }
+  addScript(object, script) {
+    if (this.scripts[object.uuid] === void 0) {
+      this.scripts[object.uuid] = [];
+    }
+    this.scripts[object.uuid].push(script);
+    this.emit("scriptAdded", script);
+  }
+  removeScript(object, script) {
+    if (this.scripts[object.uuid] === void 0)
+      return;
+    var index2 = this.scripts[object.uuid].indexOf(script);
+    if (index2 !== -1) {
+      this.scripts[object.uuid].splice(index2, 1);
+    }
+    this.emit("scriptRemoved", script);
+  }
+  getObjectMaterial(object, slot) {
+    var material = object.material;
+    if (isArray(material) && slot !== void 0) {
+      material = material[slot];
+    }
+    return material;
+  }
+  setObjectMaterial(object, slot, newMaterial) {
+    if (isArray(object.material) && slot !== void 0) {
+      object.material[slot] = newMaterial;
+    } else {
+      object.material = newMaterial;
+    }
+  }
+  setViewportCamera(uuid2) {
+    this.viewportCamera = this.cameras[uuid2];
+    this.emit("viewportCameraChanged");
+  }
+  select(object) {
+    if (this.selected === object)
+      return;
+    var uuid2 = null;
+    if (object !== null) {
+      uuid2 = object.uuid;
+    }
+    this.selected = object;
+    this.editor.config.set("selected", uuid2);
+    this.emit("objectSelected", object);
+  }
+  selectById(id) {
+    if (id === this.camera.id) {
+      this.select(this.camera);
+      return;
+    }
+    this.select(this.scene.getObjectById(id));
+  }
+  selectByUuid(uuid2) {
+    this.scene.traverse((child) => {
+      if (child.uuid === uuid2) {
+        this.select(child);
+      }
+    });
+  }
+  deselect() {
+    this.select(null);
+  }
+  focus(object) {
+    if (object !== void 0) {
+      this.emit("objectFocused", object);
+    }
+  }
+  focusById(id) {
+    this.focus(this.scene.getObjectById(id));
+  }
+  clear() {
+    this.camera.copy(_DEFAULT_CAMERA);
+    this.emit("cameraChanged");
+    this.scene.name = "Scene";
+    this.scene.userData = {};
+    this.scene.background = null;
+    this.scene.environment = null;
+    this.scene.fog = null;
+    var objects = this.scene.children;
+    while (objects.length > 0) {
+      this.removeObject(objects[0]);
+    }
+    this.geometries = {};
+    this.materials = {};
+    this.textures = {};
+    this.scripts = {};
+    this.materialsRefCounter.clear();
+    this.animations = {};
+    this.mixer.stopAllAction();
+    this.deselect();
+    this.emit("editorCleared");
+  }
+  async fromJSON(json) {
+    var loader = new ObjectLoader();
+    var camera = await loader.parseAsync(json.camera);
+    this.camera.copy(camera);
+    this.emit("cameraResetted");
+    this.scripts = json.scripts;
+    this.setScene(await loader.parseAsync(json.scene));
+  }
+  toJSON() {
+    var scene = this.scene;
+    var scripts = this.scripts;
+    for (var key in scripts) {
+      var script = scripts[key];
+      if (script.length === 0 || scene.getObjectByProperty("uuid", key) === void 0) {
+        delete scripts[key];
+      }
+    }
+    return {
+      metadata: {},
+      project: {
+        shadows: this.editor.config.get("project/renderer/shadows"),
+        shadowType: this.editor.config.get("project/renderer/shadowType"),
+        vr: this.editor.config.get("project/vr"),
+        physicallyCorrectLights: this.editor.config.get("project/renderer/physicallyCorrectLights"),
+        toneMapping: this.editor.config.get("project/renderer/toneMapping"),
+        toneMappingExposure: this.editor.config.get("project/renderer/toneMappingExposure")
+      },
+      camera: this.camera.toJSON(),
+      scene: this.scene.toJSON(),
+      scripts: this.scripts
+    };
+  }
+  objectByUuid(uuid2) {
+    return this.scene.getObjectByProperty("uuid", uuid2, true);
+  }
+}
 function threeHelpers(editor) {
   editor.registerUI("render.view", {});
 }
@@ -95513,11 +95537,16 @@ var threeEditorPlugins = [
   threeHelpers
 ];
 class ThreeEditor extends BaseLayout {
+  getManagers() {
+    return {
+      sceneManager: SceneManager
+    };
+  }
   afterRender() {
     super.afterRender();
     this.$config.init("editor.layout.elements", this.refs);
     if (this.opt.data) {
-      this.$sceneManager.fromJSON(this.opt.data);
+      this.$editor.sceneManager.fromJSON(this.opt.data);
     }
   }
   components() {
@@ -95794,4 +95823,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, SPLITTER, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, SPLITTER, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };

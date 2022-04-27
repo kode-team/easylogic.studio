@@ -31,18 +31,6 @@ const names = {
   "repeating-conic-gradient": `${icon.repeat} Conic`,
 };
 
-// eslint-disable-next-line no-unused-vars
-const types = {
-  image: "image",
-  "static-gradient": "gradient",
-  "linear-gradient": "gradient",
-  "repeating-linear-gradient": "gradient",
-  "radial-gradient": "gradient",
-  "repeating-radial-gradient": "gradient",
-  "conic-gradient": "gradient",
-  "repeating-conic-gradient": "gradient",
-};
-
 export default class BorderImageProperty extends BaseProperty {
   getTitle() {
     return "Border Image";

@@ -1,4 +1,3 @@
-import { EDIT_MODE_SELECTION } from "elf/editor/manager/Editor";
 import loadOriginalImage from "elf/editor/util/loadOriginalImage";
 
 export default {
@@ -34,7 +33,6 @@ export default {
           },
           containerItem
         );
-        editor.changeMode(EDIT_MODE_SELECTION);
       });
     }
   },

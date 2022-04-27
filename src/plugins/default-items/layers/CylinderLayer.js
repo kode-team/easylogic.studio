@@ -4,48 +4,6 @@ import icon from "elf/editor/icon/icon";
 import { Component } from "elf/editor/model/Component";
 import { Length } from "elf/editor/unit/Length";
 
-// eslint-disable-next-line no-unused-vars
-const customKeyValue = {
-  count: true,
-  rate: true,
-  face: true,
-};
-
-// eslint-disable-next-line no-unused-vars
-const cssKeyValue = {
-  position: true,
-  left: true,
-  top: true,
-  right: true,
-  bottom: true,
-  width: true,
-  height: true,
-  opacity: true,
-  "text-fill-color": true,
-  "text-stroke-color": true,
-  "text-stroke-width": true,
-  "background-clip": true,
-  "clip-path": true,
-  animation: true,
-  transition: true,
-  transform: true,
-  "transform-origin": true,
-  "transform-style": true,
-  perspective: true,
-  "perspective-origin": true,
-  "offset-path": true,
-};
-
-// eslint-disable-next-line no-unused-vars
-const nestedCssKeyValue = {
-  filter: true,
-  "mix-blend-mode": true,
-  "background-image": true,
-  "background-color": true,
-  "border-radius": true,
-  border: true,
-};
-
 export class CylinderLayer extends Component {
   static getIcon() {
     return icon.cylinder;

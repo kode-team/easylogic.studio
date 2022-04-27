@@ -19,7 +19,6 @@ import { ModeViewManager } from "./manager-items/ModeViewManager";
 import { PathKitManager } from "./manager-items/PathKitManager";
 import { PluginManager } from "./manager-items/PluginManager";
 import { RendererManager } from "./manager-items/RendererManager";
-import { SceneManager } from "./manager-items/SceneManager";
 import { SegmentSelectionManager } from "./manager-items/SegmentSelectionManager";
 import { SelectionManager } from "./manager-items/SelectionManager";
 import { ShortCutManager } from "./manager-items/ShortCutManager";
@@ -32,9 +31,6 @@ import { VisibleManager } from "./manager-items/VisibleManager";
 
 import { uuid } from "elf/core/math";
 import theme from "elf/editor/ui/theme";
-
-export const EDIT_MODE_SELECTION = "SELECTION";
-export const EDIT_MODE_ADD = "ADD";
 
 export class Editor {
   /**
@@ -52,7 +48,6 @@ export class Editor {
     this.symbols = {};
     this.images = {};
     this.openRightPanel = true;
-    this.mode = EDIT_MODE_SELECTION;
     this.ignoreManagers = opt.ignoreManagers || [];
 
     this.loadManagers();
@@ -62,41 +57,59 @@ export class Editor {
    * 에디터에서 공통으로 필요한 Manager 들을 로드 한다.
    */
   loadManagers() {
-    this.store = new BaseStore(this);
-    this.config = new ConfigManager(this);
-    this.snapManager = new SnapManager(this);
-    this.commands = new CommandManager(this);
+    this.registerManager({
+      store: BaseStore,
+      config: ConfigManager,
+      snapManager: SnapManager,
+      commands: CommandManager,
+      selection: SelectionManager,
+      segmentSelection: SegmentSelectionManager,
+      timeline: TimelineSelectionManager,
+      history: HistoryManager,
+      keyboardManager: KeyBoardManager,
+      viewport: ViewportManager,
+      storageManager: StorageManager,
+      cursorManager: CursorManager,
+      assetManager: AssetManager,
+      injectManager: InjectManager,
+      components: ComponentManager,
+      pluginManager: PluginManager,
+      renderers: RendererManager,
+      i18n: I18nManager,
+      modelManager: ModelManager,
+      modeViewManager: ModeViewManager,
+      pathKitManager: PathKitManager,
+      lockManager: LockManager,
+      visibleManager: VisibleManager,
+      clipboard: ClipboardManager,
+      iconManager: IconManager,
+      stateManager: StateManager,
+      menuManager: MenuManager,
+    });
 
-    if (this.ignoreManagers.includes("ShortCutManager") === false)
-      this.shortcuts = new ShortCutManager(this);
-
-    this.selection = new SelectionManager(this);
-    this.segmentSelection = new SegmentSelectionManager(this);
-    this.timeline = new TimelineSelectionManager(this);
-    this.history = new HistoryManager(this);
-    this.keyboardManager = new KeyBoardManager(this);
-    this.viewport = new ViewportManager(this);
-    this.storageManager = new StorageManager(this);
-    this.cursorManager = new CursorManager(this);
-    this.assetManager = new AssetManager(this);
-    this.injectManager = new InjectManager(this);
-    this.components = new ComponentManager(this);
-    this.pluginManager = new PluginManager(this);
-    this.renderers = new RendererManager(this);
-    this.i18n = new I18nManager(this);
-    this.modelManager = new ModelManager(this);
-    this.modeViewManager = new ModeViewManager(this);
-    this.pathKitManager = new PathKitManager(this);
-    this.lockManager = new LockManager(this);
-    this.visibleManager = new VisibleManager(this);
-    this.clipboard = new ClipboardManager(this);
-    this.iconManager = new IconManager(this);
-    this.stateManager = new StateManager(this);
-    this.sceneManager = new SceneManager(this);
-    this.menuManager = new MenuManager(this);
+    if (this.ignoreManagers.includes("ShortCutManager") === false) {
+      this.registerManager({
+        shortcuts: ShortCutManager,
+      });
+    }
 
     this.initPlugins();
     this.initStorage();
+  }
+
+  /**
+   *
+   * @param {object} obj
+   */
+  registerManager(obj = {}) {
+    Object.keys(obj).forEach((name) => {
+      const DataManagerClass = obj[name];
+
+      Object.defineProperty(this, name, {
+        value: new DataManagerClass(this),
+        writable: false,
+      });
+    });
   }
 
   initStorage() {
@@ -146,18 +159,6 @@ export class Editor {
 
   themeValue(key, defaultValue = "") {
     return theme[this.config.get("editor.theme")][key] || defaultValue;
-  }
-
-  changeMode(mode = EDIT_MODE_SELECTION) {
-    this.mode = mode; // add or selection
-  }
-
-  isMode(mode) {
-    return this.mode === mode;
-  }
-
-  isAddMode() {
-    return this.isMode(EDIT_MODE_ADD);
   }
 
   // 팝업의 zindex 를 계속 높여 주어

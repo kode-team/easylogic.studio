@@ -304,6 +304,7 @@ export class Dom {
   }
 
   find(selector) {
+    if (this.isTextNode) return undefined;
     return this.el.querySelector(selector);
   }
 
@@ -313,6 +314,7 @@ export class Dom {
   }
 
   findAll(selector) {
+    if (this.isTextNode) return [];
     return Array.from(this.el.querySelectorAll(selector));
   }
 
@@ -655,6 +657,10 @@ export class Dom {
     return this.el.files ? [...this.el.files] : [];
   }
 
+  get isTextNode() {
+    return this.el.nodeType === 3;
+  }
+
   realVal() {
     switch (this.el.nodeType) {
       case "INPUT":
@@ -813,6 +819,20 @@ export class Dom {
     } while (element);
 
     return results;
+  }
+
+  get childNodes() {
+    const result = [];
+
+    if (this.el.hasChildNodes()) {
+      const childNodes = this.el.childNodes;
+
+      for (let i = 0; i < childNodes.length; i++) {
+        result.push(Dom.create(childNodes[i]));
+      }
+    }
+
+    return result;
   }
 
   childLength() {

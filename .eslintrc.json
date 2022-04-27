@@ -1,5 +1,9 @@
 {
-  "plugins": ["jsx", "prettier"],
+  "root": true,
+  "plugins": [
+    "jsx", 
+    "prettier"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:prettier/recommended",
@@ -82,5 +86,18 @@
     "__dirname": true,
     "Map": true,
     "Set": true
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
+      }
+    }
+  ]
 }

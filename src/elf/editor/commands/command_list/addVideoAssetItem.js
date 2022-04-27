@@ -1,4 +1,3 @@
-import { EDIT_MODE_SELECTION } from "elf/editor/manager/Editor";
 import loadOriginalVideo from "elf/editor/util/loadOriginalVideo";
 
 export default {
@@ -23,7 +22,6 @@ export default {
           { src: videoObject.id, ...info, ...rect },
           containerItem
         );
-        editor.changeMode(EDIT_MODE_SELECTION);
       });
     }
   },

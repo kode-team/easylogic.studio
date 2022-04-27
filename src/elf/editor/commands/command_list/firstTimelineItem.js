@@ -11,8 +11,6 @@ export default {
       project.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
       project.seek();
       editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
     });
   },
 };

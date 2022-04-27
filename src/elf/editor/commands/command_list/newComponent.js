@@ -1,4 +1,3 @@
-import { EDIT_MODE_SELECTION } from "elf/editor/manager/Editor";
 import { PathParser } from "elf/editor/parser/PathParser";
 
 /**
@@ -64,6 +63,4 @@ export default function newComponent(
     isSelected,
     containerItem
   );
-
-  editor.changeMode(EDIT_MODE_SELECTION);
 }

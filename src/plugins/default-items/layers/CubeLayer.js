@@ -19,41 +19,6 @@ const customSelectorName = {
   "top.background": ".top",
   "bottom.background": ".bottom",
 };
-
-// eslint-disable-next-line no-unused-vars
-const cssKeyValue = {
-  position: true,
-  left: true,
-  top: true,
-  right: true,
-  bottom: true,
-  width: true,
-  height: true,
-  opacity: true,
-  "text-fill-color": true,
-  "text-stroke-color": true,
-  "text-stroke-width": true,
-  "background-clip": true,
-  "clip-path": true,
-  animation: true,
-  transition: true,
-  transform: true,
-  "transform-origin": true,
-  "transform-style": true,
-  perspective: true,
-  "perspective-origin": true,
-  "offset-path": true,
-};
-
-// eslint-disable-next-line no-unused-vars
-const nestedCssKeyValue = {
-  filter: true,
-  "mix-blend-mode": true,
-  "background-image": true,
-  "border-radius": true,
-  border: true,
-};
-
 export class CubeLayer extends Component {
   static getIcon() {
     return icon.cube;

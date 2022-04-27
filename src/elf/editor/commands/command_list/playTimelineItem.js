@@ -13,8 +13,6 @@ export default {
   ) {
     editor.selection.empty();
     editor.emit("refreshSelection");
-    editor.changeMode("play");
-    editor.emit("afterChangeMode");
 
     _currentProject(editor, (project, timeline) => {
       var lastTime = project.getSelectedTimelineLastTime();
@@ -48,18 +46,12 @@ export default {
           editor.emit("playTimeline");
           editor.nextTick(() => {
             editor.emit("stopTimeline");
-            // project.setTimelineCurrentTime(0);
-            editor.changeMode("SELECTION");
-            editor.emit("afterChangeMode");
           });
         },
         stop: (elapsed) => {
           // console.log('stop', timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
           project.stop(timecode(timeline.fps, elapsed / 1000));
           editor.emit("stopTimeline");
-          // project.setTimelineCurrentTime(0);
-          editor.changeMode("SELECTION");
-          editor.emit("afterChangeMode");
         },
       });
     });

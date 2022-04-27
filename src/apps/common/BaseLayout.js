@@ -26,6 +26,11 @@ const MOVE_CHECK_MS = 0;
 
 export class BaseLayout extends EditorElement {
   async created() {
+    // register data manager (as context)
+    this.$editor.registerManager({
+      ...this.getManagers(),
+    });
+
     // register local plugins
     this.$editor.registerPluginList(this.getPlugins());
 
@@ -104,6 +109,10 @@ export class BaseLayout extends EditorElement {
    */
   getPlugins() {
     return [];
+  }
+
+  getManagers() {
+    return {};
   }
 
   __initBodyMoves() {

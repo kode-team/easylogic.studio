@@ -957,7 +957,7 @@ declare module "@easylogic/editor" {
         protected bodyMouseUp(e: any, methodName: string): void;
     }
 
-    class UIElement extends EventMachine {
+    export class UIElement extends EventMachine {
 
         /**
          * UIElement 가 생성될 때 호출되는 메소드 
@@ -1139,27 +1139,6 @@ declare module "@easylogic/editor" {
         static create(json: ObjectPropertyProps): BaseProperty;
     }
 
-    export class MenuItem extends EditorElement {
-
-        clickButton(e): void;
-
-        getChecked(): boolean;
-
-        isDisabled(): boolean;
-
-        setSelected(isSelected: boolean): void;
-
-        getTitle(): string;
-
-        getIcon(): string;
-
-        getIconString(): string;
-
-        isHideTitle(): boolean;
-
-        static createMenuItem(opt: KeyValue): MenuItem;
-    }
-
     interface ICommandObject {
 
     }
@@ -1172,6 +1151,7 @@ declare module "@easylogic/editor" {
     interface DropdownMenuItem {
         type: 'dropdown';        
         items?: MenuItem[];
+        direction?: 'left' | 'right';
         icon?: string;
         title?: string;
         events?: any[];
@@ -1322,6 +1302,32 @@ declare module "@easylogic/editor" {
     const easylogic: EditorInterface;
 
     export type icon = ElementValue<string>;
+    
+    type ElementType = typeof UIElement | Function;
+
+    interface EditorPlugin {
+        (editor: EditorInstance): void;
+    }
+
+    interface EditorOptions {
+        container: string | HTMLElement;
+        config?: KeyValue;
+        plugins?: EditorPlugin[];
+    }
+
+    export function start(uiElement: ElementType, options: KeyValue): UIElement;
+    export function createDesignEditor(opts: EditorOptions): UIElement;
+    export function createThreeEditor(opts: EditorOptions): UIElement;
+    export function createBlankEditor(opts: EditorOptions): UIElement;
+    export function createDataEditor(opts: EditorOptions): UIElement;
+      
+      // createPageBuilder (opts = {}) {
+      //   return App.start(PageBuilder as any, opts)
+      // },
+      export function createWhiteBoard(opts) {
+        return start(WhiteBoard, opts);
+      }
+      
 
     export default easylogic;
 }

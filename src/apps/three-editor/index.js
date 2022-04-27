@@ -14,6 +14,7 @@ import Body3DPanel from "./area/Body3DPanel";
 import ThreeInspector from "./area/ThreeInspector";
 import ThreeToolBar from "./area/tool-bar/ThreeToolBar";
 import "./layout.scss";
+import { SceneManager } from "./managers/SceneManager";
 import threeEditorPlugins from "./plugins/three-editor-plugins";
 
 import LayerTab from "apps/common/area/LayerTab";
@@ -25,13 +26,19 @@ import { END, MOVE } from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
 export class ThreeEditor extends BaseLayout {
+  getManagers() {
+    return {
+      sceneManager: SceneManager,
+    };
+  }
+
   afterRender() {
     super.afterRender();
 
     this.$config.init("editor.layout.elements", this.refs);
 
     if (this.opt.data) {
-      this.$sceneManager.fromJSON(this.opt.data);
+      this.$editor.sceneManager.fromJSON(this.opt.data);
     }
   }
 

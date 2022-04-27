@@ -70,9 +70,11 @@ export default class ToolBarRenderer extends EditorElement {
       "DropdownMenu",
       {
         ref: "$dropdown-" + index,
+        ...item,
         items: item.items,
         icon: item.icon,
         title: item.title,
+        direction: item.direction,
         events: item.events || [],
         selected: item.selected,
         selectedKey: item.selectedKey,

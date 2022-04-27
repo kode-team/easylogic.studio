@@ -10,7 +10,7 @@ export default class ViewportHelper extends EditorElement {
   }
 
   [LOAD("$el") + DOMDIFF]() {
-    const scene = this.$sceneManager.scene;
+    const scene = this.$editor.sceneManager.scene;
 
     let objects = 0,
       vertices = 0,

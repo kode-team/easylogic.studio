@@ -343,4 +343,18 @@ export class UIElement extends EventMachine {
       baseClass
     );
   }
+
+  static createElementInstance(ElementClass, props) {
+    if (ElementClass.__proto__.name === "") {
+      class FunctionElement extends UIElement {
+        template() {
+          return ElementClass.call(this, this.props);
+        }
+      }
+
+      return new FunctionElement(props, props);
+    } else {
+      return new ElementClass(props, props);
+    }
+  }
 }

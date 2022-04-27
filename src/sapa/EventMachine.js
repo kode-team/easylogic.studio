@@ -343,7 +343,7 @@ export class EventMachine {
 
     html = (html || "").trim();
 
-    const list = TEMP_DIV.html(html).children() || [];
+    const list = TEMP_DIV.html(html).childNodes || [];
     ///////////////////////////////////////////////////////////////
 
     for (var i = 0, len = list.length; i < len; i++) {

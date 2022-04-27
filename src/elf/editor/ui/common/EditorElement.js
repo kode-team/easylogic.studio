@@ -1,9 +1,6 @@
 import { UIElement } from "sapa";
 
 // eslint-disable-next-line no-unused-vars
-// import { SceneManager } from "../../manager/manager-items/SceneManager";
-
-// eslint-disable-next-line no-unused-vars
 import { MenuManager } from "elf/editor/manager/manager-items/MenuManager";
 import { NotifyType } from "elf/editor/types/editor";
 import {
@@ -156,13 +153,6 @@ export class EditorElement extends UIElement {
 
   get $stateManager() {
     return this.$editor.stateManager;
-  }
-
-  /**
-   * @type {SceneManager}
-   */
-  get $sceneManager() {
-    return this.$editor.sceneManager;
   }
 
   /**

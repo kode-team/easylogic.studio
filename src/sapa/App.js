@@ -1,18 +1,19 @@
 import { Dom } from "./functions/Dom";
 import { registRootElementInstance } from "./functions/registElement";
+import { UIElement } from "./UIElement";
 
 /**
  * UIElement 렌더링 하기
  *
- * @param {UIElement} ElementClass
+ * @param {UIElement|Function} ElementClass
  * @returns {UIElement}
  */
-export const start = async (ElementClass, opt) => {
+export const start = (ElementClass, opt) => {
   const $container = Dom.create(opt.container || document.body);
 
-  const app = new ElementClass(opt, opt);
+  const app = UIElement.createElementInstance(ElementClass, opt);
 
-  await app.render($container);
+  app.render($container);
 
   registRootElementInstance(app);
 
