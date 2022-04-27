@@ -69,6 +69,7 @@
     "dev": "npm run vite:dev",
     "test": "vitest",
     "coverage": "vitest --coverage",
+    "prepare": "husky install",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore --fix src",
     "format": "prettier .  --write"
   },

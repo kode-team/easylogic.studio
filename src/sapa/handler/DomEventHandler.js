@@ -301,6 +301,15 @@ export default class DomEventHandler extends BaseHandler {
     // eslint-disable-next-line no-unused-vars
     const [, , ...delegates] = magicMethod.args;
 
+
+
+
+
+
+
+
+    
+
     obj.dom = this.getDefaultDomElement(dom);
     obj.delegate = delegates.join(SAPARATOR);
     obj.beforeMethods = [];
