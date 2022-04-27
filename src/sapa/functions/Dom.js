@@ -296,6 +296,21 @@ export class Dom {
     DomDiff(this, Dom.create(rootElement).html(html), options);
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
   updateSVGDiff(html, rootElement = "div") {
     DomDiff(
       this,
