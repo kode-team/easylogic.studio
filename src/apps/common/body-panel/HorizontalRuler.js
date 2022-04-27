@@ -167,9 +167,12 @@ export default class HorizontalRuler extends EditorElement {
 
     return [
       dist > 3000
-        ? this.makeLineText(500, minX, maxX, realWidth, width, 20)
+        ? this.makeLineText(1000, minX, maxX, realWidth, width, 24)
         : "",
-      1000 < dist && dist < 3000
+      2000 < dist && dist < 3000
+        ? this.makeLineText(500, minX, maxX, realWidth, width, 22)
+        : "",
+      1000 < dist && dist < 2000
         ? this.makeLineText(100, minX, maxX, realWidth, width, 20)
         : "",
       800 < dist && dist < 1000

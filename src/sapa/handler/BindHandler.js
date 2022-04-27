@@ -94,6 +94,14 @@ const applyElementAttribute = ($element, key, value) => {
 };
 
 export default class BindHandler extends BaseHandler {
+  initialize() {
+    this.destroy();
+
+    if (!this._bindMethods || this._bindMethods.length === 0) {
+      this._bindMethods = this.context.filterProps("bind", true);
+    }
+  }
+
   /**
    *
    * dom element 에 지정된 bind 를 바로 실행하는 방법
@@ -146,12 +154,10 @@ export default class BindHandler extends BaseHandler {
   // 어떻게 실행하는게 좋을까?
   // this.runHandle('bind', ...);
   async bindData(...args) {
-    if (!this._bindMethods || this._bindMethods.length === 0) {
-      this._bindMethods = this.context.filterProps("bind", true);
-    }
-
     // local 로 등록된 bind 를 모두 실행한다.
     await this.bindLocalValue(...args);
+
+    if (!this._bindMethods?.length) return;
 
     /**
      * BIND 를 해보자.

@@ -102,9 +102,8 @@ export class GroupModel extends MovableModel {
   }
 
   isInLayout(layout) {
-    if (!this.isLayoutItem()) return false;
-
-    return this.parent.layout === layout;
+    // if (!this.isLayoutItem()) return false;
+    return this.parent?.layout === layout;
   }
 
   reset(obj) {

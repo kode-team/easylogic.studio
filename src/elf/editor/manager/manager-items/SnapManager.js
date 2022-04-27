@@ -154,9 +154,9 @@ export class SnapManager {
    *
    * @param {vec3[]} sourceVerties
    */
-  check(sourceVerties) {
+  check(sourceVerties, dist = 0) {
     const snaps = [];
-    const dist = this.dist;
+    // dist = dist || this.dist;
     const sourceXList = sourceVerties.map((it) => it[0]);
     const sourceYList = sourceVerties.map((it) => it[1]);
 

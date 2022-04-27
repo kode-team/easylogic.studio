@@ -174,3 +174,31 @@ export function combineKeyArray(obj) {
 
   return obj;
 }
+
+/**
+ * classnames('a', 'b') => 'a b'
+ * classnames('a', {'b': false}) => 'a'
+ * classnames('a', {'b': true}) => 'a b'
+ * classnames('a', {'b': true, 'c': false}) => 'a b'
+ * classnames('a', {'b': true, 'c': true}) => 'a b c'
+ *
+ * @param  {...(string|object)} args
+ * @returns
+ */
+export function classnames(...args) {
+  const result = [];
+
+  args.filter(Boolean).forEach((it) => {
+    if (isObject(it)) {
+      Object.keys(it)
+        .filter((k) => Boolean(it[k]))
+        .forEach((key) => {
+          result.push(key);
+        });
+    } else if (isString(it)) {
+      result.push(it);
+    }
+  });
+
+  return result.join(" ");
+}

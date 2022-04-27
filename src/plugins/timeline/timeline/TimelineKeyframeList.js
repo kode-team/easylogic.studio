@@ -13,7 +13,7 @@ import {
   Dom,
 } from "sapa";
 
-import { OBJECT_TO_CLASS } from "elf/core/func";
+import { classnames } from "elf/core/func";
 import { timecode, second } from "elf/core/time";
 import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import { PathParser } from "elf/editor/parser/PathParser";
@@ -178,7 +178,7 @@ export default class TimelineKeyframeList extends EditorElement {
     var times = Object.keys(key).map((it) => +it);
 
     return /*html*/ `
-        <div class='timeline-keyframe ${OBJECT_TO_CLASS({
+        <div class='timeline-keyframe ${classnames({
           collapsed: animation.collapsed,
         })}' data-timeline-layer-id="${obj.id}">
             <div 

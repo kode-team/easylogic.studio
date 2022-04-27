@@ -1,4 +1,11 @@
-import { clone, isBoolean, isNotUndefined, isObject, isUndefined } from "sapa";
+import {
+  classnames,
+  clone,
+  isBoolean,
+  isNotUndefined,
+  isObject,
+  isUndefined,
+} from "sapa";
 
 import { getPredefinedCubicBezier } from "./bezier";
 import { randomNumber } from "./color/create";
@@ -44,7 +51,7 @@ export function OBJECT_TO_PROPERTY(obj) {
     .map((key) => {
       if (key === "class") {
         if (isObject(obj[key])) {
-          return `${key}="${OBJECT_TO_CLASS(obj[key])}"`;
+          return `${key}="${classnames(obj[key])}"`;
         }
       }
 
@@ -71,14 +78,32 @@ export function OBJECT_TO_PROPERTY(obj) {
     .join(" ");
 }
 
-export function OBJECT_TO_CLASS(obj) {
-  return Object.keys(obj)
-    .filter((k) => obj[k])
-    .map((key) => {
-      return key;
-    })
-    .join(" ");
-}
+// /**
+//  * classnames('a', 'b') => 'a b'
+//  * classnames('a', {'b': false}) => 'a'
+//  * classnames('a', {'b': true}) => 'a b'
+//  * classnames('a', {'b': true, 'c': false}) => 'a b'
+//  * classnames('a', {'b': true, 'c': true}) => 'a b c'
+//  *
+//  * @param  {...(string|object)} args
+//  * @returns
+//  */
+// export function classnames(...args) {
+//   const result = [];
+
+//   args.filter(Boolean).forEach((it) => {
+
+//     if (isObject(it)) {
+//       Object.keys(it).filter((k) => Boolean(it[k])).forEach((key) => {
+//         result.push(key);
+//       })
+//     } else if (isString(it)) {
+//       result.push(it);
+//     }
+//   })
+
+//   return result.join(" ");
+// }
 
 export function TAG_TO_STRING(str) {
   return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -141,3 +166,6 @@ export const objectCeil = (obj) => valueMap(obj, Math.ceil);
 export const objectRound = (obj) => valueMap(obj, Math.round);
 export const objectRoundTo = (obj, to) =>
   valueMap(obj, (v) => Math.round(v / to) * to);
+export const screenFloor = (number) => {
+  return number < 0 ? Math.floor(number) + 1 : Math.floor(number);
+};

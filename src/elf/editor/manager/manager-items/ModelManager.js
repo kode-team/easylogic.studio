@@ -243,9 +243,18 @@ export class ModelManager {
     const objectList = {};
 
     items.forEach((item) => {
-      const groupItem = this.findGroupItem(item.id) || item;
+      // layout 안에 포함된 경우는 상위 객체를 먼저 찾는다.
+      // 선택 개수가 2개 이상일 경우, 부모의 존재가 겹치면 합치고
+      // 선택한 레이어가 다른 레이어의 상위에 존재할 때 하위에 선택된 레이어를 모두 제거한다.
+      if (item.parent && item.isNot("project") && item.parent.hasLayout()) {
+        const groupItem = item.parent;
 
-      objectList[groupItem.id] = groupItem;
+        objectList[groupItem.id] = groupItem;
+      } else {
+        const groupItem = this.findGroupItem(item.id) || item;
+
+        objectList[groupItem.id] = groupItem;
+      }
     });
 
     return Object.values(objectList).filter((it) => it.isNot("project"));

@@ -16,6 +16,8 @@ export default {
     await editor.emit("hideAddViewLayer");
     await editor.emit("removeGuideLine");
 
+    editor.config.set("editing.mode.itemType", type);
+
     if (type === "select") {
       // NOOP
       // select 는 아무것도 하지 않는다.
@@ -28,7 +30,6 @@ export default {
       await editor.emit("showPathEditor", "path");
     } else {
       editor.config.set("editing.mode", EditingMode.APPEND);
-      editor.config.set("editing.mode.itemType", type);
       await editor.emit("showLayerAppendView", type, data);
     }
   },

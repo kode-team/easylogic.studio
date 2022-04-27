@@ -273,7 +273,7 @@ export class SelectionManager {
     // 상위 group 이 있다면 group 을 기준으로 selection 을 맞춘다.
     const newSelectedItems = this.modelManager.convertGroupItems(list);
 
-    return this.select(...newSelectedItems.map((it) => it.id));
+    return this.select(...newSelectedItems);
   }
 
   // 직접적은 item 을 selection 하기 위해서 사용한다.

@@ -9,12 +9,13 @@ import {
   SUBSCRIBE_SELF,
   isFunction,
   isNotUndefined,
-  initializeGroupVariables,
-  variable,
   Dom,
   createComponent,
   isArray,
   isString,
+  classnames,
+  STOP,
+  PREVENT,
 } from "sapa";
 
 import { EditorElement } from "../common/EditorElement";
@@ -23,18 +24,23 @@ import "./DropdownMenu.scss";
 import { iconUse } from "elf/editor/icon/icon";
 import { Length } from "elf/editor/unit/Length";
 
-function makeMenuItem(it) {
+function makeMenuItem(it, id) {
   if (it === "-") {
-    return createComponent("Divider");
+    return createComponent("Divider", {
+      ref: `${id}-divider`,
+    });
   }
 
   if (it === "-" || it.type === "divider") {
-    return createComponent("DropdownDividerMenuItem");
+    return createComponent("DropdownDividerMenuItem", {
+      ref: `${id}-divider`,
+    });
   }
 
   if (isString(it)) {
     return createComponent("DropdownTextMenuItem", {
       text: it,
+      ref: `${id}-text`,
     });
   }
 
@@ -43,6 +49,43 @@ function makeMenuItem(it) {
       href: it.href,
       target: it.target,
       title: it.title,
+      closable: it.closable,
+      ref: `${id}-link`,
+    });
+  }
+
+  if (it.type === "custom") {
+    return createComponent("DropdownCustomMenuItem", {
+      action: it.action,
+      command: it.command,
+      args: it.args,
+      icon: it.icon,
+      text: it.text,
+      events: it.events,
+      template: it.template,
+      closable: it.closable,
+      ref: `${id}-custom`,
+    });
+  }
+
+  if (it.type === "checkbox") {
+    return createComponent("DropdownCheckboxMenuItem", {
+      checked: it.checked,
+      command: it.command,
+      args: it.args || [],
+      disabled: it.disabled,
+      direction: it.direction,
+      icon: it.icon,
+      nextTick: it.nextTick,
+      onClick: it.onClick,
+      action: it.action,
+      shortcut: it.shortcut,
+      title: it.title,
+      key: it.key,
+      events: it.events,
+      closable: it.closable,
+      items: it.items || [],
+      ref: `${id}-checkbox`,
     });
   }
 
@@ -50,6 +93,7 @@ function makeMenuItem(it) {
     return createComponent("DropdownMenuList", {
       title: it.title,
       items: it.items,
+      ref: `${id}-list`,
     });
   }
 
@@ -67,34 +111,32 @@ function makeMenuItem(it) {
     title: it.title,
     key: it.key,
     events: it.events,
+    closable: it.closable,
     items: it.items || [],
+    ref: `${id}-menu-item`,
   });
 }
 
-function Divider(props) {
-  return /*html*/ `<li class="dropdown-divider" data-key="${props.key}"></li>`;
+function Divider() {
+  return /*html*/ `<li class="dropdown-divider"></li>`;
 }
 
-class DropdownDividerMenuItem extends EditorElement {
-  template() {
-    return /*html*/ `<li class="dropdown-divider"></li>`;
-  }
+function DropdownDividerMenuItem() {
+  return /*html*/ `<li class="dropdown-divider"></li>`;
 }
 
-class DropdownTextMenuItem extends EditorElement {
-  template() {
-    return /*html*/ `<li class='text'><label>${this.$i18n(
-      this.props.text
-    )}</label></li>`;
-  }
+function DropdownTextMenuItem() {
+  return /*html*/ `<li class='text'><label>${this.$i18n(
+    this.props.text
+  )}</label></li>`;
 }
 
-class DropdownLinkMenuItem extends EditorElement {
-  template() {
-    return /*html*/ `<li><a href="${this.props.href}" target="${
-      this.props.target || "_blank"
-    }">${this.$i18n(this.props.title)}</a></li>`;
-  }
+function DropdownLinkMenuItem() {
+  return /*html*/ `<li>
+      <a href="${this.props.href}" target="${
+    this.props.target || "_blank"
+  }">${this.$i18n(this.props.title)}</a>
+    </li>`;
 }
 
 class DropdownMenuList extends EditorElement {
@@ -103,18 +145,29 @@ class DropdownMenuList extends EditorElement {
       Divider,
       DropdownDividerMenuItem,
       DropdownLinkMenuItem,
+      DropdownTextMenuItem,
+      DropdownCustomMenuItem,
+      DropdownCheckboxMenuItem,
       DropdownMenuList,
       DropdownMenuItem,
     };
   }
 
+  get groupId() {
+    return `${this.props.id}-groupId`;
+  }
+
   template() {
     return /*html*/ `
-      <li>
+      <li class="dropdown-menu-list">
           <label>${this.$i18n(this.props.title)}</label> 
           <span>${iconUse("arrowRight")}</span>              
           <ul>
-              ${this.props.items.map((child) => makeMenuItem(child)).join("")}
+              ${this.props.items
+                .map((child, index) =>
+                  makeMenuItem(child, `${this.groupId}-${index}`)
+                )
+                .join("")}
           </ul>
       </li>
     `;
@@ -138,18 +191,10 @@ class DropdownMenuItem extends EditorElement {
 
     const checked = isFunction(it.checked) ? it.checked(this.$editor) : "";
     return /*html*/ `
-        <li data-command="${it.command}" data-has-children="${Boolean(
-      it.items?.length
-    )}"
-          ${it.disabled && "disabled"} 
-          ${it.shortcut && "shortcut"}
-          ${checked && "checked"}
-          ${
-            it.nextTick &&
-            `data-next-tick=${variable(it.nextTick, this.groupId)}`
-          } 
-          ${it.args && `data-args=${variable(it.args, this.groupId)}`} 
-          ${it.key && `data-key=${it.key}`} 
+        <li data-has-children="${Boolean(it.items?.length)}"
+          ${it.disabled ? "disabled" : ""} 
+          ${it.shortcut ? "shortcut" : ""}
+          ${checked ? `"checked=checked"` : ""}
         >
             <span class="icon">${
               checked ? iconUse("check") : it.icon || ""
@@ -162,7 +207,7 @@ class DropdownMenuItem extends EditorElement {
       `;
   }
 
-  [CLICK("$el")]() {
+  [CLICK("$el") + PREVENT + STOP]() {
     if (this.props.command) {
       this.emit(this.props.command, ...(this.props.args || []));
     } else if (isFunction(this.props.action)) {
@@ -170,6 +215,60 @@ class DropdownMenuItem extends EditorElement {
     } else if (isFunction(this.props.onClick)) {
       this.props.action(this.$editor, this);
     }
+
+    if (isFunction(this.props.nextTick)) {
+      this.nextTick(() => {
+        this.props.nextTick(this.$editor, this);
+      });
+    }
+
+    if (this.props.closable) {
+      this.parent.close();
+    }
+  }
+}
+
+class DropdownCheckboxMenuItem extends DropdownMenuItem {
+  template() {
+    return /*html*/ `<li class='checkbox'></li>`;
+  }
+
+  get checked() {
+    if (isFunction(this.props.checked)) {
+      return this.props.checked(this.$editor, this);
+    }
+
+    return this.props.checked;
+  }
+
+  [LOAD("$el") + DOMDIFF]() {
+    return /*html*/ `
+      <label>
+        <input type="checkbox" ${
+          this.checked ? 'checked="checked"' : ""
+        } value="${this.props.value}" /> 
+        ${this.$i18n(this.props.title)}
+      </label>
+    `;
+  }
+}
+
+class DropdownCustomMenuItem extends DropdownMenuItem {
+  template() {
+    return /*html*/ `<li class='custom'></li>`;
+  }
+
+  // 정해진 템플릿을 그대로 적용하기 위한 html
+  getTemplateString() {
+    if (isFunction(this.props.template)) {
+      return this.props.template(this.$editor, this);
+    }
+
+    return this.$i18n(this.props.template);
+  }
+
+  [LOAD("$el") + DOMDIFF]() {
+    return this.getTemplateString();
   }
 }
 
@@ -180,6 +279,8 @@ export class DropdownMenu extends EditorElement {
       DropdownDividerMenuItem,
       DropdownLinkMenuItem,
       DropdownTextMenuItem,
+      DropdownCustomMenuItem,
+      DropdownCheckboxMenuItem,
       DropdownMenuList,
       DropdownMenuItem,
     };
@@ -201,17 +302,20 @@ export class DropdownMenu extends EditorElement {
       direction: this.props.direction || "left",
       opened: this.props.opened || false,
       items: this.props.items || [],
-      selectedKey: this.props.selectedKey,
       dy: this.props.dy || 0,
     };
   }
 
-  template() {
-    const { direction, opened } = this.state;
+  findItem(searchKey) {
+    return this.state.items.find((it) => it.key === searchKey);
+  }
 
-    const openedClass = opened ? "opened" : "";
+  template() {
+    const { direction } = this.state;
     return /*html*/ `
-        <div class="dropdown-menu ${openedClass}" data-direction="${direction}">
+        <div class="${classnames("dropdown-menu", {
+          opened: false,
+        })}" data-direction="${direction}">
           <span class='icon' ref="$icon"></span>
           <span class='label' ref='$label'></span>
           <span class='dropdown-arrow' ref="$arrow">${iconUse(
@@ -229,7 +333,7 @@ export class DropdownMenu extends EditorElement {
 
   [LOAD("$icon")]() {
     return isFunction(this.props.icon)
-      ? this.props.icon(this.state)
+      ? this.props.icon(this.$editor, this)
       : this.props.icon;
   }
 
@@ -241,10 +345,11 @@ export class DropdownMenu extends EditorElement {
 
   [BIND("$el")]() {
     const selected = isFunction(this.props.selected)
-      ? this.props.selected(this.state, this.$editor)
+      ? this.props.selected(this.$editor, this)
       : false;
+
     return {
-      "data-selected": selected,
+      "data-selected": !!selected,
       style: {
         ...(this.props.style || {}),
         "--elf--dropdown-menu-width": this.props.width,
@@ -284,8 +389,9 @@ export class DropdownMenu extends EditorElement {
   }
 
   [LOAD("$list") + DOMDIFF]() {
-    initializeGroupVariables(this.groupId);
-    return this.state.items.map((it) => makeMenuItem(it));
+    return this.state.items.map((it, index) =>
+      makeMenuItem(it, `${this.groupId}-${index}`)
+    );
   }
 
   checkDropdownOpen(e) {
@@ -305,58 +411,28 @@ export class DropdownMenu extends EditorElement {
   }
 
   [CLICK("$icon")]() {
-    if (this.state.selectedKey) {
-      const menuItem = this.state.items.find(
-        (it) => it.key === this.state.selectedKey
-      );
+    const menuItem = this.findItem(this.props.selectedKey(this.$editor));
 
-      if (!menuItem) return;
+    if (!menuItem) return;
 
-      const command = menuItem.command;
-      const args = menuItem.args;
-      const nextTick = menuItem.nextTick;
-      const key = menuItem.key;
-
-      // command 를 실행하고
-      if (command) {
-        this.emit(command, ...args);
-      }
-
-      // nextTick 은 액션처럼 실행하고
-      if (nextTick && isFunction(nextTick)) {
-        this.nextTick(nextTick);
-      }
-
-      this.setState({
-        selectedKey: key,
-      });
-
-      // 닫고
-      this.close();
-    } else {
-      this.toggle();
-    }
-  }
-
-  [CLICK("$el [data-command]")](e) {
-    const command = e.$dt.data("command");
-    const args = e.$dt.data("args") || [];
-    const nextTick = e.$dt.data("next-tick");
-    const key = e.$dt.data("key");
+    const command = menuItem.command;
+    const args = menuItem.args;
+    const action = menuItem.action;
+    const nextTick = menuItem.nextTick;
 
     // command 를 실행하고
     if (command) {
       this.emit(command, ...args);
+    } else if (action && isFunction(action)) {
+      this.emit(action);
     }
 
     // nextTick 은 액션처럼 실행하고
     if (nextTick && isFunction(nextTick)) {
-      this.nextTick(nextTick);
+      this.nextTick(() => {
+        nextTick(this.$editor);
+      });
     }
-
-    this.setState({
-      selectedKey: key,
-    });
 
     // 닫고
     this.close();

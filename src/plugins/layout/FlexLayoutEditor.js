@@ -218,7 +218,7 @@ export default class FlexLayoutEditor extends EditorElement {
                   icons: [
                     "start",
                     "end",
-                    "center",
+                    "horizontal_align_center",
                     "horizontal_distribute",
                     "justify_content_space_around",
                   ],

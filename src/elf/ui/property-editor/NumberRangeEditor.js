@@ -6,11 +6,11 @@ import {
   BLUR,
   POINTERSTART,
   SUBSCRIBE_SELF,
+  classnames,
 } from "sapa";
 
 import "./NumberRangeEditor.scss";
 
-import { OBJECT_TO_CLASS } from "elf/core/func";
 import icon from "elf/editor/icon/icon";
 import { END } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
@@ -56,7 +56,7 @@ export default class NumberRangeEditor extends EditorElement {
 
     return /*html*/ `
         <div 
-            class="${OBJECT_TO_CLASS({
+            class="${classnames({
               "elf--number-range-editor": true,
               "has-label": !!label,
               compact: !!compact,

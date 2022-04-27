@@ -36,6 +36,7 @@ const removeProp = (node, name, value) => {
 };
 
 const updateProp = (node, name, newValue, oldValue) => {
+  // 필드만 있는 것들은 value 가 없을 수 있기 때문에, 기본 value 를 채워주자.
   if (!newValue) {
     removeProp(node, name, oldValue);
   } else if (!oldValue || newValue !== oldValue) {

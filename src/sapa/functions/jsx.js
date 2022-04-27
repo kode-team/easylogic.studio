@@ -1,4 +1,5 @@
 import {
+  classnames,
   isArray,
   isBoolean,
   isNotUndefined,
@@ -24,7 +25,7 @@ function OBJECT_TO_PROPERTY(obj) {
     .map((key) => {
       if (key === "class") {
         if (isObject(obj[key])) {
-          return `${key}="${OBJECT_TO_CLASS(obj[key])}"`;
+          return `${key}="${classnames(obj[key])}"`;
         }
       }
 
@@ -51,14 +52,6 @@ function OBJECT_TO_PROPERTY(obj) {
     .join(" ");
 }
 
-function OBJECT_TO_CLASS(obj) {
-  return Object.keys(obj)
-    .filter((k) => obj[k])
-    .map((key) => {
-      return key;
-    })
-    .join(" ");
-}
 
 export function createComponent(ComponentName, props = {}, children = []) {
   // 모든 children 을 하나로 모은다.

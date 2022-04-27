@@ -99,9 +99,7 @@ export class ConfigManager {
   }
 
   toggle(key) {
-    if (this.isBoolean(key)) {
-      this.set(key, !this.get(key));
-    }
+    this.set(key, !this.get(key));
   }
 
   true(key) {

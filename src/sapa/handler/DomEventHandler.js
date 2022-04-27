@@ -99,7 +99,7 @@ export default class DomEventHandler extends BaseHandler {
       this._domEvents.length === 0 ||
       this._bindings.length === 0
     ) {
-      this._domEvents = this.context.filterProps("domevent", true);
+      this._domEvents = this.context.filterProps("domevent");
     }
 
     // binding 되어 있지 않고, domEvents 에 정의된 것만 있는 경우

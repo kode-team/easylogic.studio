@@ -368,7 +368,7 @@ export class Dom {
    * create document fragment with children dom
    */
   createChildrenFragment() {
-    const list = this.children();
+    const list = this.childNodes;
 
     var fragment = document.createDocumentFragment();
     list.forEach(($el) => fragment.appendChild($el.el));

@@ -14,7 +14,7 @@ import { EditorElement } from "elf/editor/ui/common/EditorElement";
  *  command: string;    // 커맨드 이름
  *  args: any[];        // 커맨드 매개변수
  *  shortcut: string;   // 단축키
- *  nextTick: boolean;  // nextTick
+ *  nextTick: function;  // nextTick
  *  disabled: boolean;  // disabled 상태 추가
  *  selected?: function;
  *  selectedKey: string;
@@ -50,6 +50,10 @@ export class ToolbarButtonMenuItem extends EditorElement {
       this.props.action(this.$editor, this);
     } else if (isFunction(this.props.onClick)) {
       this.props.action(this.$editor, this);
+    }
+
+    if (isFunction(this.props.nextTick)) {
+      this.props.nextTick(this.$editor);
     }
   }
 

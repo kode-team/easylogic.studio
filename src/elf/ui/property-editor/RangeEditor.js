@@ -6,16 +6,15 @@ import {
   POINTERSTART,
   SUBSCRIBE_SELF,
   createComponent,
+  classnames,
 } from "sapa";
 
 import "./RangeEditor.scss";
 
-import { OBJECT_TO_CLASS } from "elf/core/func";
 import icon from "elf/editor/icon/icon";
 import { END } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
-
 export default class RangeEditor extends EditorElement {
   initState() {
     var units = this.props.units || ["px", "em", "%"];
@@ -69,7 +68,7 @@ export default class RangeEditor extends EditorElement {
     return /*html*/ `
         <div 
             ref="$range"
-            class="${OBJECT_TO_CLASS({
+            class="${classnames({
               "elf--range--editor": true,
               "has-label": !!label,
               compact: !!compact,

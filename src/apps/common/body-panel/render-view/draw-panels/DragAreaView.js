@@ -102,6 +102,7 @@ export default class DragAreaView extends EditorElement {
     if (this.$config.get("set.dragarea.mode")) {
       this.emit("startDragAreaView");
     }
+    this.$config.set("editing.mode.itemType", "select");
   }
 
   initializeDragSelection() {

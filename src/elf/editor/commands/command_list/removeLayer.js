@@ -13,6 +13,7 @@ export default {
 
     editor.nextTick(() => {
       editor.emit("refreshAll");
+      editor.emit("refreshSelectionTool");
     });
   },
 };

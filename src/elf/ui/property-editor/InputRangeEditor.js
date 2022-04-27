@@ -7,11 +7,11 @@ import {
   FOCUSIN,
   FOCUSOUT,
   createComponent,
+  classnames,
 } from "sapa";
 
 import "./InputRangeEditor.scss";
 
-import { OBJECT_TO_CLASS } from "elf/core/func";
 import { round } from "elf/core/math";
 import icon from "elf/editor/icon/icon";
 import { END, MOVE } from "elf/editor/types/event";
@@ -78,7 +78,7 @@ export default class InputRangeEditor extends EditorElement {
     return /*html*/ `
         <div 
             ref="$range",
-            class="${OBJECT_TO_CLASS({
+            class="${classnames({
               "elf--input-range-editor": true,
               "has-label": !!label,
               compact: !!compact,

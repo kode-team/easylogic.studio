@@ -174,7 +174,10 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   checkPointerIsNotMoved() {
-    return Boolean(this.state.dragging) === false;
+    return (
+      Boolean(this.state.dragging) === false &&
+      this.$config.false("set.move.control.point")
+    );
   }
 
   [POINTEROVER("$pointerRect .rotate-pointer") + IF("checkPointerIsNotMoved")](
@@ -255,8 +258,8 @@ export default class SelectionToolView extends SelectionToolEvent {
       let data = {
         x: lastStartVertex[0] + (newWidth < 0 ? newWidth : 0),
         y: lastStartVertex[1] + (newHeight < 0 ? newHeight : 0),
-        width: Math.abs(newWidth),
-        height: Math.abs(newHeight),
+        width: Math.max(Math.abs(newWidth), 1),
+        height: Math.max(Math.abs(newHeight), 1),
       };
 
       if (instance.isInFlex()) {
@@ -822,7 +825,11 @@ export default class SelectionToolView extends SelectionToolEvent {
    * 선택영역 컴포넌트 그리기
    */
   renderPointers() {
-    if (this.$selection.isEmpty) {
+    if (
+      this.$selection.isEmpty ||
+      this.$config.true("set.move.control.point")
+    ) {
+      this.refs.$pointerRect.empty();
       return;
     }
 
@@ -1104,10 +1111,6 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     return false;
-  }
-
-  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
-    this.renderPointers();
   }
 
   [SUBSCRIBE("hideSelectionToolView")]() {

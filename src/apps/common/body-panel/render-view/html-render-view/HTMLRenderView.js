@@ -293,6 +293,7 @@ export default class HTMLRenderView extends EditorElement {
     END("calculateEndedElement")](e) {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     this.$config.init("set.move.control.point", true);
+    this.$config.set("editing.mode.itemType", "select");
     if (this.$config.get("set.dragarea.mode")) {
       this.emit("startDragAreaView");
 
@@ -394,10 +395,9 @@ export default class HTMLRenderView extends EditorElement {
       return;
     }
 
-    const newDist = vec3.floor(
-      [],
-      vec3.subtract([], targetMousePoint, this.initMousePoint)
-    );
+    const newDist = vec3
+      .subtract([], targetMousePoint, this.initMousePoint)
+      .map(Math.round);
 
     this.moveTo(newDist);
 
@@ -440,7 +440,7 @@ export default class HTMLRenderView extends EditorElement {
       this.$selection.cachedRectVerties.map((v) => {
         return vec3.add([], v, dist);
       }),
-      3
+      this.$viewport.scale > 5 ? 0 : 3 // 확대 영역이 크면 snap 포인트를 사용하지 않는다.
     );
 
     const localDist = vec3.add([], snap, dist);
@@ -461,10 +461,18 @@ export default class HTMLRenderView extends EditorElement {
         vec3.transformMat4([], oldVertex, it.parentMatrixInverse)
       );
 
-      result[it.id] = {
-        x: Math.floor(it.x + newDist[0]), // 1px 단위로 위치 설정
-        y: Math.floor(it.y + newDist[1]),
-      };
+      if (this.$selection.isOne) {
+        result[it.id] = {
+          x: Math.floor(it.x + newDist[0]), // 1px 단위로 위치 설정
+          y: Math.floor(it.y + newDist[1]),
+        };
+      } else {
+        // group 은 그냥 설정
+        result[it.id] = {
+          x: it.x + newDist[0],
+          y: it.y + newDist[1],
+        };
+      }
     });
 
     this.$selection.reset(result);
@@ -505,6 +513,7 @@ export default class HTMLRenderView extends EditorElement {
 
     this.emit("refreshSelection");
     this.emit("refreshSelectionTool");
+    this.$config.set("editing.mode.itemType", "select");
   }
 
   refreshSelectionStyleView(obj) {

@@ -466,6 +466,7 @@ export default class LayerAppendView extends EditorElement {
           /* isSelected */ true,
           parentArtBoard
         );
+        this.$config.set("editing.mode.itemType", "select");
         break;
     }
 

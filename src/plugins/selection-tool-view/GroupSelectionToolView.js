@@ -44,17 +44,17 @@ const SelectionToolEvent = class extends EditorElement {
     return this.$modeView.isCurrentMode("CanvasView");
   }
 
-  [SUBSCRIBE("refreshSelectionTool") + IF("checkViewMode")](
-    isInitializeMatrix = true
-  ) {
-    this.initSelectionTool(isInitializeMatrix);
+  [SUBSCRIBE("refreshSelectionTool") + IF("checkViewMode")]() {
+    if (this.$selection.isMany) {
+      this.initSelectionTool();
+    } else {
+      this.hide();
+    }
   }
 
-  [SUBSCRIBE("updateViewport") + IF("checkViewMode")](
-    isInitializeMatrix = true
-  ) {
+  [SUBSCRIBE("updateViewport") + IF("checkViewMode")]() {
     if (this.$selection.isMany) {
-      this.initSelectionTool(isInitializeMatrix);
+      this.initSelectionTool();
     }
   }
 };
@@ -87,7 +87,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     this.rotateTargetNumber = +e.$dt.attr("data-number");
 
     this.refreshRotatePointerIcon();
-    this.state.dragging = true;
+    this.state.dragging = false;
     this.state.isRotate = true;
     this.$config.set("set.move.control.point", true);
   }
@@ -212,7 +212,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   }
 
   checkPointerIsNotMoved() {
-    return Boolean(this.state.dragging) === false;
+    return (
+      Boolean(this.state.dragging) === false &&
+      this.$config.false("set.move.control.point")
+    );
   }
 
   [POINTEROVER("$pointerRect .rotate-pointer") +
@@ -246,6 +249,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     // cache matrix
     // this.$selection.doCache();
     this.$selection.reselect();
+    this.state.dragging = false;
     this.initMatrix(true);
     this.cachedGroupItem = this.groupItem.matrix;
     this.$config.set("set.move.control.point", true);
@@ -297,9 +301,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     var nextResult = vec3.transformMat4([], nextVertex, reverseMatrix);
 
     // 4. 복귀한 좌표에서 차이점을 구한다.
-    const realDist = vec3.floor(
+    const realDist = vec3.round(
       [],
-      vec3.add([], nextResult, vec3.negate([], currentResult))
+      vec3.subtract([], nextResult, currentResult)
     );
 
     return realDist;
@@ -315,10 +319,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
   moveGroupItem(lastStartVertex, newWidth, newHeight) {
     this.groupItem.reset({
-      x: round(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0), 1000),
-      y: round(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0), 1000),
-      width: round(Math.abs(newWidth), 1000),
-      height: round(Math.abs(newHeight), 1000),
+      x: lastStartVertex[0] + (newWidth < 0 ? newWidth : 0),
+      y: lastStartVertex[1] + (newHeight < 0 ? newHeight : 0),
+      width: Math.abs(newWidth),
+      height: Math.abs(newHeight),
     });
   }
 
@@ -343,8 +347,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       instance.reset({
         x: newX + realDx,
         y: newY + realDy,
-        width: newWidth,
-        height: newHeight,
+        width: Math.max(Math.abs(newWidth), 1),
+        height: Math.max(Math.abs(newHeight), 1),
       });
     }
   }
@@ -534,6 +538,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     const [realDx] = this.calculateRealDist(groupItem, 2, distVector);
 
+    console.log(realDx, groupItem.width, groupItem.height);
+
     // 변형되는 넓이 높이 구하기
     const newWidth = groupItem.width + realDx;
     const newHeight = groupItem.height;
@@ -605,7 +611,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     this.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
     this.$selection.reselect();
-    this.state.dragging = false;
     this.initMatrix(true);
     this.nextTick(() => {
       this.$selection.recoverChildren();
@@ -626,18 +631,20 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   }
 
   hide() {
-    this.$el.hide();
-    this.state.show = false;
+    if (this.state.show) {
+      this.$el.hide();
+      this.state.show = false;
+    }
   }
 
-  initSelectionTool(isInitializeMatrix = false) {
+  initSelectionTool() {
     if (this.$el.isHide() && this.$selection.isMany) {
       this.show();
     } else {
       if (this.$el.isShow() && this.$selection.isMany === false) this.hide();
     }
 
-    this.initMatrix(isInitializeMatrix);
+    this.initMatrix();
 
     this.makeSelectionTool();
   }
@@ -645,14 +652,14 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   get item() {
     const verties = this.verties || rectToVerties(0, 0, 0, 0);
 
-    if (!this.state.newArtBoard) {
-      this.state.newArtBoard = this.$editor.createModel(
+    if (!this.state.groupSelectionView) {
+      this.state.groupSelectionView = this.$editor.createModel(
         { itemType: "artboard" },
         false
       );
     }
 
-    this.state.newArtBoard.reset({
+    this.state.groupSelectionView.reset({
       parentId: this.$selection.currentProject.id,
       x: verties[0][0],
       y: verties[0][1],
@@ -660,11 +667,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       height: vec3.dist(verties[0], verties[3]),
     });
 
-    return this.state.newArtBoard;
+    return this.state.groupSelectionView;
   }
 
-  initMatrix(isInitializeMatrix = false) {
-    if (isInitializeMatrix && this.$selection.isMany) {
+  initMatrix() {
+    if (this.$selection.isMany && this.state.dragging === false) {
       // matrix 초기화
       this.verties = clone(this.$selection.verties);
       this.angle = 0;
@@ -690,15 +697,17 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
    * 선택영역 컴포넌트 그리기
    */
   renderPointers() {
-    if (!this.groupItem) return;
+    if (
+      this.$selection.isEmpty ||
+      this.$config.true("set.move.control.point")
+    ) {
+      this.refs.$pointerRect.empty();
+      return;
+    }
 
-    const verties = this.state.dragging
-      ? this.groupItem.verties
-      : this.$selection.verties;
-
-    if (verties.length === 0) return;
-
-    this.state.renderPointerList = [this.$viewport.applyVerties(verties)];
+    this.state.renderPointerList = [
+      this.$viewport.applyVerties(this.$selection.verties),
+    ];
 
     const { line, point, size, elementLine } = this.createRenderPointers(
       this.state.renderPointerList[0]
@@ -791,6 +800,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     const bottom = vec3.lerp([], pointers[2], pointers[3], 0.5);
     const left = vec3.lerp([], pointers[3], pointers[0], 0.5);
 
+    const worldPosition = this.$viewport.applyVertiesInverse(pointers);
+    const width = vec3.dist(worldPosition[0], worldPosition[1]);
+    const height = vec3.dist(worldPosition[0], worldPosition[3]);
+
     const list = [
       { start: top, end: bottom },
       { start: right, end: left },
@@ -812,8 +825,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       item.data.start,
       1 + 16 / vec3.dist(item.data.start, item.data.end)
     );
-    const width = this.groupItem.width;
-    const height = this.groupItem.height;
     const diff = vec3.subtract([], item.data.start, item.data.end);
     const angle = calculateAngle360(diff[0], diff[1]) + 90;
 
@@ -930,10 +941,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     return false;
-  }
-
-  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
-    this.renderPointers();
   }
 
   [SUBSCRIBE("hideSelectionToolView")]() {

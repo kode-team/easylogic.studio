@@ -177,9 +177,12 @@ export default class VerticalRuler extends EditorElement {
 
     return [
       dist > 3000
-        ? this.makeLineText(500, minY, maxY, realHeight, height, 20)
+        ? this.makeLineText(1000, minY, maxY, realHeight, height, 24)
         : "",
-      1000 < dist && dist < 3000
+      2000 < dist && dist < 3000
+        ? this.makeLineText(500, minY, maxY, realHeight, height, 22)
+        : "",
+      1000 < dist && dist < 2000
         ? this.makeLineText(100, minY, maxY, realHeight, height, 20)
         : "",
       800 < dist && dist < 1000

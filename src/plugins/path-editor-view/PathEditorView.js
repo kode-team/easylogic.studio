@@ -371,6 +371,13 @@ export default class PathEditorView extends PathTransformEditor {
     // history.moveLayerToTarget 으로 넘겨야 할지도 모른다.
     layer = containerItem.appendChild(this.$editor.createModel(pathItem));
 
+    this.command(
+      "moveLayerToTarget",
+      "add path",
+      layer,
+      this.$selection.currentProject
+    );
+
     return layer;
   }
 
@@ -399,6 +406,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     var layer = this.makePathLayer();
     if (layer) {
+      this.$config.set("editing.mode.itemType", "select");
       this.$selection.select(layer);
       this.trigger("hidePathEditor");
       this.emit("refreshAll");

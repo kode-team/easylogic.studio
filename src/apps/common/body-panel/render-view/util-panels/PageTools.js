@@ -1,17 +1,15 @@
 import {
   CLICK,
-  PREVENT,
-  STOP,
   SUBSCRIBE,
   CONFIG,
   LOAD,
   DOMDIFF,
   createComponent,
+  classnames,
 } from "sapa";
 
 import "./PageTools.scss";
 
-import { OBJECT_TO_CLASS } from "elf/core/func";
 import { iconUse } from "elf/editor/icon/icon";
 import { PathParser } from "elf/editor/parser/PathParser";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
@@ -47,7 +45,7 @@ export default class PageTools extends EditorElement {
         <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse(
           "fullscreen"
         )}</button>                        
-        <button type='button' ref='$pantool' class="${OBJECT_TO_CLASS({
+        <button type='button' ref='$pantool' class="${classnames({
           on: this.$config.get("set.tool.hand"),
         })}" data-tooltip="Hand | H" data-direction="top">${iconUse(
       "pantool"
@@ -71,37 +69,37 @@ export default class PageTools extends EditorElement {
     }
   }
 
-  [CLICK("$plus") + PREVENT + STOP]() {
+  [CLICK("$plus")]() {
     const oldScale = this.$viewport.scale;
     this.$viewport.setScale(oldScale + 0.01);
     this.emit("updateViewport");
     this.trigger("updateViewport");
   }
 
-  [CLICK("$minus") + PREVENT + STOP]() {
+  [CLICK("$minus")]() {
     const oldScale = this.$viewport.scale;
     this.$viewport.setScale(oldScale - 0.01);
     this.emit("updateViewport");
     this.trigger("updateViewport");
   }
 
-  [CLICK("$center") + PREVENT + STOP]() {
+  [CLICK("$center")]() {
     this.emit("moveSelectionToCenter");
   }
 
-  [CLICK("$pantool") + PREVENT + STOP]() {
+  [CLICK("$pantool")]() {
     this.$config.toggle("set.tool.hand");
   }
 
-  [CLICK("$ruler") + PREVENT + STOP]() {
+  [CLICK("$ruler")]() {
     this.$config.toggle("show.ruler");
   }
 
-  [CLICK("$fullscreen") + PREVENT + STOP]() {
+  [CLICK("$fullscreen")]() {
     this.emit("bodypanel.toggle.fullscreen");
   }
 
-  [CLICK("$buttons button") + PREVENT + STOP](e) {
+  [CLICK("$buttons button")](e) {
     const itemId = e.$dt.data("item-id");
     const pathIndex = e.$dt.data("path-index");
 
