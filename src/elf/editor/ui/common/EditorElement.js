@@ -227,13 +227,11 @@ export class EditorElement extends UIElement {
    */
   createFunctionComponent(
     EventMachineComponent,
-    targetElement,
     props,
     baseClass = EditorElement
   ) {
     return super.createFunctionComponent(
       EventMachineComponent,
-      targetElement,
       props,
       baseClass
     );

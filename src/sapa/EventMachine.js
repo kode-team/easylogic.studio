@@ -492,13 +492,11 @@ export class EventMachine {
 
   createFunctionComponent(
     EventMachineComponent,
-    targetElement,
     props,
     BaseClass = EventMachine
   ) {
     class FunctionElement extends BaseClass {
       template() {
-        console.log(this.sourceName);
         return EventMachineComponent.call(this, this.props);
       }
     }
@@ -516,11 +514,7 @@ export class EventMachine {
       EventMachineComponent.__proto__.name === "" &&
       isFunction(EventMachineComponent)
     ) {
-      return this.createFunctionComponent(
-        EventMachineComponent,
-        targetElement,
-        props
-      );
+      return this.createFunctionComponent(EventMachineComponent, props);
     }
 
     // return sapa component

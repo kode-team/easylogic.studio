@@ -328,19 +328,13 @@ export class UIElement extends EventMachine {
    *
    * @override
    * @param {Function} EventMachineComponent
-   * @param {Dom} targetElement
    * @param {object} props
+   * @param {UIElement} [baseClass=UIElement]
    * @returns
    */
-  createFunctionComponent(
-    EventMachineComponent,
-    targetElement,
-    props,
-    baseClass = UIElement
-  ) {
+  createFunctionComponent(EventMachineComponent, props, baseClass = UIElement) {
     return super.createFunctionComponent(
       EventMachineComponent,
-      targetElement,
       props,
       baseClass
     );

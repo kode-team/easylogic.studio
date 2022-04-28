@@ -2467,10 +2467,9 @@ const _EventMachine = class {
     var EventMachineComponent = retriveElement(refClassName) || this.childComponents[refClassName];
     return EventMachineComponent;
   }
-  createFunctionComponent(EventMachineComponent, targetElement, props, BaseClass = _EventMachine) {
+  createFunctionComponent(EventMachineComponent, props, BaseClass = _EventMachine) {
     class FunctionElement extends BaseClass {
       template() {
-        console.log(this.sourceName);
         return EventMachineComponent.call(this, this.props);
       }
     }
@@ -2481,7 +2480,7 @@ const _EventMachine = class {
       return new EventMachineComponent({ target: targetElement, props });
     }
     if (EventMachineComponent.__proto__.name === "" && isFunction(EventMachineComponent)) {
-      return this.createFunctionComponent(EventMachineComponent, targetElement, props);
+      return this.createFunctionComponent(EventMachineComponent, props);
     }
     return new EventMachineComponent(this, props);
   }
@@ -2871,8 +2870,8 @@ const _UIElement = class extends EventMachine {
     this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, true);
     return id;
   }
-  createFunctionComponent(EventMachineComponent, targetElement, props, baseClass = _UIElement) {
-    return super.createFunctionComponent(EventMachineComponent, targetElement, props, baseClass);
+  createFunctionComponent(EventMachineComponent, props, baseClass = _UIElement) {
+    return super.createFunctionComponent(EventMachineComponent, props, baseClass);
   }
   static createElementInstance(ElementClass, props) {
     if (ElementClass.__proto__.name === "") {
@@ -4391,8 +4390,8 @@ class EditorElement extends UIElement {
       this.emit(ADD_BODY_MOUSEUP, this[methodName], this, e.xy);
     }
   }
-  createFunctionComponent(EventMachineComponent, targetElement, props, baseClass = EditorElement) {
-    return super.createFunctionComponent(EventMachineComponent, targetElement, props, baseClass);
+  createFunctionComponent(EventMachineComponent, props, baseClass = EditorElement) {
+    return super.createFunctionComponent(EventMachineComponent, props, baseClass);
   }
 }
 class BlankCanvasView extends EditorElement {
