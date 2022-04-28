@@ -98,7 +98,7 @@ export default class BindHandler extends BaseHandler {
     this.destroy();
 
     if (!this._bindMethods || this._bindMethods.length === 0) {
-      this._bindMethods = this.context.filterProps("bind", true);
+      this._bindMethods = this.context.filterMethodes("bind", true);
     }
   }
 

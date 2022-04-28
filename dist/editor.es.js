@@ -45,7 +45,11 @@ var __privateWrapper = (obj2, member, setter, getter) => {
     }
   };
 };
-var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _subscribes, _storeInstance;
+var __privateMethod = (obj2, member, method) => {
+  __accessCheck(obj2, member, "access private method");
+  return method;
+};
+var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -1716,7 +1720,7 @@ class BindHandler extends BaseHandler {
   initialize() {
     this.destroy();
     if (!this._bindMethods || this._bindMethods.length === 0) {
-      this._bindMethods = this.context.filterProps("bind", true);
+      this._bindMethods = this.context.filterMethodes("bind", true);
     }
   }
   async bindLocalValue(refName) {
@@ -1784,7 +1788,7 @@ class CallbackHandler extends BaseHandler {
   initialize() {
     this.destroy();
     if (!this._callbacks || this._callbacks.length === 0) {
-      this._callbacks = this.context.filterProps("callback");
+      this._callbacks = this.context.filterMethodes("callback");
     }
     this._callbacks.forEach((key) => this.parseCallback(key));
   }
@@ -1931,7 +1935,7 @@ class DomEventHandler extends BaseHandler {
       return;
     }
     if (!this._domEvents || this._domEvents.length === 0 || this._bindings.length === 0) {
-      this._domEvents = this.context.filterProps("domevent");
+      this._domEvents = this.context.filterMethodes("domevent");
     }
     if (!((_a = this._bindings) == null ? void 0 : _a.length) && ((_b = this._domEvents) == null ? void 0 : _b.length)) {
       this._domEvents.forEach((it) => this.parseDomEvent(it));
@@ -2194,6 +2198,8 @@ const REF_CLASS = "refclass";
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
 const _EventMachine = class {
   constructor(opt, props) {
+    __privateAdd(this, _setProps);
+    __privateAdd(this, _getProp);
     __privateAdd(this, _state, {});
     __privateAdd(this, _prevState, {});
     __privateAdd(this, _refLoadVariables, {});
@@ -2202,6 +2208,8 @@ const _EventMachine = class {
     __privateAdd(this, _loadMethods, void 0);
     __privateAdd(this, _timestamp, void 0);
     __privateAdd(this, _cachedMethodList, void 0);
+    __privateAdd(this, _props, {});
+    __privateAdd(this, _propsKeys, {});
     this.refs = {};
     this.children = {};
     this.id = uuid$1();
@@ -2224,9 +2232,17 @@ const _EventMachine = class {
   initializeProperty(opt, props = {}) {
     this.opt = opt || {};
     this.parent = this.opt;
-    this.props = this.checkProps(props);
     this.source = uuid$1();
     this.sourceName = this.constructor.name;
+    this.props = new Proxy(__privateGet(this, _props), {
+      get: (target, key) => {
+        return __privateMethod(this, _getProp, getProp_fn).call(this, key);
+      },
+      set: (target, key) => {
+        throw new Error(`${key} is readonly`);
+      }
+    });
+    __privateMethod(this, _setProps, setProps_fn).call(this, props);
   }
   initComponents() {
     this.childComponents = this.components();
@@ -2260,7 +2276,7 @@ const _EventMachine = class {
     if ($container) {
       this.render($container);
     }
-    this.props = this.checkProps(props);
+    __privateMethod(this, _setProps, setProps_fn).call(this, props);
     __privateSet(this, _state, {});
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -2558,7 +2574,7 @@ const _EventMachine = class {
   }
   async load(...args2) {
     if (!__privateGet(this, _loadMethods)) {
-      __privateSet(this, _loadMethods, this.filterProps("load"));
+      __privateSet(this, _loadMethods, this.filterMethodes("load"));
     }
     await this.loadLocalValue(...args2);
     const filtedLoadMethodList = __privateGet(this, _loadMethods).filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
@@ -2631,7 +2647,7 @@ const _EventMachine = class {
     __privateSet(this, _refLoadVariables, {});
     __privateSet(this, _refBindVariables, {});
   }
-  collectProps(refreshCache = false) {
+  collectMethodes(refreshCache = false) {
     if (!__privateGet(this, _cachedMethodList) || refreshCache) {
       __privateSet(this, _cachedMethodList, collectProps(this, (name) => MagicMethod.check(name)).map((it) => {
         return MagicMethod.parse(it, this);
@@ -2639,8 +2655,8 @@ const _EventMachine = class {
     }
     return __privateGet(this, _cachedMethodList);
   }
-  filterProps(methodKey, refreshCache = false) {
-    return this.collectProps(refreshCache).filter((it) => {
+  filterMethodes(methodKey, refreshCache = false) {
+    return this.collectMethodes(refreshCache).filter((it) => {
       return it.method === methodKey;
     });
   }
@@ -2654,6 +2670,20 @@ _localTimestamp = new WeakMap();
 _loadMethods = new WeakMap();
 _timestamp = new WeakMap();
 _cachedMethodList = new WeakMap();
+_props = new WeakMap();
+_propsKeys = new WeakMap();
+_setProps = new WeakSet();
+setProps_fn = function(props) {
+  __privateSet(this, _props, this.checkProps(props));
+  __privateSet(this, _propsKeys, {});
+  Object.keys(props).forEach((key) => {
+    __privateGet(this, _propsKeys)[key.toUpperCase()] = key;
+  });
+};
+_getProp = new WeakSet();
+getProp_fn = function(key) {
+  return __privateGet(this, _props)[__privateGet(this, _propsKeys)[key.toUpperCase()]];
+};
 const _UIElement = class extends EventMachine {
   constructor(opt, props = {}) {
     super(opt, props);
@@ -2703,7 +2733,7 @@ const _UIElement = class extends EventMachine {
   }
   initializeStoreEvent() {
     if (!__privateGet(this, _subscribes) || __privateGet(this, _subscribes).length == 0) {
-      __privateSet(this, _subscribes, this.filterProps("subscribe", true));
+      __privateSet(this, _subscribes, this.filterMethodes("subscribe", true));
       __privateGet(this, _subscribes).forEach((magicMethod) => {
         var _a, _b;
         const events = magicMethod.args.join(" ");
@@ -4509,7 +4539,9 @@ class BaseUI extends UIElement {
     } else if (isArray(this.props.action)) {
       this.emit(...this.props.action, key, value, params);
     } else {
-      this.parent.trigger(this.props.onChange, key, value, params);
+      if (this.props.onChange) {
+        this.parent.trigger(this.props.onChange, key, value, params);
+      }
     }
   }
 }
@@ -4616,10 +4648,10 @@ class ToggleCheckBox extends BaseUI {
   initState() {
     return {
       label: this.props.label || "",
-      checked: this.props.value || "false",
+      checked: this.props.value || false,
       toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
       toggleTitles: this.props.toggleTitles || [],
-      toggleValues: this.props.toggleValues || ["true", "false"]
+      toggleValues: this.props.toggleValues || [true, false]
     };
   }
   template() {
@@ -4643,7 +4675,6 @@ class ToggleCheckBox extends BaseUI {
         class: `${it === checked ? "checked" : ""}`,
         "data-index": index2,
         title: title2,
-        value: it,
         style: "--elf--toggle-checkbox-tooltip-top: -20%;"
       }, label2));
     }).join("")}
@@ -4673,7 +4704,8 @@ class ToggleCheckBox extends BaseUI {
     return this.state.checked;
   }
   [CLICK("$el button")](e) {
-    this.setValue(e.$dt.value);
+    const index2 = +e.$dt.data("index");
+    this.setValue(this.state.toggleValues[index2]);
     this.trigger("change");
   }
   [SUBSCRIBE_SELF("change")]() {
@@ -6255,7 +6287,7 @@ class ToolbarButtonMenuItem extends EditorElement {
     } else if (isFunction(this.props.action)) {
       this.props.action(this.$editor, this);
     } else if (isFunction(this.props.onClick)) {
-      this.props.action(this.$editor, this);
+      this.props.onClick(this.$editor, this);
     }
     if (isFunction(this.props.nextTick)) {
       this.props.nextTick(this.$editor);
@@ -89705,7 +89737,7 @@ function svgItem(editor) {
         editor: "NumberInputEditor",
         editorOptions: {
           label: "Count",
-          min: 1,
+          min: 3,
           max: 100,
           step: 1,
           wide: "true"

@@ -271,7 +271,6 @@ export default function (editor) {
         editor: "ToggleCheckBox",
         editorOptions: {
           label: "Curve",
-          // toggleLabels: ['Curve', 'Not Curve'],
           defaultValue: item.isCurve,
         },
       },
@@ -280,7 +279,7 @@ export default function (editor) {
         editor: "NumberInputEditor",
         editorOptions: {
           label: "Count",
-          min: 1,
+          min: 3,
           max: 100,
           step: 1,
           wide: "true",

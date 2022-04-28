@@ -30,7 +30,9 @@ export class BaseUI extends UIElement {
     // 아무것도 없을 때는 선택할 수 있는 버튼 처럼 동작한다.
     // key, value 를 던질 수 있도록 한다.
     else {
-      this.parent.trigger(this.props.onChange, key, value, params);
+      if (this.props.onChange) {
+        this.parent.trigger(this.props.onChange, key, value, params);
+      }
     }
   }
 }

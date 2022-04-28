@@ -42,6 +42,8 @@ export class EventMachine {
   #loadMethods;
   #timestamp;
   #cachedMethodList;
+  #props = {};
+  #propsKeys = {};
 
   constructor(opt, props) {
     this.refs = {};
@@ -85,9 +87,33 @@ export class EventMachine {
   initializeProperty(opt, props = {}) {
     this.opt = opt || {};
     this.parent = this.opt;
-    this.props = this.checkProps(props);
     this.source = uuid();
     this.sourceName = this.constructor.name;
+
+    // props 를 대소문자 구분없이 조회할 수 있도록 proxy 객체 생성
+    this.props = new Proxy(this.#props, {
+      get: (target, key) => {
+        return this.#getProp(key);
+      },
+      set: (target, key) => {
+        throw new Error(`${key} is readonly`);
+      },
+    });
+
+    this.#setProps(props);
+  }
+
+  #setProps(props) {
+    this.#props = this.checkProps(props);
+    this.#propsKeys = {};
+
+    Object.keys(props).forEach((key) => {
+      this.#propsKeys[key.toUpperCase()] = key;
+    });
+  }
+
+  #getProp(key) {
+    return this.#props[this.#propsKeys[key.toUpperCase()]];
   }
 
   initComponents() {
@@ -165,7 +191,8 @@ export class EventMachine {
       this.render($container);
     }
 
-    this.props = this.checkProps(props);
+    this.#setProps(props);
+
     this.#state = {};
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -691,7 +718,7 @@ export class EventMachine {
 
   async load(...args) {
     if (!this.#loadMethods) {
-      this.#loadMethods = this.filterProps("load");
+      this.#loadMethods = this.filterMethodes("load");
     }
     // local 로 등록된 load 를 모두 실행한다.
     await this.loadLocalValue(...args);
@@ -804,7 +831,7 @@ export class EventMachine {
    *
    * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다.
    */
-  collectProps(refreshCache = false) {
+  collectMethodes(refreshCache = false) {
     if (!this.#cachedMethodList || refreshCache) {
       this.#cachedMethodList = collectProps(this, (name) =>
         MagicMethod.check(name)
@@ -816,8 +843,8 @@ export class EventMachine {
     return this.#cachedMethodList;
   }
 
-  filterProps(methodKey, refreshCache = false) {
-    return this.collectProps(refreshCache).filter((it) => {
+  filterMethodes(methodKey, refreshCache = false) {
+    return this.collectMethodes(refreshCache).filter((it) => {
       return it.method === methodKey;
     });
   }

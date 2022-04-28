@@ -49,7 +49,7 @@ export class ToolbarButtonMenuItem extends EditorElement {
     } else if (isFunction(this.props.action)) {
       this.props.action(this.$editor, this);
     } else if (isFunction(this.props.onClick)) {
-      this.props.action(this.$editor, this);
+      this.props.onClick(this.$editor, this);
     }
 
     if (isFunction(this.props.nextTick)) {

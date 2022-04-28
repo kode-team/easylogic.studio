@@ -9,10 +9,10 @@ export class ToggleCheckBox extends BaseUI {
   initState() {
     return {
       label: this.props.label || "",
-      checked: this.props.value || "false",
+      checked: this.props.value || false,
       toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
       toggleTitles: this.props.toggleTitles || [],
-      toggleValues: this.props.toggleValues || ["true", "false"],
+      toggleValues: this.props.toggleValues || [true, false],
     };
   }
 
@@ -40,7 +40,6 @@ export class ToggleCheckBox extends BaseUI {
                           class={`${it === checked ? "checked" : ""}`}
                           data-index={index}
                           title={title}
-                          value={it}
                           style="--elf--toggle-checkbox-tooltip-top: -20%;"
                         >
                           {label}
@@ -83,7 +82,9 @@ export class ToggleCheckBox extends BaseUI {
   }
 
   [CLICK("$el button")](e) {
-    this.setValue(e.$dt.value);
+    const index = +e.$dt.data("index");
+
+    this.setValue(this.state.toggleValues[index]);
     this.trigger("change");
   }
 
