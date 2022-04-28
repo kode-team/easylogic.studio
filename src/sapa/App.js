@@ -19,3 +19,12 @@ export const start = (ElementClass, opt) => {
 
   return app;
 };
+
+export async function renderToString(ElementClass, opt) {
+  const app = UIElement.createElementInstance(ElementClass, opt);
+  // server 인지 확인
+  app.setServer(true);
+  const instance = await app.render();
+
+  return instance.html;
+}

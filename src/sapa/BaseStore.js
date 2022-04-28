@@ -20,7 +20,7 @@ export class BaseStore {
     this.cachedCallback = {};
     this.callbacks = {};
     this.editor = editor;
-    this.promiseProxy = new window.Proxy(this, {
+    this.promiseProxy = new Proxy(this, {
       get: (target, key) => {
         return this.makePromiseEvent(key);
       },

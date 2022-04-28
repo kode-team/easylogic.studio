@@ -36,10 +36,12 @@ export class UIElement extends EventMachine {
     return {};
   }
 
-  render($container) {
-    super.render($container);
+  async render($container) {
+    await super.render($container);
 
     this.initializeStoreEvent();
+
+    return this;
   }
 
   pushContext() {

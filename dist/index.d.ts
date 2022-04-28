@@ -880,7 +880,7 @@ declare module "@easylogic/editor" {
      *
      * @param {Dom|undefined} $container  컴포넌트가 그려질 대상
      */
-    render($container: Dom | undefined): void;
+    async render($container: Dom | undefined): void;
 
     protected initialize(): void;
 
@@ -1338,7 +1338,8 @@ declare module "@easylogic/editor" {
 
   export type icon = ElementValue<string>;
 
-  type ElementType = typeof UIElement | Function;
+  type ElementFunction = () => any;
+  type ElementType = typeof UIElement | ElementFunction;
 
   interface EditorPlugin {
     (editor: EditorInstance): void;
@@ -1351,6 +1352,10 @@ declare module "@easylogic/editor" {
   }
 
   export function start(uiElement: ElementType, options: KeyValue): UIElement;
+  export function renderToString(
+    uiElement: ElementType,
+    options: KeyValue
+  ): Promise<string>;
   export function createDesignEditor(opts: EditorOptions): UIElement;
   export function createThreeEditor(opts: EditorOptions): UIElement;
   export function createBlankEditor(opts: EditorOptions): UIElement;
@@ -1362,6 +1367,33 @@ declare module "@easylogic/editor" {
   export function createWhiteBoard(opts) {
     return start(WhiteBoard, opts);
   }
+
+  export function createComponent(
+    ComponentName: string,
+    props: KeyValue = {},
+    children: any[] = []
+  ): string;
+
+  export function createComponentList(...args: any[]): string;
+
+  export function createElement(
+    Component: string,
+    props: KeyValue = {},
+    children: any[] = []
+  ): string;
+
+  type FragmentInstanceType = any;
+
+  /**
+   * fragment 용 instance
+   */
+  export const FragmentInstance: FragmentInstanceType;
+
+  export function createElementJsx(
+    Component: ElementType | string | FragmentInstanceType,
+    props: KeyValue = {},
+    ...children: any[]
+  ): string;
 
   export default easylogic;
 }

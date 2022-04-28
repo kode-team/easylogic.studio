@@ -52,7 +52,6 @@ function OBJECT_TO_PROPERTY(obj) {
     .join(" ");
 }
 
-
 export function createComponent(ComponentName, props = {}, children = []) {
   // 모든 children 을 하나로 모은다.
   children = children.flat(Infinity).join("");

@@ -149,6 +149,22 @@ export class Dom {
     };
   }
 
+  get attributes() {
+    try {
+      [...this.el.attributes];
+
+      return this.el.attributes;
+    } catch (e) {
+      const length = this.el.attributes.length;
+      const attributes = [];
+      for (var i = 0; i < length; i++) {
+        attributes.push(this.el.attributes[`${i}`]);
+      }
+
+      return attributes;
+    }
+  }
+
   attrs(...args) {
     return args.map((key) => {
       return this.el.getAttribute(key);
@@ -268,6 +284,14 @@ export class Dom {
   toggleClass(cls, isForce) {
     this.el.classList.toggle(cls, isForce);
     return this;
+  }
+
+  outerHTML() {
+    if (this.isTextNode) {
+      return this.text();
+    }
+
+    return this.el.outerHTML;
   }
 
   html(html) {

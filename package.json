@@ -58,6 +58,7 @@
     "vitest": "0.0.107"
   },
   "scripts": {
+    "render": "node ./saparo/index.js",
     "vite:dev": "vite --config=vite.config.js",
     "vite:dist": "vite build --config=vite.dist.config.js",
     "vite:dist:watch": "vite build --config=vite.dist.config.js --watch",

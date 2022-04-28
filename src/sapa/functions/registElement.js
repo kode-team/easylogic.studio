@@ -7,8 +7,6 @@ const __rootInstance = new Set();
 const __tempVariables = new Map();
 const __tempVariablesGroup = new Map();
 
-window.__tempVariables = __tempVariables;
-
 export const VARIABLE_SAPARATOR = "v:";
 
 /**

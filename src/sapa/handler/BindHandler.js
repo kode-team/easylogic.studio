@@ -23,8 +23,14 @@ const convertToPx = (key, value) => {
  * @param {Dom} $element
  * @param {string} key
  * @param {any} value
+ * @param {boolean} [isServer=false]
  */
-const applyElementAttribute = ($element, key, value) => {
+const applyElementAttribute = (
+  $element,
+  key,
+  value,
+  hasStyleAttribute = false
+) => {
   if (key === "cssText") {
     /**
      * cssText: 'position:absolute'
@@ -41,7 +47,16 @@ const applyElementAttribute = ($element, key, value) => {
         css[key] = convertToPx(key, value);
       });
 
-      $element.css(css);
+      if (hasStyleAttribute) {
+        const styleText = Object.keys(css)
+          .map((key) => {
+            return `${key}:${css[key]};`;
+          })
+          .join("");
+        $element.attr("style", styleText);
+      } else {
+        $element.css(css);
+      }
     }
 
     return;
@@ -94,7 +109,7 @@ const applyElementAttribute = ($element, key, value) => {
 };
 
 export default class BindHandler extends BaseHandler {
-  initialize() {
+  async initialize() {
     this.destroy();
 
     if (!this._bindMethods || this._bindMethods.length === 0) {
@@ -126,29 +141,31 @@ export default class BindHandler extends BaseHandler {
       };
     }
 
-    Object.values(target).forEach(async (it) => {
-      const refCallback = it.callback;
-      let $element = this.context.refs[it.ref];
+    await Promise.all(
+      Object.values(target).map(async (it) => {
+        const refCallback = it.callback;
+        let $element = this.context.refs[it.ref];
 
-      // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-      if ($element) {
-        const results = await refCallback.call(this.context);
+        // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
+        if ($element) {
+          const results = await refCallback.call(this.context);
 
-        if (!results) return;
+          if (!results) return;
 
-        const keys = Object.keys(results);
-        for (
-          var elementKeyIndex = 0, len = keys.length;
-          elementKeyIndex < len;
-          elementKeyIndex++
-        ) {
-          const key = keys[elementKeyIndex];
-          const value = results[key];
+          const keys = Object.keys(results);
+          for (
+            var elementKeyIndex = 0, len = keys.length;
+            elementKeyIndex < len;
+            elementKeyIndex++
+          ) {
+            const key = keys[elementKeyIndex];
+            const value = results[key];
 
-          applyElementAttribute($element, key, value);
+            applyElementAttribute($element, key, value, this.context.isServer);
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   // 어떻게 실행하는게 좋을까?
@@ -170,40 +187,42 @@ export default class BindHandler extends BaseHandler {
       return args.indexOf(it.args[0]) > -1;
     });
 
-    await bindList?.forEach(async (magicMethod) => {
-      let refObject = this.getRef(`${magicMethod.keywords[0]}`);
+    await Promise.all(
+      bindList?.map(async (magicMethod) => {
+        let refObject = this.getRef(`${magicMethod.keywords[0]}`);
 
-      let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
+        let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
 
-      if (typeof refObject === "string" && refObject !== "") {
-        refCallback = BIND_CHECK_FUNCTION(refObject);
-      } else if (typeof refObject === "function") {
-        refCallback = refObject;
-      }
-
-      const elName = magicMethod.args[0];
-      let $element = this.context.refs[elName];
-      // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-      const isBindCheck =
-        typeof refCallback === "function" && refCallback.call(this.context);
-      if ($element && isBindCheck) {
-        const results = await magicMethod.execute(...args);
-
-        if (!results) return;
-
-        const keys = Object.keys(results);
-        for (
-          var elementKeyIndex = 0, len = keys.length;
-          elementKeyIndex < len;
-          elementKeyIndex++
-        ) {
-          const key = keys[elementKeyIndex];
-          const value = results[key];
-
-          applyElementAttribute($element, key, value);
+        if (typeof refObject === "string" && refObject !== "") {
+          refCallback = BIND_CHECK_FUNCTION(refObject);
+        } else if (typeof refObject === "function") {
+          refCallback = refObject;
         }
-      }
-    });
+
+        const elName = magicMethod.args[0];
+        let $element = this.context.refs[elName];
+        // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
+        const isBindCheck =
+          typeof refCallback === "function" && refCallback.call(this.context);
+        if ($element && isBindCheck) {
+          const results = await magicMethod.execute(...args);
+
+          if (!results) return;
+
+          const keys = Object.keys(results);
+          for (
+            var elementKeyIndex = 0, len = keys.length;
+            elementKeyIndex < len;
+            elementKeyIndex++
+          ) {
+            const key = keys[elementKeyIndex];
+            const value = results[key];
+
+            applyElementAttribute($element, key, value, this.context.isServer);
+          }
+        }
+      })
+    );
   }
 
   destroy() {

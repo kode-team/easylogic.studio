@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
+var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -326,7 +326,6 @@ const aliasMap = {};
 const __rootInstance = /* @__PURE__ */ new Set();
 const __tempVariables = /* @__PURE__ */ new Map();
 const __tempVariablesGroup = /* @__PURE__ */ new Map();
-window.__tempVariables = __tempVariables;
 const VARIABLE_SAPARATOR = "v:";
 function variable$4(value, groupId = "") {
   const id = `${VARIABLE_SAPARATOR}${uuidShort$1()}`;
@@ -493,6 +492,19 @@ class Dom {
       [this.el.getAttribute(keyField)]: this.val()
     };
   }
+  get attributes() {
+    try {
+      [...this.el.attributes];
+      return this.el.attributes;
+    } catch (e) {
+      const length2 = this.el.attributes.length;
+      const attributes = [];
+      for (var i = 0; i < length2; i++) {
+        attributes.push(this.el.attributes[`${i}`]);
+      }
+      return attributes;
+    }
+  }
   attrs(...args2) {
     return args2.map((key) => {
       return this.el.getAttribute(key);
@@ -586,6 +598,12 @@ class Dom {
   toggleClass(cls, isForce) {
     this.el.classList.toggle(cls, isForce);
     return this;
+  }
+  outerHTML() {
+    if (this.isTextNode) {
+      return this.text();
+    }
+    return this.el.outerHTML;
   }
   html(html) {
     try {
@@ -1141,7 +1159,7 @@ class BaseStore {
     this.cachedCallback = {};
     this.callbacks = {};
     this.editor = editor;
-    this.promiseProxy = new window.Proxy(this, {
+    this.promiseProxy = new Proxy(this, {
       get: (target, key) => {
         return this.makePromiseEvent(key);
       }
@@ -1663,7 +1681,7 @@ const convertToPx = (key, value) => {
   }
   return value;
 };
-const applyElementAttribute = ($element, key, value) => {
+const applyElementAttribute = ($element, key, value, hasStyleAttribute = false) => {
   if (key === "cssText") {
     $element.cssText(value);
     return;
@@ -1673,7 +1691,14 @@ const applyElementAttribute = ($element, key, value) => {
       Object.entries(value).forEach(([key2, value2]) => {
         css[key2] = convertToPx(key2, value2);
       });
-      $element.css(css);
+      if (hasStyleAttribute) {
+        const styleText = Object.keys(css).map((key2) => {
+          return `${key2}:${css[key2]};`;
+        }).join("");
+        $element.attr("style", styleText);
+      } else {
+        $element.css(css);
+      }
     }
     return;
   } else if (key === "class") {
@@ -1717,7 +1742,7 @@ const applyElementAttribute = ($element, key, value) => {
   }
 };
 class BindHandler extends BaseHandler {
-  initialize() {
+  async initialize() {
     this.destroy();
     if (!this._bindMethods || this._bindMethods.length === 0) {
       this._bindMethods = this.context.filterMethodes("bind", true);
@@ -1730,7 +1755,7 @@ class BindHandler extends BaseHandler {
         [refName]: this.context.refBindVariables[refName]
       };
     }
-    Object.values(target).forEach(async (it) => {
+    await Promise.all(Object.values(target).map(async (it) => {
       const refCallback = it.callback;
       let $element = this.context.refs[it.ref];
       if ($element) {
@@ -1741,10 +1766,10 @@ class BindHandler extends BaseHandler {
         for (var elementKeyIndex = 0, len2 = keys2.length; elementKeyIndex < len2; elementKeyIndex++) {
           const key = keys2[elementKeyIndex];
           const value = results[key];
-          applyElementAttribute($element, key, value);
+          applyElementAttribute($element, key, value, this.context.isServer);
         }
       }
-    });
+    }));
   }
   async bindData(...args2) {
     var _a, _b;
@@ -1756,7 +1781,7 @@ class BindHandler extends BaseHandler {
         return true;
       return args2.indexOf(it.args[0]) > -1;
     });
-    await (bindList == null ? void 0 : bindList.forEach(async (magicMethod) => {
+    await Promise.all(bindList == null ? void 0 : bindList.map(async (magicMethod) => {
       let refObject = this.getRef(`${magicMethod.keywords[0]}`);
       let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
       if (typeof refObject === "string" && refObject !== "") {
@@ -1775,7 +1800,7 @@ class BindHandler extends BaseHandler {
         for (var elementKeyIndex = 0, len2 = keys2.length; elementKeyIndex < len2; elementKeyIndex++) {
           const key = keys2[elementKeyIndex];
           const value = results[key];
-          applyElementAttribute($element, key, value);
+          applyElementAttribute($element, key, value, this.context.isServer);
         }
       }
     }));
@@ -2210,6 +2235,7 @@ const _EventMachine = class {
     __privateAdd(this, _cachedMethodList, void 0);
     __privateAdd(this, _props, {});
     __privateAdd(this, _propsKeys, {});
+    __privateAdd(this, _isServer, false);
     this.refs = {};
     this.children = {};
     this.id = uuid$1();
@@ -2243,6 +2269,13 @@ const _EventMachine = class {
       }
     });
     __privateMethod(this, _setProps, setProps_fn).call(this, props);
+  }
+  setServer(isServer = true) {
+    __privateSet(this, _isServer, isServer);
+  }
+  get isServer() {
+    var _a;
+    return ((_a = this.parent) == null ? void 0 : _a.isServer) || __privateGet(this, _isServer);
   }
   initComponents() {
     this.childComponents = this.components();
@@ -2292,7 +2325,7 @@ const _EventMachine = class {
   get isPreLoaded() {
     return true;
   }
-  render($container) {
+  async render($container) {
     if (!this.isPreLoaded) {
       this.checkLoad($container);
       return;
@@ -2308,8 +2341,12 @@ const _EventMachine = class {
         $container.append(this.$el);
       }
     }
-    this.load();
+    await this.load();
     this.afterRender();
+    return this;
+  }
+  get html() {
+    return this.$el.outerHTML();
   }
   initialize() {
     __privateSet(this, _state, this.initState());
@@ -2399,16 +2436,18 @@ const _EventMachine = class {
   }
   parsePropertyInfo($dom) {
     let props = {};
-    for (var t of $dom.el.attributes) {
-      if (hasVariable(t.nodeName)) {
-        const recoveredValue = getVariable(t.nodeName);
+    for (var t of $dom.attributes) {
+      const name = t.name || t.nodeName;
+      const value = t.value || t.nodeValue;
+      if (hasVariable(name)) {
+        const recoveredValue = getVariable(name);
         if (isObject(recoveredValue)) {
           props = Object.assign(props, recoveredValue);
         } else {
-          props[t.nodeName] = getVariable(t.nodeValue);
+          props[name] = getVariable(value);
         }
       } else {
-        props[t.nodeName] = getVariable(t.nodeValue);
+        props[name] = getVariable(value);
       }
     }
     const content2 = $dom.html();
@@ -2431,6 +2470,7 @@ const _EventMachine = class {
   createFunctionComponent(EventMachineComponent, targetElement, props, BaseClass = _EventMachine) {
     class FunctionElement extends BaseClass {
       template() {
+        console.log(this.sourceName);
         return EventMachineComponent.call(this, this.props);
       }
     }
@@ -2445,7 +2485,7 @@ const _EventMachine = class {
     }
     return new EventMachineComponent(this, props);
   }
-  renderComponent({ $dom, refName, component: component2, props }) {
+  async renderComponent({ $dom, refName, component: component2, props }) {
     var _a;
     var instance = null;
     if (this.children[refName]) {
@@ -2457,7 +2497,7 @@ const _EventMachine = class {
       __privateSet(instance, _timestamp, __privateGet(this, _localTimestamp));
       this.children[refName || instance.id] = instance;
       if (isFunction(instance.render)) {
-        instance.render();
+        await instance.render();
       }
     }
     this.afterComponentRendering($dom, refName, instance, props);
@@ -2510,17 +2550,17 @@ const _EventMachine = class {
     });
     return children2;
   }
-  parseComponent() {
+  async parseComponent() {
     const $el = this.$el;
     const componentList = this.getComponentInfoList($el);
-    componentList.forEach((comp) => {
+    await Promise.all(componentList.map(async (comp) => {
       if (comp.notUsed) {
         comp.$dom.remove();
         console.warn(`${comp.refClass} is not used.`);
       } else {
-        this.renderComponent(comp);
+        await this.renderComponent(comp);
       }
-    });
+    }));
     keyEach(this.children, (key, child) => {
       if (__privateGet(child, _timestamp) !== __privateGet(this, _localTimestamp)) {
         child.clean();
@@ -2545,8 +2585,8 @@ const _EventMachine = class {
   async _afterLoad() {
     this._timestamp;
     this.runHandlers("initialize");
-    this.bindData();
-    this.parseComponent();
+    await this.bindData();
+    await this.parseComponent();
   }
   async loadLocalValue(refName) {
     let target = __privateGet(this, _refLoadVariables);
@@ -2572,37 +2612,42 @@ const _EventMachine = class {
       this.refreshElementReference(targetRef, loadObj.ref);
     });
   }
+  async makeLoadAction(magicMethod) {
+    const [elName, ...args2] = magicMethod.args;
+    let isDomDiff = magicMethod.hasKeyword("domdiff");
+    const refTarget = this.refs[elName];
+    if (refTarget) {
+      var newTemplate = await magicMethod.execute(...args2);
+      if (Array.isArray(newTemplate)) {
+        newTemplate = newTemplate.join("");
+      }
+      const fragment2 = this.parseTemplate(newTemplate, true);
+      if (isDomDiff) {
+        refTarget.htmlDiff(fragment2);
+      } else {
+        refTarget.html(fragment2);
+      }
+      this.refreshElementReference(refTarget, elName);
+    }
+  }
   async load(...args2) {
     if (!__privateGet(this, _loadMethods)) {
       __privateSet(this, _loadMethods, this.filterMethodes("load"));
     }
     await this.loadLocalValue(...args2);
     const filtedLoadMethodList = __privateGet(this, _loadMethods).filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
-    await filtedLoadMethodList.forEach(async (magicMethod) => {
-      const [elName, ...args3] = magicMethod.args;
-      let isDomDiff = magicMethod.hasKeyword("domdiff");
-      const refTarget = this.refs[elName];
-      if (refTarget) {
-        var newTemplate = await magicMethod.execute(...args3);
-        if (Array.isArray(newTemplate)) {
-          newTemplate = newTemplate.join("");
-        }
-        const fragment2 = this.parseTemplate(newTemplate, true);
-        if (isDomDiff) {
-          refTarget.htmlDiff(fragment2);
-        } else {
-          refTarget.html(fragment2);
-        }
-        this.refreshElementReference(refTarget, elName);
-      }
-    });
+    await Promise.all(filtedLoadMethodList.map(async (magicMethod) => {
+      await this.makeLoadAction(magicMethod);
+    }));
     await this._afterLoad();
   }
-  runHandlers(func = "run", ...args2) {
-    this.handlers.filter((h) => h[func]).forEach((h) => h[func](...args2));
+  async runHandlers(func = "run", ...args2) {
+    await Promise.all(this.handlers.filter((h) => h[func]).map(async (h) => {
+      await h[func](...args2);
+    }));
   }
-  bindData(...args2) {
-    this.runHandlers("bindData", ...args2);
+  async bindData(...args2) {
+    await this.runHandlers("bindData", ...args2);
   }
   template() {
     return null;
@@ -2672,6 +2717,7 @@ _timestamp = new WeakMap();
 _cachedMethodList = new WeakMap();
 _props = new WeakMap();
 _propsKeys = new WeakMap();
+_isServer = new WeakMap();
 _setProps = new WeakSet();
 setProps_fn = function(props) {
   __privateSet(this, _props, this.checkProps(props));
@@ -2700,9 +2746,10 @@ const _UIElement = class extends EventMachine {
   createContext() {
     return {};
   }
-  render($container) {
-    super.render($container);
+  async render($container) {
+    await super.render($container);
     this.initializeStoreEvent();
+    return this;
   }
   pushContext() {
     return this.contexts.push(this.createContext());
@@ -2850,6 +2897,12 @@ const start$1 = (ElementClass, opt) => {
   registRootElementInstance(app);
   return app;
 };
+async function renderToString(ElementClass, opt) {
+  const app = UIElement.createElementInstance(ElementClass, opt);
+  app.setServer(true);
+  const instance = await app.render();
+  return instance.html;
+}
 function CSS_TO_STRING$1(style, postfix = "") {
   var newStyle = style || {};
   return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
@@ -59902,7 +59955,7 @@ class ColorPalette extends EditorElement {
     };
   }
   [BIND("$drag_pointer")]() {
-    if (this.rect.width === 0) {
+    if (!this.rect || this.rect.width === 0) {
       this.rect = this.$el.rect();
     }
     const x = this.rect.width * this.state.s;
@@ -96053,4 +96106,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, SPLITTER, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, classnames, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, SPLITTER, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, classnames, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };

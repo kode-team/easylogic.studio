@@ -44,6 +44,7 @@ export class EventMachine {
   #cachedMethodList;
   #props = {};
   #propsKeys = {};
+  #isServer = false;
 
   constructor(opt, props) {
     this.refs = {};
@@ -114,6 +115,14 @@ export class EventMachine {
 
   #getProp(key) {
     return this.#props[this.#propsKeys[key.toUpperCase()]];
+  }
+
+  setServer(isServer = true) {
+    this.#isServer = isServer;
+  }
+
+  get isServer() {
+    return this.parent?.isServer || this.#isServer;
   }
 
   initComponents() {
@@ -226,8 +235,9 @@ export class EventMachine {
    * template 을 렌더링 한다.
    *
    * @param {Dom|undefined} $container  컴포넌트가 그려질 대상
+   * @param {Boolean} [isServer=false]  로드 여부
    */
-  render($container) {
+  async render($container) {
     if (!this.isPreLoaded) {
       this.checkLoad($container);
       return;
@@ -249,10 +259,16 @@ export class EventMachine {
     }
 
     // LOAD 로 정의된 것들을 수행한다.
-    this.load();
+    await this.load();
 
     // render 이후에 실행될 콜백을 정의한다.
     this.afterRender();
+
+    return this;
+  }
+
+  get html() {
+    return this.$el.outerHTML();
   }
 
   initialize() {
@@ -433,17 +449,19 @@ export class EventMachine {
     let props = {};
 
     // parse properties
-    for (var t of $dom.el.attributes) {
+    for (var t of $dom.attributes) {
+      const name = t.name || t.nodeName;
+      const value = t.value || t.nodeValue;
       // 속성값이 없고, 속성 이름이 참조 변수 일 때는  그대로 보여준다.
-      if (hasVariable(t.nodeName)) {
-        const recoveredValue = getVariable(t.nodeName);
+      if (hasVariable(name)) {
+        const recoveredValue = getVariable(name);
         if (isObject(recoveredValue)) {
           props = Object.assign(props, recoveredValue);
         } else {
-          props[t.nodeName] = getVariable(t.nodeValue);
+          props[name] = getVariable(value);
         }
       } else {
-        props[t.nodeName] = getVariable(t.nodeValue);
+        props[name] = getVariable(value);
       }
     }
 
@@ -480,6 +498,7 @@ export class EventMachine {
   ) {
     class FunctionElement extends BaseClass {
       template() {
+        console.log(this.sourceName);
         return EventMachineComponent.call(this, this.props);
       }
     }
@@ -508,7 +527,7 @@ export class EventMachine {
     return new EventMachineComponent(this, props);
   }
 
-  renderComponent({ $dom, refName, component, props }) {
+  async renderComponent({ $dom, refName, component, props }) {
     var instance = null;
 
     // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다.
@@ -530,7 +549,7 @@ export class EventMachine {
       this.children[refName || instance.id] = instance;
 
       if (isFunction(instance.render)) {
-        instance.render();
+        await instance.render();
       } else {
         // NOOP
         // console.log(instance);
@@ -633,18 +652,20 @@ export class EventMachine {
     return children;
   }
 
-  parseComponent() {
+  async parseComponent() {
     const $el = this.$el;
     const componentList = this.getComponentInfoList($el);
 
-    componentList.forEach((comp) => {
-      if (comp.notUsed) {
-        comp.$dom.remove();
-        console.warn(`${comp.refClass} is not used.`);
-      } else {
-        this.renderComponent(comp);
-      }
-    });
+    await Promise.all(
+      componentList.map(async (comp) => {
+        if (comp.notUsed) {
+          comp.$dom.remove();
+          console.warn(`${comp.refClass} is not used.`);
+        } else {
+          await this.renderComponent(comp);
+        }
+      })
+    );
 
     keyEach(this.children, (key, child) => {
       if (child.#timestamp !== this.#localTimestamp) {
@@ -681,9 +702,9 @@ export class EventMachine {
 
     this.runHandlers("initialize");
 
-    this.bindData();
+    await this.bindData();
 
-    this.parseComponent();
+    await this.parseComponent();
   }
 
   async loadLocalValue(refName) {
@@ -716,10 +737,36 @@ export class EventMachine {
     });
   }
 
+  async makeLoadAction(magicMethod) {
+    const [elName, ...args] = magicMethod.args;
+
+    let isDomDiff = magicMethod.hasKeyword("domdiff");
+
+    const refTarget = this.refs[elName];
+
+    if (refTarget) {
+      var newTemplate = await magicMethod.execute(...args);
+
+      if (Array.isArray(newTemplate)) {
+        newTemplate = newTemplate.join("");
+      }
+
+      // create fragment
+      const fragment = this.parseTemplate(newTemplate, true);
+      if (isDomDiff) {
+        refTarget.htmlDiff(fragment);
+      } else {
+        refTarget.html(fragment);
+      }
+      this.refreshElementReference(refTarget, elName);
+    }
+  }
+
   async load(...args) {
     if (!this.#loadMethods) {
       this.#loadMethods = this.filterMethodes("load");
     }
+
     // local 로 등록된 load 를 모두 실행한다.
     await this.loadLocalValue(...args);
 
@@ -727,42 +774,27 @@ export class EventMachine {
     const filtedLoadMethodList = this.#loadMethods.filter((it) =>
       args.length === 0 ? true : it.args[0] === args[0]
     );
-
     // loop 가 비동기라 await 로 대기를 시켜줘야 나머지 html 업데이트에 대한 순서를 맞출 수 있다.
-    await filtedLoadMethodList.forEach(async (magicMethod) => {
-      const [elName, ...args] = magicMethod.args;
-
-      let isDomDiff = magicMethod.hasKeyword("domdiff");
-
-      const refTarget = this.refs[elName];
-
-      if (refTarget) {
-        var newTemplate = await magicMethod.execute(...args);
-
-        if (Array.isArray(newTemplate)) {
-          newTemplate = newTemplate.join("");
-        }
-
-        // create fragment
-        const fragment = this.parseTemplate(newTemplate, true);
-        if (isDomDiff) {
-          refTarget.htmlDiff(fragment);
-        } else {
-          refTarget.html(fragment);
-        }
-        this.refreshElementReference(refTarget, elName);
-      }
-    });
-
+    await Promise.all(
+      filtedLoadMethodList.map(async (magicMethod) => {
+        await this.makeLoadAction(magicMethod);
+      })
+    );
     await this._afterLoad();
   }
 
-  runHandlers(func = "run", ...args) {
-    this.handlers.filter((h) => h[func]).forEach((h) => h[func](...args));
+  async runHandlers(func = "run", ...args) {
+    await Promise.all(
+      this.handlers
+        .filter((h) => h[func])
+        .map(async (h) => {
+          await h[func](...args);
+        })
+    );
   }
 
-  bindData(...args) {
-    this.runHandlers("bindData", ...args);
+  async bindData(...args) {
+    await this.runHandlers("bindData", ...args);
   }
 
   // 기본 템플릿 지정

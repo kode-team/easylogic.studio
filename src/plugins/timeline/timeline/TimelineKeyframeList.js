@@ -11,9 +11,9 @@ import {
   SUBSCRIBE,
   isUndefined,
   Dom,
+  classnames,
 } from "sapa";
 
-import { classnames } from "elf/core/func";
 import { timecode, second } from "elf/core/time";
 import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import { PathParser } from "elf/editor/parser/PathParser";
