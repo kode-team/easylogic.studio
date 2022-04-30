@@ -35,7 +35,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$svgfilterList")]() {
-    var current = this.$selection.currentProject || { svgfilters: [] };
+    var current = this.$context.selection.currentProject || { svgfilters: [] };
 
     var svgfilters = current.svgfilters;
 
@@ -77,7 +77,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   executeSVGFilter(callback, isRefresh = true, isEmit = true) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       callback && callback(project);
@@ -135,7 +135,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
     this.state.$item = $item;
     this.state.$el = e.$dt.$(".svgfilter-view");
 
-    var currentProject = this.$selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
 
     var svgfilter = currentProject.svgfilters[index];
 

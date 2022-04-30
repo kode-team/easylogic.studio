@@ -25,7 +25,7 @@ export default class ImageSelectEditor extends EditorElement {
   }
 
   [LOAD("$body")]() {
-    const project = this.$selection.currentProject;
+    const project = this.$context.selection.currentProject;
 
     if (!project) return;
 

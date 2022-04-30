@@ -1,6 +1,9 @@
-import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "sapa";
+import { clone, isFunction, isArray, isNotUndefined, isNumber, isUndefined } from "sapa";
 
 import { uuid } from "elf/core/math";
+import { isArrayEquals } from 'elf/core/func';
+
+window.a = 0;
 
 /**
  * Item , 그리기를 위한 기본 모델
@@ -461,11 +464,26 @@ export class BaseModel {
   /**
    * check object values
    *
+   * 값이 같은지는 체크하기가 쉽지 않을 수도 있음. 
+   * 
    * @param {KeyValue} obj
    * @returns {boolean}
    */
   isChangedValue(obj) {
-    return Object.keys(obj).some((key) => obj[key] !== this.json[key]);
+    return true;
+    // console.log(Object.keys(obj).some((key) => {
+    //   console.log(obj, key, this.json);
+    //   return obj[key] !== this.json[key]
+    // }));
+    // return Object.keys(obj).some((key) => {
+
+    //   if (isArray(obj[key])) {
+    //     return !isArrayEquals(obj[key], this.json[key]);
+    //   } else {
+    //     return obj[key] !== this.json[key]
+    //   }
+      
+    // });
   }
 
   /**

@@ -28,12 +28,12 @@ export default class SelectionInfoView extends EditorElement {
     this.startXY = e.xy;
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     const id = e.$dt.attr("data-artboard-title-id");
-    this.$selection.select(id);
+    this.$context.selection.select(id);
 
     // alt(option) + pointerstart 시점에 Layer 카피하기
     if (e.altKey) {
       // 선택된 모든 객체 카피하기
-      this.$selection.selectAfterCopy();
+      this.$context.selection.selectAfterCopy();
       this.emit("refreshAllCanvas");
       this.emit("refreshLayerTreeView");
     }
@@ -44,16 +44,16 @@ export default class SelectionInfoView extends EditorElement {
   }
 
   initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
 
     this.emit("refreshSelectionTool");
   }
 
   moveTo(dist) {
     //////  snap 체크 하기
-    const snap = this.$snapManager.check(
-      this.$selection.cachedRectVerties.map((v) => {
+    const snap = this.$context.snapManager.check(
+      this.$context.selection.cachedRectVerties.map((v) => {
         return vec3.add([], v, dist);
       }),
       3
@@ -62,7 +62,7 @@ export default class SelectionInfoView extends EditorElement {
     const localDist = vec3.add([], snap, dist);
 
     const result = {};
-    this.$selection.cachedItemMatrices.forEach((it) => {
+    this.$context.selection.cachedItemMatrices.forEach((it) => {
       // newVerties 에 실제 움직인 좌표로 넣고
       const newVerties = it.verties.map((v) => {
         return vec3.add([], v, localDist);
@@ -83,7 +83,7 @@ export default class SelectionInfoView extends EditorElement {
         y: Math.floor(it.y + newDist[1]),
       };
     });
-    this.$selection.reset(result);
+    this.$context.selection.reset(result);
   }
 
   calculateMovedElement() {
@@ -96,7 +96,7 @@ export default class SelectionInfoView extends EditorElement {
 
     this.moveTo(newDist);
 
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y"));
     this.emit("refreshSelectionStyleView");
     this.refresh();
   }
@@ -117,7 +117,7 @@ export default class SelectionInfoView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "move item",
-      this.$selection.pack("x", "y")
+      this.$context.selection.pack("x", "y")
     );
     this.$config.set("set.move.control.point", false);
   }
@@ -127,10 +127,10 @@ export default class SelectionInfoView extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.current.is("artboard")) {
+    if (this.$context.selection.current) {
+      if (this.$context.selection.current.is("artboard")) {
         if (
-          this.$selection.hasChangedField(
+          this.$context.selection.hasChangedField(
             "x",
             "y",
             "width",
@@ -147,7 +147,7 @@ export default class SelectionInfoView extends EditorElement {
   }
 
   [LOAD("$el") + DOMDIFF]() {
-    return this.$selection.currentProject?.artboards
+    return this.$context.selection.currentProject?.artboards
       .map((it) => {
         return {
           item: it,

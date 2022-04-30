@@ -6,7 +6,7 @@
  * @param {*} callback
  */
 export default function _currentProject(editor, callback) {
-  var project = editor.selection.currentProject;
+  var project = editor.context.selection.currentProject;
 
   if (project) {
     var timeline = project.getSelectedTimeline();

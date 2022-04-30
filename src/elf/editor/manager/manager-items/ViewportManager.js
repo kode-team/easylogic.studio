@@ -16,6 +16,7 @@ import {
 export class ViewportManager {
   constructor(editor) {
     this.editor = editor;
+    this.context = this.editor.context;
 
     this.canvasSize = null;
     this.cachedViewport = rectToVerties(0, 0, 0, 0);
@@ -190,7 +191,7 @@ export class ViewportManager {
   }
 
   getWorldPosition(e) {
-    e = e || this.editor.config.get("bodyEvent");
+    e = e || this.context.config.get("bodyEvent");
 
     if (!e) {
       return this.createWorldPosition(0, 0);

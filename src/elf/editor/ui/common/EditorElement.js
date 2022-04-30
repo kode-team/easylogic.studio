@@ -47,13 +47,17 @@ export class EditorElement extends UIElement {
     return this.__cacheParentEditor;
   }
 
+  get $context() {
+    return this.$editor.context;
+  }
+
   /**
    * 메세징 루트를 재정의 할 수 있음.
    *
    * @override
    */
   get $store() {
-    return this.$editor.store || this.parent.$store;
+    return this.$context.store || this.parent.$store;
   }
 
   // editor utility
@@ -73,51 +77,51 @@ export class EditorElement extends UIElement {
   }
 
   get $config() {
-    return this.$editor.config;
+    return this.$context.config;
   }
 
   get $selection() {
-    return this.$editor.selection;
+    return this.$context.selection;
   }
 
   get $segmentSelection() {
-    return this.$editor.segmentSelection;
+    return this.$context.segmentSelection;
   }
 
   get $commands() {
-    return this.$editor.commands;
+    return this.$context.commands;
   }
 
   get $viewport() {
-    return this.$editor.viewport;
+    return this.$context.viewport;
   }
 
   get $snapManager() {
-    return this.$editor.snapManager;
+    return this.$context.snapManager;
   }
 
   get $timeline() {
-    return this.$editor.timeline;
+    return this.$context.timeline;
   }
 
   get $history() {
-    return this.$editor.history;
+    return this.$context.history;
   }
 
   get $shortcuts() {
-    return this.$editor.shortcuts;
+    return this.$context.shortcuts;
   }
 
   get $keyboardManager() {
-    return this.$editor.keyboardManager;
+    return this.$context.keyboardManager;
   }
 
   get $storageManager() {
-    return this.$editor.storageManager;
+    return this.$context.storageManager;
   }
 
   get $injectManager() {
-    return this.$editor.injectManager;
+    return this.$context.injectManager;
   }
 
   /**
@@ -125,41 +129,41 @@ export class EditorElement extends UIElement {
    *
    */
   get $model() {
-    return this.$editor.modelManager;
+    return this.$context.modelManager;
   }
 
   get $lockManager() {
-    return this.$editor.lockManager;
+    return this.$context.lockManager;
   }
 
   get $visibleManager() {
-    return this.$editor.visibleManager;
+    return this.$context.visibleManager;
   }
 
   /**
    * 현재 에디팅 모드를 관리하는 Manager 객체
    */
   get $modeView() {
-    return this.$editor.modeViewManager;
+    return this.$context.modeViewManager;
   }
 
   get $pathkit() {
-    return this.$editor.pathKitManager;
+    return this.$context.pathKitManager;
   }
 
   get $icon() {
-    return this.$editor.iconManager;
+    return this.$context.icon;
   }
 
   get $stateManager() {
-    return this.$editor.stateManager;
+    return this.$context.stateManager;
   }
 
   /**
    * @type {MenuManager}
    */
   get $menu() {
-    return this.$editor.menuManager;
+    return this.$context.menuManager;
   }
 
   /**

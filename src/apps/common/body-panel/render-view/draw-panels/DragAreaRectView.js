@@ -60,7 +60,7 @@ export default class DragAreaRectView extends EditorElement {
   }
 
   getSelectedItems(rect, areaVerties) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     let items = [];
     let selectedArtboard = [];
     if (project) {
@@ -156,7 +156,7 @@ export default class DragAreaRectView extends EditorElement {
       toRectVertiesWithoutTransformOrigin([startVertex, endVertex])
     );
 
-    if (this.$selection.selectByGroup(...selectedItems)) {
+    if (this.$context.selection.selectByGroup(...selectedItems)) {
       this.emit("refreshSelection");
       this.emit("refreshSelectionTool", true);
     }
@@ -171,12 +171,12 @@ export default class DragAreaRectView extends EditorElement {
     this.$config.init("set.move.control.point", false);
 
     if (newDist[0] === 0 && newDist[1] === 0) {
-      this.$selection.empty();
+      this.$context.selection.empty();
     }
 
     this.trigger("initDrawAreaView");
 
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.emit("history.refreshSelection");
     this.emit("refreshSelectionTool", true);
 

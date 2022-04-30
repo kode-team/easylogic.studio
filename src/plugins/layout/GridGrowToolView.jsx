@@ -542,8 +542,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const current = this.getGridTargetLayer();
 
     return {
-      "data-drag-target-item": Boolean(this.$selection.dragTargetItem),
-      "data-grid-layout-own": this.$selection.current?.id === current?.id,
+      "data-drag-target-item": Boolean(this.$context.selection.dragTargetItem),
+      "data-grid-layout-own": this.$context.selection.current?.id === current?.id,
       style: {
         display: current ? "block" : "none",
       },
@@ -643,11 +643,11 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   }
 
   getGridTargetLayer() {
-    if (this.$selection.dragTargetItem) {
-      return this.$selection.dragTargetItem;
+    if (this.$context.selection.dragTargetItem) {
+      return this.$context.selection.dragTargetItem;
     }
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return null;
 
@@ -743,7 +743,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     // 마지막 공백 구간 설정
     this.load("$gridGap");
 
-    this.$selection.updateGridInformation({
+    this.$context.selection.updateGridInformation({
       info,
       items,
     });
@@ -754,7 +754,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     if (!current) return "";
 
-    if (!this.$selection.current) return "";
+    if (!this.$context.selection.current) return "";
 
     const last = this.state.lastGridInfo;
     const scale = this.$viewport.scale;
@@ -851,7 +851,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   }
 
   isSelectedColumn(index) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     return (
       current["grid-column-start"] <= index &&
@@ -860,7 +860,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   }
 
   isSelectedRow(index) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     return (
       current["grid-row-start"] <= index && index < current["grid-row-end"]
@@ -878,7 +878,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     const totalCount = info.columns.length * info.rows.length;
 
-    const isChild = this.$selection.current?.id !== info.current.id;
+    const isChild = this.$context.selection.current?.id !== info.current.id;
 
     return (
       <>

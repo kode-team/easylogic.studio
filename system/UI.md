@@ -60,7 +60,7 @@ class MyElement extends EditorElement {
     }
 
     [SUBSCRIBE('refreshSelection')] () {
-        console.log('Some layer is selected', this.$selection.current);
+        console.log('Some layer is selected', this.$context.selection.current);
     }
 }
 

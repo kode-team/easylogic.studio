@@ -60,7 +60,7 @@ export class ShortCutManager {
     const editor = this.$editor;
     const whenList = when.split("|").map((it) => it.trim());
     return () => {
-      return whenList.some((it) => editor.modeViewManager.isCurrentMode(it));
+      return whenList.some((it) => editor.context.modeViewManager.isCurrentMode(it));
     };
   }
 

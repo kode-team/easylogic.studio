@@ -67,7 +67,7 @@ export default class PatternProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current.pattern;
 
     return createComponent("PatternEditor", {
@@ -82,7 +82,7 @@ export default class PatternProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change pattern",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         pattern,
       })
     );

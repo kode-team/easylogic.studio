@@ -5,7 +5,7 @@ import loadOriginalImage from "elf/editor/util/loadOriginalImage";
 export default {
   command: "savePNG",
   execute: function (editor, callbackCommand = "") {
-    const item = editor.selection.current;
+    const item = editor.context.selection.current;
 
     if (item) {
       const svgString = ExportManager.generateSVG(editor, item).trim();

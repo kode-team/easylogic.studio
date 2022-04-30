@@ -17,7 +17,7 @@ export default class GridLayoutEditor extends EditorElement {
   }
 
   [LOAD("$body") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
     if (current.isLayout(Layout.GRID) === false) return "";

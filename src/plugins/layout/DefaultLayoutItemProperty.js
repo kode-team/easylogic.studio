@@ -35,7 +35,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
   }
 
   [LOAD("$constraintsInfo") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     // const hasLayout = current?.hasLayout();
 
@@ -72,7 +72,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
   }
 
   [LOAD("$constraintsInfoInput")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     const hasLayout = current?.hasLayout();
     // const h = current?.["constraints-horizontal"] || Constraints.MIN;
@@ -119,7 +119,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
   [CLICK("$constraintsInfo .item")](e) {
     const [value, key] = e.$dt.attrs("data-value", "data-key");
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return;
 
@@ -131,7 +131,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "apply constraints",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );
@@ -143,7 +143,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
 
       // // const isFlexLayout = current.isLayout(Layout.FLEX);
       // const isGridLayout = current.isLayout(Layout.GRID);

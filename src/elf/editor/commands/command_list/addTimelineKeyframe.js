@@ -4,7 +4,7 @@ export default {
   command: "addTimelineKeyframe",
   execute: function (editor, options = { timing: "linear" }) {
     _currentProject(editor, (project) => {
-      var item = editor.modelManager.get(options.layerId);
+      var item = editor.context.modelManager.get(options.layerId);
 
       var keyframeObj = {
         layerId: options.layerId,

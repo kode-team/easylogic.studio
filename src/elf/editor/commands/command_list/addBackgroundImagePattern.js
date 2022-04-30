@@ -3,7 +3,7 @@ import { Pattern } from "elf/editor/property-parser/Pattern";
 export default {
   command: "addBackgroundImagePattern",
   execute: function (editor, pattern, id = null) {
-    var items = editor.selection.itemsByIds(id);
+    var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
       itemsMap[item.id] = {

@@ -1,16 +1,16 @@
 export default {
   command: "group.item",
   execute: function (editor, opt = {}) {
-    if (editor.selection.length === 0) return;
+    if (editor.context.selection.length === 0) return;
 
-    const project = editor.selection.currentProject;
+    const project = editor.context.selection.currentProject;
 
     if (project) {
       // no 캐쉬
       project.generateListNumber();
 
       // depth 캐쉬
-      const list = editor.selection.map((item) => {
+      const list = editor.context.selection.map((item) => {
         return { depth: item.depth, item };
       });
 
@@ -26,7 +26,7 @@ export default {
       // 객체 생성
       const groupLayer = editor.createModel({
         itemType: "rect",
-        ...editor.selection.itemRect,
+        ...editor.context.selection.itemRect,
         ...opt,
       });
 
@@ -38,7 +38,7 @@ export default {
         groupLayer.appendChild(item);
       });
 
-      editor.selection.select(groupLayer);
+      editor.context.selection.select(groupLayer);
 
       editor.emit("refreshAll");
     }

@@ -12,9 +12,9 @@ export default {
    * @param {string} pathObject.d    svg path 문자열
    */
   execute: function (editor, current) {
-    if (!current && editor.selection.isOne === false) return;
+    if (!current && editor.context.selection.isOne === false) return;
 
-    current = current || editor.selection.current;
+    current = current || editor.context.selection.current;
 
     if (current) {
       // d 속성은 자동으로 페스 에디터로 연결
@@ -30,7 +30,7 @@ export default {
             editor.command(
               "setAttributeForMulti",
               "change editable path",
-              editor.selection.packByValue(
+              editor.context.selection.packByValue(
                 {
                   ...current.recoverEditablePath(data.d),
                 },
@@ -39,7 +39,7 @@ export default {
             );
 
             editor.nextTick(() => {
-              if (editor.stateManager.isPointerUp) {
+              if (editor.context.stateManager.isPointerUp) {
                 // boolean path 의 조정이 끝나면
                 // box 를 재구성한다.
                 editor.emit("recoverBooleanPath");
@@ -55,7 +55,7 @@ export default {
           matrix: current.matrix,
           d: current.absolutePath().d,
           changeEvent: (data) => {
-            const newCurrent = editor.selection.current;
+            const newCurrent = editor.context.selection.current;
 
             // .d 속성을 가진 것 중에 svg-path 가 아닌 것이 있는 상태로 변경되었을 경우
             // svg-path 로 바로 변환시켜준다.
@@ -66,7 +66,7 @@ export default {
                 ...newPathData,
               });
 
-              editor.selection.select(newPath);
+              editor.context.selection.select(newPath);
 
               newCurrent.insertAfter(newPath);
 
@@ -78,7 +78,7 @@ export default {
               editor.emit("updatePathItem", data);
 
               editor.nextTick(() => {
-                if (editor.stateManager.isPointerUp) {
+                if (editor.context.stateManager.isPointerUp) {
                   // boolean path 의 조정이 끝나면
                   // box 를 재구성한다.
                   editor.emit("recoverBooleanPath");
@@ -103,7 +103,7 @@ export default {
               editor.command(
                 "setAttributeForMulti",
                 "change clip-path",
-                editor.selection.packByValue({
+                editor.context.selection.packByValue({
                   "clip-path": `path(${resultPath})`,
                 })
               );

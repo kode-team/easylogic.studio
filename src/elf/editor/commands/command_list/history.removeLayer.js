@@ -32,7 +32,7 @@ export default {
    */
   execute: function (editor, message, ids = undefined) {
     // // 지우기 전 객체를 모두 clone 한다.
-    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
+    let items = editor.context.selection.itemsByIds(ids || editor.context.selection.ids);
 
     // items 중에  자식/부모의 관게의 객체가 있으면 자식은 필터링 한다.
     items = filterChildren(items);
@@ -40,23 +40,23 @@ export default {
     const filtedIds = items.map((it) => it.id);
 
     // 삭제 할 때는 modelManager 에서 mark 를 한다.
-    editor.modelManager.markRemove(filtedIds);
+    editor.context.modelManager.markRemove(filtedIds);
 
     //전체 삭제
     const parentIds = items.map((it) => it.parentId);
 
     items.forEach((item) => {
       item.remove();
-      editor.selection.removeById(item.id);
+      editor.context.selection.removeById(item.id);
     });
 
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: [filtedIds, parentIds],
       undoValues: filtedIds,
     });
 
     editor.nextTick(() => {
-      editor.selection.removeById(filtedIds);
+      editor.context.selection.removeById(filtedIds);
 
       const commandMaker = editor.createCommandMaker();
 
@@ -69,20 +69,20 @@ export default {
       commandMaker.run();
 
       editor.nextTick(() => {
-        editor.history.saveSelection();
+        editor.context.history.saveSelection();
       });
     });
   },
 
   redo: function (editor, { currentValues }) {
     const ids = currentValues[0];
-    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
+    let items = editor.context.selection.itemsByIds(ids || editor.context.selection.ids);
 
     // items 중에  자식/부모의 관게의 객체가 있으면 자식은 필터링 한다.
     items = filterChildren(items);
 
     // 삭제 할 때는 modelManager 에서 mark 를 한다.
-    editor.modelManager.markRemove(items.map((it) => it.id));
+    editor.context.modelManager.markRemove(items.map((it) => it.id));
 
     //전체 삭제
     items.forEach((item) => item.remove());
@@ -101,7 +101,7 @@ export default {
    * @param {string} param1.undoValues  JSON serialize 된 문자열
    */
   undo: function (editor, { undoValues: recoverIds }) {
-    editor.modelManager.unmarkRemove(recoverIds);
+    editor.context.modelManager.unmarkRemove(recoverIds);
 
     editor.nextTick(() => {
       editor.emit("refreshAll");

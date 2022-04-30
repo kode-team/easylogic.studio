@@ -18,7 +18,7 @@ export default class DrawManager extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelection")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       this.children.$stroke?.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");

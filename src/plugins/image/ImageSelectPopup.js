@@ -41,7 +41,7 @@ export default class ImageSelectPopup extends BasePopup {
   }
 
   [LOAD("$imageBox") + DOMDIFF]() {
-    // var project = this.$selection.currentProject || { images: [] };
+    // var project = this.$context.selection.currentProject || { images: [] };
 
     return "";
 

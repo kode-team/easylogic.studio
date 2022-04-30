@@ -45,7 +45,7 @@ const SelectionToolEvent = class extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelectionTool") + IF("checkViewMode")]() {
-    if (this.$selection.isMany) {
+    if (this.$context.selection.isMany) {
       this.initSelectionTool();
     } else {
       this.hide();
@@ -53,7 +53,7 @@ const SelectionToolEvent = class extends EditorElement {
   }
 
   [SUBSCRIBE("updateViewport") + IF("checkViewMode")]() {
-    if (this.$selection.isMany) {
+    if (this.$context.selection.isMany) {
       this.initSelectionTool();
     }
   }
@@ -82,7 +82,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
 
     // cache matrix
-    // this.$selection.reselect();
+    // this.$context.selection.reselect();
     this.verties = this.groupItem.verties;
     this.rotateTargetNumber = +e.$dt.attr("data-number");
 
@@ -122,12 +122,12 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     );
 
     // angle 을 움직였으니 어떻게 움직이지 ?
-    let cachedItemMatrices = this.$selection.cachedItemMatrices;
+    let cachedItemMatrices = this.$context.selection.cachedItemMatrices;
 
     // 그룹이긴 하나 실제로 하나의 선택만 있을 때는 회전할 때 자식을 같이 회전하지 않도록 한다.
-    if (this.$selection.length === 1) {
+    if (this.$context.selection.length === 1) {
       cachedItemMatrices = cachedItemMatrices.filter(
-        (it) => it.id === this.$selection.current.id
+        (it) => it.id === this.$context.selection.current.id
       );
     }
 
@@ -166,7 +166,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     this.emit(
       "setAttributeForMulti",
-      this.$selection.pack("x", "y", "width", "height", "angle")
+      this.$context.selection.pack("x", "y", "width", "height", "angle")
     );
   }
 
@@ -177,13 +177,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     this.$config.set("set.move.control.point", false);
 
     // 개별 verties 의 캐쉬를 다시 한다.
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.initMatrix(true);
     this.nextTick(() => {
       this.command(
         "setAttributeForMulti",
         "rotate selection pointer",
-        this.$selection.pack("x", "y", "width", "height", "angle")
+        this.$context.selection.pack("x", "y", "width", "height", "angle")
       );
     });
   }
@@ -247,8 +247,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
 
     // cache matrix
-    // this.$selection.doCache();
-    this.$selection.reselect();
+    // this.$context.selection.doCache();
+    this.$context.selection.reselect();
     this.state.dragging = false;
     this.initMatrix(true);
     this.cachedGroupItem = this.groupItem.matrix;
@@ -256,7 +256,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     // 자식 아이템을 캐슁한다.
     // 시작할때 한번만 캐슁해야한다.
-    this.$selection.startToCacheChildren();
+    this.$context.selection.startToCacheChildren();
   }
 
   calculateNewOffsetMatrixInverse(
@@ -286,7 +286,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     // 2. dx, dy 만큼 옮긴 vertext 를 구한다.
     // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다
-    const snap = this.$snapManager.check([
+    const snap = this.$context.snapManager.check([
       vec3.add([], currentVertex, distVector),
     ]);
 
@@ -357,7 +357,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     const absoluteMatrix = groupItem.absoluteMatrix;
     const absoluteMatrixInverse = groupItem.absoluteMatrixInverse;
 
-    this.$selection.cachedItemMatrices.forEach((it) => {
+    this.$context.selection.cachedItemMatrices.forEach((it) => {
       const localView = calculateMatrix(
         it.parentMatrixInverse, // 5. 해당 객체의 parent 를 기준으로 좌표를 만들면 된다.
         absoluteMatrix, // 4. 원래의 좌표로 다시 만들고
@@ -600,7 +600,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     this.emit(
       "setAttributeForMulti",
-      this.$selection.pack("x", "y", "width", "height")
+      this.$context.selection.pack("x", "y", "width", "height")
     );
 
     this.state.dragging = true;
@@ -610,15 +610,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     this.state.dragging = false;
     this.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.initMatrix(true);
     this.nextTick(() => {
-      this.$selection.recoverChildren();
+      this.$context.selection.recoverChildren();
 
       this.command(
         "setAttributeForMulti",
         "move selection pointer",
-        this.$selection.pack("x", "y", "width", "height")
+        this.$context.selection.pack("x", "y", "width", "height")
       );
 
       this.emit("recoverBooleanPath");
@@ -638,10 +638,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   }
 
   initSelectionTool() {
-    if (this.$el.isHide() && this.$selection.isMany) {
+    if (this.$el.isHide() && this.$context.selection.isMany) {
       this.show();
     } else {
-      if (this.$el.isShow() && this.$selection.isMany === false) this.hide();
+      if (this.$el.isShow() && this.$context.selection.isMany === false) this.hide();
     }
 
     this.initMatrix();
@@ -660,7 +660,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     this.state.groupSelectionView.reset({
-      parentId: this.$selection.currentProject.id,
+      parentId: this.$context.selection.currentProject.id,
       x: verties[0][0],
       y: verties[0][1],
       width: vec3.dist(verties[0], verties[1]),
@@ -671,9 +671,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   }
 
   initMatrix() {
-    if (this.$selection.isMany && this.state.dragging === false) {
+    if (this.$context.selection.isMany && this.state.dragging === false) {
       // matrix 초기화
-      this.verties = clone(this.$selection.verties);
+      this.verties = clone(this.$context.selection.verties);
       this.angle = 0;
       this.localAngle = this.angle;
       this.groupItem = this.item;
@@ -681,7 +681,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     } else {
       // 초기화 옵션이 없으면 아무것도 변경하지 않는다.
       // matrix 초기화
-      // this.verties = clone(this.$selection.verties);
+      // this.verties = clone(this.$context.selection.verties);
       // this.angle = 0;
       // this.localAngle = this.angle;
       // this.groupItem = this.item;
@@ -698,7 +698,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
    */
   renderPointers() {
     if (
-      this.$selection.isEmpty ||
+      this.$context.selection.isEmpty ||
       this.$config.true("set.move.control.point")
     ) {
       this.refs.$pointerRect.empty();
@@ -706,7 +706,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     this.state.renderPointerList = [
-      this.$viewport.applyVerties(this.$selection.verties),
+      this.$viewport.applyVerties(this.$context.selection.verties),
     ];
 
     const { line, point, size, elementLine } = this.createRenderPointers(
@@ -869,7 +869,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       elementLine: `
                 <svg class='line' overflow="visible">
                     <path 
-                        d="${this.$selection.items
+                        d="${this.$context.selection.items
                           .map((it) => {
                             return this.createLine(
                               this.$viewport.applyVerties(it.originVerties)
@@ -936,7 +936,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   }
 
   checkShow() {
-    if (this.state.show && this.$selection.isMany) {
+    if (this.state.show && this.$context.selection.isMany) {
       return true;
     }
 

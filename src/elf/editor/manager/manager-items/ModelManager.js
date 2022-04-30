@@ -9,6 +9,7 @@ const identity = () => true;
 export class ModelManager {
   constructor(editor) {
     this.editor = editor;
+    this.context = this.editor.context;
     this.version = "0.0.0";
     this.name = "";
     this.description = "";
@@ -168,7 +169,7 @@ export class ModelManager {
    * @returns {ComponentManager}
    */
   get components() {
-    return this.editor.components;
+    return this.context.components;
   }
 
   searchItem(id) {
@@ -343,14 +344,18 @@ export class ModelManager {
     });
 
     // 하위 아이템들은 생성된 이후에 id 문자열 리스트로만 관리된다.
-    item.reset(
-      {
-        children: children.map((it) => {
-          return it.id;
-        }),
-      },
-      context
-    );
+
+    if (children.length) {
+      item.reset(
+        {
+          children: children.map((it) => {
+            return it.id;
+          }),
+        },
+        context
+      );
+  
+    }
 
     return item;
   }

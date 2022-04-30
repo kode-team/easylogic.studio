@@ -83,7 +83,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [LOAD("$body") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current.transform;
 
     return createComponent("TransformEditor", {
@@ -98,14 +98,14 @@ export default class TransformProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change transform property",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         transform,
       })
     );
   }
 
   refresh() {
-    this.children.$transformEditor.setValue(this.$selection.current.transform);
+    this.children.$transformEditor.setValue(this.$context.selection.current.transform);
   }
 
   get editableProperty() {
@@ -117,7 +117,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView") + DEBOUNCE(100)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current) {
       if (current.hasChangedField("transform")) {

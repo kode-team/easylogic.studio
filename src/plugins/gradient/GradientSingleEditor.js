@@ -36,7 +36,7 @@ export default class GradientSingleEditor extends EditorElement {
   }
 
   [BIND("$miniView")]() {
-    const project = this.$selection.currentProject;
+    const project = this.$context.selection.currentProject;
     let image;
 
     if (this.state.image.type === GradientType.URL) {
@@ -89,7 +89,7 @@ export default class GradientSingleEditor extends EditorElement {
     image = BackgroundImage.parseImage(image);
 
     // 기존 background-image 에서 필요한 정보만 다시 가지고 온다.
-    const currentImage = this.$selection.current.getBackgroundImage(
+    const currentImage = this.$context.selection.current.getBackgroundImage(
       this.state.index
     )?.image;
 

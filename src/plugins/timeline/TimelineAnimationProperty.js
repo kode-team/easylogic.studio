@@ -39,7 +39,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
   }
 
   [LOAD("$timelineAnimationList") + DOMDIFF]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (!project) return "";
 
     return project.timeline.map((timeline) => {
@@ -68,7 +68,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
     this.endInputEditing(input, (index, text) => {
       var id = input.attr("data-id");
 
-      var project = this.$selection.currentProject;
+      var project = this.$context.selection.currentProject;
       if (project) {
         project.setTimelineTitle(id, text);
       }
@@ -101,7 +101,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
   [CLICK("$timelineAnimationList .timeline-animation-item label")](e) {
     var id = e.$dt.attr("data-id");
 
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.selectTimeline(id);

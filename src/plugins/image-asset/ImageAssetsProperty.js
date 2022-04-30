@@ -34,7 +34,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$imageList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { images: [] };
+    var current = this.$context.selection.currentProject || { images: [] };
 
     var images = current.images;
 
@@ -65,7 +65,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   executeImage(callback, isRefresh = true, isEmit = true) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       callback && callback(project);
@@ -80,7 +80,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   [DRAGSTART("$imageList .preview img")](e) {
     var index = +e.$dt.closest("image-item").attr("data-index");
 
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       var imageInfo = project.images[index];

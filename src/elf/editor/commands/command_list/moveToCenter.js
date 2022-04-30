@@ -11,7 +11,7 @@ export default {
    */
   execute: function (editor, areaVerties, withScale = false) {
     if (areaVerties) {
-      editor.viewport.moveToCenter(
+      editor.context.viewport.moveToCenter(
         areaVerties,
         withScale ? -0.2 : 0,
         withScale

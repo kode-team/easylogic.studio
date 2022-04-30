@@ -17,6 +17,7 @@ export class SelectionManager {
      * @property {Editor} $editor Editor
      */
     this.$editor = editor;
+    this.$context = this.$editor.context;
 
     /**
      * @property {Project} project Project Item
@@ -40,8 +41,8 @@ export class SelectionManager {
   }
 
   refreshMousePosition() {
-    const areaWidth = this.$editor.config.get("area.width");
-    const pos = this.$editor.viewport.getWorldPosition();
+    const areaWidth = this.$context.config.get("area.width");
+    const pos = this.$context.viewport.getWorldPosition();
 
     this.pos = pos;
 
@@ -52,11 +53,11 @@ export class SelectionManager {
   }
 
   get modelManager() {
-    return this.$editor.modelManager;
+    return this.$context.modelManager;
   }
 
   get lockManager() {
-    return this.$editor.lockManager;
+    return this.$context.lockManager;
   }
 
   get items() {
@@ -128,7 +129,7 @@ export class SelectionManager {
    * @returns {Item[]}
    */
   get filteredLayers() {
-    const areaWidth = this.$editor.config.get("area.width");
+    const areaWidth = this.$editor.context.config.get("area.width");
     return this.currentProject
       .filteredAllLayers((item) => {
         if (item.is("project")) return false;
@@ -178,7 +179,7 @@ export class SelectionManager {
 
       // viewport 안에 존재 하는 것만 대상으로 한다.
       const inViewport = item.verties.some((v) => {
-        return this.$editor.viewport.checkInViewport(v);
+        return this.$context.viewport.checkInViewport(v);
       });
 
       return inViewport;
@@ -194,7 +195,7 @@ export class SelectionManager {
 
       // viewport 안에 존재 하는 것만 대상으로 한다.
       const inViewport = item.verties.some((v) => {
-        return this.$editor.viewport.checkInViewport(v);
+        return this.$context.viewport.checkInViewport(v);
       });
 
       return inViewport;

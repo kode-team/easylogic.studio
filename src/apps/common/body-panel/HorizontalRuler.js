@@ -91,7 +91,7 @@ export default class HorizontalRuler extends EditorElement {
   }
 
   makeRulerForCurrentArtboard() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -117,12 +117,12 @@ export default class HorizontalRuler extends EditorElement {
   }
 
   makeRulerForCurrent() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 
     // current
-    const verties = this.$selection.verties;
+    const verties = this.$context.selection.verties;
     const xList = verties.map((it) => it[0]);
     const currentMinX = Math.min.apply(Math, xList);
     const currentMaxX = Math.max.apply(Math, xList);
@@ -261,8 +261,8 @@ export default class HorizontalRuler extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
-    if (this.$selection.current) {
-      const current = this.$selection.current;
+    if (this.$context.selection.current) {
+      const current = this.$context.selection.current;
 
       if (current.changedRect) {
         this.refresh();

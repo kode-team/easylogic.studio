@@ -100,7 +100,7 @@ export default class TimelinePlayControl extends EditorElement {
   }
 
   getSelectedTimeline() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       return project.getSelectedTimeline();
     }
@@ -108,7 +108,7 @@ export default class TimelinePlayControl extends EditorElement {
 
   updateData(obj) {
     this.setState(obj, false);
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       project.setTimelineInfo(obj);
     }

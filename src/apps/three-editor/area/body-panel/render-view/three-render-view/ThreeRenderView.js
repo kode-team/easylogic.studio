@@ -16,19 +16,19 @@ export default class ThreeRenderView extends EditorElement {
   }
 
   renderCanvas() {
-    // console.log(this.$editor.sceneManager.scene.children);
+    // console.log(this.$context.sceneManager.scene.children);
 
-    // console.log(this.$editor.sceneManager.viewportCamera);
-    // this.$editor.sceneManager.scene.add(this.grid);
+    // console.log(this.$context.sceneManager.viewportCamera);
+    // this.$context.sceneManager.scene.add(this.grid);
 
     this.renderer.render(
-      this.$editor.sceneManager.scene,
-      this.$editor.sceneManager.viewportCamera
+      this.$context.sceneManager.scene,
+      this.$context.sceneManager.viewportCamera
     );
-    // this.$editor.sceneManager.scene.remove(this.grid);
+    // this.$context.sceneManager.scene.remove(this.grid);
 
-    // console.log(this.$editor.sceneManager.sceneHelpers.children);
-    // this.renderer.render(this.$editor.sceneManager.sceneHelpers, this.$editor.sceneManager.viewportCamera);
+    // console.log(this.$context.sceneManager.sceneHelpers.children);
+    // this.renderer.render(this.$context.sceneManager.sceneHelpers, this.$context.sceneManager.viewportCamera);
   }
 
   initializeCamera(rect) {
@@ -48,9 +48,9 @@ export default class ThreeRenderView extends EditorElement {
     // transform origin
     camera.lookAt(0, 0, 0);
 
-    this.$editor.sceneManager.camera = camera;
-    this.$editor.sceneManager.addCamera(camera);
-    this.$editor.sceneManager.setViewportCamera(camera.uuid);
+    this.$context.sceneManager.camera = camera;
+    this.$context.sceneManager.addCamera(camera);
+    this.$context.sceneManager.setViewportCamera(camera.uuid);
   }
 
   initializeRenderer() {
@@ -92,10 +92,10 @@ export default class ThreeRenderView extends EditorElement {
 
     // camera.position.z = 5;
 
-    // this.$editor.sceneManager.viewportCamera.aspect = rect.width / rect.height;
-    // this.$editor.sceneManager.viewportCamera.updateProjectionMatrix();
+    // this.$context.sceneManager.viewportCamera.aspect = rect.width / rect.height;
+    // this.$context.sceneManager.viewportCamera.updateProjectionMatrix();
 
-    console.log(this.$editor.sceneManager.viewportCamera);
+    console.log(this.$context.sceneManager.viewportCamera);
 
     const renderer = new THREE.WebGLRenderer({
       canvas: this.refs.$view.el,
@@ -109,7 +109,7 @@ export default class ThreeRenderView extends EditorElement {
     // renderer.setClearColor(0xaaaaaa);
 
     const controls = new OrbitControls(
-      this.$editor.sceneManager.viewportCamera,
+      this.$context.sceneManager.viewportCamera,
       this.refs.$body.el
     );
     controls.addEventListener("change", () => {
@@ -132,11 +132,11 @@ export default class ThreeRenderView extends EditorElement {
     grid.add(grid2);
 
     this.grid = grid;
-    this.$editor.sceneManager.addObject(this.grid, undefined, undefined, false);
+    this.$context.sceneManager.addObject(this.grid, undefined, undefined, false);
 
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(1, 1, 1);
-    this.$editor.sceneManager.scene.add(light);
+    this.$context.sceneManager.scene.add(light);
 
     const box = new THREE.Box3();
 
@@ -144,14 +144,14 @@ export default class ThreeRenderView extends EditorElement {
     selectionBox.material.depthTest = false;
     selectionBox.material.transparent = true;
     selectionBox.visible = false;
-    this.$editor.sceneManager.sceneHelpers.add(selectionBox);
+    this.$context.sceneManager.sceneHelpers.add(selectionBox);
 
     let objectPositionOnDown = null;
     let objectRotationOnDown = null;
     let objectScaleOnDown = null;
 
     const transformControls = new TransformControls(
-      this.$editor.sceneManager.viewportCamera,
+      this.$context.sceneManager.viewportCamera,
       this.refs.$view.el
     );
     this.transformControls = transformControls;
@@ -162,7 +162,7 @@ export default class ThreeRenderView extends EditorElement {
 
       //     box.setFromObject(object, true);
 
-      //     const helper = this.$editor.sceneManager.helpers[object.id];
+      //     const helper = this.$context.sceneManager.helpers[object.id];
 
       //     if (helper !== undefined && helper.isSkeletonHelper !== true) {
 
@@ -225,7 +225,7 @@ export default class ThreeRenderView extends EditorElement {
       controls.enabled = true;
     });
 
-    this.$editor.sceneManager.scene.add(transformControls);
+    this.$context.sceneManager.scene.add(transformControls);
 
     return renderer;
   }
@@ -255,8 +255,8 @@ export default class ThreeRenderView extends EditorElement {
 
     this.state.rect = rect;
 
-    this.$editor.sceneManager.viewportCamera.aspect = rect.width / rect.height;
-    this.$editor.sceneManager.viewportCamera.updateProjectionMatrix();
+    this.$context.sceneManager.viewportCamera.aspect = rect.width / rect.height;
+    this.$context.sceneManager.viewportCamera.updateProjectionMatrix();
 
     this.renderer.setSize(rect.width, rect.height);
 
@@ -264,7 +264,7 @@ export default class ThreeRenderView extends EditorElement {
   }
 
   [SUBSCRIBE("objectSelected")]() {
-    this.transformControls.attach(this.$editor.sceneManager.selected);
+    this.transformControls.attach(this.$context.sceneManager.selected);
   }
 
   [SUBSCRIBE("objectAdded")]() {

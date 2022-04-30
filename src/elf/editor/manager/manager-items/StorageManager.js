@@ -52,7 +52,7 @@ export class StorageManager {
    * @param {string} datauri  image datauri
    */
   async saveCustomAsset(datauri = "") {
-    const current = this.editor.selection.current;
+    const current = this.editor.context.selection.current;
 
     if (current) {
       const assetList = await this.getCustomAssetList();

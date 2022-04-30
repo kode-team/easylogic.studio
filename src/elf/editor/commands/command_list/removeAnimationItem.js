@@ -1,7 +1,7 @@
 export default {
   command: "removeAnimationItem",
   execute: function (editor, id) {
-    const project = editor.selection.currentProject;
+    const project = editor.context.selection.currentProject;
 
     if (project) {
       project.removeAnimationItem(id);

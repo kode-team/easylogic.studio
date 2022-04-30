@@ -34,7 +34,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["transform-origin"] || "";
 
     return createComponent("TransformOriginEditor", {
@@ -56,7 +56,7 @@ export default class TransformOriginProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change transform-origin",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "transform-origin": value,
       })
     );

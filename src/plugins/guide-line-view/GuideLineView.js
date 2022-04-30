@@ -167,7 +167,7 @@ export default class GuideLineView extends EditorElement {
     return "";
     // const lines = [];
 
-    // this.$selection.snapTargetLayers?.filter(Boolean).forEach((layer) => {
+    // this.$context.selection.snapTargetLayers?.filter(Boolean).forEach((layer) => {
     //   const verties = this.$viewport.applyVerties(layer.verties);
 
     //   lines.push(
@@ -266,8 +266,8 @@ export default class GuideLineView extends EditorElement {
 
       if (sourceVerties) {
         if (
-          (this.$selection.isOne && this.$editor.isPointerDown) ||
-          (this.$selection.isMany && !this.$editor.isPointerMove)
+          (this.$context.selection.isOne && this.$editor.isPointerDown) ||
+          (this.$context.selection.isMany && !this.$editor.isPointerMove)
         ) {
           images.push(rect(this.$viewport.applyVerties(sourceVerties)));
         }
@@ -307,14 +307,14 @@ export default class GuideLineView extends EditorElement {
   }
 
   refreshSmartGuides(targetVertiesList) {
-    if (this.$selection.isEmpty) return;
+    if (this.$context.selection.isEmpty) return;
 
-    const sourceVerties = toRectVerties(this.$selection.verties);
+    const sourceVerties = toRectVerties(this.$context.selection.verties);
     let targetList;
     if (targetVertiesList) {
       targetList = targetVertiesList.map((it) => toRectVerties(it));
     } else {
-      const targets = this.$selection.snapTargetLayers.map((target) => {
+      const targets = this.$context.selection.snapTargetLayers.map((target) => {
         const rectVerties = toRectVerties(target.verties);
         return {
           targetVerties: rectVerties,
@@ -350,15 +350,15 @@ export default class GuideLineView extends EditorElement {
 
   refreshSmartGuidesForVerties() {
     // return;
-    const guides = this.$snapManager.findGuide(this.$selection.verties);
+    const guides = this.$context.snapManager.findGuide(this.$context.selection.verties);
 
     this.setGuideLine(guides, true);
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.isMany) return;
+    if (this.$context.selection.isMany) return;
 
-    const expect = this.$selection.hasChangedField("d", "clip-path");
+    const expect = this.$context.selection.hasChangedField("d", "clip-path");
 
     if (!expect) {
       this.refreshSmartGuidesForVerties();

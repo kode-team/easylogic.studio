@@ -4,7 +4,7 @@ import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
 export default {
   command: "addBackgroundImageGradient",
   execute: function (editor, gradient, id = null) {
-    var items = editor.selection.itemsByIds(id);
+    var items = editor.context.selection.itemsByIds(id);
 
     let itemsMap = {};
     items.forEach((item) => {

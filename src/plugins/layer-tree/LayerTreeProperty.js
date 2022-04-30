@@ -154,11 +154,11 @@ export default class LayerTreeProperty extends BaseProperty {
     for (var last = layers.length - 1; last > -1; last--) {
       var layer = layers[last];
 
-      var selectedPathClass = this.$selection.hasPathOf(layer)
+      var selectedPathClass = this.$context.selection.hasPathOf(layer)
         ? "selected-path"
         : "";
-      var selectedClass = this.$selection.check(layer) ? "selected" : "";
-      var hovered = this.$selection.checkHover(layer) ? "hovered" : "";
+      var selectedClass = this.$context.selection.check(layer) ? "selected" : "";
+      var hovered = this.$context.selection.checkHover(layer) ? "hovered" : "";
       var name = layer.is("boolean-path")
         ? layer["boolean-operation"]
         : layer.name;
@@ -220,7 +220,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [LOAD("$layerList") + DOMDIFF]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (!project) return "";
 
     return [
@@ -323,7 +323,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
     this.nextTick(() => {
       this.emit("recoverBooleanPath");
-      this.$selection.select(sourceItem);
+      this.$context.selection.select(sourceItem);
       this.setState({
         hideDragPointer: true,
       });
@@ -368,7 +368,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   selectLayer(layer) {
     if (layer) {
-      this.$selection.select(layer);
+      this.$context.selection.select(layer);
     }
 
     this.refresh();
@@ -377,7 +377,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   addLayer(layer) {
     if (layer) {
-      this.$selection.select(layer);
+      this.$context.selection.select(layer);
 
       this.emit("refreshArtboard");
     }
@@ -396,7 +396,7 @@ export default class LayerTreeProperty extends BaseProperty {
     $item.onlyOneClass("selected");
 
     var id = $item.attr("data-layer-id");
-    this.$selection.select(id);
+    this.$context.selection.select(id);
 
     this.command("refreshSelection");
   }
@@ -448,7 +448,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
     // 클릭한게 lock 이고, selection 에 포함 되어 있으면 selection 영역에서 제외한다.
     if (lastLock) {
-      this.$selection.removeById(id);
+      this.$context.selection.removeById(id);
       this.emit("refreshSelection");
     }
   }
@@ -458,8 +458,8 @@ export default class LayerTreeProperty extends BaseProperty {
       it.removeClass("hovered");
     });
 
-    if (this.$selection.hoverItems.length) {
-      var selector = this.$selection.hoverItems
+    if (this.$context.selection.hoverItems.length) {
+      var selector = this.$context.selection.hoverItems
         .map((it) => {
           return `[data-layer-id="${it.id}"]`;
         })
@@ -480,7 +480,7 @@ export default class LayerTreeProperty extends BaseProperty {
         it.removeClass("selected-path");
       });
 
-      var selector = this.$selection.items
+      var selector = this.$context.selection.items
         .map((it) => {
           return `[data-layer-id="${it.id}"]`;
         })
@@ -490,7 +490,7 @@ export default class LayerTreeProperty extends BaseProperty {
         this.refs.$layerList.$$(selector).forEach((it) => {
           it.addClass("selected");
 
-          var item = this.$selection.itemKeys[it.attr("data-layer-id")];
+          var item = this.$context.selection.itemKeys[it.attr("data-layer-id")];
           if (item.is("svg-path", "svg-polygon")) {
             it.$(".icon").html(this.getIcon(item));
           }

@@ -27,7 +27,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [LOAD("$layoutType")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -43,7 +43,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [LOAD("$layoutProperty")]() {
-    var current = this.$selection.current || { layout: "default" };
+    var current = this.$context.selection.current || { layout: "default" };
     return /*html*/ `
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${
@@ -85,13 +85,13 @@ export default class LayoutProperty extends BaseProperty {
       this.command(
         "setAttributeForMulti",
         "change padding",
-        this.$selection.packByValue(value)
+        this.$context.selection.packByValue(value)
       );
     } else {
       this.command(
         "setAttributeForMulti",
         "change layout info",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           [key]: value,
         })
       );
@@ -103,8 +103,8 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    this.$selection.reset(
-      this.$selection.packByValue({
+    this.$context.selection.reset(
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );
@@ -114,7 +114,7 @@ export default class LayoutProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change layout type",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );
@@ -129,11 +129,11 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   enableHasChildren() {
-    return this.$selection.current.enableHasChildren();
+    return this.$context.selection.current.enableHasChildren();
   }
 
   updateTitle() {
-    this.setTitle(this.$selection.current.layout + " Layout");
+    this.setTitle(this.$context.selection.current.layout + " Layout");
   }
 
   [SUBSCRIBE("refreshSelection") +

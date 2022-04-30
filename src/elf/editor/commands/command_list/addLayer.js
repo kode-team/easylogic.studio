@@ -7,7 +7,7 @@ export default function addLayer(
   containerItem
 ) {
   if (!containerItem) {
-    containerItem = editor.selection.current || editor.selection.currentProject;
+    containerItem = editor.context.selection.current || editor.context.selection.currentProject;
   }
 
   if (containerItem) {
@@ -18,7 +18,7 @@ export default function addLayer(
     containerItem.appendChild(layer);
 
     if (isSelected) {
-      editor.selection.select(layer);
+      editor.context.selection.select(layer);
     }
 
     _doForceRefreshSelection(editor);

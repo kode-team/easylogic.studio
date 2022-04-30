@@ -8,8 +8,8 @@ export default {
    * @param {number} scale [0.5...5]
    */
   execute: function (editor, scale) {
-    const oldScale = editor.viewport.scale;
-    editor.viewport.setScale(scale);
+    const oldScale = editor.context.viewport.scale;
+    editor.context.viewport.setScale(scale);
     editor.emit("updateViewport", scale, oldScale);
   },
 };

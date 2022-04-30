@@ -88,7 +88,7 @@ export default class VideoProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || { playTime: "0:1:1" };
+    var current = this.$context.selection.current || { playTime: "0:1:1" };
     var currentTime = current.currentTime || 0;
     var duration = (current.playTime || "0:1:1").split(":").pop();
     return /*html*/ `
@@ -165,7 +165,7 @@ export default class VideoProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change video property",
-      this.$selection.packByValue({ currentTime })
+      this.$context.selection.packByValue({ currentTime })
     );
   }
 
@@ -175,7 +175,7 @@ export default class VideoProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change video property",
-      this.$selection.packByValue({ playbackRate })
+      this.$context.selection.packByValue({ playbackRate })
     );
   }
 
@@ -186,7 +186,7 @@ export default class VideoProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change video property",
-      this.$selection.packByValue({ volume })
+      this.$context.selection.packByValue({ volume })
     );
   }
 
@@ -225,7 +225,7 @@ export default class VideoProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change video property",
-      this.$selection.packByValue({ [key]: value })
+      this.$context.selection.packByValue({ [key]: value })
     );
   }
 
@@ -233,7 +233,7 @@ export default class VideoProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change video property",
-      this.$selection.packByValue({ [key]: value })
+      this.$context.selection.packByValue({ [key]: value })
     );
   }
 
@@ -253,7 +253,7 @@ export default class VideoProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.refreshShow(["video"]);
 
     if (current && current.is("video")) {

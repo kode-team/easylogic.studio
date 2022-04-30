@@ -1,7 +1,7 @@
 export default {
   command: "removeTimelineProperty",
   execute: function (editor, layerId, property) {
-    const project = editor.selection.currentProject;
+    const project = editor.context.selection.currentProject;
     if (project) {
       project.removeTimelineProperty(layerId, property);
 

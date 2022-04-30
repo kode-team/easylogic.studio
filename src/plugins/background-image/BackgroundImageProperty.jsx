@@ -55,7 +55,7 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [LOAD("$property")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["background-image"] || "";
 
     return createComponent("BackgroundImageEditor", {
@@ -75,8 +75,8 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.hasChangedField("background-image")) {
+    if (this.$context.selection.current) {
+      if (this.$context.selection.hasChangedField("background-image")) {
         this.refresh();
       }
     }
@@ -87,7 +87,7 @@ export default class BackgroundImageProperty extends BaseProperty {
       this.command(
         "setAttributeForMulti",
         "change background image",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           [key]: value,
         })
       );

@@ -5,7 +5,7 @@ import { URLImageResource } from "elf/editor/property-parser/image-resource/URLI
 export default {
   command: "addBackgroundImageAsset",
   execute: function (editor, url, id = null) {
-    var items = editor.selection.itemsByIds(id);
+    var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
       let images = BackgroundImage.parseStyle(

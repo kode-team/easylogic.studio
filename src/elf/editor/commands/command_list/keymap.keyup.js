@@ -1,10 +1,10 @@
 export default {
   command: "keymap.keyup",
   execute: function (editor, e) {
-    editor.keyboardManager.remove(e.key, e.keyCode);
+    editor.context.keyboardManager.remove(e.key, e.keyCode);
 
-    if (editor.shortcuts) {
-      editor.shortcuts.execute(e, "keyup");
+    if (editor.context.shortcuts) {
+      editor.context.shortcuts.execute(e, "keyup");
     }
   },
 };

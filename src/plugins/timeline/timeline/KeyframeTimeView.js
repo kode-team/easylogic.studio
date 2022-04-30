@@ -30,7 +30,7 @@ export default class KeyframeTimeView extends EditorElement {
   }
 
   get currentTimeline() {
-    var currentProject = this.$selection.currentProject;
+    var currentProject = this.$context.selection.currentProject;
 
     if (currentProject) {
       return currentProject.getSelectedTimeline();
@@ -82,7 +82,7 @@ export default class KeyframeTimeView extends EditorElement {
 
     var displayTimeRate = currentX / this.sliderRect.width;
 
-    this.$selection.currentProject.setDisplayStartTimeRate(displayTimeRate);
+    this.$context.selection.currentProject.setDisplayStartTimeRate(displayTimeRate);
 
     this.refreshTimeDisplay();
     this.refreshCanvas();
@@ -106,7 +106,7 @@ export default class KeyframeTimeView extends EditorElement {
 
     var displayTimeRate = currentX / this.sliderRect.width;
 
-    this.$selection.currentProject.setDisplayEndTimeRate(displayTimeRate);
+    this.$context.selection.currentProject.setDisplayEndTimeRate(displayTimeRate);
 
     this.refreshTimeDisplay();
     this.refreshCanvas();
@@ -125,7 +125,7 @@ export default class KeyframeTimeView extends EditorElement {
   moveGaugeButton(dx) {
     var dxRate = dx / this.sliderRect.width;
 
-    this.$selection.currentProject.setDisplayTimeDxRate(
+    this.$context.selection.currentProject.setDisplayTimeDxRate(
       dxRate,
       this.timelineStartTime,
       this.timelineEndTime
@@ -250,7 +250,7 @@ export default class KeyframeTimeView extends EditorElement {
     this.originalRect = this.$el.rect();
     this.width = this.originalRect.width - PADDING;
     this.emit("hideSelectionToolView");
-    this.$selection.empty();
+    this.$context.selection.empty();
     this.emit("refreshSelection");
   }
 
@@ -263,12 +263,12 @@ export default class KeyframeTimeView extends EditorElement {
     currentX = Math.max(currentX, minX);
     currentX = Math.min(currentX, maxX);
 
-    this.$selection.currentProject.setTimelineCurrentTimeRate(
+    this.$context.selection.currentProject.setTimelineCurrentTimeRate(
       currentX / totalWidth
     );
 
     this.refresh();
-    this.$selection.currentProject.seek();
+    this.$context.selection.currentProject.seek();
 
     this.emit("moveTimeline");
   }

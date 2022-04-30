@@ -61,16 +61,16 @@ export default {
     });
 
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentLayer.hierachy],
         undoValues: [lastValues, currentLayer.parentId],
       });
 
-      // editor.selection.reselect();
+      // editor.context.selection.reselect();
     });
 
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
 

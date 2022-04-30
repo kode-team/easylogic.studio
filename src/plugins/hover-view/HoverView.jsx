@@ -39,12 +39,12 @@ export default class HoverView extends EditorElement {
    */
   [CONFIG("bodyEvent") + IF("checkModeView")]() {
     if (this.$config.true("set.move.control.point")) {
-      this.$selection.setHoverId("");
+      this.$context.selection.setHoverId("");
       this.renderHoverLayer();
       return;
     }
 
-    const filteredList = this.$selection.filteredLayers;
+    const filteredList = this.$context.selection.filteredLayers;
     const point = this.$viewport.getWorldPosition(
       this.$config.get("bodyEvent")
     );
@@ -59,24 +59,24 @@ export default class HoverView extends EditorElement {
     // 계층 구조에서 마지막 객체를 선택
     let id = hoverItems[0]?.id;
 
-    if (this.$selection.isEmpty) {
+    if (this.$context.selection.isEmpty) {
       id = hoverItems[0]?.id;
-    } else if (this.$selection.isOne) {
-      const pathIds = this.$selection.current.pathIds;
+    } else if (this.$context.selection.isOne) {
+      const pathIds = this.$context.selection.current.pathIds;
       hoverItems = hoverItems.filter(
         (it) =>
           pathIds.includes(it.id) === false ||
-          it.id === this.$selection.current.id
+          it.id === this.$context.selection.current.id
       );
 
       id = hoverItems[0]?.id;
     }
 
     if (!id) {
-      this.$selection.setHoverId("");
+      this.$context.selection.setHoverId("");
       this.renderHoverLayer();
     } else {
-      if (this.$selection.setHoverId(id)) {
+      if (this.$context.selection.setHoverId(id)) {
         this.renderHoverLayer();
       }
     }
@@ -87,13 +87,13 @@ export default class HoverView extends EditorElement {
   }
 
   [SUBSCRIBE("refreshHoverView")](id) {
-    if (this.$selection.setHoverId(id)) {
+    if (this.$context.selection.setHoverId(id)) {
       this.renderHoverLayer();
     }
   }
 
   [SUBSCRIBE("updateViewport", "refreshSelectionStyleView")]() {
-    this.$selection.setHoverId("");
+    this.$context.selection.setHoverId("");
     this.renderHoverLayer();
   }
 
@@ -118,7 +118,7 @@ export default class HoverView extends EditorElement {
   }
 
   renderHoverLayer() {
-    const items = this.$selection.hoverItems;
+    const items = this.$context.selection.hoverItems;
     if (items.length === 0) {
       // hide render hover layer
       this.refs.$hoverRect.updateDiff("");
@@ -189,7 +189,7 @@ export default class HoverView extends EditorElement {
   }
 
   createOffsetLine() {
-    const item = this.$selection.hoverItems[0] || this.$selection.current;
+    const item = this.$context.selection.hoverItems[0] || this.$context.selection.current;
 
     if (!item || !item.parent) {
       return "";
@@ -199,7 +199,7 @@ export default class HoverView extends EditorElement {
       return "";
     }
 
-    if (this.$selection.isEmpty) {
+    if (this.$context.selection.isEmpty) {
       const offsetVerties = this.getOffsetVerties(item, item.parent);
 
       return /*html*/ `
@@ -218,7 +218,7 @@ export default class HoverView extends EditorElement {
     } else {
       const offsetVerties = this.getOffsetVerties(
         item,
-        this.$selection.current
+        this.$context.selection.current
       );
 
       return /*html*/ `

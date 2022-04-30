@@ -16,7 +16,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     LEFT_BUTTON +
     MOVE("moveEllipseRadiusX") +
     END("moveEndEllipseRadiusX")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current;
     this.state.width = current.screenWidth;
@@ -28,7 +28,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
   }
 
   moveEllipseRadiusX(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radiusX, radiusY, x, y } = this.state.ellipse;
 
     const oldX = x.toPx(current.screenWidth);
@@ -52,7 +52,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const relativePosition = vertiesMap(
       [localPosition],
-      this.$selection.current.absoluteMatrixInverse
+      this.$context.selection.current.absoluteMatrixInverse
     )[0];
 
     const distX = Math.abs(relativePosition[0] - oldX);
@@ -69,14 +69,14 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   [POINTERSTART("$el .ellipse .ellipse-radius-y") +
     LEFT_BUTTON +
     MOVE("moveEllipseRadiusY") +
     END("moveEndEllipseRadiusX")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current;
     this.state.width = current.screenWidth;
@@ -88,7 +88,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
   }
 
   moveEllipseRadiusY(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radiusX, radiusY, x, y } = this.state.ellipse;
 
     const oldX = x.toPx(current.screenWidth);
@@ -112,7 +112,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const relativePosition = vertiesMap(
       [localPosition],
-      this.$selection.current.absoluteMatrixInverse
+      this.$context.selection.current.absoluteMatrixInverse
     )[0];
 
     const distY = Math.abs(relativePosition[1] - oldY);
@@ -129,7 +129,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   moveEndEllipseRadiusX() {
@@ -138,7 +138,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
@@ -146,7 +146,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     LEFT_BUTTON +
     MOVE("moveEllipseCenter") +
     END("moveEndEllipseCenter")](e) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current;
     this.state.width = current.screenWidth;
@@ -174,7 +174,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     // local position 으로 바꾸기
     const relativePosition = vertiesMap(
       [worldPosition],
-      this.$selection.current.absoluteMatrixInverse
+      this.$context.selection.current.absoluteMatrixInverse
     )[0];
 
     const result = [
@@ -192,7 +192,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   moveEndEllipseCenter(dx, dy) {
@@ -208,7 +208,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
           this.command(
             "setAttributeForMulti",
             "change clippath",
-            this.$selection.packByValue(value)
+            this.$context.selection.packByValue(value)
           );
           break;
       }
@@ -220,12 +220,12 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
   templateEllipse(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     const radiusX = clippath.value.radiusX.toPx(current.screenWidth);
     const radiusY = clippath.value.radiusY.toPx(current.screenHeight);

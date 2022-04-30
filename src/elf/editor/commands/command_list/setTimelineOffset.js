@@ -2,7 +2,7 @@ export default {
   command: "setTimelineOffset",
   debounce: 100,
   execute: function (editor, obj) {
-    const project = editor.selection.currentProject;
+    const project = editor.context.selection.currentProject;
     if (project) {
       project.setTimelineKeyframeOffsetValue(
         obj.layerId,

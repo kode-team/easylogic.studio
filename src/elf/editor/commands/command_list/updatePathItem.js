@@ -22,7 +22,7 @@ export default {
    * @param {object} pathObject.matrix    svg path 문자열
    */
   execute: function (editor, pathObject) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       if (pathObject.box === "box") {
         const newPath = current.invertPath(pathObject.d);
@@ -31,7 +31,7 @@ export default {
         editor.command(
           "setAttributeForMulti",
           "change local path",
-          editor.selection.packByValue({
+          editor.context.selection.packByValue({
             d: newPath.d,
           })
         );
@@ -91,7 +91,7 @@ export default {
         editor.command(
           "setAttributeForMulti",
           "change path",
-          editor.selection.packByValue({
+          editor.context.selection.packByValue({
             // bbox 가 기존 좌표에서 움직인 상태 이기 때문에
             // bbox 시작점만큼 이동해서 newWidth, newHeight 기준으로 path 를 맞춘다.
             d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,

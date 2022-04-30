@@ -17,7 +17,7 @@ src/elf/editor/commands/command_list
 export default {
     command: 'zoom.in',
     execute: function (editor) {
-        editor.viewport.zoomIn(0.02);
+        editor.context.viewport.zoomIn(0.02);
 
     }
 }
@@ -36,20 +36,20 @@ export default {
 
         editor.emit('setAttributeForMulti', multiAttrs, context)
 
-        editor.history.add(message, this, {
+        editor.context.history.add(message, this, {
             currentValues: [multiAttrs],
-            undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
+            undoValues: editor.context.history.getUndoValuesForMulti(multiAttrs)
         })
 
         editor.nextTick(() =>  {
-          editor.history.saveSelection()  
+          editor.context.history.saveSelection()  
         })        
     },
 
     redo: function (editor, {currentValues}) {
         editor.emit('setAttributeForMulti', ...currentValues)
         editor.nextTick(() => {
-            editor.selection.reselect();            
+            editor.context.selection.reselect();            
             editor.emit('refreshAll');         
         })
 
@@ -57,12 +57,12 @@ export default {
 
     undo: function (editor, { undoValues }) {
         const ids = Object.keys(undoValues)
-        const items = editor.selection.itemsByIds(ids)
+        const items = editor.context.selection.itemsByIds(ids)
 
         items.forEach(item => {
             item.reset(undoValues[item.id]);
         })
-        editor.selection.reselect();
+        editor.context.selection.reselect();
 
         editor.nextTick(() => {
             editor.emit('refreshAll');

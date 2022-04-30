@@ -59,13 +59,13 @@ const TOOL_SIZE = 20;
 
 class GradientBaseEditor extends EditorElement {
   initializeData() {
-    const value = this.$selection.current["background-image"];
+    const value = this.$context.selection.current["background-image"];
 
     const cssValue = STRING_TO_CSS(value);
 
     this.state.backgroundImages = BackgroundImage.parseStyle(cssValue);
     this.state.backImages = BackgroundImage.parseStyle(cssValue);
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.gradient = this.state.backImages[this.state.index];
     this.state.contentBox = current.contentBox;
     this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(
@@ -81,7 +81,7 @@ class GradientBaseEditor extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change background image",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "background-image": value,
       })
     );
@@ -228,7 +228,7 @@ class GradientResizer extends GradientTimingStepEditor {
     const nextVertex = targetMousePoint;
 
     // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.
-    const reverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const reverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const [currentResult, nextResult] = vertiesMap(
       [currentVertex, nextVertex],
       reverseMatrix
@@ -287,7 +287,7 @@ class GradientResizer extends GradientTimingStepEditor {
     // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.
     // var currentResult = vec3.transformMat4([], currentVertex, reverseMatrix);62849
     // var nextResult = vec3.transformMat4([], nextVertex, reverseMatrix);
-    const reverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const reverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const [currentResult, nextResult] = vertiesMap(
       [currentVertex, nextVertex],
       reverseMatrix
@@ -646,7 +646,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.command(
       "setAttributeForMulti",
       "change background image",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "background-image": value,
       })
     );
@@ -676,7 +676,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
       this.command(
         "setAttributeForMulti",
         "change background image",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           "background-image": value,
         })
       );
@@ -700,7 +700,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.command(
       "setAttributeForMulti",
       "change background image",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "background-image": value,
       })
     );
@@ -872,7 +872,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
 
     var [localPosition] = vertiesMap(
       [this.$viewport.applyVertexInverse(nextPoint)],
-      this.$selection.current.absoluteMatrixInverse
+      this.$context.selection.current.absoluteMatrixInverse
     );
 
     const backgroundImage = this.state.gradient;
@@ -895,7 +895,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
         } else if (this.pointTarget === "end") {
           var [localStartPosition] = vertiesMap(
             [this.$viewport.applyVertexInverse(this.startPoint)],
-            this.$selection.current.absoluteMatrixInverse
+            this.$context.selection.current.absoluteMatrixInverse
           );
 
           var [localEndPosition] = vertiesMap(
@@ -904,12 +904,12 @@ export default class GradientEditorView extends GradientColorstepEditor {
                 vec3.add([], this.endPoint, [dx, 0, 0])
               ),
             ],
-            this.$selection.current.absoluteMatrixInverse
+            this.$context.selection.current.absoluteMatrixInverse
           );
 
           var [localShapePosition] = vertiesMap(
             [this.$viewport.applyVertexInverse(this.shapePoint)],
-            this.$selection.current.absoluteMatrixInverse
+            this.$context.selection.current.absoluteMatrixInverse
           );
 
           const newEndX =
@@ -940,7 +940,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
         } else if (this.pointTarget === "shape") {
           var [localStartPosition] = vertiesMap(
             [this.$viewport.applyVertexInverse(this.startPoint)],
-            this.$selection.current.absoluteMatrixInverse
+            this.$context.selection.current.absoluteMatrixInverse
           );
 
           var [localShapePosition] = vertiesMap(
@@ -949,12 +949,12 @@ export default class GradientEditorView extends GradientColorstepEditor {
                 vec3.add([], this.shapePoint, [0, dy, 0])
               ),
             ],
-            this.$selection.current.absoluteMatrixInverse
+            this.$context.selection.current.absoluteMatrixInverse
           );
 
           var [localEndPosition] = vertiesMap(
             [this.$viewport.applyVertexInverse(this.endPoint)],
-            this.$selection.current.absoluteMatrixInverse
+            this.$context.selection.current.absoluteMatrixInverse
           );
 
           const newEndX =
@@ -1043,9 +1043,9 @@ export default class GradientEditorView extends GradientColorstepEditor {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
+    if (this.$context.selection.current) {
       if (
-        this.$selection.hasChangedField(
+        this.$context.selection.hasChangedField(
           "x",
           "y",
           "width",
@@ -1936,7 +1936,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
   }
 
   [LOAD("$el") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 

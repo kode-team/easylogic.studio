@@ -35,7 +35,7 @@ export default class ResizingItemProperty extends BaseProperty {
   }
 
   [LOAD("$resizingModeInfo") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     const h = current.resizingHorizontal || ResizingMode.FIXED;
     const v = current.resizingVertical || ResizingMode.FIXED;
@@ -87,7 +87,7 @@ export default class ResizingItemProperty extends BaseProperty {
   }
 
   [LOAD("$resizingModeInfoInput") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     this.setState(
       {
@@ -125,7 +125,7 @@ export default class ResizingItemProperty extends BaseProperty {
   [CLICK("$resizingModeInfo [data-key]")](e) {
     const key = e.$dt.data("key");
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current[key] === ResizingMode.FIXED) {
       this.trigger("changeResizingMode", key, ResizingMode.FILL_CONTAINER);
@@ -138,7 +138,7 @@ export default class ResizingItemProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "apply self resizing",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
         "flex-grow": 1,
       })
@@ -151,7 +151,7 @@ export default class ResizingItemProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
 
       return (
         current?.parent?.hasLayout() &&
@@ -161,7 +161,7 @@ export default class ResizingItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current && current.changedLayoutItem) {
       if (

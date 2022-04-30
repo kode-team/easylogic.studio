@@ -35,7 +35,7 @@ export default class PerspectiveProperty extends BaseProperty {
   }
 
   [LOAD("$perspective")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     var perspective = current["perspective"] || "";
     return createComponent("RangeEditor", {
@@ -51,7 +51,7 @@ export default class PerspectiveProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change perspective",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );

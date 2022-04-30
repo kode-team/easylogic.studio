@@ -1,10 +1,10 @@
 export default {
   command: "keymap.keydown",
   execute: function (editor, e) {
-    editor.keyboardManager.add(e.code, e.keyCode, e);
+    editor.context.keyboardManager.add(e.code, e.keyCode, e);
 
-    if (editor.shortcuts) {
-      editor.shortcuts.execute(e, "keydown");
+    if (editor.context.shortcuts) {
+      editor.context.shortcuts.execute(e, "keydown");
     }
   },
 };

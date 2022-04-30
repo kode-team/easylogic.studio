@@ -29,7 +29,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   checkChangedValue() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return false;
 
@@ -53,7 +53,7 @@ export default class PositionProperty extends BaseProperty {
   [SUBSCRIBE("refreshSelectionStyleView") +
     IF("checkChangedValue") +
     THROTTLE(10)]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -148,7 +148,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   refresh() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current) {
       this.children.$x.setValue(round(current.offsetX || DEFAULT_SIZE, 100));
       this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
@@ -172,7 +172,7 @@ export default class PositionProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change position or size",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );
@@ -182,7 +182,7 @@ export default class PositionProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change rotate",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         angle: rotate.value,
       })
     );
@@ -192,7 +192,7 @@ export default class PositionProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       `change ${key}`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );

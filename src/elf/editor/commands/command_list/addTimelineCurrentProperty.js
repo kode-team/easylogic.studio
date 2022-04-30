@@ -5,7 +5,7 @@ export default {
   execute: function (editor, options = { timing: "linear" }) {
     _currentProject(editor, (project) => {
       var list = [];
-      editor.selection.each((item) => {
+      editor.context.selection.each((item) => {
         var keyframeObj = {
           layerId: item.id,
           property: options.property,

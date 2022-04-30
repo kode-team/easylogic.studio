@@ -3,7 +3,7 @@ import { Length } from "elf/editor/unit/Length";
 export default {
   command: "convert.stroke.to.path",
   execute: async (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 

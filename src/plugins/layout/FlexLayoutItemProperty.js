@@ -32,7 +32,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || { "flex-layout-item": "none" };
+    var current = this.$context.selection.current || { "flex-layout-item": "none" };
 
     const valueType = "value";
 
@@ -123,7 +123,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change flex layout",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );
@@ -133,7 +133,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change flex layout",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         flex: value,
       })
     );
@@ -144,7 +144,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
       return current && current.isInFlex();
     });
   }

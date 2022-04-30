@@ -42,10 +42,10 @@ export class ObjectProperty {
 
       afterComponentRendering($dom, refName, instance) {
         if (refName == "$comp") {
-          const current = this.$selection.current || {};
+          const current = this.$context.selection.current || {};
           const inspector = isFunction(json.inspector)
             ? json.inspector(current)
-            : this.$editor.components.createInspector(
+            : this.$context.components.createInspector(
                 current,
                 json.editableProperty
               );
@@ -54,7 +54,7 @@ export class ObjectProperty {
       }
 
       refresh() {
-        const current = this.$selection.current || {};
+        const current = this.$context.selection.current || {};
 
         if (current || json.visible) {
           this.setTitle(
@@ -78,13 +78,13 @@ export class ObjectProperty {
       }
 
       [LOAD("$body")]() {
-        var current = this.$selection.current;
+        var current = this.$context.selection.current;
 
         if (!current && !json.visible) return "";
 
         const inspector = isFunction(json.inspector)
           ? json.inspector(current || {})
-          : this.$editor.components.createInspector(
+          : this.$context.components.createInspector(
               current || {},
               json.editableProperty
             );
@@ -107,7 +107,7 @@ export class ObjectProperty {
           this.command(
             "setAttributeForMulti",
             `change attribute : ${key}`,
-            this.$selection.packByValue({
+            this.$context.selection.packByValue({
               [key]: value,
             })
           );

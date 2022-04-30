@@ -325,7 +325,7 @@ export default class TransformEditor extends EditorElement {
 
   [DROP("$transformList .transform-item") + PREVENT](e) {
     var targetIndex = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     this.sortTransform(this.startIndex, targetIndex);

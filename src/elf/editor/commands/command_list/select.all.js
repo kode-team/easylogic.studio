@@ -1,9 +1,9 @@
 export default {
   command: "select.all",
   execute: function (editor) {
-    var project = editor.selection.currentProject;
+    var project = editor.context.selection.currentProject;
     if (project) {
-      editor.selection.select(...project.layers);
+      editor.context.selection.select(...project.layers);
       editor.emit("history.refreshSelection");
     }
   },

@@ -45,6 +45,7 @@ export class EventMachine {
   #props = {};
   #propsKeys = {};
   #isServer = false;
+  #propsKeyList = [];
 
   constructor(opt, props) {
     this.refs = {};
@@ -111,10 +112,21 @@ export class EventMachine {
     Object.keys(props).forEach((key) => {
       this.#propsKeys[key.toUpperCase()] = key;
     });
+    this.#propsKeyList = Object.keys(this.#propsKeys);
   }
 
   #getProp(key) {
     return this.#props[this.#propsKeys[key.toUpperCase()]];
+  }
+
+  /**
+   * props 에 key 가 존재하는지 체크
+   *
+   * @param {string} key
+   * @returns {boolean}
+   */
+  hasProp(key) {
+    return this.#propsKeyList.includes(key?.toUpperCase());
   }
 
   setServer(isServer = true) {

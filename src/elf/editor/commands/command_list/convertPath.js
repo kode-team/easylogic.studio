@@ -1,7 +1,7 @@
 import { PathParser } from "elf/editor/parser/PathParser";
 
 export default function convertPath(editor, pathString, rect = null) {
-  var current = editor.selection.current;
+  var current = editor.context.selection.current;
 
   // clip path 가 path 일 때
   // path 속성을 가지고 있을 때
@@ -20,7 +20,7 @@ export default function convertPath(editor, pathString, rect = null) {
       editor.command(
         "setAttributeForMulti",
         "set attribute -d",
-        editor.selection.packByValue({ d }, current.id)
+        editor.context.selection.packByValue({ d }, current.id)
       );
     } else if (current["clip-path"].includes("path")) {
       var d = pathString;
@@ -36,7 +36,7 @@ export default function convertPath(editor, pathString, rect = null) {
       editor.command(
         "setAttributeForMulti",
         "change clip path",
-        editor.selection.packByValue({ "clip-path": `path(${d})` }, current.id)
+        editor.context.selection.packByValue({ "clip-path": `path(${d})` }, current.id)
       );
     }
   }

@@ -4,7 +4,7 @@ export default {
   command: "copy.path",
   description: "copy as path for item with path string(d attribute)",
   execute: function (editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (current) {
       let newPath = PathParser.fromSVGString(current.d);

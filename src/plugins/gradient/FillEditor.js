@@ -28,11 +28,11 @@ export default class FillEditor extends EditorElement {
       SVGStaticGradient.create();
 
     const id = image.colorsteps[this.props.index]?.id;
-    this.$selection.selectColorStep(id);
+    this.$context.selection.selectColorStep(id);
 
     if (id) {
       this.currentStep = image.colorsteps.find((it) =>
-        this.$selection.isSelectedColorStep(it.id)
+        this.$context.selection.isSelectedColorStep(it.id)
       );
     }
 
@@ -112,7 +112,7 @@ export default class FillEditor extends EditorElement {
   }
 
   [CHANGE("$file")](e) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       [...e.target.files].forEach((item) => {
         this.emit("updateImageAssetItem", item, (local) => {
@@ -251,7 +251,7 @@ export default class FillEditor extends EditorElement {
   [LOAD("$stepList")]() {
     var colorsteps = this.state.image.colorsteps || [];
     return colorsteps.map((it) => {
-      var selected = this.$selection.isSelectedColorStep(it.id)
+      var selected = this.$context.selection.isSelectedColorStep(it.id)
         ? "selected"
         : "";
       return /*html*/ `
@@ -276,11 +276,11 @@ export default class FillEditor extends EditorElement {
   selectStep(id) {
     this.state.id = id;
 
-    this.$selection.selectColorStep(id);
+    this.$context.selection.selectColorStep(id);
 
     if (this.state.image.colorsteps) {
       this.currentStep = this.state.image.colorsteps.find((it) =>
-        this.$selection.isSelectedColorStep(it.id)
+        this.$context.selection.isSelectedColorStep(it.id)
       );
       this.parent.trigger("selectColorStep", this.currentStep.color);
     }
@@ -396,7 +396,7 @@ export default class FillEditor extends EditorElement {
       return false;
     } else {
       e.$dt.focus();
-      this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
+      this.isSelectedColorStep = this.$context.selection.isSelectedColorStep(id);
 
       this.selectStep(id);
 

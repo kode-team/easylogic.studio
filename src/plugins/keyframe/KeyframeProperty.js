@@ -96,7 +96,7 @@ export default class KeyframeProperty extends BaseProperty {
     var index = +$keyframeItem.attr("data-index");
     var type = e.$dt.attr("data-type");
 
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current) return;
 
     var currentKeyframe = current.keyframes[index];
@@ -113,7 +113,7 @@ export default class KeyframeProperty extends BaseProperty {
   [CLICK("$keyframeList .keyframe-item .offset-list")](e) {
     var index = +e.$dt.closest("keyframe-item").attr("data-index");
 
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current) return;
 
     this.viewKeyframePicker(index);
@@ -121,7 +121,7 @@ export default class KeyframeProperty extends BaseProperty {
 
   [CLICK("$keyframeList .del") + PREVENT](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current) return;
 
     current.removeKeyframe(removeIndex);
@@ -133,14 +133,14 @@ export default class KeyframeProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current && current.hasChangedField("keyframes")) {
       this.refresh();
     }
   }
 
   [LOAD("$keyframeList")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
 
     if (!current) return "";
 
@@ -157,7 +157,7 @@ export default class KeyframeProperty extends BaseProperty {
   }
 
   [CLICK("$add")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (current) {
       current.createKeyframe();
       this.refresh();
@@ -174,7 +174,7 @@ export default class KeyframeProperty extends BaseProperty {
 
     this.selectedIndex = +index;
     this.selectItem(this.selectedIndex, true);
-    this.current = this.$selection.currentProject;
+    this.current = this.$context.selection.currentProject;
 
     if (!this.current) return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -197,7 +197,7 @@ export default class KeyframeProperty extends BaseProperty {
   }
 
   viewKeyframePropertyPopup(position) {
-    this.current = this.$selection.currentProject;
+    this.current = this.$context.selection.currentProject;
 
     if (!this.current) return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -215,7 +215,7 @@ export default class KeyframeProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("changeKeyframePopup")](data) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (!project) return;
     this.currentKeyframe = project.keyframes[this.selectedIndex];

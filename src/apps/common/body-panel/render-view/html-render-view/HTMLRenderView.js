@@ -111,7 +111,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   [SUBSCRIBE("playTimeline", "moveTimeline")]() {
-    const project = this.$selection.currentProject;
+    const project = this.$context.selection.currentProject;
     var timeline = project.getSelectedTimeline();
 
     if (timeline) {
@@ -164,7 +164,7 @@ export default class HTMLRenderView extends EditorElement {
     //FIXME: matrix에 기반한 좌표 연산이 필요하다.
 
     var arr = [];
-    this.$selection.items
+    this.$context.selection.items
       .filter((it) => it.id === id)
       .forEach((item) => {
         item.reset({
@@ -191,8 +191,8 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     // space 키가 눌러져있을 때는 실행하지 않는다.
-    const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-    if (this.$keyboardManager.check(code)) {
+    const code = this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space);
+    if (this.$context.keyboardManager.check(code)) {
       return false;
     }
 
@@ -204,17 +204,17 @@ export default class HTMLRenderView extends EditorElement {
 
     if (!e.shiftKey) {
       const mousePoint = this.$viewport.getWorldPosition(e);
-      if (this.$selection.hasPoint(mousePoint)) {
+      if (this.$context.selection.hasPoint(mousePoint)) {
         // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다.
-        if (this.$selection.hasHoverItem()) {
+        if (this.$context.selection.hasHoverItem()) {
           // selection 영역이 동일하고
           // hover 된 id 가 부모가 아니면
           // hover 된 아이템을 선택하게 된다.
           if (
-            this.$selection.hasParent(/*parentId*/ this.$selection.hoverId) ===
+            this.$context.selection.hasParent(/*parentId*/ this.$context.selection.hoverId) ===
             false
           ) {
-            this.$selection.selectHoverItem();
+            this.$context.selection.selectHoverItem();
           }
         }
 
@@ -222,8 +222,8 @@ export default class HTMLRenderView extends EditorElement {
       }
 
       // hover item 이 있으면 클릭 대상이 있다고 간주한다.
-      if (this.$selection.hasHoverItem()) {
-        this.$selection.selectHoverItem();
+      if (this.$context.selection.hasHoverItem()) {
+        this.$context.selection.selectHoverItem();
         return true;
       }
     }
@@ -300,11 +300,11 @@ export default class HTMLRenderView extends EditorElement {
       return;
     }
 
-    let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint);
+    let isInSelectedArea = this.$context.selection.hasPoint(this.initMousePoint);
     const $target = Dom.create(e.target);
 
     if ($target.hasClass("canvas-view")) {
-      this.$selection.select();
+      this.$context.selection.select();
       this.initializeDragSelection();
       this.emit("history.refreshSelection");
 
@@ -320,15 +320,15 @@ export default class HTMLRenderView extends EditorElement {
       if (isInSelectedArea) {
         // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다.
       } else {
-        if (this.$selection.check({ id }) === false) {
+        if (this.$context.selection.check({ id }) === false) {
           // 선택된게 없으면 id 로 선택
-          this.$selection.selectByGroup(id);
+          this.$context.selection.selectByGroup(id);
         }
       }
 
-      if (this.$selection.isEmpty === false) {
+      if (this.$context.selection.isEmpty === false) {
         // 선택된 모든 객체 카피하기
-        this.$selection.selectAfterCopy();
+        this.$context.selection.selectAfterCopy();
         this.refreshAllCanvas();
         this.emit("refreshLayerTreeView");
 
@@ -341,22 +341,22 @@ export default class HTMLRenderView extends EditorElement {
       } else {
         // shift key 는 selection 을 토글한다.
         if (e.shiftKey) {
-          this.$selection.toggleById(id);
+          this.$context.selection.toggleById(id);
         } else {
           // 선택이 안되어 있으면 선택
-          if (this.$selection.check({ id }) === false) {
+          if (this.$context.selection.check({ id }) === false) {
             const current = this.$model.get(id);
 
             if (current && current.is("artboard") && current.hasChildren()) {
               // NOOP
             } else if (current.hasChildren()) {
               // 자식이 있으면 그대로 드래그 할 수 있도록 맞춘다.
-              this.$selection.selectByGroup(id);
+              this.$context.selection.selectByGroup(id);
             } else {
               // group 선택을 한다.
               // group 선택은 현재 선택된 객체가 속한 그룹의 최상의 부모를 선택하게 한다.
               // 이 때 artboard 가 최상위이면 현재 객체를 그대로 선택한다.
-              this.$selection.selectByGroup(id);
+              this.$context.selection.selectByGroup(id);
             }
           }
         }
@@ -368,8 +368,8 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
 
     this.emit("startGhostToolView");
 
@@ -391,7 +391,7 @@ export default class HTMLRenderView extends EditorElement {
     this.emit("moveGhostToolView");
 
     // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다.
-    if (this.$selection.isLayoutItem) {
+    if (this.$context.selection.isLayoutItem) {
       return;
     }
 
@@ -405,20 +405,20 @@ export default class HTMLRenderView extends EditorElement {
     // 마우스 위치에 따라 root 를 어디로 할지 정의 해야함
     // 레이아웃도 있기 때문에 구조를 다시 맞춰야 함 .
     if (
-      this.$selection.changeInLayoutArea(
+      this.$context.selection.changeInLayoutArea(
         this.$viewport.applyVertexInverse(targetMousePoint)
       )
     ) {
       this.initMousePoint = targetMousePoint;
-      this.$selection.reselect();
-      this.$snapManager.clear();
+      this.$context.selection.reselect();
+      this.$context.snapManager.clear();
       this.refreshAllCanvas();
 
       // ArtBoard 변경 이후에 LayerTreeView 업데이트
       this.emit("refreshLayerTreeView");
     }
 
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y"));
   }
 
   /**
@@ -436,8 +436,8 @@ export default class HTMLRenderView extends EditorElement {
    */
   moveTo(dist) {
     //////  snap 체크 하기
-    const snap = this.$snapManager.check(
-      this.$selection.cachedRectVerties.map((v) => {
+    const snap = this.$context.snapManager.check(
+      this.$context.selection.cachedRectVerties.map((v) => {
         return vec3.add([], v, dist);
       }),
       this.$viewport.scale > 5 ? 0 : 3 // 확대 영역이 크면 snap 포인트를 사용하지 않는다.
@@ -446,7 +446,7 @@ export default class HTMLRenderView extends EditorElement {
     const localDist = vec3.add([], snap, dist);
 
     const result = {};
-    this.$selection.cachedItemMatrices.forEach((it) => {
+    this.$context.selection.cachedItemMatrices.forEach((it) => {
       // newVerties 에 실제 움직인 좌표로 넣고
       const oldVertex = it.verties[4];
       const newVertex = vec3.add([], oldVertex, localDist);
@@ -461,7 +461,7 @@ export default class HTMLRenderView extends EditorElement {
         vec3.transformMat4([], oldVertex, it.parentMatrixInverse)
       );
 
-      if (this.$selection.isOne) {
+      if (this.$context.selection.isOne) {
         result[it.id] = {
           x: Math.floor(it.x + newDist[0]), // 1px 단위로 위치 설정
           y: Math.floor(it.y + newDist[1]),
@@ -475,7 +475,7 @@ export default class HTMLRenderView extends EditorElement {
       }
     });
 
-    this.$selection.reset(result);
+    this.$context.selection.reset(result);
   }
 
   calculateEndedElement(dx, dy) {
@@ -495,13 +495,13 @@ export default class HTMLRenderView extends EditorElement {
     if (newDist < 1) {
       // NOOP
     } else {
-      this.$selection.reselect();
-      this.$snapManager.clear();
+      this.$context.selection.reselect();
+      this.$context.snapManager.clear();
       // this.emit('removeGuideLine');
       this.command(
         "setAttributeForMulti",
         "move item",
-        this.$selection.pack("x", "y")
+        this.$context.selection.pack("x", "y")
       );
 
       this.nextTick(() => {
@@ -520,7 +520,7 @@ export default class HTMLRenderView extends EditorElement {
     if (obj) {
       this.updateElement(obj);
     } else {
-      this.$selection.items.forEach((current) => {
+      this.$context.selection.items.forEach((current) => {
         this.updateElement(current);
       });
     }
@@ -542,7 +542,7 @@ export default class HTMLRenderView extends EditorElement {
   refreshAllCanvas() {
     this.clearElementAll();
 
-    const project = this.$selection.currentProject;
+    const project = this.$context.selection.currentProject;
 
     const html = this.$editor.html.render(project, null, this.$editor) || "";
 
@@ -570,7 +570,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   refreshAllElementBoundSize() {
-    var selectionList = this.$selection.items.map((it) => {
+    var selectionList = this.$context.selection.items.map((it) => {
       if (it.is("artboard")) {
         return it;
       }
@@ -588,7 +588,7 @@ export default class HTMLRenderView extends EditorElement {
       // FIXME: selection 이 없는 경우
       // FIXME: 모든 요소에 대해 bounding size 를 다시 맞추기 때문에
       // FIXME: 성능상의 문제가 될수도 있음.
-      this.$selection.currentProject.artboards.forEach((it) => {
+      this.$context.selection.currentProject.artboards.forEach((it) => {
         this.refreshElementBoundSize(it);
       });
     }
@@ -602,7 +602,7 @@ export default class HTMLRenderView extends EditorElement {
 
     this.refreshSelectionStyleView(item);
 
-    if (this.$selection.check(item)) {
+    if (this.$context.selection.check(item)) {
       this.emit("refreshSelectionTool");
     }
 

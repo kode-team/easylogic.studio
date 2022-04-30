@@ -40,7 +40,7 @@ export class BaseStore {
   }
 
   debug() {
-    // if (this.editor && this.editor.config.get('debug')) {
+    // if (this.editor && this.editor.context.config.get('debug')) {
     //   console.debug(...args);
     // }
   }

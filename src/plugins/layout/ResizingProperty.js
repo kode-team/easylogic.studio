@@ -34,7 +34,7 @@ export default class ResizingProperty extends BaseProperty {
   }
 
   [LOAD("$resizingModeInfo") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     const h = current.resizingHorizontal || ResizingMode.FIXED;
     const v = current.resizingVertical || ResizingMode.FIXED;
@@ -81,7 +81,7 @@ export default class ResizingProperty extends BaseProperty {
   }
 
   [LOAD("$resizingModeInfoInput")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     // const h = current.resizingHorizontal;
     // const v = current.reisizngModeVertical;
@@ -113,7 +113,7 @@ export default class ResizingProperty extends BaseProperty {
   [CLICK("$resizingModeInfo [data-key]")](e) {
     const key = e.$dt.data("key");
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current[key] === ResizingMode.FIXED) {
       this.trigger("changeResizingMode", key, ResizingMode.HUG_CONTENT);
@@ -126,7 +126,7 @@ export default class ResizingProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "apply constraints",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );
@@ -138,7 +138,7 @@ export default class ResizingProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
 
       return current && current.hasLayout();
     });

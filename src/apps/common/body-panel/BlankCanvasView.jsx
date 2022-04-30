@@ -61,12 +61,12 @@ export default class BlankCanvasView extends EditorElement {
   // space 키가 눌러져 있을 때만 실행한다.
   checkSpace() {
     // hand 툴이 on 되어 있으면 항상 드래그 모드가 된다.
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$context.config.get("set.tool.hand")) {
       return true;
     }
 
-    return this.$keyboardManager.check(
-      this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space)
+    return this.$context.keyboardManager.check(
+      this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space)
     );
   }
 
@@ -94,18 +94,18 @@ export default class BlankCanvasView extends EditorElement {
   movePan(dx, dy) {
     this.emit("refreshCursor", "grabbing");
     const currentDist = vec3.fromValues(dx, dy, 0);
-    this.$viewport.pan(
+    this.$context.viewport.pan(
       ...vec3.transformMat4(
         [],
         vec3.subtract([], this.lastDist, currentDist),
-        this.$viewport.scaleMatrixInverse
+        this.$context.viewport.scaleMatrixInverse
       )
     );
     this.lastDist = currentDist;
   }
 
   refreshCursor() {
-    if (this.$config.get("set.tool.hand") === false) {
+    if (this.$context.config.get("set.tool.hand") === false) {
       this.emit("refreshCursor", "auto");
     } else {
       this.emit("refreshCursor", "grab");
@@ -117,7 +117,7 @@ export default class BlankCanvasView extends EditorElement {
   }
 
   async [BIND("$container")]() {
-    const cursor = await this.$editor.cursorManager.load(
+    const cursor = await this.$context.cursorManager.load(
       this.state.cursor,
       ...(this.state.cursorArgs || [])
     );
@@ -130,7 +130,7 @@ export default class BlankCanvasView extends EditorElement {
 
   [DRAGOVER("$lock") + PREVENT]() {}
   [DROP("$lock") + PREVENT](e) {
-    const newCenter = this.$viewport.getWorldPosition(e);
+    const newCenter = this.$context.viewport.getWorldPosition(e);
 
     if (e.dataTransfer.getData("text/asset")) {
       this.emit("drop.asset", {
@@ -170,7 +170,7 @@ export default class BlankCanvasView extends EditorElement {
 
     if (!this.state.gesture) {
       if (e.ctrlKey) {
-        this.$viewport.setMousePoint(e.clientX, e.clientY);
+        this.$context.viewport.setMousePoint(e.clientX, e.clientY);
       }
 
       this.emit("startGesture");
@@ -181,12 +181,12 @@ export default class BlankCanvasView extends EditorElement {
 
         const zoomFactor = 1 - (2.5 * dy) / 100;
 
-        this.$viewport.zoom(zoomFactor);
+        this.$context.viewport.zoom(zoomFactor);
       } else {
         const newDx = -2.5 * dx;
         const newDy = -2.5 * dy;
 
-        this.$viewport.pan(
+        this.$context.viewport.pan(
           -newDx / this.$viewport.scale,
           -newDy / this.$viewport.scale,
           0
@@ -202,7 +202,7 @@ export default class BlankCanvasView extends EditorElement {
   }
 
   refreshCanvasSize() {
-    this.$viewport.refreshCanvasSize(this.refs.$lock.rect());
+    this.$context.viewport.refreshCanvasSize(this.refs.$lock.rect());
   }
 
   [SUBSCRIBE("resize.window", "resizeCanvas")]() {

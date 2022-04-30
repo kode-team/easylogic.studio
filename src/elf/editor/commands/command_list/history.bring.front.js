@@ -1,7 +1,7 @@
 export default {
   command: "history.bring.front",
   description: "bring front",
-  execute: function (editor, message, layer = editor.selection.current) {
+  execute: function (editor, message, layer = editor.context.selection.current) {
     // 다음으로 보내기
     const currentLayer = editor.get(layer);
     const lastValues = currentLayer.hierachy;
@@ -29,14 +29,14 @@ export default {
     });
 
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentValues],
         undoValues: [lastValues],
       });
     });
 
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
 

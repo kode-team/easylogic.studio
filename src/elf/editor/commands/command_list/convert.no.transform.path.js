@@ -4,7 +4,7 @@ export default {
   description:
     "remove transform(rotate, translate, scale) inforation in path layer",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 
@@ -21,7 +21,7 @@ export default {
       editor.command(
         "setAttributeForMulti",
         "remove transform for path",
-        editor.selection.packByValue({
+        editor.context.selection.packByValue({
           ...newRect,
           rotate: 0,
           d: childPath.d,
@@ -38,7 +38,7 @@ export default {
       editor.command(
         "setAttributeForMulti",
         "remove transform for path",
-        editor.selection.packByValue({
+        editor.context.selection.packByValue({
           ...newRect,
           rotate: 0,
           d: childPath.d,

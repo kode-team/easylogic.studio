@@ -146,7 +146,7 @@ export class BaseProperty extends EditorElement {
   onShowTitle() {}
 
   refreshShowIsNot(type = "", isRefresh = true) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       if (type.includes(current.itemType)) {
         this.hide();
@@ -161,7 +161,7 @@ export class BaseProperty extends EditorElement {
   }
 
   refreshShow(type, isRefresh = true) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       if (isFunction(type) && type()) {
         this.show();
@@ -220,12 +220,12 @@ export class BaseProperty extends EditorElement {
   }
 
   checkShow() {
-    if (!this.$selection.current) {
+    if (!this.$context.selection.current) {
       this.hide();
       return false;
     }
 
-    if (this.$selection.current.editable(this.editableProperty)) {
+    if (this.$context.selection.current.editable(this.editableProperty)) {
       this.show();
       return true;
     } else {

@@ -63,8 +63,16 @@ const SelectionToolEvent = class extends EditorElement {
   }
 
   [SUBSCRIBE("updateViewport") + IF("checkViewMode")]() {
-    if (this.$selection.isOne) {
+    if (this.$context.selection.isOne) {
       this.initSelectionTool();
+    }
+  }
+
+  [SUBSCRIBE('updateModeView')] () {
+    if (this.checkViewMode()) {
+      this.initSelectionTool();
+    } else {
+      this.hide()
     }
   }
 };
@@ -91,19 +99,19 @@ export default class SelectionToolView extends SelectionToolEvent {
     this.state.moveType = "rotate";
     this.initMousePoint = this.$viewport.getWorldPosition(e);
 
-    // this.$selection.doCache();
+    // this.$context.selection.doCache();
 
-    this.$selection.reselect();
-    this.verties = clone(this.$selection.verties);
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.verties = clone(this.$context.selection.verties);
+    this.$context.snapManager.clear();
     this.rotateTargetNumber = +e.$dt.attr("data-number");
     this.refreshRotatePointerIcon();
     this.state.dragging = true;
     this.state.isRotate = true;
-    this.initAngle = this.$selection.current.angle;
+    this.initAngle = this.$context.selection.current.angle;
 
     // drag 시작 이벤트 설정
-    this.$config.set("set.move.control.point", true);
+    // this.$config.set("set.move.control.point", true);
   }
 
   rotateVertex() {
@@ -119,7 +127,7 @@ export default class SelectionToolView extends SelectionToolEvent {
       calculateAngleForVec3(targetRotatePointer, this.verties[4], distVector)
     );
 
-    const instance = this.$selection.current;
+    const instance = this.$context.selection.current;
     let newAngle = this.initAngle + distAngle;
 
     if (instance) {
@@ -132,21 +140,21 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     this.state.dragging = true;
     // this.renderPointers();
-    this.emit("setAttributeForMulti", this.$selection.pack("angle"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("angle"));
   }
 
   rotateEndVertex() {
     this.state.dragging = false;
     this.state.isRotate = false;
     this.emit("recoverCursor");
-    this.$config.set("set.move.control.point", false);
+    // this.$config.set("set.move.control.point", false);
     // 마지막 변경 시점 업데이트
     this.verties = null;
 
     this.command(
       "setAttributeForMulti",
       "change rotate",
-      this.$selection.pack("angle")
+      this.$context.selection.pack("angle")
     );
   }
 
@@ -208,16 +216,16 @@ export default class SelectionToolView extends SelectionToolEvent {
     this.state.moveType = direction;
     this.state.moveTarget = num;
 
-    this.$selection.reselect();
-    this.$snapManager.clear();
-    this.verties = this.$selection.verties;
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
+    this.verties = this.$context.selection.verties;
 
-    this.hasRotate = this.$selection.current.angle !== 0;
-    this.cachedCurrentItemMatrix = this.$selection.current.matrix;
+    this.hasRotate = this.$context.selection.current.angle !== 0;
+    this.cachedCurrentItemMatrix = this.$context.selection.current.matrix;
 
-    this.$config.set("set.move.control.point", true);
+    // this.$config.set("set.move.control.point", true);
 
-    this.$selection.startToCacheChildren();
+    this.$context.selection.startToCacheChildren();
   }
 
   calculateDistance(vertex, distVector, reverseMatrix) {
@@ -227,7 +235,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     // 2. dx, dy 만큼 옮긴 vertex 를 구한다.
     // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다
-    const snap = this.$snapManager.check([moveVertext]);
+    const snap = this.$context.snapManager.check([moveVertext]);
 
     const nextVertex = vec3.add([], moveVertext, snap);
 
@@ -688,14 +696,14 @@ export default class SelectionToolView extends SelectionToolEvent {
       this.moveBottomLeftVertex(distVector);
     }
 
-    this.$selection.recoverChildren();
-    // this.$selection.reselect();
+    this.$context.selection.recoverChildren();
+    // this.$context.selection.reselect();
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current.isInGrid()) {
       this.emit(
         "setAttributeForMulti",
-        this.$selection.pack(
+        this.$context.selection.pack(
           "x",
           "y",
           "angle",
@@ -712,7 +720,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     } else {
       this.emit(
         "setAttributeForMulti",
-        this.$selection.pack(
+        this.$context.selection.pack(
           "x",
           "y",
           "angle",
@@ -734,26 +742,26 @@ export default class SelectionToolView extends SelectionToolEvent {
    */
   updateGridArea() {
     return GridLayoutEngine.updateGridArea(
-      this.$selection.current,
-      this.$selection.gridInformation
+      this.$context.selection.current,
+      this.$context.selection.gridInformation
     );
   }
 
   moveEndVertex() {
     this.state.dragging = false;
     this.emit("recoverCursor");
-    this.$selection.reselect();
-    this.$config.set("set.move.control.point", false);
+    this.$context.selection.reselect();
+    // this.$config.set("set.move.control.point", false);
 
     this.nextTick(() => {
       // recoverChildren 을 통해서 부모에서 변경된 크기에 따라 자식을 다시 재배치 한다.
-      this.$selection.recoverChildren();
+      this.$context.selection.recoverChildren();
 
-      if (this.$selection.current.isInGrid()) {
+      if (this.$context.selection.current.isInGrid()) {
         this.command(
           "setAttributeForMulti",
           "move selection pointer",
-          this.$selection.pack(
+          this.$context.selection.pack(
             "x",
             "y",
             "angle",
@@ -771,7 +779,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.command(
           "setAttributeForMulti",
           "move selection pointer",
-          this.$selection.pack(
+          this.$context.selection.pack(
             "x",
             "y",
             "angle",
@@ -798,9 +806,9 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   initSelectionTool() {
-    if (this.$el.isShow() && this.$selection.isOne === false) {
+    if (this.$el.isShow() && this.$context.selection.isOne === false) {
       this.hide();
-    } else if (this.$el.isHide() && this.$selection.isOne) {
+    } else if (this.$el.isHide() && this.$context.selection.isOne) {
       this.show();
     }
 
@@ -826,14 +834,14 @@ export default class SelectionToolView extends SelectionToolEvent {
    */
   renderPointers() {
     if (
-      this.$selection.isEmpty ||
+      this.$context.selection.isEmpty ||
       this.$config.true("set.move.control.point")
     ) {
       this.refs.$pointerRect.empty();
       return;
     }
 
-    const verties = this.$selection.verties;
+    const verties = this.$context.selection.verties;
 
     if (vec3.dist(verties[0], verties[1]) === 0) {
       return;
@@ -898,7 +906,7 @@ export default class SelectionToolView extends SelectionToolEvent {
   createPointerRect(pointers, rotatePointer = undefined) {
     if (pointers.length === 0) return "";
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const isArtBoard = current && current.is("artboard");
     let line = "";
     if (!isArtBoard && rotatePointer) {
@@ -970,8 +978,8 @@ export default class SelectionToolView extends SelectionToolEvent {
       item.data.start,
       1 + 16 / vec3.dist(item.data.start, item.data.end)
     );
-    const width = this.$selection.current.width;
-    const height = this.$selection.current.height;
+    const width = this.$context.selection.current.width;
+    const height = this.$context.selection.current.height;
     const diff = vec3.subtract([], item.data.start, item.data.end);
     const angle = calculateAngle360(diff[0], diff[1]) + 90;
 
@@ -984,12 +992,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         : `${round(width, 100)} x ${round(height, 100)}`;
 
     if (this.state.isRotate) {
-      text = `${round(this.$selection.current.angle, 100)}°`;
+      text = `${round(this.$context.selection.current.angle, 100)}°`;
     }
 
     return /*html*/ `
             <div 
-                data-layout="${this.$selection.current.layout}"
+                data-layout="${this.$context.selection.current.layout}"
                 class='size-pointer' 
                 style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
                ${text}
@@ -998,7 +1006,7 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   createVisiblePath() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current) return "";
 
     if (!current.isBooleanItem) {
@@ -1025,7 +1033,7 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   createRenderPointers(pointers, selectionPointers) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current && current.is("text")) {
       if (current.width === 0 && current.height === 0) {
@@ -1106,7 +1114,7 @@ export default class SelectionToolView extends SelectionToolEvent {
       return false;
     }
 
-    if (this.state.show && this.$selection.isOne) {
+    if (this.state.show && this.$context.selection.isOne) {
       return true;
     }
 

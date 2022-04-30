@@ -37,9 +37,9 @@ export default class GhostToolView extends EditorElement {
   }
 
   [SUBSCRIBE("startGhostToolView")]() {
-    const screenVerties = this.$selection.verties;
+    const screenVerties = this.$context.selection.verties;
 
-    this.isLayoutItem = this.$selection.isLayoutItem;
+    this.isLayoutItem = this.$context.selection.isLayoutItem;
 
     // layer 의 월드 좌표
     this.verties = clone(screenVerties);
@@ -52,7 +52,7 @@ export default class GhostToolView extends EditorElement {
     this.initMousePoint = this.$viewport.getWorldPosition();
 
     // 선택되지 않은 리스트들 중에
-    this.filteredLayers = this.$selection.notSelectedLayers;
+    this.filteredLayers = this.$context.selection.notSelectedLayers;
 
     // container 리스트 구하기, artboard 나 layout 을 가지고 있는 것들이 대상
     this.containerList = this.filteredLayers
@@ -74,8 +74,8 @@ export default class GhostToolView extends EditorElement {
 
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
 
-    const filteredLayers = this.$selection.filteredLayers.filter(
-      (it) => this.$selection.check(it) === false
+    const filteredLayers = this.$context.selection.filteredLayers.filter(
+      (it) => this.$context.selection.check(it) === false
     );
 
     // drop target 아이템
@@ -87,7 +87,7 @@ export default class GhostToolView extends EditorElement {
     this.targetItem = filteredLayers[0];
 
     if (this.targetItem) {
-      const currentParent = this.$selection.current?.parent;
+      const currentParent = this.$context.selection.current?.parent;
 
       if (
         currentParent.isNot("project") &&
@@ -95,7 +95,7 @@ export default class GhostToolView extends EditorElement {
       ) {
         // 내가 움직이는 영역이 grid layout 인 경우
         // 나의 부모로 고정시킨다.
-        this.targetItem = this.$selection.current.parent;
+        this.targetItem = this.$context.selection.current.parent;
       } else {
         // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
         if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
@@ -109,7 +109,7 @@ export default class GhostToolView extends EditorElement {
         }
       }
 
-      this.$selection.updateDragTargetItem(this.targetItem);
+      this.$context.selection.updateDragTargetItem(this.targetItem);
 
       // target 전체 영역 위치
       this.targetOriginPosition = this.$viewport.applyVerties(
@@ -380,7 +380,7 @@ export default class GhostToolView extends EditorElement {
   }
 
   [LOAD("$view") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!this.ghostVerties || !current) {
       return <svg></svg>;
@@ -427,7 +427,7 @@ export default class GhostToolView extends EditorElement {
     this.targetParentPosition = undefined;
 
     // targetItem 초기화
-    this.$selection.updateDragTargetItem(this.targetItem);
+    this.$context.selection.updateDragTargetItem(this.targetItem);
   }
 
   getDist() {
@@ -443,7 +443,7 @@ export default class GhostToolView extends EditorElement {
 
   // 백그라운드 영역(world)에 객체 계층 이동
   insertToBackground() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const newDist = this.getDist();
 
     if (current.isLayoutItem() === false) return;
@@ -452,7 +452,7 @@ export default class GhostToolView extends EditorElement {
       "moveLayerToTarget",
       "change target with move",
       current,
-      this.$selection.currentProject,
+      this.$context.selection.currentProject,
       newDist
     );
 
@@ -461,14 +461,14 @@ export default class GhostToolView extends EditorElement {
     // // absolute move
     // current.absoluteMove(newDist);
 
-    // this.$selection.currentProject.appendChild(current);
+    // this.$context.selection.currentProject.appendChild(current);
 
     // this.command(
     //   "setAttributeForMulti",
     //   "change move",
-    //   this.$selection.pack("x", "y")
+    //   this.$context.selection.pack("x", "y")
     // );
-    // this.command("setAttributeForMulti", "change move", this.$selection.packByIds([lastParent.id], "children"));
+    // this.command("setAttributeForMulti", "change move", this.$context.selection.packByIds([lastParent.id], "children"));
 
     // this.emit("refreshAllCanvas");
   }
@@ -515,7 +515,7 @@ export default class GhostToolView extends EditorElement {
 
   // target 의 순서에 맞게 들어가기
   insertToLayoutItem() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const newDist = this.getDist();
 
     if (this.targetParent.hasLayout()) {
@@ -539,9 +539,9 @@ export default class GhostToolView extends EditorElement {
   }
 
   insertToGridItem() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
-    const { info, items } = this.$selection.gridInformation || { items: [] };
+    const { info, items } = this.$context.selection.gridInformation || { items: [] };
 
     // ghost 의 world좌표를 구함
     const currentVerties = this.ghostVerties.filter((_, index) => index < 4);
@@ -574,7 +574,7 @@ export default class GhostToolView extends EditorElement {
       this.command(
         "setAttributeForMulti",
         "change grid item",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           "grid-column-start": columnStart,
           "grid-column-end": columnEnd,
           "grid-row-start": rowStart,
@@ -630,7 +630,7 @@ export default class GhostToolView extends EditorElement {
    *
    */
   updateLayer() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     // 선택된 객체가 없으면 동작하지 않는다.
     if (!current) return;
@@ -656,7 +656,7 @@ export default class GhostToolView extends EditorElement {
 
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {
-      const isCtrl = this.$keyboardManager.isCtrl();
+      const isCtrl = this.$context.keyboardManager.isCtrl();
 
       // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행
       if (
@@ -679,7 +679,7 @@ export default class GhostToolView extends EditorElement {
           // targetItem 은 어디를 봐야할까?
 
           // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
-          const { info } = this.$selection.gridInformation || {
+          const { info } = this.$context.selection.gridInformation || {
             items: [],
           };
 

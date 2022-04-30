@@ -39,18 +39,18 @@ export class SnapManager {
   }
 
   get dist() {
-    return this.editor.config.get("snap.distance") || this.snapDistance;
+    return this.editor.context.config.get("snap.distance") || this.snapDistance;
   }
 
   get gridSize() {
-    return this.editor.config.get("snap.grid") || 50;
+    return this.editor.context.config.get("snap.grid") || 50;
   }
 
   /**
    * 캐쉬된 item들의 matrix 정보를 삭제한다.
    */
   clear() {
-    this.snapTargetLayers = this.editor.selection.snapTargetLayers;
+    this.snapTargetLayers = this.editor.context.selection.snapTargetLayers;
   }
 
   convertMatrix(item) {
@@ -87,7 +87,7 @@ export class SnapManager {
    */
   getSnapPoints() {
     const points = [];
-    this.editor.selection.snapTargetLayersWithSelection.forEach((it) => {
+    this.editor.context.selection.snapTargetLayersWithSelection.forEach((it) => {
       points.push.apply(points, this.convertGuideAndPathMatrix(it));
     });
 

@@ -12,6 +12,6 @@ export default function addCubeBox(editor) {
 
   mesh.position.y = 0.5;
 
-  editor.sceneManager.addObject(mesh);
-  editor.sceneManager.select(mesh);
+  editor.context.sceneManager.addObject(mesh);
+  editor.context.sceneManager.select(mesh);
 }

@@ -6,6 +6,6 @@ export default function addProject(editor, obj = {}) {
     ...obj,
   });
 
-  editor.selection.selectProject(project);
+  editor.context.selection.selectProject(project);
   _doForceRefreshSelection(editor);
 }

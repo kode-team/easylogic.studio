@@ -12,7 +12,7 @@ export default class ClippathEditorView extends ClippathEllipseEditorView {
   }
 
   [LOAD("$el") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) {
       return "";
@@ -48,10 +48,10 @@ export default class ClippathEditorView extends ClippathEllipseEditorView {
   checkClipPath() {
     if (this.$el.isShow() === false) return false;
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return false;
-    return this.$selection.current.hasChangedField(
+    return this.$context.selection.current.hasChangedField(
       "clip-path",
       "angle",
       "x",

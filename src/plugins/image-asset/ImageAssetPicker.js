@@ -18,7 +18,7 @@ export default class ImageAssetPicker extends EditorElement {
   }
 
   [LOAD("$imageList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { images: [] };
+    var current = this.$context.selection.currentProject || { images: [] };
 
     var images = current.images;
     var results = images.map((image) => {

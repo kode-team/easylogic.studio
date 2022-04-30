@@ -12,7 +12,7 @@ export default {
     editor.command(
       "setAttributeForMulti",
       "change clip-path",
-      editor.selection.packByValue({
+      editor.context.selection.packByValue({
         "clip-path": `path(${pathObject.d})`,
       })
     );

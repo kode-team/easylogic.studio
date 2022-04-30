@@ -46,7 +46,7 @@ const TOOL_SIZE = 20;
 
 class FillBaseEditor extends EditorElement {
   initializeData() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.currentMatrix = current.matrix;
     this.state.imageResult = current.createFragmentMatrix(this.state.key);
@@ -92,7 +92,7 @@ class FillTimingStepEditor extends FillBaseEditor {
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
       })
     );
@@ -124,7 +124,7 @@ class FillTimingStepEditor extends FillBaseEditor {
           this.command(
             "setAttributeForMulti",
             `change ${this.state.key} fragment`,
-            this.$selection.packByValue({
+            this.$context.selection.packByValue({
               [this.state.key]: `${this.state.imageResult.image}`,
             })
           );
@@ -153,7 +153,7 @@ class FillTimingStepEditor extends FillBaseEditor {
               this.command(
                 "setAttributeForMulti",
                 `change ${this.state.key} fragment`,
-                this.$selection.packByValue({
+                this.$context.selection.packByValue({
                   [this.state.key]: `${this.state.imageResult.image}`,
                 })
               );
@@ -182,7 +182,7 @@ class FillTimingStepEditor extends FillBaseEditor {
               this.command(
                 "setAttributeForMulti",
                 `change ${this.state.key} fragment`,
-                this.$selection.packByValue({
+                this.$context.selection.packByValue({
                   [this.state.key]: `${this.state.imageResult.image}`,
                 })
               );
@@ -196,7 +196,7 @@ class FillTimingStepEditor extends FillBaseEditor {
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
       })
     );
@@ -383,7 +383,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
       })
     );
@@ -556,7 +556,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
       })
     );
@@ -637,7 +637,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${image}`,
       })
     );
@@ -742,7 +742,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${nextImage}`,
       })
     );
@@ -768,7 +768,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
       this.command(
         "setAttributeForMulti",
         "change background image",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           [this.state.key]: `${image}`,
         })
       );
@@ -786,7 +786,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.command(
       "setAttributeForMulti",
       "change background image",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [this.state.key]: `${image}`,
       })
     );
@@ -873,9 +873,9 @@ export default class FillEditorView extends FillColorstepEditor {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
+    if (this.$context.selection.current) {
       if (
-        this.$selection.hasChangedField(
+        this.$context.selection.hasChangedField(
           "x",
           "y",
           "width",
@@ -1266,7 +1266,7 @@ export default class FillEditorView extends FillColorstepEditor {
   [LOAD("$el") + DOMDIFF]() {
     if (!this.state.isShow) return "";
 
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 

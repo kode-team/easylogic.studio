@@ -4,9 +4,9 @@ export default {
   command: "history.group.item",
   description: "History Group Item",
   execute: function (editor, message = "selection") {
-    const currentValues = editor.selection.ids;
-    const projectId = editor.selection.currentProject?.id;
-    const undoValues = editor.history.selectedIds;
+    const currentValues = editor.context.selection.ids;
+    const projectId = editor.context.selection.currentProject?.id;
+    const undoValues = editor.context.history.selectedIds;
 
     // 이전 선택과 같으면 선택 히스토리는 쌓지 않는다.
     if (isArrayEquals(currentValues, undoValues)) {
@@ -18,7 +18,7 @@ export default {
     // group 을 구성할 rect를 전체 영역으로 하나 만들기
     // rect 에 items 모두 넣기
     // rect 선택하기
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: {
         ids: currentValues,
         projectId: projectId,

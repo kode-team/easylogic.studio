@@ -37,7 +37,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["perspective-origin"] || "";
 
     return createComponent("PerspectiveOriginEditor", {
@@ -59,7 +59,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change perspective origin",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "perspective-origin": value,
       })
     );

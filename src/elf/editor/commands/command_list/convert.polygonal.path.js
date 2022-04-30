@@ -3,14 +3,14 @@ export default {
   command: "convert.polygonal.path",
   description: "convert path to polygonal path",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 
     editor.command(
       "setAttributeForMulti",
       "polygonal path string",
-      editor.selection.packByValue(
+      editor.context.selection.packByValue(
         current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)
       )
     );

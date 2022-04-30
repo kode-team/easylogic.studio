@@ -58,7 +58,7 @@ export default class ColorPickerPopup extends BasePopup {
   }
 
   [LOAD("$projectColors")]() {
-    var project = this.$selection.currentProject || { colors: [] };
+    var project = this.$context.selection.currentProject || { colors: [] };
 
     var colors = project.colors;
 

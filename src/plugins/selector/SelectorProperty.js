@@ -79,7 +79,7 @@ export default class SelectorProperty extends BaseProperty {
   [CLICK("$selectorList .selector-item .name")](e) {
     var index = +e.$dt.closest("selector-item").attr("data-index");
 
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     this.viewSelectorPicker(index);
@@ -87,7 +87,7 @@ export default class SelectorProperty extends BaseProperty {
 
   [CLICK("$selectorList .selector-item .del") + PREVENT + STOP](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     current.removeSelector(removeIndex);
@@ -108,7 +108,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [LOAD("$selectorList")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -136,7 +136,7 @@ export default class SelectorProperty extends BaseProperty {
 
   [DROP("$selectorList .selector-item") + PREVENT](e) {
     var targetIndex = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     current.sortSelector(this.startIndex, targetIndex);
@@ -147,7 +147,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [CLICK("$add")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       current.createSelector({
         selector: this.children.$select.getValue(),
@@ -166,7 +166,7 @@ export default class SelectorProperty extends BaseProperty {
 
     this.selectedIndex = +index;
     this.selectItem(this.selectedIndex, true);
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
 
     if (!this.current) return;
     this.currentSelector = this.current.selectors[this.selectedIndex];
@@ -191,7 +191,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   viewSelectorPropertyPopup(position) {
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
 
     if (!this.current) return;
     this.currentSelector = this.current.selectors[this.selectedIndex];
@@ -209,7 +209,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("changeSelectorPopup")](data) {
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
 
     if (!this.current) return;
     this.currentselector = this.current.selectors[this.selectedIndex];

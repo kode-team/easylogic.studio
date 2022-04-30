@@ -50,7 +50,7 @@ export default class ExportWindow extends BaseWindow {
   }
 
   refresh() {
-    var project = this.$selection.currentProject || { layers: [] };
+    var project = this.$context.selection.currentProject || { layers: [] };
 
     // css code
     var css = `

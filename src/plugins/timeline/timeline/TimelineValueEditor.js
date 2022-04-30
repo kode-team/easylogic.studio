@@ -39,7 +39,7 @@ export default class TimelineValueEditor extends EditorElement {
   }
 
   refresh() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     var code = "00:00:00:00";
     if (project) {
       var timeline = project.getSelectedTimeline();
@@ -140,7 +140,7 @@ export default class TimelineValueEditor extends EditorElement {
   [KEYUP("$offsetTime") + ENTER + IF("checkNumberOrTimecode") + PREVENT]() {
     var frame = this.refs.$offsetTime.value;
 
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       var timeline = project.getSelectedTimeline();
 
@@ -167,7 +167,7 @@ export default class TimelineValueEditor extends EditorElement {
   }
 
   [CLICK("$seek")]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.seek(this.refs.$offsetTime.value, (it) => {
@@ -206,7 +206,7 @@ export default class TimelineValueEditor extends EditorElement {
   }
 
   [SUBSCRIBE("refreshPropertyValue")]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       var selectedLayer = this.$model.get(this.state.layerId);
 

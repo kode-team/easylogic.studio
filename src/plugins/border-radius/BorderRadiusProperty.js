@@ -19,7 +19,7 @@ export default class BorderRadiusProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["border-radius"] || "";
 
     return createComponent("BorderRadiusEditor", {
@@ -41,7 +41,7 @@ export default class BorderRadiusProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change border radius",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "border-radius": value,
       })
     );

@@ -38,7 +38,7 @@ export default class TextShadowProperty extends BaseProperty {
   }
 
   [LOAD("$shadowList")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
       key: "text-shadow",
@@ -47,7 +47,7 @@ export default class TextShadowProperty extends BaseProperty {
         this.command(
           "setAttributeForMulti",
           "change text shadow",
-          this.$selection.packByValue({
+          this.$context.selection.packByValue({
             [key]: value,
           })
         );

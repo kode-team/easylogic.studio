@@ -140,7 +140,7 @@ export default class FilterEditor extends EditorElement {
   }
 
   getSVGFilterList() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     var arr = [];
 
     if (current) {
@@ -159,7 +159,7 @@ export default class FilterEditor extends EditorElement {
     if (filter.type === "svg") {
       var options = "";
 
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
 
       if (current) {
         options = current.svgfilters.map((it) => {
@@ -261,7 +261,7 @@ export default class FilterEditor extends EditorElement {
 
   [DROP("$filterList .filter-item") + PREVENT](e) {
     var targetIndex = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     this.sortFilter(this.startIndex, targetIndex);
@@ -291,7 +291,7 @@ export default class FilterEditor extends EditorElement {
 
     var filter = this.state.filters[index];
 
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       var svgfilterIndex = current.getSVGFilterIndex(
@@ -302,12 +302,12 @@ export default class FilterEditor extends EditorElement {
   }
 
   [SUBSCRIBE("openSVGFilterPopup")](index) {
-    const current = this.$selection.current || { svgfilters: [] };
+    const current = this.$context.selection.current || { svgfilters: [] };
     const svgfilter = current.svgfilters[index];
 
     this.emit("showSVGFilterPopup", {
       changeEvent: (params) => {
-        var current = this.$selection.current;
+        var current = this.$context.selection.current;
 
         if (current) {
           current.setSVGFilterValue(params.index, {
@@ -317,7 +317,7 @@ export default class FilterEditor extends EditorElement {
           this.command(
             "setAttributeForMulti",
             "change filter",
-            this.$selection.pack("svgfilters", "filter")
+            this.$context.selection.pack("svgfilters", "filter")
           );
         }
       },
@@ -330,12 +330,12 @@ export default class FilterEditor extends EditorElement {
   [SUBSCRIBE("add")](filterType) {
     if (filterType === "svg") {
       // 비어있는 필터를 하나 생성하고
-      const index = this.$selection.current.createSVGFilter({
+      const index = this.$context.selection.current.createSVGFilter({
         filters: [],
       });
 
       // 필터 객체를 구한 다음에
-      const filter = this.$selection.current.svgfilters[index];
+      const filter = this.$context.selection.current.svgfilters[index];
 
       // 내부 리스트를 업데이트 해주고
       this.state.filters.push(

@@ -1,4 +1,4 @@
-import { createComponent } from "sapa";
+import { isArray, createComponent, createElementJsx } from "sapa";
 
 export class InjectManager {
   constructor(editor) {
@@ -54,14 +54,17 @@ export class InjectManager {
     });
 
     return list
-      .map((it) => {
-        const props = {};
+      .map((it, index) => {
+        if (isArray(it.class)) {
+          return createElementJsx(...it.class);
+        } else {
+          const props = {};
 
-        if (hasRef) {
-          props.ref = `$${it.refClass}`;
+          if (hasRef) {
+            props.ref = `$${it.refClass}-${index}`;
+          }
+          return createComponent(it.refClass, props);
         }
-
-        return createComponent(it.refClass, props);
       })
       .join("\n");
   }

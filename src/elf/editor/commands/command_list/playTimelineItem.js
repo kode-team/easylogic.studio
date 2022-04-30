@@ -11,7 +11,7 @@ export default {
     iterationCount = 1,
     direction = "normal"
   ) {
-    editor.selection.empty();
+    editor.context.selection.empty();
     editor.emit("refreshSelection");
 
     _currentProject(editor, (project, timeline) => {

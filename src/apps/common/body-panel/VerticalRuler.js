@@ -91,7 +91,7 @@ export default class VerticalRuler extends EditorElement {
   }
 
   makeRulerForCurrentArtboard() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -117,7 +117,7 @@ export default class VerticalRuler extends EditorElement {
   }
 
   makeRulerForCurrent() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -126,7 +126,7 @@ export default class VerticalRuler extends EditorElement {
     const height = this.state.rect.height;
 
     // current
-    const verties = this.$selection.verties;
+    const verties = this.$context.selection.verties;
     const yList = verties.map((it) => it[1]);
     const currentMinY = Math.min.apply(Math, yList);
     const currentMaxY = Math.max.apply(Math, yList);
@@ -254,7 +254,7 @@ export default class VerticalRuler extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current && current.changedRect) {
       this.refresh();

@@ -338,7 +338,7 @@ export default class TimelineKeyframeList extends EditorElement {
   }
 
   [LOAD("$keyframeList") + DOMDIFF]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (!project) return "";
 
@@ -370,7 +370,7 @@ export default class TimelineKeyframeList extends EditorElement {
 
   // eslint-disable-next-line getter-return
   get currentTimeline() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       return project.getSelectedTimeline();
@@ -448,7 +448,7 @@ export default class TimelineKeyframeList extends EditorElement {
       startX,
     };
 
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       this.offset = project.getTimelineKeyframeById(layerId, property, id);
       this.layerId = layerId;
@@ -508,7 +508,7 @@ export default class TimelineKeyframeList extends EditorElement {
       this.emit("refreshOffsetValue", this.offset);
       return;
     }
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
     if (project) {
       this.$timeline.each((item) => {
         project.sortTimelineKeyframe(item.layerId, item.property);

@@ -14,7 +14,7 @@ import { Length } from "elf/editor/unit/Length";
 
 export default class ClippathPolygonEditorView extends EditorElement {
   initializePolygon() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current = current;
     this.state.width = current.screenWidth;
@@ -65,7 +65,7 @@ export default class ClippathPolygonEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
@@ -94,7 +94,7 @@ export default class ClippathPolygonEditorView extends EditorElement {
     const newWorldPoints = this.$viewport.applyVertiesInverse(screenPoints);
 
     // relative 좌표로 바꾸고
-    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const inverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
 
     const newLocalPoints = vertiesMap(newWorldPoints, inverseMatrix);
 
@@ -109,7 +109,7 @@ export default class ClippathPolygonEditorView extends EditorElement {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   [POINTERSTART("$el .polygon .polygon-center") +
@@ -139,7 +139,7 @@ export default class ClippathPolygonEditorView extends EditorElement {
           this.command(
             "setAttributeForMulti",
             "change clippath",
-            this.$selection.packByValue(value)
+            this.$context.selection.packByValue(value)
           );
           break;
       }
@@ -151,12 +151,12 @@ export default class ClippathPolygonEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
   templatePolygon(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const points = ClipPath.parseStyleForPolygon(clippath.value).map(
       (point) => [
         point.x.toPx(current.screenWidth).value,

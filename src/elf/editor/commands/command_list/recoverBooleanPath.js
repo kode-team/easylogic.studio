@@ -7,7 +7,7 @@ export default {
    * @param {object} multiAttrs  아이디 기반의 속성 리스트  { [id] : { key: value }, .... }
    */
   execute: function (editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     let booleanContainer;
     if (current && current.isBooleanItem) {
@@ -53,7 +53,7 @@ export default {
       // 모든 값이 업데이트 되면 현재 값을 history 에 저장한다.
       // FIXME: booleanContainer 가 마지막에 변경이 되어야 최종 크기를 결정할 수 있다.
       const ids = [...layersCache.map((it) => it.item.id), booleanContainer.id];
-      const data = editor.selection.packByIds(ids, "x", "y", "width", "height");
+      const data = editor.context.selection.packByIds(ids, "x", "y", "width", "height");
 
       // booleanItem, 즉 자식이 그냥 변경되는 경우
       // 부모는 자식을 기준으로 변경사항만 적용하고

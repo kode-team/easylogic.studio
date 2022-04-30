@@ -205,7 +205,7 @@
     display: none;
     left: 0;
     position: absolute;
-    top: calc(100% + 2px + var(--elf--dropdown-menu-dy, 0px));
+    top: calc(100% + 5px);
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -217,7 +217,7 @@
   .dropdown-menu-list {
     > ul {
       // display: block;
-      top: calc(-11px + var(--elf--dropdown-menu-dy, 0px));
+      top: calc(-11px);
     }
   }
 
@@ -228,13 +228,13 @@
     height: 6px;
     left: 50%;
     transform: translateX(-50%) scale(1.5);
-    top: calc(100% - 8px + var(--elf--dropdown-menu-dy));
+    top: calc(100% - 6px);
     box-sizing: border-box;
     // background-color: var(--elf--background-color);
 
     svg {
       width: 8px;
-      height: 8px;
+      height: 6px;
       path,
       use {
         fill: var(--elf--background-color);

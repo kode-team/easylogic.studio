@@ -16,7 +16,7 @@ export default class KeyframeTimeGridView extends EditorElement {
   }
 
   currentTimeline() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       return project.getSelectedTimeline();

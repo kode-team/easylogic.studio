@@ -86,7 +86,7 @@ export default class FilterProperty extends BaseProperty {
   }
 
   getSVGFilterList() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var arr = [];
 
     if (current) {
@@ -103,7 +103,7 @@ export default class FilterProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current.filter;
 
     return createComponent("FilterEditor", {
@@ -118,7 +118,7 @@ export default class FilterProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change filter",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: filter,
       })
     );

@@ -29,7 +29,7 @@ export default class DragAreaView extends EditorElement {
     const mousePoint = this.$viewport.getWorldPosition(e);
 
     // select된 객체에 포지션이 있으면  움직일 수 있도록 한다.
-    if (this.$selection.hasPoint(mousePoint)) {
+    if (this.$context.selection.hasPoint(mousePoint)) {
       return true;
     }
   }
@@ -46,20 +46,20 @@ export default class DragAreaView extends EditorElement {
     }
 
     // space 키가 눌러져있을 때는 실행하지 않는다.
-    const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-    if (this.$keyboardManager.check(code)) {
+    const code = this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space);
+    if (this.$context.keyboardManager.check(code)) {
       return false;
     }
 
     // selection 영역에 속할 때
     const mousePoint = this.$viewport.getWorldPosition(e);
     this.inSelection = false;
-    if (this.$selection.hasPoint(mousePoint)) {
+    if (this.$context.selection.hasPoint(mousePoint)) {
       this.inSelection = true;
 
       // 선택한 영역이 artboard 이고, 하위 레이어가 있다면 움직이지 않는다.
-      if (this.$selection.current.is("artboard")) {
-        if (this.$selection.current.hasChildren()) {
+      if (this.$context.selection.current.is("artboard")) {
+        if (this.$context.selection.current.hasChildren()) {
           // drag 모드로 변신
           this.$config.init("set.dragarea.mode", true);
           this.$config.init("set.move.mode", false);
@@ -80,7 +80,7 @@ export default class DragAreaView extends EditorElement {
       }
     }
 
-    this.mouseOverItem = this.$selection.filteredLayers[0];
+    this.mouseOverItem = this.$context.selection.filteredLayers[0];
 
     if (this.mouseOverItem) {
       // move 모드로 변신
@@ -106,8 +106,8 @@ export default class DragAreaView extends EditorElement {
   }
 
   initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
 
     this.emit("refreshSelectionTool", true);
   }

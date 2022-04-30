@@ -83,8 +83,8 @@ export default class CanvasView extends EditorElement {
       return true;
     }
 
-    return this.$keyboardManager.check(
-      this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space)
+    return this.$context.keyboardManager.check(
+      this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space)
     );
   }
 
@@ -135,7 +135,7 @@ export default class CanvasView extends EditorElement {
   }
 
   async [BIND("$container")]() {
-    const cursor = await this.$editor.cursorManager.load(
+    const cursor = await this.$context.cursorManager.load(
       this.state.cursor,
       ...(this.state.cursorArgs || [])
     );

@@ -28,7 +28,7 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (
       current?.hasChangedField(
@@ -53,7 +53,7 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   [LOAD("$boxModelItem") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -112,7 +112,7 @@ export default class BoxModelProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change padding or margin",
-      this.$selection.packByValue(data)
+      this.$context.selection.packByValue(data)
     );
   }
 }

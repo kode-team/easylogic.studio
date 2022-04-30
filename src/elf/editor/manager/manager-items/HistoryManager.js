@@ -1,6 +1,7 @@
 export class HistoryManager {
   constructor(editor) {
     this.$editor = editor;
+    this.$context = editor.context;
 
     this.currentIndex = -1;
     this.undoHistories = [];
@@ -17,14 +18,14 @@ export class HistoryManager {
   }
 
   createCommand(commandString) {
-    return this.$editor.stateManager.isPointerUp
+    return this.$context.stateManager.isPointerUp
       ? `history.${commandString}`
       : commandString;
   }
 
   // eslint-disable-next-line no-unused-vars
   saveSelection(obj = {}) {
-    this.selection = this.$editor.selection.toCloneObject();
+    this.selection = this.$editor.context.selection.toCloneObject();
   }
 
   getUndoValues(attrs = {}) {
@@ -48,7 +49,7 @@ export class HistoryManager {
       result[id] = {};
 
       const selectedObject =
-        this.selection[id] || this.$editor.selection.itemsByIds(id)[0];
+        this.selection[id] || this.$editor.context.selection.itemsByIds(id)[0];
       const attrs = multiAttrs[id];
 
       Object.keys(attrs).forEach((key) => {
@@ -73,7 +74,7 @@ export class HistoryManager {
     if (
       lastUndoObject &&
       lastUndoObject.message === message &&
-      time - lastUndoObject.time < this.$editor.config.get("history.delay.ms")
+      time - lastUndoObject.time < this.$editor.context.config.get("history.delay.ms")
     ) {
       // 같은 메시지를 입력한 경우
       // 이전 history 와 현재 히스토리 등록 시간의 차이가 1초 미만일 때

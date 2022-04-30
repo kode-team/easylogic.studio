@@ -1,9 +1,9 @@
 export default {
   command: "ungroup.item",
   execute: function (editor) {
-    if (editor.selection.length === 0) return;
+    if (editor.context.selection.length === 0) return;
 
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (current) {
       let groupLayer = current;
@@ -15,7 +15,7 @@ export default {
         groupLayer.insertBefore(child);
       });
 
-      editor.selection.select(...layers);
+      editor.context.selection.select(...layers);
       editor.emit("refreshAll");
     }
   },

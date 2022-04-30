@@ -32,24 +32,12 @@ export class UIElement extends EventMachine {
     // this.initializeStoreEvent();
   }
 
-  createContext() {
-    return {};
-  }
-
   async render($container) {
     await super.render($container);
 
     this.initializeStoreEvent();
 
     return this;
-  }
-
-  pushContext() {
-    return this.contexts.push(this.createContext());
-  }
-
-  popContext() {
-    return this.contexts.pop();
   }
 
   currentContext() {

@@ -8,7 +8,7 @@ export class StateManager {
   }
 
   get config() {
-    return this.editor.config;
+    return this.editor.context.config;
   }
 
   // 팝업의 zindex 를 계속 높여 주어

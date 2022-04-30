@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
+var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -2236,6 +2236,7 @@ const _EventMachine = class {
     __privateAdd(this, _props, {});
     __privateAdd(this, _propsKeys, {});
     __privateAdd(this, _isServer, false);
+    __privateAdd(this, _propsKeyList, []);
     this.refs = {};
     this.children = {};
     this.id = uuid$1();
@@ -2269,6 +2270,9 @@ const _EventMachine = class {
       }
     });
     __privateMethod(this, _setProps, setProps_fn).call(this, props);
+  }
+  hasProp(key) {
+    return __privateGet(this, _propsKeyList).includes(key == null ? void 0 : key.toUpperCase());
   }
   setServer(isServer = true) {
     __privateSet(this, _isServer, isServer);
@@ -2717,6 +2721,7 @@ _cachedMethodList = new WeakMap();
 _props = new WeakMap();
 _propsKeys = new WeakMap();
 _isServer = new WeakMap();
+_propsKeyList = new WeakMap();
 _setProps = new WeakSet();
 setProps_fn = function(props) {
   __privateSet(this, _props, this.checkProps(props));
@@ -2724,6 +2729,7 @@ setProps_fn = function(props) {
   Object.keys(props).forEach((key) => {
     __privateGet(this, _propsKeys)[key.toUpperCase()] = key;
   });
+  __privateSet(this, _propsKeyList, Object.keys(__privateGet(this, _propsKeys)));
 };
 _getProp = new WeakSet();
 getProp_fn = function(key) {
@@ -2742,19 +2748,10 @@ const _UIElement = class extends EventMachine {
     this.created();
     this.initialize();
   }
-  createContext() {
-    return {};
-  }
   async render($container) {
     await super.render($container);
     this.initializeStoreEvent();
     return this;
-  }
-  pushContext() {
-    return this.contexts.push(this.createContext());
-  }
-  popContext() {
-    return this.contexts.pop();
   }
   currentContext() {
     return this.contexts[this.contexts.length - 1];
@@ -4290,8 +4287,11 @@ class EditorElement extends UIElement {
     }
     return this.__cacheParentEditor;
   }
+  get $context() {
+    return this.$editor.context;
+  }
   get $store() {
-    return this.$editor.store || this.parent.$store;
+    return this.$context.store || this.parent.$store;
   }
   $i18n(key, params = {}, locale) {
     return this.$editor.getI18nMessage(key, params, locale);
@@ -4300,64 +4300,64 @@ class EditorElement extends UIElement {
     return this.$editor.initI18nMessage(key);
   }
   get $config() {
-    return this.$editor.config;
+    return this.$context.config;
   }
   get $selection() {
-    return this.$editor.selection;
+    return this.$context.selection;
   }
   get $segmentSelection() {
-    return this.$editor.segmentSelection;
+    return this.$context.segmentSelection;
   }
   get $commands() {
-    return this.$editor.commands;
+    return this.$context.commands;
   }
   get $viewport() {
-    return this.$editor.viewport;
+    return this.$context.viewport;
   }
   get $snapManager() {
-    return this.$editor.snapManager;
+    return this.$context.snapManager;
   }
   get $timeline() {
-    return this.$editor.timeline;
+    return this.$context.timeline;
   }
   get $history() {
-    return this.$editor.history;
+    return this.$context.history;
   }
   get $shortcuts() {
-    return this.$editor.shortcuts;
+    return this.$context.shortcuts;
   }
   get $keyboardManager() {
-    return this.$editor.keyboardManager;
+    return this.$context.keyboardManager;
   }
   get $storageManager() {
-    return this.$editor.storageManager;
+    return this.$context.storageManager;
   }
   get $injectManager() {
-    return this.$editor.injectManager;
+    return this.$context.injectManager;
   }
   get $model() {
-    return this.$editor.modelManager;
+    return this.$context.modelManager;
   }
   get $lockManager() {
-    return this.$editor.lockManager;
+    return this.$context.lockManager;
   }
   get $visibleManager() {
-    return this.$editor.visibleManager;
+    return this.$context.visibleManager;
   }
   get $modeView() {
-    return this.$editor.modeViewManager;
+    return this.$context.modeViewManager;
   }
   get $pathkit() {
-    return this.$editor.pathKitManager;
+    return this.$context.pathKitManager;
   }
   get $icon() {
-    return this.$editor.iconManager;
+    return this.$context.icon;
   }
   get $stateManager() {
-    return this.$editor.stateManager;
+    return this.$context.stateManager;
   }
   get $menu() {
-    return this.$editor.menuManager;
+    return this.$context.menuManager;
   }
   command(command, description, ...args2) {
     if (this.$stateManager.isPointerUp) {
@@ -4429,10 +4429,10 @@ class BlankCanvasView extends EditorElement {
     };
   }
   checkSpace() {
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$context.config.get("set.tool.hand")) {
       return true;
     }
-    return this.$keyboardManager.check(this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space));
+    return this.$context.keyboardManager.check(this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space));
   }
   [POINTERSTART("$lock") + IF("checkSpace") + MOVE("movePan") + END("moveEndPan")]() {
     this.startMovePan();
@@ -4451,11 +4451,11 @@ class BlankCanvasView extends EditorElement {
   movePan(dx, dy) {
     this.emit("refreshCursor", "grabbing");
     const currentDist = fromValues(dx, dy, 0);
-    this.$viewport.pan(...transformMat4([], subtract([], this.lastDist, currentDist), this.$viewport.scaleMatrixInverse));
+    this.$context.viewport.pan(...transformMat4([], subtract([], this.lastDist, currentDist), this.$context.viewport.scaleMatrixInverse));
     this.lastDist = currentDist;
   }
   refreshCursor() {
-    if (this.$config.get("set.tool.hand") === false) {
+    if (this.$context.config.get("set.tool.hand") === false) {
       this.emit("refreshCursor", "auto");
     } else {
       this.emit("refreshCursor", "grab");
@@ -4465,7 +4465,7 @@ class BlankCanvasView extends EditorElement {
     this.refreshCursor();
   }
   async [BIND("$container")]() {
-    const cursor = await this.$editor.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
+    const cursor = await this.$context.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
     return {
       style: {
         cursor
@@ -4475,7 +4475,7 @@ class BlankCanvasView extends EditorElement {
   [DRAGOVER("$lock") + PREVENT]() {
   }
   [DROP("$lock") + PREVENT](e) {
-    const newCenter = this.$viewport.getWorldPosition(e);
+    const newCenter = this.$context.viewport.getWorldPosition(e);
     if (e.dataTransfer.getData("text/asset")) {
       this.emit("drop.asset", {
         asset: { id: e.dataTransfer.getData("text/asset"), center: newCenter }
@@ -4499,18 +4499,18 @@ class BlankCanvasView extends EditorElement {
     const [dx, dy] = normalizeWheelEvent(e);
     if (!this.state.gesture) {
       if (e.ctrlKey) {
-        this.$viewport.setMousePoint(e.clientX, e.clientY);
+        this.$context.viewport.setMousePoint(e.clientX, e.clientY);
       }
       this.emit("startGesture");
       this.state.gesture = true;
     } else {
       if (e.ctrlKey) {
         const zoomFactor = 1 - 2.5 * dy / 100;
-        this.$viewport.zoom(zoomFactor);
+        this.$context.viewport.zoom(zoomFactor);
       } else {
         const newDx = -2.5 * dx;
         const newDy = -2.5 * dy;
-        this.$viewport.pan(-newDx / this.$viewport.scale, -newDy / this.$viewport.scale, 0);
+        this.$context.viewport.pan(-newDx / this.$viewport.scale, -newDy / this.$viewport.scale, 0);
       }
     }
     window.clearTimeout(this.state.timer);
@@ -4520,7 +4520,7 @@ class BlankCanvasView extends EditorElement {
     }, 200);
   }
   refreshCanvasSize() {
-    this.$viewport.refreshCanvasSize(this.refs.$lock.rect());
+    this.$context.viewport.refreshCanvasSize(this.refs.$lock.rect());
   }
   [SUBSCRIBE("resize.window", "resizeCanvas")]() {
     this.refreshCanvasSize();
@@ -7287,7 +7287,7 @@ class DropdownMenu extends EditorElement {
     };
   }
   findItem(searchKey) {
-    return this.state.items.find((it) => it.key === searchKey);
+    return this.state.items.find((it) => it.key && it.key === searchKey);
   }
   template() {
     const { direction } = this.state;
@@ -7359,9 +7359,14 @@ class DropdownMenu extends EditorElement {
     this.toggle();
   }
   [CLICK("$icon")]() {
-    const menuItem = this.findItem(this.props.selectedKey(this.$editor));
-    if (!menuItem)
+    const selectedKey = isFunction(this.props.selectedKey) ? this.props.selectedKey(this.$editor, this) : this.props.selectedKey;
+    const menuItem = this.findItem(selectedKey);
+    if (!menuItem) {
+      if (isFunction(this.props.action)) {
+        this.props.action(this.$editor, this);
+      }
       return;
+    }
     const command = menuItem.command;
     const args2 = menuItem.args;
     const action = menuItem.action;
@@ -12168,7 +12173,7 @@ class ColorAssetsEditor extends EditorElement {
     return results;
   }
   executeColor(callback, isRefresh = true, isEmit = true) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       callback && callback(project2);
       if (isRefresh)
@@ -12603,7 +12608,7 @@ class CSSPropertyEditor extends EditorElement {
       return;
     }
     var value = this.getPropertyDefaultValue(key);
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       value = current[key];
     }
@@ -13842,7 +13847,7 @@ class FilterEditor extends EditorElement {
     `;
   }
   getSVGFilterList() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     var arr = [];
     if (current) {
       arr = current.svgfilters.map((it) => {
@@ -13857,7 +13862,7 @@ class FilterEditor extends EditorElement {
   makeOneFilterEditor(index2, filter2, spec) {
     if (filter2.type === "svg") {
       var options2 = "";
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
       if (current) {
         options2 = current.svgfilters.map((it) => {
           return { value: it.id };
@@ -13931,7 +13936,7 @@ class FilterEditor extends EditorElement {
   }
   [DROP("$filterList .filter-item") + PREVENT](e) {
     var targetIndex = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     this.sortFilter(this.startIndex, targetIndex);
@@ -13949,23 +13954,23 @@ class FilterEditor extends EditorElement {
     var _a, _b;
     var index2 = +e.$dt.attr("data-index");
     var filter2 = this.state.filters[index2];
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       var svgfilterIndex = current.getSVGFilterIndex((_b = (_a = filter2.value) == null ? void 0 : _a.value) == null ? void 0 : _b.replace("#", ""));
       this.trigger("openSVGFilterPopup", svgfilterIndex);
     }
   }
   [SUBSCRIBE("openSVGFilterPopup")](index2) {
-    const current = this.$selection.current || { svgfilters: [] };
+    const current = this.$context.selection.current || { svgfilters: [] };
     const svgfilter = current.svgfilters[index2];
     this.emit("showSVGFilterPopup", {
       changeEvent: (params) => {
-        var current2 = this.$selection.current;
+        var current2 = this.$context.selection.current;
         if (current2) {
           current2.setSVGFilterValue(params.index, {
             filters: params.filters
           });
-          this.command("setAttributeForMulti", "change filter", this.$selection.pack("svgfilters", "filter"));
+          this.command("setAttributeForMulti", "change filter", this.$context.selection.pack("svgfilters", "filter"));
         }
       },
       index: index2,
@@ -13975,10 +13980,10 @@ class FilterEditor extends EditorElement {
   }
   [SUBSCRIBE("add")](filterType) {
     if (filterType === "svg") {
-      const index2 = this.$selection.current.createSVGFilter({
+      const index2 = this.$context.selection.current.createSVGFilter({
         filters: []
       });
-      const filter2 = this.$selection.current.svgfilters[index2];
+      const filter2 = this.$context.selection.current.svgfilters[index2];
       this.state.filters.push(this.makeFilter(filterType, {
         value: filter2.id
       }));
@@ -18398,9 +18403,9 @@ class GradientEditor extends EditorElement {
     var _a;
     const image2 = BackgroundImage.parseImage(this.props.value || "static-gradient(#ececec)");
     const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
-    this.$selection.selectColorStep(id);
+    this.$context.selection.selectColorStep(id);
     if (id) {
-      this.currentStep = image2.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
+      this.currentStep = image2.colorsteps.find((it) => this.$context.selection.isSelectedColorStep(it.id));
     }
     return {
       id,
@@ -18428,7 +18433,7 @@ class GradientEditor extends EditorElement {
       `;
   }
   [CHANGE("$file")](e) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       [...e.target.files].forEach((item) => {
         this.emit("updateImageAssetItem", item, (local) => {
@@ -18503,7 +18508,7 @@ class GradientEditor extends EditorElement {
     var _a;
     var colorsteps = ((_a = this.state.image) == null ? void 0 : _a.colorsteps) || [];
     return colorsteps.map((it) => {
-      var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
+      var selected = this.$context.selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
         <div class='color-view' style="background-color: ${it.color}">
@@ -18520,9 +18525,9 @@ class GradientEditor extends EditorElement {
   }
   selectStep(id) {
     this.state.id = id;
-    this.$selection.selectColorStep(id);
+    this.$context.selection.selectColorStep(id);
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
+      this.currentStep = this.state.image.colorsteps.find((it) => this.$context.selection.isSelectedColorStep(it.id));
       this.parent.trigger("selectColorStep", this.currentStep.color);
     }
     this.refresh();
@@ -18604,7 +18609,7 @@ class GradientEditor extends EditorElement {
       return false;
     } else {
       e.$dt.focus();
-      this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
+      this.isSelectedColorStep = this.$context.selection.isSelectedColorStep(id);
       this.selectStep(id);
       this.startXY = e.xy;
       this.cachedStepListRect = this.refs.$stepList.rect();
@@ -22042,7 +22047,7 @@ class AssetManager {
     this.$editor = editor;
   }
   get project() {
-    return this.$editor.selection.currentProject;
+    return this.$editor.context.selection.currentProject;
   }
   revokeResource(value) {
     var json = JSON.parse(value || "[]");
@@ -22134,7 +22139,7 @@ var __glob_0_0$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   "default": Console
 }, Symbol.toStringTag, { value: "Module" }));
 function _currentProject(editor, callback) {
-  var project2 = editor.selection.currentProject;
+  var project2 = editor.context.selection.currentProject;
   if (project2) {
     var timeline = project2.getSelectedTimeline();
     callback && callback(project2, timeline);
@@ -22156,10 +22161,10 @@ var __glob_0_2$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var addArtBoard = {
   command: "AddArtBoard",
   execute: (editor, obj2 = {}, center2 = null) => {
-    var project2 = editor.selection.currentProject;
+    var project2 = editor.context.selection.currentProject;
     if (!project2) {
       project2 = editor.add(editor.createModel({ itemType: "project" }));
-      editor.selection.selectProject(project2);
+      editor.context.selection.selectProject(project2);
     }
     var artboard2 = project2.appendChild(editor.createModel(__spreadValues({
       itemType: "artboard",
@@ -22175,7 +22180,7 @@ var addArtBoard = {
       });
       artboard2.moveByCenter(center2);
     }
-    editor.selection.select(artboard2);
+    editor.context.selection.select(artboard2);
     _doForceRefreshSelection(editor);
   }
 };
@@ -22186,7 +22191,7 @@ var __glob_0_3$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var addBackgroundColor = {
   command: "addBackgroundColor",
   execute: function(editor, color2, id = null) {
-    editor.command("setAttributeForMulti", "add background color", editor.selection.packByValue({
+    editor.command("setAttributeForMulti", "add background color", editor.context.selection.packByValue({
       "background-color": color2
     }, id));
   }
@@ -22198,7 +22203,7 @@ var __glob_0_4$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var addBackgroundImageAsset = {
   command: "addBackgroundImageAsset",
   execute: function(editor, url, id = null) {
-    var items = editor.selection.itemsByIds(id);
+    var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
       let images = BackgroundImage.parseStyle(STRING_TO_CSS(item["background-image"]));
@@ -22219,7 +22224,7 @@ var __glob_0_5$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var addBackgroundImageGradient = {
   command: "addBackgroundImageGradient",
   execute: function(editor, gradient2, id = null) {
-    var items = editor.selection.itemsByIds(id);
+    var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
       let images = BackgroundImage.parseStyle(STRING_TO_CSS(item["background-image"]));
@@ -22511,7 +22516,7 @@ const PatternClassName = {
 var addBackgroundImagePattern = {
   command: "addBackgroundImagePattern",
   execute: function(editor, pattern, id = null) {
-    var items = editor.selection.itemsByIds(id);
+    var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
       itemsMap[item.id] = {
@@ -49588,15 +49593,15 @@ function addCubeBox(editor) {
   const mesh = new Mesh(geometry, material);
   mesh.name = "Box";
   mesh.position.y = 0.5;
-  editor.sceneManager.addObject(mesh);
-  editor.sceneManager.select(mesh);
+  editor.context.sceneManager.addObject(mesh);
+  editor.context.sceneManager.select(mesh);
 }
 var __glob_0_8$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addCubeBox
 }, Symbol.toStringTag, { value: "Module" }));
 function addCustomComponent(editor, obj2 = {}, center2 = null) {
-  var project2 = editor.selection.currentProject;
+  var project2 = editor.context.selection.currentProject;
   var customComponent = project2.appendChild(editor.createModel(__spreadValues({
     x: 300,
     y: 200,
@@ -49610,7 +49615,7 @@ function addCustomComponent(editor, obj2 = {}, center2 = null) {
     });
     customComponent.moveByCenter(center2);
   }
-  editor.selection.select(customComponent);
+  editor.context.selection.select(customComponent);
   _doForceRefreshSelection(editor);
 }
 var __glob_0_9$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -49645,7 +49650,7 @@ function loadOriginalImage(obj2, callback) {
 var addImageAssetItem = {
   command: "addImageAssetItem",
   execute: function(editor, imageObject, rect2 = {}, containerItem = void 0) {
-    var project2 = editor.selection.currentProject;
+    var project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.createImage(imageObject);
       editor.emit("addImageAsset");
@@ -49669,7 +49674,7 @@ var __glob_0_11$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 }, Symbol.toStringTag, { value: "Module" }));
 function addLayer(editor, layer, isSelected = true, containerItem) {
   if (!containerItem) {
-    containerItem = editor.selection.current || editor.selection.currentProject;
+    containerItem = editor.context.selection.current || editor.context.selection.currentProject;
   }
   if (containerItem) {
     if (containerItem.isNot("project") && !containerItem.enableHasChildren()) {
@@ -49677,7 +49682,7 @@ function addLayer(editor, layer, isSelected = true, containerItem) {
     }
     containerItem.appendChild(layer);
     if (isSelected) {
-      editor.selection.select(layer);
+      editor.context.selection.select(layer);
     }
     _doForceRefreshSelection(editor);
   }
@@ -49689,21 +49694,21 @@ var __glob_0_12$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var addLayerView = {
   command: "addLayerView",
   execute: async function(editor, type, data = {}) {
-    editor.selection.empty();
+    editor.context.selection.empty();
     await editor.emit("refreshSelectionTool");
     await editor.emit("hideAddViewLayer");
     await editor.emit("removeGuideLine");
-    editor.config.set("editing.mode.itemType", type);
+    editor.context.config.set("editing.mode.itemType", type);
     if (type === "select") {
-      editor.config.set("editing.mode", EditingMode.SELECT);
+      editor.context.config.set("editing.mode", EditingMode.SELECT);
     } else if (type === "brush") {
-      editor.config.set("editing.mode", EditingMode.DRAW);
+      editor.context.config.set("editing.mode", EditingMode.DRAW);
       await editor.emit("showPathDrawEditor");
     } else if (type === "path") {
-      editor.config.set("editing.mode", EditingMode.PATH);
+      editor.context.config.set("editing.mode", EditingMode.PATH);
       await editor.emit("showPathEditor", "path");
     } else {
-      editor.config.set("editing.mode", EditingMode.APPEND);
+      editor.context.config.set("editing.mode", EditingMode.APPEND);
       await editor.emit("showLayerAppendView", type, data);
     }
   }
@@ -49716,7 +49721,7 @@ function addProject(editor, obj2 = {}) {
   var project2 = editor.createModel(__spreadValues({
     itemType: "project"
   }, obj2));
-  editor.selection.selectProject(project2);
+  editor.context.selection.selectProject(project2);
   _doForceRefreshSelection(editor);
 }
 var __glob_0_14$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -49726,7 +49731,7 @@ var __glob_0_14$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var addSVGFilterAssetItem = {
   command: "addSVGFilterAssetItem",
   execute: function(editor, callback) {
-    var project2 = editor.selection.currentProject;
+    var project2 = editor.context.selection.currentProject;
     if (project2) {
       var id = uuidShort();
       var index2 = project2.createSVGFilter({ id, filters: [] });
@@ -49755,7 +49760,7 @@ var addTimelineCurrentProperty = {
   execute: function(editor, options2 = { timing: "linear" }) {
     _currentProject(editor, (project2) => {
       var list2 = [];
-      editor.selection.each((item) => {
+      editor.context.selection.each((item) => {
         var keyframeObj = {
           layerId: item.id,
           property: options2.property,
@@ -49800,7 +49805,7 @@ var addTimelineKeyframe = {
   command: "addTimelineKeyframe",
   execute: function(editor, options2 = { timing: "linear" }) {
     _currentProject(editor, (project2) => {
-      var item = editor.modelManager.get(options2.layerId);
+      var item = editor.context.modelManager.get(options2.layerId);
       var keyframeObj = {
         layerId: options2.layerId,
         property: options2.property,
@@ -49880,7 +49885,7 @@ function loadOriginalVideo(obj2, callback) {
 var addVideoAssetItem = {
   command: "addVideoAssetItem",
   execute: function(editor, videoObject, rect2 = {}, containerItem = void 0) {
-    var project2 = editor.selection.currentProject;
+    var project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.createVideo(videoObject);
       editor.emit("addVideoAsset");
@@ -49901,7 +49906,7 @@ var clipboard_copy$1 = {
   execute: function(editor) {
     editor.clipboard.push({
       type: ClipboardActionType.COPY,
-      data: editor.selection.ids
+      data: editor.context.selection.ids
     });
   }
 };
@@ -49930,7 +49935,7 @@ var convert_flatten_path = {
   command: "convert.flatten.path",
   description: "flatten selected multi path",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
     let newPath;
@@ -49955,7 +49960,7 @@ var convert_flatten_path = {
       });
     } else {
       newPath = PathParser.fromSVGString();
-      editor.selection.each((item) => {
+      editor.context.selection.each((item) => {
         newPath.addPath(item.absolutePath());
       });
       newPath = current.invertPath(newPath.d);
@@ -49978,7 +49983,7 @@ var convert_no_transform_path = {
   command: "convert.no.transform.path",
   description: "remove transform(rotate, translate, scale) inforation in path layer",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
     const parent = current.parent;
@@ -49986,14 +49991,14 @@ var convert_no_transform_path = {
     if (parent.is("project")) {
       const verties = childPath.getBBox();
       const newRect = vertiesToRectangle(verties);
-      editor.command("setAttributeForMulti", "remove transform for path", editor.selection.packByValue(__spreadProps(__spreadValues({}, newRect), {
+      editor.command("setAttributeForMulti", "remove transform for path", editor.context.selection.packByValue(__spreadProps(__spreadValues({}, newRect), {
         rotate: 0,
         d: childPath.d
       })));
     } else {
       childPath.transformMat4(parent.absoluteMatrixInverse);
       const newRect = parent.updatePath(childPath.d);
-      editor.command("setAttributeForMulti", "remove transform for path", editor.selection.packByValue(__spreadProps(__spreadValues({}, newRect), {
+      editor.command("setAttributeForMulti", "remove transform for path", editor.context.selection.packByValue(__spreadProps(__spreadValues({}, newRect), {
         rotate: 0,
         d: childPath.d
       })));
@@ -50008,10 +50013,10 @@ var convert_normalize_path = {
   command: "convert.normalize.path",
   description: "convert segments to bezier curve",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
-    editor.command("setAttributeForMulti", "normalize path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
+    editor.command("setAttributeForMulti", "normalize path string", editor.context.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
   }
 };
 var __glob_0_27$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -50023,11 +50028,11 @@ var convert_path_operation = {
   description: "apply path boolean operation",
   execute: (editor, booleanOperation) => {
     var _a;
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
     const changeBooleanOperation = (booleanOperation2) => {
-      editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
+      editor.command("setAttributeForMulti", "change boolean operation", editor.context.selection.packByValue({
         "boolean-operation": booleanOperation2
       }));
       recoverBooleanPath2();
@@ -50045,10 +50050,10 @@ var convert_path_operation = {
       if (current.isBooleanItem) {
         parent = current.parent;
       }
-      editor.selection.select(parent);
+      editor.context.selection.select(parent);
       changeBooleanOperation(booleanOperation);
     } else {
-      if ((_a = editor.selection.current) == null ? void 0 : _a.isNot("boolean-path")) {
+      if ((_a = editor.context.selection.current) == null ? void 0 : _a.isNot("boolean-path")) {
         editor.emit("group.item", {
           itemType: "boolean-path",
           title: "Intersection"
@@ -50056,7 +50061,7 @@ var convert_path_operation = {
       }
       editor.nextTick(() => {
         var _a2;
-        if ((_a2 = editor.selection.current) == null ? void 0 : _a2.is("boolean-path")) {
+        if ((_a2 = editor.context.selection.current) == null ? void 0 : _a2.is("boolean-path")) {
           changeBooleanOperation(booleanOperation);
         }
       }, 10);
@@ -50071,10 +50076,10 @@ var convert_polygonal_path = {
   command: "convert.polygonal.path",
   description: "convert path to polygonal path",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
-    editor.command("setAttributeForMulti", "polygonal path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)));
+    editor.command("setAttributeForMulti", "polygonal path string", editor.context.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)));
   }
 };
 var __glob_0_29$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -50084,10 +50089,10 @@ var __glob_0_29$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var convert_simplify_path = {
   command: "convert.simplify.path",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
-    editor.command("setAttributeForMulti", "change path string", editor.selection.packByValue(current.updatePath(editor.pathKitManager.simplify(current.d))));
+    editor.command("setAttributeForMulti", "change path string", editor.context.selection.packByValue(current.updatePath(editor.pathKitManager.simplify(current.d))));
   }
 };
 var __glob_0_30$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -50098,11 +50103,11 @@ var convert_smooth_path = {
   command: "convert.smooth.path",
   description: "convert path to smooth",
   execute: (editor, divideCount = 5, tolerance = 0.1, tension = 0.5) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
     const smoothedPath = PathParser.fromSVGString(current.d).divideSegmentByCount(divideCount).simplify(tolerance).cardinalSplines(tension).d;
-    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(smoothedPath)));
+    editor.command("setAttributeForMulti", "smooth path string", editor.context.selection.packByValue(current.updatePath(smoothedPath)));
   }
 };
 var __glob_0_31$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -50112,7 +50117,7 @@ var __glob_0_31$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var convert_stroke_to_path = {
   command: "convert.stroke.to.path",
   execute: async (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
     const attrs = current.attrs("d", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linejoin", "stroke-linecap");
@@ -51237,7 +51242,7 @@ var convertPasteText = {
       mediaType: "clip"
     });
     if (embedUrl) {
-      const center2 = editor.viewport.center;
+      const center2 = editor.context.viewport.center;
       const width2 = 300;
       const height2 = 200;
       editor.emit("newComponent", "iframe", {
@@ -51256,7 +51261,7 @@ var __glob_0_33$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": convertPasteText
 }, Symbol.toStringTag, { value: "Module" }));
 function convertPath(editor, pathString2, rect2 = null) {
-  var current = editor.selection.current;
+  var current = editor.context.selection.current;
   if (current) {
     if (current.is("svg-path", "svg-brush", "svg-textpath")) {
       var d = pathString2;
@@ -51265,7 +51270,7 @@ function convertPath(editor, pathString2, rect2 = null) {
         parser.scale(current.width / rect2.width, current.height / rect2.height);
         d = parser.d;
       }
-      editor.command("setAttributeForMulti", "set attribute -d", editor.selection.packByValue({ d }, current.id));
+      editor.command("setAttributeForMulti", "set attribute -d", editor.context.selection.packByValue({ d }, current.id));
     } else if (current["clip-path"].includes("path")) {
       var d = pathString2;
       if (rect2) {
@@ -51273,7 +51278,7 @@ function convertPath(editor, pathString2, rect2 = null) {
         parser.scale(current.width / rect2.width, current.height / rect2.height);
         d = parser.d;
       }
-      editor.command("setAttributeForMulti", "change clip path", editor.selection.packByValue({ "clip-path": `path(${d})` }, current.id));
+      editor.command("setAttributeForMulti", "change clip path", editor.context.selection.packByValue({ "clip-path": `path(${d})` }, current.id));
     }
   }
 }
@@ -51285,7 +51290,7 @@ var copy_path = {
   command: "copy.path",
   description: "copy as path for item with path string(d attribute)",
   execute: function(editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       let newPath = PathParser.fromSVGString(current.d);
       try {
@@ -51337,13 +51342,13 @@ var doubleclick_item = {
   command: "doubleclick.item",
   execute: function(editor, evt, id) {
     const item = editor.get(id);
-    if (editor.selection.isOne && item) {
-      if (editor.selection.checkChildren(item.id)) {
-        editor.selection.select(item);
+    if (editor.context.selection.isOne && item) {
+      if (editor.context.selection.checkChildren(item.id)) {
+        editor.context.selection.select(item);
         editor.emit("refreshSelection");
         editor.emit("refreshSelectionTool");
       } else {
-        if (editor.selection.check(item)) {
+        if (editor.context.selection.check(item)) {
           editor.emit("open.editor");
           editor.emit("removeGuideLine");
         } else {
@@ -51355,9 +51360,9 @@ var doubleclick_item = {
     }
   },
   selectInWorldPosition: function(editor, evt, item) {
-    const point2 = editor.viewport.getWorldPosition(evt);
-    if (editor.selection.hasPoint(point2) || editor.selection.hasChildrenPoint(point2)) {
-      editor.selection.select(item);
+    const point2 = editor.context.viewport.getWorldPosition(evt);
+    if (editor.context.selection.hasPoint(point2) || editor.context.selection.hasChildrenPoint(point2)) {
+      editor.context.selection.select(item);
       editor.snapManager.clear();
       editor.emit("refreshSelectionTool", true);
       editor.emit("history.refreshSelection");
@@ -51377,7 +51382,7 @@ function downloadFile(datauri, filename = "elf.json") {
 var downloadJSON = {
   command: "downloadJSON",
   execute: function(editor, filename) {
-    var json = JSON.stringify(editor.modelManager.toJSON());
+    var json = JSON.stringify(editor.context.modelManager.toJSON());
     var datauri = "data:application/json;base64," + window.btoa(unescape(encodeURIComponent(json)));
     downloadFile(datauri, filename || "elf.json");
   }
@@ -51429,7 +51434,7 @@ function createImagePng(img, callback, imageType = "image/png") {
 var downloadPNG = {
   command: "downloadPNG",
   execute: function(editor, callbackCommand = "") {
-    const item = editor.selection.current;
+    const item = editor.context.selection.current;
     if (item) {
       const svgString = ExportManager.generateSVG(editor, item).trim();
       const datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
@@ -51452,7 +51457,7 @@ var __glob_0_40$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var downloadSVG = {
   command: "downloadSVG",
   execute: function(editor) {
-    const item = editor.selection.current;
+    const item = editor.context.selection.current;
     if (item) {
       var svgString = ExportManager.generateSVG(editor, item).trim();
       var datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
@@ -51505,8 +51510,8 @@ var editor_config_body_event = {
   command: "config:bodyEvent",
   description: "fire when bodyEvent was set",
   execute: function(editor) {
-    const $target = Dom.create(editor.config.get("bodyEvent").target);
-    editor.config.init("onMouseMovepageContainer", $target);
+    const $target = Dom.create(editor.context.config.get("bodyEvent").target);
+    editor.context.config.init("onMouseMovepageContainer", $target);
   }
 };
 var __glob_0_44$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -51707,12 +51712,12 @@ var __glob_0_46$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var group_item$1 = {
   command: "group.item",
   execute: function(editor, opt = {}) {
-    if (editor.selection.length === 0)
+    if (editor.context.selection.length === 0)
       return;
-    const project2 = editor.selection.currentProject;
+    const project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.generateListNumber();
-      const list2 = editor.selection.map((item) => {
+      const list2 = editor.context.selection.map((item) => {
         return { depth: item.depth, item };
       });
       list2.sort((a, b) => {
@@ -51723,12 +51728,12 @@ var group_item$1 = {
       });
       const groupLayer = editor.createModel(__spreadValues(__spreadValues({
         itemType: "rect"
-      }, editor.selection.itemRect), opt));
+      }, editor.context.selection.itemRect), opt));
       list2[0].item.insertAfter(groupLayer);
       list2.forEach(({ item }) => {
         groupLayer.appendChild(item);
       });
-      editor.selection.select(groupLayer);
+      editor.context.selection.select(groupLayer);
       editor.emit("refreshAll");
     }
   }
@@ -51743,13 +51748,13 @@ var history_addLayer = {
   execute: function(editor, message, layer, isSelected = true, containerItem) {
     editor.emit("addLayer", layer, isSelected, containerItem);
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [layer, isSelected, containerItem],
         undoValues: [layer.id]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues }) {
@@ -51760,14 +51765,14 @@ var history_addLayer = {
   },
   undo: function(editor, { undoValues }) {
     const ids = undoValues;
-    const items = editor.selection.itemsByIds(ids);
+    const items = editor.context.selection.itemsByIds(ids);
     items.forEach((item) => {
       if (item) {
         item.remove();
       }
     });
     editor.nextTick(() => {
-      editor.selection.empty();
+      editor.context.selection.empty();
       editor.emit("refreshAll");
     });
   }
@@ -51779,7 +51784,7 @@ var __glob_0_48$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var history_bring_forward = {
   command: "history.bring.forward",
   description: "bring forward",
-  execute: function(editor, message, layer = editor.selection.current) {
+  execute: function(editor, message, layer = editor.context.selection.current) {
     const currentLayer = editor.get(layer);
     const lastValues = currentLayer.hierarchy;
     const oldParentLayer = currentLayer.parent;
@@ -51800,13 +51805,13 @@ var history_bring_forward = {
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")), currentLayer.parent.attrsWithId("children")));
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentValues],
         undoValues: [lastValues]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
@@ -51835,7 +51840,7 @@ var __glob_0_49$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var history_bring_front = {
   command: "history.bring.front",
   description: "bring front",
-  execute: function(editor, message, layer = editor.selection.current) {
+  execute: function(editor, message, layer = editor.context.selection.current) {
     const currentLayer = editor.get(layer);
     const lastValues = currentLayer.hierachy;
     const oldParentLayer = currentLayer.parent;
@@ -51848,13 +51853,13 @@ var history_bring_front = {
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")));
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentValues],
         undoValues: [lastValues]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues: [newValues] }) {
@@ -51913,14 +51918,14 @@ var history_clipboard_paste = {
       });
       editor.emit("setAttributeForMulti", updateData);
       editor.nextTick(() => {
-        editor.selection.select(...newIds);
+        editor.context.selection.select(...newIds);
         if (hasHistory) {
-          editor.history.add(message, this, {
+          editor.context.history.add(message, this, {
             currentValues: [data],
-            undoValues: [newIds, editor.selection.ids]
+            undoValues: [newIds, editor.context.selection.ids]
           });
         }
-        editor.history.saveSelection();
+        editor.context.history.saveSelection();
       });
     }
   },
@@ -51941,7 +51946,7 @@ var history_clipboard_paste = {
       Object.values(parentList).forEach((parent) => {
         updateData = __spreadValues(__spreadValues({}, updateData), parent.attrsWithId("children"));
       });
-      editor.selection.select(...selectedIds);
+      editor.context.selection.select(...selectedIds);
       editor.emit("setAttributeForMulti", updateData);
     }
   }
@@ -51955,13 +51960,13 @@ var history_group_item = {
   description: "History Group Item",
   execute: function(editor, message = "selection") {
     var _a;
-    const currentValues = editor.selection.ids;
-    const projectId = (_a = editor.selection.currentProject) == null ? void 0 : _a.id;
-    const undoValues = editor.history.selectedIds;
+    const currentValues = editor.context.selection.ids;
+    const projectId = (_a = editor.context.selection.currentProject) == null ? void 0 : _a.id;
+    const undoValues = editor.context.history.selectedIds;
     if (isArrayEquals(currentValues, undoValues)) {
       return;
     }
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: {
         ids: currentValues,
         projectId
@@ -51988,7 +51993,7 @@ var history_moveLayer = {
     if (isArray(layers2) === false) {
       layers2 = [layers2];
     }
-    const targetItems = editor.selection.itemsByIds(layers2);
+    const targetItems = editor.context.selection.itemsByIds(layers2);
     const lastValues = {};
     const currentValues = {};
     targetItems.forEach((it) => {
@@ -51999,17 +52004,17 @@ var history_moveLayer = {
     });
     editor.emit("setAttributeForMulti", currentValues);
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [layers2, dist2],
         undoValues: [lastValues]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues: [layers2, dist2] }) {
-    const targetItems = editor.selection.itemsByIds(layers2);
+    const targetItems = editor.context.selection.itemsByIds(layers2);
     const localChanges = {};
     targetItems.forEach((it) => {
       it.absoluteMove(dist2);
@@ -52051,13 +52056,13 @@ var history_moveLayerToTarget = {
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle", "parentId")), currentValues), currentParentLayer && currentParentLayer.isNot("project") ? currentParentLayer.attrsWithId("children") : {}));
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentLayer.hierachy],
         undoValues: [lastValues, currentLayer.parentId]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues: [info] }) {
@@ -52085,7 +52090,7 @@ var __glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var history_redo$1 = {
   command: "history.redo",
   execute: function(editor) {
-    editor.history.redo();
+    editor.context.history.redo();
   }
 };
 var __glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -52098,13 +52103,13 @@ var history_refreshSelection = {
   description_ko: "Selection \uC815\uBCF4\uB97C \uAC31\uC2E0\uD558\uBA74\uC11C History \uC5D0 \uC800\uC7A5\uD55C\uB2E4",
   execute: function(editor, message = "selection") {
     var _a;
-    const currentValues = editor.selection.ids;
-    const projectId = (_a = editor.selection.currentProject) == null ? void 0 : _a.id;
-    const undoValues = editor.history.selectedIds;
+    const currentValues = editor.context.selection.ids;
+    const projectId = (_a = editor.context.selection.currentProject) == null ? void 0 : _a.id;
+    const undoValues = editor.context.history.selectedIds;
     if (isArrayEquals(currentValues, undoValues)) {
       return;
     }
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: [currentValues, projectId],
       undoValues: [undoValues, projectId]
     });
@@ -52112,7 +52117,7 @@ var history_refreshSelection = {
   },
   nextAction(editor) {
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
       editor.emit("refreshSelection");
       editor.nextTick(() => {
         editor.emit("refreshSelectionTool");
@@ -52120,13 +52125,13 @@ var history_refreshSelection = {
     });
   },
   redo: function(editor, { currentValues: [ids, projectId] }) {
-    editor.selection.selectProject(projectId);
-    editor.selection.select(...ids);
+    editor.context.selection.selectProject(projectId);
+    editor.context.selection.select(...ids);
     this.nextAction(editor);
   },
   undo: function(editor, { undoValues: [ids, projectId] }) {
-    editor.selection.selectProject(projectId);
-    editor.selection.select(...ids);
+    editor.context.selection.selectProject(projectId);
+    editor.context.selection.select(...ids);
     this.nextAction(editor);
   }
 };
@@ -52141,12 +52146,12 @@ var history_refreshSelectionProject = {
   execute: function(editor, message = "selection", projectId) {
     var _a;
     const currentValues = [projectId];
-    const undoValues = [(_a = editor.selection.currentProject) == null ? void 0 : _a.id];
+    const undoValues = [(_a = editor.context.selection.currentProject) == null ? void 0 : _a.id];
     if (isArrayEquals(currentValues, undoValues)) {
       return;
     }
-    editor.selection.selectProject(projectId);
-    editor.history.add(message, this, {
+    editor.context.selection.selectProject(projectId);
+    editor.context.history.add(message, this, {
       currentValues,
       undoValues
     });
@@ -52159,11 +52164,11 @@ var history_refreshSelectionProject = {
     });
   },
   redo: function(editor, { currentValues: [projectId] }) {
-    editor.selection.selectProject(projectId);
+    editor.context.selection.selectProject(projectId);
     this.nextAction(editor);
   },
   undo: function(editor, { undoValues: [projectId] }) {
-    editor.selection.selectProject(projectId);
+    editor.context.selection.selectProject(projectId);
     this.nextAction(editor);
   }
 };
@@ -52184,21 +52189,21 @@ var history_removeLayer = {
   command: "history.removeLayer",
   description: "remove layer",
   execute: function(editor, message, ids = void 0) {
-    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
+    let items = editor.context.selection.itemsByIds(ids || editor.context.selection.ids);
     items = filterChildren(items);
     const filtedIds = items.map((it) => it.id);
-    editor.modelManager.markRemove(filtedIds);
+    editor.context.modelManager.markRemove(filtedIds);
     const parentIds = items.map((it) => it.parentId);
     items.forEach((item) => {
       item.remove();
-      editor.selection.removeById(item.id);
+      editor.context.selection.removeById(item.id);
     });
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: [filtedIds, parentIds],
       undoValues: filtedIds
     });
     editor.nextTick(() => {
-      editor.selection.removeById(filtedIds);
+      editor.context.selection.removeById(filtedIds);
       const commandMaker = editor.createCommandMaker();
       commandMaker.emit("refreshAll");
       commandMaker.emit("removeGuideLine");
@@ -52207,22 +52212,22 @@ var history_removeLayer = {
       });
       commandMaker.run();
       editor.nextTick(() => {
-        editor.history.saveSelection();
+        editor.context.history.saveSelection();
       });
     });
   },
   redo: function(editor, { currentValues }) {
     const ids = currentValues[0];
-    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
+    let items = editor.context.selection.itemsByIds(ids || editor.context.selection.ids);
     items = filterChildren(items);
-    editor.modelManager.markRemove(items.map((it) => it.id));
+    editor.context.modelManager.markRemove(items.map((it) => it.id));
     items.forEach((item) => item.remove());
     editor.nextTick(() => {
       editor.emit("refreshAll");
     });
   },
   undo: function(editor, { undoValues: recoverIds }) {
-    editor.modelManager.unmarkRemove(recoverIds);
+    editor.context.modelManager.unmarkRemove(recoverIds);
     editor.nextTick(() => {
       editor.emit("refreshAll");
     });
@@ -52236,30 +52241,30 @@ var history_removeProject = {
   command: "history.removeProject",
   description: "remove project",
   execute: function(editor, message, projectId) {
-    const index2 = editor.modelManager.markRemoveProject(projectId);
-    editor.history.add(message, this, {
+    const index2 = editor.context.modelManager.markRemoveProject(projectId);
+    editor.context.history.add(message, this, {
       currentValues: [projectId],
       undoValues: [projectId, index2]
     });
     editor.nextTick(() => {
-      editor.selection.selectProject(editor.modelManager.projects[0]);
+      editor.context.selection.selectProject(editor.context.modelManager.projects[0]);
       editor.emit("refreshAll");
       editor.emit("removeGuideLine");
       editor.nextTick(() => {
-        editor.history.saveSelection();
+        editor.context.history.saveSelection();
       });
     });
   },
   redo: function(editor, { currentValues: [projectId] }) {
-    editor.modelManager.markRemoveProject(projectId);
+    editor.context.modelManager.markRemoveProject(projectId);
     editor.nextTick(() => {
       editor.emit("refreshAll");
     });
   },
   undo: function(editor, { undoValues: [projectId, index2] }) {
-    editor.modelManager.unmarkRemoveProject(projectId, index2);
+    editor.context.modelManager.unmarkRemoveProject(projectId, index2);
     editor.nextTick(() => {
-      editor.selection.selectProject(projectId);
+      editor.context.selection.selectProject(projectId);
       editor.emit("refreshAll");
     });
   }
@@ -52271,7 +52276,7 @@ var __glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var history_send_back = {
   command: "history.send.back",
   description: "send back",
-  execute: function(editor, message, layer = editor.selection.current) {
+  execute: function(editor, message, layer = editor.context.selection.current) {
     const currentLayer = editor.get(layer);
     const lastValues = currentLayer.hierarchy;
     const oldParentLayer = currentLayer.parent;
@@ -52284,13 +52289,13 @@ var history_send_back = {
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle", "parentId")));
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentValues],
         undoValues: [lastValues]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues: [newValues] }) {
@@ -52316,7 +52321,7 @@ var __glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var history_send_backward = {
   command: "history.send.backward",
   description: "send backward",
-  execute: function(editor, message, layer = editor.selection.current) {
+  execute: function(editor, message, layer = editor.context.selection.current) {
     const currentLayer = editor.get(layer);
     const lastValues = currentLayer.hierarchy;
     const oldParentLayer = currentLayer.parent;
@@ -52332,13 +52337,13 @@ var history_send_backward = {
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle", "parentId")), currentLayer.parent.attrsWithId("children")));
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [currentValues],
         undoValues: [lastValues]
       });
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
@@ -52368,28 +52373,28 @@ var history_setAttributeForMulti = {
   command: "history.setAttributeForMulti",
   execute: function(editor, message, multiAttrs = {}, context = { origin: "*" }) {
     editor.emit("setAttributeForMulti", multiAttrs, context);
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: [multiAttrs],
-      undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
+      undoValues: editor.context.history.getUndoValuesForMulti(multiAttrs)
     });
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
   redo: function(editor, { currentValues }) {
     editor.emit("setAttributeForMulti", ...currentValues);
     editor.nextTick(() => {
-      editor.selection.reselect();
+      editor.context.selection.reselect();
       editor.emit("refreshAll");
     });
   },
   undo: function(editor, { undoValues }) {
     const ids = Object.keys(undoValues);
-    const items = editor.selection.itemsByIds(ids);
+    const items = editor.context.selection.itemsByIds(ids);
     items.forEach((item) => {
       item.reset(undoValues[item.id]);
     });
-    editor.selection.reselect();
+    editor.context.selection.reselect();
     editor.nextTick(() => {
       editor.emit("refreshAll");
     });
@@ -52402,7 +52407,7 @@ var __glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var history_undo$1 = {
   command: "history.undo",
   execute: function(editor) {
-    editor.history.undo();
+    editor.context.history.undo();
   }
 };
 var __glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -52412,7 +52417,7 @@ var __glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var item_move_depth_down$1 = {
   command: "item.move.depth.down",
   execute: function(editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       current.orderPrev();
     }
@@ -52426,7 +52431,7 @@ var __glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var item_move_depth_first = {
   command: "item.move.depth.first",
   execute: function(editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       current.orderFirst();
     }
@@ -52440,7 +52445,7 @@ var __glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var item_move_depth_last = {
   command: "item.move.depth.last",
   execute: function(editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       current.orderLast();
     }
@@ -52454,7 +52459,7 @@ var __glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var item_move_depth_up$1 = {
   command: "item.move.depth.up",
   execute: function(editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       current.orderNext();
     }
@@ -52468,9 +52473,9 @@ var __glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var keymap_keydown = {
   command: "keymap.keydown",
   execute: function(editor, e) {
-    editor.keyboardManager.add(e.code, e.keyCode, e);
-    if (editor.shortcuts) {
-      editor.shortcuts.execute(e, "keydown");
+    editor.context.keyboardManager.add(e.code, e.keyCode, e);
+    if (editor.context.shortcuts) {
+      editor.context.shortcuts.execute(e, "keydown");
     }
   }
 };
@@ -52481,9 +52486,9 @@ var __glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var keymap_keyup = {
   command: "keymap.keyup",
   execute: function(editor, e) {
-    editor.keyboardManager.remove(e.key, e.keyCode);
-    if (editor.shortcuts) {
-      editor.shortcuts.execute(e, "keyup");
+    editor.context.keyboardManager.remove(e.key, e.keyCode);
+    if (editor.context.shortcuts) {
+      editor.context.shortcuts.execute(e, "keyup");
     }
   }
 };
@@ -52509,7 +52514,7 @@ var __glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var load_json = {
   command: "load.json",
   execute: function(editor, json, context = { origin: "*" }) {
-    editor.modelManager.load(json, context);
+    editor.context.modelManager.load(json, context);
     _doForceRefreshSelection(editor);
   }
 };
@@ -52522,12 +52527,12 @@ var moveLayer = {
   description: "move layer by keydown with matrix ",
   execute: function(editor, dx = 0, dy = 0) {
     const absoluteDist = [dx, dy, 0];
-    editor.selection.items.forEach((it) => {
+    editor.context.selection.items.forEach((it) => {
       it.absoluteMove(absoluteDist);
     });
-    editor.command("setAttributeForMulti", "item move down", editor.selection.pack("x", "y"));
+    editor.command("setAttributeForMulti", "item move down", editor.context.selection.pack("x", "y"));
     editor.nextTick(() => {
-      editor.selection.reselect();
+      editor.context.selection.reselect();
     });
   }
 };
@@ -52546,7 +52551,7 @@ var moveLayerForItems = {
     });
     editor.emit("history.setAttributeForMulti", "item move", itemsMap);
     editor.nextTick(() => {
-      editor.selection.reselect();
+      editor.context.selection.reselect();
     });
   }
 };
@@ -52560,14 +52565,14 @@ var moveSelectionToCenter = {
   execute: function(editor, withScale = true) {
     var _a;
     let areaVerties = [];
-    if (editor.selection.isEmpty) {
-      if (((_a = editor.selection.currentProject) == null ? void 0 : _a.layers.length) > 0) {
-        areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
+    if (editor.context.selection.isEmpty) {
+      if (((_a = editor.context.selection.currentProject) == null ? void 0 : _a.layers.length) > 0) {
+        areaVerties = itemsToRectVerties(editor.context.selection.currentProject.layers);
       } else {
         areaVerties = rectToVerties(0, 0, 100, 100);
       }
     } else {
-      areaVerties = itemsToRectVerties(editor.selection.items);
+      areaVerties = itemsToRectVerties(editor.context.selection.items);
     }
     editor.emit("moveToCenter", areaVerties, withScale);
   }
@@ -52581,7 +52586,7 @@ var moveToCenter = {
   description: "Move Layer to Center on Viewport",
   execute: function(editor, areaVerties, withScale = false) {
     if (areaVerties) {
-      editor.viewport.moveToCenter(areaVerties, withScale ? -0.2 : 0, withScale);
+      editor.context.viewport.moveToCenter(areaVerties, withScale ? -0.2 : 0, withScale);
     }
   }
 };
@@ -52794,9 +52799,9 @@ var open_editor = {
   command: "open.editor",
   description: "Open custom editor for item  when doubleclick is fired",
   execute: function(editor, current) {
-    if (!current && editor.selection.isOne === false)
+    if (!current && editor.context.selection.isOne === false)
       return;
-    current = current || editor.selection.current;
+    current = current || editor.context.selection.current;
     if (current) {
       if (current.editablePath) {
         editor.emit("showPathEditor", "modify", {
@@ -52807,9 +52812,9 @@ var open_editor = {
           disableCurve: true,
           d: current.editablePath,
           changeEvent: (data) => {
-            editor.command("setAttributeForMulti", "change editable path", editor.selection.packByValue(__spreadValues({}, current.recoverEditablePath(data.d)), [current.id]));
+            editor.command("setAttributeForMulti", "change editable path", editor.context.selection.packByValue(__spreadValues({}, current.recoverEditablePath(data.d)), [current.id]));
             editor.nextTick(() => {
-              if (editor.stateManager.isPointerUp) {
+              if (editor.context.stateManager.isPointerUp) {
                 editor.emit("recoverBooleanPath");
               }
             });
@@ -52823,13 +52828,13 @@ var open_editor = {
           matrix: current.matrix,
           d: current.absolutePath().d,
           changeEvent: (data) => {
-            const newCurrent = editor.selection.current;
+            const newCurrent = editor.context.selection.current;
             if (newCurrent.isSVG() && newCurrent.isNot("svg-path")) {
               const newPathData = newCurrent.toSVGPath();
               const newPath = editor.createModel(__spreadValues({
                 itemType: "svg-path"
               }, newPathData));
-              editor.selection.select(newPath);
+              editor.context.selection.select(newPath);
               newCurrent.insertAfter(newPath);
               editor.nextTick(() => {
                 editor.emit("removeLayer", [newCurrent.id]);
@@ -52838,7 +52843,7 @@ var open_editor = {
             } else {
               editor.emit("updatePathItem", data);
               editor.nextTick(() => {
-                if (editor.stateManager.isPointerUp) {
+                if (editor.context.stateManager.isPointerUp) {
                   editor.emit("recoverBooleanPath");
                 }
               });
@@ -52854,7 +52859,7 @@ var open_editor = {
           editor.emit("showPathEditor", mode, {
             changeEvent: (data) => {
               const resultPath = current.invertPath(data.d).d;
-              editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
+              editor.command("setAttributeForMulti", "change clip-path", editor.context.selection.packByValue({
                 "clip-path": `path(${resultPath})`
               }));
             },
@@ -52892,7 +52897,7 @@ var playTimelineItem = {
   command: "playTimelineItem",
   description: "Play button action",
   execute: function(editor, speed2 = 1, iterationCount = 1, direction = "normal") {
-    editor.selection.empty();
+    editor.context.selection.empty();
     editor.emit("refreshSelection");
     _currentProject(editor, (project2, timeline) => {
       var lastTime = project2.getSelectedTimelineLastTime();
@@ -52939,7 +52944,7 @@ var __glob_0_80 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var pop_mode_view = {
   command: "pop.mode.view",
   execute: function(editor, modeView = void 0) {
-    editor.modeViewManager.popMode(modeView);
+    editor.context.modeViewManager.popMode(modeView);
   }
 };
 var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -52964,7 +52969,8 @@ var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var push_mode_view = {
   command: "push.mode.view",
   execute: function(editor, modeView = "CanvasView") {
-    editor.modeViewManager.pushMode(modeView);
+    editor.context.modeViewManager.pushMode(modeView);
+    editor.emit("updateModeView");
   }
 };
 var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -52975,7 +52981,7 @@ var recoverBooleanPath = {
   command: "recoverBooleanPath",
   description: "recover box rectangle for boolean path result",
   execute: function(editor) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     let booleanContainer;
     if (current && current.isBooleanItem) {
       booleanContainer = current.parent;
@@ -53001,7 +53007,7 @@ var recoverBooleanPath = {
         booleanContainer.resetMatrix(it.item);
       });
       const ids = [...layersCache.map((it) => it.item.id), booleanContainer.id];
-      const data = editor.selection.packByIds(ids, "x", "y", "width", "height");
+      const data = editor.context.selection.packByIds(ids, "x", "y", "width", "height");
       editor.command("setAttributeForMulti", "fit boolean path", data, {
         origin: "*",
         doNotChildrenScale: isBooleanItem
@@ -53063,12 +53069,12 @@ var refreshElement = {
       }
     }
     maker.emit("refreshSelectionStyleView", current);
-    if (current && current.is("project")) {
+    if (current.hasLayout()) {
       maker.emit("refreshElementBoundSize", current);
-    } else if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
-      maker.emit("refreshElementBoundSize", current.parent);
     } else {
-      maker.emit("refreshElementBoundSize", current);
+      if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
+        maker.emit("refreshElementBoundSize", current.parent);
+      }
     }
     maker.run();
   }
@@ -53107,7 +53113,7 @@ var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var removeAnimationItem = {
   command: "removeAnimationItem",
   execute: function(editor, id) {
-    const project2 = editor.selection.currentProject;
+    const project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.removeAnimationItem(id);
       editor.timeline.empty();
@@ -53123,13 +53129,13 @@ var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var removeLayer$1 = {
   command: "removeLayer",
   execute: function(editor, ids = void 0) {
-    const currentIds = ids || editor.selection.ids;
+    const currentIds = ids || editor.context.selection.ids;
     const removedIds = [];
-    editor.selection.itemsByIds(currentIds).forEach((item) => {
+    editor.context.selection.itemsByIds(currentIds).forEach((item) => {
       removedIds.push(item.id);
       item.remove();
     });
-    editor.selection.removeById(removedIds);
+    editor.context.selection.removeById(removedIds);
     editor.nextTick(() => {
       editor.emit("refreshAll");
       editor.emit("refreshSelectionTool");
@@ -53143,7 +53149,7 @@ var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var removeTimeline = {
   command: "removeTimeline",
   execute: function(editor, layerId) {
-    const project2 = editor.selection.currentProject;
+    const project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.removeTimeline(layerId);
       editor.timeline.empty();
@@ -53159,7 +53165,7 @@ var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var removeTimelineProperty = {
   command: "removeTimelineProperty",
   execute: function(editor, layerId, property) {
-    const project2 = editor.selection.currentProject;
+    const project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.removeTimelineProperty(layerId, property);
       editor.timeline.empty();
@@ -53180,7 +53186,7 @@ var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   "default": resetSelection
 }, Symbol.toStringTag, { value: "Module" }));
 function resizeArtBoard(editor, size2 = "") {
-  var current = editor.selection.current;
+  var current = editor.context.selection.current;
   if (current && current.is("artboard")) {
     if (!size2.trim())
       return;
@@ -53188,7 +53194,7 @@ function resizeArtBoard(editor, size2 = "") {
     width2 = +width2;
     height2 = +height2;
     current.reset({ width: width2, height: height2 });
-    editor.selection.select(current);
+    editor.context.selection.select(current);
     _doForceRefreshSelection(editor);
   }
 }
@@ -53200,8 +53206,8 @@ var rotateLayer = {
   command: "rotateLayer",
   description: "rotate layer by keydown with matrix ",
   execute: function(editor, distAngle = 0) {
-    editor.command("setAttributeForMulti", "change rotate", editor.selection.packByValue({
-      angle: editor.selection.current.angle + distAngle
+    editor.command("setAttributeForMulti", "change rotate", editor.context.selection.packByValue({
+      angle: editor.context.selection.current.angle + distAngle
     }));
   }
 };
@@ -53213,12 +53219,12 @@ var same_height = {
   command: "same.height",
   description: "fit at the same height",
   execute: function(editor) {
-    var len2 = editor.selection.length;
+    var len2 = editor.context.selection.length;
     if (len2 == 1)
       ;
     else if (len2 > 1) {
-      const rect2 = vertiesToRectangle(editor.selection.verties);
-      editor.command("setAttributeForMulti", "fit at the same height", editor.selection.packByValue({
+      const rect2 = vertiesToRectangle(editor.context.selection.verties);
+      editor.command("setAttributeForMulti", "fit at the same height", editor.context.selection.packByValue({
         y: rect2.y,
         height: rect2.height
       }));
@@ -53233,9 +53239,9 @@ var same_width = {
   command: "same.width",
   description: "fit at the same width",
   execute: function(editor) {
-    if (editor.selection.isMany) {
-      const rect2 = vertiesToRectangle(editor.selection.verties);
-      editor.command("setAttributeForMulti", "fit at the same width", editor.selection.packByValue({
+    if (editor.context.selection.isMany) {
+      const rect2 = vertiesToRectangle(editor.context.selection.verties);
+      editor.command("setAttributeForMulti", "fit at the same width", editor.context.selection.packByValue({
         x: rect2.x,
         width: rect2.width
       }));
@@ -53249,7 +53255,7 @@ var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var saveJSON = {
   command: "saveJSON",
   execute: function(editor) {
-    editor.saveItem("model", editor.modelManager.toJSON());
+    editor.saveItem("model", editor.context.modelManager.toJSON());
   }
 };
 var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -53259,7 +53265,7 @@ var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var savePNG = {
   command: "savePNG",
   execute: function(editor, callbackCommand = "") {
-    const item = editor.selection.current;
+    const item = editor.context.selection.current;
     if (item) {
       const svgString = ExportManager.generateSVG(editor, item).trim();
       const datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
@@ -53334,9 +53340,9 @@ var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var select_all$1 = {
   command: "select.all",
   execute: function(editor) {
-    var project2 = editor.selection.currentProject;
+    var project2 = editor.context.selection.currentProject;
     if (project2) {
-      editor.selection.select(...project2.layers);
+      editor.context.selection.select(...project2.layers);
       editor.emit("history.refreshSelection");
     }
   }
@@ -53348,7 +53354,7 @@ var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var selectTimelineItem = {
   command: "selectTimelineItem",
   execute: function(editor, selectedId) {
-    const project2 = editor.selection.currentProject;
+    const project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.selectTimeline(selectedId);
       editor.emit("refreshTimeline");
@@ -53436,7 +53442,7 @@ var setTimelineOffset = {
   command: "setTimelineOffset",
   debounce: 100,
   execute: function(editor, obj2) {
-    const project2 = editor.selection.currentProject;
+    const project2 = editor.context.selection.currentProject;
     if (project2) {
       project2.setTimelineKeyframeOffsetValue(obj2.layerId, obj2.property, obj2.id, obj2.value, obj2.timing, obj2.time);
       editor.emit("refreshTimeline");
@@ -53460,18 +53466,18 @@ var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var sort_bottom = {
   command: "sort.bottom",
   execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
+    if (editor.context.selection.isOne) {
+      const current = editor.context.selection.current;
       if (current.parent.is("project"))
         ;
       else {
         const parent = current.parent;
-        const distY = getVertiesMaxY(parent.verties) - getVertiesMaxY(editor.selection.verties);
+        const distY = getVertiesMaxY(parent.verties) - getVertiesMaxY(editor.context.selection.verties);
         editor.emit("moveLayer", 0, distY);
       }
-    } else if (editor.selection.isMany) {
-      let maxRightY = getVertiesMaxY(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item) => {
+    } else if (editor.context.selection.isMany) {
+      let maxRightY = getVertiesMaxY(editor.context.selection.verties);
+      editor.emit("moveLayerForItems", editor.context.selection.map((item) => {
         let itemRightY = getVertiesMaxY(item.verties);
         return { item, dist: [0, maxRightY - itemRightY, 0, 0] };
       }));
@@ -53485,17 +53491,17 @@ var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var sort_center = {
   command: "sort.center",
   execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
+    if (editor.context.selection.isOne) {
+      const current = editor.context.selection.current;
       if (current.parent.is("project"))
         ;
       else if (current.artboard) {
-        const distX = getVertiesCenterX(current.artboard.verties) - getVertiesCenterX(editor.selection.verties);
+        const distX = getVertiesCenterX(current.artboard.verties) - getVertiesCenterX(editor.context.selection.verties);
         editor.emit("moveLayer", distX, 0);
       }
-    } else if (editor.selection.isMany) {
-      let maxRightX = getVertiesCenterX(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item) => {
+    } else if (editor.context.selection.isMany) {
+      let maxRightX = getVertiesCenterX(editor.context.selection.verties);
+      editor.emit("moveLayerForItems", editor.context.selection.map((item) => {
         let itemRightX = getVertiesCenterX(item.verties);
         return { item, dist: [maxRightX - itemRightX, 0, 0] };
       }));
@@ -53509,18 +53515,18 @@ var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var sort_left = {
   command: "sort.left",
   execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
+    if (editor.context.selection.isOne) {
+      const current = editor.context.selection.current;
       if (current.parent.is("project"))
         ;
       else {
         const parent = current.parent;
-        const distX = getVertiesMinX(parent.verties) - getVertiesMinX(editor.selection.verties);
+        const distX = getVertiesMinX(parent.verties) - getVertiesMinX(editor.context.selection.verties);
         editor.emit("moveLayer", distX, 0);
       }
-    } else if (editor.selection.isMany) {
-      let maxRightX = getVertiesMinX(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item) => {
+    } else if (editor.context.selection.isMany) {
+      let maxRightX = getVertiesMinX(editor.context.selection.verties);
+      editor.emit("moveLayerForItems", editor.context.selection.map((item) => {
         let itemRightX = getVertiesMinX(item.verties);
         return { item, dist: [maxRightX - itemRightX, 0, 0] };
       }));
@@ -53534,17 +53540,17 @@ var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var sort_middle = {
   command: "sort.middle",
   execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
+    if (editor.context.selection.isOne) {
+      const current = editor.context.selection.current;
       if (current.parent.is("project"))
         ;
       else if (current.artboard) {
-        const distY = getVertiesCenterY(current.artboard.verties) - getVertiesCenterY(editor.selection.verties);
+        const distY = getVertiesCenterY(current.artboard.verties) - getVertiesCenterY(editor.context.selection.verties);
         editor.emit("moveLayer", 0, distY);
       }
-    } else if (editor.selection.isMany) {
-      let maxRightY = getVertiesCenterY(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item) => {
+    } else if (editor.context.selection.isMany) {
+      let maxRightY = getVertiesCenterY(editor.context.selection.verties);
+      editor.emit("moveLayerForItems", editor.context.selection.map((item) => {
         let itemRightY = getVertiesCenterY(item.verties);
         return { item, dist: [0, maxRightY - itemRightY, 0, 0] };
       }));
@@ -53558,18 +53564,18 @@ var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var sort_right = {
   command: "sort.right",
   execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
+    if (editor.context.selection.isOne) {
+      const current = editor.context.selection.current;
       if (current.parent.is("project"))
         ;
       else {
         const parent = current.parent;
-        const distX = getVertiesMaxX(parent.verties) - getVertiesMaxX(editor.selection.verties);
+        const distX = getVertiesMaxX(parent.verties) - getVertiesMaxX(editor.context.selection.verties);
         editor.emit("moveLayer", distX, 0);
       }
-    } else if (editor.selection.isMany) {
-      let maxRightX = getVertiesMaxX(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item) => {
+    } else if (editor.context.selection.isMany) {
+      let maxRightX = getVertiesMaxX(editor.context.selection.verties);
+      editor.emit("moveLayerForItems", editor.context.selection.map((item) => {
         let itemRightX = getVertiesMaxX(item.verties);
         return { item, dist: [maxRightX - itemRightX, 0, 0] };
       }));
@@ -53583,18 +53589,18 @@ var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var sort_top = {
   command: "sort.top",
   execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
+    if (editor.context.selection.isOne) {
+      const current = editor.context.selection.current;
       if (current.parent.is("project"))
         ;
       else {
         const parent = current.parent;
-        const distY = getVertiesMinY(parent.verties) - getVertiesMinY(editor.selection.verties);
+        const distY = getVertiesMinY(parent.verties) - getVertiesMinY(editor.context.selection.verties);
         editor.emit("moveLayer", 0, distY);
       }
-    } else if (editor.selection.isMany) {
-      let maxRightY = getVertiesMinY(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item) => {
+    } else if (editor.context.selection.isMany) {
+      let maxRightY = getVertiesMinY(editor.context.selection.verties);
+      editor.emit("moveLayerForItems", editor.context.selection.map((item) => {
         let itemRightY = getVertiesMinY(item.verties);
         return { item, dist: [0, maxRightY - itemRightY, 0, 0] };
       }));
@@ -53608,7 +53614,7 @@ var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var switch_path = {
   command: "switch.path",
   execute: async (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (!current)
       return;
     if (current.is("boolean-path") || current.isBooleanItem) {
@@ -53616,14 +53622,14 @@ var switch_path = {
       if (current.isBooleanItem) {
         parent = current.parent;
       }
-      editor.selection.select(parent);
-      editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
+      editor.context.selection.select(parent);
+      editor.command("setAttributeForMulti", "change boolean operation", editor.context.selection.packByValue({
         "boolean-operation": parent["boolean-operation"],
         children: parent.children.reverse()
       }));
       editor.nextTick(() => {
         editor.emit("recoverBooleanPath");
-        editor.selection.select(current);
+        editor.context.selection.select(current);
         editor.emit("refreshSelection");
       });
     }
@@ -53636,7 +53642,7 @@ var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var toggle_tool_hand = {
   command: "toggleToolHand",
   execute: function(editor) {
-    editor.config.toggle("set.tool.hand");
+    editor.context.config.toggle("set.tool.hand");
   }
 };
 var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -53646,9 +53652,9 @@ var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var ungroup_item$1 = {
   command: "ungroup.item",
   execute: function(editor) {
-    if (editor.selection.length === 0)
+    if (editor.context.selection.length === 0)
       return;
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       let groupLayer = current;
       let layers2 = [...groupLayer.layers];
@@ -53656,7 +53662,7 @@ var ungroup_item$1 = {
       layers2.forEach((child) => {
         groupLayer.insertBefore(child);
       });
-      editor.selection.select(...layers2);
+      editor.context.selection.select(...layers2);
       editor.emit("refreshAll");
     }
   }
@@ -53669,7 +53675,7 @@ var updateClipPath = {
   command: "updateClipPath",
   description: "update clip-path property ",
   execute: function(editor, pathObject) {
-    editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
+    editor.command("setAttributeForMulti", "change clip-path", editor.context.selection.packByValue({
       "clip-path": `path(${pathObject.d})`
     }));
   }
@@ -53707,7 +53713,7 @@ var updateImageAssetItem = {
     reader.onload = (e) => {
       var datauri = e.target.result;
       var local = window.URL.createObjectURL(item);
-      var project2 = editor.selection.currentProject;
+      var project2 = editor.context.selection.currentProject;
       if (project2) {
         const image2 = project2.createImage({
           id: uuidShort(),
@@ -54001,11 +54007,11 @@ var updatePathItem = {
   command: "updatePathItem",
   description: "Update path string for selected svg path item",
   execute: function(editor, pathObject) {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
     if (current) {
       if (pathObject.box === "box") {
         const newPath = current.invertPath(pathObject.d);
-        editor.command("setAttributeForMulti", "change local path", editor.selection.packByValue({
+        editor.command("setAttributeForMulti", "change local path", editor.context.selection.packByValue({
           d: newPath.d
         }));
       } else {
@@ -54018,7 +54024,7 @@ var updatePathItem = {
         let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(fromTranslation([], oldBBox[4]), Transform.createTransformMatrix(Transform.parseStyle(pathObject.matrix.transform), newWidth, newHeight), fromTranslation([], negate([], oldBBox[4]))));
         const worldMatrix = calculateMatrix(fromTranslation([], newBBox[0]), current.getLocalTransformMatrix(newWidth, newHeight));
         const realXY = getTranslation([], calculateMatrix(pathObject.matrix.parentMatrixInverse, worldMatrix, invert([], current.getLocalTransformMatrix(newWidth, newHeight))));
-        editor.command("setAttributeForMulti", "change path", editor.selection.packByValue({
+        editor.command("setAttributeForMulti", "change path", editor.context.selection.packByValue({
           d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
           x: realXY[0],
           y: realXY[1],
@@ -54065,8 +54071,8 @@ var __glob_0_127 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var updateScale = {
   command: "updateScale",
   execute: function(editor, scale2) {
-    const oldScale = editor.viewport.scale;
-    editor.viewport.setScale(scale2);
+    const oldScale = editor.context.viewport.scale;
+    editor.context.viewport.setScale(scale2);
     editor.emit("updateViewport", scale2, oldScale);
   }
 };
@@ -54147,7 +54153,7 @@ var updateVideoAssetItem = {
     reader.onload = (e) => {
       var datauri = e.target.result;
       var local = window.URL.createObjectURL(item);
-      var project2 = editor.selection.currentProject;
+      var project2 = editor.context.selection.currentProject;
       if (project2) {
         project2.createVideo({
           id: uuidShort(),
@@ -54170,7 +54176,7 @@ var __glob_0_131 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var zoom_default$1 = {
   command: "zoom.default",
   execute: function(editor) {
-    editor.viewport.zoomDefault();
+    editor.context.viewport.zoomDefault();
   }
 };
 var __glob_0_132 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -54180,7 +54186,7 @@ var __glob_0_132 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var zoom_in$1 = {
   command: "zoom.in",
   execute: function(editor) {
-    editor.viewport.zoomIn(0.02);
+    editor.context.viewport.zoomIn(0.02);
   }
 };
 var __glob_0_133 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -54190,7 +54196,7 @@ var __glob_0_133 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var zoom_out$1 = {
   command: "zoom.out",
   execute: function(editor) {
-    editor.viewport.zoomOut(0.02);
+    editor.context.viewport.zoomOut(0.02);
   }
 };
 var __glob_0_134 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -54415,6 +54421,7 @@ class CursorManager {
 class HistoryManager {
   constructor(editor) {
     this.$editor = editor;
+    this.$context = editor.context;
     this.currentIndex = -1;
     this.undoHistories = [];
     this.redoHistories = [];
@@ -54427,10 +54434,10 @@ class HistoryManager {
     return Object.keys(this.selection);
   }
   createCommand(commandString) {
-    return this.$editor.stateManager.isPointerUp ? `history.${commandString}` : commandString;
+    return this.$context.stateManager.isPointerUp ? `history.${commandString}` : commandString;
   }
   saveSelection(obj2 = {}) {
-    this.selection = this.$editor.selection.toCloneObject();
+    this.selection = this.$editor.context.selection.toCloneObject();
   }
   getUndoValues(attrs = {}) {
     let result = {};
@@ -54446,7 +54453,7 @@ class HistoryManager {
     let result = {};
     Object.keys(multiAttrs).forEach((id) => {
       result[id] = {};
-      const selectedObject = this.selection[id] || this.$editor.selection.itemsByIds(id)[0];
+      const selectedObject = this.selection[id] || this.$editor.context.selection.itemsByIds(id)[0];
       const attrs = multiAttrs[id];
       Object.keys(attrs).forEach((key) => {
         result[id][key] = selectedObject[key];
@@ -54458,7 +54465,7 @@ class HistoryManager {
     const time = window.performance.now();
     const lastUndoObject = this.undoHistories[this.undoHistories.length - 1];
     const historyObject = { message, command, data, time };
-    if (lastUndoObject && lastUndoObject.message === message && time - lastUndoObject.time < this.$editor.config.get("history.delay.ms")) {
+    if (lastUndoObject && lastUndoObject.message === message && time - lastUndoObject.time < this.$editor.context.config.get("history.delay.ms")) {
       this.undoHistories[this.undoHistories.length - 1] = historyObject;
     } else {
       this.undoHistories.push(historyObject);
@@ -54599,12 +54606,16 @@ class InjectManager {
         return 0;
       return a.order > b.order ? 1 : -1;
     });
-    return list2.map((it) => {
-      const props = {};
-      if (hasRef) {
-        props.ref = `$${it.refClass}`;
+    return list2.map((it, index2) => {
+      if (isArray(it.class)) {
+        return createElementJsx(...it.class);
+      } else {
+        const props = {};
+        if (hasRef) {
+          props.ref = `$${it.refClass}-${index2}`;
+        }
+        return createComponent(it.refClass, props);
       }
-      return createComponent(it.refClass, props);
     }).join("\n");
   }
 }
@@ -54670,6 +54681,7 @@ const identity$1 = () => true;
 class ModelManager {
   constructor(editor) {
     this.editor = editor;
+    this.context = this.editor.context;
     this.version = "0.0.0";
     this.name = "";
     this.description = "";
@@ -54765,7 +54777,7 @@ class ModelManager {
     return isParent;
   }
   get components() {
-    return this.editor.components;
+    return this.context.components;
   }
   searchItem(id) {
     return this.get(id);
@@ -54856,11 +54868,13 @@ class ModelManager {
     const children2 = (layers2 || []).map((it) => {
       return this.createModel(__spreadProps(__spreadValues({}, it), { parentId: item.id }), true, context);
     });
-    item.reset({
-      children: children2.map((it) => {
-        return it.id;
-      })
-    }, context);
+    if (children2.length) {
+      item.reset({
+        children: children2.map((it) => {
+          return it.id;
+        })
+      }, context);
+    }
     return item;
   }
   getAllLayers(rootId, filterCallback = identity$1) {
@@ -56988,6 +57002,7 @@ class SegmentSelectionManager {
 class SelectionManager {
   constructor(editor) {
     this.$editor = editor;
+    this.$context = this.$editor.context;
     this.project = null;
     this.itemKeys = {};
     this.hoverId = "";
@@ -57005,18 +57020,18 @@ class SelectionManager {
     });
   }
   refreshMousePosition() {
-    const areaWidth = this.$editor.config.get("area.width");
-    const pos = this.$editor.viewport.getWorldPosition();
+    const areaWidth = this.$context.config.get("area.width");
+    const pos = this.$context.viewport.getWorldPosition();
     this.pos = pos;
     const [row, column] = area$1(pos[0], pos[1], areaWidth);
     this.row = row;
     this.column = column;
   }
   get modelManager() {
-    return this.$editor.modelManager;
+    return this.$context.modelManager;
   }
   get lockManager() {
-    return this.$editor.lockManager;
+    return this.$context.lockManager;
   }
   get items() {
     return this.modelManager.searchLiveItemsById(this.ids);
@@ -57052,7 +57067,7 @@ class SelectionManager {
     return this.currentProject.allLayers || [];
   }
   get filteredLayers() {
-    const areaWidth = this.$editor.config.get("area.width");
+    const areaWidth = this.$editor.context.config.get("area.width");
     return this.currentProject.filteredAllLayers((item) => {
       if (item.is("project"))
         return false;
@@ -57078,7 +57093,7 @@ class SelectionManager {
       if (this.check(item))
         return false;
       const inViewport = item.verties.some((v) => {
-        return this.$editor.viewport.checkInViewport(v);
+        return this.$context.viewport.checkInViewport(v);
       });
       return inViewport;
     });
@@ -57090,7 +57105,7 @@ class SelectionManager {
       if (item.is("project"))
         return false;
       const inViewport = item.verties.some((v) => {
-        return this.$editor.viewport.checkInViewport(v);
+        return this.$context.viewport.checkInViewport(v);
       });
       return inViewport;
     });
@@ -58147,7 +58162,7 @@ class ShortCutManager {
     const editor = this.$editor;
     const whenList = when.split("|").map((it) => it.trim());
     return () => {
-      return whenList.some((it) => editor.modeViewManager.isCurrentMode(it));
+      return whenList.some((it) => editor.context.modeViewManager.isCurrentMode(it));
     };
   }
   sort() {
@@ -58226,13 +58241,13 @@ class SnapManager {
     this.snapDistance = snapDistance;
   }
   get dist() {
-    return this.editor.config.get("snap.distance") || this.snapDistance;
+    return this.editor.context.config.get("snap.distance") || this.snapDistance;
   }
   get gridSize() {
-    return this.editor.config.get("snap.grid") || 50;
+    return this.editor.context.config.get("snap.grid") || 50;
   }
   clear() {
-    this.snapTargetLayers = this.editor.selection.snapTargetLayers;
+    this.snapTargetLayers = this.editor.context.selection.snapTargetLayers;
   }
   convertMatrix(item) {
     const verties = this.convertGuideAndPathMatrix(item);
@@ -58252,7 +58267,7 @@ class SnapManager {
   }
   getSnapPoints() {
     const points = [];
-    this.editor.selection.snapTargetLayersWithSelection.forEach((it) => {
+    this.editor.context.selection.snapTargetLayersWithSelection.forEach((it) => {
       points.push.apply(points, this.convertGuideAndPathMatrix(it));
     });
     return points;
@@ -58377,7 +58392,7 @@ class StateManager {
     this.editor = editor;
   }
   get config() {
-    return this.editor.config;
+    return this.editor.context.config;
   }
   get zIndex() {
     return this.popupZIndex++;
@@ -58432,7 +58447,7 @@ class StorageManager {
     return null;
   }
   async saveCustomAsset(datauri = "") {
-    const current = this.editor.selection.current;
+    const current = this.editor.context.selection.current;
     if (current) {
       const assetList = await this.getCustomAssetList();
       const json = await this.editor.json.render(current);
@@ -58466,7 +58481,7 @@ class TimelineSelectionManager {
     this.itemKeys = {};
   }
   currentProject(callback) {
-    var project2 = this.$editor.selection.currentProject;
+    var project2 = this.$editor.context.selection.currentProject;
     if (project2) {
       callback && callback(project2);
     }
@@ -58565,6 +58580,7 @@ class TimelineSelectionManager {
 class ViewportManager {
   constructor(editor) {
     this.editor = editor;
+    this.context = this.editor.context;
     this.canvasSize = null;
     this.cachedViewport = rectToVerties(0, 0, 0, 0);
     this.mouse = create$3();
@@ -58631,7 +58647,7 @@ class ViewportManager {
     }
   }
   getWorldPosition(e) {
-    e = e || this.editor.config.get("bodyEvent");
+    e = e || this.context.config.get("bodyEvent");
     if (!e) {
       return this.createWorldPosition(0, 0);
     }
@@ -58809,6 +58825,7 @@ class Editor {
     this.images = {};
     this.openRightPanel = true;
     this.ignoreManagers = opt.ignoreManagers || [];
+    this.context = {};
     this.loadManagers();
   }
   loadManagers() {
@@ -58837,7 +58854,7 @@ class Editor {
       lockManager: LockManager,
       visibleManager: VisibleManager,
       clipboard: ClipboardManager,
-      iconManager: IconManager$1,
+      icon: IconManager$1,
       stateManager: StateManager,
       menuManager: MenuManager
     });
@@ -58852,7 +58869,7 @@ class Editor {
   registerManager(obj2 = {}) {
     Object.keys(obj2).forEach((name) => {
       const DataManagerClass = obj2[name];
-      Object.defineProperty(this, name, {
+      Object.defineProperty(this.context, name, {
         value: new DataManagerClass(this),
         writable: false
       });
@@ -58866,21 +58883,21 @@ class Editor {
     return this.createModel({ itemType: "project" });
   }
   getI18nMessage(key, params = {}, locale) {
-    return this.i18n.get(key, params, locale || this.locale);
+    return this.context.i18n.get(key, params, locale || this.locale);
   }
   $i18n(key, params = {}, locale) {
     return this.getI18nMessage(key, params, locale);
   }
   hasI18nkey(key, locale) {
-    return this.i18n.hasKey(key, locale || this.locale);
+    return this.context.i18n.hasKey(key, locale || this.locale);
   }
   initI18nMessage(root = "") {
     return (key, params = {}, locale) => {
       const i18nKey = `${root}.${key}`;
       if (this.hasI18nkey(i18nKey, locale)) {
-        return this.i18n(`${root}.${key}`, params, locale);
+        return this.context.i18(`${root}.${key}`, params, locale);
       } else {
-        return this.i18n(`${key}`, params, locale);
+        return this.context.i18(`${key}`, params, locale);
       }
     };
   }
@@ -58892,10 +58909,10 @@ class Editor {
     this.user = user;
   }
   async initPlugins(options2 = {}) {
-    await this.pluginManager.initializePlugin(options2);
+    await this.context.pluginManager.initializePlugin(options2);
   }
   themeValue(key, defaultValue2 = "") {
-    return theme[this.config.get("editor.theme")][key] || defaultValue2;
+    return theme[this.context.config.get("editor.theme")][key] || defaultValue2;
   }
   get zIndex() {
     return this.popupZIndex++;
@@ -58907,40 +58924,40 @@ class Editor {
     this.store = store;
   }
   emit(...args2) {
-    this.store.source = this.EDITOR_ID;
-    this.store.emit(...args2);
+    this.context.store.source = this.EDITOR_ID;
+    this.context.store.emit(...args2);
   }
   on(...args2) {
     const [name, callback, context, ...rest] = args2;
-    return this.store.on(name, callback, context || this, ...rest);
+    return this.context.store.on(name, callback, context || this, ...rest);
   }
   off(...args2) {
-    this.store.off(...args2);
+    this.context.store.off(...args2);
   }
   offAll(...args2) {
-    this.store.offAll(...args2);
+    this.context.store.offAll(...args2);
   }
   debug() {
   }
   command(command, message, ...args2) {
-    if (this.stateManager.isPointerUp) {
-      return this.store.emit(`history.${command}`, message, ...args2);
+    if (this.context.stateManager.isPointerUp) {
+      return this.context.store.emit(`history.${command}`, message, ...args2);
     } else {
-      return this.store.emit(command, ...args2);
+      return this.context.store.emit(command, ...args2);
     }
   }
   nextTick(callback, delay = 0) {
-    if (this.store) {
+    if (this.context.store) {
       window.setTimeout(() => {
-        this.store.nextTick(callback);
+        this.context.store.nextTick(callback);
       }, delay);
     }
   }
   get(idOrModel) {
-    return this.modelManager.get(idOrModel.id || idOrModel);
+    return this.context.modelManager.get(idOrModel.id || idOrModel);
   }
   replaceLocalUrltoRealUrl(str) {
-    var project2 = this.selection.currentProject;
+    var project2 = this.context.selection.currentProject;
     var images = {};
     project2.images.forEach((a) => {
       if (str.indexOf(a.local) > -1) {
@@ -58955,13 +58972,13 @@ class Editor {
     return str;
   }
   createModel(itemObject, isRegister = true) {
-    return this.modelManager.createModel(itemObject, isRegister);
+    return this.context.modelManager.createModel(itemObject, isRegister);
   }
   searchItem(id) {
-    return this.modelManager.searchItem(id);
+    return this.context.modelManager.searchItem(id);
   }
   get storeKey() {
-    return `__els__.${this.config.get("store.key")}`;
+    return `__els__.${this.context.config.get("store.key")}`;
   }
   saveItem(key, value) {
     window.localStorage.setItem(`${this.storeKey}.${key}`, JSON.stringify(value));
@@ -58981,29 +58998,29 @@ class Editor {
     });
   }
   registerUI(target, obj2 = {}, order = 1) {
-    this.injectManager.registerUI(target, obj2, order);
+    this.context.injectManager.registerUI(target, obj2, order);
     this.registerElement(obj2);
   }
   registerComponent(name, component2) {
-    this.components.registerComponent(name, component2);
+    this.context.components.registerComponent(name, component2);
   }
   registerItem(name, item) {
     this.registerComponent(name, item);
   }
   registerInspector(name, inspectorCallback) {
-    this.components.registerInspector(name, inspectorCallback);
+    this.context.components.registerInspector(name, inspectorCallback);
   }
   registerRenderer(rendererType, name, rendererInstance) {
-    this.renderers.registerRenderer(rendererType, name, rendererInstance);
+    this.context.renderers.registerRenderer(rendererType, name, rendererInstance);
   }
   registerRendererType(rendererType, rendererTypeInstance) {
-    this.renderers.registerRendererType(rendererType, rendererTypeInstance);
+    this.context.renderers.registerRendererType(rendererType, rendererTypeInstance);
   }
   getRendererInstance(rendererType, itemType) {
-    return this.renderers.getRendererInstance(rendererType, itemType);
+    return this.context.renderers.getRendererInstance(rendererType, itemType);
   }
   renderer(rendererType) {
-    return this.renderers.getRenderer(rendererType);
+    return this.context.renderers.getRenderer(rendererType);
   }
   get html() {
     return this.renderer("html");
@@ -59015,22 +59032,22 @@ class Editor {
     return this.renderer("json");
   }
   registerCommand(commandObject) {
-    return this.commands.registerCommand(commandObject);
+    return this.context.commands.registerCommand(commandObject);
   }
   registerShortCut(shortcut) {
-    this.shortcuts.registerShortCut(shortcut);
+    this.context.shortcuts.registerShortCut(shortcut);
   }
   registerPlugin(createPluginFunction) {
-    this.pluginManager.registerPlugin(createPluginFunction);
+    this.context.pluginManager.registerPlugin(createPluginFunction);
   }
   registerPluginList(plugins = []) {
     plugins.forEach((p) => this.registerPlugin(p));
   }
   registerConfig(config) {
-    this.config.registerConfig(config);
+    this.context.config.registerConfig(config);
   }
   registerI18nMessage(locale, messages) {
-    this.i18n.registerI18nMessage(locale, messages);
+    this.context.i18n.registerI18nMessage(locale, messages);
   }
   registerI18nMessageWithLocale(messages) {
     Object.entries(messages).forEach(([locale, messages2]) => {
@@ -59038,10 +59055,10 @@ class Editor {
     });
   }
   registerIcon(itemType, iconOrFunction) {
-    this.iconManager.registerIcon(itemType, iconOrFunction);
+    this.context.icon.registerIcon(itemType, iconOrFunction);
   }
   registerMenu(target, menu) {
-    this.menuManager.registerMenu(target, menu);
+    this.context.menuManager.registerMenu(target, menu);
   }
 }
 const EMPTY_POS = { x: 0, y: 0 };
@@ -59376,7 +59393,7 @@ class ExportWindow extends BaseWindow {
     this.refresh();
   }
   refresh() {
-    var project2 = this.$selection.currentProject || { layers: [] };
+    var project2 = this.$context.selection.currentProject || { layers: [] };
     var css = `
 ${this.makeStyle(project2)}
 ${project2.layers.map((item) => this.makeStyle(item)).join("\n")}
@@ -60380,9 +60397,8 @@ class BasePopup extends EditorElement {
     const elements = this.$config.get("editor.layout.elements");
     const bodyRect = elements.$bodyPanel.rect();
     let left2 = bodyRect.left + bodyRect.width - width2 - 10;
+    console.log(bodyRect.left, bodyRect.width, width2, rect2);
     let top2 = rect2.top + height2 > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height2 - 10 : rect2.top;
-    left2 -= bodyRect.left;
-    top2 -= bodyRect.top;
     if (top2 < 10) {
       top2 = 10;
     }
@@ -60394,6 +60410,7 @@ class BasePopup extends EditorElement {
     };
   }
   showByRect(rect2) {
+    console.log(rect2);
     this.$el.css({
       top: Length.px(rect2.top),
       left: Length.px(rect2.left),
@@ -60457,7 +60474,7 @@ class ColorPickerPopup extends BasePopup {
   `;
   }
   [LOAD("$projectColors")]() {
-    var project2 = this.$selection.currentProject || { colors: [] };
+    var project2 = this.$context.selection.currentProject || { colors: [] };
     var colors2 = project2.colors;
     return colors2.map((color2) => {
       return `
@@ -60987,9 +61004,9 @@ class FillEditor extends EditorElement {
     var _a;
     const image2 = SVGFill.parseImage(this.props.value || "transparent") || SVGStaticGradient.create();
     const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
-    this.$selection.selectColorStep(id);
+    this.$context.selection.selectColorStep(id);
     if (id) {
-      this.currentStep = image2.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
+      this.currentStep = image2.colorsteps.find((it) => this.$context.selection.isSelectedColorStep(it.id));
     }
     return {
       cachedRect: null,
@@ -61057,7 +61074,7 @@ class FillEditor extends EditorElement {
     return value;
   }
   [CHANGE("$file")](e) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       [...e.target.files].forEach((item) => {
         this.emit("updateImageAssetItem", item, (local) => {
@@ -61172,7 +61189,7 @@ class FillEditor extends EditorElement {
   [LOAD("$stepList")]() {
     var colorsteps = this.state.image.colorsteps || [];
     return colorsteps.map((it) => {
-      var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
+      var selected = this.$context.selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
         <div class='color-view' style="background-color: ${it.color}">
@@ -61189,9 +61206,9 @@ class FillEditor extends EditorElement {
   }
   selectStep(id) {
     this.state.id = id;
-    this.$selection.selectColorStep(id);
+    this.$context.selection.selectColorStep(id);
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
+      this.currentStep = this.state.image.colorsteps.find((it) => this.$context.selection.isSelectedColorStep(it.id));
       this.parent.trigger("selectColorStep", this.currentStep.color);
     }
     this.refresh();
@@ -61273,7 +61290,7 @@ class FillEditor extends EditorElement {
       return false;
     } else {
       e.$dt.focus();
-      this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
+      this.isSelectedColorStep = this.$context.selection.isSelectedColorStep(id);
       this.selectStep(id);
       this.startXY = e.xy;
       this.cachedStepListRect = this.refs.$stepList.rect();
@@ -61773,6 +61790,7 @@ class FillSingleEditor extends EditorElement {
     this.viewGradientPopup();
   }
   viewGradientPopup() {
+    console.log(this.$el.offsetRect(), this.$el.rect());
     this.emit("showFillPickerPopup", {
       instance: this,
       key: this.props.key,
@@ -61805,7 +61823,7 @@ class GradientSingleEditor extends EditorElement {
     this.setState(__spreadValues({}, obj2));
   }
   [BIND("$miniView")]() {
-    const project2 = this.$selection.currentProject;
+    const project2 = this.$context.selection.currentProject;
     let image2;
     if (this.state.image.type === GradientType.URL) {
       const imageUrl = project2.getImageValueById(this.state.image.url);
@@ -61844,7 +61862,7 @@ class GradientSingleEditor extends EditorElement {
   [SUBSCRIBE("changeGradientSingle")](image2) {
     var _a;
     image2 = BackgroundImage.parseImage(image2);
-    const currentImage = (_a = this.$selection.current.getBackgroundImage(this.state.index)) == null ? void 0 : _a.image;
+    const currentImage = (_a = this.$context.selection.current.getBackgroundImage(this.state.index)) == null ? void 0 : _a.image;
     switch (currentImage.type) {
       case GradientType.RADIAL:
       case GradientType.REPEATING_RADIAL:
@@ -62170,7 +62188,7 @@ class BaseProperty extends EditorElement {
   onShowTitle() {
   }
   refreshShowIsNot(type = "", isRefresh = true) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       if (type.includes(current.itemType)) {
         this.hide();
@@ -62182,7 +62200,7 @@ class BaseProperty extends EditorElement {
     }
   }
   refreshShow(type, isRefresh = true) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       if (isFunction(type) && type()) {
         this.show();
@@ -62232,11 +62250,11 @@ class BaseProperty extends EditorElement {
     return 1e3;
   }
   checkShow() {
-    if (!this.$selection.current) {
+    if (!this.$context.selection.current) {
       this.hide();
       return false;
     }
-    if (this.$selection.current.editable(this.editableProperty)) {
+    if (this.$context.selection.current.editable(this.editableProperty)) {
       this.show();
       return true;
     } else {
@@ -62455,7 +62473,7 @@ class AnimationProperty extends BaseProperty {
     return true;
   }
   [LOAD("$animationList") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     return Animation.parseStyle(current.animation).map((it, index2) => {
@@ -62499,16 +62517,16 @@ class AnimationProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current && current.hasChangedField("animation")) {
       this.refresh();
     }
     this.emit("hideAnimationPropertyPopup");
   }
   [CLICK("$add")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
-      this.command("setAttributeForMulti", "add animation property", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "add animation property", this.$context.selection.packByValue({
         animation: (item) => Animation.add(item.animation, { name: null })
       }));
       this.nextTick(() => {
@@ -62522,7 +62540,7 @@ class AnimationProperty extends BaseProperty {
   }
   [CLICK("$animationList .tools .del")](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.reset({
@@ -62533,7 +62551,7 @@ class AnimationProperty extends BaseProperty {
   }
   [CLICK("$animationList .play-state")](e) {
     var index2 = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     const list2 = Animation.parseStyle(current.animation);
@@ -62559,7 +62577,7 @@ class AnimationProperty extends BaseProperty {
       this.selectItem(this.selectedIndex, false);
     }
     this.selectedIndex = +$preview.attr("data-index");
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentAnimation = Animation.get(this.current.animation, this.selectedIndex);
@@ -62585,7 +62603,7 @@ class AnimationProperty extends BaseProperty {
     if (this.currentAnimation) {
       this.currentAnimation.reset(__spreadValues({}, data));
       if (this.current) {
-        this.command("setAttributeForMulti", "change animation property", this.$selection.packByValue({
+        this.command("setAttributeForMulti", "change animation property", this.$context.selection.packByValue({
           animation: (item) => Animation.replace(item.animation, this.selectedIndex, this.currentAnimation)
         }));
         this.refresh();
@@ -62652,7 +62670,7 @@ class AnimationPropertyPopup extends BasePopup {
     `;
   }
   [LOAD("$name")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var names2 = [];
     if (current && current.keyframes) {
       names2 = current.keyframes.map((it) => {
@@ -62809,13 +62827,13 @@ class ObjectProperty {
       }
       afterComponentRendering($dom, refName, instance) {
         if (refName == "$comp") {
-          const current = this.$selection.current || {};
-          const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
+          const current = this.$context.selection.current || {};
+          const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$context.components.createInspector(current, json.editableProperty);
           instance.setInspector(inspector);
         }
       }
       refresh() {
-        const current = this.$selection.current || {};
+        const current = this.$context.selection.current || {};
         if (current || json.visible) {
           this.setTitle(json.title || current.getDefaultTitle() || current.itemType || current.name);
           this.load();
@@ -62831,10 +62849,10 @@ class ObjectProperty {
         }
       }
       [LOAD("$body")]() {
-        var current = this.$selection.current;
+        var current = this.$context.selection.current;
         if (!current && !json.visible)
           return "";
-        const inspector = isFunction(json.inspector) ? json.inspector(current || {}) : this.$editor.components.createInspector(current || {}, json.editableProperty);
+        const inspector = isFunction(json.inspector) ? json.inspector(current || {}) : this.$context.components.createInspector(current || {}, json.editableProperty);
         return createComponent("ComponentEditor", {
           ref: "$comp",
           inspector,
@@ -62848,7 +62866,7 @@ class ObjectProperty {
         if (json.action) {
           this.command(json.action, `change attribute : ${key}`, key, value);
         } else {
-          this.command("setAttributeForMulti", `change attribute : ${key}`, this.$selection.packByValue({
+          this.command("setAttributeForMulti", `change attribute : ${key}`, this.$context.selection.packByValue({
             [key]: value
           }));
         }
@@ -63128,7 +63146,7 @@ class BackdropFilterProperty extends BaseProperty {
     });
   }
   getSVGFilterList() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var arr = [];
     if (current) {
       arr = current.svgfilters.map((it) => {
@@ -63141,7 +63159,7 @@ class BackdropFilterProperty extends BaseProperty {
     return arr;
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["backdrop-filter"];
     return `
       <div>
@@ -63156,7 +63174,7 @@ class BackdropFilterProperty extends BaseProperty {
     `;
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
-    this.command("setAttributeForMulti", "change backdrop filter", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change backdrop filter", this.$context.selection.packByValue({
       [key]: filter2
     }));
   }
@@ -63183,7 +63201,7 @@ class BackgroundClipProperty extends BaseProperty {
     return `<div ref='$backgroundClip' style='padding-top: 3px;'></div>`;
   }
   [LOAD("$backgroundClip")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var clip = current["background-clip"] || "";
     return createComponent("SelectEditor", {
       ref: "$1",
@@ -63195,7 +63213,7 @@ class BackgroundClipProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.command("setAttributeForMulti", "change background clip", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change background clip", this.$context.selection.packByValue({
       [key]: value
     }));
   }
@@ -63248,7 +63266,7 @@ class BackgroundImageEditor extends EditorElement {
         `;
   }
   [LOAD("$fillList") + DOMDIFF]() {
-    const current = this.$selection.current || { color: "black" };
+    const current = this.$context.selection.current || { color: "black" };
     return this.state.images.map((it, index2) => {
       var image2 = it.image;
       var backgroundType = types[image2.type];
@@ -63597,7 +63615,7 @@ class BackgroundImageProperty extends BaseProperty {
     this.children.$backgroundImageEditor.trigger("add", e.$dt.data("value"));
   }
   [LOAD("$property")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["background-image"] || "";
     return createComponent("BackgroundImageEditor", {
       ref: "$backgroundImageEditor",
@@ -63613,15 +63631,15 @@ class BackgroundImageProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.hasChangedField("background-image")) {
+    if (this.$context.selection.current) {
+      if (this.$context.selection.hasChangedField("background-image")) {
         this.refresh();
       }
     }
   }
   [SUBSCRIBE_SELF("changeBackgroundImage")](key, value) {
     this.nextTick(() => {
-      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
         [key]: value
       }));
     }, 10);
@@ -63821,7 +63839,7 @@ class BorderProperty extends BaseProperty {
     return `<div class="property-item full border-item" ref='$body'></div>`;
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["border"] || "";
     return createComponent("BorderEditor", {
       ref: "$1",
@@ -63837,7 +63855,7 @@ class BorderProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
-    this.command("setAttributeForMulti", "change border", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change border", this.$context.selection.packByValue({
       [key]: value
     }));
   }
@@ -63955,14 +63973,14 @@ class BorderImageProperty extends BaseProperty {
     this.refresh();
   }
   getTools() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var appliedBorderImage = current.appliedBorderImage || false;
     return `
       <label><input type='checkbox' ${appliedBorderImage ? "checked" : ""} ref='$apply' /> Apply</label>
     `;
   }
   [CLICK("$apply")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     var applyBorderImage = this.refs.$apply.checked();
@@ -63988,7 +64006,7 @@ class BorderImageProperty extends BaseProperty {
     }).join("");
   }
   [LOAD("$borderImageView")]() {
-    var current = this.$selection.current || { borderImage: { image: {} } };
+    var current = this.$context.selection.current || { borderImage: { image: {} } };
     var borderImage2 = current.borderImage;
     var backgroundTypeName = borderImage2.type ? names[borderImage2.type] : "";
     const imageCSS = `background-image: ${borderImage2.image.toString()}; background-size: cover;`;
@@ -64107,7 +64125,7 @@ class BorderImageProperty extends BaseProperty {
     return data;
   }
   viewFillPopup($preview, selectColorStepId) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     this.emit("showFillPopup", __spreadProps(__spreadValues({
@@ -64118,7 +64136,7 @@ class BorderImageProperty extends BaseProperty {
     }));
   }
   viewChangeImage() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     var borderImage2 = current.borderImage;
@@ -64141,7 +64159,7 @@ class BorderImageProperty extends BaseProperty {
     }
   }
   setImage(data) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.borderImage.setImageUrl(data);
@@ -64149,7 +64167,7 @@ class BorderImageProperty extends BaseProperty {
     this.emit("refreshElement", current);
   }
   viewChangeGradient(data) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     var borderImage2 = current.borderImage;
@@ -64172,7 +64190,7 @@ class BorderImageProperty extends BaseProperty {
     }
   }
   setGradient(data) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.borderImage.setGradient(data);
@@ -64190,7 +64208,7 @@ class BorderImageProperty extends BaseProperty {
     }
   }
   setBorderImageProperty() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     var borderImage2 = current.borderImage;
@@ -64390,7 +64408,7 @@ class BorderRadiusProperty extends BaseProperty {
     return `<div class="property-item full border-radius-item" ref='$body'></div>`;
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["border-radius"] || "";
     return createComponent("BorderRadiusEditor", {
       ref: "$1",
@@ -64405,7 +64423,7 @@ class BorderRadiusProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE_SELF("changeBorderRadius")](value) {
-    this.command("setAttributeForMulti", "change border radius", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change border radius", this.$context.selection.packByValue({
       "border-radius": value
     }));
   }
@@ -64435,7 +64453,7 @@ class BoxModelProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current == null ? void 0 : current.hasChangedField("padding-left", "padding-right", "padding-top", "padding-bottom")) {
       this.refresh();
     }
@@ -64448,7 +64466,7 @@ class BoxModelProperty extends BaseProperty {
     return `<input type="number" ref="$${key}" value="${value.value}" tabIndex="1" />`;
   }
   [LOAD("$boxModelItem") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     return `
@@ -64495,7 +64513,7 @@ class BoxModelProperty extends BaseProperty {
     styleKeys.forEach((key) => {
       data[key] = this.refs["$" + key].value;
     });
-    this.command("setAttributeForMulti", "change padding or margin", this.$selection.packByValue(data));
+    this.command("setAttributeForMulti", "change padding or margin", this.$context.selection.packByValue(data));
   }
 }
 function boxModel(editor) {
@@ -64582,13 +64600,13 @@ class BoxShadowProperty extends BaseProperty {
     this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadow);
   }
   [LOAD("$shadowList")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
       key: "box-shadow",
       value: current["box-shadow"],
       onchange: (key, value) => {
-        this.command("setAttributeForMulti", "change box shadow", this.$selection.packByValue({
+        this.command("setAttributeForMulti", "change box shadow", this.$context.selection.packByValue({
           [key]: value
         }));
       }
@@ -64721,16 +64739,16 @@ class ClipPathProperty extends BaseProperty {
     `;
   }
   [CLICK("$clippathList .clippath-item .title .name")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     this.viewClipPathPicker();
   }
   [CLICK("$clippathList .del") + PREVENT]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
-    this.command("setAttributeForMulti", "delete clip-path", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "delete clip-path", this.$context.selection.packByValue({
       "clip-path": ""
     }));
     this.emit("hideClipPathPopup");
@@ -64745,7 +64763,7 @@ class ClipPathProperty extends BaseProperty {
     this.refresh();
   }
   [LOAD("$clippathList")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     if (!current["clip-path"])
@@ -64753,7 +64771,7 @@ class ClipPathProperty extends BaseProperty {
     return this.makeClipPathTemplate(current["clip-path"].split("(")[0], current["clip-path"]);
   }
   [CLICK("$tools [data-value]")](e) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     if (current["clip-path"]) {
@@ -64764,12 +64782,12 @@ class ClipPathProperty extends BaseProperty {
       current.reset({
         "clip-path": ClipPathSample[e.$dt.data("value")]
       });
-      this.command("setAttributeForMulti", "change clip-path", this.$selection.pack("clip-path"));
+      this.command("setAttributeForMulti", "change clip-path", this.$context.selection.pack("clip-path"));
     }
     this.refresh();
   }
   viewClipPathPicker() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     var obj2 = ClipPath.parseStyle(current["clip-path"]);
@@ -64793,12 +64811,12 @@ class ClipPathProperty extends BaseProperty {
   updatePathInfo(data) {
     if (!data)
       return;
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.reset(data);
     this.refresh();
-    this.command("setAttributeForMulti", "change clip-path", this.$selection.packByValue(data));
+    this.command("setAttributeForMulti", "change clip-path", this.$context.selection.packByValue(data));
   }
 }
 function clipPath(editor) {
@@ -64809,7 +64827,7 @@ function clipPath(editor) {
 var ClippathEditorView$2 = "";
 class ClippathPolygonEditorView extends EditorElement {
   initializePolygon() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current = current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -64833,7 +64851,7 @@ class ClippathPolygonEditorView extends EditorElement {
   }
   moveEndPolygonPointer() {
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .polygon .polygon-line")](e) {
     this.initializePolygon();
@@ -64847,7 +64865,7 @@ class ClippathPolygonEditorView extends EditorElement {
   }
   updatePolygon(screenPoints) {
     const newWorldPoints = this.$viewport.applyVertiesInverse(screenPoints);
-    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const inverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const newLocalPoints = vertiesMap(newWorldPoints, inverseMatrix);
     this.state.clippath.value = newLocalPoints.map((p) => {
       return [
@@ -64856,7 +64874,7 @@ class ClippathPolygonEditorView extends EditorElement {
       ].join(" ");
     }).join(",");
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .polygon .polygon-center") + MOVE("movePolygonCenter") + END("moveEndPolygonCenter")]() {
     this.initializePolygon();
@@ -64875,16 +64893,16 @@ class ClippathPolygonEditorView extends EditorElement {
             type: ClipPathType.CIRCLE,
             value: `50% at 50% 50%`
           });
-          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value2));
           break;
       }
       return;
     }
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   templatePolygon(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const points = ClipPath.parseStyleForPolygon(clippath.value).map((point2) => [
       point2.x.toPx(current.screenWidth).value,
       point2.y.toPx(current.screenHeight).value,
@@ -64931,7 +64949,7 @@ class ClippathPolygonEditorView extends EditorElement {
 }
 class ClippathInsetEditorView extends ClippathPolygonEditorView {
   initializeInset() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -64981,7 +64999,7 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
     const newTopPoint = this.$viewport.applyVertexInverse(topPoint);
     const newRightPoint = this.$viewport.applyVertexInverse(rightPoint);
     const newBottomPoint = this.$viewport.applyVertexInverse(bottomPoint);
-    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const inverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const [
       relativeLeftPosition,
       relativeTopPosition,
@@ -64995,11 +65013,11 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
       left2.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0])
     ].join(" ");
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   moveEndInsetRadius() {
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .inset .inset-center") + LEFT_BUTTON + MOVE("moveInsetCenter") + END("moveEndInsetCenter")]() {
     this.initializeInset();
@@ -65015,7 +65033,7 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
     const newTopPoint = this.$viewport.applyVertexInverse(topPoint);
     const newRightPoint = this.$viewport.applyVertexInverse(rightPoint);
     const newBottomPoint = this.$viewport.applyVertexInverse(bottomPoint);
-    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const inverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const [
       relativeLeftPosition,
       relativeTopPosition,
@@ -65029,7 +65047,7 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
       left2.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0])
     ].join(" ");
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   moveEndInsetCenter(dx, dy) {
     if (dx == 0 && dy == 0) {
@@ -65039,16 +65057,16 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
             type: ClipPathType.POLYGON,
             value: `0% 0%, 100% 0%, 100% 100%, 0% 100%`
           });
-          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value2));
           break;
       }
       return;
     }
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   templateInset(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     clippath.value = ClipPath.parseStyleForInset(clippath.value);
     const top2 = clippath.value.top.toPx(current.screenHeight);
     const left2 = clippath.value.left.toPx(current.screenWidth);
@@ -65115,7 +65133,7 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
 }
 class ClippathCircleEditorView extends ClippathInsetEditorView {
   [POINTERSTART("$el .circle .circle-radius") + LEFT_BUTTON + MOVE("moveCircleRadius") + END("moveEndCircleRadius")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -65123,7 +65141,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     this.state.circle = ClipPath.parseStyleForCircle(this.state.clippath.value);
   }
   moveCircleRadius(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radius, x, y } = this.state.circle;
     const oldX = x.toPx(current.screenWidth);
     const oldY = y.toPx(current.screenHeight);
@@ -65134,7 +65152,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     const newX = newRadius[0] + dx;
     const newY = newRadius[1] + dy;
     const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
-    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const relativePosition = vertiesMap([localPosition], this.$context.selection.current.absoluteMatrixInverse)[0];
     const distX = Math.abs(relativePosition[0] - oldX);
     const result = [
       radius.isPercent() ? Length.makePercent(distX, r) : Length.px(distX),
@@ -65143,14 +65161,14 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     ];
     this.state.clippath.value = `${result[0]} at ${result[1]} ${result[2]}`;
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   moveEndCircleRadius() {
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .circle .circle-center") + LEFT_BUTTON + MOVE("moveCircleCenter") + END("moveEndCircleCenter")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -65158,7 +65176,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     this.state.circle = ClipPath.parseStyleForCircle(this.state.clippath.value);
   }
   moveCircleCenter(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radius, x, y } = this.state.circle;
     const oldX = x.toPx(current.screenWidth);
     const oldY = y.toPx(current.screenHeight);
@@ -65167,7 +65185,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     const newX = center2[0] + dx;
     const newY = center2[1] + dy;
     const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
-    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const relativePosition = vertiesMap([localPosition], this.$context.selection.current.absoluteMatrixInverse)[0];
     const result = [
       radius,
       x.isPercent() ? Length.makePercent(relativePosition[0], this.state.width) : Length.px(relativePosition[0]),
@@ -65175,7 +65193,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     ];
     this.state.clippath.value = `${radius} at ${result[1]} ${result[2]}`;
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   moveEndCircleCenter(dx, dy) {
     if (dx == 0 && dy == 0) {
@@ -65185,16 +65203,16 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
             type: ClipPathType.ELLIPSE,
             value: `${this.state.circle.radius} ${this.state.circle.radius} at ${this.state.circle.x} ${this.state.circle.y}`
           });
-          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value2));
           break;
       }
       return;
     }
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   templateCircle(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const r = Math.sqrt(Math.pow(current.screenWidth, 2) + Math.pow(current.screenHeight, 2)) / Math.sqrt(2);
     const radius = clippath.value.radius.toPx(r);
     const x = clippath.value.x.toPx(current.screenWidth);
@@ -65233,7 +65251,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
 }
 class ClippathEllipseEditorView extends ClippathCircleEditorView {
   [POINTERSTART("$el .ellipse .ellipse-radius-x") + LEFT_BUTTON + MOVE("moveEllipseRadiusX") + END("moveEndEllipseRadiusX")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -65241,7 +65259,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
   }
   moveEllipseRadiusX(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radiusX, radiusY, x, y } = this.state.ellipse;
     const oldX = x.toPx(current.screenWidth);
     const oldY = y.toPx(current.screenHeight);
@@ -65251,7 +65269,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     const newX = newRadius[0] + dx;
     const newY = newRadius[1] + dy;
     const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
-    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const relativePosition = vertiesMap([localPosition], this.$context.selection.current.absoluteMatrixInverse)[0];
     const distX = Math.abs(relativePosition[0] - oldX);
     const result = [
       radiusX.isPercent() ? Length.makePercent(distX, this.state.width) : Length.px(distX),
@@ -65260,10 +65278,10 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     ];
     this.state.clippath.value = `${result[0]} ${radiusY} at ${result[1]} ${result[2]}`;
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .ellipse .ellipse-radius-y") + LEFT_BUTTON + MOVE("moveEllipseRadiusY") + END("moveEndEllipseRadiusX")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -65271,7 +65289,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
   }
   moveEllipseRadiusY(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radiusX, radiusY, x, y } = this.state.ellipse;
     const oldX = x.toPx(current.screenWidth);
     const oldY = y.toPx(current.screenHeight);
@@ -65281,7 +65299,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     const newX = newRadius[0] + dx;
     const newY = newRadius[1] + dy;
     const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
-    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const relativePosition = vertiesMap([localPosition], this.$context.selection.current.absoluteMatrixInverse)[0];
     const distY = Math.abs(relativePosition[1] - oldY);
     const result = [
       radiusY.isPercent() ? Length.makePercent(distY, this.state.height) : Length.px(distY),
@@ -65290,14 +65308,14 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     ];
     this.state.clippath.value = `${radiusX} ${result[0]} at ${x} ${y}`;
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   moveEndEllipseRadiusX() {
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .ellipse .ellipse-center") + LEFT_BUTTON + MOVE("moveEllipseCenter") + END("moveEndEllipseCenter")](e) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.current;
     this.state.width = current.screenWidth;
     this.state.height = current.screenHeight;
@@ -65315,7 +65333,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
       newTop,
       0
     ]);
-    const relativePosition = vertiesMap([worldPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const relativePosition = vertiesMap([worldPosition], this.$context.selection.current.absoluteMatrixInverse)[0];
     const result = [
       radiusX,
       radiusY,
@@ -65324,7 +65342,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     ];
     this.state.clippath.value = `${radiusX} ${radiusY} at ${result[2]} ${result[3]}`;
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
   moveEndEllipseCenter(dx, dy) {
     if (dx == 0 && dy == 0) {
@@ -65334,16 +65352,16 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
             type: ClipPathType.INSET,
             value: ""
           });
-          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value2));
           break;
       }
       return;
     }
     const value = ClipPath.toCSS(this.state.clippath);
-    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+    this.command("setAttributeForMulti", "change clippath", this.$context.selection.packByValue(value));
   }
   templateEllipse(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const radiusX = clippath.value.radiusX.toPx(current.screenWidth);
     const radiusY = clippath.value.radiusY.toPx(current.screenHeight);
     const x = clippath.value.x.toPx(current.screenWidth);
@@ -65400,7 +65418,7 @@ class ClippathEditorView$1 extends ClippathEllipseEditorView {
     });
   }
   [LOAD("$el") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current) {
       return "";
     }
@@ -65428,10 +65446,10 @@ class ClippathEditorView$1 extends ClippathEllipseEditorView {
   checkClipPath() {
     if (this.$el.isShow() === false)
       return false;
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return false;
-    return this.$selection.current.hasChangedField("clip-path", "angle", "x", "y", "width", "height");
+    return this.$context.selection.current.hasChangedField("clip-path", "angle", "x", "y", "width", "height");
   }
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkClipPath")]() {
     this.refresh();
@@ -65477,10 +65495,10 @@ class CodeViewProperty extends BaseProperty {
     `;
   }
   [LOAD("$code") + DOMDIFF]() {
-    return [this.$editor.html.codeview(this.$selection.current)];
+    return [this.$editor.html.codeview(this.$context.selection.current)];
   }
   [LOAD("$svg") + DOMDIFF]() {
-    return [this.$editor.svg.codeview(this.$selection.current)];
+    return [this.$editor.svg.codeview(this.$context.selection.current)];
   }
 }
 function codeview(editor) {
@@ -65545,8 +65563,8 @@ class ComponentProperty extends BaseProperty {
     return "Component";
   }
   isShow() {
-    var current = this.$selection.current;
-    const inspector = this.$editor.components.createInspector(current);
+    var current = this.$context.selection.current;
+    const inspector = this.$context.components.createInspector(current);
     if (current && (current.is("component") || inspector.length > 0)) {
       return true;
     }
@@ -65554,13 +65572,13 @@ class ComponentProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      const current = this.$selection.current;
-      const inspector = this.$editor.components.createInspector(current);
+      const current = this.$context.selection.current;
+      const inspector = this.$context.components.createInspector(current);
       return inspector.length > 0;
     });
   }
   refresh() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       this.setTitle(current.getDefaultTitle() || current.itemType || current.name);
       this.load();
@@ -65572,10 +65590,10 @@ class ComponentProperty extends BaseProperty {
     `;
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
-    const inspector = this.$editor.components.createInspector(current);
+    const inspector = this.$context.components.createInspector(current);
     inspector.forEach((it) => {
       if (isString(it)) {
         return;
@@ -65593,7 +65611,7 @@ class ComponentProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeComponentProperty")](key, value) {
-    this.command("setAttributeForMulti", "change component : " + key, this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change component : " + key, this.$context.selection.packByValue({
       [key]: value
     }));
   }
@@ -65622,7 +65640,7 @@ class ContentProperty extends BaseProperty {
     `;
   }
   [BIND("$contentItem")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     return {
@@ -65633,7 +65651,7 @@ class ContentProperty extends BaseProperty {
     this.setContent();
   }
   setContent() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       var data = {
         content: this.refs.$contentItem.value
@@ -66065,6 +66083,7 @@ ${tabString}${it.properties.map((p) => {
     return this.toCSSText();
   }
 }
+window.a = 0;
 class BaseModel {
   constructor(json = {}, modelManager) {
     this.modelManager = modelManager;
@@ -66301,7 +66320,7 @@ class BaseModel {
     return this.modelManager.clone(this.id, isDeep);
   }
   isChangedValue(obj2) {
-    return Object.keys(obj2).some((key) => obj2[key] !== this.json[key]);
+    return true;
   }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = this.isChangedValue(obj2);
@@ -72276,7 +72295,7 @@ const spreadMethodList = [
 const TOOL_SIZE$1 = 20;
 class FillBaseEditor extends EditorElement {
   initializeData() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.currentMatrix = current.matrix;
     this.state.imageResult = current.createFragmentMatrix(this.state.key);
     this.state.originalResult = current.createFragmentMatrix(this.state.key);
@@ -72303,7 +72322,7 @@ class FillTimingStepEditor extends FillBaseEditor {
         this.localColorStep.timingCount = Math.max(this.localColorCubicBezierTimingCount + dist$1, 1);
         break;
     }
-    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
       [this.state.key]: `${this.state.imageResult.image}`
     }));
   }
@@ -72326,7 +72345,7 @@ class FillTimingStepEditor extends FillBaseEditor {
       switch (timing.name) {
         case TimingFunction.STEPS:
           this.localColorStep.timing.direction = this.localColorStep.timing.direction === "start" ? "end" : "start";
-          this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+          this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
             [this.state.key]: `${this.state.imageResult.image}`
           }));
           break;
@@ -72348,7 +72367,7 @@ class FillTimingStepEditor extends FillBaseEditor {
             ],
             changeEvent: (key, value) => {
               this.localColorStep.timing = parseOneValue(`path(${value})`).parsed;
-              this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+              this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
                 [this.state.key]: `${this.state.imageResult.image}`
               }));
             }
@@ -72370,7 +72389,7 @@ class FillTimingStepEditor extends FillBaseEditor {
             ],
             changeEvent: (key, value) => {
               this.localColorStep.timing = parseOneValue(value).parsed;
-              this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+              this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
                 [this.state.key]: `${this.state.imageResult.image}`
               }));
             }
@@ -72379,7 +72398,7 @@ class FillTimingStepEditor extends FillBaseEditor {
           return;
       }
     }
-    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
       [this.state.key]: `${this.state.imageResult.image}`
     }));
     this.$el.toggleClass("dragging", false);
@@ -72503,7 +72522,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
         });
         break;
     }
-    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
       [this.state.key]: `${this.state.imageResult.image}`
     }));
   }
@@ -72582,7 +72601,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
         }
         break;
     }
-    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
       [this.state.key]: `${this.state.imageResult.image}`
     }));
   }
@@ -72626,7 +72645,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
       }
     }
     this.emit("updateFillEditor", image2);
-    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
       [this.state.key]: `${image2}`
     }));
   }
@@ -72692,7 +72711,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     });
     nextImage.sortColorStep();
     this.emit("updateFillEditor", nextImage, targetColorStep);
-    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$context.selection.packByValue({
       [this.state.key]: `${nextImage}`
     }));
   }
@@ -72709,7 +72728,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
         percent: image2.colorsteps[this.$targetIndex].percent
       };
       this.emit("updateFillEditor", image2, targetColorStep);
-      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
         [this.state.key]: `${image2}`
       }));
     }
@@ -72719,7 +72738,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.initializeData();
     const { color: color2, percent } = image2.colorsteps[index2] || {};
     this.emit("updateFillEditor", image2, { color: color2, percent });
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
       [this.state.key]: `${image2}`
     }));
     this.state.hoverColorStep = null;
@@ -72784,8 +72803,8 @@ class FillEditorView extends FillColorstepEditor {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.hasChangedField("x", "y", "width", "height", "angle", "fill", "stroke")) {
+    if (this.$context.selection.current) {
+      if (this.$context.selection.hasChangedField("x", "y", "width", "height", "angle", "fill", "stroke")) {
         this.refresh();
       }
     }
@@ -73036,7 +73055,7 @@ class FillEditorView extends FillColorstepEditor {
   [LOAD("$el") + DOMDIFF]() {
     if (!this.state.isShow)
       return "";
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     const result = current.createFragmentMatrix(this.state.key);
@@ -73136,7 +73155,7 @@ class FilterProperty extends BaseProperty {
     });
   }
   getSVGFilterList() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var arr = [];
     if (current) {
       arr = current.svgfilters.map((it) => {
@@ -73150,7 +73169,7 @@ class FilterProperty extends BaseProperty {
     return arr;
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current.filter;
     return createComponent("FilterEditor", {
       ref: "$filterEditor",
@@ -73160,7 +73179,7 @@ class FilterProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
-    this.command("setAttributeForMulti", "change filter", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change filter", this.$context.selection.packByValue({
       [key]: filter2
     }));
   }
@@ -73516,7 +73535,7 @@ class GradientAssetsProperty extends BaseProperty {
     return results;
   }
   executeGradient(callback, isRefresh = true, isEmit = true) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       callback && callback(project2);
       if (isRefresh)
@@ -73571,18 +73590,18 @@ var repeatTypeList = [
 const TOOL_SIZE = 20;
 class GradientBaseEditor extends EditorElement {
   initializeData() {
-    const value = this.$selection.current["background-image"];
+    const value = this.$context.selection.current["background-image"];
     const cssValue = STRING_TO_CSS(value);
     this.state.backgroundImages = BackgroundImage.parseStyle(cssValue);
     this.state.backImages = BackgroundImage.parseStyle(cssValue);
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.state.gradient = this.state.backImages[this.state.index];
     this.state.contentBox = current.contentBox;
     this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(this.state.index);
   }
   updateData() {
     var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
       "background-image": value
     }));
   }
@@ -73691,7 +73710,7 @@ class GradientResizer extends GradientTimingStepEditor {
     const targetMousePoint = this.$viewport.getWorldPosition();
     const currentVertex = clone(this.initMousePoint);
     const nextVertex = targetMousePoint;
-    const reverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const reverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
     const realDist = subtract([], nextResult, currentResult);
     const { backRect: rect2 } = this.state.backgroundImageMatrix;
@@ -73720,7 +73739,7 @@ class GradientResizer extends GradientTimingStepEditor {
     const targetMousePoint = this.$viewport.getWorldPosition();
     const currentVertex = clone(this.initMousePoint);
     const nextVertex = targetMousePoint;
-    const reverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const reverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
     const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
     const realDist = subtract([], nextResult, currentResult);
     const { backRect: rect2 } = this.state.backgroundImageMatrix;
@@ -73946,7 +73965,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     nextImage.sortColorStep();
     this.emit("updateGradientEditor", nextImage, targetColorStep);
     var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
       "background-image": value
     }));
   }
@@ -73964,7 +73983,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
       };
       this.emit("updateGradientEditor", image2, targetColorStep);
       var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
-      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
         "background-image": value
       }));
     }
@@ -73976,7 +73995,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.emit("updateGradientEditor", image2, { color: color2, percent });
     this.state.backgroundImages[this.state.index].image = image2;
     var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change background image", this.$context.selection.packByValue({
       "background-image": value
     }));
     this.state.hoverColorStep = null;
@@ -74064,7 +74083,7 @@ class GradientEditorView extends GradientColorstepEditor {
   calculateMovedElement(dx, dy) {
     const targetPoint = this.pointTarget === "start" ? this.startPoint : this.endPoint;
     let nextPoint = add$1([], targetPoint, [dx, dy, 0]);
-    var [localPosition] = vertiesMap([this.$viewport.applyVertexInverse(nextPoint)], this.$selection.current.absoluteMatrixInverse);
+    var [localPosition] = vertiesMap([this.$viewport.applyVertexInverse(nextPoint)], this.$context.selection.current.absoluteMatrixInverse);
     const backgroundImage2 = this.state.gradient;
     const backRect = backgroundImage2.getOffset(this.state.contentBox);
     const image2 = this.state.gradient.image;
@@ -74080,11 +74099,11 @@ class GradientEditorView extends GradientColorstepEditor {
           ];
           this.updateData();
         } else if (this.pointTarget === "end") {
-          var [localStartPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.startPoint)], this.$selection.current.absoluteMatrixInverse);
+          var [localStartPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.startPoint)], this.$context.selection.current.absoluteMatrixInverse);
           var [localEndPosition] = vertiesMap([
             this.$viewport.applyVertexInverse(add$1([], this.endPoint, [dx, 0, 0]))
-          ], this.$selection.current.absoluteMatrixInverse);
-          var [localShapePosition] = vertiesMap([this.$viewport.applyVertexInverse(this.shapePoint)], this.$selection.current.absoluteMatrixInverse);
+          ], this.$context.selection.current.absoluteMatrixInverse);
+          var [localShapePosition] = vertiesMap([this.$viewport.applyVertexInverse(this.shapePoint)], this.$context.selection.current.absoluteMatrixInverse);
           const newEndX = localEndPosition[0] - backRect.x - localStartPosition[0];
           const newShapeY = localShapePosition[1] - backRect.y - localStartPosition[1];
           if (this.state.gradient.image.radialType === RadialGradientType.CIRCLE) {
@@ -74099,11 +74118,11 @@ class GradientEditorView extends GradientColorstepEditor {
           }
           this.updateData();
         } else if (this.pointTarget === "shape") {
-          var [localStartPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.startPoint)], this.$selection.current.absoluteMatrixInverse);
+          var [localStartPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.startPoint)], this.$context.selection.current.absoluteMatrixInverse);
           var [localShapePosition] = vertiesMap([
             this.$viewport.applyVertexInverse(add$1([], this.shapePoint, [0, dy, 0]))
-          ], this.$selection.current.absoluteMatrixInverse);
-          var [localEndPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.endPoint)], this.$selection.current.absoluteMatrixInverse);
+          ], this.$context.selection.current.absoluteMatrixInverse);
+          var [localEndPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.endPoint)], this.$context.selection.current.absoluteMatrixInverse);
           const newEndX = localEndPosition[0] - backRect.x - localStartPosition[0];
           const newShapeY = localShapePosition[1] - backRect.y - localStartPosition[1];
           if (this.state.gradient.image.radialType === RadialGradientType.CIRCLE) {
@@ -74161,8 +74180,8 @@ class GradientEditorView extends GradientColorstepEditor {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.hasChangedField("x", "y", "width", "height", "angle", "background-image", "border", "padding")) {
+    if (this.$context.selection.current) {
+      if (this.$context.selection.hasChangedField("x", "y", "width", "height", "angle", "background-image", "border", "padding")) {
         this.refresh();
       }
     }
@@ -74676,7 +74695,7 @@ class GradientEditorView extends GradientColorstepEditor {
     }), this.makeGradientPoint(colorsteps, startPoint, endPoint, null, newHoverColorStepPoint));
   }
   [LOAD("$el") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     const result = current.createBackgroundImageMatrix(this.state.index);
@@ -74882,7 +74901,7 @@ class GuideLineView extends EditorElement {
         images.push(point(localTargetVertex, 3, "vertex"));
       }
       if (sourceVerties) {
-        if (this.$selection.isOne && this.$editor.isPointerDown || this.$selection.isMany && !this.$editor.isPointerMove) {
+        if (this.$context.selection.isOne && this.$editor.isPointerDown || this.$context.selection.isMany && !this.$editor.isPointerMove) {
           images.push(rect(this.$viewport.applyVerties(sourceVerties)));
         }
       }
@@ -74913,14 +74932,14 @@ class GuideLineView extends EditorElement {
     this.refresh();
   }
   refreshSmartGuides(targetVertiesList) {
-    if (this.$selection.isEmpty)
+    if (this.$context.selection.isEmpty)
       return;
-    const sourceVerties = toRectVerties(this.$selection.verties);
+    const sourceVerties = toRectVerties(this.$context.selection.verties);
     let targetList;
     if (targetVertiesList) {
       targetList = targetVertiesList.map((it) => toRectVerties(it));
     } else {
-      const targets = this.$selection.snapTargetLayers.map((target) => {
+      const targets = this.$context.selection.snapTargetLayers.map((target) => {
         const rectVerties = toRectVerties(target.verties);
         return {
           targetVerties: rectVerties,
@@ -74940,13 +74959,13 @@ class GuideLineView extends EditorElement {
     this.setGuideLine(list2);
   }
   refreshSmartGuidesForVerties() {
-    const guides = this.$snapManager.findGuide(this.$selection.verties);
+    const guides = this.$context.snapManager.findGuide(this.$context.selection.verties);
     this.setGuideLine(guides, true);
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.isMany)
+    if (this.$context.selection.isMany)
       return;
-    const expect = this.$selection.hasChangedField("d", "clip-path");
+    const expect = this.$context.selection.hasChangedField("d", "clip-path");
     if (!expect) {
       this.refreshSmartGuidesForVerties();
     }
@@ -74971,13 +74990,13 @@ class HistoryProperty extends BaseProperty {
     `;
   }
   [LOAD("$body") + DOMDIFF]() {
-    return this.$editor.history.map((it, index2) => {
+    return this.$editor.context.history.map((it, index2) => {
       if (it === "-") {
         return `<div class='divider'>-</div>`;
       }
       return `
         <div class='history-item'>
-          <span>${index2 === this.$editor.history.currentIndex ? obj$1.arrowRight : ""}</span>
+          <span>${index2 === this.$editor.context.history.currentIndex ? obj$1.arrowRight : ""}</span>
           <span>${it.message}</span>
         </div>
       `;
@@ -75015,27 +75034,27 @@ class HoverView extends EditorElement {
   [CONFIG("bodyEvent") + IF("checkModeView")]() {
     var _a, _b, _c;
     if (this.$config.true("set.move.control.point")) {
-      this.$selection.setHoverId("");
+      this.$context.selection.setHoverId("");
       this.renderHoverLayer();
       return;
     }
-    const filteredList = this.$selection.filteredLayers;
+    const filteredList = this.$context.selection.filteredLayers;
     const point2 = this.$viewport.getWorldPosition(this.$config.get("bodyEvent"));
     const items = filteredList.filter((it) => it.hasPoint(point2[0], point2[1])).filter((it) => it.isNot("artboard"));
     let hoverItems = items;
     let id = (_a = hoverItems[0]) == null ? void 0 : _a.id;
-    if (this.$selection.isEmpty) {
+    if (this.$context.selection.isEmpty) {
       id = (_b = hoverItems[0]) == null ? void 0 : _b.id;
-    } else if (this.$selection.isOne) {
-      const pathIds = this.$selection.current.pathIds;
-      hoverItems = hoverItems.filter((it) => pathIds.includes(it.id) === false || it.id === this.$selection.current.id);
+    } else if (this.$context.selection.isOne) {
+      const pathIds = this.$context.selection.current.pathIds;
+      hoverItems = hoverItems.filter((it) => pathIds.includes(it.id) === false || it.id === this.$context.selection.current.id);
       id = (_c = hoverItems[0]) == null ? void 0 : _c.id;
     }
     if (!id) {
-      this.$selection.setHoverId("");
+      this.$context.selection.setHoverId("");
       this.renderHoverLayer();
     } else {
-      if (this.$selection.setHoverId(id)) {
+      if (this.$context.selection.setHoverId(id)) {
         this.renderHoverLayer();
       }
     }
@@ -75044,12 +75063,12 @@ class HoverView extends EditorElement {
     this.renderHoverLayer();
   }
   [SUBSCRIBE("refreshHoverView")](id) {
-    if (this.$selection.setHoverId(id)) {
+    if (this.$context.selection.setHoverId(id)) {
       this.renderHoverLayer();
     }
   }
   [SUBSCRIBE("updateViewport", "refreshSelectionStyleView")]() {
-    this.$selection.setHoverId("");
+    this.$context.selection.setHoverId("");
     this.renderHoverLayer();
   }
   createVisiblePath(current) {
@@ -75070,7 +75089,7 @@ class HoverView extends EditorElement {
         `;
   }
   renderHoverLayer() {
-    const items = this.$selection.hoverItems;
+    const items = this.$context.selection.hoverItems;
     if (items.length === 0) {
       this.refs.$hoverRect.updateDiff("");
       this.emit("removeGuideLine");
@@ -75121,14 +75140,14 @@ class HoverView extends EditorElement {
     return result;
   }
   createOffsetLine() {
-    const item = this.$selection.hoverItems[0] || this.$selection.current;
+    const item = this.$context.selection.hoverItems[0] || this.$context.selection.current;
     if (!item || !item.parent) {
       return "";
     }
     if (item.parent && item.parent.is("project")) {
       return "";
     }
-    if (this.$selection.isEmpty) {
+    if (this.$context.selection.isEmpty) {
       const offsetVerties = this.getOffsetVerties(item, item.parent);
       return `
             <svg overflow="visible">
@@ -75144,7 +75163,7 @@ class HoverView extends EditorElement {
             </svg>
             `;
     } else {
-      const offsetVerties = this.getOffsetVerties(item, this.$selection.current);
+      const offsetVerties = this.getOffsetVerties(item, this.$context.selection.current);
       return `
             <svg overflow="visible">
                 <path
@@ -75217,28 +75236,28 @@ class ImageProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeImageSize")](key, value) {
     var [width2, height2] = value.split("x").map((it) => it);
-    this.command("setAttributeForMulti", "resize image", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "resize image", this.$context.selection.packByValue({
       width: width2,
       height: height2
     }));
   }
   [CLICK("$resize")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
-      this.command("setAttributeForMulti", "resize image", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "resize image", this.$context.selection.packByValue({
         width: (item) => item.naturalWidth.clone(),
         height: (item) => item.naturalHeight.clone()
       }));
     }
   }
   [BIND("$sizeInfo")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     return {
       innerHTML: `${this.$i18n("image.property.width")}: ${current.naturalWidth}, ${this.$i18n("image.property.height")}: ${current.naturalHeight}`
     };
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var src = current.src || "";
     return createComponent("ImageSelectEditor", {
       ref: "$1",
@@ -75248,13 +75267,13 @@ class ImageProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value, info) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       current.reset(__spreadValues({
         src: value
       }, info));
       this.bindData("$sizeInfo");
-      this.command("setAttributeForMulti", "change image", this.$selection.packByValue(__spreadValues({
+      this.command("setAttributeForMulti", "change image", this.$context.selection.packByValue(__spreadValues({
         src: value
       }, info)));
     }
@@ -75284,7 +75303,7 @@ class ImageSelectEditor extends EditorElement {
     this.setState({ value });
   }
   [LOAD("$body")]() {
-    const project2 = this.$selection.currentProject;
+    const project2 = this.$context.selection.currentProject;
     if (!project2)
       return;
     const imageUrl = project2.getImageValueById(this.state.value);
@@ -75411,7 +75430,7 @@ class ImageAssetPicker extends EditorElement {
     `;
   }
   [LOAD("$imageList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { images: [] };
+    var current = this.$context.selection.currentProject || { images: [] };
     var images = current.images;
     var results = images.map((image2) => {
       return `
@@ -75462,7 +75481,7 @@ class ImageAssetsProperty extends BaseProperty {
     `;
   }
   [LOAD("$imageList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { images: [] };
+    var current = this.$context.selection.currentProject || { images: [] };
     var images = current.images;
     var results = images.map((image2, index2) => {
       return `
@@ -75489,7 +75508,7 @@ class ImageAssetsProperty extends BaseProperty {
     `;
   }
   executeImage(callback, isRefresh = true, isEmit = true) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       callback && callback(project2);
       if (isRefresh)
@@ -75502,7 +75521,7 @@ class ImageAssetsProperty extends BaseProperty {
   }
   [DRAGSTART("$imageList .preview img")](e) {
     var index2 = +e.$dt.closest("image-item").attr("data-index");
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       var imageInfo = project2.images[index2];
       e.dataTransfer.setData("image/info", imageInfo.local);
@@ -75686,7 +75705,7 @@ class KeyframeProperty extends BaseProperty {
     var $keyframeItem = e.$dt.closest("keyframe-item");
     var index2 = +$keyframeItem.attr("data-index");
     var type = e.$dt.attr("data-type");
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current)
       return;
     var currentKeyframe = current.keyframes[index2];
@@ -75699,14 +75718,14 @@ class KeyframeProperty extends BaseProperty {
   }
   [CLICK("$keyframeList .keyframe-item .offset-list")](e) {
     var index2 = +e.$dt.closest("keyframe-item").attr("data-index");
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current)
       return;
     this.viewKeyframePicker(index2);
   }
   [CLICK("$keyframeList .del") + PREVENT](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current)
       return;
     current.removeKeyframe(removeIndex);
@@ -75714,13 +75733,13 @@ class KeyframeProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current && current.hasChangedField("keyframes")) {
       this.refresh();
     }
   }
   [LOAD("$keyframeList")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (!current)
       return "";
     var keyframes = current.keyframe ? Keyframe.parseStyle(current) : current.keyframes;
@@ -75731,7 +75750,7 @@ class KeyframeProperty extends BaseProperty {
     });
   }
   [CLICK("$add")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     if (current) {
       current.createKeyframe();
       this.refresh();
@@ -75746,7 +75765,7 @@ class KeyframeProperty extends BaseProperty {
     }
     this.selectedIndex = +index2;
     this.selectItem(this.selectedIndex, true);
-    this.current = this.$selection.currentProject;
+    this.current = this.$context.selection.currentProject;
     if (!this.current)
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -75765,7 +75784,7 @@ class KeyframeProperty extends BaseProperty {
     }
   }
   viewKeyframePropertyPopup(position2) {
-    this.current = this.$selection.currentProject;
+    this.current = this.$context.selection.currentProject;
     if (!this.current)
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -75779,7 +75798,7 @@ class KeyframeProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE("changeKeyframePopup")](data) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (!project2)
       return;
     this.currentKeyframe = project2.keyframes[this.selectedIndex];
@@ -76025,12 +76044,12 @@ class LayerAppendView extends EditorElement {
   }
   [POINTERMOVE("$el") + IF("checkNotDragStart")](e) {
     const vertex2 = this.$viewport.getWorldPosition(e);
-    const newVertex = this.$snapManager.checkPoint(vertex2);
+    const newVertex = this.$context.snapManager.checkPoint(vertex2);
     if (equals$2(newVertex, vertex2) === false) {
       this.state.target = newVertex;
       this.state.targetVertex = this.$viewport.applyVertex(this.state.target);
       this.state.targetPositionVertex = clone(this.state.target);
-      this.state.targetGuides = this.$snapManager.findGuideOne([
+      this.state.targetGuides = this.$context.snapManager.findGuideOne([
         this.state.target
       ]);
     } else {
@@ -76215,11 +76234,11 @@ class LayerAppendView extends EditorElement {
   move() {
     const e = this.$config.get("bodyEvent");
     const targetMousePoint = this.$viewport.getWorldPosition();
-    const newMousePoint = this.$snapManager.checkPoint(targetMousePoint);
+    const newMousePoint = this.$context.snapManager.checkPoint(targetMousePoint);
     if (equals$2(newMousePoint, targetMousePoint) === false) {
       this.state.target = newMousePoint;
       this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
-      this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]).filter(Boolean);
+      this.state.targetGuides = this.$context.snapManager.findGuideOne([newMousePoint]).filter(Boolean);
     } else {
       this.state.target = void 0;
       this.state.targetGuides = [];
@@ -76246,7 +76265,7 @@ class LayerAppendView extends EditorElement {
     const isAltKey = this.$config.get("bodyEvent").altKey;
     let { color: color2, content: content2, fontSize, areaVerties, patternInfo } = this.state;
     const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
-    const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+    const parentArtBoard = this.$context.selection.getArtboardByPoint(rectVerties[0]);
     let { x, y, width: width2, height: height2 } = vertiesToRectangle(rectVerties);
     let hasArea = true;
     if (width2 === 0 && height2 === 0) {
@@ -76327,7 +76346,7 @@ class LayerAppendView extends EditorElement {
     this.refs.$area.empty();
     this.$el.show();
     this.$el.focus();
-    this.$snapManager.clear();
+    this.$context.snapManager.clear();
     const model = this.$model.createModel(__spreadValues({
       itemType: type
     }, options2), false);
@@ -76383,7 +76402,7 @@ class LayerAppendView extends EditorElement {
           content: text2.trim(),
           "font-size": newFontSize
         };
-        const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+        const parentArtBoard = this.$context.selection.getArtboardByPoint(rectVerties[0]);
         this.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
         break;
     }
@@ -76417,7 +76436,7 @@ class LayerAppendView extends EditorElement {
     this.state.patternInfo = patternInfo;
   }
   [SUBSCRIBE("updateViewport")]() {
-    this.$snapManager.clear();
+    this.$context.snapManager.clear();
     this.bindData("$mousePointer");
     this.bindData("$mousePointerView");
   }
@@ -76521,9 +76540,9 @@ class LayerTreeProperty extends BaseProperty {
     const data = [];
     for (var last = layers2.length - 1; last > -1; last--) {
       var layer = layers2[last];
-      var selectedPathClass = this.$selection.hasPathOf(layer) ? "selected-path" : "";
-      var selectedClass = this.$selection.check(layer) ? "selected" : "";
-      var hovered = this.$selection.checkHover(layer) ? "hovered" : "";
+      var selectedPathClass = this.$context.selection.hasPathOf(layer) ? "selected-path" : "";
+      var selectedClass = this.$context.selection.check(layer) ? "selected" : "";
+      var hovered = this.$context.selection.checkHover(layer) ? "hovered" : "";
       var name = layer.is("boolean-path") ? layer["boolean-operation"] : layer.name;
       if (layer.is("text")) {
         name = layer.text || layer.name;
@@ -76562,7 +76581,7 @@ class LayerTreeProperty extends BaseProperty {
     this.refresh();
   }
   [LOAD("$layerList") + DOMDIFF]() {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (!project2)
       return "";
     return [
@@ -76624,7 +76643,7 @@ class LayerTreeProperty extends BaseProperty {
     }
     this.nextTick(() => {
       this.emit("recoverBooleanPath");
-      this.$selection.select(sourceItem);
+      this.$context.selection.select(sourceItem);
       this.setState({
         hideDragPointer: true
       });
@@ -76662,14 +76681,14 @@ class LayerTreeProperty extends BaseProperty {
   }
   selectLayer(layer) {
     if (layer) {
-      this.$selection.select(layer);
+      this.$context.selection.select(layer);
     }
     this.refresh();
     this.emit("refreshSelection");
   }
   addLayer(layer) {
     if (layer) {
-      this.$selection.select(layer);
+      this.$context.selection.select(layer);
       this.emit("refreshArtboard");
     }
   }
@@ -76684,7 +76703,7 @@ class LayerTreeProperty extends BaseProperty {
     var $item = e.$dt.closest("layer-item");
     $item.onlyOneClass("selected");
     var id = $item.attr("data-layer-id");
-    this.$selection.select(id);
+    this.$context.selection.select(id);
     this.command("refreshSelection");
   }
   [CLICK("$layerList .layer-item label .folder")](e) {
@@ -76719,7 +76738,7 @@ class LayerTreeProperty extends BaseProperty {
     var lastLock = this.$lockManager.get(id);
     e.$dt.attr("data-lock", lastLock);
     if (lastLock) {
-      this.$selection.removeById(id);
+      this.$context.selection.removeById(id);
       this.emit("refreshSelection");
     }
   }
@@ -76727,8 +76746,8 @@ class LayerTreeProperty extends BaseProperty {
     this.refs.$layerList.$$(".hovered").forEach((it) => {
       it.removeClass("hovered");
     });
-    if (this.$selection.hoverItems.length) {
-      var selector2 = this.$selection.hoverItems.map((it) => {
+    if (this.$context.selection.hoverItems.length) {
+      var selector2 = this.$context.selection.hoverItems.map((it) => {
         return `[data-layer-id="${it.id}"]`;
       }).join(",");
       this.refs.$layerList.$$(selector2).forEach((it) => {
@@ -76744,13 +76763,13 @@ class LayerTreeProperty extends BaseProperty {
       this.refs.$layerList.$$(".selected-path").forEach((it) => {
         it.removeClass("selected-path");
       });
-      var selector2 = this.$selection.items.map((it) => {
+      var selector2 = this.$context.selection.items.map((it) => {
         return `[data-layer-id="${it.id}"]`;
       }).join(",");
       if (selector2) {
         this.refs.$layerList.$$(selector2).forEach((it) => {
           it.addClass("selected");
-          var item = this.$selection.itemKeys[it.attr("data-layer-id")];
+          var item = this.$context.selection.itemKeys[it.attr("data-layer-id")];
           if (item.is("svg-path", "svg-polygon")) {
             it.$(".icon").html(this.getIcon(item));
           }
@@ -76799,7 +76818,7 @@ class DefaultLayoutItemProperty extends BaseProperty {
       `;
   }
   [LOAD("$constraintsInfo") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     const h = (current == null ? void 0 : current["constraints-horizontal"]) || Constraints.MIN;
     const v = (current == null ? void 0 : current["constraints-vertical"]) || Constraints.MIN;
     return `
@@ -76819,7 +76838,7 @@ class DefaultLayoutItemProperty extends BaseProperty {
     `;
   }
   [LOAD("$constraintsInfoInput")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     const hasLayout = current == null ? void 0 : current.hasLayout();
     return `
       <div>
@@ -76861,14 +76880,14 @@ class DefaultLayoutItemProperty extends BaseProperty {
   }
   [CLICK("$constraintsInfo .item")](e) {
     const [value, key] = e.$dt.attrs("data-value", "data-key");
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return;
     current.changeConstraints(key, value, e.shiftKey);
     this.trigger("changeConstraints", key, current[key]);
   }
   [SUBSCRIBE_SELF("changeConstraints")](key, value) {
-    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "apply constraints", this.$context.selection.packByValue({
       [key]: value
     }));
     this.nextTick(() => {
@@ -76877,7 +76896,7 @@ class DefaultLayoutItemProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
       return current && current.isInDefault() && current.parent.isNot("project");
     });
   }
@@ -76890,7 +76909,7 @@ class FlexGrowToolView extends EditorElement {
     });
   }
   [LOAD("$el") + DOMDIFF]() {
-    return this.$selection.map((item) => {
+    return this.$context.selection.map((item) => {
       const parentItem = item.parent;
       if (!parentItem)
         return;
@@ -77050,7 +77069,7 @@ class FlexLayoutEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, key, value);
   }
   [LOAD("$body") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     const realPaddingTop = Math.min(current["padding-top"] || 0, 50);
@@ -77817,8 +77836,8 @@ class GridGrowToolView extends GridGrowDragEventView {
     var _a;
     const current = this.getGridTargetLayer();
     return {
-      "data-drag-target-item": Boolean(this.$selection.dragTargetItem),
-      "data-grid-layout-own": ((_a = this.$selection.current) == null ? void 0 : _a.id) === (current == null ? void 0 : current.id),
+      "data-drag-target-item": Boolean(this.$context.selection.dragTargetItem),
+      "data-grid-layout-own": ((_a = this.$context.selection.current) == null ? void 0 : _a.id) === (current == null ? void 0 : current.id),
       style: {
         display: current ? "block" : "none"
       }
@@ -77898,10 +77917,10 @@ class GridGrowToolView extends GridGrowDragEventView {
     return it;
   }
   getGridTargetLayer() {
-    if (this.$selection.dragTargetItem) {
-      return this.$selection.dragTargetItem;
+    if (this.$context.selection.dragTargetItem) {
+      return this.$context.selection.dragTargetItem;
     }
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return null;
     if (current.isLayout(Layout.GRID))
@@ -77967,7 +77986,7 @@ class GridGrowToolView extends GridGrowDragEventView {
     });
     this.state.lastGridInfo = { info, items };
     this.load("$gridGap");
-    this.$selection.updateGridInformation({
+    this.$context.selection.updateGridInformation({
       info,
       items
     });
@@ -77976,7 +77995,7 @@ class GridGrowToolView extends GridGrowDragEventView {
     const current = this.getGridTargetLayer();
     if (!current)
       return "";
-    if (!this.$selection.current)
+    if (!this.$context.selection.current)
       return "";
     const last = this.state.lastGridInfo;
     const scale2 = this.$viewport.scale;
@@ -78049,11 +78068,11 @@ class GridGrowToolView extends GridGrowDragEventView {
     });
   }
   isSelectedColumn(index2) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     return current["grid-column-start"] <= index2 && index2 < current["grid-column-end"];
   }
   isSelectedRow(index2) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     return current["grid-row-start"] <= index2 && index2 < current["grid-row-end"];
   }
   [LOAD("$grid") + DOMDIFF]() {
@@ -78065,7 +78084,7 @@ class GridGrowToolView extends GridGrowDragEventView {
       return "";
     const info = this.getGridLayoutInformation();
     const totalCount = info.columns.length * info.rows.length;
-    const isChild = ((_a = this.$selection.current) == null ? void 0 : _a.id) !== info.current.id;
+    const isChild = ((_a = this.$context.selection.current) == null ? void 0 : _a.id) !== info.current.id;
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, Array.from(Array(info.columns.length).keys()).map((index2) => {
       const selected = isChild && this.isSelectedColumn(index2 + 1) ? "selected" : "";
       return /* @__PURE__ */ createElementJsx("div", {
@@ -78165,7 +78184,7 @@ class GridLayoutEditor extends EditorElement {
         `;
   }
   [LOAD("$body") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     if (current.isLayout(Layout.GRID) === false)
@@ -78235,7 +78254,7 @@ class LayoutProperty extends BaseProperty {
     `;
   }
   [LOAD("$layoutType")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     return createComponent("SelectIconEditor", {
@@ -78249,7 +78268,7 @@ class LayoutProperty extends BaseProperty {
     });
   }
   [LOAD("$layoutProperty")]() {
-    var current = this.$selection.current || { layout: "default" };
+    var current = this.$context.selection.current || { layout: "default" };
     return `
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div>
@@ -78281,9 +78300,9 @@ class LayoutProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeLayoutInfo")](key, value) {
     if (key === "padding") {
-      this.command("setAttributeForMulti", "change padding", this.$selection.packByValue(value));
+      this.command("setAttributeForMulti", "change padding", this.$context.selection.packByValue(value));
     } else {
-      this.command("setAttributeForMulti", "change layout info", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "change layout info", this.$context.selection.packByValue({
         [key]: value
       }));
     }
@@ -78292,11 +78311,11 @@ class LayoutProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    this.$selection.reset(this.$selection.packByValue({
+    this.$context.selection.reset(this.$context.selection.packByValue({
       [key]: value
     }));
     this.updateTitle();
-    this.command("setAttributeForMulti", "change layout type", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change layout type", this.$context.selection.packByValue({
       [key]: value
     }));
     this.nextTick(() => {
@@ -78307,10 +78326,10 @@ class LayoutProperty extends BaseProperty {
     return "layout";
   }
   enableHasChildren() {
-    return this.$selection.current.enableHasChildren();
+    return this.$context.selection.current.enableHasChildren();
   }
   updateTitle() {
-    this.setTitle(this.$selection.current.layout + " Layout");
+    this.setTitle(this.$context.selection.current.layout + " Layout");
   }
   [SUBSCRIBE("refreshSelection") + IF("checkShow") + IF("enableHasChildren")]() {
     this.updateTitle();
@@ -78336,7 +78355,7 @@ class ResizingItemProperty extends BaseProperty {
       `;
   }
   [LOAD("$resizingModeInfo") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     const h = current.resizingHorizontal || ResizingMode.FIXED;
     const v = current.resizingVertical || ResizingMode.FIXED;
     return `
@@ -78373,7 +78392,7 @@ class ResizingItemProperty extends BaseProperty {
     return options2;
   }
   [LOAD("$resizingModeInfoInput") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     this.setState({
       resizingHorizontal: (current == null ? void 0 : current.resizingHorizontal) || ResizingMode.FIXED,
       resizingVertical: (current == null ? void 0 : current.resizingVertical) || ResizingMode.FIXED
@@ -78404,7 +78423,7 @@ class ResizingItemProperty extends BaseProperty {
   }
   [CLICK("$resizingModeInfo [data-key]")](e) {
     const key = e.$dt.data("key");
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current[key] === ResizingMode.FIXED) {
       this.trigger("changeResizingMode", key, ResizingMode.FILL_CONTAINER);
     } else {
@@ -78412,7 +78431,7 @@ class ResizingItemProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
-    this.command("setAttributeForMulti", "apply self resizing", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "apply self resizing", this.$context.selection.packByValue({
       [key]: value,
       "flex-grow": 1
     }));
@@ -78423,12 +78442,12 @@ class ResizingItemProperty extends BaseProperty {
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
       var _a, _b;
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
       return ((_a = current == null ? void 0 : current.parent) == null ? void 0 : _a.hasLayout()) && ((_b = current == null ? void 0 : current.parent) == null ? void 0 : _b.isLayout(Layout.GRID)) === false;
     });
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current && current.changedLayoutItem) {
       if (current.resizingHorizontal !== this.state.resizingHorizontal || current.resizingVertical !== this.state.resizingVertical) {
         this.refresh();
@@ -78455,7 +78474,7 @@ class ResizingProperty extends BaseProperty {
       `;
   }
   [LOAD("$resizingModeInfo") + DOMDIFF]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     const h = current.resizingHorizontal || ResizingMode.FIXED;
     const v = current.resizingVertical || ResizingMode.FIXED;
     return `
@@ -78491,7 +78510,7 @@ class ResizingProperty extends BaseProperty {
     return options2;
   }
   [LOAD("$resizingModeInfoInput")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     return `
       <div class="has-label-grid">
         <label data-direction="horizontal"></label>
@@ -78518,7 +78537,7 @@ class ResizingProperty extends BaseProperty {
   }
   [CLICK("$resizingModeInfo [data-key]")](e) {
     const key = e.$dt.data("key");
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current[key] === ResizingMode.FIXED) {
       this.trigger("changeResizingMode", key, ResizingMode.HUG_CONTENT);
     } else {
@@ -78526,7 +78545,7 @@ class ResizingProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
-    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "apply constraints", this.$context.selection.packByValue({
       [key]: value
     }));
     this.nextTick(() => {
@@ -78535,7 +78554,7 @@ class ResizingProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
       return current && current.hasLayout();
     });
   }
@@ -78572,7 +78591,7 @@ class DrawManager extends EditorElement {
   }
   [SUBSCRIBE("refreshSelection")]() {
     var _a, _b;
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       (_a = this.children.$stroke) == null ? void 0 : _a.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
       (_b = this.children.$strokeWidth) == null ? void 0 : _b.setValue(current["stroke-width"] || Length.number(1));
@@ -78760,7 +78779,7 @@ class PathDrawView extends EditorElement {
       if (this.state[key])
         Object.assign(pathItem, { [key]: this.state[key] });
     });
-    const containerItem = this.$selection.currentProject;
+    const containerItem = this.$context.selection.currentProject;
     layer = containerItem.appendChild(this.$editor.createModel(pathItem));
     return layer;
   }
@@ -80210,9 +80229,9 @@ class PathEditorView extends PathTransformEditor {
         pathItem[key] = this.state[key];
       }
     });
-    const containerItem = this.$selection.currentProject;
+    const containerItem = this.$context.selection.currentProject;
     layer = containerItem.appendChild(this.$editor.createModel(pathItem));
-    this.command("moveLayerToTarget", "add path", layer, this.$selection.currentProject);
+    this.command("moveLayerToTarget", "add path", layer, this.$context.selection.currentProject);
     return layer;
   }
   updatePathLayer() {
@@ -80230,7 +80249,7 @@ class PathEditorView extends PathTransformEditor {
     var layer = this.makePathLayer();
     if (layer) {
       this.$config.set("editing.mode.itemType", "select");
-      this.$selection.select(layer);
+      this.$context.selection.select(layer);
       this.trigger("hidePathEditor");
       this.emit("refreshAll");
     }
@@ -80721,9 +80740,9 @@ class PathToolProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection")]() {
     this.refreshShow(() => {
-      if (this.$selection.length === 1 && this.$selection.is("boolean-path"))
+      if (this.$context.selection.length === 1 && this.$context.selection.is("boolean-path"))
         return true;
-      return this.$selection.is("svg-path", "polygon", "star");
+      return this.$context.selection.is("svg-path", "polygon", "star");
     });
   }
 }
@@ -81299,7 +81318,7 @@ class PatternProperty extends BaseProperty {
     this.children.$patternEditor.trigger("add", patternType);
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current.pattern;
     return createComponent("PatternEditor", {
       ref: "$patternEditor",
@@ -81309,7 +81328,7 @@ class PatternProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changePatternEditor")](key, pattern) {
-    this.command("setAttributeForMulti", "change pattern", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change pattern", this.$context.selection.packByValue({
       pattern
     }));
   }
@@ -81454,7 +81473,7 @@ class PerspectiveProperty extends BaseProperty {
     return `<div class='property-item' ref='$perspective'></div>`;
   }
   [LOAD("$perspective")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var perspective2 = current["perspective"] || "";
     return createComponent("RangeEditor", {
       ref: "$1",
@@ -81465,7 +81484,7 @@ class PerspectiveProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changePerspective")](key, value) {
-    this.command("setAttributeForMulti", "change perspective", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change perspective", this.$context.selection.packByValue({
       [key]: value
     }));
   }
@@ -81655,7 +81674,7 @@ class PerspectiveOriginProperty extends BaseProperty {
     `;
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["perspective-origin"] || "";
     return createComponent("PerspectiveOriginEditor", {
       ref: "$1",
@@ -81670,7 +81689,7 @@ class PerspectiveOriginProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
-    this.command("setAttributeForMulti", "change perspective origin", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change perspective origin", this.$context.selection.packByValue({
       "perspective-origin": value
     }));
   }
@@ -81696,13 +81715,13 @@ class PositionProperty extends BaseProperty {
     this.refreshShowIsNot(["project"]);
   }
   checkChangedValue() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return false;
     return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "angle", "transform", "opacity", "resizingVertical", "resizingHorizontal", "constraints-horizontal", "constriants-vertical");
   }
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkChangedValue") + THROTTLE(10)]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     this.children.$x.setValue(round(current.offsetX || DEFAULT_SIZE, 100));
@@ -81792,7 +81811,7 @@ class PositionProperty extends BaseProperty {
     `;
   }
   refresh() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current) {
       this.children.$x.setValue(round(current.offsetX || DEFAULT_SIZE, 100));
       this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
@@ -81807,17 +81826,17 @@ class PositionProperty extends BaseProperty {
     console.log(command);
   }
   [SUBSCRIBE_SELF("changRangeEditor")](key, value) {
-    this.command("setAttributeForMulti", "change position or size", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change position or size", this.$context.selection.packByValue({
       [key]: value
     }));
   }
   [SUBSCRIBE_SELF("changeRotate")](key, rotate2) {
-    this.command("setAttributeForMulti", "change rotate", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "change rotate", this.$context.selection.packByValue({
       angle: rotate2.value
     }));
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.command("setAttributeForMulti", `change ${key}`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change ${key}`, this.$context.selection.packByValue({
       [key]: value
     }));
   }
@@ -81851,7 +81870,7 @@ class ProjectProperty extends BaseProperty {
   [LOAD("$projectList") + DOMDIFF]() {
     var projects = this.$model.projects || [];
     return projects.map((projectId) => {
-      var selected = projectId === this.$selection.currentProject.id ? "selected" : "";
+      var selected = projectId === this.$context.selection.currentProject.id ? "selected" : "";
       const project2 = this.$model.get(projectId);
       return `
         <div class='project-item ${selected}'>
@@ -84445,6 +84464,12 @@ class SVGPathRender$2 extends SVGItemRender$2 {
           "stroke-linecap": item["stroke-linecap"]
         });
       }
+      if (item.hasChangedField("stroke-dasharray")) {
+        $path.setAttrNS({
+          "stroke-dasharray": item["stroke-dasharray"].join(" ")
+        });
+        console.log(item["stroke-dasharray"].join(" "));
+      }
     }
     super.update(item, currentElement);
   }
@@ -84463,6 +84488,7 @@ class SVGPathRender$2 extends SVGItemRender$2 {
       stroke="${this.toStrokeValue(item)}"
       stroke-linejoin="${item["stroke-linejoin"]}"
       stroke-linecap="${item["stroke-linecap"]}"
+      stroke-dasharray="${item["stroke-dasharray"].join(" ")}"
     />
   </svg>
 </div>
@@ -85898,9 +85924,9 @@ class SelectionInfoView extends EditorElement {
     this.startXY = e.xy;
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     const id = e.$dt.attr("data-artboard-title-id");
-    this.$selection.select(id);
+    this.$context.selection.select(id);
     if (e.altKey) {
-      this.$selection.selectAfterCopy();
+      this.$context.selection.selectAfterCopy();
       this.emit("refreshAllCanvas");
       this.emit("refreshLayerTreeView");
     }
@@ -85909,17 +85935,17 @@ class SelectionInfoView extends EditorElement {
     this.$config.set("set.move.control.point", true);
   }
   initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
     this.emit("refreshSelectionTool");
   }
   moveTo(dist2) {
-    const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map((v) => {
+    const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
       return add$1([], v, dist2);
     }), 3);
     const localDist = add$1([], snap, dist2);
     const result = {};
-    this.$selection.cachedItemMatrices.forEach((it) => {
+    this.$context.selection.cachedItemMatrices.forEach((it) => {
       const newVerties = it.verties.map((v) => {
         return add$1([], v, localDist);
       });
@@ -85929,13 +85955,13 @@ class SelectionInfoView extends EditorElement {
         y: Math.floor(it.y + newDist[1])
       };
     });
-    this.$selection.reset(result);
+    this.$context.selection.reset(result);
   }
   calculateMovedElement() {
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
     this.moveTo(newDist);
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y"));
     this.emit("refreshSelectionStyleView");
     this.refresh();
   }
@@ -85947,16 +85973,16 @@ class SelectionInfoView extends EditorElement {
     (_a = this.$el.$(`[data-artboard-title-id='${id}']`)) == null ? void 0 : _a.text(title2);
   }
   calculateEndedElement() {
-    this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
+    this.command("setAttributeForMulti", "move item", this.$context.selection.pack("x", "y"));
     this.$config.set("set.move.control.point", false);
   }
   [SUBSCRIBE("updateViewport")]() {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.current.is("artboard")) {
-        if (this.$selection.hasChangedField("x", "y", "width", "height", "angle", "transform", "transform-origin")) {
+    if (this.$context.selection.current) {
+      if (this.$context.selection.current.is("artboard")) {
+        if (this.$context.selection.hasChangedField("x", "y", "width", "height", "angle", "transform", "transform-origin")) {
           this.refresh();
         }
       }
@@ -85964,7 +85990,7 @@ class SelectionInfoView extends EditorElement {
   }
   [LOAD("$el") + DOMDIFF]() {
     var _a;
-    return (_a = this.$selection.currentProject) == null ? void 0 : _a.artboards.map((it) => {
+    return (_a = this.$context.selection.currentProject) == null ? void 0 : _a.artboards.map((it) => {
       return {
         item: it,
         title: it.name,
@@ -86026,13 +86052,13 @@ class GhostToolView extends EditorElement {
     }));
   }
   [SUBSCRIBE("startGhostToolView")]() {
-    const screenVerties = this.$selection.verties;
-    this.isLayoutItem = this.$selection.isLayoutItem;
+    const screenVerties = this.$context.selection.verties;
+    this.isLayoutItem = this.$context.selection.isLayoutItem;
     this.verties = clone$1(screenVerties);
     this.ghostVerties = clone$1(screenVerties);
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
     this.initMousePoint = this.$viewport.getWorldPosition();
-    this.filteredLayers = this.$selection.notSelectedLayers;
+    this.filteredLayers = this.$context.selection.notSelectedLayers;
     this.containerList = this.filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
     this.$config.set("set.move.control.point", true);
   }
@@ -86044,12 +86070,12 @@ class GhostToolView extends EditorElement {
       return add$1([], v, newDist);
     });
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
-    const filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
+    const filteredLayers = this.$context.selection.filteredLayers.filter((it) => this.$context.selection.check(it) === false);
     this.targetItem = filteredLayers[0];
     if (this.targetItem) {
-      const currentParent = (_a = this.$selection.current) == null ? void 0 : _a.parent;
+      const currentParent = (_a = this.$context.selection.current) == null ? void 0 : _a.parent;
       if (currentParent.isNot("project") && (currentParent == null ? void 0 : currentParent.isLayout(Layout.GRID))) {
-        this.targetItem = this.$selection.current.parent;
+        this.targetItem = this.$context.selection.current.parent;
       } else {
         if (this.targetItem.hasLayout() && ((_b = this.targetItem) == null ? void 0 : _b.hasChildren())) {
           if (this.targetItem.isLayout(Layout.FLEX)) {
@@ -86058,7 +86084,7 @@ class GhostToolView extends EditorElement {
             ;
         }
       }
-      this.$selection.updateDragTargetItem(this.targetItem);
+      this.$context.selection.updateDragTargetItem(this.targetItem);
       this.targetOriginPosition = this.$viewport.applyVerties(toRectVerties(this.targetItem.contentVerties));
       this.targetPoint = this.$viewport.applyVertex(targetMousePoint);
       this.targetRelativeMousePoint = {
@@ -86229,7 +86255,7 @@ class GhostToolView extends EditorElement {
   }
   [LOAD("$view") + DOMDIFF]() {
     var _a;
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!this.ghostVerties || !current) {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
@@ -86246,7 +86272,7 @@ class GhostToolView extends EditorElement {
     this.targetItem = void 0;
     this.targetParent = void 0;
     this.targetParentPosition = void 0;
-    this.$selection.updateDragTargetItem(this.targetItem);
+    this.$context.selection.updateDragTargetItem(this.targetItem);
   }
   getDist() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -86254,11 +86280,11 @@ class GhostToolView extends EditorElement {
     return newDist;
   }
   insertToBackground() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const newDist = this.getDist();
     if (current.isLayoutItem() === false)
       return;
-    this.command("moveLayerToTarget", "change target with move", current, this.$selection.currentProject, newDist);
+    this.command("moveLayerToTarget", "change target with move", current, this.$context.selection.currentProject, newDist);
   }
   getTargetAction() {
     let targetAction = "";
@@ -86285,7 +86311,7 @@ class GhostToolView extends EditorElement {
     return targetAction;
   }
   insertToLayoutItem() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const newDist = this.getDist();
     if (this.targetParent.hasLayout()) {
       let targetAction = this.getTargetAction();
@@ -86299,8 +86325,8 @@ class GhostToolView extends EditorElement {
     }
   }
   insertToGridItem() {
-    const current = this.$selection.current;
-    const { info, items } = this.$selection.gridInformation || { items: [] };
+    const current = this.$context.selection.current;
+    const { info, items } = this.$context.selection.gridInformation || { items: [] };
     const currentVerties = this.ghostVerties.filter((_, index2) => index2 < 4);
     const targetRect = vertiesToRectangle(currentVerties);
     const checkedItems = items == null ? void 0 : items.filter((it) => {
@@ -86316,7 +86342,7 @@ class GhostToolView extends EditorElement {
       const rowStart = Math.min(...rowList);
       const columnEnd = Math.max(...columnList) + 1;
       const rowEnd = Math.max(...rowList) + 1;
-      this.command("setAttributeForMulti", "change grid item", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "change grid item", this.$context.selection.packByValue({
         "grid-column-start": columnStart,
         "grid-column-end": columnEnd,
         "grid-row-start": rowStart,
@@ -86335,7 +86361,7 @@ class GhostToolView extends EditorElement {
   }
   updateLayer() {
     var _a;
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return;
     const newDist = this.getDist();
@@ -86350,13 +86376,13 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      const isCtrl = this.$keyboardManager.isCtrl();
+      const isCtrl = this.$context.keyboardManager.isCtrl();
       if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false && this.targetItem.isLayout(Layout.FLEX) && isCtrl === false) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist);
         return;
       } else {
         if (isCtrl) {
-          const { info } = this.$selection.gridInformation || {
+          const { info } = this.$context.selection.gridInformation || {
             items: []
           };
           if (info == null ? void 0 : info.current) {
@@ -86403,14 +86429,14 @@ const SelectionToolEvent$1 = class extends EditorElement {
     return this.$modeView.isCurrentMode("CanvasView");
   }
   [SUBSCRIBE("refreshSelectionTool") + IF("checkViewMode")]() {
-    if (this.$selection.isMany) {
+    if (this.$context.selection.isMany) {
       this.initSelectionTool();
     } else {
       this.hide();
     }
   }
   [SUBSCRIBE("updateViewport") + IF("checkViewMode")]() {
-    if (this.$selection.isMany) {
+    if (this.$context.selection.isMany) {
       this.initSelectionTool();
     }
   }
@@ -86449,9 +86475,9 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
       angle: this.localAngle
     });
     const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4]);
-    let cachedItemMatrices = this.$selection.cachedItemMatrices;
-    if (this.$selection.length === 1) {
-      cachedItemMatrices = cachedItemMatrices.filter((it) => it.id === this.$selection.current.id);
+    let cachedItemMatrices = this.$context.selection.cachedItemMatrices;
+    if (this.$context.selection.length === 1) {
+      cachedItemMatrices = cachedItemMatrices.filter((it) => it.id === this.$context.selection.current.id);
     }
     cachedItemMatrices.forEach((item) => {
       const newVerties = vertiesMap(item.verties, multiply$1([], item.parentMatrixInverse, selectionMatrix));
@@ -86468,17 +86494,17 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
       }
     });
     this.state.dragging = true;
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "angle"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y", "width", "height", "angle"));
   }
   rotateEndVertex() {
     this.state.dragging = false;
     this.state.isRotate = false;
     this.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.initMatrix(true);
     this.nextTick(() => {
-      this.command("setAttributeForMulti", "rotate selection pointer", this.$selection.pack("x", "y", "width", "height", "angle"));
+      this.command("setAttributeForMulti", "rotate selection pointer", this.$context.selection.pack("x", "y", "width", "height", "angle"));
     });
   }
   refreshRotatePointerIcon() {
@@ -86514,12 +86540,12 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     const num = +e.$dt.attr("data-number");
     this.state.moveType = directionType$1[`${num}`];
     this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.state.dragging = false;
     this.initMatrix(true);
     this.cachedGroupItem = this.groupItem.matrix;
     this.$config.set("set.move.control.point", true);
-    this.$selection.startToCacheChildren();
+    this.$context.selection.startToCacheChildren();
   }
   calculateNewOffsetMatrixInverse(vertextOffset, width2, height2, origin2, itemMatrix) {
     const center2 = add$1([], TransformOrigin.scale(origin2, width2, height2), negate([], vertextOffset));
@@ -86527,7 +86553,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
   }
   calculateDistance(vertext, distVector, reverseMatrix) {
     const currentVertex = clone(vertext);
-    const snap = this.$snapManager.check([
+    const snap = this.$context.snapManager.check([
       add$1([], currentVertex, distVector)
     ]);
     const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
@@ -86565,7 +86591,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
   recoverItemForGroup(groupItem, scaleX, scaleY, realDx = 0, realDy = 0) {
     const absoluteMatrix = groupItem.absoluteMatrix;
     const absoluteMatrixInverse = groupItem.absoluteMatrixInverse;
-    this.$selection.cachedItemMatrices.forEach((it) => {
+    this.$context.selection.cachedItemMatrices.forEach((it) => {
       const localView = calculateMatrix(it.parentMatrixInverse, absoluteMatrix, fromTranslation([], [realDx, realDy, 0]), fromScaling([], [scaleX, scaleY, 1]), absoluteMatrixInverse);
       const newVerties = vertiesMap(it.verties, localView);
       this.moveItemForGroup(it, newVerties);
@@ -86678,18 +86704,18 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     } else if (this.state.moveType === "to bottom") {
       this.moveBottomVertex(distVector);
     }
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y", "width", "height"));
     this.state.dragging = true;
   }
   moveEndVertex() {
     this.state.dragging = false;
     this.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.initMatrix(true);
     this.nextTick(() => {
-      this.$selection.recoverChildren();
-      this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "width", "height"));
+      this.$context.selection.recoverChildren();
+      this.command("setAttributeForMulti", "move selection pointer", this.$context.selection.pack("x", "y", "width", "height"));
       this.emit("recoverBooleanPath");
     });
   }
@@ -86704,10 +86730,10 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     }
   }
   initSelectionTool() {
-    if (this.$el.isHide() && this.$selection.isMany) {
+    if (this.$el.isHide() && this.$context.selection.isMany) {
       this.show();
     } else {
-      if (this.$el.isShow() && this.$selection.isMany === false)
+      if (this.$el.isShow() && this.$context.selection.isMany === false)
         this.hide();
     }
     this.initMatrix();
@@ -86719,7 +86745,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
       this.state.groupSelectionView = this.$editor.createModel({ itemType: "artboard" }, false);
     }
     this.state.groupSelectionView.reset({
-      parentId: this.$selection.currentProject.id,
+      parentId: this.$context.selection.currentProject.id,
       x: verties[0][0],
       y: verties[0][1],
       width: dist(verties[0], verties[1]),
@@ -86728,8 +86754,8 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     return this.state.groupSelectionView;
   }
   initMatrix() {
-    if (this.$selection.isMany && this.state.dragging === false) {
-      this.verties = clone$1(this.$selection.verties);
+    if (this.$context.selection.isMany && this.state.dragging === false) {
+      this.verties = clone$1(this.$context.selection.verties);
       this.angle = 0;
       this.localAngle = this.angle;
       this.groupItem = this.item;
@@ -86740,12 +86766,12 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     this.renderPointers();
   }
   renderPointers() {
-    if (this.$selection.isEmpty || this.$config.true("set.move.control.point")) {
+    if (this.$context.selection.isEmpty || this.$config.true("set.move.control.point")) {
       this.refs.$pointerRect.empty();
       return;
     }
     this.state.renderPointerList = [
-      this.$viewport.applyVerties(this.$selection.verties)
+      this.$viewport.applyVerties(this.$context.selection.verties)
     ];
     const { line: line2, point: point2, size: size2, elementLine } = this.createRenderPointers(this.state.renderPointerList[0]);
     this.refs.$pointerRect.updateDiff(line2 + elementLine + point2 + size2);
@@ -86859,7 +86885,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
       elementLine: `
                 <svg class='line' overflow="visible">
                     <path 
-                        d="${this.$selection.items.map((it) => {
+                        d="${this.$context.selection.items.map((it) => {
         return this.createLine(this.$viewport.applyVerties(it.originVerties));
       }).join("")}
                         " />
@@ -86880,7 +86906,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     };
   }
   checkShow() {
-    if (this.state.show && this.$selection.isMany) {
+    if (this.state.show && this.$context.selection.isMany) {
       return true;
     }
     return false;
@@ -86907,8 +86933,15 @@ const SelectionToolEvent = class extends EditorElement {
     this.initSelectionTool();
   }
   [SUBSCRIBE("updateViewport") + IF("checkViewMode")]() {
-    if (this.$selection.isOne) {
+    if (this.$context.selection.isOne) {
       this.initSelectionTool();
+    }
+  }
+  [SUBSCRIBE("updateModeView")]() {
+    if (this.checkViewMode()) {
+      this.initSelectionTool();
+    } else {
+      this.hide();
     }
   }
 };
@@ -86926,22 +86959,21 @@ class SelectionToolView extends SelectionToolEvent {
   [POINTERSTART("$pointerRect .rotate-pointer") + MOVE("rotateVertex") + END("rotateEndVertex")](e) {
     this.state.moveType = "rotate";
     this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.$selection.reselect();
-    this.verties = clone$1(this.$selection.verties);
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.verties = clone$1(this.$context.selection.verties);
+    this.$context.snapManager.clear();
     this.rotateTargetNumber = +e.$dt.attr("data-number");
     this.refreshRotatePointerIcon();
     this.state.dragging = true;
     this.state.isRotate = true;
-    this.initAngle = this.$selection.current.angle;
-    this.$config.set("set.move.control.point", true);
+    this.initAngle = this.$context.selection.current.angle;
   }
   rotateVertex() {
     const targetMousePoint = this.$viewport.getWorldPosition();
     const distVector = subtract([], targetMousePoint, this.initMousePoint);
     const targetRotatePointer = this.rotateTargetNumber === 4 ? getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
     var distAngle = Math.floor(calculateAngleForVec3(targetRotatePointer, this.verties[4], distVector));
-    const instance = this.$selection.current;
+    const instance = this.$context.selection.current;
     let newAngle = this.initAngle + distAngle;
     if (instance) {
       if (this.$config.get("bodyEvent").shiftKey) {
@@ -86950,15 +86982,14 @@ class SelectionToolView extends SelectionToolEvent {
       instance.angle = round(newAngle % 360, 100);
     }
     this.state.dragging = true;
-    this.emit("setAttributeForMulti", this.$selection.pack("angle"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("angle"));
   }
   rotateEndVertex() {
     this.state.dragging = false;
     this.state.isRotate = false;
     this.emit("recoverCursor");
-    this.$config.set("set.move.control.point", false);
     this.verties = null;
-    this.command("setAttributeForMulti", "change rotate", this.$selection.pack("angle"));
+    this.command("setAttributeForMulti", "change rotate", this.$context.selection.pack("angle"));
   }
   refreshRotatePointerIcon() {
     this.emit("refreshCursor", "rotate");
@@ -86995,18 +87026,17 @@ class SelectionToolView extends SelectionToolEvent {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     this.state.moveType = direction;
     this.state.moveTarget = num;
-    this.$selection.reselect();
-    this.$snapManager.clear();
-    this.verties = this.$selection.verties;
-    this.hasRotate = this.$selection.current.angle !== 0;
-    this.cachedCurrentItemMatrix = this.$selection.current.matrix;
-    this.$config.set("set.move.control.point", true);
-    this.$selection.startToCacheChildren();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
+    this.verties = this.$context.selection.verties;
+    this.hasRotate = this.$context.selection.current.angle !== 0;
+    this.cachedCurrentItemMatrix = this.$context.selection.current.matrix;
+    this.$context.selection.startToCacheChildren();
   }
   calculateDistance(vertex2, distVector, reverseMatrix) {
     const currentVertex = clone(vertex2);
     const moveVertext = add$1([], currentVertex, distVector);
-    const snap = this.$snapManager.check([moveVertext]);
+    const snap = this.$context.snapManager.check([moveVertext]);
     const nextVertex = add$1([], moveVertext, snap);
     const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
     const realDist = subtract([], nextResult, currentResult);
@@ -87243,29 +87273,28 @@ class SelectionToolView extends SelectionToolEvent {
     } else if (this.state.moveType === "to bottom left") {
       this.moveBottomLeftVertex(distVector);
     }
-    this.$selection.recoverChildren();
-    const current = this.$selection.current;
+    this.$context.selection.recoverChildren();
+    const current = this.$context.selection.current;
     if (current.isInGrid()) {
-      this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+      this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
     } else {
-      this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
+      this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
     }
     this.state.dragging = true;
   }
   updateGridArea() {
-    return GridLayoutEngine.updateGridArea(this.$selection.current, this.$selection.gridInformation);
+    return GridLayoutEngine.updateGridArea(this.$context.selection.current, this.$context.selection.gridInformation);
   }
   moveEndVertex() {
     this.state.dragging = false;
     this.emit("recoverCursor");
-    this.$selection.reselect();
-    this.$config.set("set.move.control.point", false);
+    this.$context.selection.reselect();
     this.nextTick(() => {
-      this.$selection.recoverChildren();
-      if (this.$selection.current.isInGrid()) {
-        this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+      this.$context.selection.recoverChildren();
+      if (this.$context.selection.current.isInGrid()) {
+        this.command("setAttributeForMulti", "move selection pointer", this.$context.selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
       } else {
-        this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
+        this.command("setAttributeForMulti", "move selection pointer", this.$context.selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
       }
       this.emit("recoverBooleanPath");
     });
@@ -87279,9 +87308,9 @@ class SelectionToolView extends SelectionToolEvent {
     this.state.show = false;
   }
   initSelectionTool() {
-    if (this.$el.isShow() && this.$selection.isOne === false) {
+    if (this.$el.isShow() && this.$context.selection.isOne === false) {
       this.hide();
-    } else if (this.$el.isHide() && this.$selection.isOne) {
+    } else if (this.$el.isHide() && this.$context.selection.isOne) {
       this.show();
     }
     this.makeSelectionTool();
@@ -87293,11 +87322,11 @@ class SelectionToolView extends SelectionToolEvent {
     return lerp$1([], startVetex, endVertex, (dist(startVetex, endVertex) + dist$1) / dist(startVetex, endVertex));
   }
   renderPointers() {
-    if (this.$selection.isEmpty || this.$config.true("set.move.control.point")) {
+    if (this.$context.selection.isEmpty || this.$config.true("set.move.control.point")) {
       this.refs.$pointerRect.empty();
       return;
     }
-    const verties = this.$selection.verties;
+    const verties = this.$context.selection.verties;
     if (dist(verties[0], verties[1]) === 0) {
       return;
     }
@@ -87342,7 +87371,7 @@ class SelectionToolView extends SelectionToolEvent {
   createPointerRect(pointers, rotatePointer = void 0) {
     if (pointers.length === 0)
       return "";
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const isArtBoard = current && current.is("artboard");
     let line2 = "";
     if (!isArtBoard && rotatePointer) {
@@ -87402,19 +87431,19 @@ class SelectionToolView extends SelectionToolEvent {
     });
     const item = list2[0];
     const newPointer = lerp$1([], item.data.end, item.data.start, 1 + 16 / dist(item.data.start, item.data.end));
-    const width2 = this.$selection.current.width;
-    const height2 = this.$selection.current.height;
+    const width2 = this.$context.selection.current.width;
+    const height2 = this.$context.selection.current.height;
     const diff = subtract([], item.data.start, item.data.end);
     const angle = calculateAngle360(diff[0], diff[1]) + 90;
     const widthPx = round(width2, 100);
     const heightPx = round(height2, 100);
     let text2 = widthPx === heightPx ? `WH: ${widthPx}` : `${round(width2, 100)} x ${round(height2, 100)}`;
     if (this.state.isRotate) {
-      text2 = `${round(this.$selection.current.angle, 100)}\xB0`;
+      text2 = `${round(this.$context.selection.current.angle, 100)}\xB0`;
     }
     return `
             <div 
-                data-layout="${this.$selection.current.layout}"
+                data-layout="${this.$context.selection.current.layout}"
                 class='size-pointer' 
                 style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
                ${text2}
@@ -87422,7 +87451,7 @@ class SelectionToolView extends SelectionToolEvent {
         `;
   }
   createVisiblePath() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     if (!current.isBooleanItem) {
@@ -87445,7 +87474,7 @@ class SelectionToolView extends SelectionToolEvent {
     return value.replace(/NaN/g, "0");
   }
   createRenderPointers(pointers, selectionPointers) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current && current.is("text")) {
       if (current.width === 0 && current.height === 0) {
         return;
@@ -87481,7 +87510,7 @@ class SelectionToolView extends SelectionToolEvent {
     if (this.$modeView.isCurrentMode("CanvasView") === false) {
       return false;
     }
-    if (this.state.show && this.$selection.isOne) {
+    if (this.state.show && this.$context.selection.isOne) {
       return true;
     }
     return false;
@@ -87612,14 +87641,14 @@ class SelectorProperty extends BaseProperty {
   }
   [CLICK("$selectorList .selector-item .name")](e) {
     var index2 = +e.$dt.closest("selector-item").attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     this.viewSelectorPicker(index2);
   }
   [CLICK("$selectorList .selector-item .del") + PREVENT + STOP](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.removeSelector(removeIndex);
@@ -87636,7 +87665,7 @@ class SelectorProperty extends BaseProperty {
     ]);
   }
   [LOAD("$selectorList")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     var selectors = current.selector ? Selector.parseStyle(current) : current.selectors;
@@ -87653,7 +87682,7 @@ class SelectorProperty extends BaseProperty {
   }
   [DROP("$selectorList .selector-item") + PREVENT](e) {
     var targetIndex = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.sortSelector(this.startIndex, targetIndex);
@@ -87661,7 +87690,7 @@ class SelectorProperty extends BaseProperty {
     this.refresh();
   }
   [CLICK("$add")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       current.createSelector({
         selector: this.children.$select.getValue()
@@ -87676,7 +87705,7 @@ class SelectorProperty extends BaseProperty {
     }
     this.selectedIndex = +index2;
     this.selectItem(this.selectedIndex, true);
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentSelector = this.current.selectors[this.selectedIndex];
@@ -87695,7 +87724,7 @@ class SelectorProperty extends BaseProperty {
     }
   }
   viewSelectorPropertyPopup(position2) {
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentSelector = this.current.selectors[this.selectedIndex];
@@ -87709,7 +87738,7 @@ class SelectorProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE("changeSelectorPopup")](data) {
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentselector = this.current.selectors[this.selectedIndex];
@@ -87752,7 +87781,7 @@ class SVGFilterAssetsProperty extends BaseProperty {
     `;
   }
   [LOAD("$svgfilterList")]() {
-    var current = this.$selection.currentProject || { svgfilters: [] };
+    var current = this.$context.selection.currentProject || { svgfilters: [] };
     var svgfilters = current.svgfilters;
     var results = svgfilters.map((svgfilter, index2) => {
       var filters = svgfilter.filters.map((filter2) => {
@@ -87784,7 +87813,7 @@ class SVGFilterAssetsProperty extends BaseProperty {
     return results;
   }
   executeSVGFilter(callback, isRefresh = true, isEmit = true) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       callback && callback(project2);
       if (isRefresh)
@@ -87831,7 +87860,7 @@ class SVGFilterAssetsProperty extends BaseProperty {
     var index2 = +$item.attr("data-index");
     this.state.$item = $item;
     this.state.$el = e.$dt.$(".svgfilter-view");
-    var currentProject = this.$selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
     var svgfilter = currentProject.svgfilters[index2];
     this.emit("showSVGFilterPopup", {
       changeEvent: "changeSVGFilterAssets",
@@ -89438,7 +89467,7 @@ class SVGFilterSelectEditor extends EditorElement {
   [CLICK("$open")]() {
     var value = this.state.value;
     if (value.includes("id")) {
-      var currentProject = this.$selection.currentProject;
+      var currentProject = this.$context.selection.currentProject;
       var index2 = currentProject.getSVGFilterIndex(value);
       if (index2 > -1) {
         this.trigger("openSVGFilterPopup", index2);
@@ -89457,7 +89486,7 @@ class SVGFilterSelectEditor extends EditorElement {
     };
   }
   [LOAD("$options")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var options2 = "";
     if (current) {
       options2 = current.svgfilters.map((it) => it.id);
@@ -89511,7 +89540,7 @@ class SVGFilterSelectEditor extends EditorElement {
   [SUBSCRIBE("openSVGFilterPopup")](index2) {
     this.emit("refreshSVGFilterAssets");
     this.emit("refreshSVGArea");
-    var currentProject = this.$selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
     var svgfilter = currentProject.svgfilters[index2];
     this.emit("showSVGFilterPopup", {
       changeEvent: "changeSVGFilterEditorRealUpdate",
@@ -89521,7 +89550,7 @@ class SVGFilterSelectEditor extends EditorElement {
     });
   }
   [SUBSCRIBE("changeSVGFilterEditorRealUpdate")](params) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     if (project2) {
       project2.setSVGFilterValue(params.index, {
         filters: params.filters
@@ -89837,7 +89866,7 @@ class SVGTextProperty extends BaseProperty {
     this.refreshShow(["svg-textpath", "svg-text", "svg-tspan"]);
   }
   refresh() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       this.setAllValue([
         "lengthAdjust",
@@ -89849,7 +89878,7 @@ class SVGTextProperty extends BaseProperty {
     }
   }
   setAllValue(list2 = []) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     list2.forEach((key) => {
@@ -89914,7 +89943,7 @@ class SVGTextProperty extends BaseProperty {
     `;
   }
   [SUBSCRIBE_SELF("changeTextValue")](key, value) {
-    this.command("setAttributeForMulti", `change svg text property: ${key}`, this.$selection.packByValue({
+    this.command("setAttributeForMulti", `change svg text property: ${key}`, this.$context.selection.packByValue({
       [key]: value
     }));
   }
@@ -90062,13 +90091,13 @@ class TextShadowProperty extends BaseProperty {
     this.children.$textshadow.trigger("add", textShadow$1[index2].shadow);
   }
   [LOAD("$shadowList")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
       key: "text-shadow",
       value: current["text-shadow"],
       onchange: (key, value) => {
-        this.command("setAttributeForMulti", "change text shadow", this.$selection.packByValue({
+        this.command("setAttributeForMulti", "change text shadow", this.$context.selection.packByValue({
           [key]: value
         }));
       }
@@ -90194,7 +90223,7 @@ class TransitionProperty extends BaseProperty {
     return true;
   }
   [LOAD("$transitionList") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return "";
     return Transition.parseStyle(current.transition).map((it, index2) => {
@@ -90229,9 +90258,9 @@ class TransitionProperty extends BaseProperty {
     this.refreshShowIsNot([]);
   }
   [CLICK("$add")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
-      this.command("setAttributeForMulti", "add transition", this.$selection.packByValue({
+      this.command("setAttributeForMulti", "add transition", this.$context.selection.packByValue({
         transition: (item) => Transition.add(item.transition)
       }));
       this.nextTick(() => {
@@ -90248,7 +90277,7 @@ class TransitionProperty extends BaseProperty {
   }
   [CLICK("$transitionList .tools .del")](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     current.reset({
@@ -90269,7 +90298,7 @@ class TransitionProperty extends BaseProperty {
       this.selectItem(this.selectedIndex, false);
     }
     this.selectedIndex = +$preview.attr("data-index");
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentTransition = Transition.get(this.current.transition, this.selectedIndex);
@@ -90532,7 +90561,7 @@ class VideoProperty extends BaseProperty {
       this.video.pause();
   }
   [LOAD("$body")]() {
-    var current = this.$selection.current || { playTime: "0:1:1" };
+    var current = this.$context.selection.current || { playTime: "0:1:1" };
     var currentTime = current.currentTime || 0;
     var duration = (current.playTime || "0:1:1").split(":").pop();
     return `
@@ -90595,17 +90624,17 @@ class VideoProperty extends BaseProperty {
   }
   [SUBSCRIBE("changeCurrentTime")](key, currentTime) {
     this.setState({ currentTime }, false);
-    this.command("setAttributeForMulti", "change video property", this.$selection.packByValue({ currentTime }));
+    this.command("setAttributeForMulti", "change video property", this.$context.selection.packByValue({ currentTime }));
   }
   [SUBSCRIBE("changePlaybackRate")](key, playbackRate) {
     this.setState({ playbackRate }, false);
-    this.command("setAttributeForMulti", "change video property", this.$selection.packByValue({ playbackRate }));
+    this.command("setAttributeForMulti", "change video property", this.$context.selection.packByValue({ playbackRate }));
   }
   [CHANGEINPUT("$volume")]() {
     const volume = Number(this.refs.$volume.value);
     this.setState({ volume }, false);
     this.bindData("$volume_control");
-    this.command("setAttributeForMulti", "change video property", this.$selection.packByValue({ volume }));
+    this.command("setAttributeForMulti", "change video property", this.$context.selection.packByValue({ volume }));
   }
   [BIND("$volume_control")]() {
     return {
@@ -90634,10 +90663,10 @@ class VideoProperty extends BaseProperty {
   [SUBSCRIBE_SELF("changeValue") + DEBOUNCE(100)](key, value) {
     if (!this.state.$video)
       return;
-    this.command("setAttributeForMulti", "change video property", this.$selection.packByValue({ [key]: value }));
+    this.command("setAttributeForMulti", "change video property", this.$context.selection.packByValue({ [key]: value }));
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.command("setAttributeForMulti", "change video property", this.$selection.packByValue({ [key]: value }));
+    this.command("setAttributeForMulti", "change video property", this.$context.selection.packByValue({ [key]: value }));
   }
   [SUBSCRIBE_SELF("updateVideoEvent")]() {
     if (this.video.paused) {
@@ -90650,7 +90679,7 @@ class VideoProperty extends BaseProperty {
     this.children.$currentTime.setValue(this.video.currentTime);
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     this.refreshShow(["video"]);
     if (current && current.is("video")) {
       this.emit("refElement", current.id, ($el) => {
@@ -91262,11 +91291,11 @@ var DefaultMenu = [
     icon: "navigation",
     events: ["config:editing.mode"],
     selected: (editor) => {
-      return editor.config.is("editing.mode", EditingMode.SELECT);
+      return editor.context.config.is("editing.mode", EditingMode.SELECT);
     },
     action: (editor) => {
       editor.emit("addLayerView", "select");
-      editor.config.is("editing.mode.itemType", EditingMode.SELECT);
+      editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
     }
   },
   {
@@ -91274,7 +91303,7 @@ var DefaultMenu = [
     icon: "artboard",
     events: ["config:editing.mode", "config:editing.mode.itemType"],
     selected: (editor) => {
-      return editor.config.is("editing.mode", EditingMode.APPEND) && editor.config.is("editing.mode.itemType", "artboard");
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "artboard");
     },
     action: (editor) => {
       editor.emit("addLayerView", "artboard");
@@ -91284,7 +91313,7 @@ var DefaultMenu = [
     type: "dropdown",
     icon: (editor, dropdown) => {
       var _a;
-      return ((_a = dropdown.findItem(editor.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
+      return ((_a = dropdown.findItem(editor.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
     },
     items: [
       {
@@ -91295,7 +91324,7 @@ var DefaultMenu = [
         args: ["rect"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "rect");
+          editor.context.config.set("editing.css.itemType", "rect");
         },
         shortcut: KeyStringMaker({ key: "R" })
       },
@@ -91307,7 +91336,7 @@ var DefaultMenu = [
         args: ["circle"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "circle");
+          editor.context.config.set("editing.css.itemType", "circle");
         },
         shortcut: KeyStringMaker({ key: "O" })
       },
@@ -91319,7 +91348,7 @@ var DefaultMenu = [
         args: ["text"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "text");
+          editor.context.config.set("editing.css.itemType", "text");
         },
         shortcut: KeyStringMaker({ key: "T" })
       },
@@ -91331,7 +91360,7 @@ var DefaultMenu = [
         args: ["image"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "image");
+          editor.context.config.set("editing.css.itemType", "image");
         },
         shortcut: KeyStringMaker({ key: "I" })
       },
@@ -91344,7 +91373,7 @@ var DefaultMenu = [
         args: ["video"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "video");
+          editor.context.config.set("editing.css.itemType", "video");
         },
         shortcut: KeyStringMaker({ key: "V" })
       },
@@ -91356,7 +91385,7 @@ var DefaultMenu = [
         args: ["iframe"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "iframe");
+          editor.context.config.set("editing.css.itemType", "iframe");
         },
         shortcut: KeyStringMaker({ key: "F" })
       },
@@ -91368,7 +91397,7 @@ var DefaultMenu = [
         args: ["sample"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "sample");
+          editor.context.config.set("editing.css.itemType", "sample");
         }
       }
     ],
@@ -91378,17 +91407,17 @@ var DefaultMenu = [
       "config:editing.css.itemType"
     ],
     selected: (editor) => {
-      return editor.config.is("editing.mode", EditingMode.APPEND) && (editor.config.is("editing.mode.itemType", "rect") || editor.config.is("editing.mode.itemType", "circle") || editor.config.is("editing.mode.itemType", "text") || editor.config.is("editing.mode.itemType", "image") || editor.config.is("editing.mode.itemType", "video") || editor.config.is("editing.mode.itemType", "iframe"));
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "rect") || editor.context.config.is("editing.mode.itemType", "circle") || editor.context.config.is("editing.mode.itemType", "text") || editor.context.config.is("editing.mode.itemType", "image") || editor.context.config.is("editing.mode.itemType", "video") || editor.context.config.is("editing.mode.itemType", "iframe"));
     },
     selectedKey: (editor) => {
-      return editor.config.get("editing.css.itemType");
+      return editor.context.config.get("editing.css.itemType");
     }
   },
   {
     type: "dropdown",
     icon: (editor, dropdown) => {
       var _a;
-      return ((_a = dropdown.findItem(editor.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
+      return ((_a = dropdown.findItem(editor.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
     },
     items: [
       {
@@ -91399,7 +91428,7 @@ var DefaultMenu = [
         args: ["path"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.draw.itemType", "path");
+          editor.context.config.set("editing.draw.itemType", "path");
         },
         shortcut: KeyStringMaker({ key: "P" })
       },
@@ -91411,7 +91440,7 @@ var DefaultMenu = [
         args: ["brush"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.draw.itemType", "brush");
+          editor.context.config.set("editing.draw.itemType", "brush");
         },
         shortcut: KeyStringMaker({ key: "B" })
       }
@@ -91422,17 +91451,17 @@ var DefaultMenu = [
       "config:editing.draw.itemType"
     ],
     selected: (editor) => {
-      return editor.config.is("editing.mode.itemType", "path") || editor.config.is("editing.mode.itemType", "draw");
+      return editor.context.config.is("editing.mode.itemType", "path") || editor.context.config.is("editing.mode.itemType", "draw");
     },
     selectedKey: (editor) => {
-      return editor.config.get("editing.draw.itemType");
+      return editor.context.config.get("editing.draw.itemType");
     }
   },
   {
     type: "dropdown",
     icon: (editor, dropdown) => {
       var _a;
-      return ((_a = dropdown.findItem(editor.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
+      return ((_a = dropdown.findItem(editor.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
     },
     items: [
       {
@@ -91443,7 +91472,7 @@ var DefaultMenu = [
         args: ["svg-rect"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "svg-rect");
+          editor.context.config.set("editing.svg.itemType", "svg-rect");
         },
         shortcut: KeyStringMaker({ key: "Shift+R" })
       },
@@ -91455,7 +91484,7 @@ var DefaultMenu = [
         args: ["svg-circle"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "svg-circle");
+          editor.context.config.set("editing.svg.itemType", "svg-circle");
         },
         shortcut: KeyStringMaker({ key: "Shift+O" })
       },
@@ -91472,7 +91501,7 @@ var DefaultMenu = [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "polygon");
+          editor.context.config.set("editing.svg.itemType", "polygon");
         },
         shortcut: KeyStringMaker({ key: "Shift+P" })
       },
@@ -91489,7 +91518,7 @@ var DefaultMenu = [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "star");
+          editor.context.config.set("editing.svg.itemType", "star");
         },
         shortcut: KeyStringMaker({ key: "Shift+S" })
       },
@@ -91507,7 +91536,7 @@ var DefaultMenu = [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "spline");
+          editor.context.config.set("editing.svg.itemType", "spline");
         },
         shortcut: KeyStringMaker({ key: "Shift+L" })
       },
@@ -91524,7 +91553,7 @@ var DefaultMenu = [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "svg-textpath");
+          editor.context.config.set("editing.svg.itemType", "svg-textpath");
         },
         shortcut: KeyStringMaker({ key: "Shift+T" })
       }
@@ -91535,10 +91564,10 @@ var DefaultMenu = [
       "config:editing.svg.itemType"
     ],
     selected: (editor) => {
-      return editor.config.is("editing.mode", EditingMode.APPEND) && (editor.config.is("editing.mode.itemType", "svg-rect") || editor.config.is("editing.mode.itemType", "svg-circle") || editor.config.is("editing.mode.itemType", "polygon") || editor.config.is("editing.mode.itemType", "star") || editor.config.is("editing.mode.itemType", "spline") || editor.config.is("editing.mode.itemType", "svg-textpath"));
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "svg-rect") || editor.context.config.is("editing.mode.itemType", "svg-circle") || editor.context.config.is("editing.mode.itemType", "polygon") || editor.context.config.is("editing.mode.itemType", "star") || editor.context.config.is("editing.mode.itemType", "spline") || editor.context.config.is("editing.mode.itemType", "svg-textpath"));
     },
     selectedKey: (editor) => {
-      return editor.config.get("editing.svg.itemType");
+      return editor.context.config.get("editing.svg.itemType");
     }
   }
 ];
@@ -91546,17 +91575,17 @@ var RightMenu = [
   {
     type: "button",
     icon: (editor) => {
-      if (editor.config.is("editor.theme", "dark")) {
+      if (editor.context.config.is("editor.theme", "dark")) {
         return "dark";
       } else {
         return "light";
       }
     },
     action: (editor) => {
-      if (editor.config.get("editor.theme") === "dark") {
-        editor.config.set("editor.theme", "light");
+      if (editor.context.config.get("editor.theme") === "dark") {
+        editor.context.config.set("editor.theme", "light");
       } else {
-        editor.config.set("editor.theme", "dark");
+        editor.context.config.set("editor.theme", "dark");
       }
     }
   }
@@ -91851,7 +91880,7 @@ class DragAreaRectView extends EditorElement {
     this.trigger("drawAreaView", this.dragRect);
   }
   getSelectedItems(rect2, areaVerties) {
-    var project2 = this.$selection.currentProject;
+    var project2 = this.$context.selection.currentProject;
     let items = [];
     let selectedArtboard = [];
     if (project2) {
@@ -91912,7 +91941,7 @@ class DragAreaRectView extends EditorElement {
       height: height2
     };
     const selectedItems = this.getSelectedItems(rect2, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]));
-    if (this.$selection.selectByGroup(...selectedItems)) {
+    if (this.$context.selection.selectByGroup(...selectedItems)) {
       this.emit("refreshSelection");
       this.emit("refreshSelectionTool", true);
     }
@@ -91922,10 +91951,10 @@ class DragAreaRectView extends EditorElement {
     const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
     this.$config.init("set.move.control.point", false);
     if (newDist[0] === 0 && newDist[1] === 0) {
-      this.$selection.empty();
+      this.$context.selection.empty();
     }
     this.trigger("initDrawAreaView");
-    this.$selection.reselect();
+    this.$context.selection.reselect();
     this.emit("history.refreshSelection");
     this.emit("refreshSelectionTool", true);
     this.emit("removeGuideLine");
@@ -91950,7 +91979,7 @@ class DragAreaView extends EditorElement {
   }
   checkSelectionArea(e) {
     const mousePoint = this.$viewport.getWorldPosition(e);
-    if (this.$selection.hasPoint(mousePoint)) {
+    if (this.$context.selection.hasPoint(mousePoint)) {
       return true;
     }
   }
@@ -91958,16 +91987,16 @@ class DragAreaView extends EditorElement {
     if (this.$config.get("set.tool.hand")) {
       return false;
     }
-    const code2 = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-    if (this.$keyboardManager.check(code2)) {
+    const code2 = this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space);
+    if (this.$context.keyboardManager.check(code2)) {
       return false;
     }
     const mousePoint = this.$viewport.getWorldPosition(e);
     this.inSelection = false;
-    if (this.$selection.hasPoint(mousePoint)) {
+    if (this.$context.selection.hasPoint(mousePoint)) {
       this.inSelection = true;
-      if (this.$selection.current.is("artboard")) {
-        if (this.$selection.current.hasChildren()) {
+      if (this.$context.selection.current.is("artboard")) {
+        if (this.$context.selection.current.hasChildren()) {
           this.$config.init("set.dragarea.mode", true);
           this.$config.init("set.move.mode", false);
           return true;
@@ -91982,7 +92011,7 @@ class DragAreaView extends EditorElement {
         return true;
       }
     }
-    this.mouseOverItem = this.$selection.filteredLayers[0];
+    this.mouseOverItem = this.$context.selection.filteredLayers[0];
     if (this.mouseOverItem) {
       this.$config.init("set.dragarea.mode", false);
       this.$config.init("set.move.mode", true);
@@ -91999,8 +92028,8 @@ class DragAreaView extends EditorElement {
     this.$config.set("editing.mode.itemType", "select");
   }
   initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
     this.emit("refreshSelectionTool", true);
   }
   movePointer() {
@@ -92044,7 +92073,7 @@ class StyleView extends EditorElement {
     return this.$editor.html.toStyleData(item);
   }
   refreshStyleHead() {
-    var project2 = this.$selection.currentProject || new Project();
+    var project2 = this.$context.selection.currentProject || new Project();
     this.refs.$styleView.$$(`style[data-renderer-type="html"]`).forEach(($style) => $style.remove());
     this.changeStyleHead(project2);
     project2.layers.forEach((item) => this.changeStyleHead(item));
@@ -92125,9 +92154,9 @@ class StyleView extends EditorElement {
     }
     let items = [];
     if (!ids) {
-      items = this.$selection.items;
+      items = this.$context.selection.items;
     } else if (isString(ids[0])) {
-      items = this.$selection.itemsByIds(ids);
+      items = this.$context.selection.itemsByIds(ids);
     } else {
       items = ids;
     }
@@ -92239,7 +92268,7 @@ class HTMLRenderView extends EditorElement {
     this.refreshAllCanvas();
   }
   [SUBSCRIBE("playTimeline", "moveTimeline")]() {
-    const project2 = this.$selection.currentProject;
+    const project2 = this.$context.selection.currentProject;
     var timeline = project2.getSelectedTimeline();
     if (timeline) {
       timeline.animations.map((it) => this.$model.get(it.id)).forEach((current) => {
@@ -92268,7 +92297,7 @@ class HTMLRenderView extends EditorElement {
     var text2 = e.$dt.text();
     var id = e.$dt.parent().attr("data-id");
     var arr = [];
-    this.$selection.items.filter((it) => it.id === id).forEach((item) => {
+    this.$context.selection.items.filter((it) => it.id === id).forEach((item) => {
       item.reset({
         content: content2,
         text: text2
@@ -92282,8 +92311,8 @@ class HTMLRenderView extends EditorElement {
     if (this.$config.get("set.tool.hand")) {
       return false;
     }
-    const code2 = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-    if (this.$keyboardManager.check(code2)) {
+    const code2 = this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space);
+    if (this.$context.keyboardManager.check(code2)) {
       return false;
     }
     const $target = Dom.create(e.target);
@@ -92292,16 +92321,16 @@ class HTMLRenderView extends EditorElement {
     }
     if (!e.shiftKey) {
       const mousePoint = this.$viewport.getWorldPosition(e);
-      if (this.$selection.hasPoint(mousePoint)) {
-        if (this.$selection.hasHoverItem()) {
-          if (this.$selection.hasParent(this.$selection.hoverId) === false) {
-            this.$selection.selectHoverItem();
+      if (this.$context.selection.hasPoint(mousePoint)) {
+        if (this.$context.selection.hasHoverItem()) {
+          if (this.$context.selection.hasParent(this.$context.selection.hoverId) === false) {
+            this.$context.selection.selectHoverItem();
           }
         }
         return true;
       }
-      if (this.$selection.hasHoverItem()) {
-        this.$selection.selectHoverItem();
+      if (this.$context.selection.hasHoverItem()) {
+        this.$context.selection.selectHoverItem();
         return true;
       }
     }
@@ -92349,10 +92378,10 @@ class HTMLRenderView extends EditorElement {
       this.emit("startDragAreaView");
       return;
     }
-    let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint);
+    let isInSelectedArea = this.$context.selection.hasPoint(this.initMousePoint);
     const $target = Dom.create(e.target);
     if ($target.hasClass("canvas-view")) {
-      this.$selection.select();
+      this.$context.selection.select();
       this.initializeDragSelection();
       this.emit("history.refreshSelection");
       return false;
@@ -92363,12 +92392,12 @@ class HTMLRenderView extends EditorElement {
       if (isInSelectedArea)
         ;
       else {
-        if (this.$selection.check({ id }) === false) {
-          this.$selection.selectByGroup(id);
+        if (this.$context.selection.check({ id }) === false) {
+          this.$context.selection.selectByGroup(id);
         }
       }
-      if (this.$selection.isEmpty === false) {
-        this.$selection.selectAfterCopy();
+      if (this.$context.selection.isEmpty === false) {
+        this.$context.selection.selectAfterCopy();
         this.refreshAllCanvas();
         this.emit("refreshLayerTreeView");
         this.initializeDragSelection();
@@ -92379,16 +92408,16 @@ class HTMLRenderView extends EditorElement {
         ;
       else {
         if (e.shiftKey) {
-          this.$selection.toggleById(id);
+          this.$context.selection.toggleById(id);
         } else {
-          if (this.$selection.check({ id }) === false) {
+          if (this.$context.selection.check({ id }) === false) {
             const current = this.$model.get(id);
             if (current && current.is("artboard") && current.hasChildren())
               ;
             else if (current.hasChildren()) {
-              this.$selection.selectByGroup(id);
+              this.$context.selection.selectByGroup(id);
             } else {
-              this.$selection.selectByGroup(id);
+              this.$context.selection.selectByGroup(id);
             }
           }
         }
@@ -92398,8 +92427,8 @@ class HTMLRenderView extends EditorElement {
     }
   }
   initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
+    this.$context.selection.reselect();
+    this.$context.snapManager.clear();
     this.emit("startGhostToolView");
     this.emit("refreshSelectionTool", true);
   }
@@ -92414,31 +92443,31 @@ class HTMLRenderView extends EditorElement {
     }
     const targetMousePoint = this.$viewport.getWorldPosition();
     this.emit("moveGhostToolView");
-    if (this.$selection.isLayoutItem) {
+    if (this.$context.selection.isLayoutItem) {
       return;
     }
     const newDist = subtract([], targetMousePoint, this.initMousePoint).map(Math.round);
     this.moveTo(newDist);
-    if (this.$selection.changeInLayoutArea(this.$viewport.applyVertexInverse(targetMousePoint))) {
+    if (this.$context.selection.changeInLayoutArea(this.$viewport.applyVertexInverse(targetMousePoint))) {
       this.initMousePoint = targetMousePoint;
-      this.$selection.reselect();
-      this.$snapManager.clear();
+      this.$context.selection.reselect();
+      this.$context.snapManager.clear();
       this.refreshAllCanvas();
       this.emit("refreshLayerTreeView");
     }
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
+    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y"));
   }
   moveTo(dist2) {
-    const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map((v) => {
+    const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
       return add$1([], v, dist2);
     }), this.$viewport.scale > 5 ? 0 : 3);
     const localDist = add$1([], snap, dist2);
     const result = {};
-    this.$selection.cachedItemMatrices.forEach((it) => {
+    this.$context.selection.cachedItemMatrices.forEach((it) => {
       const oldVertex = it.verties[4];
       const newVertex = add$1([], oldVertex, localDist);
       const newDist = subtract([], transformMat4([], newVertex, it.parentMatrixInverse), transformMat4([], oldVertex, it.parentMatrixInverse));
-      if (this.$selection.isOne) {
+      if (this.$context.selection.isOne) {
         result[it.id] = {
           x: Math.floor(it.x + newDist[0]),
           y: Math.floor(it.y + newDist[1])
@@ -92450,7 +92479,7 @@ class HTMLRenderView extends EditorElement {
         };
       }
     });
-    this.$selection.reset(result);
+    this.$context.selection.reset(result);
   }
   calculateEndedElement(dx, dy) {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -92466,9 +92495,9 @@ class HTMLRenderView extends EditorElement {
     if (newDist < 1)
       ;
     else {
-      this.$selection.reselect();
-      this.$snapManager.clear();
-      this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
+      this.$context.selection.reselect();
+      this.$context.snapManager.clear();
+      this.command("setAttributeForMulti", "move item", this.$context.selection.pack("x", "y"));
       this.nextTick(() => {
         this.emit("recoverBooleanPath");
       });
@@ -92481,7 +92510,7 @@ class HTMLRenderView extends EditorElement {
     if (obj2) {
       this.updateElement(obj2);
     } else {
-      this.$selection.items.forEach((current) => {
+      this.$context.selection.items.forEach((current) => {
         this.updateElement(current);
       });
     }
@@ -92498,7 +92527,7 @@ class HTMLRenderView extends EditorElement {
   }
   refreshAllCanvas() {
     this.clearElementAll();
-    const project2 = this.$selection.currentProject;
+    const project2 = this.$context.selection.currentProject;
     const html = this.$editor.html.render(project2, null, this.$editor) || "";
     this.refs.$view.updateDiff(html, void 0, {
       checkPassed: (oldEl, newEl) => {
@@ -92515,7 +92544,7 @@ class HTMLRenderView extends EditorElement {
     });
   }
   refreshAllElementBoundSize() {
-    var selectionList = this.$selection.items.map((it) => {
+    var selectionList = this.$context.selection.items.map((it) => {
       if (it.is("artboard")) {
         return it;
       }
@@ -92527,7 +92556,7 @@ class HTMLRenderView extends EditorElement {
         this.refreshElementBoundSize(it);
       });
     } else {
-      this.$selection.currentProject.artboards.forEach((it) => {
+      this.$context.selection.currentProject.artboards.forEach((it) => {
         this.refreshElementBoundSize(it);
       });
     }
@@ -92537,7 +92566,7 @@ class HTMLRenderView extends EditorElement {
     const offset = $el.offsetRect();
     item.reset(offset);
     this.refreshSelectionStyleView(item);
-    if (this.$selection.check(item)) {
+    if (this.$context.selection.check(item)) {
       this.emit("refreshSelectionTool");
     }
     this.emit("refreshSelectionStyleView", item);
@@ -92652,14 +92681,14 @@ class PageTools extends EditorElement {
     this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
   }
   [SUBSCRIBE("refreshSelection")]() {
-    this.refs.$selectedCount.html(this.$selection.length + "");
+    this.refs.$selectedCount.html(this.$context.selection.length + "");
     this.load("$buttons");
   }
   [LOAD("$buttons") + DOMDIFF]() {
-    if (this.$selection.isEmpty)
+    if (this.$context.selection.isEmpty)
       return "";
     const buttons = [];
-    this.$selection.items.forEach((selectedItem) => {
+    this.$context.selection.items.forEach((selectedItem) => {
       selectedItem.allLayers.forEach((item) => {
         if (item.isNot("boolean-path")) {
           const list2 = PathParser.fromSVGString(item.absolutePath().d).toPathList();
@@ -92737,7 +92766,7 @@ class CanvasView extends EditorElement {
     if (this.$config.get("set.tool.hand")) {
       return true;
     }
-    return this.$keyboardManager.check(this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space));
+    return this.$context.keyboardManager.check(this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space));
   }
   [POINTERSTART("$lock") + IF("checkSpace") + MOVE("movePan") + END("moveEndPan")]() {
     this.startMovePan();
@@ -92770,7 +92799,7 @@ class CanvasView extends EditorElement {
     this.refreshCursor();
   }
   async [BIND("$container")]() {
-    const cursor = await this.$editor.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
+    const cursor = await this.$context.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
     return {
       style: {
         cursor
@@ -92900,7 +92929,7 @@ class HorizontalRuler extends EditorElement {
     return text2.join("");
   }
   makeRulerForCurrentArtboard() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     const currentArtboard = current.artboard;
@@ -92920,10 +92949,10 @@ class HorizontalRuler extends EditorElement {
         `;
   }
   makeRulerForCurrent() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
-    const verties = this.$selection.verties;
+    const verties = this.$context.selection.verties;
     const xList = verties.map((it) => it[0]);
     const currentMinX = Math.min.apply(Math, xList);
     const currentMaxX = Math.max.apply(Math, xList);
@@ -93013,8 +93042,8 @@ class HorizontalRuler extends EditorElement {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
-    if (this.$selection.current) {
-      const current = this.$selection.current;
+    if (this.$context.selection.current) {
+      const current = this.$context.selection.current;
       if (current.changedRect) {
         this.refresh();
       }
@@ -93086,7 +93115,7 @@ class VerticalRuler extends EditorElement {
     return text2.join("");
   }
   makeRulerForCurrentArtboard() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     const currentArtboard = current.artboard;
@@ -93106,12 +93135,12 @@ class VerticalRuler extends EditorElement {
         `;
   }
   makeRulerForCurrent() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (!current)
       return "";
     const { minY, height: realHeight } = this.$viewport;
     const height2 = this.state.rect.height;
-    const verties = this.$selection.verties;
+    const verties = this.$context.selection.verties;
     const yList = verties.map((it) => it[1]);
     const currentMinY = Math.min.apply(Math, yList);
     const currentMaxY = Math.max.apply(Math, yList);
@@ -93189,7 +93218,7 @@ class VerticalRuler extends EditorElement {
     }
   }
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     if (current && current.changedRect) {
       this.refresh();
     }
@@ -93419,12 +93448,14 @@ class DesignEditor extends BaseLayout {
     this.refresh();
     this.nextTick(() => {
       this.emit("resizeCanvas");
+      this.$config.init("editor.layout.elements", this.refs);
     });
   }
   [CONFIG("show.right.panel")]() {
     this.refresh();
     this.nextTick(() => {
       this.emit("resizeCanvas");
+      this.$config.init("editor.layout.elements", this.refs);
     });
   }
   [CONFIG("editor.design.mode")]() {
@@ -93441,6 +93472,9 @@ class DesignEditor extends BaseLayout {
     if (isFunction(callback)) {
       callback(this.refs);
     }
+  }
+  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+    this.$config.init("editor.layout.elements", this.refs);
   }
 }
 var Canvas3DView$1 = "";
@@ -95066,7 +95100,7 @@ class ThreeRenderView extends EditorElement {
     }, 100);
   }
   renderCanvas() {
-    this.renderer.render(this.$editor.sceneManager.scene, this.$editor.sceneManager.viewportCamera);
+    this.renderer.render(this.$context.sceneManager.scene, this.$context.sceneManager.viewportCamera);
   }
   initializeCamera(rect2) {
     const camera = new PerspectiveCamera(75, rect2.width / rect2.height, 0.1, 1e3);
@@ -95074,22 +95108,22 @@ class ThreeRenderView extends EditorElement {
     camera.position.y = 3;
     camera.position.z = 1;
     camera.lookAt(0, 0, 0);
-    this.$editor.sceneManager.camera = camera;
-    this.$editor.sceneManager.addCamera(camera);
-    this.$editor.sceneManager.setViewportCamera(camera.uuid);
+    this.$context.sceneManager.camera = camera;
+    this.$context.sceneManager.addCamera(camera);
+    this.$context.sceneManager.setViewportCamera(camera.uuid);
   }
   initializeRenderer() {
     const rect2 = this.refs.$view.offsetRect();
     this.state.rect = rect2;
     this.initializeCamera(rect2);
-    console.log(this.$editor.sceneManager.viewportCamera);
+    console.log(this.$context.sceneManager.viewportCamera);
     const renderer = new WebGLRenderer({
       canvas: this.refs.$view.el,
       antialias: true
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(rect2.width, rect2.height);
-    const controls = new OrbitControls(this.$editor.sceneManager.viewportCamera, this.refs.$body.el);
+    const controls = new OrbitControls(this.$context.sceneManager.viewportCamera, this.refs.$body.el);
     controls.addEventListener("change", () => {
       this.renderCanvas();
     });
@@ -95104,20 +95138,20 @@ class ThreeRenderView extends EditorElement {
     grid22.material.vertexColors = false;
     grid2.add(grid22);
     this.grid = grid2;
-    this.$editor.sceneManager.addObject(this.grid, void 0, void 0, false);
+    this.$context.sceneManager.addObject(this.grid, void 0, void 0, false);
     const light2 = new DirectionalLight(16777215, 2);
     light2.position.set(1, 1, 1);
-    this.$editor.sceneManager.scene.add(light2);
+    this.$context.sceneManager.scene.add(light2);
     const box = new Box3();
     const selectionBox = new Box3Helper(box);
     selectionBox.material.depthTest = false;
     selectionBox.material.transparent = true;
     selectionBox.visible = false;
-    this.$editor.sceneManager.sceneHelpers.add(selectionBox);
+    this.$context.sceneManager.sceneHelpers.add(selectionBox);
     let objectPositionOnDown = null;
     let objectRotationOnDown = null;
     let objectScaleOnDown = null;
-    const transformControls = new TransformControls(this.$editor.sceneManager.viewportCamera, this.refs.$view.el);
+    const transformControls = new TransformControls(this.$context.sceneManager.viewportCamera, this.refs.$view.el);
     this.transformControls = transformControls;
     transformControls.addEventListener("change", () => {
       this.renderCanvas();
@@ -95152,7 +95186,7 @@ class ThreeRenderView extends EditorElement {
       }
       controls.enabled = true;
     });
-    this.$editor.sceneManager.scene.add(transformControls);
+    this.$context.sceneManager.scene.add(transformControls);
     return renderer;
   }
   refresh() {
@@ -95170,13 +95204,13 @@ class ThreeRenderView extends EditorElement {
   refreshCanvasSize() {
     const rect2 = this.refs.$view.offsetRect();
     this.state.rect = rect2;
-    this.$editor.sceneManager.viewportCamera.aspect = rect2.width / rect2.height;
-    this.$editor.sceneManager.viewportCamera.updateProjectionMatrix();
+    this.$context.sceneManager.viewportCamera.aspect = rect2.width / rect2.height;
+    this.$context.sceneManager.viewportCamera.updateProjectionMatrix();
     this.renderer.setSize(rect2.width, rect2.height);
     this.renderCanvas(0);
   }
   [SUBSCRIBE("objectSelected")]() {
-    this.transformControls.attach(this.$editor.sceneManager.selected);
+    this.transformControls.attach(this.$context.sceneManager.selected);
   }
   [SUBSCRIBE("objectAdded")]() {
     this.renderCanvas(0);
@@ -95718,7 +95752,7 @@ class SceneManager {
       uuid2 = object.uuid;
     }
     this.selected = object;
-    this.editor.config.set("selected", uuid2);
+    this.editor.context.config.set("selected", uuid2);
     this.emit("objectSelected", object);
   }
   selectById(id) {
@@ -95788,12 +95822,12 @@ class SceneManager {
     return {
       metadata: {},
       project: {
-        shadows: this.editor.config.get("project/renderer/shadows"),
-        shadowType: this.editor.config.get("project/renderer/shadowType"),
-        vr: this.editor.config.get("project/vr"),
-        physicallyCorrectLights: this.editor.config.get("project/renderer/physicallyCorrectLights"),
-        toneMapping: this.editor.config.get("project/renderer/toneMapping"),
-        toneMappingExposure: this.editor.config.get("project/renderer/toneMappingExposure")
+        shadows: this.editor.context.config.get("project/renderer/shadows"),
+        shadowType: this.editor.context.config.get("project/renderer/shadowType"),
+        vr: this.editor.context.config.get("project/vr"),
+        physicallyCorrectLights: this.editor.context.config.get("project/renderer/physicallyCorrectLights"),
+        toneMapping: this.editor.context.config.get("project/renderer/toneMapping"),
+        toneMappingExposure: this.editor.context.config.get("project/renderer/toneMappingExposure")
       },
       camera: this.camera.toJSON(),
       scene: this.scene.toJSON(),

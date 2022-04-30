@@ -34,7 +34,7 @@ export default class KeyframeTimeControl extends EditorElement {
   }
 
   get currentTimeline() {
-    var currentProject = this.$selection.currentProject;
+    var currentProject = this.$context.selection.currentProject;
 
     if (currentProject) {
       return currentProject.getSelectedTimeline();
@@ -80,7 +80,7 @@ export default class KeyframeTimeControl extends EditorElement {
   [KEYUP("$fps") + ENTER]() {
     var fps = +this.refs.$fps.val();
 
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.setFps(fps);
@@ -114,7 +114,7 @@ export default class KeyframeTimeControl extends EditorElement {
   }
 
   [CLICK("$timer")]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.seek(this.refs.$currentTime.value, () => {
@@ -138,7 +138,7 @@ export default class KeyframeTimeControl extends EditorElement {
     IF("hasCurrentTimeline") +
     PREVENT]() {
     var frame = this.refs.$currentTime.value;
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.setTimelineCurrentTime(frame);
@@ -162,7 +162,7 @@ export default class KeyframeTimeControl extends EditorElement {
     IF("hasCurrentTimeline") +
     PREVENT]() {
     var frame = this.refs.$duration.value;
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.setTimelineTotalTime(frame);

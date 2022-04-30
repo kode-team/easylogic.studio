@@ -78,7 +78,7 @@ export default class BackgroundImageEditor extends EditorElement {
   }
 
   [LOAD("$fillList") + DOMDIFF]() {
-    const current = this.$selection.current || { color: "black" };
+    const current = this.$context.selection.current || { color: "black" };
 
     return this.state.images.map((it, index) => {
       var image = it.image;

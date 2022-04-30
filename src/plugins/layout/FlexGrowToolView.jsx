@@ -13,7 +13,7 @@ export default class FlexGrowToolView extends EditorElement {
   }
 
   [LOAD("$el") + DOMDIFF]() {
-    return this.$selection.map((item) => {
+    return this.$context.selection.map((item) => {
       const parentItem = item.parent;
 
       if (!parentItem) return;

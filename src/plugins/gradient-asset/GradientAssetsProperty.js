@@ -102,7 +102,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   executeGradient(callback, isRefresh = true, isEmit = true) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       callback && callback(project);

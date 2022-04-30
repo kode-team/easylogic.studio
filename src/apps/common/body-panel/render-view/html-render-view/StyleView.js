@@ -37,7 +37,7 @@ export default class StyleView extends EditorElement {
   }
 
   refreshStyleHead() {
-    var project = this.$selection.currentProject || new Project();
+    var project = this.$context.selection.currentProject || new Project();
     this.refs.$styleView
       .$$(`style[data-renderer-type="html"]`)
       .forEach(($style) => $style.remove());
@@ -91,7 +91,7 @@ export default class StyleView extends EditorElement {
   }
 
   // [LOAD('$svgArea') + DOMDIFF] () {
-  //   var project = this.$selection.currentProject || {  }
+  //   var project = this.$context.selection.currentProject || {  }
 
   //   return this.$editor.html.renderSVG(project);
   // }
@@ -172,9 +172,9 @@ export default class StyleView extends EditorElement {
     let items = [];
 
     if (!ids) {
-      items = this.$selection.items;
+      items = this.$context.selection.items;
     } else if (isString(ids[0])) {
-      items = this.$selection.itemsByIds(ids);
+      items = this.$context.selection.itemsByIds(ids);
     } else {
       items = ids;
     }

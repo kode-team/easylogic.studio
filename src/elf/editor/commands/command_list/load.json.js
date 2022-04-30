@@ -9,7 +9,7 @@ export default {
    * @param {*} json
    */
   execute: function (editor, json, context = { origin: "*" }) {
-    editor.modelManager.load(json, context);
+    editor.context.modelManager.load(json, context);
 
     // editor.load(projects);
     _doForceRefreshSelection(editor);

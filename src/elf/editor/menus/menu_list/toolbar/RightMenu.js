@@ -2,17 +2,17 @@ export default [
   {
     type: "button",
     icon: (editor) => {
-      if (editor.config.is("editor.theme", "dark")) {
+      if (editor.context.config.is("editor.theme", "dark")) {
         return "dark";
       } else {
         return "light";
       }
     },
     action: (editor) => {
-      if (editor.config.get("editor.theme") === "dark") {
-        editor.config.set("editor.theme", "light");
+      if (editor.context.config.get("editor.theme") === "dark") {
+        editor.context.config.set("editor.theme", "light");
       } else {
-        editor.config.set("editor.theme", "dark");
+        editor.context.config.set("editor.theme", "dark");
       }
     },
   },

@@ -8,7 +8,7 @@ export class AssetManager {
   }
 
   get project() {
-    return this.$editor.selection.currentProject;
+    return this.$editor.context.selection.currentProject;
   }
 
   /**

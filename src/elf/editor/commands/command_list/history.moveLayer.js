@@ -8,7 +8,7 @@ export default {
       layers = [layers];
     }
 
-    const targetItems = editor.selection.itemsByIds(layers);
+    const targetItems = editor.context.selection.itemsByIds(layers);
 
     const lastValues = {};
     const currentValues = {};
@@ -26,19 +26,19 @@ export default {
     editor.emit("setAttributeForMulti", currentValues);
 
     editor.nextTick(() => {
-      editor.history.add(message, this, {
+      editor.context.history.add(message, this, {
         currentValues: [layers, dist],
         undoValues: [lastValues],
       });
     });
 
     editor.nextTick(() => {
-      editor.history.saveSelection();
+      editor.context.history.saveSelection();
     });
   },
 
   redo: function (editor, { currentValues: [layers, dist] }) {
-    const targetItems = editor.selection.itemsByIds(layers);
+    const targetItems = editor.context.selection.itemsByIds(layers);
     const localChanges = {};
 
     // 절대 좌표 이동 , xy 만

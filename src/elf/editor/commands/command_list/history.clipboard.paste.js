@@ -91,18 +91,18 @@ export default {
 
       editor.nextTick(() => {
         // 새로 생성된 model 의 id 를 선택하기
-        editor.selection.select(...newIds);
+        editor.context.selection.select(...newIds);
 
         // history 체크 할 때만 히스토리로 저장
         if (hasHistory) {
-          editor.history.add(message, this, {
+          editor.context.history.add(message, this, {
             currentValues: [data],
-            undoValues: [newIds, editor.selection.ids],
+            undoValues: [newIds, editor.context.selection.ids],
           });
         }
 
-        // editor.selection.reselect();
-        editor.history.saveSelection();
+        // editor.context.selection.reselect();
+        editor.context.history.saveSelection();
       });
     }
   },
@@ -148,7 +148,7 @@ export default {
       });
 
       // 이전 ids 를 선택해준다.
-      editor.selection.select(...selectedIds);
+      editor.context.selection.select(...selectedIds);
 
       // 부모를 다시 그린다.
       editor.emit("setAttributeForMulti", updateData);

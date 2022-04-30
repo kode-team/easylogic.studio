@@ -21,7 +21,7 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["border"] || "";
 
     return createComponent("BorderEditor", {
@@ -44,7 +44,7 @@ export default class BorderProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change border",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );

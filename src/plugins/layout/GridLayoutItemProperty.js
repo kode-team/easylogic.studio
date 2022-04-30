@@ -33,7 +33,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || { "grid-layout-item": "none" };
+    var current = this.$context.selection.current || { "grid-layout-item": "none" };
 
     var valueType = current["grid-layout-item"] || "none";
 
@@ -130,7 +130,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change grid layout item",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "grid-layout-item": this.getGridValue(),
       })
     );
@@ -151,7 +151,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change grid layout item",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "grid-layout-item": value,
       })
     );
@@ -166,7 +166,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
       return current && current.isInGrid();
     });
   }

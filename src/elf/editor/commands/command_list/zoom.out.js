@@ -1,6 +1,6 @@
 export default {
   command: "zoom.out",
   execute: function (editor) {
-    editor.viewport.zoomOut(0.02);
+    editor.context.viewport.zoomOut(0.02);
   },
 };

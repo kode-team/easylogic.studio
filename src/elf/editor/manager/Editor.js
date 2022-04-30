@@ -49,6 +49,7 @@ export class Editor {
     this.images = {};
     this.openRightPanel = true;
     this.ignoreManagers = opt.ignoreManagers || [];
+    this.context = {};
 
     this.loadManagers();
   }
@@ -82,7 +83,7 @@ export class Editor {
       lockManager: LockManager,
       visibleManager: VisibleManager,
       clipboard: ClipboardManager,
-      iconManager: IconManager,
+      icon: IconManager,
       stateManager: StateManager,
       menuManager: MenuManager,
     });
@@ -105,7 +106,7 @@ export class Editor {
     Object.keys(obj).forEach((name) => {
       const DataManagerClass = obj[name];
 
-      Object.defineProperty(this, name, {
+      Object.defineProperty(this.context, name, {
         value: new DataManagerClass(this),
         writable: false,
       });
@@ -122,7 +123,7 @@ export class Editor {
   }
 
   getI18nMessage(key, params = {}, locale) {
-    return this.i18n.get(key, params, locale || this.locale);
+    return this.context.i18n.get(key, params, locale || this.locale);
   }
 
   $i18n(key, params = {}, locale) {
@@ -130,16 +131,16 @@ export class Editor {
   }
 
   hasI18nkey(key, locale) {
-    return this.i18n.hasKey(key, locale || this.locale);
+    return this.context.i18n.hasKey(key, locale || this.locale);
   }
 
   initI18nMessage(root = "") {
     return (key, params = {}, locale) => {
       const i18nKey = `${root}.${key}`;
       if (this.hasI18nkey(i18nKey, locale)) {
-        return this.i18n(`${root}.${key}`, params, locale);
+        return this.context.i18(`${root}.${key}`, params, locale);
       } else {
-        return this.i18n(`${key}`, params, locale);
+        return this.context.i18(`${key}`, params, locale);
       }
     };
   }
@@ -154,11 +155,11 @@ export class Editor {
   }
 
   async initPlugins(options = {}) {
-    await this.pluginManager.initializePlugin(options);
+    await this.context.pluginManager.initializePlugin(options);
   }
 
   themeValue(key, defaultValue = "") {
-    return theme[this.config.get("editor.theme")][key] || defaultValue;
+    return theme[this.context.config.get("editor.theme")][key] || defaultValue;
   }
 
   // 팝업의 zindex 를 계속 높여 주어
@@ -182,34 +183,34 @@ export class Editor {
    * FIXME: command 는 자신과 동일한 command 를 재귀적으로 날릴 수 없다. (구현해야할듯 )
    **/
   emit(...args) {
-    this.store.source = this.EDITOR_ID;
-    this.store.emit(...args);
+    this.context.store.source = this.EDITOR_ID;
+    this.context.store.emit(...args);
   }
 
   on(...args) {
     const [name, callback, context, ...rest] = args;
-    return this.store.on(name, callback, context || this, ...rest);
+    return this.context.store.on(name, callback, context || this, ...rest);
   }
 
   off(...args) {
-    this.store.off(...args);
+    this.context.store.off(...args);
   }
 
   offAll(...args) {
-    this.store.offAll(...args);
+    this.context.store.offAll(...args);
   }
 
   debug() {
-    // if (this.config.get('debug')) {
+    // if (this.context.config.get('debug')) {
     //   console.log(...args);
     // }
   }
 
   command(command, message, ...args) {
-    if (this.stateManager.isPointerUp) {
-      return this.store.emit(`history.${command}`, message, ...args);
+    if (this.context.stateManager.isPointerUp) {
+      return this.context.store.emit(`history.${command}`, message, ...args);
     } else {
-      return this.store.emit(command, ...args);
+      return this.context.store.emit(command, ...args);
     }
   }
 
@@ -220,9 +221,9 @@ export class Editor {
    * @param {number} [delay=0]  callback 이 실행될 딜레이 시간 설정
    */
   nextTick(callback, delay = 0) {
-    if (this.store) {
+    if (this.context.store) {
       window.setTimeout(() => {
-        this.store.nextTick(callback);
+        this.context.store.nextTick(callback);
       }, delay);
     }
   }
@@ -233,11 +234,11 @@ export class Editor {
    * @param {string} idOrModel
    */
   get(idOrModel) {
-    return this.modelManager.get(idOrModel.id || idOrModel);
+    return this.context.modelManager.get(idOrModel.id || idOrModel);
   }
 
   replaceLocalUrltoRealUrl(str) {
-    var project = this.selection.currentProject;
+    var project = this.context.selection.currentProject;
     var images = {};
 
     project.images.forEach((a) => {
@@ -262,7 +263,7 @@ export class Editor {
    * @param {Boolean} [isRecoverPosition=true]
    */
   createModel(itemObject, isRegister = true) {
-    return this.modelManager.createModel(itemObject, isRegister);
+    return this.context.modelManager.createModel(itemObject, isRegister);
   }
 
   /**
@@ -273,11 +274,11 @@ export class Editor {
    * @returns {Item}
    */
   searchItem(id) {
-    return this.modelManager.searchItem(id);
+    return this.context.modelManager.searchItem(id);
   }
 
   get storeKey() {
-    return `__els__.${this.config.get("store.key")}`;
+    return `__els__.${this.context.config.get("store.key")}`;
   }
 
   saveItem(key, value) {
@@ -320,12 +321,12 @@ export class Editor {
 
   registerUI(target, obj = {}, order = 1) {
     // console.log(target, obj, order)
-    this.injectManager.registerUI(target, obj, order);
+    this.context.injectManager.registerUI(target, obj, order);
     this.registerElement(obj);
   }
 
   registerComponent(name, component) {
-    this.components.registerComponent(name, component);
+    this.context.components.registerComponent(name, component);
   }
 
   registerItem(name, item) {
@@ -333,23 +334,30 @@ export class Editor {
   }
 
   registerInspector(name, inspectorCallback) {
-    this.components.registerInspector(name, inspectorCallback);
+    this.context.components.registerInspector(name, inspectorCallback);
   }
 
   registerRenderer(rendererType, name, rendererInstance) {
-    this.renderers.registerRenderer(rendererType, name, rendererInstance);
+    this.context.renderers.registerRenderer(
+      rendererType,
+      name,
+      rendererInstance
+    );
   }
 
   registerRendererType(rendererType, rendererTypeInstance) {
-    this.renderers.registerRendererType(rendererType, rendererTypeInstance);
+    this.context.renderers.registerRendererType(
+      rendererType,
+      rendererTypeInstance
+    );
   }
 
   getRendererInstance(rendererType, itemType) {
-    return this.renderers.getRendererInstance(rendererType, itemType);
+    return this.context.renderers.getRendererInstance(rendererType, itemType);
   }
 
   renderer(rendererType) {
-    return this.renderers.getRenderer(rendererType);
+    return this.context.renderers.getRenderer(rendererType);
   }
 
   get html() {
@@ -374,14 +382,14 @@ export class Editor {
    * @return {function} dispose function
    */
   registerCommand(commandObject) {
-    return this.commands.registerCommand(commandObject);
+    return this.context.commands.registerCommand(commandObject);
   }
 
   /**
    * 단축키(shortcut)을 등록한다.
    */
   registerShortCut(shortcut) {
-    this.shortcuts.registerShortCut(shortcut);
+    this.context.shortcuts.registerShortCut(shortcut);
   }
 
   /**
@@ -390,7 +398,7 @@ export class Editor {
    * @param {Function} createPluginFunction
    */
   registerPlugin(createPluginFunction) {
-    this.pluginManager.registerPlugin(createPluginFunction);
+    this.context.pluginManager.registerPlugin(createPluginFunction);
   }
 
   registerPluginList(plugins = []) {
@@ -403,11 +411,11 @@ export class Editor {
    * @param {object} config
    */
   registerConfig(config) {
-    this.config.registerConfig(config);
+    this.context.config.registerConfig(config);
   }
 
   registerI18nMessage(locale, messages) {
-    this.i18n.registerI18nMessage(locale, messages);
+    this.context.i18n.registerI18nMessage(locale, messages);
   }
 
   registerI18nMessageWithLocale(messages) {
@@ -417,7 +425,7 @@ export class Editor {
   }
 
   registerIcon(itemType, iconOrFunction) {
-    this.iconManager.registerIcon(itemType, iconOrFunction);
+    this.context.icon.registerIcon(itemType, iconOrFunction);
   }
 
   /**
@@ -427,6 +435,6 @@ export class Editor {
    * @param {object|object[]} menu
    */
   registerMenu(target, menu) {
-    this.menuManager.registerMenu(target, menu);
+    this.context.menuManager.registerMenu(target, menu);
   }
 }

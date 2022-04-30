@@ -40,7 +40,7 @@ Selection 툴을 만든다던가  ClipPath 에디팅 도구를 만든다던가 �
 
 ```js
 
-const layer = this.$selection.current;
+const layer = this.$context.selection.current;
 const verties = layer.verties;
 
 const screenPos = this.$viewport.applyVerties(verties);

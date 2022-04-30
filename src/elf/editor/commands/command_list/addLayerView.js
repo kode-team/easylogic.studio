@@ -11,25 +11,25 @@ export default {
   command: "addLayerView",
   execute: async function (editor, type, data = {}) {
     // editor.emit('hideSubEditor');
-    editor.selection.empty();
+    editor.context.selection.empty();
     await editor.emit("refreshSelectionTool");
     await editor.emit("hideAddViewLayer");
     await editor.emit("removeGuideLine");
 
-    editor.config.set("editing.mode.itemType", type);
+    editor.context.config.set("editing.mode.itemType", type);
 
     if (type === "select") {
       // NOOP
       // select 는 아무것도 하지 않는다.
-      editor.config.set("editing.mode", EditingMode.SELECT);
+      editor.context.config.set("editing.mode", EditingMode.SELECT);
     } else if (type === "brush") {
-      editor.config.set("editing.mode", EditingMode.DRAW);
+      editor.context.config.set("editing.mode", EditingMode.DRAW);
       await editor.emit("showPathDrawEditor");
     } else if (type === "path") {
-      editor.config.set("editing.mode", EditingMode.PATH);
+      editor.context.config.set("editing.mode", EditingMode.PATH);
       await editor.emit("showPathEditor", "path");
     } else {
-      editor.config.set("editing.mode", EditingMode.APPEND);
+      editor.context.config.set("editing.mode", EditingMode.APPEND);
       await editor.emit("showLayerAppendView", type, data);
     }
   },

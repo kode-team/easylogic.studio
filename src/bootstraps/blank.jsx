@@ -2,7 +2,11 @@ import { BIND, SUBSCRIBE } from "sapa";
 
 import { createBlankEditor } from "apps";
 
+import { TreeProvider, TreeView } from "../elf/editor/ui/view/TreeView";
+
 import { iconUse } from "elf/editor/icon/icon";
+// eslint-disable-next-line no-unused-vars
+import { Editor } from "elf/editor/manager/Editor";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 
@@ -20,6 +24,10 @@ function startEditor() {
         // 'show.ruler': false,
       },
       plugins: [
+        /**
+         *
+         * @param {Editor} editor
+         */
         function (editor) {
           editor.registerUI("layertab.tab", {
             Sample: {
@@ -29,7 +37,26 @@ function startEditor() {
             },
           });
 
-          editor.config.set("layertab.selectedValue", "sample");
+          editor.context.config.set("layertab.selectedValue", "sample");
+
+          editor.registerUI("layertab.tab.sample", {
+            TreeView: [
+              TreeView,
+              {
+                provider: new (class extends TreeProvider {
+                  async getRoot() {
+                    return [
+                      {
+                        title: "Root",
+                        value: "root",
+                        children: [{ title: "Child", value: "child" }],
+                      },
+                    ];
+                  }
+                })(),
+              },
+            ],
+          });
 
           editor.registerUI("inspector.tab", {
             Sample: {
@@ -38,7 +65,7 @@ function startEditor() {
             },
           });
 
-          editor.config.set("inspector.selectedValue", "sample");
+          editor.context.config.set("inspector.selectedValue", "sample");
 
           editor.registerUI("layertab.tab.sample", {
             SampleProperty: ObjectProperty.create({

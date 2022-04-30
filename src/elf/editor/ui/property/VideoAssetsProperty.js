@@ -42,7 +42,7 @@ export default class VideoAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$videoList") + DOMDIFF]() {
-    var current = this.$selection.currentProject || { videos: [] };
+    var current = this.$context.selection.currentProject || { videos: [] };
 
     var videos = current.videos;
 
@@ -73,7 +73,7 @@ export default class VideoAssetsProperty extends BaseProperty {
   }
 
   executeVideo(callback, isRefresh = true, isEmit = true) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       callback && callback(project);
@@ -88,7 +88,7 @@ export default class VideoAssetsProperty extends BaseProperty {
   [DRAGSTART("$videoList .preview img")](e) {
     var index = +e.$dt.closest("video-item").attr("data-index");
 
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       var videoInfo = project.videos[index];

@@ -29,7 +29,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [LOAD("$transitionList") + DOMDIFF]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -73,13 +73,13 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [CLICK("$add")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       this.command(
         "setAttributeForMulti",
         "add transition",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           transition: (item) => Transition.add(item.transition),
         })
       );
@@ -100,7 +100,7 @@ export default class TransitionProperty extends BaseProperty {
 
   [CLICK("$transitionList .tools .del")](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     current.reset({
@@ -128,7 +128,7 @@ export default class TransitionProperty extends BaseProperty {
     }
 
     this.selectedIndex = +$preview.attr("data-index");
-    this.current = this.$selection.current;
+    this.current = this.$context.selection.current;
 
     if (!this.current) return;
     this.currentTransition = Transition.get(

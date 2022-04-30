@@ -11,26 +11,26 @@ export default {
    */
   execute: function (editor, message, projectId) {
     // 삭제 할 때는 modelManager 에서 mark 를 한다.
-    const index = editor.modelManager.markRemoveProject(projectId);
+    const index = editor.context.modelManager.markRemoveProject(projectId);
 
-    editor.history.add(message, this, {
+    editor.context.history.add(message, this, {
       currentValues: [projectId],
       undoValues: [projectId, index],
     });
 
     editor.nextTick(() => {
-      editor.selection.selectProject(editor.modelManager.projects[0]);
+      editor.context.selection.selectProject(editor.context.modelManager.projects[0]);
       editor.emit("refreshAll");
       editor.emit("removeGuideLine");
       editor.nextTick(() => {
-        editor.history.saveSelection();
+        editor.context.history.saveSelection();
       });
     });
   },
 
   redo: function (editor, { currentValues: [projectId] }) {
     // 삭제 할 때는 modelManager 에서 mark 를 한다.
-    editor.modelManager.markRemoveProject(projectId);
+    editor.context.modelManager.markRemoveProject(projectId);
 
     editor.nextTick(() => {
       editor.emit("refreshAll");
@@ -46,10 +46,10 @@ export default {
    * @param {string} param1.undoValues  JSON serialize 된 문자열
    */
   undo: function (editor, { undoValues: [projectId, index] }) {
-    editor.modelManager.unmarkRemoveProject(projectId, index);
+    editor.context.modelManager.unmarkRemoveProject(projectId, index);
 
     editor.nextTick(() => {
-      editor.selection.selectProject(projectId);
+      editor.context.selection.selectProject(projectId);
       editor.emit("refreshAll");
     });
   },

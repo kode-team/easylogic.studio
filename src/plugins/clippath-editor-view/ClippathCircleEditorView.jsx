@@ -15,7 +15,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
     LEFT_BUTTON +
     MOVE("moveCircleRadius") +
     END("moveEndCircleRadius")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current;
     this.state.width = current.screenWidth;
@@ -25,7 +25,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
   }
 
   moveCircleRadius(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radius, x, y } = this.state.circle;
 
     const oldX = x.toPx(current.screenWidth);
@@ -53,7 +53,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const relativePosition = vertiesMap(
       [localPosition],
-      this.$selection.current.absoluteMatrixInverse
+      this.$context.selection.current.absoluteMatrixInverse
     )[0];
 
     const distX = Math.abs(relativePosition[0] - oldX);
@@ -68,7 +68,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   moveEndCircleRadius() {
@@ -77,7 +77,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
@@ -85,7 +85,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
     LEFT_BUTTON +
     MOVE("moveCircleCenter") +
     END("moveEndCircleCenter")]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current;
     this.state.width = current.screenWidth;
@@ -95,7 +95,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
   }
 
   moveCircleCenter(dx, dy) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
     const { radius, x, y } = this.state.circle;
 
     const oldX = x.toPx(current.screenWidth);
@@ -114,7 +114,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const relativePosition = vertiesMap(
       [localPosition],
-      this.$selection.current.absoluteMatrixInverse
+      this.$context.selection.current.absoluteMatrixInverse
     )[0];
 
     const result = [
@@ -131,7 +131,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   moveEndCircleCenter(dx, dy) {
@@ -147,7 +147,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
           this.command(
             "setAttributeForMulti",
             "change clippath",
-            this.$selection.packByValue(value)
+            this.$context.selection.packByValue(value)
           );
           break;
       }
@@ -159,12 +159,12 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
   templateCircle(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     const r =
       Math.sqrt(

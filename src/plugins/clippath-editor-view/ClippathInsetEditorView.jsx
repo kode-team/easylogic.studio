@@ -13,7 +13,7 @@ import { Length } from "elf/editor/unit/Length";
 
 export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
   initializeInset() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     this.state.current;
     this.state.width = current.screenWidth;
@@ -91,7 +91,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
     const newBottomPoint = this.$viewport.applyVertexInverse(bottomPoint);
 
     // relative 좌표로 바꾸고
-    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const inverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
 
     const [
       relativeLeftPosition,
@@ -126,7 +126,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   moveEndInsetRadius() {
@@ -135,7 +135,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
@@ -163,7 +163,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
     const newBottomPoint = this.$viewport.applyVertexInverse(bottomPoint);
 
     // relative 좌표로 바꾸고
-    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const inverseMatrix = this.$context.selection.current.absoluteMatrixInverse;
 
     const [
       relativeLeftPosition,
@@ -198,7 +198,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
   }
 
   moveEndInsetCenter(dx, dy) {
@@ -214,7 +214,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
           this.command(
             "setAttributeForMulti",
             "change clippath",
-            this.$selection.packByValue(value)
+            this.$context.selection.packByValue(value)
           );
           break;
       }
@@ -226,12 +226,12 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
     this.command(
       "setAttributeForMulti",
       "change clippath",
-      this.$selection.packByValue(value)
+      this.$context.selection.packByValue(value)
     );
   }
 
   templateInset(clippath) {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     clippath.value = ClipPath.parseStyleForInset(clippath.value);
 

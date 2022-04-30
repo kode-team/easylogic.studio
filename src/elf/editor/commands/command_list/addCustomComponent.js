@@ -6,7 +6,7 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
  * @param {vec3} [center=null] center를 지정하고 artboard 를 재배치
  */
 export default function addCustomComponent(editor, obj = {}, center = null) {
-  var project = editor.selection.currentProject;
+  var project = editor.context.selection.currentProject;
 
   var customComponent = project.appendChild(
     editor.createModel({
@@ -26,7 +26,7 @@ export default function addCustomComponent(editor, obj = {}, center = null) {
     customComponent.moveByCenter(center);
   }
 
-  editor.selection.select(customComponent);
+  editor.context.selection.select(customComponent);
 
   _doForceRefreshSelection(editor);
 }

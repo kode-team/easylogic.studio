@@ -43,11 +43,11 @@ export default class PathSegmentView extends EditorElement {
   }
 
   getSegmentVerties() {
-    if (!this.$selection.current) return [];
+    if (!this.$context.selection.current) return [];
 
-    if (this.$selection.current.isNot("svg-path")) return [];
+    if (this.$context.selection.current.isNot("svg-path")) return [];
 
-    return this.$selection.current.absolutePath().pathVerties.map((it) => {
+    return this.$context.selection.current.absolutePath().pathVerties.map((it) => {
       it.absoluteVertex = this.$viewport.applyVertex(it.vertex);
       return it;
     });
@@ -70,7 +70,7 @@ export default class PathSegmentView extends EditorElement {
 
     this.localPathSegmentList = this.getSegmentVerties();
     this.targetPathSegmentList = this.getSegmentVerties();
-    this.localPathParser = this.$selection.current.absolutePath();
+    this.localPathParser = this.$context.selection.current.absolutePath();
 
     this.initMousePosition = this.$viewport.getWorldPosition(e);
   }
@@ -92,7 +92,7 @@ export default class PathSegmentView extends EditorElement {
   }
 
   updatePath() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     // world 좌표를 local 좌표로 변경
     const target = PathParser.fromStructuredVerties(
@@ -102,7 +102,7 @@ export default class PathSegmentView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "update path",
-      this.$selection.packByValue(current.updatePath(target.d))
+      this.$context.selection.packByValue(current.updatePath(target.d))
     );
   }
 

@@ -3,13 +3,13 @@ export default {
   execute: function (editor, evt, id) {
     const item = editor.get(id);
 
-    if (editor.selection.isOne && item) {
-      if (editor.selection.checkChildren(item.id)) {
-        editor.selection.select(item);
+    if (editor.context.selection.isOne && item) {
+      if (editor.context.selection.checkChildren(item.id)) {
+        editor.context.selection.select(item);
         editor.emit("refreshSelection");
         editor.emit("refreshSelectionTool");
       } else {
-        if (editor.selection.check(item)) {
+        if (editor.context.selection.check(item)) {
           editor.emit("open.editor");
           editor.emit("removeGuideLine");
         } else {
@@ -22,12 +22,12 @@ export default {
   },
 
   selectInWorldPosition: function (editor, evt, item) {
-    const point = editor.viewport.getWorldPosition(evt);
+    const point = editor.context.viewport.getWorldPosition(evt);
     if (
-      editor.selection.hasPoint(point) ||
-      editor.selection.hasChildrenPoint(point)
+      editor.context.selection.hasPoint(point) ||
+      editor.context.selection.hasChildrenPoint(point)
     ) {
-      editor.selection.select(item);
+      editor.context.selection.select(item);
       editor.snapManager.clear();
       editor.emit("refreshSelectionTool", true);
       editor.emit("history.refreshSelection");

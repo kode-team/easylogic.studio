@@ -129,20 +129,20 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [CLICK("$clippathList .clippath-item .title .name")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     this.viewClipPathPicker();
   }
 
   [CLICK("$clippathList .del") + PREVENT]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     this.command(
       "setAttributeForMulti",
       "delete clip-path",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         "clip-path": "",
       })
     );
@@ -162,7 +162,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [LOAD("$clippathList")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return "";
     if (!current["clip-path"]) return "";
 
@@ -173,7 +173,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [CLICK("$tools [data-value]")](e) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return;
     if (current["clip-path"]) {
@@ -189,7 +189,7 @@ export default class ClipPathProperty extends BaseProperty {
       this.command(
         "setAttributeForMulti",
         "change clip-path",
-        this.$selection.pack("clip-path")
+        this.$context.selection.pack("clip-path")
       );
     }
 
@@ -197,7 +197,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   viewClipPathPicker() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     var obj = ClipPath.parseStyle(current["clip-path"]);
@@ -227,7 +227,7 @@ export default class ClipPathProperty extends BaseProperty {
 
   updatePathInfo(data) {
     if (!data) return;
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     current.reset(data);
@@ -236,7 +236,7 @@ export default class ClipPathProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change clip-path",
-      this.$selection.packByValue(data)
+      this.$context.selection.packByValue(data)
     );
   }
 }

@@ -96,7 +96,7 @@ export default class CSSPropertyEditor extends EditorElement {
 
     var value = this.getPropertyDefaultValue(key);
 
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       value = current[key];

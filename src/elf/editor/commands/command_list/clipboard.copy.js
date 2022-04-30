@@ -7,7 +7,7 @@ export default {
   execute: function (editor) {
     editor.clipboard.push({
       type: ClipboardActionType.COPY,
-      data: editor.selection.ids,
+      data: editor.context.selection.ids,
     });
   },
 };

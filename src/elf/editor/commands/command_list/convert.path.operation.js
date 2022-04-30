@@ -2,7 +2,7 @@ export default {
   command: "convert.path.operation",
   description: "apply path boolean operation",
   execute: (editor, booleanOperation) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 
@@ -10,7 +10,7 @@ export default {
       editor.command(
         "setAttributeForMulti",
         "change boolean operation",
-        editor.selection.packByValue({
+        editor.context.selection.packByValue({
           "boolean-operation": booleanOperation,
         })
       );
@@ -38,11 +38,11 @@ export default {
       }
 
       // boolean operation 을 적용할 레이어를 먼저 선택한다.
-      editor.selection.select(parent);
+      editor.context.selection.select(parent);
 
       changeBooleanOperation(booleanOperation);
     } else {
-      if (editor.selection.current?.isNot("boolean-path")) {
+      if (editor.context.selection.current?.isNot("boolean-path")) {
         editor.emit("group.item", {
           itemType: "boolean-path",
           title: "Intersection",
@@ -50,7 +50,7 @@ export default {
       }
 
       editor.nextTick(() => {
-        if (editor.selection.current?.is("boolean-path")) {
+        if (editor.context.selection.current?.is("boolean-path")) {
           changeBooleanOperation(booleanOperation);
         }
       }, 10);

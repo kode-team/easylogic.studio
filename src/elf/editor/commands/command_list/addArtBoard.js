@@ -9,11 +9,11 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default {
   command: "AddArtBoard",
   execute: (editor, obj = {}, center = null) => {
-    var project = editor.selection.currentProject;
+    var project = editor.context.selection.currentProject;
     if (!project) {
       project = editor.add(editor.createModel({ itemType: "project" }));
 
-      editor.selection.selectProject(project);
+      editor.context.selection.selectProject(project);
     }
 
     var artboard = project.appendChild(
@@ -35,7 +35,7 @@ export default {
       artboard.moveByCenter(center);
     }
 
-    editor.selection.select(artboard);
+    editor.context.selection.select(artboard);
 
     _doForceRefreshSelection(editor);
   },

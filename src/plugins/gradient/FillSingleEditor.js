@@ -123,6 +123,7 @@ export default class FillSingleEditor extends EditorElement {
   }
 
   viewGradientPopup() {
+    console.log(this.$el.offsetRect(), this.$el.rect());
     this.emit(
       "showFillPickerPopup",
       {

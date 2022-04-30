@@ -22,8 +22,8 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   isShow() {
-    var current = this.$selection.current;
-    const inspector = this.$editor.components.createInspector(current);
+    var current = this.$context.selection.current;
+    const inspector = this.$context.components.createInspector(current);
     if (current && (current.is("component") || inspector.length > 0)) {
       return true;
     }
@@ -33,14 +33,14 @@ export default class ComponentProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      const current = this.$selection.current;
-      const inspector = this.$editor.components.createInspector(current);
+      const current = this.$context.selection.current;
+      const inspector = this.$context.components.createInspector(current);
       return inspector.length > 0;
     });
   }
 
   refresh() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       this.setTitle(
@@ -57,11 +57,11 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return "";
 
-    const inspector = this.$editor.components.createInspector(current);
+    const inspector = this.$context.components.createInspector(current);
 
     inspector.forEach((it) => {
       if (isString(it)) {
@@ -88,7 +88,7 @@ export default class ComponentProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change component : " + key,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );

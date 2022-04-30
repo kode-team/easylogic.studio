@@ -61,7 +61,7 @@ export default class RotateEditorView extends EditorElement {
   [CLICK("$directionArea .direction")](e) {
     var direction = e.$dt.attr("data-value");
     var value = Length.deg(DEFINED_ANGLES[direction] || 0);
-    this.$selection.each((item) => {
+    this.$context.selection.each((item) => {
       const transform = Transform.replace(item.transform, {
         type: "rotateZ",
         value: [value],
@@ -73,13 +73,13 @@ export default class RotateEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change direction",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool', false);
   }
 
   [BIND("$rotateContainer")]() {
-    var current = this.$selection.current || { transform: "" };
+    var current = this.$context.selection.current || { transform: "" };
 
     var transform = Transform.filter(current.transform || "", (it) => {
       return it.type === "rotateX" || it.type === "rotateY";
@@ -93,7 +93,7 @@ export default class RotateEditorView extends EditorElement {
   }
 
   [BIND("$rotateZ")]() {
-    var current = this.$selection.current || { transform: "" };
+    var current = this.$context.selection.current || { transform: "" };
 
     var transform = Transform.filter(current.transform || "", (it) => {
       return it.type === "rotate" || it.type === "rotateZ";
@@ -107,18 +107,18 @@ export default class RotateEditorView extends EditorElement {
   }
 
   [DOUBLECLICK("$rotateArea")]() {
-    this.$selection.reset(
-      this.$selection.packByValue({
+    this.$context.selection.reset(
+      this.$context.selection.packByValue({
         transform: (item) => {
           return Transform.remove(item.transform, ["rotateX", "rotateY"]);
         },
       })
     );
-    // this.$selection.reselect();
+    // this.$context.selection.reselect();
     this.command(
       "setAttributeForMulti",
       "change direction",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool');
     this.bindData("$rotateContainer");
@@ -127,7 +127,7 @@ export default class RotateEditorView extends EditorElement {
   [POINTERSTART("$rotateArea") +
     MOVE("moveRotateXY") +
     END("moveEndRotateXY")]() {
-    this.state.rotateCache = this.$selection.map((item) => {
+    this.state.rotateCache = this.$context.selection.map((item) => {
       const rotateX = Transform.get(item["transform"], "rotateX");
       const rotateY = Transform.get(item["transform"], "rotateY");
 
@@ -165,7 +165,7 @@ export default class RotateEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change rotate",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool');
   }
@@ -174,25 +174,25 @@ export default class RotateEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change rotate",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool');
   }
 
   [DOUBLECLICK("$handle")]() {
-    this.$selection.reset(
-      this.$selection.packByValue({
+    this.$context.selection.reset(
+      this.$context.selection.packByValue({
         transform: (item) => {
           return Transform.remove(item.transform, ["rotateZ", "rotate"]);
         },
       })
     );
-    // this.$selection.reselect();
+    // this.$context.selection.reselect();
     this.bindData("$rotateZ");
     this.command(
       "setAttributeForMulti",
       "change rotate handle",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool');
   }
@@ -208,7 +208,7 @@ export default class RotateEditorView extends EditorElement {
       x: pointerRect.x + pointerRect.width / 2,
       y: pointerRect.y + pointerRect.height / 2,
     };
-    this.state.rotateCache = this.$selection.map((item) => {
+    this.state.rotateCache = this.$context.selection.map((item) => {
       const rotateZ = Transform.get(item["transform"], "rotateZ");
       return {
         item,
@@ -224,7 +224,7 @@ export default class RotateEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change rotate handle",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool');
   }
@@ -233,7 +233,7 @@ export default class RotateEditorView extends EditorElement {
     this.command(
       "setAttributeForMulti",
       "change rotate handle",
-      this.$selection.pack("transform")
+      this.$context.selection.pack("transform")
     );
     // this.emit('refreshSelectionTool');
   }
@@ -265,11 +265,11 @@ export default class RotateEditorView extends EditorElement {
   }
 
   checkShow() {
-    return this.$selection.isOne;
+    return this.$context.selection.isOne;
   }
 
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
-    if (this.$selection.hasChangedField("transform")) {
+    if (this.$context.selection.hasChangedField("transform")) {
       this.refresh();
     }
   }

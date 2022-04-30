@@ -1,7 +1,7 @@
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default function resizeArtBoard(editor, size = "") {
-  var current = editor.selection.current;
+  var current = editor.context.selection.current;
   if (current && current.is("artboard")) {
     if (!size.trim()) return;
 
@@ -11,7 +11,7 @@ export default function resizeArtBoard(editor, size = "") {
     height = +height;
 
     current.reset({ width, height });
-    editor.selection.select(current);
+    editor.context.selection.select(current);
 
     _doForceRefreshSelection(editor);
   }

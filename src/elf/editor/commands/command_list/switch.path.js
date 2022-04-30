@@ -1,7 +1,7 @@
 export default {
   command: "switch.path",
   execute: async (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 
@@ -12,12 +12,12 @@ export default {
         parent = current.parent;
       }
 
-      editor.selection.select(parent);
+      editor.context.selection.select(parent);
 
       editor.command(
         "setAttributeForMulti",
         "change boolean operation",
-        editor.selection.packByValue({
+        editor.context.selection.packByValue({
           // reverse children
           "boolean-operation": parent["boolean-operation"],
           children: parent.children.reverse(),
@@ -27,7 +27,7 @@ export default {
       editor.nextTick(() => {
         editor.emit("recoverBooleanPath");
 
-        editor.selection.select(current);
+        editor.context.selection.select(current);
         editor.emit("refreshSelection");
       });
     }

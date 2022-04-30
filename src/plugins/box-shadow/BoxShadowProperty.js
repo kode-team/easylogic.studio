@@ -38,7 +38,7 @@ export default class BoxShadowProperty extends BaseProperty {
   }
 
   [LOAD("$shadowList")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
       key: "box-shadow",
@@ -47,7 +47,7 @@ export default class BoxShadowProperty extends BaseProperty {
         this.command(
           "setAttributeForMulti",
           "change box shadow",
-          this.$selection.packByValue({
+          this.$context.selection.packByValue({
             [key]: value,
           })
         );

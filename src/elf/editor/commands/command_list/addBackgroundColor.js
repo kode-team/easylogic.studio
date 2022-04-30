@@ -4,7 +4,7 @@ export default {
     editor.command(
       "setAttributeForMulti",
       "add background color",
-      editor.selection.packByValue(
+      editor.context.selection.packByValue(
         {
           "background-color": color,
         },

@@ -33,10 +33,10 @@ export default class CodeViewProperty extends BaseProperty {
   }
 
   [LOAD("$code") + DOMDIFF]() {
-    return [this.$editor.html.codeview(this.$selection.current)];
+    return [this.$editor.html.codeview(this.$context.selection.current)];
   }
 
   [LOAD("$svg") + DOMDIFF]() {
-    return [this.$editor.svg.codeview(this.$selection.current)];
+    return [this.$editor.svg.codeview(this.$context.selection.current)];
   }
 }

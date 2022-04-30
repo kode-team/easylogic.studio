@@ -11,7 +11,7 @@ export class TimelineSelectionManager {
   }
 
   currentProject(callback) {
-    var project = this.$editor.selection.currentProject;
+    var project = this.$editor.context.selection.currentProject;
 
     if (project) {
       callback && callback(project);

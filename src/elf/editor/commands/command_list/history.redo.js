@@ -6,6 +6,6 @@ export default {
    * @param {Editor} editor
    */
   execute: function (editor) {
-    editor.history.redo();
+    editor.context.history.redo();
   },
 };

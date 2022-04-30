@@ -8,17 +8,17 @@ export default {
    * @param {Editor} editor
    */
   execute: function (editor) {
-    var len = editor.selection.length;
+    var len = editor.context.selection.length;
 
     if (len == 1) {
       // artboard 랑 크기를 맞출지 고민해보자.
     } else if (len > 1) {
-      const rect = vertiesToRectangle(editor.selection.verties);
+      const rect = vertiesToRectangle(editor.context.selection.verties);
 
       editor.command(
         "setAttributeForMulti",
         "fit at the same height",
-        editor.selection.packByValue({
+        editor.context.selection.packByValue({
           y: rect.y,
           height: rect.height,
         })

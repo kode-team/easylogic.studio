@@ -12,7 +12,7 @@ export default class SVGTextProperty extends BaseProperty {
   }
 
   refresh() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       this.setAllValue([
         "lengthAdjust",
@@ -25,7 +25,7 @@ export default class SVGTextProperty extends BaseProperty {
   }
 
   setAllValue(list = []) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (!current) return;
 
     list.forEach((key) => {
@@ -95,7 +95,7 @@ export default class SVGTextProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       `change svg text property: ${key}`,
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );

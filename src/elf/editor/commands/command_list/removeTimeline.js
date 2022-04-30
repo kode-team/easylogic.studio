@@ -1,7 +1,7 @@
 export default {
   command: "removeTimeline",
   execute: function (editor, layerId) {
-    const project = editor.selection.currentProject;
+    const project = editor.context.selection.currentProject;
 
     if (project) {
       project.removeTimeline(layerId);

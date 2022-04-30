@@ -10,18 +10,18 @@ export default {
    */
   execute: function (editor, dx = 0, dy = 0) {
     const absoluteDist = [dx, dy, 0];
-    editor.selection.items.forEach((it) => {
+    editor.context.selection.items.forEach((it) => {
       it.absoluteMove(absoluteDist);
     });
 
     editor.command(
       "setAttributeForMulti",
       "item move down",
-      editor.selection.pack("x", "y")
+      editor.context.selection.pack("x", "y")
     );
 
     editor.nextTick(() => {
-      editor.selection.reselect();
+      editor.context.selection.reselect();
     });
   },
 };

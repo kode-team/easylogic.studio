@@ -90,13 +90,12 @@ export default class BasePopup extends EditorElement {
     const bodyRect = elements.$bodyPanel.rect();
 
     let left = bodyRect.left + bodyRect.width - width - 10;
+
+    console.log(bodyRect.left , bodyRect.width , width , rect)
     let top =
       rect.top + height > bodyRect.top + bodyRect.height
         ? bodyRect.top + bodyRect.height - height - 10
         : rect.top;
-
-    left -= bodyRect.left;
-    top -= bodyRect.top;
 
     if (top < 10) {
       top = 10;
@@ -114,6 +113,7 @@ export default class BasePopup extends EditorElement {
   }
 
   showByRect(rect) {
+    console.log(rect);
     this.$el
       .css({
         top: Length.px(rect.top),

@@ -69,7 +69,7 @@ export default class BackdropFilterProperty extends BaseProperty {
   }
 
   getSVGFilterList() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var arr = [];
 
     if (current) {
@@ -85,7 +85,7 @@ export default class BackdropFilterProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
     var value = current["backdrop-filter"];
 
     return /*html*/ `
@@ -105,7 +105,7 @@ export default class BackdropFilterProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change backdrop filter",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: filter,
       })
     );

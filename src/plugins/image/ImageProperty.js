@@ -61,7 +61,7 @@ export default class ImageProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "resize image",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         width,
         height,
       })
@@ -69,13 +69,13 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [CLICK("$resize")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       this.command(
         "setAttributeForMulti",
         "resize image",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           width: (item) => item.naturalWidth.clone(),
           height: (item) => item.naturalHeight.clone(),
         })
@@ -84,7 +84,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [BIND("$sizeInfo")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     return {
       innerHTML: `${this.$i18n("image.property.width")}: ${
@@ -94,7 +94,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     var src = current.src || "";
     return createComponent("ImageSelectEditor", {
@@ -106,7 +106,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeSelect")](key, value, info) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       current.reset({
@@ -119,7 +119,7 @@ export default class ImageProperty extends BaseProperty {
       this.command(
         "setAttributeForMulti",
         "change image",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           src: value,
           ...info,
         })

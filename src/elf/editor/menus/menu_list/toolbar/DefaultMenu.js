@@ -78,23 +78,23 @@ export default [
   //     type: 'button',
   //     icon: 'undo',
   //     action: (editor) => {
-  //         editor.config.toggle('history.undo');
+  //         editor.context.config.toggle('history.undo');
   //     }
   // },
   // {
   //     type: 'button',
   //     icon: 'redo',
   //     action: (editor) => {
-  //         editor.config.toggle('history.redo');
+  //         editor.context.config.toggle('history.redo');
   //     }
   // },
   // {
   //     type: 'button',
   //     icon: 'outline',
-  //     selected: (editor) => editor.config.true('show.outline'),
+  //     selected: (editor) => editor.context.config.true('show.outline'),
   //     events: ['config:show.outline'],
   //     action: (editor) => {
-  //         editor.config.toggle('show.outline');
+  //         editor.context.config.toggle('show.outline');
   //     }
   // },
   {
@@ -102,11 +102,11 @@ export default [
     icon: "navigation",
     events: ["config:editing.mode"],
     selected: (editor) => {
-      return editor.config.is("editing.mode", EditingMode.SELECT);
+      return editor.context.config.is("editing.mode", EditingMode.SELECT);
     },
     action: (editor) => {
       editor.emit("addLayerView", "select");
-      editor.config.is("editing.mode.itemType", EditingMode.SELECT);
+      editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
     },
   },
   {
@@ -115,8 +115,8 @@ export default [
     events: ["config:editing.mode", "config:editing.mode.itemType"],
     selected: (editor) => {
       return (
-        editor.config.is("editing.mode", EditingMode.APPEND) &&
-        editor.config.is("editing.mode.itemType", "artboard")
+        editor.context.config.is("editing.mode", EditingMode.APPEND) &&
+        editor.context.config.is("editing.mode.itemType", "artboard")
       );
     },
     action: (editor) => {
@@ -127,7 +127,7 @@ export default [
     type: "dropdown",
     icon: (editor, dropdown) => {
       return (
-        dropdown.findItem(editor.config.get("editing.css.itemType"))?.icon ||
+        dropdown.findItem(editor.context.config.get("editing.css.itemType"))?.icon ||
         iconUse("rect")
       );
     },
@@ -140,7 +140,7 @@ export default [
         args: ["rect"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "rect");
+          editor.context.config.set("editing.css.itemType", "rect");
         },
         shortcut: KeyStringMaker({ key: "R" }),
       },
@@ -152,7 +152,7 @@ export default [
         args: ["circle"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "circle");
+          editor.context.config.set("editing.css.itemType", "circle");
         },
         shortcut: KeyStringMaker({ key: "O" }),
       },
@@ -164,7 +164,7 @@ export default [
         args: ["text"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "text");
+          editor.context.config.set("editing.css.itemType", "text");
         },
         shortcut: KeyStringMaker({ key: "T" }),
       },
@@ -176,7 +176,7 @@ export default [
         args: ["image"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "image");
+          editor.context.config.set("editing.css.itemType", "image");
         },
         shortcut: KeyStringMaker({ key: "I" }),
       },
@@ -189,7 +189,7 @@ export default [
         args: ["video"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "video");
+          editor.context.config.set("editing.css.itemType", "video");
         },
         shortcut: KeyStringMaker({ key: "V" }),
       },
@@ -201,7 +201,7 @@ export default [
         args: ["iframe"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "iframe");
+          editor.context.config.set("editing.css.itemType", "iframe");
         },
         shortcut: KeyStringMaker({ key: "F" }),
       },
@@ -213,7 +213,7 @@ export default [
         args: ["sample"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.css.itemType", "sample");
+          editor.context.config.set("editing.css.itemType", "sample");
         },
       },
     ],
@@ -224,24 +224,24 @@ export default [
     ],
     selected: (editor) => {
       return (
-        editor.config.is("editing.mode", EditingMode.APPEND) &&
-        (editor.config.is("editing.mode.itemType", "rect") ||
-          editor.config.is("editing.mode.itemType", "circle") ||
-          editor.config.is("editing.mode.itemType", "text") ||
-          editor.config.is("editing.mode.itemType", "image") ||
-          editor.config.is("editing.mode.itemType", "video") ||
-          editor.config.is("editing.mode.itemType", "iframe"))
+        editor.context.config.is("editing.mode", EditingMode.APPEND) &&
+        (editor.context.config.is("editing.mode.itemType", "rect") ||
+          editor.context.config.is("editing.mode.itemType", "circle") ||
+          editor.context.config.is("editing.mode.itemType", "text") ||
+          editor.context.config.is("editing.mode.itemType", "image") ||
+          editor.context.config.is("editing.mode.itemType", "video") ||
+          editor.context.config.is("editing.mode.itemType", "iframe"))
       );
     },
     selectedKey: (editor) => {
-      return editor.config.get("editing.css.itemType");
+      return editor.context.config.get("editing.css.itemType");
     },
   },
   {
     type: "dropdown",
     icon: (editor, dropdown) => {
       return (
-        dropdown.findItem(editor.config.get("editing.draw.itemType"))?.icon ||
+        dropdown.findItem(editor.context.config.get("editing.draw.itemType"))?.icon ||
         iconUse("pentool")
       );
     },
@@ -254,7 +254,7 @@ export default [
         args: ["path"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.draw.itemType", "path");
+          editor.context.config.set("editing.draw.itemType", "path");
         },
         shortcut: KeyStringMaker({ key: "P" }),
       },
@@ -266,7 +266,7 @@ export default [
         args: ["brush"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.draw.itemType", "brush");
+          editor.context.config.set("editing.draw.itemType", "brush");
         },
         shortcut: KeyStringMaker({ key: "B" }),
       },
@@ -278,19 +278,19 @@ export default [
     ],
     selected: (editor) => {
       return (
-        editor.config.is("editing.mode.itemType", "path") ||
-        editor.config.is("editing.mode.itemType", "draw")
+        editor.context.config.is("editing.mode.itemType", "path") ||
+        editor.context.config.is("editing.mode.itemType", "draw")
       );
     },
     selectedKey: (editor) => {
-      return editor.config.get("editing.draw.itemType");
+      return editor.context.config.get("editing.draw.itemType");
     },
   },
   {
     type: "dropdown",
     icon: (editor, dropdown) => {
       return (
-        dropdown.findItem(editor.config.get("editing.svg.itemType"))?.icon ||
+        dropdown.findItem(editor.context.config.get("editing.svg.itemType"))?.icon ||
         iconUse("outline_rect")
       );
     },
@@ -303,7 +303,7 @@ export default [
         args: ["svg-rect"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "svg-rect");
+          editor.context.config.set("editing.svg.itemType", "svg-rect");
         },
         shortcut: KeyStringMaker({ key: "Shift+R" }),
       },
@@ -315,7 +315,7 @@ export default [
         args: ["svg-circle"],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "svg-circle");
+          editor.context.config.set("editing.svg.itemType", "svg-circle");
         },
         shortcut: KeyStringMaker({ key: "Shift+O" }),
       },
@@ -332,7 +332,7 @@ export default [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "polygon");
+          editor.context.config.set("editing.svg.itemType", "polygon");
         },
         shortcut: KeyStringMaker({ key: "Shift+P" }),
       },
@@ -349,7 +349,7 @@ export default [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "star");
+          editor.context.config.set("editing.svg.itemType", "star");
         },
         shortcut: KeyStringMaker({ key: "Shift+S" }),
       },
@@ -367,7 +367,7 @@ export default [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "spline");
+          editor.context.config.set("editing.svg.itemType", "spline");
         },
         shortcut: KeyStringMaker({ key: "Shift+L" }),
       },
@@ -384,7 +384,7 @@ export default [
         ],
         closable: true,
         nextTick: (editor) => {
-          editor.config.set("editing.svg.itemType", "svg-textpath");
+          editor.context.config.set("editing.svg.itemType", "svg-textpath");
         },
         shortcut: KeyStringMaker({ key: "Shift+T" }),
       },
@@ -396,17 +396,17 @@ export default [
     ],
     selected: (editor) => {
       return (
-        editor.config.is("editing.mode", EditingMode.APPEND) &&
-        (editor.config.is("editing.mode.itemType", "svg-rect") ||
-          editor.config.is("editing.mode.itemType", "svg-circle") ||
-          editor.config.is("editing.mode.itemType", "polygon") ||
-          editor.config.is("editing.mode.itemType", "star") ||
-          editor.config.is("editing.mode.itemType", "spline") ||
-          editor.config.is("editing.mode.itemType", "svg-textpath"))
+        editor.context.config.is("editing.mode", EditingMode.APPEND) &&
+        (editor.context.config.is("editing.mode.itemType", "svg-rect") ||
+          editor.context.config.is("editing.mode.itemType", "svg-circle") ||
+          editor.context.config.is("editing.mode.itemType", "polygon") ||
+          editor.context.config.is("editing.mode.itemType", "star") ||
+          editor.context.config.is("editing.mode.itemType", "spline") ||
+          editor.context.config.is("editing.mode.itemType", "svg-textpath"))
       );
     },
     selectedKey: (editor) => {
-      return editor.config.get("editing.svg.itemType");
+      return editor.context.config.get("editing.svg.itemType");
     },
   },
 ];

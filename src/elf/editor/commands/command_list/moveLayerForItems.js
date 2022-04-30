@@ -20,7 +20,7 @@ export default {
     editor.emit("history.setAttributeForMulti", "item move", itemsMap);
 
     editor.nextTick(() => {
-      editor.selection.reselect();
+      editor.context.selection.reselect();
     });
   },
 };

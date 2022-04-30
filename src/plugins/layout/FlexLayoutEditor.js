@@ -65,7 +65,7 @@ export default class FlexLayoutEditor extends EditorElement {
   }
 
   [LOAD("$body") + DOMDIFF]() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (!current) return "";
 

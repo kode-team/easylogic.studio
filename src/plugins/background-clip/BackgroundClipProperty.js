@@ -22,7 +22,7 @@ export default class BackgroundClipProperty extends BaseProperty {
   }
 
   [LOAD("$backgroundClip")]() {
-    var current = this.$selection.current || {};
+    var current = this.$context.selection.current || {};
 
     var clip = current["background-clip"] || "";
     return createComponent("SelectEditor", {
@@ -39,7 +39,7 @@ export default class BackgroundClipProperty extends BaseProperty {
     this.command(
       "setAttributeForMulti",
       "change background clip",
-      this.$selection.packByValue({
+      this.$context.selection.packByValue({
         [key]: value,
       })
     );

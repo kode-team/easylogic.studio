@@ -90,11 +90,11 @@ src/plugins/ 를 참고하세요.
 
 ```js
 
-editor.command('setAttributeForMulti', 'change property', editor.selection.packByValue({
+editor.command('setAttributeForMulti', 'change property', editor.context.selection.packByValue({
     'background-color': 'red'
 }))
 
-this.command('setAttributeForMulti', 'change property', this.$selection.packByValue({
+this.command('setAttributeForMulti', 'change property', this.$context.selection.packByValue({
     'background-color': 'red'
 }))
 
@@ -103,9 +103,9 @@ this.command('setAttributeForMulti', 'change property', this.$selection.packByVa
 ### 현재 선택된 레이어 얻어오기 
 
 ```js
-const layer = editor.selection.current;
+const layer = editor.context.selection.current;
 
 // or 
-const layer = this.$selection.current;
+const layer = this.$context.selection.current;
 
 ```

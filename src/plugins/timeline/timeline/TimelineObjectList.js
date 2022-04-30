@@ -86,7 +86,7 @@ export default class TimelineObjectList extends EditorElement {
   }
 
   [LOAD() + DOMDIFF]() {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (!project) return "";
 
@@ -139,7 +139,7 @@ export default class TimelineObjectList extends EditorElement {
     var layerId = e.$dt.attr("data-layer-id");
 
     if (property) {
-      var current = this.$selection.current;
+      var current = this.$context.selection.current;
 
       this.emit("addTimelineProperty", {
         layerId,

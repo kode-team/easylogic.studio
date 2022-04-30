@@ -13,7 +13,7 @@ export default class ProjectInformationProperty extends BaseProperty {
   }
 
   refresh() {
-    var project = this.$selection.currentProject || {
+    var project = this.$context.selection.currentProject || {
       name: "",
       description: "",
     };
@@ -23,7 +23,7 @@ export default class ProjectInformationProperty extends BaseProperty {
   }
 
   getBody() {
-    var project = this.$selection.currentProject || {
+    var project = this.$context.selection.currentProject || {
       name: "",
       description: "",
     };
@@ -55,14 +55,14 @@ export default class ProjectInformationProperty extends BaseProperty {
   }
 
   [CHANGEINPUT("$name")]() {
-    const currentProject = this.$selection.currentProject;
+    const currentProject = this.$context.selection.currentProject;
     if (currentProject) {
       currentProject.name = this.refs.$name.value;
     }
   }
 
   [CHANGEINPUT("$description")]() {
-    const currentProject = this.$selection.currentProject;
+    const currentProject = this.$context.selection.currentProject;
     if (currentProject) {
       currentProject.description = this.refs.$description.value;
     }

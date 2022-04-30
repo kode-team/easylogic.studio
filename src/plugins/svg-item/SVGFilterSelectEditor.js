@@ -43,7 +43,7 @@ export default class SVGFilterSelectEditor extends EditorElement {
     var value = this.state.value;
 
     if (value.includes("id")) {
-      var currentProject = this.$selection.currentProject;
+      var currentProject = this.$context.selection.currentProject;
       var index = currentProject.getSVGFilterIndex(value);
 
       if (index > -1) {
@@ -67,7 +67,7 @@ export default class SVGFilterSelectEditor extends EditorElement {
   }
 
   [LOAD("$options")]() {
-    var current = this.$selection.currentProject;
+    var current = this.$context.selection.currentProject;
     var options = "";
 
     if (current) {
@@ -142,7 +142,7 @@ export default class SVGFilterSelectEditor extends EditorElement {
   [SUBSCRIBE("openSVGFilterPopup")](index) {
     this.emit("refreshSVGFilterAssets");
     this.emit("refreshSVGArea");
-    var currentProject = this.$selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
 
     var svgfilter = currentProject.svgfilters[index];
 
@@ -155,7 +155,7 @@ export default class SVGFilterSelectEditor extends EditorElement {
   }
 
   [SUBSCRIBE("changeSVGFilterEditorRealUpdate")](params) {
-    var project = this.$selection.currentProject;
+    var project = this.$context.selection.currentProject;
 
     if (project) {
       project.setSVGFilterValue(params.index, {

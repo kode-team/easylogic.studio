@@ -307,7 +307,7 @@ export class DropdownMenu extends EditorElement {
   }
 
   findItem(searchKey) {
-    return this.state.items.find((it) => it.key === searchKey);
+    return this.state.items.find((it) => it.key && it.key === searchKey);
   }
 
   template() {
@@ -411,9 +411,19 @@ export class DropdownMenu extends EditorElement {
   }
 
   [CLICK("$icon")]() {
-    const menuItem = this.findItem(this.props.selectedKey(this.$editor));
+    const selectedKey = isFunction(this.props.selectedKey)
+      ? this.props.selectedKey(this.$editor, this)
+      : this.props.selectedKey;
 
-    if (!menuItem) return;
+    const menuItem = this.findItem(selectedKey);
+
+    if (!menuItem) {
+      if (isFunction(this.props.action)) {
+        this.props.action(this.$editor, this);
+      }
+
+      return;
+    }
 
     const command = menuItem.command;
     const args = menuItem.args;

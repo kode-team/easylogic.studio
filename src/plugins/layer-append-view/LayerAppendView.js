@@ -71,13 +71,13 @@ export default class LayerAppendView extends EditorElement {
     const vertex = this.$viewport.getWorldPosition(e);
 
     // 영역 드래그 하면서 snap 하기
-    const newVertex = this.$snapManager.checkPoint(vertex);
+    const newVertex = this.$context.snapManager.checkPoint(vertex);
 
     if (vec3.equals(newVertex, vertex) === false) {
       this.state.target = newVertex;
       this.state.targetVertex = this.$viewport.applyVertex(this.state.target);
       this.state.targetPositionVertex = vec3.clone(this.state.target);
-      this.state.targetGuides = this.$snapManager.findGuideOne([
+      this.state.targetGuides = this.$context.snapManager.findGuideOne([
         this.state.target,
       ]);
     } else {
@@ -336,12 +336,12 @@ export default class LayerAppendView extends EditorElement {
   move() {
     const e = this.$config.get("bodyEvent");
     const targetMousePoint = this.$viewport.getWorldPosition();
-    const newMousePoint = this.$snapManager.checkPoint(targetMousePoint);
+    const newMousePoint = this.$context.snapManager.checkPoint(targetMousePoint);
 
     if (vec3.equals(newMousePoint, targetMousePoint) === false) {
       this.state.target = newMousePoint;
       this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
-      this.state.targetGuides = this.$snapManager
+      this.state.targetGuides = this.$context.snapManager
         .findGuideOne([newMousePoint])
         .filter(Boolean);
     } else {
@@ -384,7 +384,7 @@ export default class LayerAppendView extends EditorElement {
     const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
 
     // artboard 가 아닐 때만 parentArtBoard 가 존재
-    const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+    const parentArtBoard = this.$context.selection.getArtboardByPoint(rectVerties[0]);
 
     let { x, y, width, height } = vertiesToRectangle(rectVerties);
     let hasArea = true;
@@ -493,7 +493,7 @@ export default class LayerAppendView extends EditorElement {
     this.refs.$area.empty();
     this.$el.show();
     this.$el.focus();
-    this.$snapManager.clear();
+    this.$context.snapManager.clear();
 
     const model = this.$model.createModel(
       {
@@ -583,7 +583,7 @@ export default class LayerAppendView extends EditorElement {
 
         // artboard 가 아닐 때만 parentArtBoard 가 존재
         // eslint-disable-next-line no-case-declarations
-        const parentArtBoard = this.$selection.getArtboardByPoint(
+        const parentArtBoard = this.$context.selection.getArtboardByPoint(
           rectVerties[0]
         );
 
@@ -632,7 +632,7 @@ export default class LayerAppendView extends EditorElement {
   }
 
   [SUBSCRIBE("updateViewport")]() {
-    this.$snapManager.clear();
+    this.$context.snapManager.clear();
     this.bindData("$mousePointer");
     this.bindData("$mousePointerView");
   }

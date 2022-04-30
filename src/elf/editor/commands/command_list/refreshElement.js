@@ -34,17 +34,22 @@ export default {
     // 화면 사이즈 조정
     maker.emit("refreshSelectionStyleView", current);
 
-    // 화면 레이아웃 재정렬
-    if (current && current.is("project")) {
+    if (current.hasLayout()) {
       maker.emit("refreshElementBoundSize", current);
-    } else if (
-      current &&
-      (current.isLayoutItem() || current.parent.is("boolean-path"))
-    ) {
-      maker.emit("refreshElementBoundSize", current.parent);
     } else {
-      maker.emit("refreshElementBoundSize", current);
+      // 화면 레이아웃 재정렬
+      if (
+        current &&
+        (current.isLayoutItem() || current.parent.is("boolean-path"))
+      ) {
+        maker.emit("refreshElementBoundSize", current.parent);
+      } else {
+        // maker.emit("refreshElementBoundSize", current);
+      }
+
     }
+
+    // maker.log();
 
     maker.run();
   },

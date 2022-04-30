@@ -4,7 +4,7 @@ import downloadFile from "elf/editor/util/downloadFile";
 export default {
   command: "downloadSVG",
   execute: function (editor) {
-    const item = editor.selection.current;
+    const item = editor.context.selection.current;
 
     if (item) {
       var svgString = ExportManager.generateSVG(editor, item).trim();

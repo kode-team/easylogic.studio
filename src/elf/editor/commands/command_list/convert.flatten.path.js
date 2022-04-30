@@ -3,7 +3,7 @@ export default {
   command: "convert.flatten.path",
   description: "flatten selected multi path",
   execute: (editor) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 
@@ -43,7 +43,7 @@ export default {
       });
     } else {
       newPath = PathParser.fromSVGString();
-      editor.selection.each((item) => {
+      editor.context.selection.each((item) => {
         newPath.addPath(item.absolutePath());
       });
 

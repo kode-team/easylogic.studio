@@ -22,7 +22,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
   [BIND("$contentItem")]() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (!current) return "";
 
@@ -36,7 +36,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
   setContent() {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
     if (current) {
       var data = {
         content: this.refs.$contentItem.value,

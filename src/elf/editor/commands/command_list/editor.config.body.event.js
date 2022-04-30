@@ -4,8 +4,8 @@ export default {
   command: "config:bodyEvent",
   description: "fire when bodyEvent was set",
   execute: function (editor) {
-    const $target = Dom.create(editor.config.get("bodyEvent").target);
+    const $target = Dom.create(editor.context.config.get("bodyEvent").target);
 
-    editor.config.init("onMouseMovepageContainer", $target);
+    editor.context.config.init("onMouseMovepageContainer", $target);
   },
 };

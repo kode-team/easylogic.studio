@@ -3,7 +3,7 @@ export default {
   command: "convert.smooth.path",
   description: "convert path to smooth",
   execute: (editor, divideCount = 5, tolerance = 0.1, tension = 0.5) => {
-    const current = editor.selection.current;
+    const current = editor.context.selection.current;
 
     if (!current) return;
 
@@ -15,7 +15,7 @@ export default {
     editor.command(
       "setAttributeForMulti",
       "smooth path string",
-      editor.selection.packByValue(current.updatePath(smoothedPath))
+      editor.context.selection.packByValue(current.updatePath(smoothedPath))
     );
   },
 };

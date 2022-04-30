@@ -25,7 +25,7 @@ export default class IFrameProperty extends BaseProperty {
   }
 
   refresh() {
-    const current = this.$selection.current;
+    const current = this.$context.selection.current;
 
     if (current) {
       this.children.$input.setValue(current.url);
@@ -33,7 +33,7 @@ export default class IFrameProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeText") + DEBOUNCE(100)](key, value) {
-    var current = this.$selection.current;
+    var current = this.$context.selection.current;
 
     if (current) {
       current.reset({
@@ -43,7 +43,7 @@ export default class IFrameProperty extends BaseProperty {
       this.command(
         "setAttributeForMulti",
         "change iframe url",
-        this.$selection.packByValue({
+        this.$context.selection.packByValue({
           [key]: value,
         })
       );

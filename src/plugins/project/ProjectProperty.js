@@ -46,7 +46,7 @@ export default class ProjectProperty extends BaseProperty {
 
     return projects.map((projectId) => {
       var selected =
-        projectId === this.$selection.currentProject.id ? "selected" : "";
+        projectId === this.$context.selection.currentProject.id ? "selected" : "";
       const project = this.$model.get(projectId);
       return /*html*/ `
         <div class='project-item ${selected}'>

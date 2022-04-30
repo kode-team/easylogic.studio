@@ -12,8 +12,8 @@ export default {
     editor.command(
       "setAttributeForMulti",
       "change rotate",
-      editor.selection.packByValue({
-        angle: editor.selection.current.angle + distAngle,
+      editor.context.selection.packByValue({
+        angle: editor.context.selection.current.angle + distAngle,
       })
     );
   },

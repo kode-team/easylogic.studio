@@ -251,6 +251,7 @@ export class DesignEditor extends BaseLayout {
     this.refresh();
     this.nextTick(() => {
       this.emit("resizeCanvas");
+      this.$config.init("editor.layout.elements", this.refs);
     });
   }
 
@@ -258,6 +259,7 @@ export class DesignEditor extends BaseLayout {
     this.refresh();
     this.nextTick(() => {
       this.emit("resizeCanvas");
+      this.$config.init("editor.layout.elements", this.refs);
     });
   }
 
@@ -278,5 +280,9 @@ export class DesignEditor extends BaseLayout {
     if (isFunction(callback)) {
       callback(this.refs);
     }
+  }
+
+  [SUBSCRIBE('resize.window', 'resizeCanvas')]() {
+    this.$config.init("editor.layout.elements", this.refs);
   }
 }

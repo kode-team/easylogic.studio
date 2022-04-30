@@ -1155,6 +1155,10 @@ declare module "@easylogic/editor" {
 
   interface ShortcutObject {}
 
+  interface MenuItemCallback<T> {
+    (editor: EditorInstance, ...args: any[]): T;
+  }
+
   interface DropdownMenuItem {
     type: "dropdown";
     items?: MenuItem[];
@@ -1163,8 +1167,8 @@ declare module "@easylogic/editor" {
     title?: string;
     events?: any[];
     selected?: boolean;
-    selectedKey?: string;
-    action?: Function;
+    selectedKey?: string | MenuItemCallback<string>;
+    action?: MenuItemCallback<void>;
     style?: KeyValue;
     dy?: number;
   }
@@ -1175,10 +1179,11 @@ declare module "@easylogic/editor" {
     type: "custom";
     title?: string;
     icon?: string;
-    action?: Function;
+    key?: string;
+    action?: MenuItemCallback<void>;
     command?: string;
     args?: any[];
-    template: string | Function;
+    template: string | MenuItemCallback<string>;
     events?: EventCommandType[];
   }
 
@@ -1188,12 +1193,13 @@ declare module "@easylogic/editor" {
     icon?: string;
     command?: string;
     shortcut?: string;
+    closable?: boolean;
     args?: any[];
-    nextTick?: () => void;
+    nextTick?: MenuItemCallback<void>;
     disabled?: boolean;
     selected?: boolean;
-    selectedKey?: string;
-    action?: () => void;
+    key?: string;
+    action?: MenuItemCallback<void>;
     events?: EventCommandType[];
     style?: KeyValue;
   }
@@ -1206,11 +1212,11 @@ declare module "@easylogic/editor" {
     command?: string;
     shortcut?: string;
     args?: any[];
-    nextTick?: () => void;
+    nextTick?: MenuItemCallback<void>;
     disabled?: boolean;
     selected?: boolean;
-    selectedKey?: string;
-    action?: () => void;
+    key?: string;
+    action?: MenuItemCallback<void>;
     events?: EventCommandType[];
     style?: KeyValue;
   }

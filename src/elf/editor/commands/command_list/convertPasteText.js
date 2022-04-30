@@ -10,7 +10,7 @@ export default {
     });
 
     if (embedUrl) {
-      const center = editor.viewport.center;
+      const center = editor.context.viewport.center;
       const width = 300;
       const height = 200;
 

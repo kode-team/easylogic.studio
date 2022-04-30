@@ -21,14 +21,14 @@ export default class HistoryProperty extends BaseProperty {
   }
 
   [LOAD("$body") + DOMDIFF]() {
-    return this.$editor.history.map((it, index) => {
+    return this.$editor.context.history.map((it, index) => {
       if (it === "-") {
         return /*html*/ `<div class='divider'>-</div>`;
       }
       return /*html*/ `
         <div class='history-item'>
           <span>${
-            index === this.$editor.history.currentIndex ? icon.arrowRight : ""
+            index === this.$editor.context.history.currentIndex ? icon.arrowRight : ""
           }</span>
           <span>${it.message}</span>
         </div>

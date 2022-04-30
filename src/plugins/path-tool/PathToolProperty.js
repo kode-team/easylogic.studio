@@ -146,10 +146,10 @@ export default class PathToolProperty extends BaseProperty {
 
   [SUBSCRIBE("refreshSelection")]() {
     this.refreshShow(() => {
-      if (this.$selection.length === 1 && this.$selection.is("boolean-path"))
+      if (this.$context.selection.length === 1 && this.$context.selection.is("boolean-path"))
         return true;
 
-      return this.$selection.is("svg-path", "polygon", "star");
+      return this.$context.selection.is("svg-path", "polygon", "star");
     });
   }
 }

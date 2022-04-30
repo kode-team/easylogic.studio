@@ -139,17 +139,17 @@ export default class PageTools extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelection")]() {
-    this.refs.$selectedCount.html(this.$selection.length + "");
+    this.refs.$selectedCount.html(this.$context.selection.length + "");
 
     this.load("$buttons");
   }
 
   [LOAD("$buttons") + DOMDIFF]() {
-    if (this.$selection.isEmpty) return "";
+    if (this.$context.selection.isEmpty) return "";
 
     const buttons = [];
 
-    this.$selection.items.forEach((selectedItem) => {
+    this.$context.selection.items.forEach((selectedItem) => {
       selectedItem.allLayers.forEach((item) => {
         if (item.isNot("boolean-path")) {
           const list = PathParser.fromSVGString(

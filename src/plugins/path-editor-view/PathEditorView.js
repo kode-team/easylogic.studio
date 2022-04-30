@@ -363,7 +363,7 @@ export default class PathEditorView extends PathTransformEditor {
       }
     });
 
-    const containerItem = this.$selection.currentProject;
+    const containerItem = this.$context.selection.currentProject;
 
     // project 를 설정하다.
     // 이걸 여기다 하는게 맞는건가?
@@ -375,7 +375,7 @@ export default class PathEditorView extends PathTransformEditor {
       "moveLayerToTarget",
       "add path",
       layer,
-      this.$selection.currentProject
+      this.$context.selection.currentProject
     );
 
     return layer;
@@ -407,7 +407,7 @@ export default class PathEditorView extends PathTransformEditor {
     var layer = this.makePathLayer();
     if (layer) {
       this.$config.set("editing.mode.itemType", "select");
-      this.$selection.select(layer);
+      this.$context.selection.select(layer);
       this.trigger("hidePathEditor");
       this.emit("refreshAll");
     }

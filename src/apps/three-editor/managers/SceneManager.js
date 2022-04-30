@@ -322,7 +322,7 @@ export class SceneManager {
 
     this.selected = object;
 
-    this.editor.config.set("selected", uuid);
+    this.editor.context.config.set("selected", uuid);
     this.emit("objectSelected", object);
   }
 
@@ -423,14 +423,14 @@ export class SceneManager {
     return {
       metadata: {},
       project: {
-        shadows: this.editor.config.get("project/renderer/shadows"),
-        shadowType: this.editor.config.get("project/renderer/shadowType"),
-        vr: this.editor.config.get("project/vr"),
-        physicallyCorrectLights: this.editor.config.get(
+        shadows: this.editor.context.config.get("project/renderer/shadows"),
+        shadowType: this.editor.context.config.get("project/renderer/shadowType"),
+        vr: this.editor.context.config.get("project/vr"),
+        physicallyCorrectLights: this.editor.context.config.get(
           "project/renderer/physicallyCorrectLights"
         ),
-        toneMapping: this.editor.config.get("project/renderer/toneMapping"),
-        toneMappingExposure: this.editor.config.get(
+        toneMapping: this.editor.context.config.get("project/renderer/toneMapping"),
+        toneMappingExposure: this.editor.context.config.get(
           "project/renderer/toneMappingExposure"
         ),
       },

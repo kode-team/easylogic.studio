@@ -8,7 +8,7 @@ export default {
     rect = {},
     containerItem = undefined
   ) {
-    var project = editor.selection.currentProject;
+    var project = editor.context.selection.currentProject;
 
     if (project) {
       // append image asset
