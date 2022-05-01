@@ -132,7 +132,12 @@ export default class ThreeRenderView extends EditorElement {
     grid.add(grid2);
 
     this.grid = grid;
-    this.$context.sceneManager.addObject(this.grid, undefined, undefined, false);
+    this.$context.sceneManager.addObject(
+      this.grid,
+      undefined,
+      undefined,
+      false
+    );
 
     const light = new THREE.DirectionalLight(0xffffff, 2);
     light.position.set(1, 1, 1);

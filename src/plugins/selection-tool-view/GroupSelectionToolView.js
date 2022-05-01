@@ -286,9 +286,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     // 2. dx, dy 만큼 옮긴 vertext 를 구한다.
     // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다
-    const snap = this.$context.snapManager.check([
-      vec3.add([], currentVertex, distVector),
-    ]);
+    const snap = this.$context.snapManager.check(
+      [vec3.add([], currentVertex, distVector)],
+      3 / this.$viewport.scale
+    );
 
     const nextVertex = vec3.add(
       [],
@@ -641,7 +642,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     if (this.$el.isHide() && this.$context.selection.isMany) {
       this.show();
     } else {
-      if (this.$el.isShow() && this.$context.selection.isMany === false) this.hide();
+      if (this.$el.isShow() && this.$context.selection.isMany === false)
+        this.hide();
     }
 
     this.initMatrix();

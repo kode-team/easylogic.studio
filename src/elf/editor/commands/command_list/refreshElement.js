@@ -44,9 +44,8 @@ export default {
       ) {
         maker.emit("refreshElementBoundSize", current.parent);
       } else {
-        // maker.emit("refreshElementBoundSize", current);
+        maker.emit("refreshElementBoundSize", current);
       }
-
     }
 
     // maker.log();

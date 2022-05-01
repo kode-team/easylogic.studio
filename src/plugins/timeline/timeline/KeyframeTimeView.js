@@ -82,7 +82,9 @@ export default class KeyframeTimeView extends EditorElement {
 
     var displayTimeRate = currentX / this.sliderRect.width;
 
-    this.$context.selection.currentProject.setDisplayStartTimeRate(displayTimeRate);
+    this.$context.selection.currentProject.setDisplayStartTimeRate(
+      displayTimeRate
+    );
 
     this.refreshTimeDisplay();
     this.refreshCanvas();
@@ -106,7 +108,9 @@ export default class KeyframeTimeView extends EditorElement {
 
     var displayTimeRate = currentX / this.sliderRect.width;
 
-    this.$context.selection.currentProject.setDisplayEndTimeRate(displayTimeRate);
+    this.$context.selection.currentProject.setDisplayEndTimeRate(
+      displayTimeRate
+    );
 
     this.refreshTimeDisplay();
     this.refreshCanvas();

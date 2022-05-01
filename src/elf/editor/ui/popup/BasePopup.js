@@ -91,7 +91,7 @@ export default class BasePopup extends EditorElement {
 
     let left = bodyRect.left + bodyRect.width - width - 10;
 
-    console.log(bodyRect.left , bodyRect.width , width , rect)
+    console.log(bodyRect.left, bodyRect.width, width, rect);
     let top =
       rect.top + height > bodyRect.top + bodyRect.height
         ? bodyRect.top + bodyRect.height - height - 10

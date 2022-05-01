@@ -336,7 +336,8 @@ export default class LayerAppendView extends EditorElement {
   move() {
     const e = this.$config.get("bodyEvent");
     const targetMousePoint = this.$viewport.getWorldPosition();
-    const newMousePoint = this.$context.snapManager.checkPoint(targetMousePoint);
+    const newMousePoint =
+      this.$context.snapManager.checkPoint(targetMousePoint);
 
     if (vec3.equals(newMousePoint, targetMousePoint) === false) {
       this.state.target = newMousePoint;
@@ -384,7 +385,9 @@ export default class LayerAppendView extends EditorElement {
     const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
 
     // artboard 가 아닐 때만 parentArtBoard 가 존재
-    const parentArtBoard = this.$context.selection.getArtboardByPoint(rectVerties[0]);
+    const parentArtBoard = this.$context.selection.getArtboardByPoint(
+      rectVerties[0]
+    );
 
     let { x, y, width, height } = vertiesToRectangle(rectVerties);
     let hasArea = true;

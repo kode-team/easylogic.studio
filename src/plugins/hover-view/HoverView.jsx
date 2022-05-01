@@ -122,7 +122,7 @@ export default class HoverView extends EditorElement {
     if (items.length === 0) {
       // hide render hover layer
       this.refs.$hoverRect.updateDiff("");
-      this.emit("removeGuideLine");
+      // this.emit("removeGuideLine");
     } else {
       // refresh hover view
       const verties = items[0].verties;
@@ -132,7 +132,7 @@ export default class HoverView extends EditorElement {
 
       this.refs.$hoverRect.updateDiff(line + offsetLine);
 
-      this.emit("refreshGuideLineByTarget", [items[0].verties]);
+      // this.emit("refreshGuideLineByTarget", [items[0].verties]);
     }
   }
 
@@ -189,7 +189,8 @@ export default class HoverView extends EditorElement {
   }
 
   createOffsetLine() {
-    const item = this.$context.selection.hoverItems[0] || this.$context.selection.current;
+    const item =
+      this.$context.selection.hoverItems[0] || this.$context.selection.current;
 
     if (!item || !item.parent) {
       return "";

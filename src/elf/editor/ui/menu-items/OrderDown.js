@@ -10,6 +10,10 @@ export default class OrderDown extends MenuItem {
   }
 
   clickButton() {
-    this.command("send.backward", "send backward", this.$context.selection.current);
+    this.command(
+      "send.backward",
+      "send backward",
+      this.$context.selection.current
+    );
   }
 }

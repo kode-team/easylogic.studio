@@ -1,9 +1,6 @@
-import { clone, isFunction, isArray, isNotUndefined, isNumber, isUndefined } from "sapa";
+import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "sapa";
 
 import { uuid } from "elf/core/math";
-import { isArrayEquals } from 'elf/core/func';
-
-window.a = 0;
 
 /**
  * Item , 그리기를 위한 기본 모델
@@ -464,27 +461,27 @@ export class BaseModel {
   /**
    * check object values
    *
-   * 값이 같은지는 체크하기가 쉽지 않을 수도 있음. 
-   * 
+   * 값이 같은지는 체크하기가 쉽지 않을 수도 있음.
+   *
    * @param {KeyValue} obj
    * @returns {boolean}
    */
-  isChangedValue(obj) {
-    return true;
-    // console.log(Object.keys(obj).some((key) => {
-    //   console.log(obj, key, this.json);
-    //   return obj[key] !== this.json[key]
-    // }));
-    // return Object.keys(obj).some((key) => {
+  // isChangedValue(obj) {
+  //   return true;
+  //   // console.log(Object.keys(obj).some((key) => {
+  //   //   console.log(obj, key, this.json);
+  //   //   return obj[key] !== this.json[key]
+  //   // }));
+  //   // return Object.keys(obj).some((key) => {
 
-    //   if (isArray(obj[key])) {
-    //     return !isArrayEquals(obj[key], this.json[key]);
-    //   } else {
-    //     return obj[key] !== this.json[key]
-    //   }
-      
-    // });
-  }
+  //   //   if (isArray(obj[key])) {
+  //   //     return !isArrayEquals(obj[key], this.json[key]);
+  //   //   } else {
+  //   //     return obj[key] !== this.json[key]
+  //   //   }
+
+  //   // });
+  // }
 
   /**
    * set json content
@@ -493,20 +490,20 @@ export class BaseModel {
    * @param {{origin: string}} context
    */
   reset(obj, context = { origin: "*" }) {
-    const isChanged = this.isChangedValue(obj);
+    // const isChanged = this.isChangedValue(obj);
 
-    if (isChanged) {
-      this.json = this.convert(Object.assign(this.json, obj));
+    // if (isChanged) {
+    this.json = this.convert(Object.assign(this.json, obj));
 
-      this.lastChangedField = obj;
-      this.lastChangedFieldKeys = Object.keys(obj);
+    this.lastChangedField = obj;
+    this.lastChangedFieldKeys = Object.keys(obj);
 
-      if (context.origin === "*") {
-        this.modelManager.setChanged("reset", this.id, obj);
-      }
-
-      this.changed();
+    if (context.origin === "*") {
+      this.modelManager.setChanged("reset", this.id, obj);
     }
+
+    this.changed();
+    // }
 
     return true;
   }

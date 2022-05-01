@@ -69,7 +69,10 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   [POINTERSTART("$el .ellipse .ellipse-radius-y") +
@@ -129,7 +132,10 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndEllipseRadiusX() {
@@ -192,7 +198,10 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndEllipseCenter(dx, dy) {

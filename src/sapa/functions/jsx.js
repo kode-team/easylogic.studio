@@ -56,7 +56,8 @@ export function createComponent(ComponentName, props = {}, children = []) {
   // 모든 children 을 하나로 모은다.
   children = children.flat(Infinity).join("");
 
-  const targetVariable = Object.keys(props).length ? variable(props) : "";
+  let targetVariable;
+  targetVariable = Object.keys(props).length ? variable(props) : "";
 
   return /*html*/ `<object refClass="${ComponentName}" ${targetVariable}>${children}</object>`;
 }
@@ -103,6 +104,9 @@ export function createElementJsx(Component, props = {}, ...children) {
   if (Component === FragmentInstance) {
     return children;
   }
+
+  // props 가 null 로 넘어오는 경우가 있어서 기본값 처리를 해준다.
+  props = props || {};
 
   if (typeof Component !== "string") {
     const ComponentName = Component.name;

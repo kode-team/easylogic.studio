@@ -105,7 +105,9 @@ export default class TransformProperty extends BaseProperty {
   }
 
   refresh() {
-    this.children.$transformEditor.setValue(this.$context.selection.current.transform);
+    this.children.$transformEditor.setValue(
+      this.$context.selection.current.transform
+    );
   }
 
   get editableProperty() {

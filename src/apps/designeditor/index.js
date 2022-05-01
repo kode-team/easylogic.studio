@@ -22,6 +22,7 @@ import SwitchRightPanel from "apps/common/area/status-bar/SwitchRightPanel";
 import ToolBar from "apps/common/area/tool-bar/ToolBar";
 import { BaseLayout } from "apps/common/BaseLayout";
 import BodyPanel from "apps/common/BodyPanel";
+import { ContextMenuManager } from "apps/common/ContextMenuManager";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { PopupManager } from "apps/common/PopupManager";
@@ -57,6 +58,7 @@ export class DesignEditor extends BaseLayout {
       IconManager,
       SwitchLeftPanel,
       SwitchRightPanel,
+      ContextMenuManager,
     };
   }
 
@@ -110,6 +112,7 @@ export class DesignEditor extends BaseLayout {
         </div>
         ${createComponent("PopupManager")}
         ${createComponent("IconManager")}
+        ${createComponent("ContextMenuManager")}
       </div>
     `;
   }
@@ -282,7 +285,7 @@ export class DesignEditor extends BaseLayout {
     }
   }
 
-  [SUBSCRIBE('resize.window', 'resizeCanvas')]() {
+  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
     this.$config.init("editor.layout.elements", this.refs);
   }
 }

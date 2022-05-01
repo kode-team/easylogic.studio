@@ -87,7 +87,9 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   [LOAD("$borderImageView")]() {
-    var current = this.$context.selection.current || { borderImage: { image: {} } };
+    var current = this.$context.selection.current || {
+      borderImage: { image: {} },
+    };
     var borderImage = current.borderImage;
 
     var backgroundTypeName = borderImage.type ? names[borderImage.type] : "";

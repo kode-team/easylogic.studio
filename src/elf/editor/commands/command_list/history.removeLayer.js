@@ -32,7 +32,9 @@ export default {
    */
   execute: function (editor, message, ids = undefined) {
     // // 지우기 전 객체를 모두 clone 한다.
-    let items = editor.context.selection.itemsByIds(ids || editor.context.selection.ids);
+    let items = editor.context.selection.itemsByIds(
+      ids || editor.context.selection.ids
+    );
 
     // items 중에  자식/부모의 관게의 객체가 있으면 자식은 필터링 한다.
     items = filterChildren(items);
@@ -76,7 +78,9 @@ export default {
 
   redo: function (editor, { currentValues }) {
     const ids = currentValues[0];
-    let items = editor.context.selection.itemsByIds(ids || editor.context.selection.ids);
+    let items = editor.context.selection.itemsByIds(
+      ids || editor.context.selection.ids
+    );
 
     // items 중에  자식/부모의 관게의 객체가 있으면 자식은 필터링 한다.
     items = filterChildren(items);

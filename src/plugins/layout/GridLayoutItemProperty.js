@@ -33,7 +33,9 @@ export default class GridLayoutItemProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$context.selection.current || { "grid-layout-item": "none" };
+    var current = this.$context.selection.current || {
+      "grid-layout-item": "none",
+    };
 
     var valueType = current["grid-layout-item"] || "none";
 

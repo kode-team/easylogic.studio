@@ -354,7 +354,6 @@ export class ModelManager {
         },
         context
       );
-  
     }
 
     return item;

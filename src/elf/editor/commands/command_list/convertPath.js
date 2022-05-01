@@ -36,7 +36,10 @@ export default function convertPath(editor, pathString, rect = null) {
       editor.command(
         "setAttributeForMulti",
         "change clip path",
-        editor.context.selection.packByValue({ "clip-path": `path(${d})` }, current.id)
+        editor.context.selection.packByValue(
+          { "clip-path": `path(${d})` },
+          current.id
+        )
       );
     }
   }

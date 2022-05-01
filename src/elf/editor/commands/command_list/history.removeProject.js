@@ -19,7 +19,9 @@ export default {
     });
 
     editor.nextTick(() => {
-      editor.context.selection.selectProject(editor.context.modelManager.projects[0]);
+      editor.context.selection.selectProject(
+        editor.context.modelManager.projects[0]
+      );
       editor.emit("refreshAll");
       editor.emit("removeGuideLine");
       editor.nextTick(() => {

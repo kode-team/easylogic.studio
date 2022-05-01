@@ -142,7 +142,9 @@ export default class SVGFilterSelectEditor extends EditorElement {
   [SUBSCRIBE("openSVGFilterPopup")](index) {
     this.emit("refreshSVGFilterAssets");
     this.emit("refreshSVGArea");
-    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || {
+      svgfilters: [],
+    };
 
     var svgfilter = currentProject.svgfilters[index];
 

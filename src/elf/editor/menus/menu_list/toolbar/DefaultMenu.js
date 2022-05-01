@@ -127,8 +127,8 @@ export default [
     type: "dropdown",
     icon: (editor, dropdown) => {
       return (
-        dropdown.findItem(editor.context.config.get("editing.css.itemType"))?.icon ||
-        iconUse("rect")
+        dropdown.findItem(editor.context.config.get("editing.css.itemType"))
+          ?.icon || iconUse("rect")
       );
     },
     items: [
@@ -241,8 +241,8 @@ export default [
     type: "dropdown",
     icon: (editor, dropdown) => {
       return (
-        dropdown.findItem(editor.context.config.get("editing.draw.itemType"))?.icon ||
-        iconUse("pentool")
+        dropdown.findItem(editor.context.config.get("editing.draw.itemType"))
+          ?.icon || iconUse("pentool")
       );
     },
     items: [
@@ -290,8 +290,8 @@ export default [
     type: "dropdown",
     icon: (editor, dropdown) => {
       return (
-        dropdown.findItem(editor.context.config.get("editing.svg.itemType"))?.icon ||
-        iconUse("outline_rect")
+        dropdown.findItem(editor.context.config.get("editing.svg.itemType"))
+          ?.icon || iconUse("outline_rect")
       );
     },
     items: [

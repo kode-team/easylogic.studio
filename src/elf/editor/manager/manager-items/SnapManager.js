@@ -87,9 +87,11 @@ export class SnapManager {
    */
   getSnapPoints() {
     const points = [];
-    this.editor.context.selection.snapTargetLayersWithSelection.forEach((it) => {
-      points.push.apply(points, this.convertGuideAndPathMatrix(it));
-    });
+    this.editor.context.selection.snapTargetLayersWithSelection.forEach(
+      (it) => {
+        points.push.apply(points, this.convertGuideAndPathMatrix(it));
+      }
+    );
 
     return points;
   }
@@ -265,9 +267,7 @@ export class SnapManager {
     Object.keys(groupPoints).forEach((key) => {
       if (groupPoints[key] && groupPoints[key].length) {
         const sorted = groupPoints[key].sort((a, b) => a[3] - b[3]);
-        const [sourceVertex, targetVertex, axis] = sorted[0];
-
-        points.push([sourceVertex, targetVertex, axis]);
+        points.push(...sorted);
       }
     });
 

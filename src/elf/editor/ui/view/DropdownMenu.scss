@@ -109,7 +109,15 @@
 
       .shortcut {
         font-size: 13px;
-        padding-right: 10px;
+        // padding-right: 10px;
+        padding: 0px 4px;
+        border-radius: 2px;
+        border: 1px solid var(--elf--border-color);
+
+        &:empty {
+          display: none;
+        }
+
       }
     }
 
@@ -199,6 +207,14 @@
     }
   }
 
+  &.flat {
+    padding: 0px;
+    > ul {
+      position: relative;
+      width: 100%;
+    }
+  }
+
   ul {
     background-color: var(--elf--background-color);
     border: 1px solid var(--elf--border-color);
@@ -265,11 +281,18 @@
             }
           }
         }
+
+        & > .menu-item-text {
+          .shortcut {
+            border-color: var(--elf--selected-font-color);
+          }
+        }
       }
 
       color: var(--elf--font-color);
     }
   }
+
 
   li:hover > ul {
     display: block;

@@ -109,7 +109,10 @@ export default class ClippathPolygonEditorView extends EditorElement {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   [POINTERSTART("$el .polygon .polygon-center") +

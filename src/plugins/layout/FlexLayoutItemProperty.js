@@ -32,7 +32,9 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$context.selection.current || { "flex-layout-item": "none" };
+    var current = this.$context.selection.current || {
+      "flex-layout-item": "none",
+    };
 
     const valueType = "value";
 

@@ -92,20 +92,20 @@ declare module "@easylogic/editor" {
 
   // gl-matrix
 
-  export const makeEventChecker = (value: string, split: string) => string;
+  export function makeEventChecker(value: string, split: string): string;
 
   // event name regular expression
-  export const EVENT: (...args: string[]) => string;
-  export const COMMAND = EVENT;
-  export const ON = EVENT;
+  export type EVENT = (...args: string[]) => string;
+  export const COMMAND: EVENT;
+  export const ON:  EVENT;
 
   // Predefined CHECKER
-  export const CHECKER = (value: string, split: string) => string;
-  export const AFTER = (value: string, split: string) => string;
-  export const BEFORE = (value: string, split: string) => string;
+  export type CHECKER = (value: string, split: string) => string;
+  export type AFTER = (value: string, split: string) => string;
+  export type BEFORE = (value: string, split: string) => string;
 
-  export const IF = CHECKER;
-  export const KEY = CHECKER;
+  export const IF: CHECKER;
+  export const KEY: CHECKER;
 
   export const ARROW_UP: string;
   export const ARROW_DOWN: string;
@@ -151,13 +151,11 @@ declare module "@easylogic/editor" {
   type MoveEndMethod = (method: string = "end") => string;
   export const END: MoveEndMethod;
 
-  export const PREVENT = string;
-  export const STOP = string;
+  export const PREVENT: string;
+  export const STOP: string;
 
   type CallbackFunction = (...args: string[]) => string;
   type DOM_EVENT_MAKE = (...keys: string[]) => CallbackFunction;
-
-  const SUBSCRIBE_EVENT_MAKE: CallbackFunction;
 
   export const SUBSCRIBE: CallbackFunction;
   export const SUBSCRIBE_ALL: CallbackFunction;
@@ -231,8 +229,8 @@ declare module "@easylogic/editor" {
   export function createRef(value: any): string;
   export function getRef(id: string): any;
   export function BIND(
-    value: string = "$el",
-    checkFieldOrCallback: string = ""
+    value: string,
+    checkFieldOrCallback: string
   ): string;
 
   export interface KeyValue {
@@ -272,30 +270,11 @@ declare module "@easylogic/editor" {
       newElement: Dom | HTMLElement
     ): Dom;
 
-    checked(isChecked = false): Dom | boolean;
+    checked(isChecked: boolean): Dom | boolean;
     click(): Dom;
     focus(): Dom;
     select(): Dom;
     blur(): Dom;
-
-    // canvas functions
-
-    context(contextType: string = "2d"): CanvasRenderingContext2D;
-
-    resize({ width: number, height: number }: KeyValue): void;
-
-    toDataURL(type = "image/png", quality = 1): string;
-
-    clear(): void;
-
-    update(callback: () => void): void;
-
-    drawImage(img: any, dx: number = 0, dy: number = 0): void;
-    drawOption(option: KeyValue = {}): void;
-    drawLine(x1: number, y1: number, x2: number, y2: number): void;
-    drawPath(...path: vec3[]): void;
-    drawCircle(cx: number, cy: number, r: number): void;
-    drawText(x: number, y: number, text: string): void;
 
     /* utility */
     fullscreen(): void;
@@ -309,7 +288,7 @@ declare module "@easylogic/editor" {
     getIcon(): string;
     isAttribute(): boolean;
     isChanged(timestamp: number): boolean;
-    changed();
+    changed():void;
 
     /**
      * title 속성
@@ -388,7 +367,7 @@ declare module "@easylogic/editor" {
      *
      * @param {string} postfix
      */
-    getInnerId: (postfix: string = "") => string;
+    getInnerId: (postfix: string) => string;
 
     // selection 이후에
     // 위치나 , width, height 등의 geometry 가 변경되었을 때 호출 하는 함수
@@ -444,7 +423,7 @@ declare module "@easylogic/editor" {
      *
      * @param {object} obj
      */
-    getDefaultObject(obj: KeyValue = {}): KeyValue;
+    getDefaultObject(obj: KeyValue): KeyValue;
 
     /**
      * 지정된 필드의 값을 object 형태로 리턴한다.
@@ -481,7 +460,7 @@ declare module "@easylogic/editor" {
      * @param {Item} layer
      * @param {number} index
      */
-    insertChildItem(layer: Item, index: number = 0): Item;
+    insertChildItem(layer: Item, index: number): Item;
 
     /**
      * 현재 Item 의 그 다음 순서로 추가한다.
@@ -512,7 +491,7 @@ declare module "@easylogic/editor" {
      * @param {*} field
      * @param {*} toggleValue
      */
-    toggle(field: string, toggleValue: boolean | undefined = undefined): void;
+    toggle(field: string, toggleValue: boolean | undefined): void;
 
     isTreeItemHide(): boolean;
 
@@ -1035,15 +1014,7 @@ declare module "@easylogic/editor" {
      */
     registerConfig(config: KeyValue): void;
   }
-  interface ShortCutManager {}
-  interface SelectionManager {}
-  interface ViewportManager {}
-  interface SnapManager {}
-  interface HistoryManager {}
-  interface KeyBoardManager {}
-  interface MenuItemManager {}
-
-  export class EditorElement extends UIElement {
+    export class EditorElement extends UIElement {
     get $editor(): EditorInstance;
     get $store(): BaseStore;
 
@@ -1057,58 +1028,18 @@ declare module "@easylogic/editor" {
 
     get $config(): ConfigManager;
 
-    /**
-     * @type {SelectionManager} $selection
-     */
-    get $selection(): SelectionManager;
-
-    /**
-     * @type {ViewportManager} $viewport
-     */
-    get $viewport(): ViewportManager;
-
-    /**
-     * @type {SnapManager} $snapManager
-     */
-    get $snapManager(): SnapManager;
-
-    get $history(): HistoryManager;
-
-    /**
-     * @type {ShortCutManager} $shortcuts
-     */
-    get $shortcuts(): ShortCutManager;
-
-    /**
-     * @type {KeyBoardManager} $keyboardManager
-     */
-    get $keyboardManager(): KeyBoardManager;
-
-    /**
-     * @type {StorageManager} $storageManager
-     */
-    get $storageManager(): StorageManager;
-
-    /**
-     * history 가 필요한 커맨드는 command 함수를 사용하자.
-     * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다.
-     * 기존 emit 과 거의 동일하게 사용할 수 있다.
-     *
-     * @param {string} command
-     * @param {string} description
-     * @param {any[]} args
-     */
+    get $shortcuts(): any;
+    get $keyboardManager(): any;
+    get $storageManager(): any;
 
     command(command: string, description: string, ...args: any[]): any;
 
-    $theme(key: sring): any;
+    $theme(key: string): any;
   }
 
   export class BaseProperty extends EditorElement {
     onToggleShow(): void;
-
     protected setTitle(title: string): void;
-
     protected isHideHeader(): boolean;
 
     protected isFirstShow(): boolean;
@@ -1289,6 +1220,7 @@ declare module "@easylogic/editor" {
     json: JSONRenderer;
 
     config: ConfigManager;
+    context: KeyValue;
   }
 
   export interface PluginInterface {

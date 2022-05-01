@@ -27,7 +27,7 @@ const text = (t, target) => {
   }" width="${width}" height="${height}" rx="2" ry="2" fill="#00a9f4" />
         <text x="${target[0]}" y="${
     target[1]
-  }" dy="-5" font-size="16">${text}</text>
+  }" dy="-5" font-size="13">${text}</text>
     `;
 };
 
@@ -145,10 +145,10 @@ export default class GuideLineView extends EditorElement {
 
   [BIND("$guide")]() {
     const line = this.createGuideLine(this.state.list);
-    const layerLine = this.createLayerLine();
+    // const layerLine = this.createLayerLine();
 
     return {
-      svgDiff: /*html*/ `<g>${line}${layerLine}</g>`,
+      svgDiff: /*html*/ `<g>${line}</g>`,
     };
   }
 
@@ -167,13 +167,15 @@ export default class GuideLineView extends EditorElement {
     return "";
     // const lines = [];
 
-    // this.$context.selection.snapTargetLayers?.filter(Boolean).forEach((layer) => {
-    //   const verties = this.$viewport.applyVerties(layer.verties);
+    // this.$context.selection.snapTargetLayers
+    //   ?.filter(Boolean)
+    //   .forEach((layer) => {
+    //     const verties = this.$viewport.applyVerties(layer.verties);
 
-    //   lines.push(
-    //     `<text x="${verties[0][0]}" y="${verties[0][1]}" style="filter: drop-shadow(0 0 2px red)">${layer.id}</text>`
-    //   );
-    // });
+    //     lines.push(
+    //       `<text x="${verties[0][0]}" y="${verties[0][1]}" style="filter: drop-shadow(0 0 2px red)">${layer.id}</text>`
+    //     );
+    //   });
 
     // return lines.join("");
   }
@@ -193,7 +195,7 @@ export default class GuideLineView extends EditorElement {
         sourceVerties,
         targetVerties,
       ] = list[i];
-      const localDist = Math.floor(dist);
+      const localDist = vec3.dist(source, target);
 
       // 시작점 기준으로 맞출때가 필요하면 localSourceVertex 를 활용하자. 아직은 없음.
       const localSourceVertex = this.$viewport.applyVertex(source);
@@ -216,14 +218,14 @@ export default class GuideLineView extends EditorElement {
           );
         }
 
-        if (localDist > 0) {
-          texts.push(
-            text(
-              localDist,
-              vec3.lerp([], localSourceVertex, localTargetVertex, 0.5)
-            )
-          );
-        }
+        // if (localDist > 0) {
+        //   texts.push(
+        //     text(
+        //       localDist,
+        //       vec3.lerp([], localSourceVertex, localTargetVertex, 0.5)
+        //     )
+        //   );
+        // }
       }
 
       if (axis === "y") {
@@ -237,18 +239,18 @@ export default class GuideLineView extends EditorElement {
           );
         }
 
-        if (localDist > 0) {
-          texts.push(
-            text(
-              localDist,
-              vec3.add(
-                [],
-                vec3.lerp([], localSourceVertex, localTargetVertex, 0.5),
-                [20, 0, 0]
-              )
-            )
-          );
-        }
+        // if (localDist > 0) {
+        //   texts.push(
+        //     text(
+        //       localDist,
+        //       vec3.add(
+        //         [],
+        //         vec3.lerp([], localSourceVertex, localTargetVertex, 0.5),
+        //         [20, 0, 0]
+        //       )
+        //     )
+        //   );
+        // }
       }
 
       if (axis === "x") {
@@ -303,7 +305,7 @@ export default class GuideLineView extends EditorElement {
   }
 
   [SUBSCRIBE("updateViewport")]() {
-    this.refresh();
+    this.refreshSmartGuidesForVerties();
   }
 
   refreshSmartGuides(targetVertiesList) {
@@ -350,7 +352,20 @@ export default class GuideLineView extends EditorElement {
 
   refreshSmartGuidesForVerties() {
     // return;
-    const guides = this.$context.snapManager.findGuide(this.$context.selection.verties);
+
+    let verties = this.$context.selection.verties;
+
+    if (verties.length) {
+      verties = [
+        ...verties,
+        vec3.lerp([], verties[0], verties[1], 0.5),
+        vec3.lerp([], verties[1], verties[2], 0.5),
+        vec3.lerp([], verties[2], verties[3], 0.5),
+        vec3.lerp([], verties[3], verties[0], 0.5),
+      ];
+    }
+
+    const guides = this.$context.snapManager.findGuide(verties);
 
     this.setGuideLine(guides, true);
   }

@@ -543,7 +543,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     return {
       "data-drag-target-item": Boolean(this.$context.selection.dragTargetItem),
-      "data-grid-layout-own": this.$context.selection.current?.id === current?.id,
+      "data-grid-layout-own":
+        this.$context.selection.current?.id === current?.id,
       style: {
         display: current ? "block" : "none",
       },

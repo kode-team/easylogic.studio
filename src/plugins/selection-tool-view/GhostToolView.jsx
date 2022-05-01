@@ -541,7 +541,9 @@ export default class GhostToolView extends EditorElement {
   insertToGridItem() {
     const current = this.$context.selection.current;
 
-    const { info, items } = this.$context.selection.gridInformation || { items: [] };
+    const { info, items } = this.$context.selection.gridInformation || {
+      items: [],
+    };
 
     // ghost 의 world좌표를 구함
     const currentVerties = this.ghostVerties.filter((_, index) => index < 4);

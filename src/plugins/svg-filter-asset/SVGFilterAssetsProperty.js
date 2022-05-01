@@ -135,7 +135,9 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
     this.state.$item = $item;
     this.state.$el = e.$dt.$(".svgfilter-view");
 
-    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || {
+      svgfilters: [],
+    };
 
     var svgfilter = currentProject.svgfilters[index];
 

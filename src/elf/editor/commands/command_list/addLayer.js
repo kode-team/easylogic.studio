@@ -7,7 +7,9 @@ export default function addLayer(
   containerItem
 ) {
   if (!containerItem) {
-    containerItem = editor.context.selection.current || editor.context.selection.currentProject;
+    containerItem =
+      editor.context.selection.current ||
+      editor.context.selection.currentProject;
   }
 
   if (containerItem) {

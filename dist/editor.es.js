@@ -2928,7 +2928,12 @@ function OBJECT_TO_PROPERTY$1(obj2) {
 }
 function createComponent(ComponentName, props = {}, children2 = []) {
   children2 = children2.flat(Infinity).join("");
-  const targetVariable = Object.keys(props).length ? variable$4(props) : "";
+  let targetVariable;
+  try {
+    targetVariable = Object.keys(props).length ? variable$4(props) : "";
+  } catch (e) {
+    console.error(e);
+  }
   return `<object refClass="${ComponentName}" ${targetVariable}>${children2}</object>`;
 }
 function createComponentList(...args2) {
@@ -2956,6 +2961,7 @@ function createElementJsx(Component2, props = {}, ...children2) {
   if (Component2 === FragmentInstance) {
     return children2;
   }
+  props = props || {};
   if (typeof Component2 !== "string") {
     const ComponentName = Component2.name;
     registElement({
@@ -7050,7 +7056,7 @@ class Length {
   }
 }
 Length.auto = Length.string("auto");
-function makeMenuItem(it, id) {
+function makeMenuItem$1(it, id) {
   if (it === "-") {
     return createComponent("Divider", {
       ref: `${id}-divider`
@@ -7135,31 +7141,31 @@ function makeMenuItem(it, id) {
     ref: `${id}-menu-item`
   });
 }
-function Divider() {
+function Divider$1() {
   return `<li class="dropdown-divider"></li>`;
 }
-function DropdownDividerMenuItem() {
+function DropdownDividerMenuItem$1() {
   return `<li class="dropdown-divider"></li>`;
 }
-function DropdownTextMenuItem() {
+function DropdownTextMenuItem$1() {
   return `<li class='text'><label>${this.$i18n(this.props.text)}</label></li>`;
 }
-function DropdownLinkMenuItem() {
+function DropdownLinkMenuItem$1() {
   return `<li>
       <a href="${this.props.href}" target="${this.props.target || "_blank"}">${this.$i18n(this.props.title)}</a>
     </li>`;
 }
-class DropdownMenuList extends EditorElement {
+class DropdownMenuList$1 extends EditorElement {
   components() {
     return {
-      Divider,
-      DropdownDividerMenuItem,
-      DropdownLinkMenuItem,
-      DropdownTextMenuItem,
-      DropdownCustomMenuItem,
-      DropdownCheckboxMenuItem,
-      DropdownMenuList,
-      DropdownMenuItem
+      Divider: Divider$1,
+      DropdownDividerMenuItem: DropdownDividerMenuItem$1,
+      DropdownLinkMenuItem: DropdownLinkMenuItem$1,
+      DropdownTextMenuItem: DropdownTextMenuItem$1,
+      DropdownCustomMenuItem: DropdownCustomMenuItem$1,
+      DropdownCheckboxMenuItem: DropdownCheckboxMenuItem$1,
+      DropdownMenuList: DropdownMenuList$1,
+      DropdownMenuItem: DropdownMenuItem$1
     };
   }
   get groupId() {
@@ -7171,13 +7177,13 @@ class DropdownMenuList extends EditorElement {
           <label>${this.$i18n(this.props.title)}</label> 
           <span>${iconUse("arrowRight")}</span>              
           <ul>
-              ${this.props.items.map((child, index2) => makeMenuItem(child, `${this.groupId}-${index2}`)).join("")}
+              ${this.props.items.map((child, index2) => makeMenuItem$1(child, `${this.groupId}-${index2}`)).join("")}
           </ul>
       </li>
     `;
   }
 }
-class DropdownMenuItem extends EditorElement {
+class DropdownMenuItem$1 extends EditorElement {
   initialize() {
     super.initialize();
     const events = this.props.events || [];
@@ -7223,7 +7229,7 @@ class DropdownMenuItem extends EditorElement {
     }
   }
 }
-class DropdownCheckboxMenuItem extends DropdownMenuItem {
+class DropdownCheckboxMenuItem$1 extends DropdownMenuItem$1 {
   template() {
     return `<li class='checkbox'></li>`;
   }
@@ -7242,7 +7248,7 @@ class DropdownCheckboxMenuItem extends DropdownMenuItem {
     `;
   }
 }
-class DropdownCustomMenuItem extends DropdownMenuItem {
+class DropdownCustomMenuItem$1 extends DropdownMenuItem$1 {
   template() {
     return `<li class='custom'></li>`;
   }
@@ -7259,14 +7265,14 @@ class DropdownCustomMenuItem extends DropdownMenuItem {
 class DropdownMenu extends EditorElement {
   components() {
     return {
-      Divider,
-      DropdownDividerMenuItem,
-      DropdownLinkMenuItem,
-      DropdownTextMenuItem,
-      DropdownCustomMenuItem,
-      DropdownCheckboxMenuItem,
-      DropdownMenuList,
-      DropdownMenuItem
+      Divider: Divider$1,
+      DropdownDividerMenuItem: DropdownDividerMenuItem$1,
+      DropdownLinkMenuItem: DropdownLinkMenuItem$1,
+      DropdownTextMenuItem: DropdownTextMenuItem$1,
+      DropdownCustomMenuItem: DropdownCustomMenuItem$1,
+      DropdownCheckboxMenuItem: DropdownCheckboxMenuItem$1,
+      DropdownMenuList: DropdownMenuList$1,
+      DropdownMenuItem: DropdownMenuItem$1
     };
   }
   initialize() {
@@ -7344,7 +7350,7 @@ class DropdownMenu extends EditorElement {
     return this.id + "$list";
   }
   [LOAD("$list") + DOMDIFF]() {
-    return this.state.items.map((it, index2) => makeMenuItem(it, `${this.groupId}-${index2}`));
+    return this.state.items.map((it, index2) => makeMenuItem$1(it, `${this.groupId}-${index2}`));
   }
   checkDropdownOpen(e) {
     const ul = Dom.create(e.target).closest("dropdown-menu-item-list");
@@ -53074,6 +53080,8 @@ var refreshElement = {
     } else {
       if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
         maker.emit("refreshElementBoundSize", current.parent);
+      } else {
+        maker.emit("refreshElementBoundSize", current);
       }
     }
     maker.run();
@@ -57067,8 +57075,9 @@ class SelectionManager {
     return this.currentProject.allLayers || [];
   }
   get filteredLayers() {
+    var _a;
     const areaWidth = this.$editor.context.config.get("area.width");
-    return this.currentProject.filteredAllLayers((item) => {
+    return ((_a = this.currentProject) == null ? void 0 : _a.filteredAllLayers((item) => {
       if (item.is("project"))
         return false;
       const areaPosition = item.getAreaPosition(areaWidth);
@@ -57079,7 +57088,7 @@ class SelectionManager {
       return column[0] <= this.column && this.column <= column[1] && row[0] <= this.row && this.row <= row[1];
     }).filter((item) => {
       return item.isPointInRect(this.pos[0], this.pos[1]);
-    });
+    })) || [];
   }
   get notSelectedLayers() {
     return this.filteredLayers.filter((it) => this.check(it) === false);
@@ -58369,8 +58378,7 @@ class SnapManager {
     Object.keys(groupPoints).forEach((key) => {
       if (groupPoints[key] && groupPoints[key].length) {
         const sorted = groupPoints[key].sort((a, b) => a[3] - b[3]);
-        const [sourceVertex2, targetVertex2, axis] = sorted[0];
-        points.push([sourceVertex2, targetVertex2, axis]);
+        points.push(...sorted);
       }
     });
     return points;
@@ -58723,6 +58731,9 @@ class ViewportManager {
   }
   get width() {
     return this.maxX - this.minX;
+  }
+  get pixelSize() {
+    return Math.round(this.width / this.canvasSize.width);
   }
   checkInViewport(pointVertex) {
     const xInViewport = this.minX < pointVertex[0] && pointVertex[0] < this.maxX;
@@ -61995,6 +62006,335 @@ class DataEditor extends BaseLayout {
   }
 }
 var layout$3 = "";
+var ContextMenuRenderer$1 = "";
+function makeMenuItem(it, id) {
+  if (it === "-") {
+    return createComponent("Divider", {
+      ref: `${id}-divider`
+    });
+  }
+  if (it === "-" || it.type === "divider") {
+    return createComponent("DropdownDividerMenuItem", {
+      ref: `${id}-divider`
+    });
+  }
+  if (isString(it)) {
+    return createComponent("DropdownTextMenuItem", {
+      text: it,
+      ref: `${id}-text`
+    });
+  }
+  if (it.type === "link") {
+    return createComponent("DropdownLinkMenuItem", {
+      href: it.href,
+      target: it.target,
+      title: it.title,
+      closable: it.closable,
+      ref: `${id}-link`
+    });
+  }
+  if (it.type === "custom") {
+    return createComponent("DropdownCustomMenuItem", {
+      action: it.action,
+      command: it.command,
+      args: it.args,
+      icon: it.icon,
+      text: it.text,
+      events: it.events,
+      template: it.template,
+      closable: it.closable,
+      ref: `${id}-custom`
+    });
+  }
+  if (it.type === "checkbox") {
+    return createComponent("DropdownCheckboxMenuItem", {
+      checked: it.checked,
+      command: it.command,
+      args: it.args || [],
+      disabled: it.disabled,
+      direction: it.direction,
+      icon: it.icon,
+      nextTick: it.nextTick,
+      onClick: it.onClick,
+      action: it.action,
+      shortcut: it.shortcut,
+      title: it.title,
+      key: it.key,
+      events: it.events,
+      closable: it.closable,
+      items: it.items || [],
+      ref: `${id}-checkbox`
+    });
+  }
+  if (isArray(it.items)) {
+    return createComponent("DropdownMenuList", {
+      title: it.title,
+      items: it.items,
+      ref: `${id}-list`
+    });
+  }
+  return createComponent("DropdownMenuItem", {
+    checked: it.checked,
+    command: it.command,
+    args: it.args || [],
+    disabled: it.disabled,
+    direction: it.direction,
+    icon: it.icon,
+    nextTick: it.nextTick,
+    onClick: it.onClick,
+    action: it.action,
+    shortcut: it.shortcut,
+    title: it.title,
+    key: it.key,
+    events: it.events,
+    closable: it.closable,
+    items: it.items || [],
+    ref: `${id}-menu-item`
+  });
+}
+function Divider() {
+  return `<li class="dropdown-divider"></li>`;
+}
+function DropdownDividerMenuItem() {
+  return `<li class="dropdown-divider"></li>`;
+}
+function DropdownTextMenuItem() {
+  return `<li class='text'><label>${this.$i18n(this.props.text)}</label></li>`;
+}
+function DropdownLinkMenuItem() {
+  return `<li>
+      <a href="${this.props.href}" target="${this.props.target || "_blank"}">${this.$i18n(this.props.title)}</a>
+    </li>`;
+}
+class DropdownMenuList extends EditorElement {
+  components() {
+    return {
+      Divider,
+      DropdownDividerMenuItem,
+      DropdownLinkMenuItem,
+      DropdownTextMenuItem,
+      DropdownCustomMenuItem,
+      DropdownCheckboxMenuItem,
+      DropdownMenuList,
+      DropdownMenuItem
+    };
+  }
+  get groupId() {
+    return `${this.props.id}-groupId`;
+  }
+  template() {
+    return `
+      <li class="dropdown-menu-list">
+          ${this.props.title ? `<label>${this.$i18n(this.props.title)}</label>` : ""} 
+          ${this.props.title ? `<span>${iconUse("arrowRight")}</span>` : ""}
+          <ul>
+              ${this.props.items.map((child, index2) => makeMenuItem(child, `${this.groupId}-${index2}`)).join("")}
+          </ul>
+      </li>
+    `;
+  }
+}
+class DropdownMenuItem extends EditorElement {
+  initialize() {
+    super.initialize();
+    const events = this.props.events || [];
+    if (events.length) {
+      events.forEach((event) => {
+        this.on(event, () => this.refresh());
+      });
+    }
+  }
+  template() {
+    var _a;
+    const it = this.props;
+    const checked = isFunction(it.checked) ? it.checked(this.$editor) : "";
+    return `
+        <li data-has-children="${Boolean((_a = it.items) == null ? void 0 : _a.length)}"
+          ${it.disabled ? "disabled" : ""} 
+          ${it.shortcut ? "shortcut" : ""}
+          ${checked ? `"checked=checked"` : ""}
+        >
+            <span class="icon">${checked ? iconUse("check") : it.icon || ""}</span>
+            <div class='menu-item-text'>
+              <label>${this.$i18n(it.title)}</label>
+              <kbd class="shortcut">${it.shortcut || ""}</kbd>
+            </div>
+        </li>
+      `;
+  }
+  [CLICK("$el") + PREVENT + STOP]() {
+    if (this.props.command) {
+      this.emit(this.props.command, ...this.props.args || []);
+    } else if (isFunction(this.props.action)) {
+      this.props.action(this.$editor, this);
+    } else if (isFunction(this.props.onClick)) {
+      this.props.action(this.$editor, this);
+    }
+    if (isFunction(this.props.nextTick)) {
+      this.nextTick(() => {
+        this.props.nextTick(this.$editor, this);
+      });
+    }
+    if (this.props.closable) {
+      this.parent.close();
+    }
+  }
+}
+class DropdownCheckboxMenuItem extends DropdownMenuItem {
+  template() {
+    return `<li class='checkbox'></li>`;
+  }
+  get checked() {
+    if (isFunction(this.props.checked)) {
+      return this.props.checked(this.$editor, this);
+    }
+    return this.props.checked;
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    return `
+      <label>
+        <input type="checkbox" ${this.checked ? 'checked="checked"' : ""} value="${this.props.value}" /> 
+        ${this.$i18n(this.props.title)}
+      </label>
+    `;
+  }
+}
+class DropdownCustomMenuItem extends DropdownMenuItem {
+  template() {
+    return `<li class='custom'></li>`;
+  }
+  getTemplateString() {
+    if (isFunction(this.props.template)) {
+      return this.props.template(this.$editor, this);
+    }
+    return this.$i18n(this.props.template);
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    return this.getTemplateString();
+  }
+}
+class ContextDropdownMenu extends DropdownMenuList {
+  template() {
+    return `
+      <div class="dropdown-menu opened flat">
+          <ul>
+              ${this.props.items.map((child, index2) => makeMenuItem(child, `${this.groupId}-${index2}`)).join("")}
+          </ul>
+      </div>
+    `;
+  }
+}
+class ContextMenuRenderer extends EditorElement {
+  checkProps(props = {}) {
+    return props;
+  }
+  components() {
+    return {
+      ContextDropdownMenu,
+      ToolbarButtonMenuItem
+    };
+  }
+  template() {
+    return `<div class="elf--context-menu-renderer"></div>`;
+  }
+  [LOAD("$el")]() {
+    var _a;
+    return (_a = this.props.items) == null ? void 0 : _a.map((item, index2) => {
+      return this.renderMenuItem(item, index2);
+    });
+  }
+  renderMenuItem(item, index2) {
+    switch (item.type) {
+      case MenuItemType.LINK:
+        return this.renderLink(item, index2);
+      case MenuItemType.SUBMENU:
+        return this.renderMenu(item, index2);
+      case MenuItemType.BUTTON:
+        return this.renderButton(item, index2);
+      case MenuItemType.DROPDOWN:
+        return this.renderDropdown(item, index2);
+      default:
+        return this.renderButton(item, index2);
+    }
+  }
+  renderButton(item, index2) {
+    return createComponent("ToolbarButtonMenuItem", {
+      ref: "$button-" + index2,
+      title: item.title,
+      icon: item.icon,
+      command: item.command,
+      shortcut: item.shortcut,
+      args: item.args,
+      nextTick: item.nextTick,
+      disabled: item.disabled,
+      selected: item.selected,
+      selectedKey: item.selectedKey,
+      action: item.action,
+      events: item.events,
+      style: item.style
+    });
+  }
+  renderDropdown(item, index2) {
+    return createComponent("ContextDropdownMenu", __spreadProps(__spreadValues({
+      ref: "$dropdown-" + index2
+    }, item), {
+      items: item.items,
+      icon: item.icon,
+      title: item.title,
+      events: item.events || []
+    }));
+  }
+}
+var ContextMenuView$1 = "";
+class ContextMenuView extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--context-menu-view"
+    });
+  }
+  [BIND("$el")]() {
+    const contextMenuOpenInfo = this.$context.config.get("context.menu.open");
+    if (!contextMenuOpenInfo) {
+      return;
+    }
+    return {
+      style: {
+        left: Length.px(contextMenuOpenInfo.x),
+        top: Length.px(contextMenuOpenInfo.y + 10)
+      }
+    };
+  }
+  [LOAD("$el")]() {
+    const info = this.$context.config.get("context.menu.open");
+    if (!info)
+      return;
+    const items = this.$menu.getTargetMenu(info.target);
+    return /* @__PURE__ */ createElementJsx(ContextMenuRenderer, {
+      items: [{ type: "dropdown", items }]
+    });
+  }
+  [CONFIG("context.menu.open")]() {
+    this.refresh();
+    if (this.$context.config.get("context.menu.open")) {
+      this.$el.show();
+    } else {
+      this.$el.hide();
+    }
+  }
+  close() {
+    this.$el.hide();
+    this.$context.config.set("context.menu.open", null);
+  }
+  [POINTERSTART("document")](e) {
+    const $target = Dom.create(e.target);
+    const $dropdown = $target.closest("elf--context-menu-view");
+    if (!$dropdown) {
+      this.close();
+    } else if ($dropdown.el !== this.$el.el) {
+      this.close();
+    }
+  }
+}
 var AlignmentProperty$1 = "";
 class BottomAlign extends MenuItem {
   getIconString() {
@@ -64006,7 +64346,9 @@ class BorderImageProperty extends BaseProperty {
     }).join("");
   }
   [LOAD("$borderImageView")]() {
-    var current = this.$context.selection.current || { borderImage: { image: {} } };
+    var current = this.$context.selection.current || {
+      borderImage: { image: {} }
+    };
     var borderImage2 = current.borderImage;
     var backgroundTypeName = borderImage2.type ? names[borderImage2.type] : "";
     const imageCSS = `background-image: ${borderImage2.image.toString()}; background-size: cover;`;
@@ -66083,7 +66425,6 @@ ${tabString}${it.properties.map((p) => {
     return this.toCSSText();
   }
 }
-window.a = 0;
 class BaseModel {
   constructor(json = {}, modelManager) {
     this.modelManager = modelManager;
@@ -66319,20 +66660,14 @@ class BaseModel {
   clone(isDeep = true) {
     return this.modelManager.clone(this.id, isDeep);
   }
-  isChangedValue(obj2) {
-    return true;
-  }
   reset(obj2, context = { origin: "*" }) {
-    const isChanged = this.isChangedValue(obj2);
-    if (isChanged) {
-      this.json = this.convert(Object.assign(this.json, obj2));
-      this.lastChangedField = obj2;
-      this.lastChangedFieldKeys = Object.keys(obj2);
-      if (context.origin === "*") {
-        this.modelManager.setChanged("reset", this.id, obj2);
-      }
-      this.changed();
+    this.json = this.convert(Object.assign(this.json, obj2));
+    this.lastChangedField = obj2;
+    this.lastChangedFieldKeys = Object.keys(obj2);
+    if (context.origin === "*") {
+      this.modelManager.setChanged("reset", this.id, obj2);
     }
+    this.changed();
     return true;
   }
   hasChangedField(...args2) {
@@ -74733,18 +75068,6 @@ var GuideLineView$1 = "";
 const line = (source2, target, className = "base-line") => {
   return `<line x1="${source2[0]}" y1="${source2[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`;
 };
-const text$1 = (t, target) => {
-  const text2 = `${Math.floor(t)}`;
-  const unitWidth = 13;
-  const unitHeight = 16;
-  const width2 = text2.length * unitWidth;
-  const height2 = unitHeight;
-  return `
-    
-        <rect x="${target[0] - width2 / 4}" y="${target[1] - unitHeight - 2}" width="${width2}" height="${height2}" rx="2" ry="2" fill="#00a9f4" />
-        <text x="${target[0]}" y="${target[1]}" dy="-5" font-size="16">${text2}</text>
-    `;
-};
 const hLineByPoint = (target, source2) => {
   return line(target, source2);
 };
@@ -74839,9 +75162,8 @@ class GuideLineView extends EditorElement {
   }
   [BIND("$guide")]() {
     const line2 = this.createGuideLine(this.state.list);
-    const layerLine = this.createLayerLine();
     return {
-      svgDiff: `<g>${line2}${layerLine}</g>`
+      svgDiff: `<g>${line2}</g>`
     };
   }
   createLayerLine() {
@@ -74856,12 +75178,12 @@ class GuideLineView extends EditorElement {
         source2,
         target,
         axis,
-        dist2,
+        dist$1,
         newTarget,
         sourceVerties,
         targetVerties
       ] = list2[i];
-      const localDist = Math.floor(dist2);
+      const localDist = dist(source2, target);
       const localSourceVertex = this.$viewport.applyVertex(source2);
       const localTargetVertex = this.$viewport.applyVertex(target);
       let localNewTargetVertex;
@@ -74875,9 +75197,6 @@ class GuideLineView extends EditorElement {
         if (localNewTargetVertex) {
           images.push(line(localTargetVertex, localNewTargetVertex, "dash-line"));
         }
-        if (localDist > 0) {
-          texts.push(text$1(localDist, lerp$1([], localSourceVertex, localTargetVertex, 0.5)));
-        }
       }
       if (axis === "y") {
         if (localDist > 0) {
@@ -74885,9 +75204,6 @@ class GuideLineView extends EditorElement {
         }
         if (localNewTargetVertex) {
           images.push(line(localTargetVertex, localNewTargetVertex, "dash-line"));
-        }
-        if (localDist > 0) {
-          texts.push(text$1(localDist, add$1([], lerp$1([], localSourceVertex, localTargetVertex, 0.5), [20, 0, 0])));
         }
       }
       if (axis === "x") {
@@ -74929,7 +75245,7 @@ class GuideLineView extends EditorElement {
     return this.refreshSmartGuides(targetVertiesList);
   }
   [SUBSCRIBE("updateViewport")]() {
-    this.refresh();
+    this.refreshSmartGuidesForVerties();
   }
   refreshSmartGuides(targetVertiesList) {
     if (this.$context.selection.isEmpty)
@@ -74959,7 +75275,17 @@ class GuideLineView extends EditorElement {
     this.setGuideLine(list2);
   }
   refreshSmartGuidesForVerties() {
-    const guides = this.$context.snapManager.findGuide(this.$context.selection.verties);
+    let verties = this.$context.selection.verties;
+    if (verties.length) {
+      verties = [
+        ...verties,
+        lerp$1([], verties[0], verties[1], 0.5),
+        lerp$1([], verties[1], verties[2], 0.5),
+        lerp$1([], verties[2], verties[3], 0.5),
+        lerp$1([], verties[3], verties[0], 0.5)
+      ];
+    }
+    const guides = this.$context.snapManager.findGuide(verties);
     this.setGuideLine(guides, true);
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
@@ -75092,13 +75418,11 @@ class HoverView extends EditorElement {
     const items = this.$context.selection.hoverItems;
     if (items.length === 0) {
       this.refs.$hoverRect.updateDiff("");
-      this.emit("removeGuideLine");
     } else {
       const verties = items[0].verties;
       const line2 = this.createPointerLine(this.$viewport.applyVerties(verties));
       const offsetLine = this.createOffsetLine();
       this.refs.$hoverRect.updateDiff(line2 + offsetLine);
-      this.emit("refreshGuideLineByTarget", [items[0].verties]);
     }
   }
   getOffsetVerties(current, parent) {
@@ -86326,7 +86650,9 @@ class GhostToolView extends EditorElement {
   }
   insertToGridItem() {
     const current = this.$context.selection.current;
-    const { info, items } = this.$context.selection.gridInformation || { items: [] };
+    const { info, items } = this.$context.selection.gridInformation || {
+      items: []
+    };
     const currentVerties = this.ghostVerties.filter((_, index2) => index2 < 4);
     const targetRect = vertiesToRectangle(currentVerties);
     const checkedItems = items == null ? void 0 : items.filter((it) => {
@@ -86553,9 +86879,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
   }
   calculateDistance(vertext, distVector, reverseMatrix) {
     const currentVertex = clone(vertext);
-    const snap = this.$context.snapManager.check([
-      add$1([], currentVertex, distVector)
-    ]);
+    const snap = this.$context.snapManager.check([add$1([], currentVertex, distVector)], 3 / this.$viewport.scale);
     const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
     var currentResult = transformMat4([], currentVertex, reverseMatrix);
     var nextResult = transformMat4([], nextVertex, reverseMatrix);
@@ -87036,7 +87360,7 @@ class SelectionToolView extends SelectionToolEvent {
   calculateDistance(vertex2, distVector, reverseMatrix) {
     const currentVertex = clone(vertex2);
     const moveVertext = add$1([], currentVertex, distVector);
-    const snap = this.$context.snapManager.check([moveVertext]);
+    const snap = this.$context.snapManager.check([moveVertext], 3 / this.$viewport.scale);
     const nextVertex = add$1([], moveVertext, snap);
     const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
     const realDist = subtract([], nextResult, currentResult);
@@ -87860,7 +88184,9 @@ class SVGFilterAssetsProperty extends BaseProperty {
     var index2 = +$item.attr("data-index");
     this.state.$item = $item;
     this.state.$el = e.$dt.$(".svgfilter-view");
-    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || {
+      svgfilters: []
+    };
     var svgfilter = currentProject.svgfilters[index2];
     this.emit("showSVGFilterPopup", {
       changeEvent: "changeSVGFilterAssets",
@@ -89540,7 +89866,9 @@ class SVGFilterSelectEditor extends EditorElement {
   [SUBSCRIBE("openSVGFilterPopup")](index2) {
     this.emit("refreshSVGFilterAssets");
     this.emit("refreshSVGArea");
-    var currentProject = this.$context.selection.currentProject || { svgfilters: [] };
+    var currentProject = this.$context.selection.currentProject || {
+      svgfilters: []
+    };
     var svgfilter = currentProject.svgfilters[index2];
     this.emit("showSVGFilterPopup", {
       changeEvent: "changeSVGFilterEditorRealUpdate",
@@ -90769,7 +91097,51 @@ var designEditorPlugins = [
   fillEditorView,
   ClippathEditorView,
   imageAsset,
-  sample
+  sample,
+  function(editor) {
+    editor.registerMenu("context.menu.layer2", [
+      {
+        type: "button",
+        title: "Layer"
+      }
+    ]);
+    editor.registerMenu("context.menu.layer", [
+      {
+        type: "button",
+        title: "Sample"
+      },
+      {
+        type: "button",
+        title: "Sample"
+      },
+      {
+        type: "button",
+        title: "Sample",
+        action: (editor2) => {
+          console.log(editor2);
+        }
+      },
+      {
+        type: "button",
+        title: "Sample"
+      },
+      {
+        type: "dropdown",
+        title: "dropdown",
+        items: [
+          {
+            title: "menu.item.fullscreen.title",
+            command: "toggle.fullscreen",
+            shortcut: "ALT+/",
+            closable: true
+          }
+        ]
+      }
+    ]);
+    editor.registerUI("context.menu", {
+      ContextMenuView
+    });
+  }
 ];
 class Inspector extends EditorElement {
   afterRender() {
@@ -91957,7 +92329,6 @@ class DragAreaRectView extends EditorElement {
     this.$context.selection.reselect();
     this.emit("history.refreshSelection");
     this.emit("refreshSelectionTool", true);
-    this.emit("removeGuideLine");
   }
 }
 class DragAreaView extends EditorElement {
@@ -92370,6 +92741,19 @@ class HTMLRenderView extends EditorElement {
       }
     }
   }
+  [CONTEXTMENU("$view") + PREVENT](e) {
+    const $target = Dom.create(e.target);
+    const $element = $target.closest("element-item");
+    var id = $element && $element.attr("data-id");
+    this.$context.selection.select(id);
+    this.emit("refreshSelectionTool", true);
+    this.emit("openContextMenu", {
+      target: "context.menu.layer",
+      x: e.clientX,
+      y: e.clientY,
+      id
+    });
+  }
   [POINTERSTART("$view") + IF("checkEditMode") + MOVE("calculateMovedElement") + FIRSTMOVE("calculateFirstMovedElement") + END("calculateEndedElement")](e) {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     this.$config.init("set.move.control.point", true);
@@ -92460,7 +92844,7 @@ class HTMLRenderView extends EditorElement {
   moveTo(dist2) {
     const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
       return add$1([], v, dist2);
-    }), this.$viewport.scale > 5 ? 0 : 3);
+    }), 3 / this.$viewport.scale);
     const localDist = add$1([], snap, dist2);
     const result = {};
     this.$context.selection.cachedItemMatrices.forEach((it) => {
@@ -93273,6 +93657,17 @@ class BodyPanel extends EditorElement {
     this.refs.$el.toggleFullscreen();
   }
 }
+var ContextMenuManager$1 = "";
+class ContextMenuManager extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--context-menu-manger"
+    }, this.$injectManager.generate("context.menu"));
+  }
+  [SUBSCRIBE("openContextMenu")](obj2) {
+    this.$context.config.set("context.menu.open", obj2);
+  }
+}
 class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
@@ -93295,7 +93690,8 @@ class DesignEditor extends BaseLayout {
       KeyboardManager,
       IconManager,
       SwitchLeftPanel,
-      SwitchRightPanel
+      SwitchRightPanel,
+      ContextMenuManager
     };
   }
   getPlugins() {
@@ -93333,6 +93729,7 @@ class DesignEditor extends BaseLayout {
         </div>
         ${createComponent("PopupManager")}
         ${createComponent("IconManager")}
+        ${createComponent("ContextMenuManager")}
       </div>
     `;
   }

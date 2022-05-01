@@ -180,6 +180,6 @@ export default class DragAreaRectView extends EditorElement {
     this.emit("history.refreshSelection");
     this.emit("refreshSelectionTool", true);
 
-    this.emit("removeGuideLine");
+    // this.emit("removeGuideLine");
   }
 }

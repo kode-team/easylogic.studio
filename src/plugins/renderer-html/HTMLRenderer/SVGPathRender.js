@@ -54,11 +54,11 @@ export default class SVGPathRender extends SVGItemRender {
 
       if (item.hasChangedField("stroke-dasharray")) {
         $path.setAttrNS({
-          "stroke-dasharray": item["stroke-dasharray"].join(' '),
+          "stroke-dasharray": item["stroke-dasharray"].join(" "),
         });
 
-        console.log(item["stroke-dasharray"].join(' '));
-      }      
+        console.log(item["stroke-dasharray"].join(" "));
+      }
     }
 
     super.update(item, currentElement);
@@ -80,7 +80,7 @@ export default class SVGPathRender extends SVGItemRender {
       stroke="${this.toStrokeValue(item)}"
       stroke-linejoin="${item["stroke-linejoin"]}"
       stroke-linecap="${item["stroke-linecap"]}"
-      stroke-dasharray="${item["stroke-dasharray"].join(' ')}"
+      stroke-dasharray="${item["stroke-dasharray"].join(" ")}"
     />
   </svg>
 </div>

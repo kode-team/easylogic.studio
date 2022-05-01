@@ -297,7 +297,8 @@ export default class GradientEditor extends EditorElement {
       return false;
     } else {
       e.$dt.focus();
-      this.isSelectedColorStep = this.$context.selection.isSelectedColorStep(id);
+      this.isSelectedColorStep =
+        this.$context.selection.isSelectedColorStep(id);
 
       this.selectStep(id);
 

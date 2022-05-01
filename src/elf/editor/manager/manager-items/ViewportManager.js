@@ -357,6 +357,15 @@ export class ViewportManager {
     return this.maxX - this.minX;
   }
 
+  // world 좌표 : 스크린 좌표 비율
+  // world 좌표 1 이 스크린 좌표 어느 크기에 대응하는지 알 수 있다.
+  // snap 은 이것을 기준으로 dist 로 계산한다.
+  // 이것을 하는 이유는 확대 축소 할 때 world 좌표 1을 기준으로 snap 을 하다 보니
+  // 너무 작게 축소 시켰을 때는 스냅이 된 것인지 아닌지 알 수가 없는상태가 된다.
+  get pixelSize() {
+    return Math.round(this.width / this.canvasSize.width);
+  }
+
   checkInViewport(pointVertex) {
     const xInViewport =
       this.minX < pointVertex[0] && pointVertex[0] < this.maxX;

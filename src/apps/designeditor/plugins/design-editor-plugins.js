@@ -1,3 +1,5 @@
+import { ContextMenuView } from "../../common/area/context/ContextMenuView";
+
 import alignment from "plugins/alignment";
 import animation from "plugins/animation";
 import appearance from "plugins/appearance";
@@ -165,4 +167,58 @@ export default [
 
   // sample
   sample,
+
+  function (editor) {
+    editor.registerMenu("context.menu.layer2", [
+      {
+        type: "button",
+        title: "Layer",
+      },
+    ]);
+
+    // menu 를 등록 하고
+    editor.registerMenu("context.menu.layer", [
+      {
+        type: "button",
+        title: "Sample",
+      },
+      {
+        type: "button",
+        title: "Sample",
+      },
+      {
+        type: "button",
+        title: "Sample",
+        action: (editor) => {
+          console.log(editor);
+        },
+      },
+      {
+        type: "button",
+        title: "Sample",
+      },
+      {
+        type: "dropdown",
+        title: "dropdown",
+        items: [
+          {
+            title: "menu.item.fullscreen.title",
+            command: "toggle.fullscreen",
+            shortcut: "ALT+/",
+            closable: true,
+          },
+        ],
+      },
+    ]);
+
+    // 렌더링 되는 것 까지는 알겠는데
+    editor.registerUI("context.menu", {
+      ContextMenuView,
+    });
+
+    // context 메뉴는 조건에 따라 열려야 하기 때문에
+    // 때로는 합쳐질 수도 있어서
+    // 각각의 메뉴가 동적으로 열리는 방식을 정의해야할 듯
+    // inspector 처럼 함수로 받아야 할 듯 하다.
+  },
 ];

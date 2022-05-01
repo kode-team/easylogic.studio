@@ -126,7 +126,10 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndInsetRadius() {
@@ -198,7 +201,10 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndInsetCenter(dx, dy) {

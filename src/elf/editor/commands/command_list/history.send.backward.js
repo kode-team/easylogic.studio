@@ -1,7 +1,11 @@
 export default {
   command: "history.send.backward",
   description: "send backward",
-  execute: function (editor, message, layer = editor.context.selection.current) {
+  execute: function (
+    editor,
+    message,
+    layer = editor.context.selection.current
+  ) {
     // 다음으로 보내기
     const currentLayer = editor.get(layer);
     const lastValues = currentLayer.hierarchy;

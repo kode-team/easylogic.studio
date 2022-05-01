@@ -424,12 +424,16 @@ export class SceneManager {
       metadata: {},
       project: {
         shadows: this.editor.context.config.get("project/renderer/shadows"),
-        shadowType: this.editor.context.config.get("project/renderer/shadowType"),
+        shadowType: this.editor.context.config.get(
+          "project/renderer/shadowType"
+        ),
         vr: this.editor.context.config.get("project/vr"),
         physicallyCorrectLights: this.editor.context.config.get(
           "project/renderer/physicallyCorrectLights"
         ),
-        toneMapping: this.editor.context.config.get("project/renderer/toneMapping"),
+        toneMapping: this.editor.context.config.get(
+          "project/renderer/toneMapping"
+        ),
         toneMappingExposure: this.editor.context.config.get(
           "project/renderer/toneMappingExposure"
         ),

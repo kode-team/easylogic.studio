@@ -28,7 +28,9 @@ export default class HistoryProperty extends BaseProperty {
       return /*html*/ `
         <div class='history-item'>
           <span>${
-            index === this.$editor.context.history.currentIndex ? icon.arrowRight : ""
+            index === this.$editor.context.history.currentIndex
+              ? icon.arrowRight
+              : ""
           }</span>
           <span>${it.message}</span>
         </div>

@@ -47,10 +47,12 @@ export default class PathSegmentView extends EditorElement {
 
     if (this.$context.selection.current.isNot("svg-path")) return [];
 
-    return this.$context.selection.current.absolutePath().pathVerties.map((it) => {
-      it.absoluteVertex = this.$viewport.applyVertex(it.vertex);
-      return it;
-    });
+    return this.$context.selection.current
+      .absolutePath()
+      .pathVerties.map((it) => {
+        it.absoluteVertex = this.$viewport.applyVertex(it.vertex);
+        return it;
+      });
   }
 
   checkMoveSegment(e) {

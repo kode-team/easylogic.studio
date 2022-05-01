@@ -130,32 +130,34 @@ export class SelectionManager {
    */
   get filteredLayers() {
     const areaWidth = this.$editor.context.config.get("area.width");
-    return this.currentProject
-      .filteredAllLayers((item) => {
-        if (item.is("project")) return false;
+    return (
+      this.currentProject
+        ?.filteredAllLayers((item) => {
+          if (item.is("project")) return false;
 
-        // 설정된 areaWidth 를 기준으로 areaPosition(column, row) 을 구한다.
-        const areaPosition = item.getAreaPosition(areaWidth);
+          // 설정된 areaWidth 를 기준으로 areaPosition(column, row) 을 구한다.
+          const areaPosition = item.getAreaPosition(areaWidth);
 
-        // console.log(item.itemType, item.id, areaPosition);
+          // console.log(item.itemType, item.id, areaPosition);
 
-        if (!areaPosition) {
-          return false;
-        }
+          if (!areaPosition) {
+            return false;
+          }
 
-        const { column, row } = areaPosition;
+          const { column, row } = areaPosition;
 
-        return (
-          column[0] <= this.column &&
-          this.column <= column[1] &&
-          row[0] <= this.row &&
-          this.row <= row[1]
-        );
-      })
-      .filter((item) => {
-        // 사각형 영역에 포함되는지 체크
-        return item.isPointInRect(this.pos[0], this.pos[1]);
-      });
+          return (
+            column[0] <= this.column &&
+            this.column <= column[1] &&
+            row[0] <= this.row &&
+            this.row <= row[1]
+          );
+        })
+        .filter((item) => {
+          // 사각형 영역에 포함되는지 체크
+          return item.isPointInRect(this.pos[0], this.pos[1]);
+        }) || []
+    );
   }
 
   get notSelectedLayers() {

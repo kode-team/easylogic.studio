@@ -68,7 +68,10 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndCircleRadius() {
@@ -131,7 +134,10 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttributeForMulti", this.$context.selection.packByValue(value));
+    this.emit(
+      "setAttributeForMulti",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndCircleCenter(dx, dy) {

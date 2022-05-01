@@ -12,6 +12,8 @@ import {
   Dom,
   isFunction,
   createComponent,
+  CONTEXTMENU,
+  PREVENT,
 } from "sapa";
 
 import "./HTMLRenderView.scss";
@@ -211,8 +213,9 @@ export default class HTMLRenderView extends EditorElement {
           // hover 된 id 가 부모가 아니면
           // hover 된 아이템을 선택하게 된다.
           if (
-            this.$context.selection.hasParent(/*parentId*/ this.$context.selection.hoverId) ===
-            false
+            this.$context.selection.hasParent(
+              /*parentId*/ this.$context.selection.hoverId
+            ) === false
           ) {
             this.$context.selection.selectHoverItem();
           }
@@ -279,6 +282,24 @@ export default class HTMLRenderView extends EditorElement {
     }
   }
 
+  [CONTEXTMENU("$view") + PREVENT](e) {
+    const $target = Dom.create(e.target);
+    const $element = $target.closest("element-item");
+
+    var id = $element && $element.attr("data-id");
+
+    this.$context.selection.select(id);
+
+    this.emit("refreshSelectionTool", true);
+
+    this.emit("openContextMenu", {
+      target: "context.menu.layer",
+      x: e.clientX,
+      y: e.clientY,
+      id,
+    });
+  }
+
   /**
    * 드래그 해서 객체 옮기기
    *
@@ -300,7 +321,9 @@ export default class HTMLRenderView extends EditorElement {
       return;
     }
 
-    let isInSelectedArea = this.$context.selection.hasPoint(this.initMousePoint);
+    let isInSelectedArea = this.$context.selection.hasPoint(
+      this.initMousePoint
+    );
     const $target = Dom.create(e.target);
 
     if ($target.hasClass("canvas-view")) {
@@ -440,7 +463,7 @@ export default class HTMLRenderView extends EditorElement {
       this.$context.selection.cachedRectVerties.map((v) => {
         return vec3.add([], v, dist);
       }),
-      this.$viewport.scale > 5 ? 0 : 3 // 확대 영역이 크면 snap 포인트를 사용하지 않는다.
+      3 / this.$viewport.scale // 확대 영역이 크면 snap 포인트를 사용하지 않는다.
     );
 
     const localDist = vec3.add([], snap, dist);
