@@ -10,6 +10,7 @@ import {
 
 import "./ComponentProperty.scss";
 
+import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class ComponentProperty extends BaseProperty {
@@ -31,7 +32,7 @@ export default class ComponentProperty extends BaseProperty {
     return false;
   }
 
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
     this.refreshShow(() => {
       const current = this.$context.selection.current;
       const inspector = this.$context.components.createInspector(current);

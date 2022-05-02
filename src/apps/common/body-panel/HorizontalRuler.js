@@ -2,6 +2,13 @@ import { BIND, CONFIG, LOAD, SUBSCRIBE, THROTTLE } from "sapa";
 
 import "./HorizontalRuler.scss";
 
+import {
+  UPDATE_VIEWPORT,
+  REFRESH_SELECTION,
+  RESIZE_WINDOW,
+  RESIZE_CANVAS,
+  UPDATE_CANVAS,
+} from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 let pathString = [];
@@ -256,11 +263,11 @@ export default class HorizontalRuler extends EditorElement {
     }
   }
 
-  [SUBSCRIBE("updateViewport", "refreshSelection")]() {
+  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION)]() {
     this.refresh();
   }
 
-  [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + THROTTLE(10)]() {
     if (this.$context.selection.current) {
       const current = this.$context.selection.current;
 
@@ -270,7 +277,7 @@ export default class HorizontalRuler extends EditorElement {
     }
   }
 
-  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+  [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.refreshCanvasSize();
   }
 

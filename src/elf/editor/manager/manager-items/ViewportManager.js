@@ -1,11 +1,17 @@
 import { mat4, vec3 } from "gl-matrix";
 
-import { rectToVerties, rectToVertiesForArea } from "elf/core/collision";
+import {
+  polyPoly,
+  rectToVerties,
+  rectToVertiesForArea,
+} from "../../../core/collision";
+
 import {
   calculateMatrix,
   calculateMatrixInverse,
   vertiesMap,
 } from "elf/core/math";
+import { UPDATE_VIEWPORT } from "elf/editor/types/event";
 
 /**
  * editor 의 viewport 를 관리한다.
@@ -176,7 +182,7 @@ export class ViewportManager {
         0,
       ]);
     }
-    this.editor.emit("updateViewport");
+    this.editor.emit(UPDATE_VIEWPORT);
   }
 
   /**
@@ -241,7 +247,7 @@ export class ViewportManager {
       vec3.lerp([], this.verties[0], this.verties[2], 0.5)
     );
 
-    this.editor.emit("updateViewport");
+    this.editor.emit(UPDATE_VIEWPORT);
   }
 
   zoom(zoomFactor) {
@@ -258,7 +264,7 @@ export class ViewportManager {
         vec3.lerp([], this.mouse, this.transformOrigin, 1 / zoomFactor)
       );
 
-      this.editor.emit("updateViewport");
+      this.editor.emit(UPDATE_VIEWPORT);
     }
   }
 
@@ -275,7 +281,7 @@ export class ViewportManager {
     this.setTransformOriginWithTranslate(
       vec3.add([], this.transformOrigin, [x, y, 0])
     );
-    this.editor.emit("updateViewport");
+    this.editor.emit(UPDATE_VIEWPORT);
   }
 
   /**
@@ -306,7 +312,7 @@ export class ViewportManager {
     this.setTransformOrigin(areaCenter);
     this.setScale(this.scale * minRate);
 
-    this.editor.emit("updateViewport");
+    this.editor.emit(UPDATE_VIEWPORT);
   }
 
   /**
@@ -374,6 +380,10 @@ export class ViewportManager {
     return xInViewport && yInViewport;
   }
 
+  checkInViewportArea(verties = []) {
+    return polyPoly(verties, this.verties);
+  }
+
   applyVertex(vertex) {
     return vec3.transformMat4([], vertex, this.matrix);
   }
@@ -421,7 +431,7 @@ export class ViewportManager {
 
   zoomIn(zoomFactor = 0.01) {
     this.setScale(this.scale + zoomFactor);
-    this.editor.emit("updateViewport");
+    this.editor.emit(UPDATE_VIEWPORT);
   }
 
   zoomOut(zoomFactor = 0.01) {
@@ -430,6 +440,6 @@ export class ViewportManager {
 
   zoomDefault() {
     this.setScale(1);
-    this.editor.emit("updateViewport");
+    this.editor.emit(UPDATE_VIEWPORT);
   }
 }

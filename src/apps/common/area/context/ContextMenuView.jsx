@@ -32,8 +32,12 @@ export class ContextMenuView extends EditorElement {
   [LOAD("$el")]() {
     const info = this.$context.config.get("context.menu.open");
     if (!info) return;
-    const items = this.$menu.getTargetMenu(info.target);
-    return <ContextMenuRenderer items={[{ type: "dropdown", items }]} />;
+    const items = this.$menu.getTargetMenu(info.target) || [];
+    return (
+      <ContextMenuRenderer
+        items={[{ type: "dropdown", items: [...items, ...(info.items || [])] }]}
+      />
+    );
   }
 
   [CONFIG("context.menu.open")]() {

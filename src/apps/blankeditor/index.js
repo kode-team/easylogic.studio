@@ -21,7 +21,12 @@ import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { PopupManager } from "apps/common/PopupManager";
-import { END, MOVE } from "elf/editor/types/event";
+import {
+  END,
+  MOVE,
+  TOGGLE_FULLSCREEN,
+  RESIZE_CANVAS,
+} from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
 export class BlankEditor extends BaseLayout {
@@ -209,14 +214,14 @@ export class BlankEditor extends BaseLayout {
   [CONFIG("show.left.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit("resizeCanvas");
+      this.emit(RESIZE_CANVAS);
     });
   }
 
   [CONFIG("show.right.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit("resizeCanvas");
+      this.emit(RESIZE_CANVAS);
     });
   }
 
@@ -229,7 +234,7 @@ export class BlankEditor extends BaseLayout {
   [DROP("$middle") + PREVENT]() {}
   /** 드랍존 설정을 위해서 남겨놔야함 */
 
-  [SUBSCRIBE("toggle.fullscreen")]() {
+  [SUBSCRIBE(TOGGLE_FULLSCREEN)]() {
     this.$el.toggleFullscreen();
   }
 

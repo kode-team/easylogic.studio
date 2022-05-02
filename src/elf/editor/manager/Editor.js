@@ -1,33 +1,24 @@
 import { BaseStore, registAlias, registElement } from "sapa";
 
 import { AssetManager } from "./manager-items/AssetManager";
-import { ClipboardManager } from "./manager-items/ClipboardManager";
 import { CommandMaker } from "./manager-items/CommandMaker";
 import { CommandManager } from "./manager-items/CommandManager";
 import { ComponentManager } from "./manager-items/ComponentManager";
 import { ConfigManager } from "./manager-items/ConfigManager";
 import { CursorManager } from "./manager-items/CursorManager";
-import { HistoryManager } from "./manager-items/HistoryManager";
 import { I18nManager } from "./manager-items/I18nManager";
 import { IconManager } from "./manager-items/IconManager";
 import { InjectManager } from "./manager-items/InjectManager";
 import { KeyBoardManager } from "./manager-items/KeyboardManager";
-import { LockManager } from "./manager-items/LockManager";
 import { MenuManager } from "./manager-items/MenuManager";
-import { ModelManager } from "./manager-items/ModelManager";
 import { ModeViewManager } from "./manager-items/ModeViewManager";
 import { PathKitManager } from "./manager-items/PathKitManager";
 import { PluginManager } from "./manager-items/PluginManager";
 import { RendererManager } from "./manager-items/RendererManager";
-import { SegmentSelectionManager } from "./manager-items/SegmentSelectionManager";
-import { SelectionManager } from "./manager-items/SelectionManager";
 import { ShortCutManager } from "./manager-items/ShortCutManager";
-import { SnapManager } from "./manager-items/SnapManager";
 import { StateManager } from "./manager-items/StateManager";
 import { StorageManager } from "./manager-items/StorageManager";
-import { TimelineSelectionManager } from "./manager-items/TimelineSelectionManager";
 import { ViewportManager } from "./manager-items/ViewportManager";
-import { VisibleManager } from "./manager-items/VisibleManager";
 
 import { uuid } from "elf/core/math";
 import theme from "elf/editor/ui/theme";
@@ -61,15 +52,12 @@ export class Editor {
     this.registerManager({
       store: BaseStore,
       config: ConfigManager,
-      snapManager: SnapManager,
       commands: CommandManager,
-      selection: SelectionManager,
-      segmentSelection: SegmentSelectionManager,
-      timeline: TimelineSelectionManager,
-      history: HistoryManager,
       keyboardManager: KeyBoardManager,
       viewport: ViewportManager,
       storageManager: StorageManager,
+      modeViewManager: ModeViewManager,
+      pathKitManager: PathKitManager,
       cursorManager: CursorManager,
       assetManager: AssetManager,
       injectManager: InjectManager,
@@ -77,12 +65,6 @@ export class Editor {
       pluginManager: PluginManager,
       renderers: RendererManager,
       i18n: I18nManager,
-      modelManager: ModelManager,
-      modeViewManager: ModeViewManager,
-      pathKitManager: PathKitManager,
-      lockManager: LockManager,
-      visibleManager: VisibleManager,
-      clipboard: ClipboardManager,
       icon: IconManager,
       stateManager: StateManager,
       menuManager: MenuManager,

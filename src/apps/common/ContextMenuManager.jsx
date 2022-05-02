@@ -2,6 +2,7 @@ import { SUBSCRIBE } from "sapa";
 
 import "./ContextMenuManager.scss";
 
+import { OPEN_CONTEXT_MENU } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export class ContextMenuManager extends EditorElement {
@@ -13,7 +14,7 @@ export class ContextMenuManager extends EditorElement {
     );
   }
 
-  [SUBSCRIBE("openContextMenu")](obj) {
+  [SUBSCRIBE(OPEN_CONTEXT_MENU)](obj) {
     this.$context.config.set("context.menu.open", obj);
   }
 }

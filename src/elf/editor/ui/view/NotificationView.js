@@ -1,5 +1,6 @@
 import { Dom, TRANSITIONEND, CLICK, SUBSCRIBE } from "sapa";
 
+import { SHOW_NOTIFY } from "../../types/event";
 import { EditorElement } from "../common/EditorElement";
 import "./NotificationView.scss";
 
@@ -31,7 +32,7 @@ export default class NotificationView extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE("notify")](type, title, description, duration = 1000) {
+  [SUBSCRIBE(SHOW_NOTIFY)](type, title, description, duration = 1000) {
     const $dom = Dom.createByHTML(
       this.getMessageTemplate(type, title, description, 1000)
     );

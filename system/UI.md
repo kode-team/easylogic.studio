@@ -59,7 +59,7 @@ class MyElement extends EditorElement {
         return `<div>my element</div>`
     }
 
-    [SUBSCRIBE('refreshSelection')] () {
+    [SUBSCRIBE(REFRESH_SELECTION)] () {
         console.log('Some layer is selected', this.$context.selection.current);
     }
 }

@@ -15,13 +15,20 @@ import {
   createComponent,
 } from "sapa";
 
+import {
+  CHANGE_ICON_VIEW,
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+  RESIZE_WINDOW,
+  RESIZE_CANVAS,
+} from "../../../elf/editor/types/event";
 import "./CanvasView.scss";
 import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
 import DragAreaView from "./render-view/draw-panels/DragAreaView";
 import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
 import PageTools from "./render-view/util-panels/PageTools";
 
-import { END, MOVE } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -44,7 +51,7 @@ export default class CanvasView extends EditorElement {
 
   afterRender() {
     this.nextTick(() => {
-      this.trigger("resizeCanvas");
+      this.trigger(RESIZE_CANVAS);
       this.emit("moveSelectionToCenter", true);
       this.refreshCursor();
     }, 100);
@@ -221,11 +228,11 @@ export default class CanvasView extends EditorElement {
     this.$viewport.refreshCanvasSize(this.refs.$lock.rect());
   }
 
-  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+  [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.refreshCanvasSize();
   }
 
-  [SUBSCRIBE("changeIconView")](cursor, ...args) {
+  [SUBSCRIBE(CHANGE_ICON_VIEW)](cursor, ...args) {
     if (
       `${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args}`
     ) {
@@ -237,7 +244,7 @@ export default class CanvasView extends EditorElement {
     this.bindData("$container");
   }
 
-  [SUBSCRIBE("updateViewport")]() {
+  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     this.emit("refreshCursor", "auto");
   }
 }

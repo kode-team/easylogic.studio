@@ -7,6 +7,7 @@ import {
   PREVENT,
   SUBSCRIBE,
   createComponent,
+  SUBSCRIBE_SELF,
 } from "sapa";
 
 import "./TextShadowEditor.scss";
@@ -140,7 +141,7 @@ export default class TextShadowEditor extends EditorElement {
     this.modifyTextShadow();
   }
 
-  [SUBSCRIBE("changeKeyValue")](key, value, index) {
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value, index) {
     var shadow = this.state.textShadows[index];
 
     shadow.reset({

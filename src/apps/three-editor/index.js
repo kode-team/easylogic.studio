@@ -22,7 +22,7 @@ import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { PopupManager } from "apps/common/PopupManager";
-import { END, MOVE } from "elf/editor/types/event";
+import { END, MOVE, RESIZE_CANVAS } from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
 export class ThreeEditor extends BaseLayout {
@@ -235,14 +235,14 @@ export class ThreeEditor extends BaseLayout {
   [CONFIG("show.left.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit("resizeCanvas");
+      this.emit(RESIZE_CANVAS);
     });
   }
 
   [CONFIG("show.right.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit("resizeCanvas");
+      this.emit(RESIZE_CANVAS);
     });
   }
 

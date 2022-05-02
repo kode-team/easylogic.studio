@@ -50,7 +50,7 @@ export default class ProjectInformationProperty extends BaseProperty {
     `;
   }
 
-  [SUBSCRIBE("refreshProjectList", "refreshAllSelectProject")]() {
+  [SUBSCRIBE("refreshProjectList")]() {
     this.refresh();
   }
 

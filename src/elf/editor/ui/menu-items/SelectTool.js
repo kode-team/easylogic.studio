@@ -1,5 +1,6 @@
 import { CONFIG, SUBSCRIBE } from "sapa";
 
+import { REFRESH_SELECTION } from "../../types/event";
 import MenuItem from "./MenuItem";
 
 import { EditingMode } from "elf/editor/types/editor";
@@ -25,7 +26,7 @@ export default class SelectTool extends MenuItem {
     this.setSelected(this.$config.is("editing.mode", EditingMode.SELECT));
   }
 
-  [SUBSCRIBE("refreshSelection")]() {
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
     this.doSelect();
   }
 

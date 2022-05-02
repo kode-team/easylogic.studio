@@ -1,7 +1,7 @@
 import { BIND, SUBSCRIBE, Dom, isString } from "sapa";
 
+import { UPDATE_CANVAS } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import { Project } from "plugins/default-items/layers/Project";
 
 const TEMP_DIV = Dom.create("div");
 
@@ -37,7 +37,8 @@ export default class StyleView extends EditorElement {
   }
 
   refreshStyleHead() {
-    var project = this.$context.selection.currentProject || new Project();
+    var project =
+      this.$context.selection.currentProject || this.$editor.createProject();
     this.refs.$styleView
       .$$(`style[data-renderer-type="html"]`)
       .forEach(($style) => $style.remove());
@@ -160,7 +161,7 @@ export default class StyleView extends EditorElement {
    *
    * @param {String|Object|Array<string>|Array<object>} obj  ,  id 리스트를 만들기 위한 객체, 없으면 selection에 있는 객체 전체
    */
-  [SUBSCRIBE("refreshSelectionStyleView")](obj = null) {
+  [SUBSCRIBE(UPDATE_CANVAS)](obj = null) {
     var ids = obj;
 
     if (Array.isArray(obj)) {

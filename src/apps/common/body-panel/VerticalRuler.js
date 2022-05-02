@@ -2,6 +2,13 @@ import { LOAD, SUBSCRIBE, THROTTLE, CONFIG, BIND } from "sapa";
 
 import "./VerticalRuler.scss";
 
+import {
+  UPDATE_VIEWPORT,
+  REFRESH_SELECTION,
+  RESIZE_WINDOW,
+  RESIZE_CANVAS,
+  UPDATE_CANVAS,
+} from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 let pathString = [];
@@ -253,7 +260,7 @@ export default class VerticalRuler extends EditorElement {
     }
   }
 
-  [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + THROTTLE(10)]() {
     const current = this.$context.selection.current;
 
     if (current && current.changedRect) {
@@ -261,11 +268,11 @@ export default class VerticalRuler extends EditorElement {
     }
   }
 
-  [SUBSCRIBE("updateViewport", "refreshSelection")]() {
+  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION)]() {
     this.refresh();
   }
 
-  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+  [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.refreshCanvasSize();
   }
 

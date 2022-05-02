@@ -1,3 +1,4 @@
+import { REFRESH_SELECTION } from "../../types/event";
 import _currentProject from "./_currentProject";
 
 import { makeTimer, timecode } from "elf/core/time";
@@ -12,7 +13,7 @@ export default {
     direction = "normal"
   ) {
     editor.context.selection.empty();
-    editor.emit("refreshSelection");
+    editor.emit(REFRESH_SELECTION);
 
     _currentProject(editor, (project, timeline) => {
       var lastTime = project.getSelectedTimelineLastTime();

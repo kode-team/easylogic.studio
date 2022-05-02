@@ -1,3 +1,4 @@
+import { UPDATE_CANVAS } from "../../types/event";
 /**
  * refresh element command
  *
@@ -32,7 +33,7 @@ export default {
     }
 
     // 화면 사이즈 조정
-    maker.emit("refreshSelectionStyleView", current);
+    maker.emit(UPDATE_CANVAS, current);
 
     if (current.hasLayout()) {
       maker.emit("refreshElementBoundSize", current);

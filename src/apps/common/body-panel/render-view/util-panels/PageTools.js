@@ -12,6 +12,7 @@ import "./PageTools.scss";
 
 import { iconUse } from "elf/editor/icon/icon";
 import { PathParser } from "elf/editor/parser/PathParser";
+import { UPDATE_VIEWPORT, REFRESH_SELECTION } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class PageTools extends EditorElement {
@@ -29,8 +30,8 @@ export default class PageTools extends EditorElement {
             value: this.$viewport.scale * 100,
             onchange: this.subscribe((key, scale) => {
               this.$viewport.setScale(scale / 100);
-              this.emit("updateViewport");
-              this.trigger("updateViewport");
+              this.emit(UPDATE_VIEWPORT);
+              this.trigger(UPDATE_VIEWPORT);
             }, 1000),
           })}
         </div>
@@ -61,7 +62,7 @@ export default class PageTools extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE("updateViewport")]() {
+  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     const scale = Math.floor(this.$viewport.scale * 100);
 
     if (this.children.$scaleInput) {
@@ -72,15 +73,15 @@ export default class PageTools extends EditorElement {
   [CLICK("$plus")]() {
     const oldScale = this.$viewport.scale;
     this.$viewport.setScale(oldScale + 0.01);
-    this.emit("updateViewport");
-    this.trigger("updateViewport");
+    this.emit(UPDATE_VIEWPORT);
+    this.trigger(UPDATE_VIEWPORT);
   }
 
   [CLICK("$minus")]() {
     const oldScale = this.$viewport.scale;
     this.$viewport.setScale(oldScale - 0.01);
-    this.emit("updateViewport");
-    this.trigger("updateViewport");
+    this.emit(UPDATE_VIEWPORT);
+    this.trigger(UPDATE_VIEWPORT);
   }
 
   [CLICK("$center")]() {
@@ -138,7 +139,7 @@ export default class PageTools extends EditorElement {
     this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
   }
 
-  [SUBSCRIBE("refreshSelection")]() {
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
     this.refs.$selectedCount.html(this.$context.selection.length + "");
 
     this.load("$buttons");

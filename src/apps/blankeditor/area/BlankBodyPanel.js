@@ -1,9 +1,10 @@
 import { SUBSCRIBE, createComponent } from "sapa";
 
 import "./BlankBodyPanel.scss";
+import BlankCanvasView from "./BlankCanvasView";
 
-import BlankCanvasView from "apps/common/body-panel/BlankCanvasView";
 import PageSubEditor from "apps/common/body-panel/PageSubEditor";
+import { TOGGLE_FULLSCREEN } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class BlankBodyPanel extends EditorElement {
@@ -30,7 +31,7 @@ export default class BlankBodyPanel extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
+  [SUBSCRIBE(TOGGLE_FULLSCREEN)]() {
     this.refs.$el.toggleFullscreen();
   }
 }

@@ -8,6 +8,10 @@ import {
   toRectVerties,
   toRectVertiesWithoutTransformOrigin,
 } from "elf/core/collision";
+import {
+  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
+} from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -157,8 +161,8 @@ export default class DragAreaRectView extends EditorElement {
     );
 
     if (this.$context.selection.selectByGroup(...selectedItems)) {
-      this.emit("refreshSelection");
-      this.emit("refreshSelectionTool", true);
+      this.emit(REFRESH_SELECTION);
+      this.emit(REFRESH_SELECTION_TOOL, true);
     }
   }
 
@@ -178,7 +182,7 @@ export default class DragAreaRectView extends EditorElement {
 
     this.$context.selection.reselect();
     this.emit("history.refreshSelection");
-    this.emit("refreshSelectionTool", true);
+    this.emit(REFRESH_SELECTION_TOOL, true);
 
     // this.emit("removeGuideLine");
   }

@@ -10,6 +10,6 @@ export default {
   execute: function (editor, scale) {
     const oldScale = editor.context.viewport.scale;
     editor.context.viewport.setScale(scale);
-    editor.emit("updateViewport", scale, oldScale);
+    editor.emit(UPDATE_VIEWPORT, scale, oldScale);
   },
 };

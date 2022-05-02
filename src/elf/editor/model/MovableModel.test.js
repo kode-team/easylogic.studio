@@ -1,8 +1,8 @@
 import { beforeAll, expect, test, vi } from "vitest";
 
-import { ModelManager } from "../manager/manager-items/ModelManager";
 import { MovableModel } from "./MovableModel";
 
+import { ModelManager } from "apps/designeditor/managers/ModelManager";
 import { vertiesToRectangle } from "elf/core/collision";
 import { Length } from "elf/editor/unit/Length";
 

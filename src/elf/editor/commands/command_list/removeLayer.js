@@ -1,3 +1,5 @@
+import { REFRESH_SELECTION_TOOL } from "../../types/event";
+
 export default {
   command: "removeLayer",
   execute: function (editor, ids = undefined) {
@@ -13,7 +15,7 @@ export default {
 
     editor.nextTick(() => {
       editor.emit("refreshAll");
-      editor.emit("refreshSelectionTool");
+      editor.emit(REFRESH_SELECTION_TOOL);
     });
   },
 };

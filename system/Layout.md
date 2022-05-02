@@ -57,6 +57,35 @@ orderNumber 를 지정하게 되면  오름차순으로 정렬이 됩니다.
 * page.subeditor.view 
 * page.tools
 
+# ContextMenu 
+
+컨텍스트 메뉴는 아래와 같이 2가지 방식으로 데이타를 가지고 와서 사용할 수 있다. 
+
+
+```js
+// 메뉴 리스트 등록
+editor.registerMenu("context.menu.layer", [
+    { type: 'button', title: 'yellow', action: (editor) => {
+        console.log('emit')
+        editor.emit(UPDATE_VIEWPORT);
+    } }
+])
+
+editor.emit('openContextMenu', {
+    x: e.clientX,
+    y: e.clientY,
+    // 동적으로 메뉴 설정 
+    items: [
+        .... menus
+    ],
+    // 또는  설정된 메뉴를 가지고 온다. 
+    target: "context.menu.layer",
+
+})
+
+```
+
+메뉴 시스템에 대한 자세한 이야기는 [메뉴시스템](./MenuSystem.md) 에서 확인 할 수 있습니다. 
 
 # 확장 
 

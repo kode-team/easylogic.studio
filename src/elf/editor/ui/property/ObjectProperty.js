@@ -8,6 +8,8 @@ import {
   createComponent,
 } from "sapa";
 
+import { REFRESH_SELECTION } from "../../types/event";
+
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export class ObjectProperty {
@@ -42,7 +44,7 @@ export class ObjectProperty {
 
       afterComponentRendering($dom, refName, instance) {
         if (refName == "$comp") {
-          const current = this.$context.selection.current || {};
+          const current = this.$context.selection?.current || {};
           const inspector = isFunction(json.inspector)
             ? json.inspector(current)
             : this.$context.components.createInspector(
@@ -67,7 +69,7 @@ export class ObjectProperty {
         }
       }
 
-      [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
+      [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
         if (json.preventUpdate) {
           if (this.$stateManager.isPointerUp) {
             this.refresh();
@@ -78,7 +80,7 @@ export class ObjectProperty {
       }
 
       [LOAD("$body")]() {
-        var current = this.$context.selection.current;
+        var current = this.$context.selection?.current;
 
         if (!current && !json.visible) return "";
 

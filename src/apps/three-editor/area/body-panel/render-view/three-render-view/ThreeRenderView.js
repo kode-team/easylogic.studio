@@ -6,6 +6,7 @@ import { SUBSCRIBE } from "sapa";
 
 import "./ThreeRenderView.scss";
 
+import { RESIZE_WINDOW, RESIZE_CANVAS } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class ThreeRenderView extends EditorElement {
@@ -276,7 +277,7 @@ export default class ThreeRenderView extends EditorElement {
     this.renderCanvas(0);
   }
 
-  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+  [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     console.log("resize");
     this.refreshCanvasSize();
   }

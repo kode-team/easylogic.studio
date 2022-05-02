@@ -11,6 +11,15 @@ import {
 } from "sapa";
 
 import "./layout.scss";
+import { ClipboardManager } from "./managers/ClipboardManager";
+import { HistoryManager } from "./managers/HistoryManager";
+import { LockManager } from "./managers/LockManager";
+import { ModelManager } from "./managers/ModelManager";
+import { SegmentSelectionManager } from "./managers/SegmentSelectionManager";
+import { SelectionManager } from "./managers/SelectionManager";
+import { SnapManager } from "./managers/SnapManager";
+import { TimelineSelectionManager } from "./managers/TimelineSelectionManager";
+import { VisibleManager } from "./managers/VisibleManager";
 import designEditorPlugins from "./plugins/design-editor-plugins";
 
 import Inspector from "apps/common/area/Inspector";
@@ -26,7 +35,12 @@ import { ContextMenuManager } from "apps/common/ContextMenuManager";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { PopupManager } from "apps/common/PopupManager";
-import { END, MOVE } from "elf/editor/types/event";
+import {
+  END,
+  MOVE,
+  RESIZE_WINDOW,
+  RESIZE_CANVAS,
+} from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";
 
 export class DesignEditor extends BaseLayout {
@@ -43,6 +57,20 @@ export class DesignEditor extends BaseLayout {
 
     // load default data
     this.emit("load.json", this.opt.data);
+  }
+
+  getManagers() {
+    return {
+      snapManager: SnapManager,
+      selection: SelectionManager,
+      segmentSelection: SegmentSelectionManager,
+      timeline: TimelineSelectionManager,
+      history: HistoryManager,
+      modelManager: ModelManager,
+      lockManager: LockManager,
+      visibleManager: VisibleManager,
+      clipboard: ClipboardManager,
+    };
   }
 
   components() {
@@ -253,7 +281,7 @@ export class DesignEditor extends BaseLayout {
   [CONFIG("show.left.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit("resizeCanvas");
+      this.emit(RESIZE_CANVAS);
       this.$config.init("editor.layout.elements", this.refs);
     });
   }
@@ -261,7 +289,7 @@ export class DesignEditor extends BaseLayout {
   [CONFIG("show.right.panel")]() {
     this.refresh();
     this.nextTick(() => {
-      this.emit("resizeCanvas");
+      this.emit(RESIZE_CANVAS);
       this.$config.init("editor.layout.elements", this.refs);
     });
   }
@@ -285,7 +313,7 @@ export class DesignEditor extends BaseLayout {
     }
   }
 
-  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+  [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.$config.init("editor.layout.elements", this.refs);
   }
 }

@@ -2,6 +2,11 @@ import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "sapa";
 
 import "./ContentProperty.scss";
 
+import {
+  REFRESH_SELECTION,
+  REFRESH_CONTENT,
+  UPDATE_CANVAS,
+} from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
 export default class ContentProperty extends BaseProperty {
@@ -9,7 +14,7 @@ export default class ContentProperty extends BaseProperty {
     return "Content";
   }
 
-  [SUBSCRIBE("refreshSelection", "refreshContent") + DEBOUNCE(100)]() {
+  [SUBSCRIBE(REFRESH_SELECTION, REFRESH_CONTENT) + DEBOUNCE(100)]() {
     this.refreshShow(["text"]);
   }
 
@@ -42,7 +47,7 @@ export default class ContentProperty extends BaseProperty {
         content: this.refs.$contentItem.value,
       };
       current.reset(data);
-      this.emit("refreshSelectionStyleView", current);
+      this.emit(UPDATE_CANVAS, current);
     }
   }
 }

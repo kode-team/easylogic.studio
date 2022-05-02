@@ -19,7 +19,16 @@ import {
 import "./HTMLRenderView.scss";
 import StyleView from "./StyleView";
 
-import { END, FIRSTMOVE, MOVE } from "elf/editor/types/event";
+import {
+  END,
+  FIRSTMOVE,
+  MOVE,
+  UPDATE_VIEWPORT,
+  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
+  UPDATE_CANVAS,
+  OPEN_CONTEXT_MENU,
+} from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -85,11 +94,11 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   // 객체를 부분 업데이트 하기 위한 메소드
-  [SUBSCRIBE("refreshSelectionStyleView")](obj) {
+  [SUBSCRIBE(UPDATE_CANVAS)](obj) {
     this.refreshSelectionStyleView(obj);
   }
 
-  [SUBSCRIBE("updateViewport")]() {
+  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     this.bindData("$view");
   }
 
@@ -290,10 +299,19 @@ export default class HTMLRenderView extends EditorElement {
 
     this.$context.selection.select(id);
 
-    this.emit("refreshSelectionTool", true);
+    this.emit(REFRESH_SELECTION_TOOL, true);
 
-    this.emit("openContextMenu", {
+    this.emit(OPEN_CONTEXT_MENU, {
       target: "context.menu.layer",
+      items: [
+        {
+          type: "button",
+          title: "yellow",
+          action: () => {
+            console.log("console.log", "yellow");
+          },
+        },
+      ],
       x: e.clientX,
       y: e.clientY,
       id,
@@ -396,7 +414,7 @@ export default class HTMLRenderView extends EditorElement {
 
     this.emit("startGhostToolView");
 
-    this.emit("refreshSelectionTool", true);
+    this.emit(REFRESH_SELECTION_TOOL, true);
   }
 
   calculateFirstMovedElement() {
@@ -418,9 +436,11 @@ export default class HTMLRenderView extends EditorElement {
       return;
     }
 
-    const newDist = vec3
-      .subtract([], targetMousePoint, this.initMousePoint)
-      .map(Math.round);
+    // 마우스 움직인 거리를 정수형으로 맞춘다.
+    const newDist = vec3.floor(
+      [],
+      vec3.subtract([], targetMousePoint, this.initMousePoint)
+    );
 
     this.moveTo(newDist);
 
@@ -486,8 +506,8 @@ export default class HTMLRenderView extends EditorElement {
 
       if (this.$context.selection.isOne) {
         result[it.id] = {
-          x: Math.floor(it.x + newDist[0]), // 1px 단위로 위치 설정
-          y: Math.floor(it.y + newDist[1]),
+          x: Math.round(it.x + newDist[0]), // 1px 단위로 위치 설정
+          y: Math.round(it.y + newDist[1]),
         };
       } else {
         // group 은 그냥 설정
@@ -534,8 +554,8 @@ export default class HTMLRenderView extends EditorElement {
       });
     }
 
-    this.emit("refreshSelection");
-    this.emit("refreshSelectionTool");
+    this.emit(REFRESH_SELECTION);
+    this.emit(REFRESH_SELECTION_TOOL);
     this.$config.set("editing.mode.itemType", "select");
   }
 
@@ -626,10 +646,10 @@ export default class HTMLRenderView extends EditorElement {
     this.refreshSelectionStyleView(item);
 
     if (this.$context.selection.check(item)) {
-      this.emit("refreshSelectionTool");
+      this.emit(REFRESH_SELECTION_TOOL);
     }
 
-    this.emit("refreshSelectionStyleView", item);
+    this.emit(UPDATE_CANVAS, item);
   }
 
   refreshSelfElement(item) {

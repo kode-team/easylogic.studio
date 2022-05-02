@@ -8,6 +8,7 @@ import {
   SUBSCRIBE,
   createComponent,
   DOMDIFF,
+  SUBSCRIBE_SELF,
 } from "sapa";
 
 import "./BoxShadowEditor.scss";
@@ -173,7 +174,7 @@ export default class BoxShadowEditor extends EditorElement {
     this.modifyBoxShadow();
   }
 
-  [SUBSCRIBE("changeKeyValue")](key, value, index) {
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value, index) {
     var shadow = this.state.boxShadows[index];
 
     shadow.reset({

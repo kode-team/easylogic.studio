@@ -9,6 +9,7 @@ import {
 
 import "./ComponentPopup.scss";
 
+import { SHOW_COMPONENT_POPUP } from "elf/editor/types/event";
 import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class ComponentPopup extends BasePopup {
@@ -61,7 +62,7 @@ export default class ComponentPopup extends BasePopup {
     }
   }
 
-  [SUBSCRIBE("showComponentPopup")](data) {
+  [SUBSCRIBE(SHOW_COMPONENT_POPUP)](data) {
     this.setState(data, false);
 
     this.refresh();

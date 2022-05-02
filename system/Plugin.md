@@ -84,6 +84,23 @@ editor.registerAlias({
     'button': 'Button',
 })
 
+// menu 정의 
+editor.registerMenu("toolbar.right", [
+  {
+    type: "button",
+    title: "Layer",
+  },
+  {
+    type: 'dropdown', 
+    title: '',
+    icon: '',
+    selectedKey: () => "yellow",
+    items: [
+      ....
+    ]
+  }
+])
+
 ```
 
 

@@ -1,3 +1,5 @@
+import { REFRESH_SELECTION } from "../../types/event";
+
 export default {
   command: "convert.path.operation",
   description: "apply path boolean operation",
@@ -24,7 +26,7 @@ export default {
         editor.emit("recoverBooleanPath");
 
         editor.nextTick(() => {
-          editor.emit("refreshSelection");
+          editor.emit(REFRESH_SELECTION);
           // editor.emit('refreshSelectionTool');
         });
       });

@@ -14,16 +14,16 @@ export default {
   execute: function (editor, withScale = true) {
     let areaVerties = [];
 
-    if (editor.context.selection.isEmpty) {
-      if (editor.context.selection.currentProject?.layers.length > 0) {
+    if (editor.context.selection?.isEmpty) {
+      if (editor.context.selection?.currentProject?.layers.length > 0) {
         areaVerties = itemsToRectVerties(
-          editor.context.selection.currentProject.layers
+          editor.context.selection?.currentProject.layers
         );
       } else {
         areaVerties = rectToVerties(0, 0, 100, 100);
       }
     } else {
-      areaVerties = itemsToRectVerties(editor.context.selection.items);
+      areaVerties = itemsToRectVerties(editor.context.selection?.items);
     }
 
     editor.emit("moveToCenter", areaVerties, withScale);

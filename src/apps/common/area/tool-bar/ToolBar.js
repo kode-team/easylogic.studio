@@ -39,13 +39,7 @@ export default class ToolBar extends EditorElement {
           title: "menu.item.save.title",
           command: "saveJSON",
           nextTick: () => {
-            this.emit(
-              "notify",
-              "alert",
-              "Save",
-              "Save the content on localStorage",
-              2000
-            );
+            this.alert("Save", "Save the content on localStorage", 2000);
           },
         },
         {

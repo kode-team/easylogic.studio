@@ -11,13 +11,15 @@ import {
   isObject,
 } from "sapa";
 
-import { getDist } from "elf/core/math";
-import { Editor } from "elf/editor/manager/Editor";
 import {
+  RESIZE_WINDOW,
   ADD_BODY_FIRST_MOUSEMOVE,
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP,
-} from "elf/editor/types/event";
+} from "../../elf/editor/types/event";
+
+import { getDist } from "elf/core/math";
+import { Editor } from "elf/editor/manager/Editor";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 const EMPTY_POS = { x: 0, y: 0 };
@@ -237,15 +239,11 @@ export class BaseLayout extends EditorElement {
   }
 
   [RESIZE("window") + DEBOUNCE(100)]() {
-    this.emit("resize.window");
+    this.emit(RESIZE_WINDOW);
   }
 
   [SUBSCRIBE("refreshAll")]() {
     this.emit("refreshProjectList");
-    this.trigger("refreshAllSelectProject");
-  }
-
-  [SUBSCRIBE("refreshAllSelectProject")]() {
     this.emit("refreshArtboard");
   }
 

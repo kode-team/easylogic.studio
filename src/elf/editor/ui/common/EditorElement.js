@@ -1,13 +1,11 @@
 import { UIElement } from "sapa";
-
-// eslint-disable-next-line no-unused-vars
-import { MenuManager } from "elf/editor/manager/manager-items/MenuManager";
-import { NotifyType } from "elf/editor/types/editor";
 import {
   ADD_BODY_FIRST_MOUSEMOVE,
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP,
+  SHOW_NOTIFY,
 } from "elf/editor/types/event";
+import { NotifyType } from "elf/editor/types/editor";
 
 export class EditorElement extends UIElement {
   /**
@@ -159,9 +157,6 @@ export class EditorElement extends UIElement {
     return this.$context.stateManager;
   }
 
-  /**
-   * @type {MenuManager}
-   */
   get $menu() {
     return this.$context.menuManager;
   }
@@ -191,7 +186,7 @@ export class EditorElement extends UIElement {
    * @param {number} [duration=1000]
    */
   notify(type, title, description, duration = 1000) {
-    this.emit("notify", type, title, description, duration);
+    this.emit(SHOW_NOTIFY, type, title, description, duration);
   }
 
   alert(title, description, duration = 1000) {

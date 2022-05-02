@@ -1,3 +1,5 @@
+import { REFRESH_SELECTION } from "../../types/event";
+
 export default {
   command: "switch.path",
   execute: async (editor) => {
@@ -28,7 +30,7 @@ export default {
         editor.emit("recoverBooleanPath");
 
         editor.context.selection.select(current);
-        editor.emit("refreshSelection");
+        editor.emit(REFRESH_SELECTION);
       });
     }
   },

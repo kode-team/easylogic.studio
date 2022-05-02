@@ -2,13 +2,13 @@ import { BIND, SUBSCRIBE } from "sapa";
 
 import { createBlankEditor } from "apps";
 
-import { TreeProvider, TreeView } from "../elf/editor/ui/view/TreeView";
-
 import { iconUse } from "elf/editor/icon/icon";
 // eslint-disable-next-line no-unused-vars
 import { Editor } from "elf/editor/manager/Editor";
+import { UPDATE_VIEWPORT } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
+import { TreeProvider, TreeView } from "elf/editor/ui/view/TreeView";
 
 function startEditor() {
   const idList = ["app"];
@@ -113,7 +113,7 @@ function startEditor() {
                 };
               }
 
-              [SUBSCRIBE("updateViewport")]() {
+              [SUBSCRIBE(UPDATE_VIEWPORT)]() {
                 this.bindData("$el");
               }
             },
