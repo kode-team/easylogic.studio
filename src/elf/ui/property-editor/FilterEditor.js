@@ -327,7 +327,7 @@ export default class FilterEditor extends EditorElement {
     });
   }
 
-  [SUBSCRIBE("add")](filterType) {
+  [SUBSCRIBE_SELF("add")](filterType) {
     if (filterType === "svg") {
       // 비어있는 필터를 하나 생성하고
       const index = this.$context.selection.current.createSVGFilter({

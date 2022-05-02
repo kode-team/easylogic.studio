@@ -321,13 +321,15 @@ export default class GuideLineView extends EditorElement {
     if (targetVertiesList) {
       targetList = targetVertiesList.map((it) => toRectVerties(it));
     } else {
-      const targets = this.$context.selection.snapTargetLayers.map((target) => {
-        const rectVerties = toRectVerties(target.verties);
-        return {
-          targetVerties: rectVerties,
-          dist: vec3.dist(rectVerties[4], sourceVerties[4]),
-        };
-      });
+      const targets = this.$context.snapManager.snapTargetLayers.map(
+        (target) => {
+          const rectVerties = toRectVerties(target.verties);
+          return {
+            targetVerties: rectVerties,
+            dist: vec3.dist(rectVerties[4], sourceVerties[4]),
+          };
+        }
+      );
 
       targets.sort((a, b) => {
         return a.dist - b.dist;

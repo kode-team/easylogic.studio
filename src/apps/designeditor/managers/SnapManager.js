@@ -33,24 +33,49 @@ export class SnapManager {
    */
   constructor(editor, snapDistance = MAX_SNAP_DISTANCE) {
     this.editor = editor;
+    this.context = this.editor.context;
     this.map = new Map();
     this.snapTargetLayers = [];
     this.snapDistance = snapDistance;
   }
 
   get dist() {
-    return this.editor.context.config.get("snap.distance") || this.snapDistance;
+    return this.context.config.get("snap.distance") || this.snapDistance;
   }
 
   get gridSize() {
-    return this.editor.context.config.get("snap.grid") || 50;
+    return this.context.config.get("snap.grid") || 50;
+  }
+
+  /**
+   * snap to object 에 사용될 target item 리스트
+   *
+   * @returns {Item[]}
+   */
+  makeSnapTargetLayers() {
+    if (!this.context.selection.currentProject) return [];
+
+    return this.context.selection.currentProject.allLayers.filter((item) => {
+      // project item 은 제외
+      if (item.is("project")) return false;
+
+      // 선택된 것은 제외
+      if (this.context.selection.check(item)) return false;
+
+      // viewport 안에 존재 하는 것만 대상으로 한다.
+      const inViewport = this.context.viewport.checkInViewportArea(
+        item.verties.filter((_, index) => index < 4)
+      );
+
+      return inViewport;
+    });
   }
 
   /**
    * 캐쉬된 item들의 matrix 정보를 삭제한다.
    */
   clear() {
-    this.snapTargetLayers = this.editor.context.selection.snapTargetLayers;
+    this.snapTargetLayers = this.makeSnapTargetLayers();
   }
 
   convertMatrix(item) {
@@ -80,6 +105,22 @@ export class SnapManager {
     return [...guideVerties];
   }
 
+  get snapTargetLayersWithSelection() {
+    if (!this.context.selection.currentProject) return [];
+
+    return this.context.selection.currentProject.allLayers.filter((item) => {
+      // project item 은 제외
+      if (item.is("project")) return false;
+
+      // viewport 안에 존재 하는 것만 대상으로 한다.
+      const inViewport = item.verties.some((v) => {
+        return this.context.viewport.checkInViewport(v);
+      });
+
+      return inViewport;
+    });
+  }
+
   /**
    * snap 포인트 모으기
    *
@@ -87,11 +128,9 @@ export class SnapManager {
    */
   getSnapPoints() {
     const points = [];
-    this.editor.context.selection.snapTargetLayersWithSelection.forEach(
-      (it) => {
-        points.push.apply(points, this.convertGuideAndPathMatrix(it));
-      }
-    );
+    this.snapTargetLayersWithSelection.forEach((it) => {
+      points.push.apply(points, this.convertGuideAndPathMatrix(it));
+    });
 
     return points;
   }

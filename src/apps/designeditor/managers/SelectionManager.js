@@ -164,46 +164,6 @@ export class SelectionManager {
     return this.filteredLayers.filter((it) => this.check(it) === false);
   }
 
-  /**
-   * snap to object 에 사용될 target item 리스트
-   *
-   * @returns {Item[]}
-   */
-  get snapTargetLayers() {
-    if (!this.currentProject) return [];
-
-    return this.currentProject.allLayers.filter((item) => {
-      // project item 은 제외
-      if (item.is("project")) return false;
-
-      // 선택된 것은 제외
-      if (this.check(item)) return false;
-
-      // viewport 안에 존재 하는 것만 대상으로 한다.
-      const inViewport = this.$context.viewport.checkInViewportArea(
-        item.verties.filter((_, index) => index < 4)
-      );
-
-      return inViewport;
-    });
-  }
-
-  get snapTargetLayersWithSelection() {
-    if (!this.currentProject) return [];
-
-    return this.currentProject.allLayers.filter((item) => {
-      // project item 은 제외
-      if (item.is("project")) return false;
-
-      // viewport 안에 존재 하는 것만 대상으로 한다.
-      const inViewport = item.verties.some((v) => {
-        return this.$context.viewport.checkInViewport(v);
-      });
-
-      return inViewport;
-    });
-  }
-
   get selectedArtboards() {
     return [...new Set(this.items.map((it) => it.artboard))];
   }

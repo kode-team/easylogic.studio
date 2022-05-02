@@ -13970,7 +13970,7 @@ class FilterEditor extends EditorElement {
       filters: svgfilter.filters
     });
   }
-  [SUBSCRIBE("add")](filterType) {
+  [SUBSCRIBE_SELF("add")](filterType) {
     if (filterType === "svg") {
       const index2 = this.$context.selection.current.createSVGFilter({
         filters: []
@@ -59927,30 +59927,6 @@ class SelectionManager {
   get notSelectedLayers() {
     return this.filteredLayers.filter((it) => this.check(it) === false);
   }
-  get snapTargetLayers() {
-    if (!this.currentProject)
-      return [];
-    return this.currentProject.allLayers.filter((item) => {
-      if (item.is("project"))
-        return false;
-      if (this.check(item))
-        return false;
-      const inViewport = this.$context.viewport.checkInViewportArea(item.verties.filter((_, index2) => index2 < 4));
-      return inViewport;
-    });
-  }
-  get snapTargetLayersWithSelection() {
-    if (!this.currentProject)
-      return [];
-    return this.currentProject.allLayers.filter((item) => {
-      if (item.is("project"))
-        return false;
-      const inViewport = item.verties.some((v) => {
-        return this.$context.viewport.checkInViewport(v);
-      });
-      return inViewport;
-    });
-  }
   get selectedArtboards() {
     return [...new Set(this.items.map((it) => it.artboard))];
   }
@@ -60357,18 +60333,31 @@ function checkYAxis(sourceVertex, targetVertex, dist2 = 1) {
 class SnapManager {
   constructor(editor, snapDistance = MAX_SNAP_DISTANCE) {
     this.editor = editor;
+    this.context = this.editor.context;
     this.map = /* @__PURE__ */ new Map();
     this.snapTargetLayers = [];
     this.snapDistance = snapDistance;
   }
   get dist() {
-    return this.editor.context.config.get("snap.distance") || this.snapDistance;
+    return this.context.config.get("snap.distance") || this.snapDistance;
   }
   get gridSize() {
-    return this.editor.context.config.get("snap.grid") || 50;
+    return this.context.config.get("snap.grid") || 50;
+  }
+  makeSnapTargetLayers() {
+    if (!this.context.selection.currentProject)
+      return [];
+    return this.context.selection.currentProject.allLayers.filter((item) => {
+      if (item.is("project"))
+        return false;
+      if (this.context.selection.check(item))
+        return false;
+      const inViewport = this.context.viewport.checkInViewportArea(item.verties.filter((_, index2) => index2 < 4));
+      return inViewport;
+    });
   }
   clear() {
-    this.snapTargetLayers = this.editor.context.selection.snapTargetLayers;
+    this.snapTargetLayers = this.makeSnapTargetLayers();
   }
   convertMatrix(item) {
     const verties = this.convertGuideAndPathMatrix(item);
@@ -60386,9 +60375,21 @@ class SnapManager {
     const guideVerties = item.guideVerties;
     return [...guideVerties];
   }
+  get snapTargetLayersWithSelection() {
+    if (!this.context.selection.currentProject)
+      return [];
+    return this.context.selection.currentProject.allLayers.filter((item) => {
+      if (item.is("project"))
+        return false;
+      const inViewport = item.verties.some((v) => {
+        return this.context.viewport.checkInViewport(v);
+      });
+      return inViewport;
+    });
+  }
   getSnapPoints() {
     const points = [];
-    this.editor.context.selection.snapTargetLayersWithSelection.forEach((it) => {
+    this.snapTargetLayersWithSelection.forEach((it) => {
       points.push.apply(points, this.convertGuideAndPathMatrix(it));
     });
     return points;
@@ -74763,7 +74764,7 @@ class GuideLineView extends EditorElement {
     if (targetVertiesList) {
       targetList = targetVertiesList.map((it) => toRectVerties(it));
     } else {
-      const targets = this.$context.selection.snapTargetLayers.map((target) => {
+      const targets = this.$context.snapManager.snapTargetLayers.map((target) => {
         const rectVerties = toRectVerties(target.verties);
         return {
           targetVerties: rectVerties,
