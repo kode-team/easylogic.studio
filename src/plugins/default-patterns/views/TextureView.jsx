@@ -1,41 +1,33 @@
-import { EditorElement } from 'el/editor/ui/common/EditorElement';
+import "./TextureView.scss";
 
-import './TextureView.scss';
-import { Tabs } from 'el/editor/ui/view/Tabs';
-import { variable } from 'el/sapa/functions/registElement';
-
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import { TabPanel, Tabs } from "elf/ui";
 export default class TextureView extends EditorElement {
-
-  components() {
-    return {
-      Tabs
-    }
-  }
-
   template() {
+    const isItemMode = this.$config.get("editor.design.mode") === "item";
 
-    const isItemMode = this.$config.get('editor.design.mode') === 'item';
-
-    return <div class='elf--texture'>
-      <object refClass="Tabs" 
-        ref="$tab" 
-          selectedValue={isItemMode ? 'svg' : 'css'}
-          onchange = {(value) => {
+    return (
+      <div class="elf--texture">
+        <Tabs
+          ref="$tab"
+          selectedValue={isItemMode ? "svg" : "css"}
+          onchange={(value) => {
             this.$config.set("inspector.selectedValue", value);
           }}
-      >
+        >
+          {isItemMode ? (
+            ""
+          ) : (
+            <TabPanel value="css" title="CSS">
+              <object refClass="CSSTextureView" />
+            </TabPanel>
+          )}
 
-        {isItemMode ? '' : (
-          <object refClass="TabPanel" value="css" title="CSS">
-            <object refClass="CSSTextureView" />
-          </object>
-        )}
-        
-        <object refClass="TabPanel" value="svg" title="SVG">
-          <object refClass="SVGTextureView" />
-        </object>            
-      </object>
-    </div>
+          <TabPanel value="svg" title="SVG">
+            <object refClass="SVGTextureView" />
+          </TabPanel>
+        </Tabs>
+      </div>
+    );
   }
-
 }

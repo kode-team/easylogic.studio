@@ -9,10 +9,10 @@
 함수는 [Editor](./Editor.md) 객체를 받습니다.
 
 ```js
-import EasyLogic from "./editor-layouts/index";
+import {createDesignEditor} from "apps";
 
 function startEditor() {
-  return EasyLogic.createDesignEditor({
+  return createDesignEditor({
     container: document.getElementById("app"),
     plugins: [
       function (editor) {
@@ -83,6 +83,23 @@ editor.registerAlias({
     'toggle-button': 'ToggleButton',
     'button': 'Button',
 })
+
+// menu 정의 
+editor.registerMenu("toolbar.right", [
+  {
+    type: "button",
+    title: "Layer",
+  },
+  {
+    type: 'dropdown', 
+    title: '',
+    icon: '',
+    selectedKey: () => "yellow",
+    items: [
+      ....
+    ]
+  }
+])
 
 ```
 

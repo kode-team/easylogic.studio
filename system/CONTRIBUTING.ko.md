@@ -26,7 +26,7 @@ vite 는 빠른 빌드 속도와 서버 구동을 지원하기 때문에 선택�
 ### src 
 
 * src/index.jsx - 에디터의 시작점 파일입니다. 
-* src/editor-layouts - 에디터의 레이아웃 구조가 있는 디렉토리입니다. 
+* src/apps - 에디터의 레이아웃 구조가 있는 디렉토리입니다. 
 * src/el - 에디터를 이루는 여러가지 자료구조, UI 라이브러리(sapa), 각종 파서 등이 있습니다. 
   * editor  
     * commands - 에디터 내부에서 사용되는 command 리스트 모음 

@@ -1,0 +1,53 @@
+.elf--hover-view {
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+.elf--hover-rect {
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  box-sizing: border-box;
+
+  .line {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    stroke: var(--elf--selection-tool-border-color);
+    fill: transparent;
+    stroke-width: 2;
+    // filter: drop-shadow(0px 0px 2px white);
+  }
+
+  svg {
+    // background-color: yellow;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+
+    .offset-line {
+      stroke: var(--elf--selected-color-2);
+      stroke-dasharray: 2 4;
+      fill: transparent;
+      stroke-width: 1;
+    }
+    text {
+      fill: var(--elf--selected-font-color);
+    }
+  
+    rect {
+      fill: var(--elf--selection-tool-border-color);
+    }
+  }
+
+}

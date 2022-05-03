@@ -35,7 +35,7 @@ npm test
 
 내부적으로는 vitest 를 사용해서 테스트 합니다. 
 
-xxx.test.js 형태로 테스트 파일을 작성하면 됩니다. ([여기](src/el/editor/parser/PathParser.test.js)를 참고해주세요.)
+xxx.test.js 형태로 테스트 파일을 작성하면 됩니다. ([여기](src/elf/editor/parser/PathParser.test.js)를 참고해주세요.)
 
 # Sapa 와 이벤트 시스템 
 
@@ -90,11 +90,11 @@ src/plugins/ 를 참고하세요.
 
 ```js
 
-editor.command('setAttributeForMulti', 'change property', editor.selection.packByValue({
+editor.command('setAttributeForMulti', 'change property', editor.context.selection.packByValue({
     'background-color': 'red'
 }))
 
-this.command('setAttributeForMulti', 'change property', this.$selection.packByValue({
+this.command('setAttributeForMulti', 'change property', this.$context.selection.packByValue({
     'background-color': 'red'
 }))
 
@@ -103,9 +103,9 @@ this.command('setAttributeForMulti', 'change property', this.$selection.packByVa
 ### 현재 선택된 레이어 얻어오기 
 
 ```js
-const layer = editor.selection.current;
+const layer = editor.context.selection.current;
 
 // or 
-const layer = this.$selection.current;
+const layer = this.$context.selection.current;
 
 ```

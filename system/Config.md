@@ -28,7 +28,7 @@ export default {
 ```js
 
 // editor 에서 사용 
-const bodyEvent = editor.config.get('bodyEvent');
+const bodyEvent = editor.context.config.get('bodyEvent');
 
 // ui 에서 사용 
 const bodyEvent = this.$config.get('bodyEvent');

@@ -1,0 +1,11 @@
+.elf--context-menu-view {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    // background-color: var(--elf--background-color);
+    // border: 1px solid var(--elf--border-color);
+    min-width: 240px;
+    z-index: 1000;
+    border-radius: 4px;
+    display: none;
+}

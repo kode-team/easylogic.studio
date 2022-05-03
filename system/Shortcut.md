@@ -6,7 +6,7 @@
 
 아래 디렉토리를 참고하세요.
 
-src/el/editor/shortcuts/shortcuts_list/
+src/elf/editor/shortcuts/shortcuts_list/
 
 ## 단축키 정의 
 

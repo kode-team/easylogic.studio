@@ -1,3 +1,3 @@
-const modules = import.meta.globEager('./config_list/*.js')
+const modules = import.meta.globEager("./config_list/*.js");
 
-export default Object.values(modules).map(it => it.default);
+export default Object.values(modules).map((it) => it.default);
