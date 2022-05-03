@@ -12,6 +12,7 @@ import { uuid } from "./functions/uuid";
 import BindHandler from "./handler/BindHandler";
 import CallbackHandler from "./handler/CallbackHandler";
 import DomEventHandler from "./handler/DomEventHandler";
+import ObserverHandler from "./handler/ObserverHandler";
 
 const REFERENCE_PROPERTY = "ref";
 const BIND_PROPERTY = "bind";
@@ -146,6 +147,7 @@ export class EventMachine {
       new BindHandler(this),
       new DomEventHandler(this),
       new CallbackHandler(this),
+      new ObserverHandler(this),
     ];
   }
 

@@ -39,6 +39,10 @@ const CALLBACK_EVENT_MAKE = (...args) => {
   return MagicMethod.make("callback", ...args);
 };
 
+const OBSERVER_EVENT_MAKE = (...args) => {
+  return MagicMethod.make("observer", ...args);
+};
+
 // Predefined CHECKER
 export const CHECKER = (value, split = SPLITTER) => {
   return makeEventChecker(value, split);
@@ -126,6 +130,8 @@ export const CONFIG = (config, ...args) =>
 
 export const CALLBACK = CALLBACK_EVENT_MAKE;
 export const RAF = CALLBACK("requestAnimationFrame");
+
+export const OBSERVER = OBSERVER_EVENT_MAKE;
 
 export const CUSTOM = DOM_EVENT_MAKE;
 export const CLICK = DOM_EVENT_MAKE("click");

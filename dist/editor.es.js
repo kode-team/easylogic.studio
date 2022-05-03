@@ -1472,6 +1472,9 @@ const SUBSCRIBE_EVENT_MAKE = (...args2) => {
 const CALLBACK_EVENT_MAKE = (...args2) => {
   return MagicMethod.make("callback", ...args2);
 };
+const OBSERVER_EVENT_MAKE = (...args2) => {
+  return MagicMethod.make("observer", ...args2);
+};
 const CHECKER = (value, split = SPLITTER) => {
   return makeEventChecker(value, split);
 };
@@ -1534,6 +1537,7 @@ const SUBSCRIBE_SELF = (...args2) => SUBSCRIBE_EVENT_MAKE(...args2, SELF_TRIGGER
 const CONFIG = (config, ...args2) => SUBSCRIBE_EVENT_MAKE(`config:${config}`, ...args2);
 const CALLBACK = CALLBACK_EVENT_MAKE;
 const RAF = CALLBACK("requestAnimationFrame");
+const OBSERVER = OBSERVER_EVENT_MAKE;
 const CUSTOM = DOM_EVENT_MAKE;
 const CLICK = DOM_EVENT_MAKE("click");
 const DOUBLECLICK = DOM_EVENT_MAKE("dblclick");
@@ -2214,6 +2218,105 @@ class DomEventHandler extends BaseHandler {
     }
   }
 }
+class ObserverHandler extends BaseHandler {
+  initialize() {
+    var _a, _b;
+    this.destroy();
+    if (this._observers && this.context.notEventRedefine) {
+      return;
+    }
+    if (!this._observers || this._observers.length === 0) {
+      this._observers = this.context.filterMethodes("observer");
+    }
+    if (!((_a = this._bindings) == null ? void 0 : _a.length) && ((_b = this._observers) == null ? void 0 : _b.length)) {
+      this._observers.forEach((it) => this.parseObserver(it));
+    }
+  }
+  destroy() {
+    if (this.context.notEventRedefine)
+      ;
+    else {
+      this.removeEventAll();
+    }
+  }
+  removeEventAll() {
+    this.getBindings().forEach((observer) => {
+      this.removeDomEvent(observer);
+    });
+    this.initBindings();
+  }
+  disconnectObserver(observer) {
+    observer == null ? void 0 : observer.disconnect();
+  }
+  getBindings() {
+    if (!this._bindings) {
+      this.initBindings();
+    }
+    return this._bindings;
+  }
+  addBinding(obj2) {
+    this.getBindings().push(obj2);
+  }
+  initBindings() {
+    this._bindings = [];
+  }
+  addObserver(observer) {
+    this.addBinding(observer);
+  }
+  getDefaultDomElement(dom) {
+    const context = this.context;
+    let el;
+    if (dom) {
+      el = context.refs[dom] || context[dom] || window[dom];
+    } else {
+      el = context.el || context.$el || context.$root;
+    }
+    if (el instanceof Dom) {
+      return el.getElement();
+    }
+    return el;
+  }
+  createObserver(magicMethod, callback) {
+    var _a;
+    const [observerType, observerTarget] = magicMethod.args || ["intersection"];
+    const $target = this.getDefaultDomElement(observerTarget);
+    const params = magicMethod.getFunction("params");
+    const options2 = getVariable((_a = params == null ? void 0 : params.args) == null ? void 0 : _a[0]);
+    let observer;
+    switch (observerType) {
+      case "intersection":
+        if (options2.root) {
+          options2.root = this.getDefaultDomElement(options2.root);
+        }
+        observer = new window.IntersectionObserver(callback, options2 || {});
+        observer.observe($target);
+        break;
+      case "mutation":
+        observer = new window.MutationObserver(callback);
+        observer.observe($target, options2 || {
+          attributes: true,
+          characterData: true,
+          childList: true
+        });
+        break;
+      case "performance":
+        observer = new window.PerformanceObserver(callback);
+        observer.observe(options2 || {
+          entryTypes: ["paint"]
+        });
+        break;
+    }
+    return observer;
+  }
+  bindingObserver(magicMethod, callback) {
+    this.addObserver(this.createObserver(magicMethod, callback));
+  }
+  parseObserver(it) {
+    const context = this.context;
+    var originalCallback = context[it.originalMethod].bind(context);
+    this.bindingObserver(it, originalCallback);
+  }
+}
 const REFERENCE_PROPERTY = "ref";
 const BIND_PROPERTY = "bind";
 const LOAD_PROPERTY = "load";
@@ -2288,7 +2391,8 @@ const _EventMachine = class {
     return [
       new BindHandler(this),
       new DomEventHandler(this),
-      new CallbackHandler(this)
+      new CallbackHandler(this),
+      new ObserverHandler(this)
     ];
   }
   initState() {
@@ -96545,4 +96649,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT$1 as UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, classnames, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT$1 as UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, classnames, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
