@@ -96,7 +96,7 @@ editor.context.commands.executeCommand('setAttribute', 'change property', editor
 }))
 
 // ui 상에서 
-this.$commands.executeCommand('setAttribute', 'change property', this.$context.selection.packByValue({
+this.$context.commands.executeCommand('setAttribute', 'change property', this.$context.selection.packByValue({
     'background-color': 'red'
 }))
 
