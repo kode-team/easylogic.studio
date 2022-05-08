@@ -15,6 +15,7 @@ import "./PatternAssetsProperty.scss";
 import { CSS_TO_STRING } from "elf/core/func";
 import patterns from "elf/editor/preset/patterns";
 import { Pattern } from "elf/editor/property-parser/Pattern";
+import { ViewModeType } from "elf/editor/types/editor";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
@@ -102,7 +103,7 @@ export default class PatternAssetsProperty extends BaseProperty {
     const pattern = e.$dt.attr("data-pattern");
 
     // view 에 따라 다른 속성을 가진다.
-    if (this.$modeView.isCurrentMode("CanvasView")) {
+    if (this.$modeView.isCurrentMode(ViewModeType.CanvasView)) {
       this.emit("addBackgroundImagePattern", pattern);
     } else {
       this.emit("setPatternAsset", pattern);

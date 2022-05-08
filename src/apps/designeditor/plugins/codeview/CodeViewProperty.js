@@ -18,7 +18,9 @@ export default class CodeViewProperty extends BaseProperty {
     this.refresh();
   }
 
-  [SUBSCRIBE(UPDATE_CANVAS, REFRESH_SELECTION) + IF("checkConfig") + DEBOUNCE(100)]() {
+  [SUBSCRIBE(UPDATE_CANVAS, REFRESH_SELECTION) +
+    IF("checkConfig") +
+    DEBOUNCE(100)]() {
     this.refresh();
   }
 

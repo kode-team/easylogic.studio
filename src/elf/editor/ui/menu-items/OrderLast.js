@@ -10,6 +10,10 @@ export default class OrderLast extends MenuItem {
   }
 
   clickButton() {
-    this.commands.executeCommand("bring.front", "bring front", this.$context.selection.current);
+    this.$commands.executeCommand(
+      "bring.front",
+      "bring front",
+      this.$context.selection.current
+    );
   }
 }

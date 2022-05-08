@@ -1,9 +1,9 @@
 import { PathParser } from "./PathParser";
-import PathStringManager from "./PathStringManager";
+import { PathStringManager } from "./PathStringManager";
 
 const splitReg = /[\b\t ,]/g;
 
-export default class PolygonParser extends PathParser {
+export class PolygonParser extends PathParser {
   constructor(points = "") {
     super(points);
   }

@@ -305,19 +305,19 @@ function DomDiff(A, B, options2 = {}) {
 const UUID_REG$1 = /[xy]/g;
 function uuid$1() {
   var dt = new Date().getTime();
-  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG$1, function(c) {
+  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG$1, function(c2) {
     var r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
-    return (c == "x" ? r : r & 3 | 8).toString(16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
   });
   return uuid2;
 }
 function uuidShort$1() {
   var dt = new Date().getTime();
-  var uuid2 = "idxxxxxxx".replace(UUID_REG$1, function(c) {
+  var uuid2 = "idxxxxxxx".replace(UUID_REG$1, function(c2) {
     var r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
-    return (c == "x" ? r : r & 3 | 8).toString(16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
   });
   return uuid2;
 }
@@ -3136,12 +3136,12 @@ function fromTranslation$1(out, v) {
   return out;
 }
 function fromRotation$1(out, rad) {
-  var s = Math.sin(rad), c = Math.cos(rad);
-  out[0] = c;
+  var s = Math.sin(rad), c2 = Math.cos(rad);
+  out[0] = c2;
   out[1] = s;
   out[2] = 0;
   out[3] = -s;
-  out[4] = c;
+  out[4] = c2;
   out[5] = 0;
   out[6] = 0;
   out[7] = 0;
@@ -3376,7 +3376,7 @@ function translate(out, a, v) {
   }
   return out;
 }
-function scale(out, a, v) {
+function scale$1(out, a, v) {
   var x = v[0], y = v[1], z = v[2];
   out[0] = a[0] * x;
   out[1] = a[1] * x;
@@ -3399,7 +3399,7 @@ function scale(out, a, v) {
 function rotate$1(out, a, rad, axis) {
   var x = axis[0], y = axis[1], z = axis[2];
   var len2 = Math.hypot(x, y, z);
-  var s, c, t;
+  var s, c2, t;
   var a00, a01, a02, a03;
   var a10, a11, a12, a13;
   var a20, a21, a22, a23;
@@ -3414,8 +3414,8 @@ function rotate$1(out, a, rad, axis) {
   y *= len2;
   z *= len2;
   s = Math.sin(rad);
-  c = Math.cos(rad);
-  t = 1 - c;
+  c2 = Math.cos(rad);
+  t = 1 - c2;
   a00 = a[0];
   a01 = a[1];
   a02 = a[2];
@@ -3428,15 +3428,15 @@ function rotate$1(out, a, rad, axis) {
   a21 = a[9];
   a22 = a[10];
   a23 = a[11];
-  b00 = x * x * t + c;
+  b00 = x * x * t + c2;
   b01 = y * x * t + z * s;
   b02 = z * x * t - y * s;
   b10 = x * y * t - z * s;
-  b11 = y * y * t + c;
+  b11 = y * y * t + c2;
   b12 = z * y * t + x * s;
   b20 = x * z * t + y * s;
   b21 = y * z * t - x * s;
-  b22 = z * z * t + c;
+  b22 = z * z * t + c2;
   out[0] = a00 * b00 + a10 * b01 + a20 * b02;
   out[1] = a01 * b00 + a11 * b01 + a21 * b02;
   out[2] = a02 * b00 + a12 * b01 + a22 * b02;
@@ -3459,7 +3459,7 @@ function rotate$1(out, a, rad, axis) {
 }
 function rotateX(out, a, rad) {
   var s = Math.sin(rad);
-  var c = Math.cos(rad);
+  var c2 = Math.cos(rad);
   var a10 = a[4];
   var a11 = a[5];
   var a12 = a[6];
@@ -3478,19 +3478,19 @@ function rotateX(out, a, rad) {
     out[14] = a[14];
     out[15] = a[15];
   }
-  out[4] = a10 * c + a20 * s;
-  out[5] = a11 * c + a21 * s;
-  out[6] = a12 * c + a22 * s;
-  out[7] = a13 * c + a23 * s;
-  out[8] = a20 * c - a10 * s;
-  out[9] = a21 * c - a11 * s;
-  out[10] = a22 * c - a12 * s;
-  out[11] = a23 * c - a13 * s;
+  out[4] = a10 * c2 + a20 * s;
+  out[5] = a11 * c2 + a21 * s;
+  out[6] = a12 * c2 + a22 * s;
+  out[7] = a13 * c2 + a23 * s;
+  out[8] = a20 * c2 - a10 * s;
+  out[9] = a21 * c2 - a11 * s;
+  out[10] = a22 * c2 - a12 * s;
+  out[11] = a23 * c2 - a13 * s;
   return out;
 }
 function rotateY(out, a, rad) {
   var s = Math.sin(rad);
-  var c = Math.cos(rad);
+  var c2 = Math.cos(rad);
   var a00 = a[0];
   var a01 = a[1];
   var a02 = a[2];
@@ -3509,19 +3509,19 @@ function rotateY(out, a, rad) {
     out[14] = a[14];
     out[15] = a[15];
   }
-  out[0] = a00 * c - a20 * s;
-  out[1] = a01 * c - a21 * s;
-  out[2] = a02 * c - a22 * s;
-  out[3] = a03 * c - a23 * s;
-  out[8] = a00 * s + a20 * c;
-  out[9] = a01 * s + a21 * c;
-  out[10] = a02 * s + a22 * c;
-  out[11] = a03 * s + a23 * c;
+  out[0] = a00 * c2 - a20 * s;
+  out[1] = a01 * c2 - a21 * s;
+  out[2] = a02 * c2 - a22 * s;
+  out[3] = a03 * c2 - a23 * s;
+  out[8] = a00 * s + a20 * c2;
+  out[9] = a01 * s + a21 * c2;
+  out[10] = a02 * s + a22 * c2;
+  out[11] = a03 * s + a23 * c2;
   return out;
 }
 function rotateZ(out, a, rad) {
   var s = Math.sin(rad);
-  var c = Math.cos(rad);
+  var c2 = Math.cos(rad);
   var a00 = a[0];
   var a01 = a[1];
   var a02 = a[2];
@@ -3540,14 +3540,14 @@ function rotateZ(out, a, rad) {
     out[14] = a[14];
     out[15] = a[15];
   }
-  out[0] = a00 * c + a10 * s;
-  out[1] = a01 * c + a11 * s;
-  out[2] = a02 * c + a12 * s;
-  out[3] = a03 * c + a13 * s;
-  out[4] = a10 * c - a00 * s;
-  out[5] = a11 * c - a01 * s;
-  out[6] = a12 * c - a02 * s;
-  out[7] = a13 * c - a03 * s;
+  out[0] = a00 * c2 + a10 * s;
+  out[1] = a01 * c2 + a11 * s;
+  out[2] = a02 * c2 + a12 * s;
+  out[3] = a03 * c2 + a13 * s;
+  out[4] = a10 * c2 - a00 * s;
+  out[5] = a11 * c2 - a01 * s;
+  out[6] = a12 * c2 - a02 * s;
+  out[7] = a13 * c2 - a03 * s;
   return out;
 }
 function fromTranslation(out, v) {
@@ -3591,7 +3591,7 @@ function fromScaling(out, v) {
 function fromRotation(out, rad, axis) {
   var x = axis[0], y = axis[1], z = axis[2];
   var len2 = Math.hypot(x, y, z);
-  var s, c, t;
+  var s, c2, t;
   if (len2 < EPSILON) {
     return null;
   }
@@ -3600,19 +3600,19 @@ function fromRotation(out, rad, axis) {
   y *= len2;
   z *= len2;
   s = Math.sin(rad);
-  c = Math.cos(rad);
-  t = 1 - c;
-  out[0] = x * x * t + c;
+  c2 = Math.cos(rad);
+  t = 1 - c2;
+  out[0] = x * x * t + c2;
   out[1] = y * x * t + z * s;
   out[2] = z * x * t - y * s;
   out[3] = 0;
   out[4] = x * y * t - z * s;
-  out[5] = y * y * t + c;
+  out[5] = y * y * t + c2;
   out[6] = z * y * t + x * s;
   out[7] = 0;
   out[8] = x * z * t + y * s;
   out[9] = y * z * t - x * s;
-  out[10] = z * z * t + c;
+  out[10] = z * z * t + c2;
   out[11] = 0;
   out[12] = 0;
   out[13] = 0;
@@ -3622,13 +3622,13 @@ function fromRotation(out, rad, axis) {
 }
 function fromZRotation(out, rad) {
   var s = Math.sin(rad);
-  var c = Math.cos(rad);
-  out[0] = c;
+  var c2 = Math.cos(rad);
+  out[0] = c2;
   out[1] = s;
   out[2] = 0;
   out[3] = 0;
   out[4] = -s;
-  out[5] = c;
+  out[5] = c2;
   out[6] = 0;
   out[7] = 0;
   out[8] = 0;
@@ -4078,9 +4078,9 @@ var normalize$1 = normalize$2;
 (function() {
   var temp1 = create$1();
   var temp2 = create$1();
-  return function(out, a, b, c, d, t) {
+  return function(out, a, b, c2, d, t) {
     slerp(temp1, a, d, t);
-    slerp(temp2, b, c, t);
+    slerp(temp2, b, c2, t);
     slerp(out, temp1, temp2, 2 * t * (1 - t));
     return out;
   };
@@ -4352,7 +4352,7 @@ const NotifyType = {
   WARNING: "warning",
   ALERT: "alert"
 };
-const IntersectEpsilonType = {
+const IntersectEpsilonNumberType = {
   RECT: 30
 };
 const ClipboardType = {
@@ -4455,9 +4455,6 @@ class EditorElement extends UIElement {
   }
   get $modeView() {
     return this.$context.modeViewManager;
-  }
-  get $pathkit() {
-    return this.$context.pathKitManager;
   }
   get $icon() {
     return this.$context.icon;
@@ -5015,37 +5012,37 @@ function _icon_template(tpl, opt) {
             height="${defaultOpts.height}" 
             viewBox="0 0 ${defaultOpts.viewBoxWidth || defaultOpts.width} ${defaultOpts.viewBoxHeight || defaultOpts.height}">${tpl}</svg>`;
 }
-var __glob_0_0$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _icon_template
 }, Symbol.toStringTag, { value: "Module" }));
 var account_tree = _icon_template(`<path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z"/>`);
-var __glob_0_1$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": account_tree
 }, Symbol.toStringTag, { value: "Module" }));
 var add = _icon_template(`<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>`);
-var __glob_0_2$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add
 }, Symbol.toStringTag, { value: "Module" }));
 var add_box = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>`);
-var __glob_0_3$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_box
 }, Symbol.toStringTag, { value: "Module" }));
 var add_circle$1 = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>`);
-var __glob_0_4$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_circle$1
 }, Symbol.toStringTag, { value: "Module" }));
 var add_note = _icon_template(`<path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"/>`);
-var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_note
 }, Symbol.toStringTag, { value: "Module" }));
 var align_center = _icon_template(`<path d="M7 15v2h10v-2H7zm-4 6h18v-2H3v2zm0-8h18v-2H3v2zm4-6v2h10V7H7zM3 3v2h18V3H3z"/>`);
-var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": align_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5100,7 +5097,7 @@ var __glob_0_16$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": alternate
 }, Symbol.toStringTag, { value: "Module" }));
 var alternate_reverse = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />`);
-var __glob_0_17$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_17$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": alternate_reverse
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5120,37 +5117,37 @@ var __glob_0_20$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": arrowLeft
 }, Symbol.toStringTag, { value: "Module" }));
 var arrowRight = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
-var __glob_0_21$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": arrowRight
 }, Symbol.toStringTag, { value: "Module" }));
 var arrow_right = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
-var __glob_0_22$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": arrow_right
 }, Symbol.toStringTag, { value: "Module" }));
 var artboard$1 = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
-var __glob_0_23$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_23$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": artboard$1
 }, Symbol.toStringTag, { value: "Module" }));
 var auto_awesome = _icon_template(`<path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>`);
-var __glob_0_24$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": auto_awesome
 }, Symbol.toStringTag, { value: "Module" }));
 var autorenew = _icon_template(`<path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>`);
-var __glob_0_25$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_25$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": autorenew
 }, Symbol.toStringTag, { value: "Module" }));
 var ballot = _icon_template(`<clipPath><use xlink:href="#a" overflow="visible"/></clipPath><path fill-rule="evenodd" clip-rule="evenodd" d="M13 9.5h5v-2h-5v2zm0 7h5v-2h-5v2zm6 4.5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2zM6 11h5V6H6v5zm1-4h3v3H7V7zM6 18h5v-5H6v5zm1-4h3v3H7v-3z"/>`);
-var __glob_0_26$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_26$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ballot
 }, Symbol.toStringTag, { value: "Module" }));
 var bar_chart = _icon_template(`<path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/>`);
-var __glob_0_27$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_27$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": bar_chart
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5560,10 +5557,10 @@ var __glob_0_94$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": gps_fixed
 }, Symbol.toStringTag, { value: "Module" }));
-var gradient$1 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
+var gradient$2 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
 var __glob_0_95$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": gradient$1
+  "default": gradient$2
 }, Symbol.toStringTag, { value: "Module" }));
 var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
 var __glob_0_96$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -6390,11 +6387,11 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$5 = { "./icon_list/_icon_template.js": __glob_0_0$5, "./icon_list/account_tree.js": __glob_0_1$5, "./icon_list/add.js": __glob_0_2$5, "./icon_list/add_box.js": __glob_0_3$5, "./icon_list/add_circle.js": __glob_0_4$5, "./icon_list/add_note.js": __glob_0_5$5, "./icon_list/align_center.js": __glob_0_6$5, "./icon_list/align_horizontal_center.js": __glob_0_7$5, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$5, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$3, "./icon_list/ballot.js": __glob_0_26$3, "./icon_list/bar_chart.js": __glob_0_27$3, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/doc.js": __glob_0_63$1, "./icon_list/drag_handle.js": __glob_0_64$1, "./icon_list/drag_indicator.js": __glob_0_65$1, "./icon_list/draw.js": __glob_0_66$1, "./icon_list/east.js": __glob_0_67$1, "./icon_list/edit.js": __glob_0_68$1, "./icon_list/end.js": __glob_0_69$1, "./icon_list/exit_to_app.js": __glob_0_70$1, "./icon_list/expand.js": __glob_0_71$1, "./icon_list/expand_more.js": __glob_0_72$1, "./icon_list/export.js": __glob_0_73$1, "./icon_list/face.js": __glob_0_74$1, "./icon_list/fast_forward.js": __glob_0_75$1, "./icon_list/fast_rewind.js": __glob_0_76$1, "./icon_list/file_copy.js": __glob_0_77$1, "./icon_list/filter.js": __glob_0_78$1, "./icon_list/flag.js": __glob_0_79$1, "./icon_list/flash_on.js": __glob_0_80$1, "./icon_list/flatten.js": __glob_0_81$1, "./icon_list/flex.js": __glob_0_82$1, "./icon_list/flip.js": __glob_0_83$1, "./icon_list/flipY.js": __glob_0_84$1, "./icon_list/flip_camera.js": __glob_0_85$1, "./icon_list/folder.js": __glob_0_86$1, "./icon_list/font_download.js": __glob_0_87$1, "./icon_list/format_bold.js": __glob_0_88$1, "./icon_list/format_indent.js": __glob_0_89$1, "./icon_list/format_line_spacing.js": __glob_0_90$1, "./icon_list/format_shapes.js": __glob_0_91$1, "./icon_list/format_size.js": __glob_0_92$1, "./icon_list/fullscreen.js": __glob_0_93$1, "./icon_list/gps_fixed.js": __glob_0_94$1, "./icon_list/gradient.js": __glob_0_95$1, "./icon_list/grid.js": __glob_0_96$1, "./icon_list/grid3x3.js": __glob_0_97$1, "./icon_list/group.js": __glob_0_98$1, "./icon_list/height.js": __glob_0_99$1, "./icon_list/highlight_at.js": __glob_0_100$1, "./icon_list/horizontal_align_center.js": __glob_0_101$1, "./icon_list/horizontal_distribute.js": __glob_0_102$1, "./icon_list/horizontal_rule.js": __glob_0_103$1, "./icon_list/image.js": __glob_0_104$1, "./icon_list/input.js": __glob_0_105$1, "./icon_list/italic.js": __glob_0_106$1, "./icon_list/join_full.js": __glob_0_107$1, "./icon_list/join_right.js": __glob_0_108$1, "./icon_list/justify_content_space_around.js": __glob_0_109$1, "./icon_list/keyboard.js": __glob_0_110$1, "./icon_list/keyboard_arrow_down.js": __glob_0_111$1, "./icon_list/keyboard_arrow_left.js": __glob_0_112$1, "./icon_list/keyboard_arrow_right.js": __glob_0_113$1, "./icon_list/keyboard_arrow_up.js": __glob_0_114$1, "./icon_list/landscape.js": __glob_0_115$1, "./icon_list/launch.js": __glob_0_116$1, "./icon_list/layers.js": __glob_0_117$1, "./icon_list/layout_default.js": __glob_0_118$1, "./icon_list/layout_flex.js": __glob_0_119$1, "./icon_list/layout_grid.js": __glob_0_120$1, "./icon_list/left.js": __glob_0_121$1, "./icon_list/left_hide.js": __glob_0_122, "./icon_list/lens.js": __glob_0_123, "./icon_list/light.js": __glob_0_124, "./icon_list/line_cap_butt.js": __glob_0_125, "./icon_list/line_cap_round.js": __glob_0_126, "./icon_list/line_cap_square.js": __glob_0_127, "./icon_list/line_chart.js": __glob_0_128, "./icon_list/line_join_bevel.js": __glob_0_129, "./icon_list/line_join_miter.js": __glob_0_130, "./icon_list/line_join_round.js": __glob_0_131, "./icon_list/line_style.js": __glob_0_132, "./icon_list/line_weight.js": __glob_0_133, "./icon_list/list.js": __glob_0_134, "./icon_list/local_library.js": __glob_0_135, "./icon_list/local_movie.js": __glob_0_136, "./icon_list/lock.js": __glob_0_137, "./icon_list/lock_open.js": __glob_0_138, "./icon_list/looks.js": __glob_0_139, "./icon_list/margin.js": __glob_0_140, "./icon_list/merge.js": __glob_0_141, "./icon_list/middle.js": __glob_0_142, "./icon_list/navigation.js": __glob_0_143, "./icon_list/near_me.js": __glob_0_144, "./icon_list/north.js": __glob_0_145, "./icon_list/note.js": __glob_0_146, "./icon_list/nowrap.js": __glob_0_147, "./icon_list/opacity.js": __glob_0_148, "./icon_list/open_in_full.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
-const obj$2 = {};
-Object.entries(modules$5).forEach(([key, value]) => {
+const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$5, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$2, "./icon_list/arrow_right.js": __glob_0_22$2, "./icon_list/artboard.js": __glob_0_23$2, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/doc.js": __glob_0_63$1, "./icon_list/drag_handle.js": __glob_0_64$1, "./icon_list/drag_indicator.js": __glob_0_65$1, "./icon_list/draw.js": __glob_0_66$1, "./icon_list/east.js": __glob_0_67$1, "./icon_list/edit.js": __glob_0_68$1, "./icon_list/end.js": __glob_0_69$1, "./icon_list/exit_to_app.js": __glob_0_70$1, "./icon_list/expand.js": __glob_0_71$1, "./icon_list/expand_more.js": __glob_0_72$1, "./icon_list/export.js": __glob_0_73$1, "./icon_list/face.js": __glob_0_74$1, "./icon_list/fast_forward.js": __glob_0_75$1, "./icon_list/fast_rewind.js": __glob_0_76$1, "./icon_list/file_copy.js": __glob_0_77$1, "./icon_list/filter.js": __glob_0_78$1, "./icon_list/flag.js": __glob_0_79$1, "./icon_list/flash_on.js": __glob_0_80$1, "./icon_list/flatten.js": __glob_0_81$1, "./icon_list/flex.js": __glob_0_82$1, "./icon_list/flip.js": __glob_0_83$1, "./icon_list/flipY.js": __glob_0_84$1, "./icon_list/flip_camera.js": __glob_0_85$1, "./icon_list/folder.js": __glob_0_86$1, "./icon_list/font_download.js": __glob_0_87$1, "./icon_list/format_bold.js": __glob_0_88$1, "./icon_list/format_indent.js": __glob_0_89$1, "./icon_list/format_line_spacing.js": __glob_0_90$1, "./icon_list/format_shapes.js": __glob_0_91$1, "./icon_list/format_size.js": __glob_0_92$1, "./icon_list/fullscreen.js": __glob_0_93$1, "./icon_list/gps_fixed.js": __glob_0_94$1, "./icon_list/gradient.js": __glob_0_95$1, "./icon_list/grid.js": __glob_0_96$1, "./icon_list/grid3x3.js": __glob_0_97$1, "./icon_list/group.js": __glob_0_98$1, "./icon_list/height.js": __glob_0_99$1, "./icon_list/highlight_at.js": __glob_0_100$1, "./icon_list/horizontal_align_center.js": __glob_0_101$1, "./icon_list/horizontal_distribute.js": __glob_0_102$1, "./icon_list/horizontal_rule.js": __glob_0_103$1, "./icon_list/image.js": __glob_0_104$1, "./icon_list/input.js": __glob_0_105$1, "./icon_list/italic.js": __glob_0_106$1, "./icon_list/join_full.js": __glob_0_107$1, "./icon_list/join_right.js": __glob_0_108$1, "./icon_list/justify_content_space_around.js": __glob_0_109$1, "./icon_list/keyboard.js": __glob_0_110$1, "./icon_list/keyboard_arrow_down.js": __glob_0_111$1, "./icon_list/keyboard_arrow_left.js": __glob_0_112$1, "./icon_list/keyboard_arrow_right.js": __glob_0_113$1, "./icon_list/keyboard_arrow_up.js": __glob_0_114$1, "./icon_list/landscape.js": __glob_0_115$1, "./icon_list/launch.js": __glob_0_116$1, "./icon_list/layers.js": __glob_0_117$1, "./icon_list/layout_default.js": __glob_0_118$1, "./icon_list/layout_flex.js": __glob_0_119$1, "./icon_list/layout_grid.js": __glob_0_120$1, "./icon_list/left.js": __glob_0_121$1, "./icon_list/left_hide.js": __glob_0_122, "./icon_list/lens.js": __glob_0_123, "./icon_list/light.js": __glob_0_124, "./icon_list/line_cap_butt.js": __glob_0_125, "./icon_list/line_cap_round.js": __glob_0_126, "./icon_list/line_cap_square.js": __glob_0_127, "./icon_list/line_chart.js": __glob_0_128, "./icon_list/line_join_bevel.js": __glob_0_129, "./icon_list/line_join_miter.js": __glob_0_130, "./icon_list/line_join_round.js": __glob_0_131, "./icon_list/line_style.js": __glob_0_132, "./icon_list/line_weight.js": __glob_0_133, "./icon_list/list.js": __glob_0_134, "./icon_list/local_library.js": __glob_0_135, "./icon_list/local_movie.js": __glob_0_136, "./icon_list/lock.js": __glob_0_137, "./icon_list/lock_open.js": __glob_0_138, "./icon_list/looks.js": __glob_0_139, "./icon_list/margin.js": __glob_0_140, "./icon_list/merge.js": __glob_0_141, "./icon_list/middle.js": __glob_0_142, "./icon_list/navigation.js": __glob_0_143, "./icon_list/near_me.js": __glob_0_144, "./icon_list/north.js": __glob_0_145, "./icon_list/note.js": __glob_0_146, "./icon_list/nowrap.js": __glob_0_147, "./icon_list/opacity.js": __glob_0_148, "./icon_list/open_in_full.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const obj$3 = {};
+Object.entries(modules$7).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
-  obj$2[key] = value.default;
+  obj$3[key] = value.default;
 });
 function iconUse(name, transform2 = "", opt = { width: 24, height: 24 }) {
   if (!name)
@@ -6905,19 +6902,19 @@ function calculateAngle360(rx, ry) {
 const UUID_REG = /[xy]/g;
 function uuid() {
   var dt = new Date().getTime();
-  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG, function(c) {
+  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG, function(c2) {
     var r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
-    return (c == "x" ? r : r & 3 | 8).toString(16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
   });
   return uuid2;
 }
 function uuidShort() {
   var dt = new Date().getTime();
-  var uuid2 = "idxxxxxxx".replace(UUID_REG, function(c) {
+  var uuid2 = "idxxxxxxx".replace(UUID_REG, function(c2) {
     var r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
-    return (c == "x" ? r : r & 3 | 8).toString(16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
   });
   return uuid2;
 }
@@ -7583,7 +7580,7 @@ class MenuItem extends EditorElement {
             ${this.isDisabled() ? "disabled" : ""}
             data-direction="${this.getDirection()}"
         >
-            <div class="icon ${this.getIcon()}" ref="$icon">${obj$2[this.getIconString()] || this.getIconString() || ""}</div>
+            <div class="icon ${this.getIcon()}" ref="$icon">${obj$3[this.getIconString()] || this.getIconString() || ""}</div>
             ${this.isHideTitle() ? "" : `<div class="title">${this.getTitle()}</div>`}
             
         </button>
@@ -7610,7 +7607,7 @@ class MenuItem extends EditorElement {
     return DEFAULT_ICON;
   }
   setIcon(iconString) {
-    this.refs.$icon.html(obj$2[iconString] || iconString || "");
+    this.refs.$icon.html(obj$3[iconString] || iconString || "");
   }
   getIconString() {
     return DEFAULT_ICON;
@@ -7735,17 +7732,6 @@ function baseEditor(editor) {
     button: "Button"
   });
 }
-var area_width = {
-  key: "area.width",
-  defaultValue: 100,
-  title: "Area Width to find layers fastly",
-  description: "Set area width/height",
-  type: "number"
-};
-var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": area_width
-}, Symbol.toStringTag, { value: "Module" }));
 var body_move_ms = {
   key: "body.move.ms",
   defaultValue: 30,
@@ -7753,120 +7739,20 @@ var body_move_ms = {
   description: "Set delay millisecond to moving pointer in body  ",
   type: "number"
 };
-var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": body_move_ms
 }, Symbol.toStringTag, { value: "Module" }));
-var canvas_height = {
-  key: "canvas.height",
-  defaultValue: 1e4,
-  title: "Default canvas height",
-  description: "Set default canvas height",
-  type: "number"
-};
-var __glob_0_2$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": canvas_height
-}, Symbol.toStringTag, { value: "Module" }));
-var canvas_width = {
-  key: "canvas.width",
-  defaultValue: 1e4,
-  title: "Default canvas width",
-  description: "Set default canvas width",
-  type: "number"
-};
-var __glob_0_3$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": canvas_width
-}, Symbol.toStringTag, { value: "Module" }));
-var debug_mode = {
+var debug_mode$1 = {
   key: "debug.mode",
   defaultValue: false,
   title: "debug mode",
   description: "Set debug mode to on ",
   type: "boolean"
 };
-var __glob_0_4$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": debug_mode
-}, Symbol.toStringTag, { value: "Module" }));
-var editing_css_itemType = {
-  key: "editing.css.itemType",
-  defaultValue: "rect",
-  title: "set item type for  editing css",
-  description: "set item type for  editing css",
-  type: "string"
-};
-var __glob_0_5$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editing_css_itemType
-}, Symbol.toStringTag, { value: "Module" }));
-var editing_draw_itemType = {
-  key: "editing.draw.itemType",
-  defaultValue: "path",
-  title: "set item type for  editing draw",
-  description: "set item type for  editing draw",
-  type: "string"
-};
-var __glob_0_6$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editing_draw_itemType
-}, Symbol.toStringTag, { value: "Module" }));
-var editing_mode_itemType = {
-  key: "editing.mode.itemType",
-  defaultValue: "select",
-  title: "set item type for  editing mode",
-  description: "set item type for  editing mode",
-  type: "string"
-};
-var __glob_0_7$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editing_mode_itemType
-}, Symbol.toStringTag, { value: "Module" }));
-var editing_mode = {
-  key: "editing.mode",
-  defaultValue: EditingMode.SELECT,
-  title: "set editing mode for Editor",
-  description: "set editing mode (select, append, draw, path)",
-  type: "string"
-};
-var __glob_0_8$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editing_mode
-}, Symbol.toStringTag, { value: "Module" }));
-var editing_svg_itemType = {
-  key: "editing.svg.itemType",
-  defaultValue: "svg-rect",
-  title: "set item type for  editing svg",
-  description: "set item type for  editing svg",
-  type: "string"
-};
-var __glob_0_9$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editing_svg_itemType
-}, Symbol.toStringTag, { value: "Module" }));
-var editor_design_mode = {
-  key: "editor.design.mode",
-  defaultValue: "design",
-  title: "Editor Design Mode ",
-  description: "Set editor's design mode",
-  options: ["design", "item"],
-  type: "select"
-};
-var __glob_0_10$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editor_design_mode
-}, Symbol.toStringTag, { value: "Module" }));
-var editor_layout_mode = {
-  key: "editor.layout.mode",
-  defaultValue: "all",
-  title: "Editor Layout Mode ",
-  description: "Set editor's layout mode",
-  type: "string"
-};
-var __glob_0_11$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editor_layout_mode
+  "default": debug_mode$1
 }, Symbol.toStringTag, { value: "Module" }));
 var editor_theme = {
   key: "editor.theme",
@@ -7875,42 +7761,9 @@ var editor_theme = {
   description: "Set editor's theme",
   type: "string"
 };
-var __glob_0_12$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": editor_theme
-}, Symbol.toStringTag, { value: "Module" }));
-var fixed_angle = {
-  key: "fixed.angle",
-  defaultValue: 15,
-  title: "fixed angle count",
-  description: "Set fixed angle",
-  type: "number"
-};
-var __glob_0_13$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": fixed_angle
-}, Symbol.toStringTag, { value: "Module" }));
-var fixed_gradient_angle = {
-  key: "fixed.gradient.angle",
-  defaultValue: 1,
-  title: "fixed gradient angle count",
-  description: "Set fixed gradient angle",
-  type: "number"
-};
-var __glob_0_14$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": fixed_gradient_angle
-}, Symbol.toStringTag, { value: "Module" }));
-var history_delay_ms = {
-  key: "history.delay.ms",
-  defaultValue: 500,
-  title: "history delay milliseconds",
-  description: "Set history delay time",
-  type: "number"
-};
-var __glob_0_15$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": history_delay_ms
 }, Symbol.toStringTag, { value: "Module" }));
 var language_locale = {
   key: "language.locale",
@@ -7919,35 +7772,11 @@ var language_locale = {
   description: "set locale for editor",
   type: "string"
 };
-var __glob_0_16$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": language_locale
 }, Symbol.toStringTag, { value: "Module" }));
-var set_drag_path_area = {
-  key: "set.drag.path.area",
-  defaultValue: false,
-  title: "Drag path area",
-  description: "Drag path area",
-  type: "boolean",
-  storage: "none"
-};
-var __glob_0_17$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": set_drag_path_area
-}, Symbol.toStringTag, { value: "Module" }));
-var set_move_control_point = {
-  key: "set.move.control.point",
-  defaultValue: false,
-  title: "Moving Control Point",
-  description: "Moving Control Point",
-  type: "boolean",
-  storage: "none"
-};
-var __glob_0_18$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": set_move_control_point
-}, Symbol.toStringTag, { value: "Module" }));
-var set_tool_hand$1 = {
+var set_tool_hand$2 = {
   key: "set.tool.hand",
   defaultValue: false,
   title: "Hand tool",
@@ -7955,75 +7784,9 @@ var set_tool_hand$1 = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_19$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": set_tool_hand$1
-}, Symbol.toStringTag, { value: "Module" }));
-var show_left_panel = {
-  key: "show.left.panel",
-  defaultValue: true,
-  title: "Show left panel",
-  description: "Set left panel visibility to on",
-  type: "boolean"
-};
-var __glob_0_20$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": show_left_panel
-}, Symbol.toStringTag, { value: "Module" }));
-var show_outline = {
-  key: "show.outline",
-  defaultValue: false,
-  title: "Show outline",
-  description: "Set outline visibility to on",
-  type: "boolean"
-};
-var __glob_0_21$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": show_outline
-}, Symbol.toStringTag, { value: "Module" }));
-var show_right_panel = {
-  key: "show.right.panel",
-  defaultValue: true,
-  title: "Show right panel",
-  description: "Set right panel visibility to on",
-  type: "boolean"
-};
-var __glob_0_22$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": show_right_panel
-}, Symbol.toStringTag, { value: "Module" }));
-var show_ruler = {
-  key: "show.ruler",
-  defaultValue: true,
-  title: "Show ruler",
-  description: "Set ruler visibility to on",
-  type: "boolean"
-};
-var __glob_0_23$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": show_ruler
-}, Symbol.toStringTag, { value: "Module" }));
-var snap_distance = {
-  key: "snap.distance",
-  defaultValue: 3,
-  title: "Snap distance between objects",
-  description: "Set snap distance",
-  type: "number"
-};
-var __glob_0_24$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": snap_distance
-}, Symbol.toStringTag, { value: "Module" }));
-var snap_grid = {
-  key: "snap.grid",
-  defaultValue: 50,
-  title: "Snap grid size between objects",
-  description: "Set snap grid size",
-  type: "number"
-};
-var __glob_0_25$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": snap_grid
+  "default": set_tool_hand$2
 }, Symbol.toStringTag, { value: "Module" }));
 var store_key = {
   key: "store.key",
@@ -8032,7 +7795,7 @@ var store_key = {
   description: "Set localStorage key",
   type: "string"
 };
-var __glob_0_26$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": store_key
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8043,14 +7806,14 @@ var style_canvas_background_color = {
   description: "Set canvas background color",
   type: "color"
 };
-var __glob_0_27$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": style_canvas_background_color
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$4 = { "./config_list/area.width.js": __glob_0_0$4, "./config_list/body.move.ms.js": __glob_0_1$4, "./config_list/canvas.height.js": __glob_0_2$4, "./config_list/canvas.width.js": __glob_0_3$4, "./config_list/debug.mode.js": __glob_0_4$4, "./config_list/editing.css.itemType.js": __glob_0_5$4, "./config_list/editing.draw.itemType.js": __glob_0_6$4, "./config_list/editing.mode.itemType.js": __glob_0_7$4, "./config_list/editing.mode.js": __glob_0_8$4, "./config_list/editing.svg.itemType.js": __glob_0_9$4, "./config_list/editor.design.mode.js": __glob_0_10$4, "./config_list/editor.layout.mode.js": __glob_0_11$4, "./config_list/editor.theme.js": __glob_0_12$4, "./config_list/fixed.angle.js": __glob_0_13$4, "./config_list/fixed.gradient.angle.js": __glob_0_14$4, "./config_list/history.delay.ms.js": __glob_0_15$4, "./config_list/language.locale.js": __glob_0_16$4, "./config_list/set.drag.path.area.js": __glob_0_17$4, "./config_list/set.move.control.point.js": __glob_0_18$3, "./config_list/set.tool.hand.js": __glob_0_19$3, "./config_list/show.left.panel.js": __glob_0_20$3, "./config_list/show.outline.js": __glob_0_21$2, "./config_list/show.right.panel.js": __glob_0_22$2, "./config_list/show.ruler.js": __glob_0_23$2, "./config_list/snap.distance.js": __glob_0_24$2, "./config_list/snap.grid.js": __glob_0_25$2, "./config_list/store.key.js": __glob_0_26$2, "./config_list/style.canvas.background.color.js": __glob_0_27$2 };
-var configs = Object.values(modules$4).map((it) => it.default);
+const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.theme.js": __glob_0_2$5, "./config_list/language.locale.js": __glob_0_3$5, "./config_list/set.tool.hand.js": __glob_0_4$5, "./config_list/store.key.js": __glob_0_5$5, "./config_list/style.canvas.background.color.js": __glob_0_6$5 };
+var configs$2 = Object.values(modules$6).map((it) => it.default);
 function defaultConfigs(editor) {
-  configs.forEach((config) => {
+  configs$2.forEach((config) => {
     editor.registerConfig(config);
   });
 }
@@ -8069,8 +7832,8 @@ function defaultIcons(editor) {
 }
 var en_US = {
   "app.title": "elf",
-  "app.sample": (a, b, c) => {
-    return `${a}-${b}-${c}`;
+  "app.sample": (a, b, c2) => {
+    return `${a}-${b}-${c2}`;
   },
   "app.lang.en_US": "English",
   "app.lang.ko_KR": "\uD55C\uAD6D\uC5B4",
@@ -8487,8 +8250,8 @@ var en_US = {
 };
 var fr_FR = {
   "app.title": "elf",
-  "app.sample": (a, b, c) => {
-    return `${a}-${b}-${c}`;
+  "app.sample": (a, b, c2) => {
+    return `${a}-${b}-${c2}`;
   },
   "app.lang.en_US": "English",
   "app.lang.ko_KR": "\uD55C\uAD6D\uC5B4",
@@ -8896,8 +8659,8 @@ var fr_FR = {
 };
 var ko_KR = {
   "app.title": "elf",
-  "app.sample": (a, b, c) => {
-    return `${a}-${b}-${c}`;
+  "app.sample": (a, b, c2) => {
+    return `${a}-${b}-${c2}`;
   },
   "app.lang.en_US": "English",
   "app.lang.ko_KR": "\uD55C\uAD6D\uC5B4",
@@ -9602,7 +9365,7 @@ class SelectEditor extends EditorElement {
     var hasLabel = label ? "has-label" : "";
     var hasTabIndex = tabIndex ? 'tabIndex="1"' : "";
     var compact = this.props.compact ? "compact" : "";
-    if (obj$2[label]) {
+    if (obj$3[label]) {
       label = iconUse(label);
     }
     return `
@@ -9857,6 +9620,69 @@ var ColorNames = {
   isColorName,
   getColorByName
 };
+function ReverseXyz(n) {
+  return Math.pow(n, 3) > 8856e-6 ? Math.pow(n, 3) : (n - 16 / 116) / 7.787;
+}
+function ReverseRGB(n) {
+  return n > 31308e-7 ? 1.055 * Math.pow(n, 1 / 2.4) - 0.055 : 12.92 * n;
+}
+function XYZtoRGB(x, y, z) {
+  if (arguments.length == 1) {
+    var { x, y, z } = arguments[0];
+  }
+  let X = x / 100;
+  let Y = y / 100;
+  let Z = z / 100;
+  let R = X * 3.2406 + Y * -1.5372 + Z * -0.4986;
+  let G = X * -0.9689 + Y * 1.8758 + Z * 0.0415;
+  let B = X * 0.0557 + Y * -0.204 + Z * 1.057;
+  R = ReverseRGB(R);
+  G = ReverseRGB(G);
+  B = ReverseRGB(B);
+  const r = round(R * 255);
+  const g = round(G * 255);
+  const b = round(B * 255);
+  return { r, g, b };
+}
+function LABtoXYZ(l, a, b) {
+  if (arguments.length == 1) {
+    var { l, a, b } = arguments[0];
+  }
+  let Y = (l + 16) / 116;
+  let X = a / 500 + Y;
+  let Z = Y - b / 200;
+  Y = ReverseXyz(Y);
+  X = ReverseXyz(X);
+  Z = ReverseXyz(Z);
+  const x = X * 95.047;
+  const y = Y * 100;
+  const z = Z * 108.883;
+  return { x, y, z };
+}
+function PivotXyz(n) {
+  return n > 8856e-6 ? Math.pow(n, 1 / 3) : (7.787 * n + 16) / 116;
+}
+function XYZtoLAB(x, y, z) {
+  if (arguments.length == 1) {
+    var { x, y, z } = arguments[0];
+  }
+  let X = x / 95.047;
+  let Y = y / 100;
+  let Z = z / 108.883;
+  X = PivotXyz(X);
+  Y = PivotXyz(Y);
+  Z = PivotXyz(Z);
+  const l = 116 * Y - 16;
+  const a = 500 * (X - Y);
+  const b = 200 * (Y - Z);
+  return { l, a, b };
+}
+function LABtoRGB(l, a, b) {
+  if (arguments.length == 1) {
+    var { l, a, b } = arguments[0];
+  }
+  return XYZtoRGB(LABtoXYZ(l, a, b));
+}
 function RGBtoHSV(r, g, b) {
   if (arguments.length == 1) {
     var { r, g, b } = arguments[0];
@@ -9888,6 +9714,19 @@ function RGBtoHSV(r, g, b) {
   var V = MaxC;
   return { h: H, s: S, v: V };
 }
+function RGBtoCMYK(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  const R1 = r / 255;
+  const G1 = g / 255;
+  const B1 = b / 255;
+  const K = 1 - Math.max(R1, G1, B1);
+  const C = (1 - R1 - K) / (1 - K);
+  const M = (1 - G1 - K) / (1 - K);
+  const Y = (1 - B1 - K) / (1 - K);
+  return { c: C, m: M, y: Y, k: K };
+}
 function RGBtoHSL(r, g, b) {
   if (arguments.length == 1) {
     var { r, g, b } = arguments[0];
@@ -9914,6 +9753,63 @@ function RGBtoHSL(r, g, b) {
     h /= 6;
   }
   return { h: round(h * 360), s: round(s * 100), l: round(l * 100) };
+}
+function c(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return gray((r + g + b) / 3 > 90 ? 0 : 255);
+}
+function gray(gray2) {
+  return { r: gray2, g: gray2, b: gray2 };
+}
+function RGBtoSimpleGray(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return gray(Math.ceil((r + g + b) / 3));
+}
+function RGBtoGray(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return gray(RGBtoYCrCb(r, g, b).y);
+}
+function brightness(r, g, b) {
+  return Math.ceil(r * 0.2126 + g * 0.7152 + b * 0.0722);
+}
+function RGBtoYCrCb(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  const Y = brightness(r, g, b);
+  const Cb = 0.564 * (b - Y);
+  const Cr = 0.713 * (r - Y);
+  return { y: Y, cr: Cr, cb: Cb };
+}
+function PivotRGB(n) {
+  return (n > 0.04045 ? Math.pow((n + 0.055) / 1.055, 2.4) : n / 12.92) * 100;
+}
+function RGBtoXYZ(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  let R = r / 255;
+  let G = g / 255;
+  let B = b / 255;
+  R = PivotRGB(R);
+  G = PivotRGB(G);
+  B = PivotRGB(B);
+  const x = R * 0.4124 + G * 0.3576 + B * 0.1805;
+  const y = R * 0.2126 + G * 0.7152 + B * 0.0722;
+  const z = R * 0.0193 + G * 0.1192 + B * 0.9505;
+  return { x, y, z };
+}
+function RGBtoLAB(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return XYZtoLAB(RGBtoXYZ(r, g, b));
 }
 function HUEtoRGB(p, q, t) {
   if (t < 0)
@@ -9993,6 +9889,16 @@ function convertMatches(str, prefix = "@") {
     str = str.replace(it.color, getColorIndexString(it, prefix));
   });
   return { str, matches: m };
+}
+function convertMatchesArray(str, splitStr = ",") {
+  const ret = convertMatches(str);
+  return ret.str.split(splitStr).map((it, index2) => {
+    it = trim(it);
+    if (ret.matches[index2]) {
+      it = it.replace(getColorIndexString(ret.matches[index2]), ret.matches[index2].color);
+    }
+    return it;
+  });
 }
 function reverseMatches(str, matches2) {
   matches2.forEach((it) => {
@@ -10091,6 +9997,60 @@ function parse(str) {
     }
   }
   return str;
+}
+function parseGradient(colors2) {
+  if (isString(colors2)) {
+    colors2 = convertMatchesArray(colors2);
+  }
+  colors2 = colors2.map((it) => {
+    if (isString(it)) {
+      const ret = convertMatches(it);
+      let arr = trim(ret.str).split(" ");
+      if (arr[1]) {
+        if (arr[1].indexOf("%") > -1) {
+          arr[1] = parseFloat(arr[1].replace(/%/, "")) / 100;
+        } else {
+          arr[1] = parseFloat(arr[1]);
+        }
+      } else {
+        arr[1] = "*";
+      }
+      arr[0] = reverseMatches(arr[0], ret.matches);
+      return arr;
+    } else if (Array.isArray(it)) {
+      if (!it[1]) {
+        it[1] = "*";
+      } else if (isString(it[1])) {
+        if (it[1].indexOf("%") > -1) {
+          it[1] = parseFloat(it[1].replace(/%/, "")) / 100;
+        } else {
+          it[1] = +it[1];
+        }
+      }
+      return [...it];
+    }
+  });
+  const count = colors2.filter((it) => {
+    return it[1] === "*";
+  }).length;
+  if (count > 0) {
+    const sum = colors2.filter((it) => {
+      return it[1] != "*" && it[1] != 1;
+    }).map((it) => it[1]).reduce((total, cur) => {
+      return total + cur;
+    }, 0);
+    const dist2 = (1 - sum) / count;
+    colors2.forEach((it, index2) => {
+      if (it[1] == "*" && index2 > 0) {
+        if (colors2.length - 1 == index2)
+          ;
+        else {
+          it[1] = dist2;
+        }
+      }
+    });
+  }
+  return colors2;
 }
 const identity$2 = () => true;
 function _traverse(obj2, filterCallback = identity$2) {
@@ -10486,6 +10446,9 @@ class TransformOrigin {
     transformOriginZ = transformOriginZ.toPx(distance2);
     return `${transformOriginX} ${transformOriginY} ${transformOriginZ}`;
   }
+}
+function rectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
+  return rx1 + rw1 >= rx2 && rx1 <= rx2 + rw2 && ry1 + rh1 >= ry2 && ry1 <= ry2 + rh2;
 }
 class Rect {
   constructor(x, y, width2, height2) {
@@ -11074,9 +11037,9 @@ const calculateC = (points) => {
 const findRootForCurve = (points) => {
   const a = calculateA(points);
   const b = calculateB(points);
-  const c = calculateC(points);
+  const c2 = calculateC(points);
   const roots = [];
-  const distX = b[0] * b[0] - 4 * a[0] * c[0];
+  const distX = b[0] * b[0] - 4 * a[0] * c2[0];
   if (distX < 0)
     ;
   else if (distX === 0) {
@@ -11096,7 +11059,7 @@ const findRootForCurve = (points) => {
       roots.push(rootX2);
     }
   }
-  const distY = b[1] * b[1] - 4 * a[1] * c[1];
+  const distY = b[1] * b[1] - 4 * a[1] * c2[1];
   if (distY < 0)
     ;
   else if (distY === 0) {
@@ -11211,6 +11174,14 @@ function random$1() {
     r: randomNumber(0, 255),
     g: randomNumber(0, 255),
     b: randomNumber(0, 255)
+  });
+}
+function randomRGBA() {
+  return rgb({
+    r: randomNumber(0, 255),
+    g: randomNumber(0, 255),
+    b: randomNumber(0, 255),
+    a: randomNumber(0, 1e3) / 1e3
   });
 }
 function randomItem(...args2) {
@@ -11553,7 +11524,7 @@ var materialAmber = {
     return colors$k;
   }
 };
-var __glob_0_0$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialAmber
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11583,7 +11554,7 @@ var materialBlue = {
     return colors$j;
   }
 };
-var __glob_0_1$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialBlue
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11608,7 +11579,7 @@ var materialBluegray = {
     return colors$i;
   }
 };
-var __glob_0_2$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialBluegray
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11633,7 +11604,7 @@ var materialBrown = {
     return colors$h;
   }
 };
-var __glob_0_3$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialBrown
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11663,7 +11634,7 @@ var materialCyan = {
     return colors$g;
   }
 };
-var __glob_0_4$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialCyan
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11692,7 +11663,7 @@ var materialDeeporange = {
     return colors$f;
   }
 };
-var __glob_0_5$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialDeeporange
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11722,7 +11693,7 @@ var materialDeeppurple = {
     return colors$e;
   }
 };
-var __glob_0_6$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialDeeppurple
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11747,7 +11718,7 @@ var materialGray = {
     return colors$d;
   }
 };
-var __glob_0_7$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialGray
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11776,7 +11747,7 @@ var materialGreen = {
     return colors$c;
   }
 };
-var __glob_0_8$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialGreen
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11806,7 +11777,7 @@ var materialIndigo = {
     return colors$b;
   }
 };
-var __glob_0_9$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_9$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialIndigo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11836,7 +11807,7 @@ var materialLightblue = {
     return colors$a;
   }
 };
-var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_10$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialLightblue
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11865,7 +11836,7 @@ var materialLightgreen = {
     return colors$9;
   }
 };
-var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_11$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialLightgreen
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11894,7 +11865,7 @@ var materialLime = {
     return colors$8;
   }
 };
-var __glob_0_12$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_12$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialLime
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11923,7 +11894,7 @@ var materialOrange = {
     return colors$7;
   }
 };
-var __glob_0_13$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_13$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialOrange
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11953,7 +11924,7 @@ var materialPink = {
     return colors$6;
   }
 };
-var __glob_0_14$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialPink
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11983,7 +11954,7 @@ var materialPurple = {
     return colors$5;
   }
 };
-var __glob_0_15$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialPurple
 }, Symbol.toStringTag, { value: "Module" }));
@@ -12013,7 +11984,7 @@ var materialRed = {
     return colors$4;
   }
 };
-var __glob_0_16$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialRed
 }, Symbol.toStringTag, { value: "Module" }));
@@ -12072,7 +12043,7 @@ var materialYellow = {
     return colors$2;
   }
 };
-var __glob_0_18$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_18$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialYellow
 }, Symbol.toStringTag, { value: "Module" }));
@@ -12098,10 +12069,19 @@ var opencolorGray = {
     return colors$1;
   }
 };
-var __glob_0_19$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_19$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": opencolorGray
 }, Symbol.toStringTag, { value: "Module" }));
+function CMYKtoRGB(c2, m, y, k) {
+  if (arguments.length == 1) {
+    var { c: c2, m, y, k } = arguments[0];
+  }
+  const R = 255 * (1 - c2) * (1 - k);
+  const G = 255 * (1 - m) * (1 - k);
+  const B = 255 * (1 - y) * (1 - k);
+  return { r: R, g: G, b: B };
+}
 function HSVtoRGB(h, s, v) {
   if (arguments.length == 1) {
     var { h, s, v } = arguments[0];
@@ -12142,6 +12122,16 @@ function HSVtoHSL(h, s, v) {
   const rgb2 = HSVtoRGB(h, s, v);
   return RGBtoHSL(rgb2.r, rgb2.g, rgb2.b);
 }
+function YCrCbtoRGB(y, cr, cb, bit) {
+  if (arguments.length == 1) {
+    var { y, cr, cb, bit } = arguments[0];
+    bit = bit || 0;
+  }
+  const R = y + 1.402 * (cr - bit);
+  const G = y - 0.344 * (cb - bit) - 0.714 * (cr - bit);
+  const B = y + 1.772 * (cb - bit);
+  return { r: Math.ceil(R), g: Math.ceil(G), b: Math.ceil(B) };
+}
 function interpolateRGB(startColor, endColor, t = 0.5, exportFormat = "hex") {
   var obj2 = interpolateRGBObject(startColor, endColor, t);
   return format(obj2, exportFormat);
@@ -12156,6 +12146,22 @@ function interpolateRGBObject(startColor, endColor, t = 0.5) {
     a: round(startColorAlpha + (endColorAlpha - startColorAlpha) * t, 100)
   };
 }
+function scale(scale2, count = 5) {
+  if (!scale2)
+    return [];
+  if (typeof scale2 === "string") {
+    scale2 = convertMatchesArray(scale2);
+  }
+  scale2 = scale2 || [];
+  var len2 = scale2.length;
+  var colors2 = [];
+  for (var i = 0; i < len2 - 1; i++) {
+    for (var index2 = 0; index2 < count; index2++) {
+      colors2.push(blend(scale2[i], scale2[i + 1], index2 / count));
+    }
+  }
+  return colors2;
+}
 function blend(startColor, endColor, ratio = 0.5, format2 = "hex") {
   var s = parse(startColor);
   var e = parse(endColor);
@@ -12164,6 +12170,87 @@ function blend(startColor, endColor, ratio = 0.5, format2 = "hex") {
 function mix(startcolor, endColor, ratio = 0.5, format2 = "hex") {
   return blend(startcolor, endColor, ratio, format2);
 }
+function contrast(c2) {
+  c2 = parse(c2);
+  return (Math.round(c2.r * 299) + Math.round(c2.g * 587) + Math.round(c2.b * 114)) / 1e3;
+}
+function contrastColor(c2) {
+  return contrast(c2) >= 128 ? "black" : "white";
+}
+function gradient$1(colors2, count = 10) {
+  colors2 = parseGradient(colors2);
+  let newColors = [];
+  let maxCount = count - (colors2.length - 1);
+  let allCount = maxCount;
+  for (var i = 1, len2 = colors2.length; i < len2; i++) {
+    var startColor = colors2[i - 1][0];
+    var endColor = colors2[i][0];
+    var rate = i == 1 ? colors2[i][1] : colors2[i][1] - colors2[i - 1][1];
+    var colorCount = i == colors2.length - 1 ? allCount : Math.floor(rate * maxCount);
+    newColors = newColors.concat(scale([startColor, endColor], colorCount), [
+      endColor
+    ]);
+    allCount -= colorCount;
+  }
+  return newColors;
+}
+function scaleHSV(color2, target = "h", count = 9, exportFormat = "rgb", min = 0, max = 1, dist2 = 100) {
+  var colorObj = parse(color2);
+  var hsv = RGBtoHSV(colorObj);
+  var unit = (max - min) * dist2 / count;
+  var results = [];
+  for (var i = 1; i <= count; i++) {
+    hsv[target] = Math.abs((dist2 - unit * i) / dist2);
+    results.push(format(HSVtoRGB(hsv), exportFormat));
+  }
+  return results;
+}
+function scaleH(color2, count = 9, exportFormat = "rgb", min = 0, max = 360) {
+  return scaleHSV(color2, "h", count, exportFormat, min, max, 1);
+}
+function scaleS(color2, count = 9, exportFormat = "rgb", min = 0, max = 1) {
+  return scaleHSV(color2, "s", count, exportFormat, min, max, 100);
+}
+function scaleV(color2, count = 9, exportFormat = "rgb", min = 0, max = 1) {
+  return scaleHSV(color2, "v", count, exportFormat, min, max, 100);
+}
+scale.parula = function(count) {
+  return scale(["#352a87", "#0f5cdd", "#00b5a6", "#ffc337", "#fdff00"], count);
+};
+scale.jet = function(count) {
+  return scale([
+    "#00008f",
+    "#0020ff",
+    "#00ffff",
+    "#51ff77",
+    "#fdff00",
+    "#ff0000",
+    "#800000"
+  ], count);
+};
+scale.hsv = function(count) {
+  return scale([
+    "#ff0000",
+    "#ffff00",
+    "#00ff00",
+    "#00ffff",
+    "#0000ff",
+    "#ff00ff",
+    "#ff0000"
+  ], count);
+};
+scale.hot = function(count) {
+  return scale(["#0b0000", "#ff0000", "#ffff00", "#ffffff"], count);
+};
+scale.pink = function(count) {
+  return scale(["#1e0000", "#bd7b7b", "#e7e5b2", "#ffffff"], count);
+};
+scale.bone = function(count) {
+  return scale(["#000000", "#4a4a68", "#a6c6c6", "#ffffff"], count);
+};
+scale.copper = function(count) {
+  return scale(["#000000", "#3d2618", "#9d623e", "#ffa167", "#ffc77f"], count);
+};
 const hue_color = [
   { rgb: "#ff0000", start: 0 },
   { rgb: "#ffff00", start: 0.17 },
@@ -12212,12 +12299,12 @@ var random = {
     return colorList;
   }
 };
-var __glob_0_20$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_20$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": random
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$3 = { "./colors_list/material-amber.js": __glob_0_0$3, "./colors_list/material-blue.js": __glob_0_1$3, "./colors_list/material-bluegray.js": __glob_0_2$3, "./colors_list/material-brown.js": __glob_0_3$3, "./colors_list/material-cyan.js": __glob_0_4$3, "./colors_list/material-deeporange.js": __glob_0_5$3, "./colors_list/material-deeppurple.js": __glob_0_6$3, "./colors_list/material-gray.js": __glob_0_7$3, "./colors_list/material-green.js": __glob_0_8$3, "./colors_list/material-indigo.js": __glob_0_9$3, "./colors_list/material-lightblue.js": __glob_0_10$3, "./colors_list/material-lightgreen.js": __glob_0_11$3, "./colors_list/material-lime.js": __glob_0_12$3, "./colors_list/material-orange.js": __glob_0_13$3, "./colors_list/material-pink.js": __glob_0_14$3, "./colors_list/material-purple.js": __glob_0_15$3, "./colors_list/material-red.js": __glob_0_16$3, "./colors_list/material-teal.js": __glob_0_17$3, "./colors_list/material-yellow.js": __glob_0_18$2, "./colors_list/opencolor-gray.js": __glob_0_19$2, "./colors_list/random.js": __glob_0_20$2 };
-var colors = Object.values(modules$3).map((it) => it.default);
+const modules$5 = { "./colors_list/material-amber.js": __glob_0_0$5, "./colors_list/material-blue.js": __glob_0_1$5, "./colors_list/material-bluegray.js": __glob_0_2$4, "./colors_list/material-brown.js": __glob_0_3$4, "./colors_list/material-cyan.js": __glob_0_4$4, "./colors_list/material-deeporange.js": __glob_0_5$4, "./colors_list/material-deeppurple.js": __glob_0_6$4, "./colors_list/material-gray.js": __glob_0_7$4, "./colors_list/material-green.js": __glob_0_8$4, "./colors_list/material-indigo.js": __glob_0_9$4, "./colors_list/material-lightblue.js": __glob_0_10$4, "./colors_list/material-lightgreen.js": __glob_0_11$4, "./colors_list/material-lime.js": __glob_0_12$4, "./colors_list/material-orange.js": __glob_0_13$4, "./colors_list/material-pink.js": __glob_0_14$4, "./colors_list/material-purple.js": __glob_0_15$4, "./colors_list/material-red.js": __glob_0_16$4, "./colors_list/material-teal.js": __glob_0_17$3, "./colors_list/material-yellow.js": __glob_0_18$3, "./colors_list/opencolor-gray.js": __glob_0_19$3, "./colors_list/random.js": __glob_0_20$3 };
+var colors = Object.values(modules$5).map((it) => it.default);
 class ColorAssetsEditor extends EditorElement {
   initState() {
     return {
@@ -12662,7 +12749,7 @@ class CSSPropertyEditor extends EditorElement {
           <label>${this.$i18n("css.property.editor.properties")}</label>
           <div class='tools'>
             ${this.makePropertySelect()}
-            <button type="button" ref='$addProperty'>${obj$2.add}</button>
+            <button type="button" ref='$addProperty'>${obj$3.add}</button>
           </div>
         </div>
         <div class='input grid-1 css-property-list' ref='$property'></div>
@@ -13110,12 +13197,12 @@ class CSSPropertyEditor extends EditorElement {
           <div class='title'>
             <label>${it.key}</label>
             <div class='tools'>
-              <button type="button" class='remove' data-index="${index2}">${obj$2.remove2}</button>
+              <button type="button" class='remove' data-index="${index2}">${obj$3.remove2}</button>
             </div>
           </div>
           <div class='title-2'>
             <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index2}">${obj$2.refresh}</button> Refresh</label>
+              <label><button type="button" class='refresh' data-index="${index2}">${obj$3.refresh}</button> Refresh</label>
             </div>
           </div>
           <div class='value-editor'>
@@ -13170,9 +13257,9 @@ class CubicBezierEditor extends EditorElement {
     return `
             <div class='elf--cubic-bezier-editor'>
                 <div class='predefined'>
-                    <div class='left' ref='$left'>${obj$2.chevron_left}</div>
+                    <div class='left' ref='$left'>${obj$3.chevron_left}</div>
                     <div class='predefined-text' ref='$text'></div>
-                    <div class='right' ref='$right'>${obj$2.chevron_right}</div>
+                    <div class='right' ref='$right'>${obj$3.chevron_right}</div>
                 </div>
                 <div class='animation' ref='$animationArea'>
                     <canvas 
@@ -13476,9 +13563,9 @@ class DirectionEditor extends EditorElement {
     return `
       <div class="property-item direction-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${obj$2.border_all}</button>
+          <button type="button" data-value="all">${obj$3.border_all}</button>
           <button type="button" data-value="partitial">
-            ${obj$2.border_inner}
+            ${obj$3.border_inner}
           </button>
         </div>
         <div class="radius-value">
@@ -14691,62 +14778,6 @@ class ImageResource extends PropertyItem {
     return "none";
   }
 }
-function easeOutElastic() {
-  return (rate) => {
-    return Math.pow(2, -10 * rate) * Math.sin((rate - 0.1) * 5 * Math.PI) + 1;
-  };
-}
-const stepTimingFunction = (step2 = 1, direction = "end") => {
-  var stepDist = 1 / step2;
-  return function(rate) {
-    let pos = 0;
-    const offset = round(rate / stepDist, 1e7);
-    if (direction == "start") {
-      pos = Math.ceil(offset);
-    } else if (direction == "end") {
-      if (rate === 0)
-        return 0;
-      else if (rate === 1)
-        return 1;
-      pos = Math.ceil(offset) - 1;
-    }
-    return Math.min(Math.max(stepDist * pos, 0), 1);
-  };
-};
-function step(step2 = 1, direction = "end") {
-  return stepTimingFunction(step2, direction);
-}
-function stepStart() {
-  return stepTimingFunction(1, "start");
-}
-function stepEnd() {
-  return stepTimingFunction(1, "end");
-}
-var timingFunctions = {
-  step,
-  "step-start": stepStart,
-  "step-end": stepEnd,
-  stepStart,
-  stepEnd,
-  "ease-out-elastic": easeOutElastic,
-  easeOutElastic
-};
-function createTimingFunction(timing = "linear") {
-  var [funcName] = timing.split("(").map((it) => it.trim());
-  var func = timingFunctions[funcName];
-  if (func) {
-    var args2 = timing.split("(")[1].split(")")[0].split(",").map((it) => it.trim());
-    return func(...args2);
-  } else {
-    return createCurveFunction(timing);
-  }
-}
-function createCurveFunction(timing) {
-  var func = createBezierForPattern(timing);
-  return (rate) => {
-    return func(rate).y;
-  };
-}
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getAugmentedNamespace(n) {
   if (n.__esModule)
@@ -15233,11 +15264,11 @@ var arcToBezier = function arcToBezier2(_ref2) {
   });
 };
 class Point {
-  static isEqual(a, b, c) {
+  static isEqual(a, b, c2) {
     if (arguments.length === 2) {
       return a.x === b.x && a.y === b.y;
     } else if (arguments.length === 3) {
-      return Point.isEqual(a, b) && Point.isEqual(b, c);
+      return Point.isEqual(a, b) && Point.isEqual(b, c2);
     }
   }
   static isFirst(point2) {
@@ -15819,8 +15850,8 @@ class PathParser {
   _loop(m, isReturn = false) {
     return this.each(function(segment) {
       var v = segment.values;
-      var c = segment.command;
-      switch (c) {
+      var c2 = segment.command;
+      switch (c2) {
         case "M":
         case "L":
           var result = m(v, 0);
@@ -15882,8 +15913,8 @@ class PathParser {
   scaleFunc(xScale = (x) => x, yScale = (y) => y) {
     return this.each(function(segment) {
       var v = segment.values;
-      var c = segment.command;
-      switch (c) {
+      var c2 = segment.command;
+      switch (c2) {
         case "M":
         case "L":
           segment.values = [xScale(v[0]), yScale(v[1])];
@@ -16144,9 +16175,9 @@ class PathParser {
     let maxX = Number.MIN_SAFE_INTEGER, maxY = Number.MIN_SAFE_INTEGER;
     this.each(function(segment, index2) {
       var v = segment.values;
-      var c = segment.command;
+      var c2 = segment.command;
       const prevSegment = this.segments[index2 - 1];
-      switch (c) {
+      switch (c2) {
         case "M":
         case "L":
           minX = Math.min(minX, v[0]);
@@ -16296,8 +16327,8 @@ class PathParser {
   transformMat4(transformMatrix, isReturn = false) {
     return this.each(function(segment) {
       var v = segment.values;
-      var c = segment.command;
-      switch (c) {
+      var c2 = segment.command;
+      switch (c2) {
         case "M":
         case "L":
           var result = transformMat4([], [v[0], v[1], 0], transformMatrix);
@@ -16319,8 +16350,8 @@ class PathParser {
     const bbox = vertiesToRectangle(this.getBBox());
     return this.each(function(segment) {
       var v = segment.values;
-      var c = segment.command;
-      switch (c) {
+      var c2 = segment.command;
+      switch (c2) {
         case "M":
         case "L":
         case "C":
@@ -16352,11 +16383,11 @@ class PathParser {
     for (var i = lastIndex; i > 0; i--) {
       const segment = segments[i];
       const v = segment.values;
-      const c = segment.command;
+      const c2 = segment.command;
       const prevSegment = segments[i - 1];
       const lastX = prevSegment.values[prevSegment.values.length - 2];
       const lastY = prevSegment.values[prevSegment.values.length - 1];
-      switch (c) {
+      switch (c2) {
         case "L":
           if (i === lastIndex) {
             newSegments.push(Segment.M(v[0], v[1]));
@@ -16431,8 +16462,8 @@ class PathParser {
     let lastValues = [];
     this.segments.forEach((segment, index2) => {
       var v = segment.values;
-      var c = segment.command;
-      switch (c) {
+      var c2 = segment.command;
+      switch (c2) {
         case "M":
         case "L":
           arr.push({
@@ -16759,8 +16790,8 @@ class PathParser {
     let lastValues = [];
     this.each(function(segment) {
       var v = segment.values;
-      var c = segment.command;
-      switch (c) {
+      var c2 = segment.command;
+      switch (c2) {
         case "M":
         case "L":
           arr.push([...segment.values, 0]);
@@ -17078,6 +17109,62 @@ class PathParser {
     };
   }
 }
+function easeOutElastic() {
+  return (rate) => {
+    return Math.pow(2, -10 * rate) * Math.sin((rate - 0.1) * 5 * Math.PI) + 1;
+  };
+}
+const stepTimingFunction = (step2 = 1, direction = "end") => {
+  var stepDist = 1 / step2;
+  return function(rate) {
+    let pos = 0;
+    const offset = round(rate / stepDist, 1e7);
+    if (direction == "start") {
+      pos = Math.ceil(offset);
+    } else if (direction == "end") {
+      if (rate === 0)
+        return 0;
+      else if (rate === 1)
+        return 1;
+      pos = Math.ceil(offset) - 1;
+    }
+    return Math.min(Math.max(stepDist * pos, 0), 1);
+  };
+};
+function step(step2 = 1, direction = "end") {
+  return stepTimingFunction(step2, direction);
+}
+function stepStart() {
+  return stepTimingFunction(1, "start");
+}
+function stepEnd() {
+  return stepTimingFunction(1, "end");
+}
+var timingFunctions = {
+  step,
+  "step-start": stepStart,
+  "step-end": stepEnd,
+  stepStart,
+  stepEnd,
+  "ease-out-elastic": easeOutElastic,
+  easeOutElastic
+};
+function createTimingFunction(timing = "linear") {
+  var [funcName] = timing.split("(").map((it) => it.trim());
+  var func = timingFunctions[funcName];
+  if (func) {
+    var args2 = timing.split("(")[1].split(")")[0].split(",").map((it) => it.trim());
+    return func(...args2);
+  } else {
+    return createCurveFunction(timing);
+  }
+}
+function createCurveFunction(timing) {
+  var func = createBezierForPattern(timing);
+  return (rate) => {
+    return func(rate).y;
+  };
+}
 const DEFINED_ANGLES$2 = {
   "to top": 0,
   "to top right": 45,
@@ -17111,7 +17198,7 @@ class Gradient extends ImageResource {
     if (json.colorsteps[0] instanceof ColorStep)
       ;
     else {
-      json.colorsteps = json.colorsteps.map((c) => new ColorStep(c));
+      json.colorsteps = json.colorsteps.map((c2) => new ColorStep(c2));
     }
     return json;
   }
@@ -17234,13 +17321,13 @@ class Gradient extends ImageResource {
     this.sortColorStep();
   }
   addColorStepList(colorstepList = []) {
-    colorstepList.forEach((c) => {
-      this.addColorStep(c, false);
+    colorstepList.forEach((c2) => {
+      this.addColorStep(c2, false);
     });
     this.sortColorStep();
   }
   getColorStep(id) {
-    return this.json.colorsteps.filter((c) => c.id == id)[0];
+    return this.json.colorsteps.filter((c2) => c2.id == id)[0];
   }
   clear(...args2) {
     if (args2.length) {
@@ -18797,8 +18884,8 @@ class IconListViewEditor extends EditorElement {
     };
   }
   [LOAD("$body")]() {
-    return Object.keys(obj$2).map((key) => {
-      var html = obj$2[key];
+    return Object.keys(obj$3).map((key) => {
+      var html = obj$3[key];
       var selected = key === this.state.value ? "selected" : "";
       return `<div class='list-view-item ${selected}'  data-key='${key}'>${html}</div>`;
     });
@@ -18871,8 +18958,8 @@ class InputRangeEditor extends EditorElement {
     var units = this.props.units || ["px", "em", "%", "auto"];
     var value = Length.parse(this.props.value || "0px");
     let label = this.props.label || "";
-    if (obj$2[label]) {
-      label = obj$2[label];
+    if (obj$3[label]) {
+      label = obj$3[label];
     }
     return {
       removable: this.props.removable,
@@ -18944,7 +19031,7 @@ class InputRangeEditor extends EditorElement {
                     
                 </div>
             </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${obj$2.remove}</button>
+            <button type='button' class='remove' ref='$remove' title='Remove'>${obj$3.remove}</button>
         </div>
     `;
   }
@@ -19093,7 +19180,7 @@ class RangeEditor extends EditorElement {
     })}
                 </div>
             </div>
-            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$2.remove}</button>
+            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$3.remove}</button>
         </div>
     `;
   }
@@ -19300,8 +19387,8 @@ class NumberInputEditor extends EditorElement {
   initState() {
     var value = +this.props.value;
     let label = this.props.label || "";
-    if (obj$2[label]) {
-      label = obj$2[label];
+    if (obj$3[label]) {
+      label = obj$3[label];
     }
     const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
     const wide = isBoolean(this.props.wide) ? this.props.wide : this.props.wide === "true";
@@ -19477,7 +19564,7 @@ class NumberRangeEditor extends EditorElement {
                     </div>
                 </div>
             </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${obj$2.remove}</button>
+            <button type='button' class='remove' ref='$remove' title='Remove'>${obj$3.remove}</button>
         </div>
     `;
   }
@@ -20114,15 +20201,15 @@ class PurePathGenerator {
     translate(view, view, [x, y, 0]);
     switch (type) {
       case "flipX":
-        scale(view, view, [-1, 1, 1]);
+        scale$1(view, view, [-1, 1, 1]);
         translate(view, view, [-width2, 0, 0]);
         break;
       case "flipY":
-        scale(view, view, [1, -1, 1]);
+        scale$1(view, view, [1, -1, 1]);
         translate(view, view, [0, -height2, 0]);
         break;
       case "flip":
-        scale(view, view, [-1, -1, 1]);
+        scale$1(view, view, [-1, -1, 1]);
         translate(view, view, [-width2, -height2, 0]);
         break;
     }
@@ -21542,11 +21629,11 @@ class SelectIconEditor extends EditorElement {
         }
       } else {
         var iconKey = this.state.icons[index2];
-        if (obj$2[iconKey]) {
+        if (obj$3[iconKey]) {
           iconClass = "icon";
         }
         title2 = label;
-        label = obj$2[iconKey] || label || iconKey || it.text || it.value;
+        label = obj$3[iconKey] || label || iconKey || it.text || it.value;
       }
       var color2 = this.state.colors[index2];
       var css = {};
@@ -21603,7 +21690,7 @@ class StrokeDashArrayEditor extends EditorElement {
         <div class='tools ${hasLabel ? "has-label" : ""}'>
           ${hasLabel ? `<label class='label'>${label}</label>` : ""}
           <div class="buttons">
-            <label ref='$add'>${obj$2.add}</label>          
+            <label ref='$add'>${obj$3.add}</label>          
           </div>
         </div>      
         <div ref='$body' class='dash-list'></div>
@@ -21990,7 +22077,7 @@ class VarEditor extends EditorElement {
             <div class='label ${labelClass}' >
                 <label>${this.props.title || ""}</label>
                 <div class='tools'>
-                    <button type="button" ref="$add" title="add Var">${obj$2.add}</button>
+                    <button type="button" ref="$add" title="add Var">${obj$3.add}</button>
                 </div>
             </div>
             <div class='var-list' ref='$varList'></div>
@@ -22019,7 +22106,7 @@ class VarEditor extends EditorElement {
                     </div>
                     <div class="tools">
                         <button type="button" class="del" data-index="${index2}">
-                        ${obj$2.remove2}
+                        ${obj$3.remove2}
                         </button>
                     </div>
                 </div>
@@ -22127,7 +22214,7 @@ var Console$1 = {
     console.log(...args2);
   }
 };
-var __glob_0_0$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": Console$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22142,7 +22229,7 @@ var clipboard_copy$2 = {
     });
   }
 };
-var __glob_0_1$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_copy$2
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22159,21 +22246,9 @@ var clipboard_paste$2 = {
     }
   }
 };
-var __glob_0_2$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_paste$2
-}, Symbol.toStringTag, { value: "Module" }));
-var editor_config_body_event$1 = {
-  command: "config:bodyEvent",
-  description: "fire when bodyEvent was set",
-  execute: function(editor) {
-    const $target = Dom.create(editor.context.config.get("bodyEvent").target);
-    editor.context.config.init("onMouseMovepageContainer", $target);
-  }
-};
-var __glob_0_3$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": editor_config_body_event$1
 }, Symbol.toStringTag, { value: "Module" }));
 var history_redo$1 = {
   command: "history.redo",
@@ -22181,7 +22256,7 @@ var history_redo$1 = {
     editor.context.history.redo();
   }
 };
-var __glob_0_4$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_redo$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22191,7 +22266,7 @@ var history_undo$1 = {
     editor.context.history.undo();
   }
 };
-var __glob_0_5$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_undo$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22204,7 +22279,7 @@ var keymap_keydown$1 = {
     }
   }
 };
-var __glob_0_6$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keydown$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22217,7 +22292,7 @@ var keymap_keyup = {
     }
   }
 };
-var __glob_0_7$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keyup
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22230,7 +22305,7 @@ var moveToCenter = {
     }
   }
 };
-var __glob_0_8$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveToCenter
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22240,18 +22315,18 @@ var pop_mode_view = {
     editor.context.modeViewManager.popMode(modeView);
   }
 };
-var __glob_0_9$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": pop_mode_view
 }, Symbol.toStringTag, { value: "Module" }));
 var push_mode_view = {
   command: "push.mode.view",
-  execute: function(editor, modeView = "CanvasView") {
+  execute: function(editor, modeView = ViewModeType.CanvasView) {
     editor.context.modeViewManager.pushMode(modeView);
     editor.emit("updateModeView");
   }
 };
-var __glob_0_10$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_9$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": push_mode_view
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22261,7 +22336,7 @@ var recoverCursor = {
     editor.emit(CHANGE_ICON_VIEW, "auto");
   }
 };
-var __glob_0_11$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": recoverCursor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22271,7 +22346,7 @@ var refreshCursor$1 = {
     editor.emit(CHANGE_ICON_VIEW, iconType, ...args2);
   }
 };
-var __glob_0_12$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshCursor$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22282,7 +22357,7 @@ var setLocale = {
     editor.emit("changed.locale");
   }
 };
-var __glob_0_13$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_12$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setLocale
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22292,7 +22367,7 @@ var toggle_tool_hand = {
     editor.context.config.toggle("set.tool.hand");
   }
 };
-var __glob_0_14$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_13$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": toggle_tool_hand
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22302,7 +22377,7 @@ var zoom_default$1 = {
     editor.context.viewport.zoomDefault();
   }
 };
-var __glob_0_15$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_default$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22312,7 +22387,7 @@ var zoom_in$1 = {
     editor.context.viewport.zoomIn(0.02);
   }
 };
-var __glob_0_16$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_in$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22322,15 +22397,15 @@ var zoom_out$1 = {
     editor.context.viewport.zoomOut(0.02);
   }
 };
-var __glob_0_17$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_out$1
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/clipboard.copy.js": __glob_0_1$2, "./command_list/clipboard.paste.js": __glob_0_2$2, "./command_list/editor.config.body.event.js": __glob_0_3$2, "./command_list/history.redo.js": __glob_0_4$2, "./command_list/history.undo.js": __glob_0_5$2, "./command_list/keymap.keydown.js": __glob_0_6$2, "./command_list/keymap.keyup.js": __glob_0_7$2, "./command_list/moveToCenter.js": __glob_0_8$2, "./command_list/pop.mode.view.js": __glob_0_9$2, "./command_list/push.mode.view.js": __glob_0_10$2, "./command_list/recoverCursor.js": __glob_0_11$2, "./command_list/refreshCursor.js": __glob_0_12$2, "./command_list/setLocale.js": __glob_0_13$2, "./command_list/toggle.tool.hand.js": __glob_0_14$2, "./command_list/zoom.default.js": __glob_0_15$2, "./command_list/zoom.in.js": __glob_0_16$2, "./command_list/zoom.out.js": __glob_0_17$2 };
-const obj$1 = {};
-Object.entries(modules$2).forEach(([key, value]) => {
+const modules$4 = { "./command_list/Console.js": __glob_0_0$4, "./command_list/clipboard.copy.js": __glob_0_1$4, "./command_list/clipboard.paste.js": __glob_0_2$3, "./command_list/history.redo.js": __glob_0_3$3, "./command_list/history.undo.js": __glob_0_4$3, "./command_list/keymap.keydown.js": __glob_0_5$3, "./command_list/keymap.keyup.js": __glob_0_6$3, "./command_list/moveToCenter.js": __glob_0_7$3, "./command_list/pop.mode.view.js": __glob_0_8$3, "./command_list/push.mode.view.js": __glob_0_9$3, "./command_list/recoverCursor.js": __glob_0_10$3, "./command_list/refreshCursor.js": __glob_0_11$3, "./command_list/setLocale.js": __glob_0_12$3, "./command_list/toggle.tool.hand.js": __glob_0_13$3, "./command_list/zoom.default.js": __glob_0_14$3, "./command_list/zoom.in.js": __glob_0_15$3, "./command_list/zoom.out.js": __glob_0_16$3 };
+const obj$2 = {};
+Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
-  obj$1[key] = value.default;
+  obj$2[key] = value.default;
 });
 class AssetParser {
   static parse(datauri, enableParselocal = false) {
@@ -22489,7 +22564,9 @@ class CommandManager {
   }
   emit(command, ...args2) {
     const callback = this.getCallback(command);
-    return callback(...args2);
+    if (callback) {
+      return callback(...args2);
+    }
   }
 }
 class ComponentManager {
@@ -22605,8 +22682,8 @@ class ConfigManager {
 }
 class CursorManager {
   async load(iconName = "default", ...args2) {
-    if (obj$2[iconName]) {
-      const iconContent = isFunction(obj$2[iconName]) ? obj$2[iconName].call(obj$2[iconName], ...args2) : obj$2[iconName];
+    if (obj$3[iconName]) {
+      const iconContent = isFunction(obj$3[iconName]) ? obj$3[iconName].call(obj$3[iconName], ...args2) : obj$3[iconName];
       const blob = new window.Blob([iconContent], { type: "image/svg+xml" });
       return new Promise((resolve) => {
         const reader = new window.FileReader();
@@ -22788,10 +22865,12 @@ class MenuManager {
 class ModeViewManager {
   constructor(editor) {
     this.editor = editor;
-    this.modes = ["CanvasView"];
+    this.modes = [ViewModeType.CanvasView];
   }
   pushMode(mode) {
-    this.modes.push(mode);
+    if (!this.isCurrentMode(mode)) {
+      this.modes.push(mode);
+    }
   }
   popMode(mode = void 0) {
     if (mode) {
@@ -22807,1882 +22886,6 @@ class ModeViewManager {
   }
   isCurrentMode(mode) {
     return this.currentMode() === mode;
-  }
-}
-var pathkit = { exports: {} };
-var __viteBrowserExternal = {};
-var __viteBrowserExternal$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": __viteBrowserExternal
-}, Symbol.toStringTag, { value: "Module" }));
-var require$$0 = /* @__PURE__ */ getAugmentedNamespace(__viteBrowserExternal$1);
-(function(module, exports) {
-  var PathKitInit2 = function() {
-    var _scriptDir = typeof document !== "undefined" && document.currentScript ? document.currentScript.src : void 0;
-    if (typeof __filename !== "undefined")
-      _scriptDir = _scriptDir || __filename;
-    return function(PathKitInit3) {
-      PathKitInit3 = PathKitInit3 || {};
-      var d;
-      d || (d = typeof PathKitInit3 !== "undefined" ? PathKitInit3 : {});
-      var aa;
-      d.ready = new Promise(function(a) {
-        aa = a;
-      });
-      (function(a) {
-        var b = {};
-        a.loadCmdsTypedArray = function(h) {
-          for (var k = 0, l = 0; l < h.length; l++)
-            k += h[l].length;
-          if (b[k])
-            var n = b[k];
-          else
-            n = new Float32Array(k), b[k] = n;
-          var p = 0;
-          for (l = 0; l < h.length; l++)
-            for (var q = 0; q < h[l].length; q++) {
-              var t = h[l][q];
-              typeof t === "string" && (t = a.SkBits2FloatUnsigned(parseInt(t)));
-              n[p] = t;
-              p++;
-            }
-          h = a._malloc(n.length * n.BYTES_PER_ELEMENT);
-          a.HEAPF32.set(n, h / n.BYTES_PER_ELEMENT);
-          return [h, k];
-        };
-        a.FromCmds = function(h) {
-          h = a.loadCmdsTypedArray(h);
-          var k = a._FromCmds(h[0], h[1]);
-          a._free(h[0]);
-          return k;
-        };
-        var c, e, f, g, m;
-        a.cubicYFromX = function(h, k, l, n, p) {
-          c && e === h && f === k && g === l && m === n || (c && c.delete(), c = new a._SkCubicMap([h, k], [l, n]), e = h, f = k, g = l, m = n);
-          return c.computeYFromX(p);
-        };
-        a.cubicPtFromT = function(h, k, l, n, p) {
-          c && e === h && f === k && g === l && m === n || (c && c.delete(), c = new a._SkCubicMap([h, k], [l, n]), e = h, f = k, g = l, m = n);
-          return c.computePtFromT(p);
-        };
-      })(d);
-      (function(a) {
-        a.onRuntimeInitialized = function() {
-          a.SkPath.prototype.addPath = function() {
-            var b = arguments[0];
-            if (arguments.length === 1)
-              this._addPath(b, 1, 0, 0, 0, 1, 0, 0, 0, 1);
-            else if (arguments.length === 2) {
-              var c = arguments[1];
-              this._addPath(b, c.a, c.c, c.e, c.b, c.d, c.f, 0, 0, 1);
-            } else if (arguments.length === 7)
-              c = arguments, this._addPath(b, c[1], c[3], c[5], c[2], c[4], c[6], 0, 0, 1);
-            else if (arguments.length === 10)
-              c = arguments, this._addPath(b, c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9]);
-            else
-              return console.Fb("addPath expected to take 1, 2, 7, or 10 args. Got " + arguments.length), null;
-            return this;
-          };
-          a.SkPath.prototype.arc = function(b, c, e, f, g, m) {
-            this._arc(b, c, e, f, g, !!m);
-            return this;
-          };
-          a.SkPath.prototype.arcTo = function(b, c, e, f, g) {
-            this._arcTo(b, c, e, f, g);
-            return this;
-          };
-          a.SkPath.prototype.bezierCurveTo = function(b, c, e, f, g, m) {
-            this._cubicTo(b, c, e, f, g, m);
-            return this;
-          };
-          a.SkPath.prototype.close = function() {
-            this._close();
-            return this;
-          };
-          a.SkPath.prototype.closePath = function() {
-            this._close();
-            return this;
-          };
-          a.SkPath.prototype.conicTo = function(b, c, e, f, g) {
-            this._conicTo(b, c, e, f, g);
-            return this;
-          };
-          a.SkPath.prototype.cubicTo = function(b, c, e, f, g, m) {
-            this._cubicTo(b, c, e, f, g, m);
-            return this;
-          };
-          a.SkPath.prototype.dash = function(b, c, e) {
-            return this._dash(b, c, e) ? this : null;
-          };
-          a.SkPath.prototype.ellipse = function(b, c, e, f, g, m, h, k) {
-            this._ellipse(b, c, e, f, g, m, h, !!k);
-            return this;
-          };
-          a.SkPath.prototype.lineTo = function(b, c) {
-            this._lineTo(b, c);
-            return this;
-          };
-          a.SkPath.prototype.moveTo = function(b, c) {
-            this._moveTo(b, c);
-            return this;
-          };
-          a.SkPath.prototype.op = function(b, c) {
-            return this._op(b, c) ? this : null;
-          };
-          a.SkPath.prototype.quadraticCurveTo = function(b, c, e, f) {
-            this._quadTo(b, c, e, f);
-            return this;
-          };
-          a.SkPath.prototype.quadTo = function(b, c, e, f) {
-            this._quadTo(b, c, e, f);
-            return this;
-          };
-          a.SkPath.prototype.rect = function(b, c, e, f) {
-            this._rect(b, c, e, f);
-            return this;
-          };
-          a.SkPath.prototype.simplify = function() {
-            return this._simplify() ? this : null;
-          };
-          a.SkPath.prototype.stroke = function(b) {
-            b = b || {};
-            b.width = b.width || 1;
-            b.miter_limit = b.miter_limit || 4;
-            b.cap = b.cap || a.StrokeCap.BUTT;
-            b.join = b.join || a.StrokeJoin.MITER;
-            return this._stroke(b) ? this : null;
-          };
-          a.SkPath.prototype.transform = function() {
-            if (arguments.length === 1)
-              this._transform(arguments[0]);
-            else if (arguments.length === 9) {
-              var b = arguments;
-              this._transform(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]);
-            } else
-              return console.Fb("transform expected to take 1 or 9 arguments. Got " + arguments.length), null;
-            return this;
-          };
-          a.SkPath.prototype.trim = function(b, c, e) {
-            return this._trim(b, c, !!e) ? this : null;
-          };
-        };
-      })(d);
-      var r = {}, v;
-      for (v in d)
-        d.hasOwnProperty(v) && (r[v] = d[v]);
-      var ba = false, w = false, ca = false, da = false;
-      ba = typeof window === "object";
-      w = typeof importScripts === "function";
-      ca = typeof process === "object" && typeof process.versions === "object" && typeof process.versions.node === "string";
-      da = !ba && !ca && !w;
-      var x = "", ea, fa, ha, ia;
-      if (ca)
-        x = w ? require$$0.dirname(x) + "/" : __dirname + "/", ea = function(a, b) {
-          ha || (ha = require$$0);
-          ia || (ia = require$$0);
-          a = ia.normalize(a);
-          return ha.readFileSync(a, b ? null : "utf8");
-        }, fa = function(a) {
-          a = ea(a, true);
-          a.buffer || (a = new Uint8Array(a));
-          assert(a.buffer);
-          return a;
-        }, 1 < process.argv.length && process.argv[1].replace(/\\/g, "/"), process.argv.slice(2), process.on("uncaughtException", function(a) {
-          throw a;
-        }), process.on("unhandledRejection", y), d.inspect = function() {
-          return "[Emscripten Module object]";
-        };
-      else if (da)
-        typeof read != "undefined" && (ea = function(a) {
-          return read(a);
-        }), fa = function(a) {
-          if (typeof readbuffer === "function")
-            return new Uint8Array(readbuffer(a));
-          a = read(a, "binary");
-          assert(typeof a === "object");
-          return a;
-        }, typeof print !== "undefined" && (typeof console === "undefined" && (console = {}), console.log = print, console.warn = console.error = typeof printErr !== "undefined" ? printErr : print);
-      else if (ba || w)
-        w ? x = self.location.href : document.currentScript && (x = document.currentScript.src), _scriptDir && (x = _scriptDir), x.indexOf("blob:") !== 0 ? x = x.substr(0, x.lastIndexOf("/") + 1) : x = "", ea = function(a) {
-          var b = new XMLHttpRequest();
-          b.open("GET", a, false);
-          b.send(null);
-          return b.responseText;
-        }, w && (fa = function(a) {
-          var b = new XMLHttpRequest();
-          b.open("GET", a, false);
-          b.responseType = "arraybuffer";
-          b.send(null);
-          return new Uint8Array(b.response);
-        });
-      var ja = d.print || console.log.bind(console), z = d.printErr || console.warn.bind(console);
-      for (v in r)
-        r.hasOwnProperty(v) && (d[v] = r[v]);
-      r = null;
-      var ka;
-      d.wasmBinary && (ka = d.wasmBinary);
-      d.noExitRuntime && d.noExitRuntime;
-      typeof WebAssembly !== "object" && z("no native wasm support detected");
-      var la, ma = new WebAssembly.Table({ initial: 309, maximum: 309, element: "anyfunc" }), na = false;
-      function assert(a, b) {
-        a || y("Assertion failed: " + b);
-      }
-      var oa = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : void 0;
-      function pa(a, b, c) {
-        var e = b + c;
-        for (c = b; a[c] && !(c >= e); )
-          ++c;
-        if (16 < c - b && a.subarray && oa)
-          return oa.decode(a.subarray(b, c));
-        for (e = ""; b < c; ) {
-          var f = a[b++];
-          if (f & 128) {
-            var g = a[b++] & 63;
-            if ((f & 224) == 192)
-              e += String.fromCharCode((f & 31) << 6 | g);
-            else {
-              var m = a[b++] & 63;
-              f = (f & 240) == 224 ? (f & 15) << 12 | g << 6 | m : (f & 7) << 18 | g << 12 | m << 6 | a[b++] & 63;
-              65536 > f ? e += String.fromCharCode(f) : (f -= 65536, e += String.fromCharCode(55296 | f >> 10, 56320 | f & 1023));
-            }
-          } else
-            e += String.fromCharCode(f);
-        }
-        return e;
-      }
-      function qa(a, b, c) {
-        var e = B;
-        if (0 < c) {
-          c = b + c - 1;
-          for (var f = 0; f < a.length; ++f) {
-            var g = a.charCodeAt(f);
-            if (55296 <= g && 57343 >= g) {
-              var m = a.charCodeAt(++f);
-              g = 65536 + ((g & 1023) << 10) | m & 1023;
-            }
-            if (127 >= g) {
-              if (b >= c)
-                break;
-              e[b++] = g;
-            } else {
-              if (2047 >= g) {
-                if (b + 1 >= c)
-                  break;
-                e[b++] = 192 | g >> 6;
-              } else {
-                if (65535 >= g) {
-                  if (b + 2 >= c)
-                    break;
-                  e[b++] = 224 | g >> 12;
-                } else {
-                  if (b + 3 >= c)
-                    break;
-                  e[b++] = 240 | g >> 18;
-                  e[b++] = 128 | g >> 12 & 63;
-                }
-                e[b++] = 128 | g >> 6 & 63;
-              }
-              e[b++] = 128 | g & 63;
-            }
-          }
-          e[b] = 0;
-        }
-      }
-      var ra = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : void 0;
-      function sa(a, b) {
-        var c = a >> 1;
-        for (var e = c + b / 2; !(c >= e) && ta[c]; )
-          ++c;
-        c <<= 1;
-        if (32 < c - a && ra)
-          return ra.decode(B.subarray(a, c));
-        c = 0;
-        for (e = ""; ; ) {
-          var f = D[a + 2 * c >> 1];
-          if (f == 0 || c == b / 2)
-            return e;
-          ++c;
-          e += String.fromCharCode(f);
-        }
-      }
-      function ua(a, b, c) {
-        c === void 0 && (c = 2147483647);
-        if (2 > c)
-          return 0;
-        c -= 2;
-        var e = b;
-        c = c < 2 * a.length ? c / 2 : a.length;
-        for (var f = 0; f < c; ++f)
-          D[b >> 1] = a.charCodeAt(f), b += 2;
-        D[b >> 1] = 0;
-        return b - e;
-      }
-      function va(a) {
-        return 2 * a.length;
-      }
-      function wa(a, b) {
-        for (var c = 0, e = ""; !(c >= b / 4); ) {
-          var f = E[a + 4 * c >> 2];
-          if (f == 0)
-            break;
-          ++c;
-          65536 <= f ? (f -= 65536, e += String.fromCharCode(55296 | f >> 10, 56320 | f & 1023)) : e += String.fromCharCode(f);
-        }
-        return e;
-      }
-      function xa(a, b, c) {
-        c === void 0 && (c = 2147483647);
-        if (4 > c)
-          return 0;
-        var e = b;
-        c = e + c - 4;
-        for (var f = 0; f < a.length; ++f) {
-          var g = a.charCodeAt(f);
-          if (55296 <= g && 57343 >= g) {
-            var m = a.charCodeAt(++f);
-            g = 65536 + ((g & 1023) << 10) | m & 1023;
-          }
-          E[b >> 2] = g;
-          b += 4;
-          if (b + 4 > c)
-            break;
-        }
-        E[b >> 2] = 0;
-        return b - e;
-      }
-      function ya(a) {
-        for (var b = 0, c = 0; c < a.length; ++c) {
-          var e = a.charCodeAt(c);
-          55296 <= e && 57343 >= e && ++c;
-          b += 4;
-        }
-        return b;
-      }
-      var za, Aa, B, D, ta, E, F, Ba, Ca, Da = d.INITIAL_MEMORY || 16777216;
-      d.wasmMemory ? la = d.wasmMemory : la = new WebAssembly.Memory({ initial: Da / 65536, maximum: Da / 65536 });
-      la && (za = la.buffer);
-      Da = za.byteLength;
-      var G = za;
-      za = G;
-      d.HEAP8 = Aa = new Int8Array(G);
-      d.HEAP16 = D = new Int16Array(G);
-      d.HEAP32 = E = new Int32Array(G);
-      d.HEAPU8 = B = new Uint8Array(G);
-      d.HEAPU16 = ta = new Uint16Array(G);
-      d.HEAPU32 = F = new Uint32Array(G);
-      d.HEAPF32 = Ba = new Float32Array(G);
-      d.HEAPF64 = Ca = new Float64Array(G);
-      E[3e3] = 5255040;
-      function Ea(a) {
-        for (; 0 < a.length; ) {
-          var b = a.shift();
-          if (typeof b == "function")
-            b(d);
-          else {
-            var c = b.Jb;
-            typeof c === "number" ? b.tb === void 0 ? d.dynCall_v(c) : d.dynCall_vi(c, b.tb) : c(b.tb === void 0 ? null : b.tb);
-          }
-        }
-      }
-      var Fa = [], Ga = [], Ha = [], Ia = [];
-      function Ja() {
-        var a = d.preRun.shift();
-        Fa.unshift(a);
-      }
-      var H = 0, La = null;
-      d.preloadedImages = {};
-      d.preloadedAudios = {};
-      function y(a) {
-        if (d.onAbort)
-          d.onAbort(a);
-        ja(a);
-        z(a);
-        na = true;
-        throw new WebAssembly.RuntimeError("abort(" + a + "). Build with -s ASSERTIONS=1 for more info.");
-      }
-      function Ma(a) {
-        var b = I;
-        return String.prototype.startsWith ? b.startsWith(a) : b.indexOf(a) === 0;
-      }
-      function Na() {
-        return Ma("data:application/octet-stream;base64,");
-      }
-      var I = "pathkit.wasm";
-      if (!Na()) {
-        var Oa = I;
-        I = d.locateFile ? d.locateFile(Oa, x) : x + Oa;
-      }
-      function Pa() {
-        try {
-          if (ka)
-            return new Uint8Array(ka);
-          if (fa)
-            return fa(I);
-          throw "both async and sync fetching of the wasm failed";
-        } catch (a) {
-          y(a);
-        }
-      }
-      function Qa() {
-        return ka || !ba && !w || typeof fetch !== "function" || Ma("file://") ? new Promise(function(a) {
-          a(Pa());
-        }) : fetch(I, { credentials: "same-origin" }).then(function(a) {
-          if (!a.ok)
-            throw "failed to load wasm binary file at '" + I + "'";
-          return a.arrayBuffer();
-        }).catch(function() {
-          return Pa();
-        });
-      }
-      Ga.push({ Jb: function() {
-        Ra();
-      } });
-      var Sa = {};
-      function Ta(a) {
-        for (; a.length; ) {
-          var b = a.pop();
-          a.pop()(b);
-        }
-      }
-      function J(a) {
-        return this.fromWireType(F[a >> 2]);
-      }
-      var K = {}, L = {}, Ua = {};
-      function Va(a) {
-        if (a === void 0)
-          return "_unknown";
-        a = a.replace(/[^a-zA-Z0-9_]/g, "$");
-        var b = a.charCodeAt(0);
-        return 48 <= b && 57 >= b ? "_" + a : a;
-      }
-      function Wa(a, b) {
-        a = Va(a);
-        return new Function("body", "return function " + a + '() {\n    "use strict";    return body.apply(this, arguments);\n};\n')(b);
-      }
-      function Xa(a) {
-        var b = Error, c = Wa(a, function(e) {
-          this.name = a;
-          this.message = e;
-          e = Error(e).stack;
-          e !== void 0 && (this.stack = this.toString() + "\n" + e.replace(/^Error(:[^\n]*)?\n/, ""));
-        });
-        c.prototype = Object.create(b.prototype);
-        c.prototype.constructor = c;
-        c.prototype.toString = function() {
-          return this.message === void 0 ? this.name : this.name + ": " + this.message;
-        };
-        return c;
-      }
-      var Ya = void 0;
-      function Za(a) {
-        throw new Ya(a);
-      }
-      function N(a, b, c) {
-        function e(h) {
-          h = c(h);
-          h.length !== a.length && Za("Mismatched type converter count");
-          for (var k = 0; k < a.length; ++k)
-            O(a[k], h[k]);
-        }
-        a.forEach(function(h) {
-          Ua[h] = b;
-        });
-        var f = Array(b.length), g = [], m = 0;
-        b.forEach(function(h, k) {
-          L.hasOwnProperty(h) ? f[k] = L[h] : (g.push(h), K.hasOwnProperty(h) || (K[h] = []), K[h].push(function() {
-            f[k] = L[h];
-            ++m;
-            m === g.length && e(f);
-          }));
-        });
-        g.length === 0 && e(f);
-      }
-      var $a = {};
-      function ab(a) {
-        switch (a) {
-          case 1:
-            return 0;
-          case 2:
-            return 1;
-          case 4:
-            return 2;
-          case 8:
-            return 3;
-          default:
-            throw new TypeError("Unknown type size: " + a);
-        }
-      }
-      var bb = void 0;
-      function P(a) {
-        for (var b = ""; B[a]; )
-          b += bb[B[a++]];
-        return b;
-      }
-      var Q = void 0;
-      function R(a) {
-        throw new Q(a);
-      }
-      function O(a, b, c) {
-        c = c || {};
-        if (!("argPackAdvance" in b))
-          throw new TypeError("registerType registeredInstance requires argPackAdvance");
-        var e = b.name;
-        a || R('type "' + e + '" must have a positive integer typeid pointer');
-        if (L.hasOwnProperty(a)) {
-          if (c.Mb)
-            return;
-          R("Cannot register type '" + e + "' twice");
-        }
-        L[a] = b;
-        delete Ua[a];
-        K.hasOwnProperty(a) && (b = K[a], delete K[a], b.forEach(function(f) {
-          f();
-        }));
-      }
-      function cb(a) {
-        return { count: a.count, lb: a.lb, nb: a.nb, bb: a.bb, cb: a.cb, gb: a.gb, ib: a.ib };
-      }
-      function db(a) {
-        R(a.$a.cb.ab.name + " instance already deleted");
-      }
-      var eb = false;
-      function fb() {
-      }
-      function gb(a) {
-        --a.count.value;
-        a.count.value === 0 && (a.gb ? a.ib.hb(a.gb) : a.cb.ab.hb(a.bb));
-      }
-      function hb(a) {
-        if (typeof FinalizationGroup === "undefined")
-          return hb = function(b) {
-            return b;
-          }, a;
-        eb = new FinalizationGroup(function(b) {
-          for (var c = b.next(); !c.done; c = b.next())
-            c = c.value, c.bb ? gb(c) : console.warn("object already deleted: " + c.bb);
-        });
-        hb = function(b) {
-          eb.register(b, b.$a, b.$a);
-          return b;
-        };
-        fb = function(b) {
-          eb.unregister(b.$a);
-        };
-        return hb(a);
-      }
-      var ib = void 0, jb = [];
-      function kb() {
-        for (; jb.length; ) {
-          var a = jb.pop();
-          a.$a.lb = false;
-          a["delete"]();
-        }
-      }
-      function S() {
-      }
-      var lb = {};
-      function mb(a, b, c) {
-        if (a[b].eb === void 0) {
-          var e = a[b];
-          a[b] = function() {
-            a[b].eb.hasOwnProperty(arguments.length) || R("Function '" + c + "' called with an invalid number of arguments (" + arguments.length + ") - expects one of (" + a[b].eb + ")!");
-            return a[b].eb[arguments.length].apply(this, arguments);
-          };
-          a[b].eb = [];
-          a[b].eb[e.qb] = e;
-        }
-      }
-      function nb(a, b, c) {
-        d.hasOwnProperty(a) ? ((c === void 0 || d[a].eb !== void 0 && d[a].eb[c] !== void 0) && R("Cannot register public name '" + a + "' twice"), mb(d, a, a), d.hasOwnProperty(c) && R("Cannot register multiple overloads of a function with the same number of arguments (" + c + ")!"), d[a].eb[c] = b) : (d[a] = b, c !== void 0 && (d[a].Sb = c));
-      }
-      function ob(a, b, c, e, f, g, m, h) {
-        this.name = a;
-        this.constructor = b;
-        this.mb = c;
-        this.hb = e;
-        this.jb = f;
-        this.Kb = g;
-        this.pb = m;
-        this.Hb = h;
-        this.Pb = [];
-      }
-      function pb(a, b, c) {
-        for (; b !== c; )
-          b.pb || R("Expected null or instance of " + c.name + ", got an instance of " + b.name), a = b.pb(a), b = b.jb;
-        return a;
-      }
-      function qb(a, b) {
-        if (b === null)
-          return this.xb && R("null is not a valid " + this.name), 0;
-        b.$a || R('Cannot pass "' + U(b) + '" as a ' + this.name);
-        b.$a.bb || R("Cannot pass deleted object as a pointer of type " + this.name);
-        return pb(b.$a.bb, b.$a.cb.ab, this.ab);
-      }
-      function rb(a, b) {
-        if (b === null) {
-          this.xb && R("null is not a valid " + this.name);
-          if (this.sb) {
-            var c = this.ob();
-            a !== null && a.push(this.hb, c);
-            return c;
-          }
-          return 0;
-        }
-        b.$a || R('Cannot pass "' + U(b) + '" as a ' + this.name);
-        b.$a.bb || R("Cannot pass deleted object as a pointer of type " + this.name);
-        !this.rb && b.$a.cb.rb && R("Cannot convert argument of type " + (b.$a.ib ? b.$a.ib.name : b.$a.cb.name) + " to parameter type " + this.name);
-        c = pb(b.$a.bb, b.$a.cb.ab, this.ab);
-        if (this.sb)
-          switch (b.$a.gb === void 0 && R("Passing raw pointer to smart pointer is illegal"), this.Rb) {
-            case 0:
-              b.$a.ib === this ? c = b.$a.gb : R("Cannot convert argument of type " + (b.$a.ib ? b.$a.ib.name : b.$a.cb.name) + " to parameter type " + this.name);
-              break;
-            case 1:
-              c = b.$a.gb;
-              break;
-            case 2:
-              if (b.$a.ib === this)
-                c = b.$a.gb;
-              else {
-                var e = b.clone();
-                c = this.Qb(c, V(function() {
-                  e["delete"]();
-                }));
-                a !== null && a.push(this.hb, c);
-              }
-              break;
-            default:
-              R("Unsupporting sharing policy");
-          }
-        return c;
-      }
-      function sb(a, b) {
-        if (b === null)
-          return this.xb && R("null is not a valid " + this.name), 0;
-        b.$a || R('Cannot pass "' + U(b) + '" as a ' + this.name);
-        b.$a.bb || R("Cannot pass deleted object as a pointer of type " + this.name);
-        b.$a.cb.rb && R("Cannot convert argument of type " + b.$a.cb.name + " to parameter type " + this.name);
-        return pb(b.$a.bb, b.$a.cb.ab, this.ab);
-      }
-      function tb(a, b, c) {
-        if (b === c)
-          return a;
-        if (c.jb === void 0)
-          return null;
-        a = tb(a, b, c.jb);
-        return a === null ? null : c.Hb(a);
-      }
-      var ub = {};
-      function vb(a, b) {
-        for (b === void 0 && R("ptr should not be undefined"); a.jb; )
-          b = a.pb(b), a = a.jb;
-        return ub[b];
-      }
-      function wb(a, b) {
-        b.cb && b.bb || Za("makeClassHandle requires ptr and ptrType");
-        !!b.ib !== !!b.gb && Za("Both smartPtrType and smartPtr must be specified");
-        b.count = { value: 1 };
-        return hb(Object.create(a, { $a: { value: b } }));
-      }
-      function W(a, b, c, e) {
-        this.name = a;
-        this.ab = b;
-        this.xb = c;
-        this.rb = e;
-        this.sb = false;
-        this.hb = this.Qb = this.ob = this.Eb = this.Rb = this.Ob = void 0;
-        b.jb !== void 0 ? this.toWireType = rb : (this.toWireType = e ? qb : sb, this.fb = null);
-      }
-      function xb(a, b, c) {
-        d.hasOwnProperty(a) || Za("Replacing nonexistant public symbol");
-        d[a].eb !== void 0 && c !== void 0 ? d[a].eb[c] = b : (d[a] = b, d[a].qb = c);
-      }
-      function X(a, b) {
-        a = P(a);
-        var c = d["dynCall_" + a];
-        for (var e = [], f = 1; f < a.length; ++f)
-          e.push("a" + f);
-        f = "return function dynCall_" + (a + "_" + b) + "(" + e.join(", ") + ") {\n";
-        f += "    return dynCall(rawFunction" + (e.length ? ", " : "") + e.join(", ") + ");\n";
-        c = new Function("dynCall", "rawFunction", f + "};\n")(c, b);
-        typeof c !== "function" && R("unknown function pointer with signature " + a + ": " + b);
-        return c;
-      }
-      var yb = void 0;
-      function zb(a) {
-        a = Ab(a);
-        var b = P(a);
-        Y(a);
-        return b;
-      }
-      function Db(a, b) {
-        function c(g) {
-          f[g] || L[g] || (Ua[g] ? Ua[g].forEach(c) : (e.push(g), f[g] = true));
-        }
-        var e = [], f = {};
-        b.forEach(c);
-        throw new yb(a + ": " + e.map(zb).join([", "]));
-      }
-      function Eb(a, b) {
-        for (var c = [], e = 0; e < a; e++)
-          c.push(E[(b >> 2) + e]);
-        return c;
-      }
-      function Fb(a) {
-        var b = Function;
-        if (!(b instanceof Function))
-          throw new TypeError("new_ called with constructor type " + typeof b + " which is not a function");
-        var c = Wa(b.name || "unknownFunctionName", function() {
-        });
-        c.prototype = b.prototype;
-        c = new c();
-        a = b.apply(c, a);
-        return a instanceof Object ? a : c;
-      }
-      function Gb(a, b, c, e, f) {
-        var g = b.length;
-        2 > g && R("argTypes array size mismatch! Must at least get return value and 'this' types!");
-        var m = b[1] !== null && c !== null, h = false;
-        for (c = 1; c < b.length; ++c)
-          if (b[c] !== null && b[c].fb === void 0) {
-            h = true;
-            break;
-          }
-        var k = b[0].name !== "void", l = "", n = "";
-        for (c = 0; c < g - 2; ++c)
-          l += (c !== 0 ? ", " : "") + "arg" + c, n += (c !== 0 ? ", " : "") + "arg" + c + "Wired";
-        a = "return function " + Va(a) + "(" + l + ") {\nif (arguments.length !== " + (g - 2) + ") {\nthrowBindingError('function " + a + " called with ' + arguments.length + ' arguments, expected " + (g - 2) + " args!');\n}\n";
-        h && (a += "var destructors = [];\n");
-        var p = h ? "destructors" : "null";
-        l = "throwBindingError invoker fn runDestructors retType classParam".split(" ");
-        e = [R, e, f, Ta, b[0], b[1]];
-        m && (a += "var thisWired = classParam.toWireType(" + p + ", this);\n");
-        for (c = 0; c < g - 2; ++c)
-          a += "var arg" + c + "Wired = argType" + c + ".toWireType(" + p + ", arg" + c + "); // " + b[c + 2].name + "\n", l.push("argType" + c), e.push(b[c + 2]);
-        m && (n = "thisWired" + (0 < n.length ? ", " : "") + n);
-        a += (k ? "var rv = " : "") + "invoker(fn" + (0 < n.length ? ", " : "") + n + ");\n";
-        if (h)
-          a += "runDestructors(destructors);\n";
-        else
-          for (c = m ? 1 : 2; c < b.length; ++c)
-            g = c === 1 ? "thisWired" : "arg" + (c - 2) + "Wired", b[c].fb !== null && (a += g + "_dtor(" + g + "); // " + b[c].name + "\n", l.push(g + "_dtor"), e.push(b[c].fb));
-        k && (a += "var ret = retType.fromWireType(rv);\nreturn ret;\n");
-        l.push(a + "}\n");
-        return Fb(l).apply(null, e);
-      }
-      var Hb = [], Z = [{}, { value: void 0 }, { value: null }, { value: true }, { value: false }];
-      function Ib(a) {
-        4 < a && --Z[a].yb === 0 && (Z[a] = void 0, Hb.push(a));
-      }
-      function V(a) {
-        switch (a) {
-          case void 0:
-            return 1;
-          case null:
-            return 2;
-          case true:
-            return 3;
-          case false:
-            return 4;
-          default:
-            var b = Hb.length ? Hb.pop() : Z.length;
-            Z[b] = { yb: 1, value: a };
-            return b;
-        }
-      }
-      function Jb(a, b, c) {
-        switch (b) {
-          case 0:
-            return function(e) {
-              return this.fromWireType((c ? Aa : B)[e]);
-            };
-          case 1:
-            return function(e) {
-              return this.fromWireType((c ? D : ta)[e >> 1]);
-            };
-          case 2:
-            return function(e) {
-              return this.fromWireType((c ? E : F)[e >> 2]);
-            };
-          default:
-            throw new TypeError("Unknown integer type: " + a);
-        }
-      }
-      function Kb(a, b) {
-        var c = L[a];
-        c === void 0 && R(b + " has unknown type " + zb(a));
-        return c;
-      }
-      function U(a) {
-        if (a === null)
-          return "null";
-        var b = typeof a;
-        return b === "object" || b === "array" || b === "function" ? a.toString() : "" + a;
-      }
-      function Lb(a, b) {
-        switch (b) {
-          case 2:
-            return function(c) {
-              return this.fromWireType(Ba[c >> 2]);
-            };
-          case 3:
-            return function(c) {
-              return this.fromWireType(Ca[c >> 3]);
-            };
-          default:
-            throw new TypeError("Unknown float type: " + a);
-        }
-      }
-      function Mb(a, b, c) {
-        switch (b) {
-          case 0:
-            return c ? function(e) {
-              return Aa[e];
-            } : function(e) {
-              return B[e];
-            };
-          case 1:
-            return c ? function(e) {
-              return D[e >> 1];
-            } : function(e) {
-              return ta[e >> 1];
-            };
-          case 2:
-            return c ? function(e) {
-              return E[e >> 2];
-            } : function(e) {
-              return F[e >> 2];
-            };
-          default:
-            throw new TypeError("Unknown integer type: " + a);
-        }
-      }
-      var Nb = {};
-      function Ob(a) {
-        var b = Nb[a];
-        return b === void 0 ? P(a) : b;
-      }
-      var Pb = [];
-      function Qb(a) {
-        a || R("Cannot use deleted val. handle = " + a);
-        return Z[a].value;
-      }
-      function Rb() {
-        return typeof globalThis === "object" ? globalThis : Function("return this")();
-      }
-      function Sb(a) {
-        var b = Pb.length;
-        Pb.push(a);
-        return b;
-      }
-      function Tb(a, b) {
-        for (var c = Array(a), e = 0; e < a; ++e)
-          c[e] = Kb(E[(b >> 2) + e], "parameter " + e);
-        return c;
-      }
-      var Ub = {}, Vb = [null, [], []];
-      Ya = d.InternalError = Xa("InternalError");
-      for (var Wb = Array(256), Xb = 0; 256 > Xb; ++Xb)
-        Wb[Xb] = String.fromCharCode(Xb);
-      bb = Wb;
-      Q = d.BindingError = Xa("BindingError");
-      S.prototype.isAliasOf = function(a) {
-        if (!(this instanceof S && a instanceof S))
-          return false;
-        var b = this.$a.cb.ab, c = this.$a.bb, e = a.$a.cb.ab;
-        for (a = a.$a.bb; b.jb; )
-          c = b.pb(c), b = b.jb;
-        for (; e.jb; )
-          a = e.pb(a), e = e.jb;
-        return b === e && c === a;
-      };
-      S.prototype.clone = function() {
-        this.$a.bb || db(this);
-        if (this.$a.nb)
-          return this.$a.count.value += 1, this;
-        var a = hb(Object.create(Object.getPrototypeOf(this), { $a: { value: cb(this.$a) } }));
-        a.$a.count.value += 1;
-        a.$a.lb = false;
-        return a;
-      };
-      S.prototype["delete"] = function() {
-        this.$a.bb || db(this);
-        this.$a.lb && !this.$a.nb && R("Object already scheduled for deletion");
-        fb(this);
-        gb(this.$a);
-        this.$a.nb || (this.$a.gb = void 0, this.$a.bb = void 0);
-      };
-      S.prototype.isDeleted = function() {
-        return !this.$a.bb;
-      };
-      S.prototype.deleteLater = function() {
-        this.$a.bb || db(this);
-        this.$a.lb && !this.$a.nb && R("Object already scheduled for deletion");
-        jb.push(this);
-        jb.length === 1 && ib && ib(kb);
-        this.$a.lb = true;
-        return this;
-      };
-      W.prototype.Lb = function(a) {
-        this.Eb && (a = this.Eb(a));
-        return a;
-      };
-      W.prototype.Cb = function(a) {
-        this.hb && this.hb(a);
-      };
-      W.prototype.argPackAdvance = 8;
-      W.prototype.readValueFromPointer = J;
-      W.prototype.deleteObject = function(a) {
-        if (a !== null)
-          a["delete"]();
-      };
-      W.prototype.fromWireType = function(a) {
-        function b() {
-          return this.sb ? wb(this.ab.mb, { cb: this.Ob, bb: c, ib: this, gb: a }) : wb(this.ab.mb, { cb: this, bb: a });
-        }
-        var c = this.Lb(a);
-        if (!c)
-          return this.Cb(a), null;
-        var e = vb(this.ab, c);
-        if (e !== void 0) {
-          if (e.$a.count.value === 0)
-            return e.$a.bb = c, e.$a.gb = a, e.clone();
-          e = e.clone();
-          this.Cb(a);
-          return e;
-        }
-        e = this.ab.Kb(c);
-        e = lb[e];
-        if (!e)
-          return b.call(this);
-        e = this.rb ? e.Gb : e.pointerType;
-        var f = tb(c, this.ab, e.ab);
-        return f === null ? b.call(this) : this.sb ? wb(e.ab.mb, { cb: e, bb: f, ib: this, gb: a }) : wb(e.ab.mb, { cb: e, bb: f });
-      };
-      d.getInheritedInstanceCount = function() {
-        return Object.keys(ub).length;
-      };
-      d.getLiveInheritedInstances = function() {
-        var a = [], b;
-        for (b in ub)
-          ub.hasOwnProperty(b) && a.push(ub[b]);
-        return a;
-      };
-      d.flushPendingDeletes = kb;
-      d.setDelayFunction = function(a) {
-        ib = a;
-        jb.length && ib && ib(kb);
-      };
-      yb = d.UnboundTypeError = Xa("UnboundTypeError");
-      d.count_emval_handles = function() {
-        for (var a = 0, b = 5; b < Z.length; ++b)
-          Z[b] !== void 0 && ++a;
-        return a;
-      };
-      d.get_first_emval = function() {
-        for (var a = 5; a < Z.length; ++a)
-          if (Z[a] !== void 0)
-            return Z[a];
-        return null;
-      };
-      var Zb = {
-        s: function(a) {
-          var b = Sa[a];
-          delete Sa[a];
-          var c = b.elements, e = c.length, f = c.map(function(h) {
-            return h.wb;
-          }).concat(c.map(function(h) {
-            return h.Ab;
-          })), g = b.ob, m = b.hb;
-          N([a], f, function(h) {
-            c.forEach(function(k, l) {
-              var n = h[l], p = k.ub, q = k.vb, t = h[l + e], u = k.zb, M = k.Bb;
-              k.read = function(A) {
-                return n.fromWireType(p(q, A));
-              };
-              k.write = function(A, T) {
-                var C = [];
-                u(M, A, t.toWireType(C, T));
-                Ta(C);
-              };
-            });
-            return [{ name: b.name, fromWireType: function(k) {
-              for (var l = Array(e), n = 0; n < e; ++n)
-                l[n] = c[n].read(k);
-              m(k);
-              return l;
-            }, toWireType: function(k, l) {
-              if (e !== l.length)
-                throw new TypeError("Incorrect number of tuple elements for " + b.name + ": expected=" + e + ", actual=" + l.length);
-              for (var n = g(), p = 0; p < e; ++p)
-                c[p].write(n, l[p]);
-              k !== null && k.push(m, n);
-              return n;
-            }, argPackAdvance: 8, readValueFromPointer: J, fb: m }];
-          });
-        },
-        v: function(a) {
-          var b = $a[a];
-          delete $a[a];
-          var c = b.ob, e = b.hb, f = b.Db, g = f.map(function(m) {
-            return m.wb;
-          }).concat(f.map(function(m) {
-            return m.Ab;
-          }));
-          N([a], g, function(m) {
-            var h = {};
-            f.forEach(function(k, l) {
-              var n = m[l], p = k.ub, q = k.vb, t = m[l + f.length], u = k.zb, M = k.Bb;
-              h[k.Ib] = { read: function(A) {
-                return n.fromWireType(p(q, A));
-              }, write: function(A, T) {
-                var C = [];
-                u(M, A, t.toWireType(C, T));
-                Ta(C);
-              } };
-            });
-            return [{ name: b.name, fromWireType: function(k) {
-              var l = {}, n;
-              for (n in h)
-                l[n] = h[n].read(k);
-              e(k);
-              return l;
-            }, toWireType: function(k, l) {
-              for (var n in h)
-                if (!(n in l))
-                  throw new TypeError("Missing field");
-              var p = c();
-              for (n in h)
-                h[n].write(p, l[n]);
-              k !== null && k.push(e, p);
-              return p;
-            }, argPackAdvance: 8, readValueFromPointer: J, fb: e }];
-          });
-        },
-        G: function(a, b, c, e, f) {
-          var g = ab(c);
-          b = P(b);
-          O(a, {
-            name: b,
-            fromWireType: function(m) {
-              return !!m;
-            },
-            toWireType: function(m, h) {
-              return h ? e : f;
-            },
-            argPackAdvance: 8,
-            readValueFromPointer: function(m) {
-              if (c === 1)
-                var h = Aa;
-              else if (c === 2)
-                h = D;
-              else if (c === 4)
-                h = E;
-              else
-                throw new TypeError("Unknown boolean type size: " + b);
-              return this.fromWireType(h[m >> g]);
-            },
-            fb: null
-          });
-        },
-        k: function(a, b, c, e, f, g, m, h, k, l, n, p, q) {
-          n = P(n);
-          g = X(f, g);
-          h && (h = X(m, h));
-          l && (l = X(k, l));
-          q = X(p, q);
-          var t = Va(n);
-          nb(t, function() {
-            Db("Cannot construct " + n + " due to unbound types", [e]);
-          });
-          N([a, b, c], e ? [e] : [], function(u) {
-            u = u[0];
-            if (e) {
-              var M = u.ab;
-              var A = M.mb;
-            } else
-              A = S.prototype;
-            u = Wa(t, function() {
-              if (Object.getPrototypeOf(this) !== T)
-                throw new Q("Use 'new' to construct " + n);
-              if (C.kb === void 0)
-                throw new Q(n + " has no accessible constructor");
-              var Bb = C.kb[arguments.length];
-              if (Bb === void 0)
-                throw new Q("Tried to invoke ctor of " + n + " with invalid number of parameters (" + arguments.length + ") - expected (" + Object.keys(C.kb).toString() + ") parameters instead!");
-              return Bb.apply(this, arguments);
-            });
-            var T = Object.create(A, { constructor: { value: u } });
-            u.prototype = T;
-            var C = new ob(n, u, T, q, M, g, h, l);
-            M = new W(n, C, true, false);
-            A = new W(n + "*", C, false, false);
-            var Cb = new W(n + " const*", C, false, true);
-            lb[a] = { pointerType: A, Gb: Cb };
-            xb(t, u);
-            return [M, A, Cb];
-          });
-        },
-        h: function(a, b, c, e, f, g) {
-          assert(0 < b);
-          var m = Eb(b, c);
-          f = X(e, f);
-          var h = [g], k = [];
-          N([], [a], function(l) {
-            l = l[0];
-            var n = "constructor " + l.name;
-            l.ab.kb === void 0 && (l.ab.kb = []);
-            if (l.ab.kb[b - 1] !== void 0)
-              throw new Q("Cannot register multiple constructors with identical number of parameters (" + (b - 1) + ") for class '" + l.name + "'! Overload resolution is currently only performed using the parameter count, not actual type info!");
-            l.ab.kb[b - 1] = function() {
-              Db("Cannot construct " + l.name + " due to unbound types", m);
-            };
-            N([], m, function(p) {
-              l.ab.kb[b - 1] = function() {
-                arguments.length !== b - 1 && R(n + " called with " + arguments.length + " arguments, expected " + (b - 1));
-                k.length = 0;
-                h.length = b;
-                for (var q = 1; q < b; ++q)
-                  h[q] = p[q].toWireType(k, arguments[q - 1]);
-                q = f.apply(null, h);
-                Ta(k);
-                return p[0].fromWireType(q);
-              };
-              return [];
-            });
-            return [];
-          });
-        },
-        a: function(a, b, c, e, f, g, m, h) {
-          var k = Eb(c, e);
-          b = P(b);
-          g = X(f, g);
-          N([], [a], function(l) {
-            function n() {
-              Db("Cannot call " + p + " due to unbound types", k);
-            }
-            l = l[0];
-            var p = l.name + "." + b;
-            h && l.ab.Pb.push(b);
-            var q = l.ab.mb, t = q[b];
-            t === void 0 || t.eb === void 0 && t.className !== l.name && t.qb === c - 2 ? (n.qb = c - 2, n.className = l.name, q[b] = n) : (mb(q, b, p), q[b].eb[c - 2] = n);
-            N([], k, function(u) {
-              u = Gb(p, u, l, g, m);
-              q[b].eb === void 0 ? (u.qb = c - 2, q[b] = u) : q[b].eb[c - 2] = u;
-              return [];
-            });
-            return [];
-          });
-        },
-        M: function(a, b, c) {
-          a = P(a);
-          N([], [b], function(e) {
-            e = e[0];
-            d[a] = e.fromWireType(c);
-            return [];
-          });
-        },
-        E: function(a, b) {
-          b = P(b);
-          O(a, { name: b, fromWireType: function(c) {
-            var e = Z[c].value;
-            Ib(c);
-            return e;
-          }, toWireType: function(c, e) {
-            return V(e);
-          }, argPackAdvance: 8, readValueFromPointer: J, fb: null });
-        },
-        g: function(a, b, c, e) {
-          function f() {
-          }
-          c = ab(c);
-          b = P(b);
-          f.values = {};
-          O(a, { name: b, constructor: f, fromWireType: function(g) {
-            return this.constructor.values[g];
-          }, toWireType: function(g, m) {
-            return m.value;
-          }, argPackAdvance: 8, readValueFromPointer: Jb(b, c, e), fb: null });
-          nb(b, f);
-        },
-        j: function(a, b, c) {
-          var e = Kb(a, "enum");
-          b = P(b);
-          a = e.constructor;
-          e = Object.create(e.constructor.prototype, { value: { value: c }, constructor: { value: Wa(e.name + "_" + b, function() {
-          }) } });
-          a.values[c] = e;
-          a[b] = e;
-        },
-        p: function(a, b, c) {
-          c = ab(c);
-          b = P(b);
-          O(a, { name: b, fromWireType: function(e) {
-            return e;
-          }, toWireType: function(e, f) {
-            if (typeof f !== "number" && typeof f !== "boolean")
-              throw new TypeError('Cannot convert "' + U(f) + '" to ' + this.name);
-            return f;
-          }, argPackAdvance: 8, readValueFromPointer: Lb(b, c), fb: null });
-        },
-        f: function(a, b, c, e, f, g) {
-          var m = Eb(b, c);
-          a = P(a);
-          f = X(e, f);
-          nb(a, function() {
-            Db("Cannot call " + a + " due to unbound types", m);
-          }, b - 1);
-          N([], m, function(h) {
-            h = [h[0], null].concat(h.slice(1));
-            xb(a, Gb(a, h, null, f, g), b - 1);
-            return [];
-          });
-        },
-        e: function(a, b, c, e, f) {
-          function g(l) {
-            return l;
-          }
-          b = P(b);
-          f === -1 && (f = 4294967295);
-          var m = ab(c);
-          if (e === 0) {
-            var h = 32 - 8 * c;
-            g = function(l) {
-              return l << h >>> h;
-            };
-          }
-          var k = b.indexOf("unsigned") != -1;
-          O(a, { name: b, fromWireType: g, toWireType: function(l, n) {
-            if (typeof n !== "number" && typeof n !== "boolean")
-              throw new TypeError('Cannot convert "' + U(n) + '" to ' + this.name);
-            if (n < e || n > f)
-              throw new TypeError('Passing a number "' + U(n) + '" from JS side to C/C++ side to an argument of type "' + b + '", which is outside the valid range [' + e + ", " + f + "]!");
-            return k ? n >>> 0 : n | 0;
-          }, argPackAdvance: 8, readValueFromPointer: Mb(b, m, e !== 0), fb: null });
-        },
-        b: function(a, b, c) {
-          function e(g) {
-            g >>= 2;
-            return new f(za, F[g + 1], F[g]);
-          }
-          var f = [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array][b];
-          c = P(c);
-          O(a, { name: c, fromWireType: e, argPackAdvance: 8, readValueFromPointer: e }, { Mb: true });
-        },
-        q: function(a, b) {
-          b = P(b);
-          var c = b === "std::string";
-          O(a, { name: b, fromWireType: function(e) {
-            var f = F[e >> 2];
-            if (c)
-              for (var g = e + 4, m = 0; m <= f; ++m) {
-                var h = e + 4 + m;
-                if (B[h] == 0 || m == f) {
-                  g = g ? pa(B, g, h - g) : "";
-                  if (k === void 0)
-                    var k = g;
-                  else
-                    k += String.fromCharCode(0), k += g;
-                  g = h + 1;
-                }
-              }
-            else {
-              k = Array(f);
-              for (m = 0; m < f; ++m)
-                k[m] = String.fromCharCode(B[e + 4 + m]);
-              k = k.join("");
-            }
-            Y(e);
-            return k;
-          }, toWireType: function(e, f) {
-            f instanceof ArrayBuffer && (f = new Uint8Array(f));
-            var g = typeof f === "string";
-            g || f instanceof Uint8Array || f instanceof Uint8ClampedArray || f instanceof Int8Array || R("Cannot pass non-string to std::string");
-            var m = (c && g ? function() {
-              for (var l = 0, n = 0; n < f.length; ++n) {
-                var p = f.charCodeAt(n);
-                55296 <= p && 57343 >= p && (p = 65536 + ((p & 1023) << 10) | f.charCodeAt(++n) & 1023);
-                127 >= p ? ++l : l = 2047 >= p ? l + 2 : 65535 >= p ? l + 3 : l + 4;
-              }
-              return l;
-            } : function() {
-              return f.length;
-            })(), h = Yb(4 + m + 1);
-            F[h >> 2] = m;
-            if (c && g)
-              qa(f, h + 4, m + 1);
-            else if (g)
-              for (g = 0; g < m; ++g) {
-                var k = f.charCodeAt(g);
-                255 < k && (Y(h), R("String has UTF-16 code units that do not fit in 8 bits"));
-                B[h + 4 + g] = k;
-              }
-            else
-              for (g = 0; g < m; ++g)
-                B[h + 4 + g] = f[g];
-            e !== null && e.push(Y, h);
-            return h;
-          }, argPackAdvance: 8, readValueFromPointer: J, fb: function(e) {
-            Y(e);
-          } });
-        },
-        l: function(a, b, c) {
-          c = P(c);
-          if (b === 2) {
-            var e = sa;
-            var f = ua;
-            var g = va;
-            var m = function() {
-              return ta;
-            };
-            var h = 1;
-          } else
-            b === 4 && (e = wa, f = xa, g = ya, m = function() {
-              return F;
-            }, h = 2);
-          O(a, { name: c, fromWireType: function(k) {
-            for (var l = F[k >> 2], n = m(), p, q = k + 4, t = 0; t <= l; ++t) {
-              var u = k + 4 + t * b;
-              if (n[u >> h] == 0 || t == l)
-                q = e(q, u - q), p === void 0 ? p = q : (p += String.fromCharCode(0), p += q), q = u + b;
-            }
-            Y(k);
-            return p;
-          }, toWireType: function(k, l) {
-            typeof l !== "string" && R("Cannot pass non-string to C++ string type " + c);
-            var n = g(l), p = Yb(4 + n + b);
-            F[p >> 2] = n >> h;
-            f(l, p + 4, n + b);
-            k !== null && k.push(Y, p);
-            return p;
-          }, argPackAdvance: 8, readValueFromPointer: J, fb: function(k) {
-            Y(k);
-          } });
-        },
-        u: function(a, b, c, e, f, g) {
-          Sa[a] = { name: P(b), ob: X(c, e), hb: X(f, g), elements: [] };
-        },
-        t: function(a, b, c, e, f, g, m, h, k) {
-          Sa[a].elements.push({ wb: b, ub: X(c, e), vb: f, Ab: g, zb: X(m, h), Bb: k });
-        },
-        w: function(a, b, c, e, f, g) {
-          $a[a] = { name: P(b), ob: X(c, e), hb: X(f, g), Db: [] };
-        },
-        i: function(a, b, c, e, f, g, m, h, k, l) {
-          $a[a].Db.push({ Ib: P(b), wb: c, ub: X(e, f), vb: g, Ab: m, zb: X(h, k), Bb: l });
-        },
-        H: function(a, b) {
-          b = P(b);
-          O(a, { Nb: true, name: b, argPackAdvance: 0, fromWireType: function() {
-          }, toWireType: function() {
-          } });
-        },
-        d: function(a, b, c, e) {
-          a = Pb[a];
-          b = Qb(b);
-          c = Ob(c);
-          a(b, c, null, e);
-        },
-        N: Ib,
-        z: function(a) {
-          if (a === 0)
-            return V(Rb());
-          a = Ob(a);
-          return V(Rb()[a]);
-        },
-        c: function(a, b) {
-          b = Tb(a, b);
-          for (var c = b[0], e = c.name + "_$" + b.slice(1).map(function(l) {
-            return l.name;
-          }).join("_") + "$", f = ["retType"], g = [c], m = "", h = 0; h < a - 1; ++h)
-            m += (h !== 0 ? ", " : "") + "arg" + h, f.push("argType" + h), g.push(b[1 + h]);
-          e = "return function " + Va("methodCaller_" + e) + "(handle, name, destructors, args) {\n";
-          var k = 0;
-          for (h = 0; h < a - 1; ++h)
-            e += "    var arg" + h + " = argType" + h + ".readValueFromPointer(args" + (k ? "+" + k : "") + ");\n", k += b[h + 1].argPackAdvance;
-          e += "    var rv = handle[name](" + m + ");\n";
-          for (h = 0; h < a - 1; ++h)
-            b[h + 1].deleteObject && (e += "    argType" + h + ".deleteObject(arg" + h + ");\n");
-          c.Nb || (e += "    return retType.toWireType(destructors, rv);\n");
-          f.push(e + "};\n");
-          a = Fb(f).apply(null, g);
-          return Sb(a);
-        },
-        n: function(a) {
-          4 < a && (Z[a].yb += 1);
-        },
-        x: function(a, b, c, e) {
-          a = Qb(a);
-          var f = Ub[b];
-          if (!f) {
-            f = "";
-            for (var g = 0; g < b; ++g)
-              f += (g !== 0 ? ", " : "") + "arg" + g;
-            var m = "return function emval_allocator_" + b + "(constructor, argTypes, args) {\n";
-            for (g = 0; g < b; ++g)
-              m += "var argType" + g + " = requireRegisteredType(Module['HEAP32'][(argTypes >>> 2) + " + g + '], "parameter ' + g + '");\nvar arg' + g + " = argType" + g + ".readValueFromPointer(args);\nargs += argType" + g + "['argPackAdvance'];\n";
-            f = new Function("requireRegisteredType", "Module", "__emval_register", m + ("var obj = new constructor(" + f + ");\nreturn __emval_register(obj);\n}\n"))(Kb, d, V);
-            Ub[b] = f;
-          }
-          return f(a, c, e);
-        },
-        O: function() {
-          return V([]);
-        },
-        F: function(a) {
-          return V(Ob(a));
-        },
-        L: function(a, b) {
-          a = Kb(a, "_emval_take_value");
-          a = a.readValueFromPointer(b);
-          return V(a);
-        },
-        m: function() {
-          y();
-        },
-        B: function(a, b, c) {
-          B.copyWithin(a, b, b + c);
-        },
-        C: function() {
-          y("OOM");
-        },
-        D: function() {
-          return 0;
-        },
-        y: function() {
-        },
-        o: function(a, b, c, e) {
-          for (var f = 0, g = 0; g < c; g++) {
-            for (var m = E[b + 8 * g >> 2], h = E[b + (8 * g + 4) >> 2], k = 0; k < h; k++) {
-              var l = B[m + k], n = Vb[a];
-              l === 0 || l === 10 ? ((a === 1 ? ja : z)(pa(n, 0)), n.length = 0) : n.push(l);
-            }
-            f += h;
-          }
-          E[e >> 2] = f;
-          return 0;
-        },
-        memory: la,
-        K: function() {
-        },
-        r: function() {
-        },
-        J: function() {
-        },
-        I: function() {
-        },
-        A: function() {
-        },
-        table: ma
-      }, $b = function() {
-        function a(f) {
-          d.asm = f.exports;
-          H--;
-          d.monitorRunDependencies && d.monitorRunDependencies(H);
-          H == 0 && (La && (f = La, La = null, f()));
-        }
-        function b(f) {
-          a(f.instance);
-        }
-        function c(f) {
-          return Qa().then(function(g) {
-            return WebAssembly.instantiate(g, e);
-          }).then(f, function(g) {
-            z("failed to asynchronously prepare wasm: " + g);
-            y(g);
-          });
-        }
-        var e = { a: Zb };
-        H++;
-        d.monitorRunDependencies && d.monitorRunDependencies(H);
-        if (d.instantiateWasm)
-          try {
-            return d.instantiateWasm(e, a);
-          } catch (f) {
-            return z("Module.instantiateWasm callback failed with error: " + f), false;
-          }
-        (function() {
-          if (ka || typeof WebAssembly.instantiateStreaming !== "function" || Na() || Ma("file://") || typeof fetch !== "function")
-            return c(b);
-          fetch(I, { credentials: "same-origin" }).then(function(f) {
-            return WebAssembly.instantiateStreaming(f, e).then(b, function(g) {
-              z("wasm streaming compile failed: " + g);
-              z("falling back to ArrayBuffer instantiation");
-              c(b);
-            });
-          });
-        })();
-        return {};
-      }();
-      d.asm = $b;
-      var Ra = d.___wasm_call_ctors = function() {
-        return (Ra = d.___wasm_call_ctors = d.asm.P).apply(null, arguments);
-      };
-      d.__Z6ToCmdsRK6SkPath = function() {
-        return (d.__Z6ToCmdsRK6SkPath = d.asm.Q).apply(null, arguments);
-      };
-      d.__Z8FromCmdsmi = function() {
-        return (d.__Z8FromCmdsmi = d.asm.R).apply(null, arguments);
-      };
-      d.__Z7NewPathv = function() {
-        return (d.__Z7NewPathv = d.asm.S).apply(null, arguments);
-      };
-      d.__Z8CopyPathRK6SkPath = function() {
-        return (d.__Z8CopyPathRK6SkPath = d.asm.T).apply(null, arguments);
-      };
-      d.__Z6EqualsRK6SkPathS1_ = function() {
-        return (d.__Z6EqualsRK6SkPathS1_ = d.asm.U).apply(null, arguments);
-      };
-      d.__Z11ToSVGStringRK6SkPath = function() {
-        return (d.__Z11ToSVGStringRK6SkPath = d.asm.V).apply(null, arguments);
-      };
-      d.__Z13FromSVGStringNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE = function() {
-        return (d.__Z13FromSVGStringNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE = d.asm.W).apply(null, arguments);
-      };
-      d.__Z13ApplySimplifyR6SkPath = function() {
-        return (d.__Z13ApplySimplifyR6SkPath = d.asm.X).apply(null, arguments);
-      };
-      d.__Z11ApplyPathOpR6SkPathRKS_8SkPathOp = function() {
-        return (d.__Z11ApplyPathOpR6SkPathRKS_8SkPathOp = d.asm.Y).apply(null, arguments);
-      };
-      d.__Z10MakeFromOpRK6SkPathS1_8SkPathOp = function() {
-        return (d.__Z10MakeFromOpRK6SkPathS1_8SkPathOp = d.asm.Z).apply(null, arguments);
-      };
-      d.__Z14ResolveBuilderR11SkOpBuilder = function() {
-        return (d.__Z14ResolveBuilderR11SkOpBuilder = d.asm._).apply(null, arguments);
-      };
-      d.__Z8ToCanvasRK6SkPathN10emscripten3valE = function() {
-        return (d.__Z8ToCanvasRK6SkPathN10emscripten3valE = d.asm.$).apply(null, arguments);
-      };
-      d.__Z8ToPath2DRK6SkPath = function() {
-        return (d.__Z8ToPath2DRK6SkPath = d.asm.aa).apply(null, arguments);
-      };
-      var Y = d._free = function() {
-        return (Y = d._free = d.asm.ba).apply(null, arguments);
-      }, Yb = d._malloc = function() {
-        return (Yb = d._malloc = d.asm.ca).apply(null, arguments);
-      }, Ab = d.___getTypeName = function() {
-        return (Ab = d.___getTypeName = d.asm.da).apply(null, arguments);
-      };
-      d.___embind_register_native_and_builtin_types = function() {
-        return (d.___embind_register_native_and_builtin_types = d.asm.ea).apply(null, arguments);
-      };
-      d.dynCall_vi = function() {
-        return (d.dynCall_vi = d.asm.fa).apply(null, arguments);
-      };
-      d.dynCall_iiiii = function() {
-        return (d.dynCall_iiiii = d.asm.ga).apply(null, arguments);
-      };
-      d.dynCall_ii = function() {
-        return (d.dynCall_ii = d.asm.ha).apply(null, arguments);
-      };
-      d.dynCall_i = function() {
-        return (d.dynCall_i = d.asm.ia).apply(null, arguments);
-      };
-      d.dynCall_viifffffffff = function() {
-        return (d.dynCall_viifffffffff = d.asm.ja).apply(null, arguments);
-      };
-      d.dynCall_vifffffi = function() {
-        return (d.dynCall_vifffffi = d.asm.ka).apply(null, arguments);
-      };
-      d.dynCall_vifffff = function() {
-        return (d.dynCall_vifffff = d.asm.la).apply(null, arguments);
-      };
-      d.dynCall_viffffff = function() {
-        return (d.dynCall_viffffff = d.asm.ma).apply(null, arguments);
-      };
-      d.dynCall_vifffffffi = function() {
-        return (d.dynCall_vifffffffi = d.asm.na).apply(null, arguments);
-      };
-      d.dynCall_viff = function() {
-        return (d.dynCall_viff = d.asm.oa).apply(null, arguments);
-      };
-      d.dynCall_viffff = function() {
-        return (d.dynCall_viffff = d.asm.pa).apply(null, arguments);
-      };
-      d.dynCall_vii = function() {
-        return (d.dynCall_vii = d.asm.qa).apply(null, arguments);
-      };
-      d.dynCall_iii = function() {
-        return (d.dynCall_iii = d.asm.ra).apply(null, arguments);
-      };
-      d.dynCall_iifff = function() {
-        return (d.dynCall_iifff = d.asm.sa).apply(null, arguments);
-      };
-      d.dynCall_iiffi = function() {
-        return (d.dynCall_iiffi = d.asm.ta).apply(null, arguments);
-      };
-      d.dynCall_vifffffffff = function() {
-        return (d.dynCall_vifffffffff = d.asm.ua).apply(null, arguments);
-      };
-      d.dynCall_iiii = function() {
-        return (d.dynCall_iiii = d.asm.va).apply(null, arguments);
-      };
-      d.dynCall_viii = function() {
-        return (d.dynCall_viii = d.asm.wa).apply(null, arguments);
-      };
-      d.dynCall_viiii = function() {
-        return (d.dynCall_viiii = d.asm.xa).apply(null, arguments);
-      };
-      d.dynCall_fif = function() {
-        return (d.dynCall_fif = d.asm.ya).apply(null, arguments);
-      };
-      d.dynCall_viif = function() {
-        return (d.dynCall_viif = d.asm.za).apply(null, arguments);
-      };
-      d.dynCall_fi = function() {
-        return (d.dynCall_fi = d.asm.Aa).apply(null, arguments);
-      };
-      d.dynCall_viiifffffffff = function() {
-        return (d.dynCall_viiifffffffff = d.asm.Ba).apply(null, arguments);
-      };
-      d.dynCall_viifffffi = function() {
-        return (d.dynCall_viifffffi = d.asm.Ca).apply(null, arguments);
-      };
-      d.dynCall_viifffff = function() {
-        return (d.dynCall_viifffff = d.asm.Da).apply(null, arguments);
-      };
-      d.dynCall_viiffffff = function() {
-        return (d.dynCall_viiffffff = d.asm.Ea).apply(null, arguments);
-      };
-      d.dynCall_viifffffffi = function() {
-        return (d.dynCall_viifffffffi = d.asm.Fa).apply(null, arguments);
-      };
-      d.dynCall_viiff = function() {
-        return (d.dynCall_viiff = d.asm.Ga).apply(null, arguments);
-      };
-      d.dynCall_viiffff = function() {
-        return (d.dynCall_viiffff = d.asm.Ha).apply(null, arguments);
-      };
-      d.dynCall_iiifff = function() {
-        return (d.dynCall_iiifff = d.asm.Ia).apply(null, arguments);
-      };
-      d.dynCall_iiiffi = function() {
-        return (d.dynCall_iiiffi = d.asm.Ja).apply(null, arguments);
-      };
-      d.dynCall_fii = function() {
-        return (d.dynCall_fii = d.asm.Ka).apply(null, arguments);
-      };
-      d.dynCall_iiffff = function() {
-        return (d.dynCall_iiffff = d.asm.La).apply(null, arguments);
-      };
-      d.dynCall_fiif = function() {
-        return (d.dynCall_fiif = d.asm.Ma).apply(null, arguments);
-      };
-      d.dynCall_iiif = function() {
-        return (d.dynCall_iiif = d.asm.Na).apply(null, arguments);
-      };
-      d.dynCall_vifii = function() {
-        return (d.dynCall_vifii = d.asm.Oa).apply(null, arguments);
-      };
-      d.dynCall_viifd = function() {
-        return (d.dynCall_viifd = d.asm.Pa).apply(null, arguments);
-      };
-      d.dynCall_viid = function() {
-        return (d.dynCall_viid = d.asm.Qa).apply(null, arguments);
-      };
-      d.dynCall_viddi = function() {
-        return (d.dynCall_viddi = d.asm.Ra).apply(null, arguments);
-      };
-      d.dynCall_iidi = function() {
-        return (d.dynCall_iidi = d.asm.Sa).apply(null, arguments);
-      };
-      d.dynCall_viffi = function() {
-        return (d.dynCall_viffi = d.asm.Ta).apply(null, arguments);
-      };
-      d.dynCall_fffff = function() {
-        return (d.dynCall_fffff = d.asm.Ua).apply(null, arguments);
-      };
-      d.dynCall_viiiii = function() {
-        return (d.dynCall_viiiii = d.asm.Va).apply(null, arguments);
-      };
-      d.dynCall_viiiiiffii = function() {
-        return (d.dynCall_viiiiiffii = d.asm.Wa).apply(null, arguments);
-      };
-      d.dynCall_iiiiii = function() {
-        return (d.dynCall_iiiiii = d.asm.Xa).apply(null, arguments);
-      };
-      d.dynCall_iiiiiii = function() {
-        return (d.dynCall_iiiiiii = d.asm.Ya).apply(null, arguments);
-      };
-      d.dynCall_iidiiii = function() {
-        return (d.dynCall_iidiiii = d.asm.Za).apply(null, arguments);
-      };
-      d.dynCall_jiji = function() {
-        return (d.dynCall_jiji = d.asm._a).apply(null, arguments);
-      };
-      d.asm = $b;
-      var ac;
-      La = function bc() {
-        ac || cc();
-        ac || (La = bc);
-      };
-      function cc() {
-        function a() {
-          if (!ac && (ac = true, d.calledRun = true, !na)) {
-            Ea(Ga);
-            Ea(Ha);
-            aa(d);
-            if (d.onRuntimeInitialized)
-              d.onRuntimeInitialized();
-            if (d.postRun)
-              for (typeof d.postRun == "function" && (d.postRun = [d.postRun]); d.postRun.length; ) {
-                var b = d.postRun.shift();
-                Ia.unshift(b);
-              }
-            Ea(Ia);
-          }
-        }
-        if (!(0 < H)) {
-          if (d.preRun)
-            for (typeof d.preRun == "function" && (d.preRun = [d.preRun]); d.preRun.length; )
-              Ja();
-          Ea(Fa);
-          0 < H || (d.setStatus ? (d.setStatus("Running..."), setTimeout(function() {
-            setTimeout(function() {
-              d.setStatus("");
-            }, 1);
-            a();
-          }, 1)) : a());
-        }
-      }
-      d.run = cc;
-      if (d.preInit)
-        for (typeof d.preInit == "function" && (d.preInit = [d.preInit]); 0 < d.preInit.length; )
-          d.preInit.pop()();
-      cc();
-      return PathKitInit3.ready;
-    };
-  }();
-  module.exports = PathKitInit2;
-})(pathkit);
-var PathKitInit = pathkit.exports;
-class PathKitManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.pathkit = null;
-  }
-  async load() {
-    this.registerPathKit(await PathKitInit());
-  }
-  registerPathKit(pathkit2) {
-    this.pathkit = pathkit2;
-    this.editor.emit("updatePathKit");
-  }
-  has() {
-    return !!this.pathkit;
-  }
-  booleanOperation(first, second2, pathOp) {
-    const PathKit = this.pathkit;
-    return PathKit.MakeFromOp(PathKit.FromSVGString(first), PathKit.FromSVGString(second2), pathOp).toSVGString();
-  }
-  intersection(first, second2) {
-    const PathKit = this.pathkit;
-    if (!PathKit)
-      return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.INTERSECT));
-  }
-  union(first, second2) {
-    const PathKit = this.pathkit;
-    if (!PathKit)
-      return;
-    return this.booleanOperation(first, second2, PathKit.PathOp.UNION);
-  }
-  difference(first, second2) {
-    const PathKit = this.pathkit;
-    if (!PathKit)
-      return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.DIFFERENCE));
-  }
-  reverseDifference(first, second2) {
-    const PathKit = this.pathkit;
-    if (!PathKit)
-      return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.REVERSE_DIFFERENCE));
-  }
-  xor(first, second2) {
-    const PathKit = this.pathkit;
-    if (!PathKit)
-      return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.XOR));
-  }
-  reversePathString(pathString2) {
-    return PathParser.fromSVGString(pathString2).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
-  }
-  isValidPath(path) {
-    const PathKit = this.pathkit;
-    let pathKitPath = PathKit.FromSVGString(path);
-    return pathKitPath.isValid();
-  }
-  simplify(path) {
-    const PathKit = this.pathkit;
-    const pathObject = PathKit.FromSVGString(path);
-    return pathObject.simplify().toSVGString();
-  }
-  convertLineJoin(lineJoin) {
-    const PathKit = this.pathkit;
-    switch (lineJoin) {
-      case "miter":
-        return PathKit.StrokeJoin.MITER;
-      case "round":
-        return PathKit.StrokeJoin.ROUND;
-      case "bevel":
-        return PathKit.StrokeJoin.BEVEL;
-    }
-  }
-  convertLineCap(lineCap) {
-    const PathKit = this.pathkit;
-    switch (lineCap) {
-      case "butt":
-        return PathKit.StrokeCap.BUTT;
-      case "round":
-        return PathKit.StrokeCap.ROUND;
-      case "square":
-        return PathKit.StrokeCap.SQUARE;
-    }
-  }
-  stroke(path, opt = { width: 1, miter_limit: 4 }) {
-    const PathKit = this.pathkit;
-    const pathObject = PathKit.FromSVGString(path);
-    if (isArray(opt["stroke-dasharray"])) {
-      const arr = opt["stroke-dasharray"];
-      if (arr.length >= 2) {
-        pathObject.dash(arr[0], arr[1], +(opt["stroke-dashoffset"] || 0));
-      }
-    }
-    let newPathObject = pathObject.stroke({
-      width: +opt["stroke-width"],
-      join: this.convertLineJoin(opt["stroke-linejoin"]),
-      cap: this.convertLineCap(opt["stroke-linecap"])
-    });
-    newPathObject.setFillType(PathKit.FillType.WINDING);
-    return newPathObject.simplify().toSVGString();
-  }
-  round(path, opt = { width: 1, miter_limit: 4 }) {
-    return this.stroke(path, __spreadProps(__spreadValues({}, opt), {
-      "stroke-linejoin": "round"
-    }));
-  }
-  grow(path, opt = { width: 1, miter_limit: 4 }) {
-    const PathKit = this.pathkit;
-    const pathObject = PathKit.FromSVGString(path);
-    return pathObject.copy().stroke(opt).op(pathObject, PathKit.PathOp.DIFFERENCE).toSVGString();
-  }
-  shrink(path, opt = { width: 1, miter_limit: 4 }) {
-    const PathKit = this.pathkit;
-    const pathObject = PathKit.FromSVGString(path);
-    const simplifyPath = pathObject.copy().simplify();
-    return pathObject.copy().stroke(opt).op(simplifyPath, PathKit.PathOp.DIFFERENCE).toSVGString();
-  }
-  dash(path, on, off, phase = 1) {
-    const PathKit = this.pathkit;
-    const pathObject = PathKit.FromSVGString(path);
-    return pathObject.dash(on, off, phase).toSVGString();
-  }
-  trim(path, startT, stopT, isComplement = false) {
-    const PathKit = this.pathkit;
-    const pathObject = PathKit.FromSVGString(path);
-    return pathObject.trim(startT, stopT, isComplement).toSVGString();
   }
 }
 class PluginManager {
@@ -24734,7 +22937,7 @@ var add_artboard = {
   description: "Add ArtBoard",
   when: "CanvasView"
 };
-var __glob_0_0$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_artboard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24746,7 +22949,7 @@ var add_brush = {
   description: "Draw SVG Path",
   when: "CanvasView"
 };
-var __glob_0_1$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_brush
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24758,7 +22961,7 @@ var add_circle = {
   description: "Add circle layer",
   when: "CanvasView"
 };
-var __glob_0_2$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_circle
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24770,7 +22973,7 @@ var add_circle_l = {
   description: "Add circle layer",
   when: "CanvasView"
 };
-var __glob_0_3$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_circle_l
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24782,7 +22985,7 @@ var add_path = {
   description: "Add SVG Path layer",
   when: "CanvasView"
 };
-var __glob_0_4$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24794,7 +22997,7 @@ var add_rect = {
   description: "Add rect layer",
   when: "CanvasView"
 };
-var __glob_0_5$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_rect
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24806,7 +23009,7 @@ var add_rect_m = {
   description: "Add rect layer",
   when: "CanvasView"
 };
-var __glob_0_6$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_rect_m
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24818,7 +23021,7 @@ var add_text = {
   description: "Add text layer",
   when: "CanvasView"
 };
-var __glob_0_7$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": add_text
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24829,7 +23032,7 @@ var clipboard_copy$1 = {
   description: "Copy objects",
   when: "CanvasView"
 };
-var __glob_0_8$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_copy$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24841,7 +23044,7 @@ var clipboard_paste$1 = {
   description: "Paste selected objects",
   when: "CanvasView"
 };
-var __glob_0_9$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_9$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_paste$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24853,7 +23056,7 @@ var group_item$1 = {
   description: "Grouping selected items",
   when: "CanvasView"
 };
-var __glob_0_10$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_10$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": group_item$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24865,7 +23068,7 @@ var history_redo = {
   description: "redoing in history",
   when: "CanvasView"
 };
-var __glob_0_11$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_11$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_redo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24877,7 +23080,7 @@ var history_undo = {
   description: "undoing in history",
   when: "CanvasView"
 };
-var __glob_0_12$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_12$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_undo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24889,7 +23092,7 @@ var item_move_alt_down = {
   args: [0, 5],
   when: "CanvasView"
 };
-var __glob_0_13$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_13$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_alt_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24901,7 +23104,7 @@ var item_move_alt_left = {
   args: [-5, 0],
   when: "CanvasView"
 };
-var __glob_0_14$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_alt_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24913,7 +23116,7 @@ var item_move_alt_right = {
   args: [5, 0],
   when: "CanvasView"
 };
-var __glob_0_15$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_alt_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24925,7 +23128,7 @@ var item_move_alt_up = {
   args: [0, -5],
   when: "CanvasView"
 };
-var __glob_0_16$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_alt_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24937,7 +23140,7 @@ var item_move_depth_down$1 = {
   args: ["send backward"],
   when: "CanvasView"
 };
-var __glob_0_17$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_17$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_down$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24949,7 +23152,7 @@ var item_move_depth_up$1 = {
   args: ["bring forward"],
   when: "CanvasView"
 };
-var __glob_0_18$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_18$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_up$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24961,7 +23164,7 @@ var item_move_key_down = {
   args: [0, 1],
   when: "CanvasView"
 };
-var __glob_0_19$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_19$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_key_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -24973,7 +23176,7 @@ var item_move_key_left = {
   args: [-1, 0],
   when: "CanvasView"
 };
-var __glob_0_20$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_20$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_key_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -25274,7 +23477,7 @@ var __glob_0_45$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": select_view
 }, Symbol.toStringTag, { value: "Module" }));
-var set_tool_hand = {
+var set_tool_hand$1 = {
   category: "Tools",
   key: "h",
   command: "toggleToolHand",
@@ -25283,7 +23486,7 @@ var set_tool_hand = {
 };
 var __glob_0_46$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": set_tool_hand
+  "default": set_tool_hand$1
 }, Symbol.toStringTag, { value: "Module" }));
 var show_pan = {
   category: "Tool",
@@ -25341,8 +23544,8 @@ var __glob_0_51$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": zoom_out
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$1 = { "./shortcuts_list/add.artboard.js": __glob_0_0$1, "./shortcuts_list/add.brush.js": __glob_0_1$1, "./shortcuts_list/add.circle.js": __glob_0_2$1, "./shortcuts_list/add.circle.l.js": __glob_0_3$1, "./shortcuts_list/add.path.js": __glob_0_4$1, "./shortcuts_list/add.rect.js": __glob_0_5$1, "./shortcuts_list/add.rect.m.js": __glob_0_6$1, "./shortcuts_list/add.text.js": __glob_0_7$1, "./shortcuts_list/clipboard.copy.js": __glob_0_8$1, "./shortcuts_list/clipboard.paste.js": __glob_0_9$1, "./shortcuts_list/group.item.js": __glob_0_10$1, "./shortcuts_list/history.redo.js": __glob_0_11$1, "./shortcuts_list/history.undo.js": __glob_0_12$1, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$1, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$1, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$1, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$1, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$1, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$1, "./shortcuts_list/item.move.key.down.js": __glob_0_19$1, "./shortcuts_list/item.move.key.left.js": __glob_0_20$1, "./shortcuts_list/item.move.key.right.js": __glob_0_21$1, "./shortcuts_list/item.move.key.up.js": __glob_0_22$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
-var shortcuts = Object.values(modules$1).map((it) => it.default);
+const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$2, "./shortcuts_list/add.circle.l.js": __glob_0_3$2, "./shortcuts_list/add.path.js": __glob_0_4$2, "./shortcuts_list/add.rect.js": __glob_0_5$2, "./shortcuts_list/add.rect.m.js": __glob_0_6$2, "./shortcuts_list/add.text.js": __glob_0_7$2, "./shortcuts_list/clipboard.copy.js": __glob_0_8$2, "./shortcuts_list/clipboard.paste.js": __glob_0_9$2, "./shortcuts_list/group.item.js": __glob_0_10$2, "./shortcuts_list/history.redo.js": __glob_0_11$2, "./shortcuts_list/history.undo.js": __glob_0_12$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$2, "./shortcuts_list/item.move.key.down.js": __glob_0_19$2, "./shortcuts_list/item.move.key.left.js": __glob_0_20$2, "./shortcuts_list/item.move.key.right.js": __glob_0_21$1, "./shortcuts_list/item.move.key.up.js": __glob_0_22$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
+var shortcuts = Object.values(modules$3).map((it) => it.default);
 function joinKeys(...args2) {
   return args2.filter(Boolean).join("+");
 }
@@ -25596,6 +23799,8 @@ class ViewportManager {
   refresh() {
     if (this.cachedViewport) {
       this.verties = vertiesMap(this.cachedViewport, this.matrixInverse);
+      this.originVerties = this.verties.filter((_, index2) => index2 < 4);
+      this.originRect = vertiesToRectangle(this.originVerties);
     }
   }
   getWorldPosition(e) {
@@ -25687,7 +23892,9 @@ class ViewportManager {
     return xInViewport && yInViewport;
   }
   checkInViewportArea(verties = []) {
-    return polyPoly(verties, this.verties);
+    const source2 = vertiesToRectangle(verties);
+    const target = this.originRect;
+    return rectRect(source2.x, source2.y, source2.width, source2.height, target.x, target.y, target.width, target.height);
   }
   applyVertex(vertex2) {
     return transformMat4([], vertex2, this.matrix);
@@ -25771,7 +23978,6 @@ class Editor {
       viewport: ViewportManager,
       storageManager: StorageManager,
       modeViewManager: ModeViewManager,
-      pathKitManager: PathKitManager,
       cursorManager: CursorManager,
       assetManager: AssetManager,
       injectManager: InjectManager,
@@ -25788,7 +23994,7 @@ class Editor {
         shortcuts: ShortCutManager
       });
     }
-    this.loadCommands(obj$1);
+    this.loadCommands(obj$2);
     this.initPlugins();
     this.initStorage();
   }
@@ -26112,6 +24318,7 @@ class BaseLayout extends EditorElement {
   [POINTERMOVE()](e) {
     var newPos = e.xy || EMPTY_POS;
     this.$config.init("bodyEvent", e);
+    this.$commands.emit("change.bodyEvent");
     this.pos = newPos;
     if (!this.__requestId) {
       this.__requestId = window.requestAnimationFrame(this.__funcBodyMoves);
@@ -26142,7 +24349,7 @@ class IconManager extends EditorElement {
     `;
   }
   [LOAD("$list")]() {
-    return Object.entries(obj$2).map(([key, value]) => {
+    return Object.entries(obj$3).map(([key, value]) => {
       if (isString(value) === false)
         return "";
       return value.replace(/\<svg/g, `<svg id="icon-${key}"`);
@@ -26171,6 +24378,7 @@ class KeyboardManager extends EditorElement {
     this.$commands.emit("keymap.keyup", e);
   }
 }
+var PopupManager$1 = "";
 var NotificationView$1 = "";
 class NotificationView extends EditorElement {
   template() {
@@ -26495,7 +24703,7 @@ class PopupManager extends EditorElement {
   }
   template() {
     return /* @__PURE__ */ createElementJsx("div", {
-      class: "popup-manger"
+      class: "elf--popup-manager"
     }, createComponent("ExportWindow"), createComponent("EmbedEditorWindow"), createComponent("ProjectWindow"), createComponent("ShortcutWindow"), createComponent("NotificationView"), this.$injectManager.generate("popup"));
   }
 }
@@ -27336,7 +25544,6 @@ class BasePopup extends EditorElement {
     };
   }
   showByRect(rect2) {
-    console.log(rect2);
     this.$el.css({
       top: Length.px(rect2.top),
       left: Length.px(rect2.left),
@@ -28010,6 +26217,1882 @@ class ModelManager {
     }
   }
 }
+var pathkit = { exports: {} };
+var __viteBrowserExternal = {};
+var __viteBrowserExternal$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": __viteBrowserExternal
+}, Symbol.toStringTag, { value: "Module" }));
+var require$$0 = /* @__PURE__ */ getAugmentedNamespace(__viteBrowserExternal$1);
+(function(module, exports) {
+  var PathKitInit2 = function() {
+    var _scriptDir = typeof document !== "undefined" && document.currentScript ? document.currentScript.src : void 0;
+    if (typeof __filename !== "undefined")
+      _scriptDir = _scriptDir || __filename;
+    return function(PathKitInit3) {
+      PathKitInit3 = PathKitInit3 || {};
+      var d;
+      d || (d = typeof PathKitInit3 !== "undefined" ? PathKitInit3 : {});
+      var aa;
+      d.ready = new Promise(function(a) {
+        aa = a;
+      });
+      (function(a) {
+        var b = {};
+        a.loadCmdsTypedArray = function(h) {
+          for (var k = 0, l = 0; l < h.length; l++)
+            k += h[l].length;
+          if (b[k])
+            var n = b[k];
+          else
+            n = new Float32Array(k), b[k] = n;
+          var p = 0;
+          for (l = 0; l < h.length; l++)
+            for (var q = 0; q < h[l].length; q++) {
+              var t = h[l][q];
+              typeof t === "string" && (t = a.SkBits2FloatUnsigned(parseInt(t)));
+              n[p] = t;
+              p++;
+            }
+          h = a._malloc(n.length * n.BYTES_PER_ELEMENT);
+          a.HEAPF32.set(n, h / n.BYTES_PER_ELEMENT);
+          return [h, k];
+        };
+        a.FromCmds = function(h) {
+          h = a.loadCmdsTypedArray(h);
+          var k = a._FromCmds(h[0], h[1]);
+          a._free(h[0]);
+          return k;
+        };
+        var c2, e, f, g, m;
+        a.cubicYFromX = function(h, k, l, n, p) {
+          c2 && e === h && f === k && g === l && m === n || (c2 && c2.delete(), c2 = new a._SkCubicMap([h, k], [l, n]), e = h, f = k, g = l, m = n);
+          return c2.computeYFromX(p);
+        };
+        a.cubicPtFromT = function(h, k, l, n, p) {
+          c2 && e === h && f === k && g === l && m === n || (c2 && c2.delete(), c2 = new a._SkCubicMap([h, k], [l, n]), e = h, f = k, g = l, m = n);
+          return c2.computePtFromT(p);
+        };
+      })(d);
+      (function(a) {
+        a.onRuntimeInitialized = function() {
+          a.SkPath.prototype.addPath = function() {
+            var b = arguments[0];
+            if (arguments.length === 1)
+              this._addPath(b, 1, 0, 0, 0, 1, 0, 0, 0, 1);
+            else if (arguments.length === 2) {
+              var c2 = arguments[1];
+              this._addPath(b, c2.a, c2.c, c2.e, c2.b, c2.d, c2.f, 0, 0, 1);
+            } else if (arguments.length === 7)
+              c2 = arguments, this._addPath(b, c2[1], c2[3], c2[5], c2[2], c2[4], c2[6], 0, 0, 1);
+            else if (arguments.length === 10)
+              c2 = arguments, this._addPath(b, c2[1], c2[2], c2[3], c2[4], c2[5], c2[6], c2[7], c2[8], c2[9]);
+            else
+              return console.Fb("addPath expected to take 1, 2, 7, or 10 args. Got " + arguments.length), null;
+            return this;
+          };
+          a.SkPath.prototype.arc = function(b, c2, e, f, g, m) {
+            this._arc(b, c2, e, f, g, !!m);
+            return this;
+          };
+          a.SkPath.prototype.arcTo = function(b, c2, e, f, g) {
+            this._arcTo(b, c2, e, f, g);
+            return this;
+          };
+          a.SkPath.prototype.bezierCurveTo = function(b, c2, e, f, g, m) {
+            this._cubicTo(b, c2, e, f, g, m);
+            return this;
+          };
+          a.SkPath.prototype.close = function() {
+            this._close();
+            return this;
+          };
+          a.SkPath.prototype.closePath = function() {
+            this._close();
+            return this;
+          };
+          a.SkPath.prototype.conicTo = function(b, c2, e, f, g) {
+            this._conicTo(b, c2, e, f, g);
+            return this;
+          };
+          a.SkPath.prototype.cubicTo = function(b, c2, e, f, g, m) {
+            this._cubicTo(b, c2, e, f, g, m);
+            return this;
+          };
+          a.SkPath.prototype.dash = function(b, c2, e) {
+            return this._dash(b, c2, e) ? this : null;
+          };
+          a.SkPath.prototype.ellipse = function(b, c2, e, f, g, m, h, k) {
+            this._ellipse(b, c2, e, f, g, m, h, !!k);
+            return this;
+          };
+          a.SkPath.prototype.lineTo = function(b, c2) {
+            this._lineTo(b, c2);
+            return this;
+          };
+          a.SkPath.prototype.moveTo = function(b, c2) {
+            this._moveTo(b, c2);
+            return this;
+          };
+          a.SkPath.prototype.op = function(b, c2) {
+            return this._op(b, c2) ? this : null;
+          };
+          a.SkPath.prototype.quadraticCurveTo = function(b, c2, e, f) {
+            this._quadTo(b, c2, e, f);
+            return this;
+          };
+          a.SkPath.prototype.quadTo = function(b, c2, e, f) {
+            this._quadTo(b, c2, e, f);
+            return this;
+          };
+          a.SkPath.prototype.rect = function(b, c2, e, f) {
+            this._rect(b, c2, e, f);
+            return this;
+          };
+          a.SkPath.prototype.simplify = function() {
+            return this._simplify() ? this : null;
+          };
+          a.SkPath.prototype.stroke = function(b) {
+            b = b || {};
+            b.width = b.width || 1;
+            b.miter_limit = b.miter_limit || 4;
+            b.cap = b.cap || a.StrokeCap.BUTT;
+            b.join = b.join || a.StrokeJoin.MITER;
+            return this._stroke(b) ? this : null;
+          };
+          a.SkPath.prototype.transform = function() {
+            if (arguments.length === 1)
+              this._transform(arguments[0]);
+            else if (arguments.length === 9) {
+              var b = arguments;
+              this._transform(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]);
+            } else
+              return console.Fb("transform expected to take 1 or 9 arguments. Got " + arguments.length), null;
+            return this;
+          };
+          a.SkPath.prototype.trim = function(b, c2, e) {
+            return this._trim(b, c2, !!e) ? this : null;
+          };
+        };
+      })(d);
+      var r = {}, v;
+      for (v in d)
+        d.hasOwnProperty(v) && (r[v] = d[v]);
+      var ba = false, w = false, ca = false, da = false;
+      ba = typeof window === "object";
+      w = typeof importScripts === "function";
+      ca = typeof process === "object" && typeof process.versions === "object" && typeof process.versions.node === "string";
+      da = !ba && !ca && !w;
+      var x = "", ea, fa, ha, ia;
+      if (ca)
+        x = w ? require$$0.dirname(x) + "/" : __dirname + "/", ea = function(a, b) {
+          ha || (ha = require$$0);
+          ia || (ia = require$$0);
+          a = ia.normalize(a);
+          return ha.readFileSync(a, b ? null : "utf8");
+        }, fa = function(a) {
+          a = ea(a, true);
+          a.buffer || (a = new Uint8Array(a));
+          assert(a.buffer);
+          return a;
+        }, 1 < process.argv.length && process.argv[1].replace(/\\/g, "/"), process.argv.slice(2), process.on("uncaughtException", function(a) {
+          throw a;
+        }), process.on("unhandledRejection", y), d.inspect = function() {
+          return "[Emscripten Module object]";
+        };
+      else if (da)
+        typeof read != "undefined" && (ea = function(a) {
+          return read(a);
+        }), fa = function(a) {
+          if (typeof readbuffer === "function")
+            return new Uint8Array(readbuffer(a));
+          a = read(a, "binary");
+          assert(typeof a === "object");
+          return a;
+        }, typeof print !== "undefined" && (typeof console === "undefined" && (console = {}), console.log = print, console.warn = console.error = typeof printErr !== "undefined" ? printErr : print);
+      else if (ba || w)
+        w ? x = self.location.href : document.currentScript && (x = document.currentScript.src), _scriptDir && (x = _scriptDir), x.indexOf("blob:") !== 0 ? x = x.substr(0, x.lastIndexOf("/") + 1) : x = "", ea = function(a) {
+          var b = new XMLHttpRequest();
+          b.open("GET", a, false);
+          b.send(null);
+          return b.responseText;
+        }, w && (fa = function(a) {
+          var b = new XMLHttpRequest();
+          b.open("GET", a, false);
+          b.responseType = "arraybuffer";
+          b.send(null);
+          return new Uint8Array(b.response);
+        });
+      var ja = d.print || console.log.bind(console), z = d.printErr || console.warn.bind(console);
+      for (v in r)
+        r.hasOwnProperty(v) && (d[v] = r[v]);
+      r = null;
+      var ka;
+      d.wasmBinary && (ka = d.wasmBinary);
+      d.noExitRuntime && d.noExitRuntime;
+      typeof WebAssembly !== "object" && z("no native wasm support detected");
+      var la, ma = new WebAssembly.Table({ initial: 309, maximum: 309, element: "anyfunc" }), na = false;
+      function assert(a, b) {
+        a || y("Assertion failed: " + b);
+      }
+      var oa = typeof TextDecoder !== "undefined" ? new TextDecoder("utf8") : void 0;
+      function pa(a, b, c2) {
+        var e = b + c2;
+        for (c2 = b; a[c2] && !(c2 >= e); )
+          ++c2;
+        if (16 < c2 - b && a.subarray && oa)
+          return oa.decode(a.subarray(b, c2));
+        for (e = ""; b < c2; ) {
+          var f = a[b++];
+          if (f & 128) {
+            var g = a[b++] & 63;
+            if ((f & 224) == 192)
+              e += String.fromCharCode((f & 31) << 6 | g);
+            else {
+              var m = a[b++] & 63;
+              f = (f & 240) == 224 ? (f & 15) << 12 | g << 6 | m : (f & 7) << 18 | g << 12 | m << 6 | a[b++] & 63;
+              65536 > f ? e += String.fromCharCode(f) : (f -= 65536, e += String.fromCharCode(55296 | f >> 10, 56320 | f & 1023));
+            }
+          } else
+            e += String.fromCharCode(f);
+        }
+        return e;
+      }
+      function qa(a, b, c2) {
+        var e = B;
+        if (0 < c2) {
+          c2 = b + c2 - 1;
+          for (var f = 0; f < a.length; ++f) {
+            var g = a.charCodeAt(f);
+            if (55296 <= g && 57343 >= g) {
+              var m = a.charCodeAt(++f);
+              g = 65536 + ((g & 1023) << 10) | m & 1023;
+            }
+            if (127 >= g) {
+              if (b >= c2)
+                break;
+              e[b++] = g;
+            } else {
+              if (2047 >= g) {
+                if (b + 1 >= c2)
+                  break;
+                e[b++] = 192 | g >> 6;
+              } else {
+                if (65535 >= g) {
+                  if (b + 2 >= c2)
+                    break;
+                  e[b++] = 224 | g >> 12;
+                } else {
+                  if (b + 3 >= c2)
+                    break;
+                  e[b++] = 240 | g >> 18;
+                  e[b++] = 128 | g >> 12 & 63;
+                }
+                e[b++] = 128 | g >> 6 & 63;
+              }
+              e[b++] = 128 | g & 63;
+            }
+          }
+          e[b] = 0;
+        }
+      }
+      var ra = typeof TextDecoder !== "undefined" ? new TextDecoder("utf-16le") : void 0;
+      function sa(a, b) {
+        var c2 = a >> 1;
+        for (var e = c2 + b / 2; !(c2 >= e) && ta[c2]; )
+          ++c2;
+        c2 <<= 1;
+        if (32 < c2 - a && ra)
+          return ra.decode(B.subarray(a, c2));
+        c2 = 0;
+        for (e = ""; ; ) {
+          var f = D[a + 2 * c2 >> 1];
+          if (f == 0 || c2 == b / 2)
+            return e;
+          ++c2;
+          e += String.fromCharCode(f);
+        }
+      }
+      function ua(a, b, c2) {
+        c2 === void 0 && (c2 = 2147483647);
+        if (2 > c2)
+          return 0;
+        c2 -= 2;
+        var e = b;
+        c2 = c2 < 2 * a.length ? c2 / 2 : a.length;
+        for (var f = 0; f < c2; ++f)
+          D[b >> 1] = a.charCodeAt(f), b += 2;
+        D[b >> 1] = 0;
+        return b - e;
+      }
+      function va(a) {
+        return 2 * a.length;
+      }
+      function wa(a, b) {
+        for (var c2 = 0, e = ""; !(c2 >= b / 4); ) {
+          var f = E[a + 4 * c2 >> 2];
+          if (f == 0)
+            break;
+          ++c2;
+          65536 <= f ? (f -= 65536, e += String.fromCharCode(55296 | f >> 10, 56320 | f & 1023)) : e += String.fromCharCode(f);
+        }
+        return e;
+      }
+      function xa(a, b, c2) {
+        c2 === void 0 && (c2 = 2147483647);
+        if (4 > c2)
+          return 0;
+        var e = b;
+        c2 = e + c2 - 4;
+        for (var f = 0; f < a.length; ++f) {
+          var g = a.charCodeAt(f);
+          if (55296 <= g && 57343 >= g) {
+            var m = a.charCodeAt(++f);
+            g = 65536 + ((g & 1023) << 10) | m & 1023;
+          }
+          E[b >> 2] = g;
+          b += 4;
+          if (b + 4 > c2)
+            break;
+        }
+        E[b >> 2] = 0;
+        return b - e;
+      }
+      function ya(a) {
+        for (var b = 0, c2 = 0; c2 < a.length; ++c2) {
+          var e = a.charCodeAt(c2);
+          55296 <= e && 57343 >= e && ++c2;
+          b += 4;
+        }
+        return b;
+      }
+      var za, Aa, B, D, ta, E, F, Ba, Ca, Da = d.INITIAL_MEMORY || 16777216;
+      d.wasmMemory ? la = d.wasmMemory : la = new WebAssembly.Memory({ initial: Da / 65536, maximum: Da / 65536 });
+      la && (za = la.buffer);
+      Da = za.byteLength;
+      var G = za;
+      za = G;
+      d.HEAP8 = Aa = new Int8Array(G);
+      d.HEAP16 = D = new Int16Array(G);
+      d.HEAP32 = E = new Int32Array(G);
+      d.HEAPU8 = B = new Uint8Array(G);
+      d.HEAPU16 = ta = new Uint16Array(G);
+      d.HEAPU32 = F = new Uint32Array(G);
+      d.HEAPF32 = Ba = new Float32Array(G);
+      d.HEAPF64 = Ca = new Float64Array(G);
+      E[3e3] = 5255040;
+      function Ea(a) {
+        for (; 0 < a.length; ) {
+          var b = a.shift();
+          if (typeof b == "function")
+            b(d);
+          else {
+            var c2 = b.Jb;
+            typeof c2 === "number" ? b.tb === void 0 ? d.dynCall_v(c2) : d.dynCall_vi(c2, b.tb) : c2(b.tb === void 0 ? null : b.tb);
+          }
+        }
+      }
+      var Fa = [], Ga = [], Ha = [], Ia = [];
+      function Ja() {
+        var a = d.preRun.shift();
+        Fa.unshift(a);
+      }
+      var H = 0, La = null;
+      d.preloadedImages = {};
+      d.preloadedAudios = {};
+      function y(a) {
+        if (d.onAbort)
+          d.onAbort(a);
+        ja(a);
+        z(a);
+        na = true;
+        throw new WebAssembly.RuntimeError("abort(" + a + "). Build with -s ASSERTIONS=1 for more info.");
+      }
+      function Ma(a) {
+        var b = I;
+        return String.prototype.startsWith ? b.startsWith(a) : b.indexOf(a) === 0;
+      }
+      function Na() {
+        return Ma("data:application/octet-stream;base64,");
+      }
+      var I = "pathkit.wasm";
+      if (!Na()) {
+        var Oa = I;
+        I = d.locateFile ? d.locateFile(Oa, x) : x + Oa;
+      }
+      function Pa() {
+        try {
+          if (ka)
+            return new Uint8Array(ka);
+          if (fa)
+            return fa(I);
+          throw "both async and sync fetching of the wasm failed";
+        } catch (a) {
+          y(a);
+        }
+      }
+      function Qa() {
+        return ka || !ba && !w || typeof fetch !== "function" || Ma("file://") ? new Promise(function(a) {
+          a(Pa());
+        }) : fetch(I, { credentials: "same-origin" }).then(function(a) {
+          if (!a.ok)
+            throw "failed to load wasm binary file at '" + I + "'";
+          return a.arrayBuffer();
+        }).catch(function() {
+          return Pa();
+        });
+      }
+      Ga.push({ Jb: function() {
+        Ra();
+      } });
+      var Sa = {};
+      function Ta(a) {
+        for (; a.length; ) {
+          var b = a.pop();
+          a.pop()(b);
+        }
+      }
+      function J(a) {
+        return this.fromWireType(F[a >> 2]);
+      }
+      var K = {}, L = {}, Ua = {};
+      function Va(a) {
+        if (a === void 0)
+          return "_unknown";
+        a = a.replace(/[^a-zA-Z0-9_]/g, "$");
+        var b = a.charCodeAt(0);
+        return 48 <= b && 57 >= b ? "_" + a : a;
+      }
+      function Wa(a, b) {
+        a = Va(a);
+        return new Function("body", "return function " + a + '() {\n    "use strict";    return body.apply(this, arguments);\n};\n')(b);
+      }
+      function Xa(a) {
+        var b = Error, c2 = Wa(a, function(e) {
+          this.name = a;
+          this.message = e;
+          e = Error(e).stack;
+          e !== void 0 && (this.stack = this.toString() + "\n" + e.replace(/^Error(:[^\n]*)?\n/, ""));
+        });
+        c2.prototype = Object.create(b.prototype);
+        c2.prototype.constructor = c2;
+        c2.prototype.toString = function() {
+          return this.message === void 0 ? this.name : this.name + ": " + this.message;
+        };
+        return c2;
+      }
+      var Ya = void 0;
+      function Za(a) {
+        throw new Ya(a);
+      }
+      function N(a, b, c2) {
+        function e(h) {
+          h = c2(h);
+          h.length !== a.length && Za("Mismatched type converter count");
+          for (var k = 0; k < a.length; ++k)
+            O(a[k], h[k]);
+        }
+        a.forEach(function(h) {
+          Ua[h] = b;
+        });
+        var f = Array(b.length), g = [], m = 0;
+        b.forEach(function(h, k) {
+          L.hasOwnProperty(h) ? f[k] = L[h] : (g.push(h), K.hasOwnProperty(h) || (K[h] = []), K[h].push(function() {
+            f[k] = L[h];
+            ++m;
+            m === g.length && e(f);
+          }));
+        });
+        g.length === 0 && e(f);
+      }
+      var $a = {};
+      function ab(a) {
+        switch (a) {
+          case 1:
+            return 0;
+          case 2:
+            return 1;
+          case 4:
+            return 2;
+          case 8:
+            return 3;
+          default:
+            throw new TypeError("Unknown type size: " + a);
+        }
+      }
+      var bb = void 0;
+      function P(a) {
+        for (var b = ""; B[a]; )
+          b += bb[B[a++]];
+        return b;
+      }
+      var Q = void 0;
+      function R(a) {
+        throw new Q(a);
+      }
+      function O(a, b, c2) {
+        c2 = c2 || {};
+        if (!("argPackAdvance" in b))
+          throw new TypeError("registerType registeredInstance requires argPackAdvance");
+        var e = b.name;
+        a || R('type "' + e + '" must have a positive integer typeid pointer');
+        if (L.hasOwnProperty(a)) {
+          if (c2.Mb)
+            return;
+          R("Cannot register type '" + e + "' twice");
+        }
+        L[a] = b;
+        delete Ua[a];
+        K.hasOwnProperty(a) && (b = K[a], delete K[a], b.forEach(function(f) {
+          f();
+        }));
+      }
+      function cb(a) {
+        return { count: a.count, lb: a.lb, nb: a.nb, bb: a.bb, cb: a.cb, gb: a.gb, ib: a.ib };
+      }
+      function db(a) {
+        R(a.$a.cb.ab.name + " instance already deleted");
+      }
+      var eb = false;
+      function fb() {
+      }
+      function gb(a) {
+        --a.count.value;
+        a.count.value === 0 && (a.gb ? a.ib.hb(a.gb) : a.cb.ab.hb(a.bb));
+      }
+      function hb(a) {
+        if (typeof FinalizationGroup === "undefined")
+          return hb = function(b) {
+            return b;
+          }, a;
+        eb = new FinalizationGroup(function(b) {
+          for (var c2 = b.next(); !c2.done; c2 = b.next())
+            c2 = c2.value, c2.bb ? gb(c2) : console.warn("object already deleted: " + c2.bb);
+        });
+        hb = function(b) {
+          eb.register(b, b.$a, b.$a);
+          return b;
+        };
+        fb = function(b) {
+          eb.unregister(b.$a);
+        };
+        return hb(a);
+      }
+      var ib = void 0, jb = [];
+      function kb() {
+        for (; jb.length; ) {
+          var a = jb.pop();
+          a.$a.lb = false;
+          a["delete"]();
+        }
+      }
+      function S() {
+      }
+      var lb = {};
+      function mb(a, b, c2) {
+        if (a[b].eb === void 0) {
+          var e = a[b];
+          a[b] = function() {
+            a[b].eb.hasOwnProperty(arguments.length) || R("Function '" + c2 + "' called with an invalid number of arguments (" + arguments.length + ") - expects one of (" + a[b].eb + ")!");
+            return a[b].eb[arguments.length].apply(this, arguments);
+          };
+          a[b].eb = [];
+          a[b].eb[e.qb] = e;
+        }
+      }
+      function nb(a, b, c2) {
+        d.hasOwnProperty(a) ? ((c2 === void 0 || d[a].eb !== void 0 && d[a].eb[c2] !== void 0) && R("Cannot register public name '" + a + "' twice"), mb(d, a, a), d.hasOwnProperty(c2) && R("Cannot register multiple overloads of a function with the same number of arguments (" + c2 + ")!"), d[a].eb[c2] = b) : (d[a] = b, c2 !== void 0 && (d[a].Sb = c2));
+      }
+      function ob(a, b, c2, e, f, g, m, h) {
+        this.name = a;
+        this.constructor = b;
+        this.mb = c2;
+        this.hb = e;
+        this.jb = f;
+        this.Kb = g;
+        this.pb = m;
+        this.Hb = h;
+        this.Pb = [];
+      }
+      function pb(a, b, c2) {
+        for (; b !== c2; )
+          b.pb || R("Expected null or instance of " + c2.name + ", got an instance of " + b.name), a = b.pb(a), b = b.jb;
+        return a;
+      }
+      function qb(a, b) {
+        if (b === null)
+          return this.xb && R("null is not a valid " + this.name), 0;
+        b.$a || R('Cannot pass "' + U(b) + '" as a ' + this.name);
+        b.$a.bb || R("Cannot pass deleted object as a pointer of type " + this.name);
+        return pb(b.$a.bb, b.$a.cb.ab, this.ab);
+      }
+      function rb(a, b) {
+        if (b === null) {
+          this.xb && R("null is not a valid " + this.name);
+          if (this.sb) {
+            var c2 = this.ob();
+            a !== null && a.push(this.hb, c2);
+            return c2;
+          }
+          return 0;
+        }
+        b.$a || R('Cannot pass "' + U(b) + '" as a ' + this.name);
+        b.$a.bb || R("Cannot pass deleted object as a pointer of type " + this.name);
+        !this.rb && b.$a.cb.rb && R("Cannot convert argument of type " + (b.$a.ib ? b.$a.ib.name : b.$a.cb.name) + " to parameter type " + this.name);
+        c2 = pb(b.$a.bb, b.$a.cb.ab, this.ab);
+        if (this.sb)
+          switch (b.$a.gb === void 0 && R("Passing raw pointer to smart pointer is illegal"), this.Rb) {
+            case 0:
+              b.$a.ib === this ? c2 = b.$a.gb : R("Cannot convert argument of type " + (b.$a.ib ? b.$a.ib.name : b.$a.cb.name) + " to parameter type " + this.name);
+              break;
+            case 1:
+              c2 = b.$a.gb;
+              break;
+            case 2:
+              if (b.$a.ib === this)
+                c2 = b.$a.gb;
+              else {
+                var e = b.clone();
+                c2 = this.Qb(c2, V(function() {
+                  e["delete"]();
+                }));
+                a !== null && a.push(this.hb, c2);
+              }
+              break;
+            default:
+              R("Unsupporting sharing policy");
+          }
+        return c2;
+      }
+      function sb(a, b) {
+        if (b === null)
+          return this.xb && R("null is not a valid " + this.name), 0;
+        b.$a || R('Cannot pass "' + U(b) + '" as a ' + this.name);
+        b.$a.bb || R("Cannot pass deleted object as a pointer of type " + this.name);
+        b.$a.cb.rb && R("Cannot convert argument of type " + b.$a.cb.name + " to parameter type " + this.name);
+        return pb(b.$a.bb, b.$a.cb.ab, this.ab);
+      }
+      function tb(a, b, c2) {
+        if (b === c2)
+          return a;
+        if (c2.jb === void 0)
+          return null;
+        a = tb(a, b, c2.jb);
+        return a === null ? null : c2.Hb(a);
+      }
+      var ub = {};
+      function vb(a, b) {
+        for (b === void 0 && R("ptr should not be undefined"); a.jb; )
+          b = a.pb(b), a = a.jb;
+        return ub[b];
+      }
+      function wb(a, b) {
+        b.cb && b.bb || Za("makeClassHandle requires ptr and ptrType");
+        !!b.ib !== !!b.gb && Za("Both smartPtrType and smartPtr must be specified");
+        b.count = { value: 1 };
+        return hb(Object.create(a, { $a: { value: b } }));
+      }
+      function W(a, b, c2, e) {
+        this.name = a;
+        this.ab = b;
+        this.xb = c2;
+        this.rb = e;
+        this.sb = false;
+        this.hb = this.Qb = this.ob = this.Eb = this.Rb = this.Ob = void 0;
+        b.jb !== void 0 ? this.toWireType = rb : (this.toWireType = e ? qb : sb, this.fb = null);
+      }
+      function xb(a, b, c2) {
+        d.hasOwnProperty(a) || Za("Replacing nonexistant public symbol");
+        d[a].eb !== void 0 && c2 !== void 0 ? d[a].eb[c2] = b : (d[a] = b, d[a].qb = c2);
+      }
+      function X(a, b) {
+        a = P(a);
+        var c2 = d["dynCall_" + a];
+        for (var e = [], f = 1; f < a.length; ++f)
+          e.push("a" + f);
+        f = "return function dynCall_" + (a + "_" + b) + "(" + e.join(", ") + ") {\n";
+        f += "    return dynCall(rawFunction" + (e.length ? ", " : "") + e.join(", ") + ");\n";
+        c2 = new Function("dynCall", "rawFunction", f + "};\n")(c2, b);
+        typeof c2 !== "function" && R("unknown function pointer with signature " + a + ": " + b);
+        return c2;
+      }
+      var yb = void 0;
+      function zb(a) {
+        a = Ab(a);
+        var b = P(a);
+        Y(a);
+        return b;
+      }
+      function Db(a, b) {
+        function c2(g) {
+          f[g] || L[g] || (Ua[g] ? Ua[g].forEach(c2) : (e.push(g), f[g] = true));
+        }
+        var e = [], f = {};
+        b.forEach(c2);
+        throw new yb(a + ": " + e.map(zb).join([", "]));
+      }
+      function Eb(a, b) {
+        for (var c2 = [], e = 0; e < a; e++)
+          c2.push(E[(b >> 2) + e]);
+        return c2;
+      }
+      function Fb(a) {
+        var b = Function;
+        if (!(b instanceof Function))
+          throw new TypeError("new_ called with constructor type " + typeof b + " which is not a function");
+        var c2 = Wa(b.name || "unknownFunctionName", function() {
+        });
+        c2.prototype = b.prototype;
+        c2 = new c2();
+        a = b.apply(c2, a);
+        return a instanceof Object ? a : c2;
+      }
+      function Gb(a, b, c2, e, f) {
+        var g = b.length;
+        2 > g && R("argTypes array size mismatch! Must at least get return value and 'this' types!");
+        var m = b[1] !== null && c2 !== null, h = false;
+        for (c2 = 1; c2 < b.length; ++c2)
+          if (b[c2] !== null && b[c2].fb === void 0) {
+            h = true;
+            break;
+          }
+        var k = b[0].name !== "void", l = "", n = "";
+        for (c2 = 0; c2 < g - 2; ++c2)
+          l += (c2 !== 0 ? ", " : "") + "arg" + c2, n += (c2 !== 0 ? ", " : "") + "arg" + c2 + "Wired";
+        a = "return function " + Va(a) + "(" + l + ") {\nif (arguments.length !== " + (g - 2) + ") {\nthrowBindingError('function " + a + " called with ' + arguments.length + ' arguments, expected " + (g - 2) + " args!');\n}\n";
+        h && (a += "var destructors = [];\n");
+        var p = h ? "destructors" : "null";
+        l = "throwBindingError invoker fn runDestructors retType classParam".split(" ");
+        e = [R, e, f, Ta, b[0], b[1]];
+        m && (a += "var thisWired = classParam.toWireType(" + p + ", this);\n");
+        for (c2 = 0; c2 < g - 2; ++c2)
+          a += "var arg" + c2 + "Wired = argType" + c2 + ".toWireType(" + p + ", arg" + c2 + "); // " + b[c2 + 2].name + "\n", l.push("argType" + c2), e.push(b[c2 + 2]);
+        m && (n = "thisWired" + (0 < n.length ? ", " : "") + n);
+        a += (k ? "var rv = " : "") + "invoker(fn" + (0 < n.length ? ", " : "") + n + ");\n";
+        if (h)
+          a += "runDestructors(destructors);\n";
+        else
+          for (c2 = m ? 1 : 2; c2 < b.length; ++c2)
+            g = c2 === 1 ? "thisWired" : "arg" + (c2 - 2) + "Wired", b[c2].fb !== null && (a += g + "_dtor(" + g + "); // " + b[c2].name + "\n", l.push(g + "_dtor"), e.push(b[c2].fb));
+        k && (a += "var ret = retType.fromWireType(rv);\nreturn ret;\n");
+        l.push(a + "}\n");
+        return Fb(l).apply(null, e);
+      }
+      var Hb = [], Z = [{}, { value: void 0 }, { value: null }, { value: true }, { value: false }];
+      function Ib(a) {
+        4 < a && --Z[a].yb === 0 && (Z[a] = void 0, Hb.push(a));
+      }
+      function V(a) {
+        switch (a) {
+          case void 0:
+            return 1;
+          case null:
+            return 2;
+          case true:
+            return 3;
+          case false:
+            return 4;
+          default:
+            var b = Hb.length ? Hb.pop() : Z.length;
+            Z[b] = { yb: 1, value: a };
+            return b;
+        }
+      }
+      function Jb(a, b, c2) {
+        switch (b) {
+          case 0:
+            return function(e) {
+              return this.fromWireType((c2 ? Aa : B)[e]);
+            };
+          case 1:
+            return function(e) {
+              return this.fromWireType((c2 ? D : ta)[e >> 1]);
+            };
+          case 2:
+            return function(e) {
+              return this.fromWireType((c2 ? E : F)[e >> 2]);
+            };
+          default:
+            throw new TypeError("Unknown integer type: " + a);
+        }
+      }
+      function Kb(a, b) {
+        var c2 = L[a];
+        c2 === void 0 && R(b + " has unknown type " + zb(a));
+        return c2;
+      }
+      function U(a) {
+        if (a === null)
+          return "null";
+        var b = typeof a;
+        return b === "object" || b === "array" || b === "function" ? a.toString() : "" + a;
+      }
+      function Lb(a, b) {
+        switch (b) {
+          case 2:
+            return function(c2) {
+              return this.fromWireType(Ba[c2 >> 2]);
+            };
+          case 3:
+            return function(c2) {
+              return this.fromWireType(Ca[c2 >> 3]);
+            };
+          default:
+            throw new TypeError("Unknown float type: " + a);
+        }
+      }
+      function Mb(a, b, c2) {
+        switch (b) {
+          case 0:
+            return c2 ? function(e) {
+              return Aa[e];
+            } : function(e) {
+              return B[e];
+            };
+          case 1:
+            return c2 ? function(e) {
+              return D[e >> 1];
+            } : function(e) {
+              return ta[e >> 1];
+            };
+          case 2:
+            return c2 ? function(e) {
+              return E[e >> 2];
+            } : function(e) {
+              return F[e >> 2];
+            };
+          default:
+            throw new TypeError("Unknown integer type: " + a);
+        }
+      }
+      var Nb = {};
+      function Ob(a) {
+        var b = Nb[a];
+        return b === void 0 ? P(a) : b;
+      }
+      var Pb = [];
+      function Qb(a) {
+        a || R("Cannot use deleted val. handle = " + a);
+        return Z[a].value;
+      }
+      function Rb() {
+        return typeof globalThis === "object" ? globalThis : Function("return this")();
+      }
+      function Sb(a) {
+        var b = Pb.length;
+        Pb.push(a);
+        return b;
+      }
+      function Tb(a, b) {
+        for (var c2 = Array(a), e = 0; e < a; ++e)
+          c2[e] = Kb(E[(b >> 2) + e], "parameter " + e);
+        return c2;
+      }
+      var Ub = {}, Vb = [null, [], []];
+      Ya = d.InternalError = Xa("InternalError");
+      for (var Wb = Array(256), Xb = 0; 256 > Xb; ++Xb)
+        Wb[Xb] = String.fromCharCode(Xb);
+      bb = Wb;
+      Q = d.BindingError = Xa("BindingError");
+      S.prototype.isAliasOf = function(a) {
+        if (!(this instanceof S && a instanceof S))
+          return false;
+        var b = this.$a.cb.ab, c2 = this.$a.bb, e = a.$a.cb.ab;
+        for (a = a.$a.bb; b.jb; )
+          c2 = b.pb(c2), b = b.jb;
+        for (; e.jb; )
+          a = e.pb(a), e = e.jb;
+        return b === e && c2 === a;
+      };
+      S.prototype.clone = function() {
+        this.$a.bb || db(this);
+        if (this.$a.nb)
+          return this.$a.count.value += 1, this;
+        var a = hb(Object.create(Object.getPrototypeOf(this), { $a: { value: cb(this.$a) } }));
+        a.$a.count.value += 1;
+        a.$a.lb = false;
+        return a;
+      };
+      S.prototype["delete"] = function() {
+        this.$a.bb || db(this);
+        this.$a.lb && !this.$a.nb && R("Object already scheduled for deletion");
+        fb(this);
+        gb(this.$a);
+        this.$a.nb || (this.$a.gb = void 0, this.$a.bb = void 0);
+      };
+      S.prototype.isDeleted = function() {
+        return !this.$a.bb;
+      };
+      S.prototype.deleteLater = function() {
+        this.$a.bb || db(this);
+        this.$a.lb && !this.$a.nb && R("Object already scheduled for deletion");
+        jb.push(this);
+        jb.length === 1 && ib && ib(kb);
+        this.$a.lb = true;
+        return this;
+      };
+      W.prototype.Lb = function(a) {
+        this.Eb && (a = this.Eb(a));
+        return a;
+      };
+      W.prototype.Cb = function(a) {
+        this.hb && this.hb(a);
+      };
+      W.prototype.argPackAdvance = 8;
+      W.prototype.readValueFromPointer = J;
+      W.prototype.deleteObject = function(a) {
+        if (a !== null)
+          a["delete"]();
+      };
+      W.prototype.fromWireType = function(a) {
+        function b() {
+          return this.sb ? wb(this.ab.mb, { cb: this.Ob, bb: c2, ib: this, gb: a }) : wb(this.ab.mb, { cb: this, bb: a });
+        }
+        var c2 = this.Lb(a);
+        if (!c2)
+          return this.Cb(a), null;
+        var e = vb(this.ab, c2);
+        if (e !== void 0) {
+          if (e.$a.count.value === 0)
+            return e.$a.bb = c2, e.$a.gb = a, e.clone();
+          e = e.clone();
+          this.Cb(a);
+          return e;
+        }
+        e = this.ab.Kb(c2);
+        e = lb[e];
+        if (!e)
+          return b.call(this);
+        e = this.rb ? e.Gb : e.pointerType;
+        var f = tb(c2, this.ab, e.ab);
+        return f === null ? b.call(this) : this.sb ? wb(e.ab.mb, { cb: e, bb: f, ib: this, gb: a }) : wb(e.ab.mb, { cb: e, bb: f });
+      };
+      d.getInheritedInstanceCount = function() {
+        return Object.keys(ub).length;
+      };
+      d.getLiveInheritedInstances = function() {
+        var a = [], b;
+        for (b in ub)
+          ub.hasOwnProperty(b) && a.push(ub[b]);
+        return a;
+      };
+      d.flushPendingDeletes = kb;
+      d.setDelayFunction = function(a) {
+        ib = a;
+        jb.length && ib && ib(kb);
+      };
+      yb = d.UnboundTypeError = Xa("UnboundTypeError");
+      d.count_emval_handles = function() {
+        for (var a = 0, b = 5; b < Z.length; ++b)
+          Z[b] !== void 0 && ++a;
+        return a;
+      };
+      d.get_first_emval = function() {
+        for (var a = 5; a < Z.length; ++a)
+          if (Z[a] !== void 0)
+            return Z[a];
+        return null;
+      };
+      var Zb = {
+        s: function(a) {
+          var b = Sa[a];
+          delete Sa[a];
+          var c2 = b.elements, e = c2.length, f = c2.map(function(h) {
+            return h.wb;
+          }).concat(c2.map(function(h) {
+            return h.Ab;
+          })), g = b.ob, m = b.hb;
+          N([a], f, function(h) {
+            c2.forEach(function(k, l) {
+              var n = h[l], p = k.ub, q = k.vb, t = h[l + e], u = k.zb, M = k.Bb;
+              k.read = function(A) {
+                return n.fromWireType(p(q, A));
+              };
+              k.write = function(A, T) {
+                var C = [];
+                u(M, A, t.toWireType(C, T));
+                Ta(C);
+              };
+            });
+            return [{ name: b.name, fromWireType: function(k) {
+              for (var l = Array(e), n = 0; n < e; ++n)
+                l[n] = c2[n].read(k);
+              m(k);
+              return l;
+            }, toWireType: function(k, l) {
+              if (e !== l.length)
+                throw new TypeError("Incorrect number of tuple elements for " + b.name + ": expected=" + e + ", actual=" + l.length);
+              for (var n = g(), p = 0; p < e; ++p)
+                c2[p].write(n, l[p]);
+              k !== null && k.push(m, n);
+              return n;
+            }, argPackAdvance: 8, readValueFromPointer: J, fb: m }];
+          });
+        },
+        v: function(a) {
+          var b = $a[a];
+          delete $a[a];
+          var c2 = b.ob, e = b.hb, f = b.Db, g = f.map(function(m) {
+            return m.wb;
+          }).concat(f.map(function(m) {
+            return m.Ab;
+          }));
+          N([a], g, function(m) {
+            var h = {};
+            f.forEach(function(k, l) {
+              var n = m[l], p = k.ub, q = k.vb, t = m[l + f.length], u = k.zb, M = k.Bb;
+              h[k.Ib] = { read: function(A) {
+                return n.fromWireType(p(q, A));
+              }, write: function(A, T) {
+                var C = [];
+                u(M, A, t.toWireType(C, T));
+                Ta(C);
+              } };
+            });
+            return [{ name: b.name, fromWireType: function(k) {
+              var l = {}, n;
+              for (n in h)
+                l[n] = h[n].read(k);
+              e(k);
+              return l;
+            }, toWireType: function(k, l) {
+              for (var n in h)
+                if (!(n in l))
+                  throw new TypeError("Missing field");
+              var p = c2();
+              for (n in h)
+                h[n].write(p, l[n]);
+              k !== null && k.push(e, p);
+              return p;
+            }, argPackAdvance: 8, readValueFromPointer: J, fb: e }];
+          });
+        },
+        G: function(a, b, c2, e, f) {
+          var g = ab(c2);
+          b = P(b);
+          O(a, {
+            name: b,
+            fromWireType: function(m) {
+              return !!m;
+            },
+            toWireType: function(m, h) {
+              return h ? e : f;
+            },
+            argPackAdvance: 8,
+            readValueFromPointer: function(m) {
+              if (c2 === 1)
+                var h = Aa;
+              else if (c2 === 2)
+                h = D;
+              else if (c2 === 4)
+                h = E;
+              else
+                throw new TypeError("Unknown boolean type size: " + b);
+              return this.fromWireType(h[m >> g]);
+            },
+            fb: null
+          });
+        },
+        k: function(a, b, c2, e, f, g, m, h, k, l, n, p, q) {
+          n = P(n);
+          g = X(f, g);
+          h && (h = X(m, h));
+          l && (l = X(k, l));
+          q = X(p, q);
+          var t = Va(n);
+          nb(t, function() {
+            Db("Cannot construct " + n + " due to unbound types", [e]);
+          });
+          N([a, b, c2], e ? [e] : [], function(u) {
+            u = u[0];
+            if (e) {
+              var M = u.ab;
+              var A = M.mb;
+            } else
+              A = S.prototype;
+            u = Wa(t, function() {
+              if (Object.getPrototypeOf(this) !== T)
+                throw new Q("Use 'new' to construct " + n);
+              if (C.kb === void 0)
+                throw new Q(n + " has no accessible constructor");
+              var Bb = C.kb[arguments.length];
+              if (Bb === void 0)
+                throw new Q("Tried to invoke ctor of " + n + " with invalid number of parameters (" + arguments.length + ") - expected (" + Object.keys(C.kb).toString() + ") parameters instead!");
+              return Bb.apply(this, arguments);
+            });
+            var T = Object.create(A, { constructor: { value: u } });
+            u.prototype = T;
+            var C = new ob(n, u, T, q, M, g, h, l);
+            M = new W(n, C, true, false);
+            A = new W(n + "*", C, false, false);
+            var Cb = new W(n + " const*", C, false, true);
+            lb[a] = { pointerType: A, Gb: Cb };
+            xb(t, u);
+            return [M, A, Cb];
+          });
+        },
+        h: function(a, b, c2, e, f, g) {
+          assert(0 < b);
+          var m = Eb(b, c2);
+          f = X(e, f);
+          var h = [g], k = [];
+          N([], [a], function(l) {
+            l = l[0];
+            var n = "constructor " + l.name;
+            l.ab.kb === void 0 && (l.ab.kb = []);
+            if (l.ab.kb[b - 1] !== void 0)
+              throw new Q("Cannot register multiple constructors with identical number of parameters (" + (b - 1) + ") for class '" + l.name + "'! Overload resolution is currently only performed using the parameter count, not actual type info!");
+            l.ab.kb[b - 1] = function() {
+              Db("Cannot construct " + l.name + " due to unbound types", m);
+            };
+            N([], m, function(p) {
+              l.ab.kb[b - 1] = function() {
+                arguments.length !== b - 1 && R(n + " called with " + arguments.length + " arguments, expected " + (b - 1));
+                k.length = 0;
+                h.length = b;
+                for (var q = 1; q < b; ++q)
+                  h[q] = p[q].toWireType(k, arguments[q - 1]);
+                q = f.apply(null, h);
+                Ta(k);
+                return p[0].fromWireType(q);
+              };
+              return [];
+            });
+            return [];
+          });
+        },
+        a: function(a, b, c2, e, f, g, m, h) {
+          var k = Eb(c2, e);
+          b = P(b);
+          g = X(f, g);
+          N([], [a], function(l) {
+            function n() {
+              Db("Cannot call " + p + " due to unbound types", k);
+            }
+            l = l[0];
+            var p = l.name + "." + b;
+            h && l.ab.Pb.push(b);
+            var q = l.ab.mb, t = q[b];
+            t === void 0 || t.eb === void 0 && t.className !== l.name && t.qb === c2 - 2 ? (n.qb = c2 - 2, n.className = l.name, q[b] = n) : (mb(q, b, p), q[b].eb[c2 - 2] = n);
+            N([], k, function(u) {
+              u = Gb(p, u, l, g, m);
+              q[b].eb === void 0 ? (u.qb = c2 - 2, q[b] = u) : q[b].eb[c2 - 2] = u;
+              return [];
+            });
+            return [];
+          });
+        },
+        M: function(a, b, c2) {
+          a = P(a);
+          N([], [b], function(e) {
+            e = e[0];
+            d[a] = e.fromWireType(c2);
+            return [];
+          });
+        },
+        E: function(a, b) {
+          b = P(b);
+          O(a, { name: b, fromWireType: function(c2) {
+            var e = Z[c2].value;
+            Ib(c2);
+            return e;
+          }, toWireType: function(c2, e) {
+            return V(e);
+          }, argPackAdvance: 8, readValueFromPointer: J, fb: null });
+        },
+        g: function(a, b, c2, e) {
+          function f() {
+          }
+          c2 = ab(c2);
+          b = P(b);
+          f.values = {};
+          O(a, { name: b, constructor: f, fromWireType: function(g) {
+            return this.constructor.values[g];
+          }, toWireType: function(g, m) {
+            return m.value;
+          }, argPackAdvance: 8, readValueFromPointer: Jb(b, c2, e), fb: null });
+          nb(b, f);
+        },
+        j: function(a, b, c2) {
+          var e = Kb(a, "enum");
+          b = P(b);
+          a = e.constructor;
+          e = Object.create(e.constructor.prototype, { value: { value: c2 }, constructor: { value: Wa(e.name + "_" + b, function() {
+          }) } });
+          a.values[c2] = e;
+          a[b] = e;
+        },
+        p: function(a, b, c2) {
+          c2 = ab(c2);
+          b = P(b);
+          O(a, { name: b, fromWireType: function(e) {
+            return e;
+          }, toWireType: function(e, f) {
+            if (typeof f !== "number" && typeof f !== "boolean")
+              throw new TypeError('Cannot convert "' + U(f) + '" to ' + this.name);
+            return f;
+          }, argPackAdvance: 8, readValueFromPointer: Lb(b, c2), fb: null });
+        },
+        f: function(a, b, c2, e, f, g) {
+          var m = Eb(b, c2);
+          a = P(a);
+          f = X(e, f);
+          nb(a, function() {
+            Db("Cannot call " + a + " due to unbound types", m);
+          }, b - 1);
+          N([], m, function(h) {
+            h = [h[0], null].concat(h.slice(1));
+            xb(a, Gb(a, h, null, f, g), b - 1);
+            return [];
+          });
+        },
+        e: function(a, b, c2, e, f) {
+          function g(l) {
+            return l;
+          }
+          b = P(b);
+          f === -1 && (f = 4294967295);
+          var m = ab(c2);
+          if (e === 0) {
+            var h = 32 - 8 * c2;
+            g = function(l) {
+              return l << h >>> h;
+            };
+          }
+          var k = b.indexOf("unsigned") != -1;
+          O(a, { name: b, fromWireType: g, toWireType: function(l, n) {
+            if (typeof n !== "number" && typeof n !== "boolean")
+              throw new TypeError('Cannot convert "' + U(n) + '" to ' + this.name);
+            if (n < e || n > f)
+              throw new TypeError('Passing a number "' + U(n) + '" from JS side to C/C++ side to an argument of type "' + b + '", which is outside the valid range [' + e + ", " + f + "]!");
+            return k ? n >>> 0 : n | 0;
+          }, argPackAdvance: 8, readValueFromPointer: Mb(b, m, e !== 0), fb: null });
+        },
+        b: function(a, b, c2) {
+          function e(g) {
+            g >>= 2;
+            return new f(za, F[g + 1], F[g]);
+          }
+          var f = [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array][b];
+          c2 = P(c2);
+          O(a, { name: c2, fromWireType: e, argPackAdvance: 8, readValueFromPointer: e }, { Mb: true });
+        },
+        q: function(a, b) {
+          b = P(b);
+          var c2 = b === "std::string";
+          O(a, { name: b, fromWireType: function(e) {
+            var f = F[e >> 2];
+            if (c2)
+              for (var g = e + 4, m = 0; m <= f; ++m) {
+                var h = e + 4 + m;
+                if (B[h] == 0 || m == f) {
+                  g = g ? pa(B, g, h - g) : "";
+                  if (k === void 0)
+                    var k = g;
+                  else
+                    k += String.fromCharCode(0), k += g;
+                  g = h + 1;
+                }
+              }
+            else {
+              k = Array(f);
+              for (m = 0; m < f; ++m)
+                k[m] = String.fromCharCode(B[e + 4 + m]);
+              k = k.join("");
+            }
+            Y(e);
+            return k;
+          }, toWireType: function(e, f) {
+            f instanceof ArrayBuffer && (f = new Uint8Array(f));
+            var g = typeof f === "string";
+            g || f instanceof Uint8Array || f instanceof Uint8ClampedArray || f instanceof Int8Array || R("Cannot pass non-string to std::string");
+            var m = (c2 && g ? function() {
+              for (var l = 0, n = 0; n < f.length; ++n) {
+                var p = f.charCodeAt(n);
+                55296 <= p && 57343 >= p && (p = 65536 + ((p & 1023) << 10) | f.charCodeAt(++n) & 1023);
+                127 >= p ? ++l : l = 2047 >= p ? l + 2 : 65535 >= p ? l + 3 : l + 4;
+              }
+              return l;
+            } : function() {
+              return f.length;
+            })(), h = Yb(4 + m + 1);
+            F[h >> 2] = m;
+            if (c2 && g)
+              qa(f, h + 4, m + 1);
+            else if (g)
+              for (g = 0; g < m; ++g) {
+                var k = f.charCodeAt(g);
+                255 < k && (Y(h), R("String has UTF-16 code units that do not fit in 8 bits"));
+                B[h + 4 + g] = k;
+              }
+            else
+              for (g = 0; g < m; ++g)
+                B[h + 4 + g] = f[g];
+            e !== null && e.push(Y, h);
+            return h;
+          }, argPackAdvance: 8, readValueFromPointer: J, fb: function(e) {
+            Y(e);
+          } });
+        },
+        l: function(a, b, c2) {
+          c2 = P(c2);
+          if (b === 2) {
+            var e = sa;
+            var f = ua;
+            var g = va;
+            var m = function() {
+              return ta;
+            };
+            var h = 1;
+          } else
+            b === 4 && (e = wa, f = xa, g = ya, m = function() {
+              return F;
+            }, h = 2);
+          O(a, { name: c2, fromWireType: function(k) {
+            for (var l = F[k >> 2], n = m(), p, q = k + 4, t = 0; t <= l; ++t) {
+              var u = k + 4 + t * b;
+              if (n[u >> h] == 0 || t == l)
+                q = e(q, u - q), p === void 0 ? p = q : (p += String.fromCharCode(0), p += q), q = u + b;
+            }
+            Y(k);
+            return p;
+          }, toWireType: function(k, l) {
+            typeof l !== "string" && R("Cannot pass non-string to C++ string type " + c2);
+            var n = g(l), p = Yb(4 + n + b);
+            F[p >> 2] = n >> h;
+            f(l, p + 4, n + b);
+            k !== null && k.push(Y, p);
+            return p;
+          }, argPackAdvance: 8, readValueFromPointer: J, fb: function(k) {
+            Y(k);
+          } });
+        },
+        u: function(a, b, c2, e, f, g) {
+          Sa[a] = { name: P(b), ob: X(c2, e), hb: X(f, g), elements: [] };
+        },
+        t: function(a, b, c2, e, f, g, m, h, k) {
+          Sa[a].elements.push({ wb: b, ub: X(c2, e), vb: f, Ab: g, zb: X(m, h), Bb: k });
+        },
+        w: function(a, b, c2, e, f, g) {
+          $a[a] = { name: P(b), ob: X(c2, e), hb: X(f, g), Db: [] };
+        },
+        i: function(a, b, c2, e, f, g, m, h, k, l) {
+          $a[a].Db.push({ Ib: P(b), wb: c2, ub: X(e, f), vb: g, Ab: m, zb: X(h, k), Bb: l });
+        },
+        H: function(a, b) {
+          b = P(b);
+          O(a, { Nb: true, name: b, argPackAdvance: 0, fromWireType: function() {
+          }, toWireType: function() {
+          } });
+        },
+        d: function(a, b, c2, e) {
+          a = Pb[a];
+          b = Qb(b);
+          c2 = Ob(c2);
+          a(b, c2, null, e);
+        },
+        N: Ib,
+        z: function(a) {
+          if (a === 0)
+            return V(Rb());
+          a = Ob(a);
+          return V(Rb()[a]);
+        },
+        c: function(a, b) {
+          b = Tb(a, b);
+          for (var c2 = b[0], e = c2.name + "_$" + b.slice(1).map(function(l) {
+            return l.name;
+          }).join("_") + "$", f = ["retType"], g = [c2], m = "", h = 0; h < a - 1; ++h)
+            m += (h !== 0 ? ", " : "") + "arg" + h, f.push("argType" + h), g.push(b[1 + h]);
+          e = "return function " + Va("methodCaller_" + e) + "(handle, name, destructors, args) {\n";
+          var k = 0;
+          for (h = 0; h < a - 1; ++h)
+            e += "    var arg" + h + " = argType" + h + ".readValueFromPointer(args" + (k ? "+" + k : "") + ");\n", k += b[h + 1].argPackAdvance;
+          e += "    var rv = handle[name](" + m + ");\n";
+          for (h = 0; h < a - 1; ++h)
+            b[h + 1].deleteObject && (e += "    argType" + h + ".deleteObject(arg" + h + ");\n");
+          c2.Nb || (e += "    return retType.toWireType(destructors, rv);\n");
+          f.push(e + "};\n");
+          a = Fb(f).apply(null, g);
+          return Sb(a);
+        },
+        n: function(a) {
+          4 < a && (Z[a].yb += 1);
+        },
+        x: function(a, b, c2, e) {
+          a = Qb(a);
+          var f = Ub[b];
+          if (!f) {
+            f = "";
+            for (var g = 0; g < b; ++g)
+              f += (g !== 0 ? ", " : "") + "arg" + g;
+            var m = "return function emval_allocator_" + b + "(constructor, argTypes, args) {\n";
+            for (g = 0; g < b; ++g)
+              m += "var argType" + g + " = requireRegisteredType(Module['HEAP32'][(argTypes >>> 2) + " + g + '], "parameter ' + g + '");\nvar arg' + g + " = argType" + g + ".readValueFromPointer(args);\nargs += argType" + g + "['argPackAdvance'];\n";
+            f = new Function("requireRegisteredType", "Module", "__emval_register", m + ("var obj = new constructor(" + f + ");\nreturn __emval_register(obj);\n}\n"))(Kb, d, V);
+            Ub[b] = f;
+          }
+          return f(a, c2, e);
+        },
+        O: function() {
+          return V([]);
+        },
+        F: function(a) {
+          return V(Ob(a));
+        },
+        L: function(a, b) {
+          a = Kb(a, "_emval_take_value");
+          a = a.readValueFromPointer(b);
+          return V(a);
+        },
+        m: function() {
+          y();
+        },
+        B: function(a, b, c2) {
+          B.copyWithin(a, b, b + c2);
+        },
+        C: function() {
+          y("OOM");
+        },
+        D: function() {
+          return 0;
+        },
+        y: function() {
+        },
+        o: function(a, b, c2, e) {
+          for (var f = 0, g = 0; g < c2; g++) {
+            for (var m = E[b + 8 * g >> 2], h = E[b + (8 * g + 4) >> 2], k = 0; k < h; k++) {
+              var l = B[m + k], n = Vb[a];
+              l === 0 || l === 10 ? ((a === 1 ? ja : z)(pa(n, 0)), n.length = 0) : n.push(l);
+            }
+            f += h;
+          }
+          E[e >> 2] = f;
+          return 0;
+        },
+        memory: la,
+        K: function() {
+        },
+        r: function() {
+        },
+        J: function() {
+        },
+        I: function() {
+        },
+        A: function() {
+        },
+        table: ma
+      }, $b = function() {
+        function a(f) {
+          d.asm = f.exports;
+          H--;
+          d.monitorRunDependencies && d.monitorRunDependencies(H);
+          H == 0 && (La && (f = La, La = null, f()));
+        }
+        function b(f) {
+          a(f.instance);
+        }
+        function c2(f) {
+          return Qa().then(function(g) {
+            return WebAssembly.instantiate(g, e);
+          }).then(f, function(g) {
+            z("failed to asynchronously prepare wasm: " + g);
+            y(g);
+          });
+        }
+        var e = { a: Zb };
+        H++;
+        d.monitorRunDependencies && d.monitorRunDependencies(H);
+        if (d.instantiateWasm)
+          try {
+            return d.instantiateWasm(e, a);
+          } catch (f) {
+            return z("Module.instantiateWasm callback failed with error: " + f), false;
+          }
+        (function() {
+          if (ka || typeof WebAssembly.instantiateStreaming !== "function" || Na() || Ma("file://") || typeof fetch !== "function")
+            return c2(b);
+          fetch(I, { credentials: "same-origin" }).then(function(f) {
+            return WebAssembly.instantiateStreaming(f, e).then(b, function(g) {
+              z("wasm streaming compile failed: " + g);
+              z("falling back to ArrayBuffer instantiation");
+              c2(b);
+            });
+          });
+        })();
+        return {};
+      }();
+      d.asm = $b;
+      var Ra = d.___wasm_call_ctors = function() {
+        return (Ra = d.___wasm_call_ctors = d.asm.P).apply(null, arguments);
+      };
+      d.__Z6ToCmdsRK6SkPath = function() {
+        return (d.__Z6ToCmdsRK6SkPath = d.asm.Q).apply(null, arguments);
+      };
+      d.__Z8FromCmdsmi = function() {
+        return (d.__Z8FromCmdsmi = d.asm.R).apply(null, arguments);
+      };
+      d.__Z7NewPathv = function() {
+        return (d.__Z7NewPathv = d.asm.S).apply(null, arguments);
+      };
+      d.__Z8CopyPathRK6SkPath = function() {
+        return (d.__Z8CopyPathRK6SkPath = d.asm.T).apply(null, arguments);
+      };
+      d.__Z6EqualsRK6SkPathS1_ = function() {
+        return (d.__Z6EqualsRK6SkPathS1_ = d.asm.U).apply(null, arguments);
+      };
+      d.__Z11ToSVGStringRK6SkPath = function() {
+        return (d.__Z11ToSVGStringRK6SkPath = d.asm.V).apply(null, arguments);
+      };
+      d.__Z13FromSVGStringNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE = function() {
+        return (d.__Z13FromSVGStringNSt3__212basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE = d.asm.W).apply(null, arguments);
+      };
+      d.__Z13ApplySimplifyR6SkPath = function() {
+        return (d.__Z13ApplySimplifyR6SkPath = d.asm.X).apply(null, arguments);
+      };
+      d.__Z11ApplyPathOpR6SkPathRKS_8SkPathOp = function() {
+        return (d.__Z11ApplyPathOpR6SkPathRKS_8SkPathOp = d.asm.Y).apply(null, arguments);
+      };
+      d.__Z10MakeFromOpRK6SkPathS1_8SkPathOp = function() {
+        return (d.__Z10MakeFromOpRK6SkPathS1_8SkPathOp = d.asm.Z).apply(null, arguments);
+      };
+      d.__Z14ResolveBuilderR11SkOpBuilder = function() {
+        return (d.__Z14ResolveBuilderR11SkOpBuilder = d.asm._).apply(null, arguments);
+      };
+      d.__Z8ToCanvasRK6SkPathN10emscripten3valE = function() {
+        return (d.__Z8ToCanvasRK6SkPathN10emscripten3valE = d.asm.$).apply(null, arguments);
+      };
+      d.__Z8ToPath2DRK6SkPath = function() {
+        return (d.__Z8ToPath2DRK6SkPath = d.asm.aa).apply(null, arguments);
+      };
+      var Y = d._free = function() {
+        return (Y = d._free = d.asm.ba).apply(null, arguments);
+      }, Yb = d._malloc = function() {
+        return (Yb = d._malloc = d.asm.ca).apply(null, arguments);
+      }, Ab = d.___getTypeName = function() {
+        return (Ab = d.___getTypeName = d.asm.da).apply(null, arguments);
+      };
+      d.___embind_register_native_and_builtin_types = function() {
+        return (d.___embind_register_native_and_builtin_types = d.asm.ea).apply(null, arguments);
+      };
+      d.dynCall_vi = function() {
+        return (d.dynCall_vi = d.asm.fa).apply(null, arguments);
+      };
+      d.dynCall_iiiii = function() {
+        return (d.dynCall_iiiii = d.asm.ga).apply(null, arguments);
+      };
+      d.dynCall_ii = function() {
+        return (d.dynCall_ii = d.asm.ha).apply(null, arguments);
+      };
+      d.dynCall_i = function() {
+        return (d.dynCall_i = d.asm.ia).apply(null, arguments);
+      };
+      d.dynCall_viifffffffff = function() {
+        return (d.dynCall_viifffffffff = d.asm.ja).apply(null, arguments);
+      };
+      d.dynCall_vifffffi = function() {
+        return (d.dynCall_vifffffi = d.asm.ka).apply(null, arguments);
+      };
+      d.dynCall_vifffff = function() {
+        return (d.dynCall_vifffff = d.asm.la).apply(null, arguments);
+      };
+      d.dynCall_viffffff = function() {
+        return (d.dynCall_viffffff = d.asm.ma).apply(null, arguments);
+      };
+      d.dynCall_vifffffffi = function() {
+        return (d.dynCall_vifffffffi = d.asm.na).apply(null, arguments);
+      };
+      d.dynCall_viff = function() {
+        return (d.dynCall_viff = d.asm.oa).apply(null, arguments);
+      };
+      d.dynCall_viffff = function() {
+        return (d.dynCall_viffff = d.asm.pa).apply(null, arguments);
+      };
+      d.dynCall_vii = function() {
+        return (d.dynCall_vii = d.asm.qa).apply(null, arguments);
+      };
+      d.dynCall_iii = function() {
+        return (d.dynCall_iii = d.asm.ra).apply(null, arguments);
+      };
+      d.dynCall_iifff = function() {
+        return (d.dynCall_iifff = d.asm.sa).apply(null, arguments);
+      };
+      d.dynCall_iiffi = function() {
+        return (d.dynCall_iiffi = d.asm.ta).apply(null, arguments);
+      };
+      d.dynCall_vifffffffff = function() {
+        return (d.dynCall_vifffffffff = d.asm.ua).apply(null, arguments);
+      };
+      d.dynCall_iiii = function() {
+        return (d.dynCall_iiii = d.asm.va).apply(null, arguments);
+      };
+      d.dynCall_viii = function() {
+        return (d.dynCall_viii = d.asm.wa).apply(null, arguments);
+      };
+      d.dynCall_viiii = function() {
+        return (d.dynCall_viiii = d.asm.xa).apply(null, arguments);
+      };
+      d.dynCall_fif = function() {
+        return (d.dynCall_fif = d.asm.ya).apply(null, arguments);
+      };
+      d.dynCall_viif = function() {
+        return (d.dynCall_viif = d.asm.za).apply(null, arguments);
+      };
+      d.dynCall_fi = function() {
+        return (d.dynCall_fi = d.asm.Aa).apply(null, arguments);
+      };
+      d.dynCall_viiifffffffff = function() {
+        return (d.dynCall_viiifffffffff = d.asm.Ba).apply(null, arguments);
+      };
+      d.dynCall_viifffffi = function() {
+        return (d.dynCall_viifffffi = d.asm.Ca).apply(null, arguments);
+      };
+      d.dynCall_viifffff = function() {
+        return (d.dynCall_viifffff = d.asm.Da).apply(null, arguments);
+      };
+      d.dynCall_viiffffff = function() {
+        return (d.dynCall_viiffffff = d.asm.Ea).apply(null, arguments);
+      };
+      d.dynCall_viifffffffi = function() {
+        return (d.dynCall_viifffffffi = d.asm.Fa).apply(null, arguments);
+      };
+      d.dynCall_viiff = function() {
+        return (d.dynCall_viiff = d.asm.Ga).apply(null, arguments);
+      };
+      d.dynCall_viiffff = function() {
+        return (d.dynCall_viiffff = d.asm.Ha).apply(null, arguments);
+      };
+      d.dynCall_iiifff = function() {
+        return (d.dynCall_iiifff = d.asm.Ia).apply(null, arguments);
+      };
+      d.dynCall_iiiffi = function() {
+        return (d.dynCall_iiiffi = d.asm.Ja).apply(null, arguments);
+      };
+      d.dynCall_fii = function() {
+        return (d.dynCall_fii = d.asm.Ka).apply(null, arguments);
+      };
+      d.dynCall_iiffff = function() {
+        return (d.dynCall_iiffff = d.asm.La).apply(null, arguments);
+      };
+      d.dynCall_fiif = function() {
+        return (d.dynCall_fiif = d.asm.Ma).apply(null, arguments);
+      };
+      d.dynCall_iiif = function() {
+        return (d.dynCall_iiif = d.asm.Na).apply(null, arguments);
+      };
+      d.dynCall_vifii = function() {
+        return (d.dynCall_vifii = d.asm.Oa).apply(null, arguments);
+      };
+      d.dynCall_viifd = function() {
+        return (d.dynCall_viifd = d.asm.Pa).apply(null, arguments);
+      };
+      d.dynCall_viid = function() {
+        return (d.dynCall_viid = d.asm.Qa).apply(null, arguments);
+      };
+      d.dynCall_viddi = function() {
+        return (d.dynCall_viddi = d.asm.Ra).apply(null, arguments);
+      };
+      d.dynCall_iidi = function() {
+        return (d.dynCall_iidi = d.asm.Sa).apply(null, arguments);
+      };
+      d.dynCall_viffi = function() {
+        return (d.dynCall_viffi = d.asm.Ta).apply(null, arguments);
+      };
+      d.dynCall_fffff = function() {
+        return (d.dynCall_fffff = d.asm.Ua).apply(null, arguments);
+      };
+      d.dynCall_viiiii = function() {
+        return (d.dynCall_viiiii = d.asm.Va).apply(null, arguments);
+      };
+      d.dynCall_viiiiiffii = function() {
+        return (d.dynCall_viiiiiffii = d.asm.Wa).apply(null, arguments);
+      };
+      d.dynCall_iiiiii = function() {
+        return (d.dynCall_iiiiii = d.asm.Xa).apply(null, arguments);
+      };
+      d.dynCall_iiiiiii = function() {
+        return (d.dynCall_iiiiiii = d.asm.Ya).apply(null, arguments);
+      };
+      d.dynCall_iidiiii = function() {
+        return (d.dynCall_iidiiii = d.asm.Za).apply(null, arguments);
+      };
+      d.dynCall_jiji = function() {
+        return (d.dynCall_jiji = d.asm._a).apply(null, arguments);
+      };
+      d.asm = $b;
+      var ac;
+      La = function bc() {
+        ac || cc();
+        ac || (La = bc);
+      };
+      function cc() {
+        function a() {
+          if (!ac && (ac = true, d.calledRun = true, !na)) {
+            Ea(Ga);
+            Ea(Ha);
+            aa(d);
+            if (d.onRuntimeInitialized)
+              d.onRuntimeInitialized();
+            if (d.postRun)
+              for (typeof d.postRun == "function" && (d.postRun = [d.postRun]); d.postRun.length; ) {
+                var b = d.postRun.shift();
+                Ia.unshift(b);
+              }
+            Ea(Ia);
+          }
+        }
+        if (!(0 < H)) {
+          if (d.preRun)
+            for (typeof d.preRun == "function" && (d.preRun = [d.preRun]); d.preRun.length; )
+              Ja();
+          Ea(Fa);
+          0 < H || (d.setStatus ? (d.setStatus("Running..."), setTimeout(function() {
+            setTimeout(function() {
+              d.setStatus("");
+            }, 1);
+            a();
+          }, 1)) : a());
+        }
+      }
+      d.run = cc;
+      if (d.preInit)
+        for (typeof d.preInit == "function" && (d.preInit = [d.preInit]); 0 < d.preInit.length; )
+          d.preInit.pop()();
+      cc();
+      return PathKitInit3.ready;
+    };
+  }();
+  module.exports = PathKitInit2;
+})(pathkit);
+var PathKitInit = pathkit.exports;
+class PathKitManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.pathkit = null;
+  }
+  async load() {
+    this.registerPathKit(await PathKitInit());
+  }
+  registerPathKit(pathkit2) {
+    this.pathkit = pathkit2;
+    this.editor.emit("updatePathKit");
+  }
+  has() {
+    return !!this.pathkit;
+  }
+  booleanOperation(first, second2, pathOp) {
+    const PathKit = this.pathkit;
+    return PathKit.MakeFromOp(PathKit.FromSVGString(first), PathKit.FromSVGString(second2), pathOp).toSVGString();
+  }
+  intersection(first, second2) {
+    const PathKit = this.pathkit;
+    if (!PathKit)
+      return;
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.INTERSECT));
+  }
+  union(first, second2) {
+    const PathKit = this.pathkit;
+    if (!PathKit)
+      return;
+    return this.booleanOperation(first, second2, PathKit.PathOp.UNION);
+  }
+  difference(first, second2) {
+    const PathKit = this.pathkit;
+    if (!PathKit)
+      return;
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.DIFFERENCE));
+  }
+  reverseDifference(first, second2) {
+    const PathKit = this.pathkit;
+    if (!PathKit)
+      return;
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.REVERSE_DIFFERENCE));
+  }
+  xor(first, second2) {
+    const PathKit = this.pathkit;
+    if (!PathKit)
+      return;
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.XOR));
+  }
+  reversePathString(pathString2) {
+    return PathParser.fromSVGString(pathString2).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
+  }
+  isValidPath(path) {
+    const PathKit = this.pathkit;
+    let pathKitPath = PathKit.FromSVGString(path);
+    return pathKitPath.isValid();
+  }
+  simplify(path) {
+    const PathKit = this.pathkit;
+    const pathObject = PathKit.FromSVGString(path);
+    return pathObject.simplify().toSVGString();
+  }
+  convertLineJoin(lineJoin) {
+    const PathKit = this.pathkit;
+    switch (lineJoin) {
+      case "miter":
+        return PathKit.StrokeJoin.MITER;
+      case "round":
+        return PathKit.StrokeJoin.ROUND;
+      case "bevel":
+        return PathKit.StrokeJoin.BEVEL;
+    }
+  }
+  convertLineCap(lineCap) {
+    const PathKit = this.pathkit;
+    switch (lineCap) {
+      case "butt":
+        return PathKit.StrokeCap.BUTT;
+      case "round":
+        return PathKit.StrokeCap.ROUND;
+      case "square":
+        return PathKit.StrokeCap.SQUARE;
+    }
+  }
+  stroke(path, opt = { width: 1, miter_limit: 4 }) {
+    const PathKit = this.pathkit;
+    const pathObject = PathKit.FromSVGString(path);
+    if (isArray(opt["stroke-dasharray"])) {
+      const arr = opt["stroke-dasharray"];
+      if (arr.length >= 2) {
+        pathObject.dash(arr[0], arr[1], +(opt["stroke-dashoffset"] || 0));
+      }
+    }
+    let newPathObject = pathObject.stroke({
+      width: +opt["stroke-width"],
+      join: this.convertLineJoin(opt["stroke-linejoin"]),
+      cap: this.convertLineCap(opt["stroke-linecap"])
+    });
+    newPathObject.setFillType(PathKit.FillType.WINDING);
+    return newPathObject.simplify().toSVGString();
+  }
+  round(path, opt = { width: 1, miter_limit: 4 }) {
+    return this.stroke(path, __spreadProps(__spreadValues({}, opt), {
+      "stroke-linejoin": "round"
+    }));
+  }
+  grow(path, opt = { width: 1, miter_limit: 4 }) {
+    const PathKit = this.pathkit;
+    const pathObject = PathKit.FromSVGString(path);
+    return pathObject.copy().stroke(opt).op(pathObject, PathKit.PathOp.DIFFERENCE).toSVGString();
+  }
+  shrink(path, opt = { width: 1, miter_limit: 4 }) {
+    const PathKit = this.pathkit;
+    const pathObject = PathKit.FromSVGString(path);
+    const simplifyPath = pathObject.copy().simplify();
+    return pathObject.copy().stroke(opt).op(simplifyPath, PathKit.PathOp.DIFFERENCE).toSVGString();
+  }
+  dash(path, on, off, phase = 1) {
+    const PathKit = this.pathkit;
+    const pathObject = PathKit.FromSVGString(path);
+    return pathObject.dash(on, off, phase).toSVGString();
+  }
+  trim(path, startT, stopT, isComplement = false) {
+    const PathKit = this.pathkit;
+    const pathObject = PathKit.FromSVGString(path);
+    return pathObject.trim(startT, stopT, isComplement).toSVGString();
+  }
+}
 class SegmentSelectionManager {
   constructor(editor) {
     this.$editor = editor;
@@ -28553,7 +28636,7 @@ class SelectionManager {
   }
 }
 const MAX_SNAP_DISTANCE = 3;
-const DEFAULT_DIST_VECTOR = fromValues(0, 0, 0);
+const DEFAULT_DIST_VECTOR = { dist: fromValues(0, 0, 0) };
 const AXIS_X = "x";
 const AXIS_Y = "y";
 function checkXAxis(sourceVertex, targetVertex, dist2 = 1) {
@@ -28584,7 +28667,7 @@ class SnapManager {
         return false;
       if (this.context.selection.check(item))
         return false;
-      const inViewport = this.context.viewport.checkInViewportArea(item.verties.filter((_, index2) => index2 < 4));
+      const inViewport = this.context.viewport.checkInViewportArea(item.originVerties);
       return inViewport;
     });
   }
@@ -28668,13 +28751,16 @@ class SnapManager {
     this.snapTargetLayers.forEach((target) => {
       const x = this.checkX(target.xList, sourceXList, dist2)[0];
       const y = this.checkY(target.yList, sourceYList, dist2)[0];
-      snaps.push(fromValues(x ? x.dx : 0, y ? y.dy : 0, 0));
+      const distVector = fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+      if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+        snaps.push({ target, dist: distVector });
+      }
     });
     return snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR;
   }
   checkPoint(sourceVertex) {
     const snap = this.check([sourceVertex]);
-    return add$1([], sourceVertex, snap);
+    return add$1([], sourceVertex, snap.dist);
   }
   getGuidesByPointPoint(sourceVerties, targetVerties, dist$1 = 0) {
     const points = [];
@@ -28721,7 +28807,7 @@ class SnapManager {
   findGuide(sourceVerties, dist2 = 0) {
     const guides = [];
     this.snapTargetLayers.forEach((target) => {
-      const points = this.getGuidesByPointPoint(sourceVerties, target.verties, dist2);
+      const points = this.getGuidesByPointPoint(sourceVerties, target.guideVerties, dist2);
       guides.push.apply(guides, points);
     });
     return guides;
@@ -30954,11 +31040,11 @@ const names = {
   image: "Image",
   "static-gradient": "Static",
   "linear-gradient": "Linear",
-  "repeating-linear-gradient": `${obj$2.repeat} Linear`,
+  "repeating-linear-gradient": `${obj$3.repeat} Linear`,
   "radial-gradient": "Radial",
-  "repeating-radial-gradient": `${obj$2.repeat} Radial`,
+  "repeating-radial-gradient": `${obj$3.repeat} Radial`,
   "conic-gradient": "Conic",
-  "repeating-conic-gradient": `${obj$2.repeat} Conic`
+  "repeating-conic-gradient": `${obj$3.repeat} Conic`
 };
 class BorderImageProperty extends BaseProperty {
   getTitle() {
@@ -31037,9 +31123,9 @@ class BorderImageProperty extends BaseProperty {
       <div class="property-item border-image-item" ref='$borderImageView'></div>    
       <div class="property-item border-slice-item">
         <div class="slice-selector" data-selected-value="all" ref="$selector">
-          <button type="button" data-value="all">${obj$2.border_all}</button>
+          <button type="button" data-value="all">${obj$3.border_all}</button>
           <button type="button" data-value="partitial">
-            ${obj$2.border_inner}
+            ${obj$3.border_inner}
           </button>
         </div>
         <div class="slice-value">
@@ -31590,7 +31676,7 @@ class BoxShadowProperty extends BaseProperty {
         `;
     }).join("")}
       </select>
-      <button type="button" ref='$add'>${obj$2.add}</button>
+      <button type="button" ref='$add'>${obj$3.add}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -31876,7 +31962,7 @@ class ClipPathProperty extends BaseProperty {
             ${isPolygon ? polygonSelect : ""}
           </div>
           <div class='tools'>
-            <button type="button" class="del">${obj$2.remove2}</button>
+            <button type="button" class="del">${obj$3.remove2}</button>
           </div>        
         </div>
         ${isPath ? `<svg><path d="${newPathString}" fill="transparent" stroke="currentColor" /></svg>` : ""}
@@ -32659,7 +32745,7 @@ var Console = {
     console.log(...args2);
   }
 };
-var __glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": Console
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32670,14 +32756,14 @@ function _currentProject(editor, callback) {
     callback && callback(project2, timeline);
   }
 }
-var __glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _currentProject
 }, Symbol.toStringTag, { value: "Module" }));
 function _doForceRefreshSelection(editor) {
   editor.emit("refreshAll");
 }
-var __glob_0_2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _doForceRefreshSelection
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32707,7 +32793,7 @@ var addArtBoard = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32719,7 +32805,7 @@ var addBackgroundColor = {
     }, id));
   }
 };
-var __glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundColor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32740,7 +32826,7 @@ var addBackgroundImageAsset = {
     editor.context.commands.emit("history.setAttribute", "add background image", itemsMap);
   }
 };
-var __glob_0_5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundImageAsset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32761,7 +32847,7 @@ var addBackgroundImageGradient = {
     editor.context.commands.emit("history.setAttribute", "add gradient", itemsMap);
   }
 };
-var __glob_0_6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundImageGradient
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33052,7 +33138,7 @@ var addBackgroundImagePattern = {
     editor.context.commands.emit("history.setAttribute", "add pattern", itemsMap);
   }
 };
-var __glob_0_7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundImagePattern
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33074,14 +33160,14 @@ function addCustomComponent(editor, obj2 = {}, center2 = null) {
   editor.context.selection.select(customComponent);
   _doForceRefreshSelection(editor);
 }
-var __glob_0_8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addCustomComponent
 }, Symbol.toStringTag, { value: "Module" }));
 function addImage(editor, rect2 = {}, containerItem = void 0) {
   editor.context.commands.emit("newComponent", "image", rect2, true, containerItem);
 }
-var __glob_0_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_9$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33124,7 +33210,7 @@ var addImageAssetItem = {
     }
   }
 };
-var __glob_0_10 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_10$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33143,7 +33229,7 @@ function addLayer(editor, layer, isSelected = true, containerItem) {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_11$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33169,7 +33255,7 @@ var addLayerView = {
     }
   }
 };
-var __glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_12$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addLayerView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33180,7 +33266,7 @@ function addProject(editor, obj2 = {}) {
   editor.context.selection.selectProject(project2);
   _doForceRefreshSelection(editor);
 }
-var __glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_13$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33195,7 +33281,7 @@ var addSVGFilterAssetItem = {
     }
   }
 };
-var __glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addSVGFilterAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33207,7 +33293,7 @@ function addText(editor, rect2 = {}) {
     "font-size": 30
   }, rect2), rect2);
 }
-var __glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addText
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33235,7 +33321,7 @@ var addTimelineCurrentProperty = {
     });
   }
 };
-var __glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineCurrentProperty
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33253,7 +33339,7 @@ var addTimelineItem = {
     });
   }
 };
-var __glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_17$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33277,7 +33363,7 @@ var addTimelineKeyframe = {
     });
   }
 };
-var __glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_18$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineKeyframe
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33308,14 +33394,14 @@ var addTimelineProperty = {
     });
   }
 };
-var __glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_19$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
 function addVideo(editor, rect2 = {}, containerItem = void 0) {
   editor.context.commands.emit("newComponent", "video", rect2, true, containerItem);
 }
-var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_20$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34959,8 +35045,8 @@ var __glob_0_42 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": dropImageUrl
 }, Symbol.toStringTag, { value: "Module" }));
-var editor_config_body_event = {
-  command: "config:bodyEvent",
+var editor_config_body_event$1 = {
+  command: "change.bodyEvent",
   description: "fire when bodyEvent was set",
   execute: function(editor) {
     const $target = Dom.create(editor.context.config.get("bodyEvent").target);
@@ -34969,7 +35055,7 @@ var editor_config_body_event = {
 };
 var __glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": editor_config_body_event
+  "default": editor_config_body_event$1
 }, Symbol.toStringTag, { value: "Module" }));
 var fileDropItems = {
   command: "fileDropItems",
@@ -37135,16 +37221,16 @@ class Transform extends PropertyItem {
           ]);
           break;
         case "scale":
-          scale(view, view, [it.value[0].value, it.value[1].value, 1]);
+          scale$1(view, view, [it.value[0].value, it.value[1].value, 1]);
           break;
         case "scaleX":
-          scale(view, view, [it.value[0].value, 1, 1]);
+          scale$1(view, view, [it.value[0].value, 1, 1]);
           break;
         case "scaleY":
-          scale(view, view, [1, it.value[0].value, 1]);
+          scale$1(view, view, [1, it.value[0].value, 1]);
           break;
         case "scaleZ":
-          scale(view, view, [1, 1, it.value[0].value]);
+          scale$1(view, view, [1, 1, it.value[0].value]);
           break;
         case "skewX":
           var rad = it.value[0].toDeg().toRad();
@@ -37382,14 +37468,256 @@ var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules = { "./command_list/Console.js": __glob_0_0, "./command_list/_currentProject.js": __glob_0_1, "./command_list/_doForceRefreshSelection.js": __glob_0_2, "./command_list/addArtBoard.js": __glob_0_3, "./command_list/addBackgroundColor.js": __glob_0_4, "./command_list/addBackgroundImageAsset.js": __glob_0_5, "./command_list/addBackgroundImageGradient.js": __glob_0_6, "./command_list/addBackgroundImagePattern.js": __glob_0_7, "./command_list/addCustomComponent.js": __glob_0_8, "./command_list/addImage.js": __glob_0_9, "./command_list/addImageAssetItem.js": __glob_0_10, "./command_list/addLayer.js": __glob_0_11, "./command_list/addLayerView.js": __glob_0_12, "./command_list/addProject.js": __glob_0_13, "./command_list/addSVGFilterAssetItem.js": __glob_0_14, "./command_list/addText.js": __glob_0_15, "./command_list/addTimelineCurrentProperty.js": __glob_0_16, "./command_list/addTimelineItem.js": __glob_0_17, "./command_list/addTimelineKeyframe.js": __glob_0_18, "./command_list/addTimelineProperty.js": __glob_0_19, "./command_list/addVideo.js": __glob_0_20, "./command_list/addVideoAssetItem.js": __glob_0_21, "./command_list/clipboard.copy.js": __glob_0_22, "./command_list/clipboard.paste.js": __glob_0_23, "./command_list/convert.flatten.path.js": __glob_0_24, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshCursor.js": __glob_0_79, "./command_list/refreshElement.js": __glob_0_80, "./command_list/refreshHistory.js": __glob_0_81, "./command_list/refreshProject.js": __glob_0_82, "./command_list/refreshSelectedOffset.js": __glob_0_83, "./command_list/removeAnimationItem.js": __glob_0_84, "./command_list/removeLayer.js": __glob_0_85, "./command_list/removeTimeline.js": __glob_0_86, "./command_list/removeTimelineProperty.js": __glob_0_87, "./command_list/resetSelection.js": __glob_0_88, "./command_list/resizeArtBoard.js": __glob_0_89, "./command_list/rotateLayer.js": __glob_0_90, "./command_list/same.height.js": __glob_0_91, "./command_list/same.width.js": __glob_0_92, "./command_list/saveJSON.js": __glob_0_93, "./command_list/savePNG.js": __glob_0_94, "./command_list/segment.delete.js": __glob_0_95, "./command_list/segment.move.down.js": __glob_0_96, "./command_list/segment.move.left.js": __glob_0_97, "./command_list/segment.move.right.js": __glob_0_98, "./command_list/segment.move.up.js": __glob_0_99, "./command_list/select.all.js": __glob_0_100, "./command_list/selectTimelineItem.js": __glob_0_101, "./command_list/setAttribute.js": __glob_0_102, "./command_list/setTimelineOffset.js": __glob_0_103, "./command_list/showExportView.js": __glob_0_104, "./command_list/sort.bottom.js": __glob_0_105, "./command_list/sort.center.js": __glob_0_106, "./command_list/sort.left.js": __glob_0_107, "./command_list/sort.middle.js": __glob_0_108, "./command_list/sort.right.js": __glob_0_109, "./command_list/sort.top.js": __glob_0_110, "./command_list/switch.path.js": __glob_0_111, "./command_list/ungroup.item.js": __glob_0_112, "./command_list/updateClipPath.js": __glob_0_113, "./command_list/updateImage.js": __glob_0_114, "./command_list/updateImageAssetItem.js": __glob_0_115, "./command_list/updatePathItem.js": __glob_0_116, "./command_list/updateResource.js": __glob_0_117, "./command_list/updateUriList.js": __glob_0_118, "./command_list/updateVideo.js": __glob_0_119, "./command_list/updateVideoAssetItem.js": __glob_0_120, "./command_list/model/update.js": __glob_0_121 };
-const obj = {};
-Object.entries(modules).forEach(([key, value]) => {
+const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21, "./command_list/clipboard.copy.js": __glob_0_22, "./command_list/clipboard.paste.js": __glob_0_23, "./command_list/convert.flatten.path.js": __glob_0_24, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshCursor.js": __glob_0_79, "./command_list/refreshElement.js": __glob_0_80, "./command_list/refreshHistory.js": __glob_0_81, "./command_list/refreshProject.js": __glob_0_82, "./command_list/refreshSelectedOffset.js": __glob_0_83, "./command_list/removeAnimationItem.js": __glob_0_84, "./command_list/removeLayer.js": __glob_0_85, "./command_list/removeTimeline.js": __glob_0_86, "./command_list/removeTimelineProperty.js": __glob_0_87, "./command_list/resetSelection.js": __glob_0_88, "./command_list/resizeArtBoard.js": __glob_0_89, "./command_list/rotateLayer.js": __glob_0_90, "./command_list/same.height.js": __glob_0_91, "./command_list/same.width.js": __glob_0_92, "./command_list/saveJSON.js": __glob_0_93, "./command_list/savePNG.js": __glob_0_94, "./command_list/segment.delete.js": __glob_0_95, "./command_list/segment.move.down.js": __glob_0_96, "./command_list/segment.move.left.js": __glob_0_97, "./command_list/segment.move.right.js": __glob_0_98, "./command_list/segment.move.up.js": __glob_0_99, "./command_list/select.all.js": __glob_0_100, "./command_list/selectTimelineItem.js": __glob_0_101, "./command_list/setAttribute.js": __glob_0_102, "./command_list/setTimelineOffset.js": __glob_0_103, "./command_list/showExportView.js": __glob_0_104, "./command_list/sort.bottom.js": __glob_0_105, "./command_list/sort.center.js": __glob_0_106, "./command_list/sort.left.js": __glob_0_107, "./command_list/sort.middle.js": __glob_0_108, "./command_list/sort.right.js": __glob_0_109, "./command_list/sort.top.js": __glob_0_110, "./command_list/switch.path.js": __glob_0_111, "./command_list/ungroup.item.js": __glob_0_112, "./command_list/updateClipPath.js": __glob_0_113, "./command_list/updateImage.js": __glob_0_114, "./command_list/updateImageAssetItem.js": __glob_0_115, "./command_list/updatePathItem.js": __glob_0_116, "./command_list/updateResource.js": __glob_0_117, "./command_list/updateUriList.js": __glob_0_118, "./command_list/updateVideo.js": __glob_0_119, "./command_list/updateVideoAssetItem.js": __glob_0_120, "./command_list/model/update.js": __glob_0_121 };
+const obj$1 = {};
+Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
-  obj[key] = value.default;
+  obj$1[key] = value.default;
 });
 function commands$1(editor) {
-  editor.loadCommands(obj);
+  editor.loadCommands(obj$1);
+}
+var area_width = {
+  key: "area.width",
+  defaultValue: 100,
+  title: "Area Width to find layers fastly",
+  description: "Set area width/height",
+  type: "number"
+};
+var __glob_0_0$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": area_width
+}, Symbol.toStringTag, { value: "Module" }));
+var debug_mode = {
+  key: "debug.mode",
+  defaultValue: false,
+  title: "debug mode",
+  description: "Set debug mode to on ",
+  type: "boolean"
+};
+var __glob_0_1$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": debug_mode
+}, Symbol.toStringTag, { value: "Module" }));
+var editing_css_itemType = {
+  key: "editing.css.itemType",
+  defaultValue: "rect",
+  title: "set item type for  editing css",
+  description: "set item type for  editing css",
+  type: "string"
+};
+var __glob_0_2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editing_css_itemType
+}, Symbol.toStringTag, { value: "Module" }));
+var editing_draw_itemType = {
+  key: "editing.draw.itemType",
+  defaultValue: "path",
+  title: "set item type for  editing draw",
+  description: "set item type for  editing draw",
+  type: "string"
+};
+var __glob_0_3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editing_draw_itemType
+}, Symbol.toStringTag, { value: "Module" }));
+var editing_mode_itemType = {
+  key: "editing.mode.itemType",
+  defaultValue: "select",
+  title: "set item type for  editing mode",
+  description: "set item type for  editing mode",
+  type: "string"
+};
+var __glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editing_mode_itemType
+}, Symbol.toStringTag, { value: "Module" }));
+var editing_mode = {
+  key: "editing.mode",
+  defaultValue: EditingMode.SELECT,
+  title: "set editing mode for Editor",
+  description: "set editing mode (select, append, draw, path)",
+  type: "string"
+};
+var __glob_0_5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editing_mode
+}, Symbol.toStringTag, { value: "Module" }));
+var editing_svg_itemType = {
+  key: "editing.svg.itemType",
+  defaultValue: "svg-rect",
+  title: "set item type for  editing svg",
+  description: "set item type for  editing svg",
+  type: "string"
+};
+var __glob_0_6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editing_svg_itemType
+}, Symbol.toStringTag, { value: "Module" }));
+var editor_design_mode = {
+  key: "editor.design.mode",
+  defaultValue: "design",
+  title: "Editor Design Mode ",
+  description: "Set editor's design mode",
+  options: ["design", "item"],
+  type: "select"
+};
+var __glob_0_7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editor_design_mode
+}, Symbol.toStringTag, { value: "Module" }));
+var editor_layout_mode = {
+  key: "editor.layout.mode",
+  defaultValue: "all",
+  title: "Editor Layout Mode ",
+  description: "Set editor's layout mode",
+  type: "string"
+};
+var __glob_0_8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editor_layout_mode
+}, Symbol.toStringTag, { value: "Module" }));
+var fixed_angle = {
+  key: "fixed.angle",
+  defaultValue: 15,
+  title: "fixed angle count",
+  description: "Set fixed angle",
+  type: "number"
+};
+var __glob_0_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": fixed_angle
+}, Symbol.toStringTag, { value: "Module" }));
+var fixed_gradient_angle = {
+  key: "fixed.gradient.angle",
+  defaultValue: 1,
+  title: "fixed gradient angle count",
+  description: "Set fixed gradient angle",
+  type: "number"
+};
+var __glob_0_10 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": fixed_gradient_angle
+}, Symbol.toStringTag, { value: "Module" }));
+var history_delay_ms = {
+  key: "history.delay.ms",
+  defaultValue: 500,
+  title: "history delay milliseconds",
+  description: "Set history delay time",
+  type: "number"
+};
+var __glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": history_delay_ms
+}, Symbol.toStringTag, { value: "Module" }));
+var set_drag_path_area = {
+  key: "set.drag.path.area",
+  defaultValue: false,
+  title: "Drag path area",
+  description: "Drag path area",
+  type: "boolean",
+  storage: "none"
+};
+var __glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": set_drag_path_area
+}, Symbol.toStringTag, { value: "Module" }));
+var set_move_control_point = {
+  key: "set.move.control.point",
+  defaultValue: false,
+  title: "Moving Control Point",
+  description: "Moving Control Point",
+  type: "boolean",
+  storage: "none"
+};
+var __glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": set_move_control_point
+}, Symbol.toStringTag, { value: "Module" }));
+var set_tool_hand = {
+  key: "set.tool.hand",
+  defaultValue: false,
+  title: "Hand tool",
+  description: "Hand tool is on",
+  type: "boolean",
+  storage: "none"
+};
+var __glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": set_tool_hand
+}, Symbol.toStringTag, { value: "Module" }));
+var show_left_panel = {
+  key: "show.left.panel",
+  defaultValue: true,
+  title: "Show left panel",
+  description: "Set left panel visibility to on",
+  type: "boolean"
+};
+var __glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": show_left_panel
+}, Symbol.toStringTag, { value: "Module" }));
+var show_outline = {
+  key: "show.outline",
+  defaultValue: false,
+  title: "Show outline",
+  description: "Set outline visibility to on",
+  type: "boolean"
+};
+var __glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": show_outline
+}, Symbol.toStringTag, { value: "Module" }));
+var show_right_panel = {
+  key: "show.right.panel",
+  defaultValue: true,
+  title: "Show right panel",
+  description: "Set right panel visibility to on",
+  type: "boolean"
+};
+var __glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": show_right_panel
+}, Symbol.toStringTag, { value: "Module" }));
+var show_ruler = {
+  key: "show.ruler",
+  defaultValue: true,
+  title: "Show ruler",
+  description: "Set ruler visibility to on",
+  type: "boolean"
+};
+var __glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": show_ruler
+}, Symbol.toStringTag, { value: "Module" }));
+var snap_distance = {
+  key: "snap.distance",
+  defaultValue: 3,
+  title: "Snap distance between objects",
+  description: "Set snap distance",
+  type: "number"
+};
+var __glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": snap_distance
+}, Symbol.toStringTag, { value: "Module" }));
+var snap_grid = {
+  key: "snap.grid",
+  defaultValue: 50,
+  title: "Snap grid size between objects",
+  description: "Set snap grid size",
+  type: "number"
+};
+var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": snap_grid
+}, Symbol.toStringTag, { value: "Module" }));
+const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/debug.mode.js": __glob_0_1$1, "./config_list/editing.css.itemType.js": __glob_0_2, "./config_list/editing.draw.itemType.js": __glob_0_3, "./config_list/editing.mode.itemType.js": __glob_0_4, "./config_list/editing.mode.js": __glob_0_5, "./config_list/editing.svg.itemType.js": __glob_0_6, "./config_list/editor.design.mode.js": __glob_0_7, "./config_list/editor.layout.mode.js": __glob_0_8, "./config_list/fixed.angle.js": __glob_0_9, "./config_list/fixed.gradient.angle.js": __glob_0_10, "./config_list/history.delay.ms.js": __glob_0_11, "./config_list/set.drag.path.area.js": __glob_0_12, "./config_list/set.move.control.point.js": __glob_0_13, "./config_list/set.tool.hand.js": __glob_0_14, "./config_list/show.left.panel.js": __glob_0_15, "./config_list/show.outline.js": __glob_0_16, "./config_list/show.right.panel.js": __glob_0_17, "./config_list/show.ruler.js": __glob_0_18, "./config_list/snap.distance.js": __glob_0_19, "./config_list/snap.grid.js": __glob_0_20 };
+var configs$1 = Object.values(modules$1).map((it) => it.default);
+function configs(editor) {
+  configs$1.forEach((config) => {
+    editor.registerConfig(config);
+  });
 }
 class Selector extends PropertyItem {
   static parse(obj2) {
@@ -37543,17 +37871,18 @@ var GridLayoutEngine = {
   },
   recover() {
   },
-  updateGridArea(currentItem, gridInformation) {
+  updateGridArea(currentItem, gridInformation, scale2 = 1) {
     if (currentItem.isInGrid() === false)
       return;
     const lastVerties = currentItem.originVerties;
     const targetRect = vertiesToRectangle(lastVerties);
     const { items } = gridInformation;
+    const epsilon = IntersectEpsilonNumberType.RECT / scale2;
     const checkedGridRowColumnList = items.filter((it) => {
       return polyPoly(lastVerties, it.originVerties);
     }).filter((it) => {
       const intersect = intersectRectRect(it.originRect, targetRect);
-      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
+      return Math.floor(intersect.width) > epsilon && Math.floor(intersect.height) > epsilon;
     });
     if (checkedGridRowColumnList.length === 0)
       return;
@@ -39518,7 +39847,7 @@ class ArtBoard extends LayerModel {
     return "ArtBoard";
   }
   getIcon() {
-    return obj$2.artboard;
+    return obj$3.artboard;
   }
   editable(editablePropertyName) {
     switch (editablePropertyName) {
@@ -40180,7 +40509,7 @@ class SVGItem extends LayerModel {
 }
 class SVGPathItem extends SVGItem {
   getIcon() {
-    return obj$2.edit;
+    return obj$3.edit;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -40242,7 +40571,7 @@ class SVGPathItem extends SVGItem {
 }
 class BooleanPathItem extends SVGPathItem {
   getIcon() {
-    return obj$2.edit;
+    return obj$3.edit;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -40418,7 +40747,7 @@ class BooleanPathItem extends SVGPathItem {
 }
 class CircleLayer extends LayerModel {
   getIcon() {
-    return obj$2.lens;
+    return obj$3.lens;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -40433,7 +40762,7 @@ class CircleLayer extends LayerModel {
 }
 class ImageLayer extends LayerModel {
   getIcon() {
-    return obj$2.image;
+    return obj$3.image;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -42664,7 +42993,7 @@ class Project extends TimelineModel {
 }
 class RectLayer extends LayerModel {
   getIcon() {
-    return obj$2.rect;
+    return obj$3.rect;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -43366,12 +43695,12 @@ var support = function(cacheKey2, nurbs2, accessors, debug, checkBounds) {
     parameterArgs.push(tVar([i]));
   }
   code2.push("function " + functionName + " (out, " + parameterArgs.join(", ") + ") {");
-  var c = 0;
+  var c2 = 0;
   function pushSupport(args2, period) {
     if (period === void 0) {
-      line2("out[" + c++ + "] = " + args2.join(" + ") + ";");
+      line2("out[" + c2++ + "] = " + args2.join(" + ") + ";");
     } else {
-      line2("out[" + c++ + "] = (" + args2.join(" + ") + " + " + period + ") % " + period + ";");
+      line2("out[" + c2++ + "] = (" + args2.join(" + ") + " + " + period + ") % " + period + ";");
     }
   }
   line2("var h, m;");
@@ -43436,7 +43765,7 @@ var support = function(cacheKey2, nurbs2, accessors, debug, checkBounds) {
       pushSupport(readIdx[d2], period[d2]);
     }
   });
-  line2("out.length = " + c + ";");
+  line2("out.length = " + c2 + ";");
   line2("return out;");
   code2.push("}");
   if (debug)
@@ -43693,7 +44022,7 @@ function nurbs(points, degree, knots, weights, boundary, opts) {
 var nurbs_1 = nurbs;
 class SplineItem extends SVGItem {
   getIcon() {
-    return obj$2.star;
+    return obj$3.star;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -43794,7 +44123,7 @@ class SplineItem extends SVGItem {
 }
 class SVGPolygonItem extends SVGItem {
   getIcon() {
-    return obj$2.edit;
+    return obj$3.edit;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -43833,7 +44162,7 @@ class SVGPolygonItem extends SVGItem {
 }
 class SVGStarItem extends SVGItem {
   getIcon() {
-    return obj$2.star;
+    return obj$3.star;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -43879,7 +44208,7 @@ class SVGStarItem extends SVGItem {
 }
 class SVGTextItem extends SVGItem {
   getIcon() {
-    return obj$2.title;
+    return obj$3.title;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -43914,7 +44243,7 @@ class SVGTextItem extends SVGItem {
 }
 class SVGTextPathItem extends SVGItem {
   getIcon() {
-    return obj$2.text_rotate;
+    return obj$3.text_rotate;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -44012,7 +44341,7 @@ const DEFAULT_TEMPLATE = `
 `;
 class TemplateLayer extends Component {
   getIcon() {
-    return obj$2.auto_awesome;
+    return obj$3.auto_awesome;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -44042,7 +44371,7 @@ class TemplateLayer extends Component {
 }
 class TextLayer extends LayerModel {
   getIcon() {
-    return obj$2.title;
+    return obj$3.title;
   }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -44987,7 +45316,7 @@ class FillEditorView extends FillColorstepEditor {
       onchange: params.onchange
     });
     this.$el.show();
-    this.emit("push.mode.view", "FillEditorView");
+    this.$context.commands.emit("push.mode.view", "FillEditorView");
   }
   [SUBSCRIBE("hideFillEditorView")]() {
     this.setState({
@@ -47271,7 +47600,7 @@ class GradientEditorView extends GradientColorstepEditor {
     this.state.isShow = true;
     this.refresh();
     this.$commands.emit("recoverCursor");
-    this.emit("push.mode.view", "GradientEditorView");
+    this.$context.commands.emit("push.mode.view", "GradientEditorView");
   }
   [SUBSCRIBE("hideGradientEditorView")]() {
     this.$el.hide();
@@ -47913,10 +48242,14 @@ class GuideLineView extends EditorElement {
   createLayerLine() {
     return "";
   }
+  filterGuideLine(list2) {
+    list2 = list2.filter(Boolean);
+    return list2;
+  }
   createGuideLine(list2) {
     var images = [];
     var texts = [];
-    list2 = list2.filter(Boolean);
+    list2 = this.filterGuideLine(list2);
     for (var i = 0, len2 = list2.length; i < len2; i++) {
       const [
         source2,
@@ -48066,7 +48399,7 @@ class HistoryProperty extends BaseProperty {
       }
       return `
         <div class='history-item'>
-          <span>${index2 === this.$editor.context.history.currentIndex ? obj$2.arrowRight : ""}</span>
+          <span>${index2 === this.$editor.context.history.currentIndex ? obj$3.arrowRight : ""}</span>
           <span>${it.message}</span>
         </div>
       `;
@@ -48099,7 +48432,7 @@ class HoverView extends EditorElement {
     const canvas = Dom.create(e.target).closest("elf--page-container");
     if (!canvas)
       return false;
-    return this.$modeView.isCurrentMode("CanvasView") && this.$stateManager.isPointerUp;
+    return this.$modeView.isCurrentMode(ViewModeType.CanvasView) && this.$stateManager.isPointerUp;
   }
   [CONFIG("bodyEvent") + IF("checkModeView")]() {
     var _a, _b, _c;
@@ -48558,8 +48891,8 @@ class ImageAssetsProperty extends BaseProperty {
             <img src="${image2.local}" />
           </div>
           <div class='tools'>
-            <button type="button" class='copy'>${obj$2.copy}</button>          
-            <button type="button" class='remove'>${obj$2.remove}</button>
+            <button type="button" class='copy'>${obj$3.copy}</button>          
+            <button type="button" class='remove'>${obj$3.remove}</button>
           </div>
         </div>
       `;
@@ -48569,7 +48902,7 @@ class ImageAssetsProperty extends BaseProperty {
         ${results.join("")}
         <div class='add-image-item'>
           <input type='file' accept='image/*' ref='$file' />
-          <button type="button">${obj$2.add}</button>
+          <button type="button">${obj$3.add}</button>
         </div>        
       </div>
 
@@ -48707,7 +49040,7 @@ class KeyframeProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <button type="button" ref="$add" title="add Filter">${obj$2.add}</button>
+      <button type="button" ref="$add" title="add Filter">${obj$3.add}</button>
     `;
   }
   makeProperty(property) {
@@ -48743,10 +49076,10 @@ class KeyframeProperty extends BaseProperty {
           <div class='name'>${keyframe2.name}</div>
           <div class='tools'>
             <div class='group'>
-              <button type="button" data-type='list'>${obj$2.list}</button>
-              <button type="button" data-type='code'>${obj$2.code}</button>
+              <button type="button" data-type='list'>${obj$3.list}</button>
+              <button type="button" data-type='code'>${obj$3.code}</button>
             </div>
-            <button type="button" class="del" data-index="${index2}">${obj$2.remove2}</button>
+            <button type="button" class="del" data-index="${index2}">${obj$3.remove2}</button>
           </div>
         </div>
         <div class='offset-list'>
@@ -49430,7 +49763,7 @@ class LayerAppendView extends EditorElement {
       this.state.d = new PathParser(options2.d);
       this.state.bboxRect = this.state.d.rect();
     }
-    this.emit("push.mode.view", "LayerAppendView");
+    this.$context.commands.emit("push.mode.view", "LayerAppendView");
   }
   [SUBSCRIBE("hideLayerAppendView")]() {
     if (this.$el.isShow()) {
@@ -50445,7 +50778,7 @@ class GridBoxEditor extends EditorElement {
                     <div class='item header'>
                         <div class='repeat'>
                             <label>${this.state.label} </label>
-                            <button type='button' ref='$add'>${obj$2.add}</button>
+                            <button type='button' ref='$add'>${obj$3.add}</button>
                         </div>
                         <div class='count'>${this.$i18n("grid.box.editor.count")}</div>
                         <div class='value'>${this.$i18n("grid.box.editor.value")}</div>
@@ -51062,6 +51395,8 @@ class GridGrowToolView extends GridGrowDragEventView {
   [LOAD("$gridGap") + DOMDIFF]() {
     const current = this.getGridTargetLayer();
     if (!current)
+      return "";
+    if (this.$config.true("set.move.control.point"))
       return "";
     if (!this.$context.selection.current)
       return "";
@@ -51887,7 +52222,7 @@ class PathDrawView extends EditorElement {
       "stroke-linejoin": this.state["stroke-linejoin"]
     });
     this.emit("hidePathEditor");
-    this.emit("push.mode.view", "PathDrawView");
+    this.$context.commands.emit("push.mode.view", "PathDrawView");
   }
   [SUBSCRIBE("initPathDrawEditor")]() {
     this.pathParser.reset("");
@@ -52335,15 +52670,15 @@ class PathGenerator {
     translate(view, view, [x, y, 0]);
     switch (type) {
       case "flipX":
-        scale(view, view, [-1, 1, 1]);
+        scale$1(view, view, [-1, 1, 1]);
         translate(view, view, [-width2, 0, 0]);
         break;
       case "flipY":
-        scale(view, view, [1, -1, 1]);
+        scale$1(view, view, [1, -1, 1]);
         translate(view, view, [0, -height2, 0]);
         break;
       case "flip":
-        scale(view, view, [-1, -1, 1]);
+        scale$1(view, view, [-1, -1, 1]);
         translate(view, view, [-width2, -height2, 0]);
         break;
     }
@@ -53374,7 +53709,7 @@ class PathEditorView extends PathTransformEditor {
     this.$el.focus();
     this.emit("showPathManager", { mode: this.state.mode });
     this.emit("hidePathDrawEditor");
-    this.emit("push.mode.view", "PathEditorView");
+    this.$context.commands.emit("push.mode.view", "PathEditorView");
   }
   [SUBSCRIBE("hidePathEditor")]() {
     if (this.$el.isShow()) {
@@ -53384,7 +53719,7 @@ class PathEditorView extends PathTransformEditor {
       this.refs.$view.empty();
       this.$el.hide();
       this.emit("hidePathManager");
-      this.emit("pop.mode.view", "PathEditorView");
+      this.$context.commands.emit("pop.mode.view", "PathEditorView");
       this.emit(REFRESH_SELECTION_TOOL);
     }
   }
@@ -53999,7 +54334,7 @@ class PatternAssetsProperty extends BaseProperty {
   }
   [CLICK("$patternList .pattern-item")](e) {
     const pattern = e.$dt.attr("data-pattern");
-    if (this.$modeView.isCurrentMode("CanvasView")) {
+    if (this.$modeView.isCurrentMode(ViewModeType.CanvasView)) {
       this.emit("addBackgroundImagePattern", pattern);
     } else {
       this.emit("setPatternAsset", pattern);
@@ -54531,7 +54866,7 @@ class PerspectiveProperty extends BaseProperty {
   }
   getTools() {
     return `
-        <button type="button" class="remove" ref='$remove'>${obj$2.remove}</button>
+        <button type="button" class="remove" ref='$remove'>${obj$3.remove}</button>
     `;
   }
   [CLICK("$remove")]() {
@@ -54649,9 +54984,9 @@ class PerspectiveOriginEditor extends EditorElement {
     return `
       <div class="property-item perspective-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${obj$2.border_all}</button>
+          <button type="button" data-value="all">${obj$3.border_all}</button>
           <button type="button" data-value="partitial">
-            ${obj$2.border_inner}
+            ${obj$3.border_inner}
           </button>
         </div>
         <div class="radius-value">
@@ -54730,7 +55065,7 @@ class PerspectiveOriginProperty extends BaseProperty {
   }
   getTools() {
     return `
-        <button type="button" class="remove" ref='$remove'>${obj$2.remove}</button>
+        <button type="button" class="remove" ref='$remove'>${obj$3.remove}</button>
     `;
   }
   [CLICK("$remove")]() {
@@ -54924,7 +55259,7 @@ class ProjectProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <button type='button' ref='$add' data-tooltip="Add a project" data-direction="bottom right">${obj$2.add}</button>
+      <button type='button' ref='$add' data-tooltip="Add a project" data-direction="bottom right">${obj$3.add}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -54946,7 +55281,7 @@ class ProjectProperty extends BaseProperty {
           <div class='detail'>
             <label data-id='${projectId}'>${project2.name || "New Project"}</label>
             <div class="tools">
-              <button type="button" class="remove" data-id="${projectId}" title='Remove'>${obj$2.remove2}</button>
+              <button type="button" class="remove" data-id="${projectId}" title='Remove'>${obj$3.remove2}</button>
             </div>
           </div>
         </div>
@@ -55206,7 +55541,7 @@ class BaseSVGFilter extends PropertyItem {
     this.json.in[index2] = { id: target.id, type: target.type };
   }
   setConnected(target) {
-    var f = this.json.connected.filter((c) => c.id === target.id);
+    var f = this.json.connected.filter((c2) => c2.id === target.id);
     if (f.length === 0) {
       this.json.connected.push({ id: target.id });
     }
@@ -59012,7 +59347,7 @@ class SelectionInfoView extends EditorElement {
     const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
       return add$1([], v, dist2);
     }), 3);
-    const localDist = add$1([], snap, dist2);
+    const localDist = add$1([], snap.dist, dist2);
     const result = {};
     this.$context.selection.cachedItemMatrices.forEach((it) => {
       const newVerties = it.verties.map((v) => {
@@ -59400,11 +59735,12 @@ class GhostToolView extends EditorElement {
     };
     const currentVerties = this.ghostVerties.filter((_, index2) => index2 < 4);
     const targetRect = vertiesToRectangle(currentVerties);
+    const epsilon = IntersectEpsilonNumberType.RECT / this.$context.viewport.scale;
     const checkedItems = items == null ? void 0 : items.filter((it) => {
       return polyPoly(it.originVerties, currentVerties);
     }).filter((it) => {
       const intersect = intersectRectRect(it.originRect, targetRect);
-      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
+      return Math.floor(intersect.width) > epsilon && Math.floor(intersect.height) > epsilon;
     });
     if (checkedItems == null ? void 0 : checkedItems.length) {
       const columnList = checkedItems.map((it) => it.column);
@@ -59497,7 +59833,7 @@ var directionType$1 = {
 };
 const SelectionToolEvent$1 = class extends EditorElement {
   checkViewMode() {
-    return this.$modeView.isCurrentMode("CanvasView");
+    return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
   [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
     if (this.$context.selection.isMany) {
@@ -59625,7 +59961,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
   calculateDistance(vertext, distVector, reverseMatrix) {
     const currentVertex = clone(vertext);
     const snap = this.$context.snapManager.check([add$1([], currentVertex, distVector)], 3 / this.$viewport.scale);
-    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
+    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap.dist));
     var currentResult = transformMat4([], currentVertex, reverseMatrix);
     var nextResult = transformMat4([], nextVertex, reverseMatrix);
     const realDist = round$2([], subtract([], nextResult, currentResult));
@@ -59995,7 +60331,7 @@ var directionType = {
 };
 const SelectionToolEvent = class extends EditorElement {
   checkViewMode() {
-    return this.$modeView.isCurrentMode("CanvasView");
+    return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
   [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
     this.initSelectionTool();
@@ -60105,7 +60441,7 @@ class SelectionToolView extends SelectionToolEvent {
     const currentVertex = clone(vertex2);
     const moveVertex = add$1([], currentVertex, distVector);
     const snap = this.$context.snapManager.check([moveVertex], 3 / this.$viewport.scale);
-    const nextVertex = add$1([], moveVertex, snap);
+    const nextVertex = add$1([], moveVertex, snap.dist);
     const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
     const realDist = subtract([], nextResult, currentResult);
     return realDist;
@@ -60351,7 +60687,7 @@ class SelectionToolView extends SelectionToolEvent {
     this.state.dragging = true;
   }
   updateGridArea() {
-    return GridLayoutEngine.updateGridArea(this.$context.selection.current, this.$context.selection.gridInformation);
+    return GridLayoutEngine.updateGridArea(this.$context.selection.current, this.$context.selection.gridInformation, this.$context.viewport.scale);
   }
   moveEndVertex() {
     this.state.dragging = false;
@@ -60575,7 +60911,7 @@ class SelectionToolView extends SelectionToolEvent {
     };
   }
   checkShow() {
-    if (this.$modeView.isCurrentMode("CanvasView") === false) {
+    if (this.$modeView.isCurrentMode(ViewModeType.CanvasView) === false) {
       return false;
     }
     if (this.state.show && this.$context.selection.isOne) {
@@ -60689,7 +61025,7 @@ class SelectorProperty extends BaseProperty {
       options: selectorList
     })}
       </div>
-      <button type="button" ref="$add" title="add Selector">${obj$2.add}</button>
+      <button type="button" ref="$add" title="add Selector">${obj$3.add}</button>
     `;
   }
   makeSelectorTemplate(selector2, index2) {
@@ -60701,7 +61037,7 @@ class SelectorProperty extends BaseProperty {
             <span>${selector2.selector || `&lt;${this.$i18n("selector.property.none")}&gt;`}</span>
           </div>
           <div class='tools'>
-              <button type="button" class="del" data-index="${index2}">${obj$2.remove2}</button>
+              <button type="button" class="del" data-index="${index2}">${obj$3.remove2}</button>
           </div>
         </div>
       </div>
@@ -60871,13 +61207,13 @@ class SVGFilterAssetsProperty extends BaseProperty {
             </div>
           </div>
           <div class='tools'>
-            <button type="button" class='copy'>${obj$2.copy}</button>          
-            <button type="button" class='remove'>${obj$2.remove}</button>
+            <button type="button" class='copy'>${obj$3.copy}</button>          
+            <button type="button" class='remove'>${obj$3.remove}</button>
           </div>
         </div>
       `;
     });
-    results.push(`<div class='add-svgfilter-item'><button type="button">${obj$2.add}</button></div>`);
+    results.push(`<div class='add-svgfilter-item'><button type="button">${obj$3.add}</button></div>`);
     return results;
   }
   executeSVGFilter(callback, isRefresh = true, isEmit = true) {
@@ -62122,8 +62458,8 @@ class SVGFilterEditor extends EditorElement {
   modifyFilter() {
     this.state.filters.forEach((f) => {
       if (f.isLight() && f.connected.length) {
-        f.connected.forEach((c) => {
-          this.state.filters.filter((s) => s.id === c.id).forEach((lightManager) => {
+        f.connected.forEach((c2) => {
+          this.state.filters.filter((s) => s.id === c2.id).forEach((lightManager) => {
             lightManager.reset({
               lightInfo: f.toLightString()
             });
@@ -62299,7 +62635,7 @@ class SVGFilterEditor extends EditorElement {
     var [tid, sid] = e.$dt.attrs("data-target-id", "data-source-id");
     var filters = this.state.filters;
     filters.filter((it) => it.id === sid).forEach((it) => {
-      it.connected = it.connected.filter((c) => c.id != tid);
+      it.connected = it.connected.filter((c2) => c2.id != tid);
     });
     filters.filter((it) => it.id === tid).forEach((it) => {
       it.in = it.in.map((inObject) => {
@@ -62435,8 +62771,8 @@ class SVGFilterEditor extends EditorElement {
   removeFilter(id) {
     var filters = this.state.filters.filter((it) => it.id != id);
     filters.forEach((it) => {
-      it.connected = it.connected.filter((c) => c.id != id);
-      it.in = it.in.filter((c) => c.id != id);
+      it.connected = it.connected.filter((c2) => c2.id != id);
+      it.in = it.in.filter((c2) => c2.id != id);
     });
     if (this.state.selectedFilter.id === id) {
       this.state.selectedFilter = null;
@@ -62524,8 +62860,8 @@ class SVGFilterSelectEditor extends EditorElement {
             <div class='elf--svg-filter-select-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : ""}
                 <select ref='$options'></select>
-                <button type='button' class='open thin' ref='$open' title='Open SVG Filter Editor'>${obj$2.fullscreen}</button>
-                <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$2.remove}</button>
+                <button type='button' class='open thin' ref='$open' title='Open SVG Filter Editor'>${obj$3.fullscreen}</button>
+                <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$3.remove}</button>
             </div>
         `;
   }
@@ -63155,7 +63491,7 @@ class TextShadowProperty extends BaseProperty {
         `;
     }).join("")}
       </select>
-      <button type="button" ref='$add'>${obj$2.add}</button>
+      <button type="button" ref='$add'>${obj$3.add}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -63638,8 +63974,8 @@ class VideoProperty extends BaseProperty {
     var duration = (current.playTime || "0:1:1").split(":").pop();
     return `
         <div ref='$tools' class='play-control' data-selected-value="${this.state.status}">
-          <button type="button" data-value="play" >${obj$2.play} ${this.$i18n("video.property.play")}</button>
-          <button type="button" data-value="pause">${obj$2.pause}  ${this.$i18n("video.property.pause")}</button>      
+          <button type="button" data-value="play" >${obj$3.play} ${this.$i18n("video.property.play")}</button>
+          <button type="button" data-value="pause">${obj$3.pause}  ${this.$i18n("video.property.pause")}</button>      
           <div>
             ${createComponent("NumberRangeEditor", {
       ref: "$currentTime",
@@ -63657,9 +63993,9 @@ class VideoProperty extends BaseProperty {
             ${this.$i18n("video.property.volume")}
           </div>
           <div ref='$volume_control' class='volume-control' data-selected-value='${this.volumeStatus}'>
-            <span data-value='muted'>${obj$2.volume_off}</span>
-            <span data-value='down'>${obj$2.volume_down}</span>
-            <span data-value='up'>${obj$2.volume_up}</span>
+            <span data-value='muted'>${obj$3.volume_off}</span>
+            <span data-value='down'>${obj$3.volume_down}</span>
+            <span data-value='up'>${obj$3.volume_up}</span>
             <input type="range" ref='$volume' min="0" max="1" step="0.001" value="${this.state.volume}" />
           </div>          
         </div>
@@ -63941,6 +64277,7 @@ function content(editor) {
   });
 }
 var designEditorPlugins = [
+  configs,
   commands$1,
   defaultConfigs,
   defaultIcons,
@@ -64240,7 +64577,7 @@ class ItemLayerTab extends EditorElement {
     }).map((it) => {
       const { value, title: title2 } = it.class;
       let iconString = it.class.icon;
-      if (obj$2[it.class.icon]) {
+      if (obj$3[it.class.icon]) {
         iconString = iconUse(it.class.icon);
       }
       return `
@@ -64311,16 +64648,6 @@ class LayerTab extends EditorElement {
       selectedIndexValue: 2
     };
   }
-  afterRender() {
-    this.$el.toggle(this.$config.get("editor.design.mode") === "design");
-  }
-  [BIND("$el")]() {
-    return {
-      style: {
-        display: this.$config.get("editor.design.mode") === "design" ? "block" : "none"
-      }
-    };
-  }
   template() {
     return `
       <div class='layer-tab'>
@@ -64342,7 +64669,7 @@ class LayerTab extends EditorElement {
             ${this.$injectManager.getTargetUI("leftbar.tab").map((it) => {
       const { value, title: title2 } = it.class;
       let iconString = it.class.icon;
-      if (obj$2[it.class.icon]) {
+      if (obj$3[it.class.icon]) {
         iconString = iconUse(it.class.icon);
       }
       return `
@@ -65645,7 +65972,7 @@ class HTMLRenderView extends EditorElement {
           $content.select();
         }, 100);
       } else {
-        this.emit("doubleclick.item", e, id);
+        this.$context.commands.emit("doubleclick.item", e, id);
       }
     }
   }
@@ -65764,7 +66091,7 @@ class HTMLRenderView extends EditorElement {
     const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
       return add$1([], v, dist2);
     }), 3 / this.$viewport.scale);
-    const localDist = add$1([], snap, dist2);
+    const localDist = add$1([], snap.dist, dist2);
     const result = {};
     this.$context.selection.cachedItemMatrices.forEach((it) => {
       const oldVertex = it.verties[4];
@@ -65918,9 +66245,9 @@ class PageTools extends EditorElement {
         <button type='button' ref='$pantool' class="${classnames({
       on: this.$config.get("set.tool.hand")
     })}" data-tooltip="Hand | H" data-direction="top">${iconUse("pantool")}</button>   
-        <span class="divider">|</span>
-        <button type="button" ref="$selectedCount" style="color:var(--elf--selected-color);font-weight: bold;text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1)"></button>
-        <span ref="$buttons"></span>
+        <!--span class="divider">|</span>
+        <button type="button" ref="$selectedCount" style="color:var(--elf--selected-color);font-weight: bold;text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1)"></button-->
+        <!--span ref="$buttons"></span-->
         ${this.$injectManager.generate("page.tools")}                             
       </div>
 
@@ -65983,38 +66310,8 @@ class PageTools extends EditorElement {
   [CONFIG("set.tool.hand")]() {
     this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
   }
-  [SUBSCRIBE(REFRESH_SELECTION)]() {
-    this.refs.$selectedCount.html(this.$context.selection.length + "");
-    this.load("$buttons");
-  }
   [LOAD("$buttons") + DOMDIFF]() {
-    if (this.$context.selection.isEmpty)
-      return "";
-    const buttons = [];
-    this.$context.selection.items.forEach((selectedItem) => {
-      selectedItem.allLayers.forEach((item) => {
-        if (item.isNot("boolean-path")) {
-          const list2 = PathParser.fromSVGString(item.absolutePath().d).toPathList();
-          list2.forEach((path, index2) => {
-            buttons.push({
-              item,
-              index: index2,
-              path
-            });
-          });
-        }
-      });
-    });
-    return buttons.map((it) => {
-      const { item, index: index2, path } = it;
-      return `
-        <button type="button" data-item-id="${item.id}" data-path-index="${index2}">
-          <svg width="16" height="16" overflow="visible">
-            <path d="${path.scaleWith(16, 16).d}" style="fill:${item.fill};stroke:currentColor" stroke-width="1" />
-          </svg>
-        </button>
-      `;
-    });
+    return "";
   }
 }
 class CanvasView extends EditorElement {
@@ -66227,7 +66524,7 @@ class HorizontalRuler extends EditorElement {
       return;
     for (var i = startX; i < endX; i += baseNumber) {
       const x = Math.floor((i - minX) / realWidth * width2);
-      text2[text2.length] = `<text x="${x}" y="${0}" dx="0" dy="8" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`;
+      text2[text2.length] = `<text x="${x}" y="${0}" dx="0" dy="6" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`;
     }
     return text2.join("");
   }
@@ -66275,7 +66572,8 @@ class HorizontalRuler extends EditorElement {
     const { minX, maxX, width: realWidth } = this.$viewport;
     const width2 = this.state.rect.width;
     pathString$1 = [];
-    this.makeLine(pathString$1, 200, minX, maxX, realWidth, width2, 10, 20, 1e4);
+    this.makeLine(pathString$1, 1e3, minX, maxX, realWidth, width2, 10, 24, 1e4);
+    this.makeLine(pathString$1, 200, minX, maxX, realWidth, width2, 10, 20, 5e3);
     this.makeLine(pathString$1, 100, minX, maxX, realWidth, width2, 10, 20, 200);
     this.makeLine(pathString$1, 50, minX, maxX, realWidth, width2, 10, 20, 100);
     this.makeLine(pathString$1, 10, minX, maxX, realWidth, width2, 10, 18, 50);
@@ -66288,7 +66586,7 @@ class HorizontalRuler extends EditorElement {
     const width2 = this.state.rect.width;
     const dist2 = Math.abs(maxX - minX);
     return [
-      dist2 > 3e3 ? this.makeLineText(1e3, minX, maxX, realWidth, width2, 24) : "",
+      dist2 > 3e3 ? this.makeLineText(3e3, minX, maxX, realWidth, width2, 24) : "",
       2e3 < dist2 && dist2 < 3e3 ? this.makeLineText(500, minX, maxX, realWidth, width2, 22) : "",
       1e3 < dist2 && dist2 < 2e3 ? this.makeLineText(100, minX, maxX, realWidth, width2, 20) : "",
       800 < dist2 && dist2 < 1e3 ? this.makeLineText(100, minX, maxX, realWidth, width2, 20) : "",
@@ -66413,7 +66711,7 @@ class VerticalRuler extends EditorElement {
       return;
     for (var i = startY; i < endY; i += baseNumber) {
       const y = Math.floor((i - minY) / realHeight * height2);
-      text2[text2.length] = `<text x="${1}" y="${y}" dy="6" dominant-baseline="central" transform="rotate(-90, 1, ${y})">${i}</text>`;
+      text2[text2.length] = `<text x="${0}" y="${y}" dy="4" dominant-baseline="central" transform="rotate(-90, 1, ${y})">${i}</text>`;
     }
     return text2.join("");
   }
@@ -66461,7 +66759,8 @@ class VerticalRuler extends EditorElement {
     const { minY, maxY, height: realHeight } = this.$viewport;
     const height2 = this.state.rect.height;
     pathString = [];
-    this.makeLine(pathString, 200, minY, maxY, realHeight, height2, 10, 18, 1e4);
+    this.makeLine(pathString, 1e3, minY, maxY, realHeight, height2, 10, 20, 1e4);
+    this.makeLine(pathString, 200, minY, maxY, realHeight, height2, 10, 16, 5e3);
     this.makeLine(pathString, 100, minY, maxY, realHeight, height2, 10, 18, 200);
     this.makeLine(pathString, 50, minY, maxY, realHeight, height2, 10, 18, 100);
     this.makeLine(pathString, 10, minY, maxY, realHeight, height2, 10, 18, 50);
@@ -66474,7 +66773,7 @@ class VerticalRuler extends EditorElement {
     const height2 = this.state.rect.height;
     const dist2 = Math.abs(maxY - minY);
     return [
-      dist2 > 3e3 ? this.makeLineText(1e3, minY, maxY, realHeight, height2, 24) : "",
+      dist2 > 3e3 ? this.makeLineText(3e3, minY, maxY, realHeight, height2, 24) : "",
       2e3 < dist2 && dist2 < 3e3 ? this.makeLineText(500, minY, maxY, realHeight, height2, 22) : "",
       1e3 < dist2 && dist2 < 2e3 ? this.makeLineText(100, minY, maxY, realHeight, height2, 20) : "",
       800 < dist2 && dist2 < 1e3 ? this.makeLineText(100, minY, maxY, realHeight, height2, 20) : "",
@@ -66590,7 +66889,7 @@ class ContextMenuManager extends EditorElement {
 class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
-    this.$pathkit.load();
+    this.$context.pathkit.load();
   }
   afterRender() {
     super.afterRender();
@@ -66607,7 +66906,8 @@ class DesignEditor extends BaseLayout {
       modelManager: ModelManager,
       lockManager: LockManager,
       visibleManager: VisibleManager,
-      clipboard: ClipboardManager
+      clipboard: ClipboardManager,
+      pathkit: PathKitManager
     };
   }
   components() {
@@ -67281,11 +67581,11 @@ class Vector2 {
     return this;
   }
   rotateAround(center2, angle) {
-    const c = Math.cos(angle), s = Math.sin(angle);
+    const c2 = Math.cos(angle), s = Math.sin(angle);
     const x = this.x - center2.x;
     const y = this.y - center2.y;
-    this.x = x * c - y * s + center2.x;
-    this.y = x * s + y * c + center2.y;
+    this.x = x * c2 - y * s + center2.x;
+    this.y = x * s + y * c2 + center2.y;
     return this;
   }
   random() {
@@ -67400,8 +67700,8 @@ class Matrix3 {
   }
   determinant() {
     const te = this.elements;
-    const a = te[0], b = te[1], c = te[2], d = te[3], e = te[4], f = te[5], g = te[6], h = te[7], i = te[8];
-    return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
+    const a = te[0], b = te[1], c2 = te[2], d = te[3], e = te[4], f = te[5], g = te[6], h = te[7], i = te[8];
+    return a * e * i - a * f * h - b * d * i + b * f * g + c2 * d * h - c2 * e * g;
   }
   invert() {
     const te = this.elements, n11 = te[0], n21 = te[1], n31 = te[2], n12 = te[3], n22 = te[4], n32 = te[5], n13 = te[6], n23 = te[7], n33 = te[8], t11 = n33 * n22 - n32 * n23, t12 = n32 * n13 - n33 * n12, t13 = n23 * n12 - n22 * n13, det = n11 * t11 + n21 * t12 + n31 * t13;
@@ -67450,9 +67750,9 @@ class Matrix3 {
     return this;
   }
   setUvTransform(tx, ty, sx, sy, rotation, cx, cy) {
-    const c = Math.cos(rotation);
+    const c2 = Math.cos(rotation);
     const s = Math.sin(rotation);
-    this.set(sx * c, sx * s, -sx * (c * cx + s * cy) + cx + tx, -sy * s, sy * c, -sy * (-s * cx + c * cy) + cy + ty, 0, 0, 1);
+    this.set(sx * c2, sx * s, -sx * (c2 * cx + s * cy) + cx + tx, -sy * s, sy * c2, -sy * (-s * cx + c2 * cy) + cy + ty, 0, 0, 1);
     return this;
   }
   scale(sx, sy) {
@@ -67466,17 +67766,17 @@ class Matrix3 {
     return this;
   }
   rotate(theta) {
-    const c = Math.cos(theta);
+    const c2 = Math.cos(theta);
     const s = Math.sin(theta);
     const te = this.elements;
     const a11 = te[0], a12 = te[3], a13 = te[6];
     const a21 = te[1], a22 = te[4], a23 = te[7];
-    te[0] = c * a11 + s * a21;
-    te[3] = c * a12 + s * a22;
-    te[6] = c * a13 + s * a23;
-    te[1] = -s * a11 + c * a21;
-    te[4] = -s * a12 + c * a22;
-    te[7] = -s * a13 + c * a23;
+    te[0] = c2 * a11 + s * a21;
+    te[3] = c2 * a12 + s * a22;
+    te[6] = c2 * a13 + s * a23;
+    te[1] = -s * a11 + c2 * a21;
+    te[4] = -s * a12 + c2 * a22;
+    te[7] = -s * a13 + c2 * a23;
     return this;
   }
   translate(tx, ty) {
@@ -67546,11 +67846,11 @@ function getTypedArray(type, buffer) {
 function createElementNS(name) {
   return document.createElementNS("http://www.w3.org/1999/xhtml", name);
 }
-function SRGBToLinear(c) {
-  return c < 0.04045 ? c * 0.0773993808 : Math.pow(c * 0.9478672986 + 0.0521327014, 2.4);
+function SRGBToLinear(c2) {
+  return c2 < 0.04045 ? c2 * 0.0773993808 : Math.pow(c2 * 0.9478672986 + 0.0521327014, 2.4);
 }
-function LinearToSRGB(c) {
-  return c < 31308e-7 ? c * 12.92 : 1.055 * Math.pow(c, 0.41666) - 0.055;
+function LinearToSRGB(c2) {
+  return c2 < 31308e-7 ? c2 * 12.92 : 1.055 * Math.pow(c2, 0.41666) - 0.055;
 }
 const FN = {
   [SRGBColorSpace]: { [LinearSRGBColorSpace]: SRGBToLinear },
@@ -68031,8 +68331,8 @@ class Color {
     this.setHSL(h, s, l);
     return this;
   }
-  equals(c) {
-    return c.r === this.r && c.g === this.g && c.b === this.b;
+  equals(c2) {
+    return c2.r === this.r && c2.g === this.g && c2.b === this.b;
   }
   fromArray(array, offset = 0) {
     this.r = array[offset];
@@ -69635,8 +69935,8 @@ class Vector3 {
     this.z = sinPhiRadius * Math.cos(theta);
     return this;
   }
-  setFromCylindrical(c) {
-    return this.setFromCylindricalCoords(c.radius, c.theta, c.y);
+  setFromCylindrical(c2) {
+    return this.setFromCylindricalCoords(c2.radius, c2.theta, c2.y);
   }
   setFromCylindricalCoords(radius, theta, y) {
     this.x = radius * Math.sin(theta);
@@ -70213,7 +70513,7 @@ class Ray {
     const a01 = -this.direction.dot(_segDir);
     const b0 = _diff.dot(this.direction);
     const b1 = -_diff.dot(_segDir);
-    const c = _diff.lengthSq();
+    const c2 = _diff.lengthSq();
     const det = Math.abs(1 - a01 * a01);
     let s0, s1, sqrDist, extDet;
     if (det > 0) {
@@ -70226,36 +70526,36 @@ class Ray {
             const invDet = 1 / det;
             s0 *= invDet;
             s1 *= invDet;
-            sqrDist = s0 * (s0 + a01 * s1 + 2 * b0) + s1 * (a01 * s0 + s1 + 2 * b1) + c;
+            sqrDist = s0 * (s0 + a01 * s1 + 2 * b0) + s1 * (a01 * s0 + s1 + 2 * b1) + c2;
           } else {
             s1 = segExtent;
             s0 = Math.max(0, -(a01 * s1 + b0));
-            sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c;
+            sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c2;
           }
         } else {
           s1 = -segExtent;
           s0 = Math.max(0, -(a01 * s1 + b0));
-          sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c;
+          sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c2;
         }
       } else {
         if (s1 <= -extDet) {
           s0 = Math.max(0, -(-a01 * segExtent + b0));
           s1 = s0 > 0 ? -segExtent : Math.min(Math.max(-segExtent, -b1), segExtent);
-          sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c;
+          sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c2;
         } else if (s1 <= extDet) {
           s0 = 0;
           s1 = Math.min(Math.max(-segExtent, -b1), segExtent);
-          sqrDist = s1 * (s1 + 2 * b1) + c;
+          sqrDist = s1 * (s1 + 2 * b1) + c2;
         } else {
           s0 = Math.max(0, -(a01 * segExtent + b0));
           s1 = s0 > 0 ? segExtent : Math.min(Math.max(-segExtent, -b1), segExtent);
-          sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c;
+          sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c2;
         }
       }
     } else {
       s1 = a01 > 0 ? -segExtent : segExtent;
       s0 = Math.max(0, -(a01 * s1 + b0));
-      sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c;
+      sqrDist = -s0 * s0 + s1 * (s1 + 2 * b1) + c2;
     }
     if (optionalPointOnRay) {
       optionalPointOnRay.copy(this.direction).multiplyScalar(s0).add(this.origin);
@@ -70357,9 +70657,9 @@ class Ray {
   intersectsBox(box) {
     return this.intersectBox(box, _vector$a) !== null;
   }
-  intersectTriangle(a, b, c, backfaceCulling, target) {
+  intersectTriangle(a, b, c2, backfaceCulling, target) {
     _edge1.subVectors(b, a);
-    _edge2.subVectors(c, a);
+    _edge2.subVectors(c2, a);
     _normal$1.crossVectors(_edge1, _edge2);
     let DdN = this.direction.dot(_normal$1);
     let sign2;
@@ -70528,21 +70828,21 @@ class Matrix4 {
     const te = this.elements;
     const x = euler.x, y = euler.y, z = euler.z;
     const a = Math.cos(x), b = Math.sin(x);
-    const c = Math.cos(y), d = Math.sin(y);
+    const c2 = Math.cos(y), d = Math.sin(y);
     const e = Math.cos(z), f = Math.sin(z);
     if (euler.order === "XYZ") {
       const ae = a * e, af = a * f, be = b * e, bf = b * f;
-      te[0] = c * e;
-      te[4] = -c * f;
+      te[0] = c2 * e;
+      te[4] = -c2 * f;
       te[8] = d;
       te[1] = af + be * d;
       te[5] = ae - bf * d;
-      te[9] = -b * c;
+      te[9] = -b * c2;
       te[2] = bf - ae * d;
       te[6] = be + af * d;
-      te[10] = a * c;
+      te[10] = a * c2;
     } else if (euler.order === "YXZ") {
-      const ce = c * e, cf = c * f, de = d * e, df = d * f;
+      const ce = c2 * e, cf = c2 * f, de = d * e, df = d * f;
       te[0] = ce + df * b;
       te[4] = de * b - cf;
       te[8] = a * d;
@@ -70551,9 +70851,9 @@ class Matrix4 {
       te[9] = -b;
       te[2] = cf * b - de;
       te[6] = df + ce * b;
-      te[10] = a * c;
+      te[10] = a * c2;
     } else if (euler.order === "ZXY") {
-      const ce = c * e, cf = c * f, de = d * e, df = d * f;
+      const ce = c2 * e, cf = c2 * f, de = d * e, df = d * f;
       te[0] = ce - df * b;
       te[4] = -a * f;
       te[8] = de + cf * b;
@@ -70562,21 +70862,21 @@ class Matrix4 {
       te[9] = df - ce * b;
       te[2] = -a * d;
       te[6] = b;
-      te[10] = a * c;
+      te[10] = a * c2;
     } else if (euler.order === "ZYX") {
       const ae = a * e, af = a * f, be = b * e, bf = b * f;
-      te[0] = c * e;
+      te[0] = c2 * e;
       te[4] = be * d - af;
       te[8] = ae * d + bf;
-      te[1] = c * f;
+      te[1] = c2 * f;
       te[5] = bf * d + ae;
       te[9] = af * d - be;
       te[2] = -d;
-      te[6] = b * c;
-      te[10] = a * c;
+      te[6] = b * c2;
+      te[10] = a * c2;
     } else if (euler.order === "YZX") {
-      const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
-      te[0] = c * e;
+      const ac = a * c2, ad = a * d, bc = b * c2, bd = b * d;
+      te[0] = c2 * e;
       te[4] = bd - ac * f;
       te[8] = bc * f + ad;
       te[1] = f;
@@ -70586,8 +70886,8 @@ class Matrix4 {
       te[6] = ad * f + bc;
       te[10] = ac - bd * f;
     } else if (euler.order === "XZY") {
-      const ac = a * c, ad = a * d, bc = b * c, bd = b * d;
-      te[0] = c * e;
+      const ac = a * c2, ad = a * d, bc = b * c2, bd = b * d;
+      te[0] = c2 * e;
       te[4] = -f;
       te[8] = d * e;
       te[1] = ac * f + bd;
@@ -70796,27 +71096,27 @@ class Matrix4 {
     return this;
   }
   makeRotationX(theta) {
-    const c = Math.cos(theta), s = Math.sin(theta);
-    this.set(1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1);
+    const c2 = Math.cos(theta), s = Math.sin(theta);
+    this.set(1, 0, 0, 0, 0, c2, -s, 0, 0, s, c2, 0, 0, 0, 0, 1);
     return this;
   }
   makeRotationY(theta) {
-    const c = Math.cos(theta), s = Math.sin(theta);
-    this.set(c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1);
+    const c2 = Math.cos(theta), s = Math.sin(theta);
+    this.set(c2, 0, s, 0, 0, 1, 0, 0, -s, 0, c2, 0, 0, 0, 0, 1);
     return this;
   }
   makeRotationZ(theta) {
-    const c = Math.cos(theta), s = Math.sin(theta);
-    this.set(c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    const c2 = Math.cos(theta), s = Math.sin(theta);
+    this.set(c2, -s, 0, 0, s, c2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     return this;
   }
   makeRotationAxis(axis, angle) {
-    const c = Math.cos(angle);
+    const c2 = Math.cos(angle);
     const s = Math.sin(angle);
-    const t = 1 - c;
+    const t = 1 - c2;
     const x = axis.x, y = axis.y, z = axis.z;
     const tx = t * x, ty = t * y;
-    this.set(tx * x + c, tx * y - s * z, tx * z + s * y, 0, tx * y + s * z, ty * y + c, ty * z - s * x, 0, tx * z - s * y, ty * z + s * x, t * z * z + c, 0, 0, 0, 0, 1);
+    this.set(tx * x + c2, tx * y - s * z, tx * z + s * y, 0, tx * y + s * z, ty * y + c2, ty * z - s * x, 0, tx * z - s * y, ty * z + s * x, t * z * z + c2, 0, 0, 0, 0, 1);
     return this;
   }
   makeScale(x, y, z) {
@@ -70892,7 +71192,7 @@ class Matrix4 {
     const y = 2 * near / (top2 - bottom2);
     const a = (right2 + left2) / (right2 - left2);
     const b = (top2 + bottom2) / (top2 - bottom2);
-    const c = -(far + near) / (far - near);
+    const c2 = -(far + near) / (far - near);
     const d = -2 * far * near / (far - near);
     te[0] = x;
     te[4] = 0;
@@ -70904,7 +71204,7 @@ class Matrix4 {
     te[13] = 0;
     te[2] = 0;
     te[6] = 0;
-    te[10] = c;
+    te[10] = c2;
     te[14] = d;
     te[3] = 0;
     te[7] = 0;
@@ -71705,13 +72005,13 @@ const _vap = /* @__PURE__ */ new Vector3();
 const _vbp = /* @__PURE__ */ new Vector3();
 const _vcp = /* @__PURE__ */ new Vector3();
 class Triangle {
-  constructor(a = new Vector3(), b = new Vector3(), c = new Vector3()) {
+  constructor(a = new Vector3(), b = new Vector3(), c2 = new Vector3()) {
     this.a = a;
     this.b = b;
-    this.c = c;
+    this.c = c2;
   }
-  static getNormal(a, b, c, target) {
-    target.subVectors(c, b);
+  static getNormal(a, b, c2, target) {
+    target.subVectors(c2, b);
     _v0$1.subVectors(a, b);
     target.cross(_v0$1);
     const targetLengthSq = target.lengthSq();
@@ -71720,8 +72020,8 @@ class Triangle {
     }
     return target.set(0, 0, 0);
   }
-  static getBarycoord(point2, a, b, c, target) {
-    _v0$1.subVectors(c, a);
+  static getBarycoord(point2, a, b, c2, target) {
+    _v0$1.subVectors(c2, a);
     _v1$3.subVectors(b, a);
     _v2$2.subVectors(point2, a);
     const dot00 = _v0$1.dot(_v0$1);
@@ -71738,8 +72038,8 @@ class Triangle {
     const v = (dot00 * dot12 - dot01 * dot02) * invDenom;
     return target.set(1 - u - v, v, u);
   }
-  static containsPoint(point2, a, b, c) {
-    this.getBarycoord(point2, a, b, c, _v3$1);
+  static containsPoint(point2, a, b, c2) {
+    this.getBarycoord(point2, a, b, c2, _v3$1);
     return _v3$1.x >= 0 && _v3$1.y >= 0 && _v3$1.x + _v3$1.y <= 1;
   }
   static getUV(point2, p1, p2, p3, uv1, uv2, uv3, target) {
@@ -71750,15 +72050,15 @@ class Triangle {
     target.addScaledVector(uv3, _v3$1.z);
     return target;
   }
-  static isFrontFacing(a, b, c, direction) {
-    _v0$1.subVectors(c, b);
+  static isFrontFacing(a, b, c2, direction) {
+    _v0$1.subVectors(c2, b);
     _v1$3.subVectors(a, b);
     return _v0$1.cross(_v1$3).dot(direction) < 0 ? true : false;
   }
-  set(a, b, c) {
+  set(a, b, c2) {
     this.a.copy(a);
     this.b.copy(b);
-    this.c.copy(c);
+    this.c.copy(c2);
     return this;
   }
   setFromPointsAndIndices(points, i0, i1, i2) {
@@ -71812,10 +72112,10 @@ class Triangle {
     return box.intersectsTriangle(this);
   }
   closestPointToPoint(p, target) {
-    const a = this.a, b = this.b, c = this.c;
+    const a = this.a, b = this.b, c2 = this.c;
     let v, w;
     _vab.subVectors(b, a);
-    _vac.subVectors(c, a);
+    _vac.subVectors(c2, a);
     _vap.subVectors(p, a);
     const d1 = _vab.dot(_vap);
     const d2 = _vac.dot(_vap);
@@ -71833,11 +72133,11 @@ class Triangle {
       v = d1 / (d1 - d3);
       return target.copy(a).addScaledVector(_vab, v);
     }
-    _vcp.subVectors(p, c);
+    _vcp.subVectors(p, c2);
     const d5 = _vab.dot(_vcp);
     const d6 = _vac.dot(_vcp);
     if (d6 >= 0 && d5 <= d6) {
-      return target.copy(c);
+      return target.copy(c2);
     }
     const vb = d5 * d2 - d1 * d6;
     if (vb <= 0 && d2 >= 0 && d6 <= 0) {
@@ -71846,7 +72146,7 @@ class Triangle {
     }
     const va = d3 * d6 - d5 * d4;
     if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) {
-      _vbc.subVectors(c, b);
+      _vbc.subVectors(c2, b);
       w = (d4 - d3) / (d4 - d3 + (d5 - d6));
       return target.copy(b).addScaledVector(_vbc, w);
     }
@@ -72771,13 +73071,13 @@ class BufferGeometry extends EventDispatcher {
       tan2[i] = new Vector3();
     }
     const vA = new Vector3(), vB = new Vector3(), vC = new Vector3(), uvA = new Vector2(), uvB = new Vector2(), uvC = new Vector2(), sdir = new Vector3(), tdir = new Vector3();
-    function handleTriangle(a, b, c) {
+    function handleTriangle(a, b, c2) {
       vA.fromArray(positions, a * 3);
       vB.fromArray(positions, b * 3);
-      vC.fromArray(positions, c * 3);
+      vC.fromArray(positions, c2 * 3);
       uvA.fromArray(uvs, a * 2);
       uvB.fromArray(uvs, b * 2);
-      uvC.fromArray(uvs, c * 2);
+      uvC.fromArray(uvs, c2 * 2);
       vB.sub(vA);
       vC.sub(vA);
       uvB.sub(uvA);
@@ -72789,10 +73089,10 @@ class BufferGeometry extends EventDispatcher {
       tdir.copy(vC).multiplyScalar(uvB.x).addScaledVector(vB, -uvC.x).multiplyScalar(r);
       tan1[a].add(sdir);
       tan1[b].add(sdir);
-      tan1[c].add(sdir);
+      tan1[c2].add(sdir);
       tan2[a].add(tdir);
       tan2[b].add(tdir);
-      tan2[c].add(tdir);
+      tan2[c2].add(tdir);
     }
     let groups = this.groups;
     if (groups.length === 0) {
@@ -73194,8 +73494,8 @@ class Mesh extends Object3D {
             for (let j = start2, jl = end2; j < jl; j += 3) {
               const a = index2.getX(j);
               const b = index2.getX(j + 1);
-              const c = index2.getX(j + 2);
-              intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c);
+              const c2 = index2.getX(j + 2);
+              intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c2);
               if (intersection) {
                 intersection.faceIndex = Math.floor(j / 3);
                 intersection.face.materialIndex = group2.materialIndex;
@@ -73209,8 +73509,8 @@ class Mesh extends Object3D {
           for (let i = start2, il = end2; i < il; i += 3) {
             const a = index2.getX(i);
             const b = index2.getX(i + 1);
-            const c = index2.getX(i + 2);
-            intersection = checkBufferGeometryIntersection(this, material, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c);
+            const c2 = index2.getX(i + 2);
+            intersection = checkBufferGeometryIntersection(this, material, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c2);
             if (intersection) {
               intersection.faceIndex = Math.floor(i / 3);
               intersects2.push(intersection);
@@ -73227,8 +73527,8 @@ class Mesh extends Object3D {
             for (let j = start2, jl = end2; j < jl; j += 3) {
               const a = j;
               const b = j + 1;
-              const c = j + 2;
-              intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c);
+              const c2 = j + 2;
+              intersection = checkBufferGeometryIntersection(this, groupMaterial, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c2);
               if (intersection) {
                 intersection.faceIndex = Math.floor(j / 3);
                 intersection.face.materialIndex = group2.materialIndex;
@@ -73242,8 +73542,8 @@ class Mesh extends Object3D {
           for (let i = start2, il = end2; i < il; i += 3) {
             const a = i;
             const b = i + 1;
-            const c = i + 2;
-            intersection = checkBufferGeometryIntersection(this, material, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c);
+            const c2 = i + 2;
+            intersection = checkBufferGeometryIntersection(this, material, raycaster, _ray$2, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c2);
             if (intersection) {
               intersection.faceIndex = Math.floor(i / 3);
               intersects2.push(intersection);
@@ -73277,10 +73577,10 @@ function checkIntersection(object, material, raycaster, ray, pA, pB, pC, point2)
     object
   };
 }
-function checkBufferGeometryIntersection(object, material, raycaster, ray, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c) {
+function checkBufferGeometryIntersection(object, material, raycaster, ray, position2, morphPosition, morphTargetsRelative, uv, uv2, a, b, c2) {
   _vA$1.fromBufferAttribute(position2, a);
   _vB$1.fromBufferAttribute(position2, b);
-  _vC$1.fromBufferAttribute(position2, c);
+  _vC$1.fromBufferAttribute(position2, c2);
   const morphInfluences = object.morphTargetInfluences;
   if (morphPosition && morphInfluences) {
     _morphA.set(0, 0, 0);
@@ -73293,7 +73593,7 @@ function checkBufferGeometryIntersection(object, material, raycaster, ray, posit
         continue;
       _tempA.fromBufferAttribute(morphAttribute, a);
       _tempB.fromBufferAttribute(morphAttribute, b);
-      _tempC.fromBufferAttribute(morphAttribute, c);
+      _tempC.fromBufferAttribute(morphAttribute, c2);
       if (morphTargetsRelative) {
         _morphA.addScaledVector(_tempA, influence);
         _morphB.addScaledVector(_tempB, influence);
@@ -73311,26 +73611,26 @@ function checkBufferGeometryIntersection(object, material, raycaster, ray, posit
   if (object.isSkinnedMesh) {
     object.boneTransform(a, _vA$1);
     object.boneTransform(b, _vB$1);
-    object.boneTransform(c, _vC$1);
+    object.boneTransform(c2, _vC$1);
   }
   const intersection = checkIntersection(object, material, raycaster, ray, _vA$1, _vB$1, _vC$1, _intersectionPoint);
   if (intersection) {
     if (uv) {
       _uvA$1.fromBufferAttribute(uv, a);
       _uvB$1.fromBufferAttribute(uv, b);
-      _uvC$1.fromBufferAttribute(uv, c);
+      _uvC$1.fromBufferAttribute(uv, c2);
       intersection.uv = Triangle.getUV(_intersectionPoint, _vA$1, _vB$1, _vC$1, _uvA$1, _uvB$1, _uvC$1, new Vector2());
     }
     if (uv2) {
       _uvA$1.fromBufferAttribute(uv2, a);
       _uvB$1.fromBufferAttribute(uv2, b);
-      _uvC$1.fromBufferAttribute(uv2, c);
+      _uvC$1.fromBufferAttribute(uv2, c2);
       intersection.uv2 = Triangle.getUV(_intersectionPoint, _vA$1, _vB$1, _vC$1, _uvA$1, _uvB$1, _uvC$1, new Vector2());
     }
     const face2 = {
       a,
       b,
-      c,
+      c: c2,
       normal: new Vector3(),
       materialIndex: 0
     };
@@ -73403,10 +73703,10 @@ class BoxGeometry extends BufferGeometry {
         for (let ix = 0; ix < gridX; ix++) {
           const a = numberOfVertices + ix + gridX1 * iy;
           const b = numberOfVertices + ix + gridX1 * (iy + 1);
-          const c = numberOfVertices + (ix + 1) + gridX1 * (iy + 1);
+          const c2 = numberOfVertices + (ix + 1) + gridX1 * (iy + 1);
           const d = numberOfVertices + (ix + 1) + gridX1 * iy;
           indices.push(a, b, d);
-          indices.push(b, c, d);
+          indices.push(b, c2, d);
           groupCount += 6;
         }
       }
@@ -73906,8 +74206,8 @@ class Plane {
     this.constant = -point2.dot(this.normal);
     return this;
   }
-  setFromCoplanarPoints(a, b, c) {
-    const normal = _vector1.subVectors(c, b).cross(_vector2.subVectors(a, b)).normalize();
+  setFromCoplanarPoints(a, b, c2) {
+    const normal = _vector1.subVectors(c2, b).cross(_vector2.subVectors(a, b)).normalize();
     this.setFromNormalAndCoplanarPoint(normal, a);
     return this;
   }
@@ -74242,10 +74542,10 @@ class PlaneGeometry extends BufferGeometry {
       for (let ix = 0; ix < gridX; ix++) {
         const a = ix + gridX1 * iy;
         const b = ix + gridX1 * (iy + 1);
-        const c = ix + 1 + gridX1 * (iy + 1);
+        const c2 = ix + 1 + gridX1 * (iy + 1);
         const d = ix + 1 + gridX1 * iy;
         indices.push(a, b, d);
-        indices.push(b, c, d);
+        indices.push(b, c2, d);
       }
     }
     this.setIndex(indices);
@@ -75654,11 +75954,11 @@ class OrthographicCamera extends Camera {
     let bottom2 = cy - dy;
     if (this.view !== null && this.view.enabled) {
       const scaleW = (this.right - this.left) / this.view.fullWidth / this.zoom;
-      const scaleH = (this.top - this.bottom) / this.view.fullHeight / this.zoom;
+      const scaleH2 = (this.top - this.bottom) / this.view.fullHeight / this.zoom;
       left2 += scaleW * this.view.offsetX;
       right2 = left2 + scaleW * this.view.width;
-      top2 -= scaleH * this.view.offsetY;
-      bottom2 = top2 - scaleH * this.view.height;
+      top2 -= scaleH2 * this.view.offsetY;
+      bottom2 = top2 - scaleH2 * this.view.height;
     }
     this.projectionMatrix.makeOrthographic(left2, right2, top2, bottom2, this.near, this.far);
     this.projectionMatrixInverse.copy(this.projectionMatrix).invert();
@@ -76419,8 +76719,8 @@ function WebGLGeometries(gl, attributes, info, bindingStates) {
       for (let i = 0, l = array.length; i < l; i += 3) {
         const a = array[i + 0];
         const b = array[i + 1];
-        const c = array[i + 2];
-        indices.push(a, b, b, c, c, a);
+        const c2 = array[i + 2];
+        indices.push(a, b, b, c2, c2, a);
       }
     } else {
       const array = geometryPosition.array;
@@ -76428,8 +76728,8 @@ function WebGLGeometries(gl, attributes, info, bindingStates) {
       for (let i = 0, l = array.length / 3 - 1; i < l; i += 3) {
         const a = i + 0;
         const b = i + 1;
-        const c = i + 2;
-        indices.push(a, b, b, c, c, a);
+        const c2 = i + 2;
+        indices.push(a, b, b, c2, c2, a);
       }
     }
     const attribute = new (arrayNeedsUint32(indices) ? Uint32BufferAttribute : Uint16BufferAttribute)(indices, 1);
@@ -85241,10 +85541,10 @@ class LatheGeometry extends BufferGeometry {
         const base = j + i * points.length;
         const a = base;
         const b = base + points.length;
-        const c = base + points.length + 1;
+        const c2 = base + points.length + 1;
         const d = base + 1;
         indices.push(a, b, d);
-        indices.push(c, d, b);
+        indices.push(c2, d, b);
       }
     }
     this.setIndex(indices);
@@ -85381,10 +85681,10 @@ class CylinderGeometry extends BufferGeometry {
         for (let y = 0; y < heightSegments; y++) {
           const a = indexArray[y][x];
           const b = indexArray[y + 1][x];
-          const c = indexArray[y + 1][x + 1];
+          const c2 = indexArray[y + 1][x + 1];
           const d = indexArray[y][x + 1];
           indices.push(a, b, d);
-          indices.push(b, c, d);
+          indices.push(b, c2, d);
           groupCount += 6;
         }
       }
@@ -85421,12 +85721,12 @@ class CylinderGeometry extends BufferGeometry {
         index2++;
       }
       for (let x = 0; x < radialSegments; x++) {
-        const c = centerIndexStart + x;
+        const c2 = centerIndexStart + x;
         const i = centerIndexEnd + x;
         if (top2 === true) {
-          indices.push(i, i + 1, c);
+          indices.push(i, i + 1, c2);
         } else {
-          indices.push(i + 1, i, c);
+          indices.push(i + 1, i, c2);
         }
         groupCount += 3;
       }
@@ -85482,21 +85782,21 @@ class PolyhedronGeometry extends BufferGeometry {
     function subdivide(detail2) {
       const a = new Vector3();
       const b = new Vector3();
-      const c = new Vector3();
+      const c2 = new Vector3();
       for (let i = 0; i < indices.length; i += 3) {
         getVertexByIndex(indices[i + 0], a);
         getVertexByIndex(indices[i + 1], b);
-        getVertexByIndex(indices[i + 2], c);
-        subdivideFace(a, b, c, detail2);
+        getVertexByIndex(indices[i + 2], c2);
+        subdivideFace(a, b, c2, detail2);
       }
     }
-    function subdivideFace(a, b, c, detail2) {
+    function subdivideFace(a, b, c2, detail2) {
       const cols = detail2 + 1;
       const v = [];
       for (let i = 0; i <= cols; i++) {
         v[i] = [];
-        const aj = a.clone().lerp(c, i / cols);
-        const bj = b.clone().lerp(c, i / cols);
+        const aj = a.clone().lerp(c2, i / cols);
+        const bj = b.clone().lerp(c2, i / cols);
         const rows = cols - i;
         for (let j = 0; j <= rows; j++) {
           if (j === 0 && i === cols) {
@@ -85575,7 +85875,7 @@ class PolyhedronGeometry extends BufferGeometry {
     function correctUVs() {
       const a = new Vector3();
       const b = new Vector3();
-      const c = new Vector3();
+      const c2 = new Vector3();
       const centroid = new Vector3();
       const uvA = new Vector2();
       const uvB = new Vector2();
@@ -85583,15 +85883,15 @@ class PolyhedronGeometry extends BufferGeometry {
       for (let i = 0, j = 0; i < vertexBuffer.length; i += 9, j += 6) {
         a.set(vertexBuffer[i + 0], vertexBuffer[i + 1], vertexBuffer[i + 2]);
         b.set(vertexBuffer[i + 3], vertexBuffer[i + 4], vertexBuffer[i + 5]);
-        c.set(vertexBuffer[i + 6], vertexBuffer[i + 7], vertexBuffer[i + 8]);
+        c2.set(vertexBuffer[i + 6], vertexBuffer[i + 7], vertexBuffer[i + 8]);
         uvA.set(uvBuffer[j + 0], uvBuffer[j + 1]);
         uvB.set(uvBuffer[j + 2], uvBuffer[j + 3]);
         uvC.set(uvBuffer[j + 4], uvBuffer[j + 5]);
-        centroid.copy(a).add(b).add(c).divideScalar(3);
+        centroid.copy(a).add(b).add(c2).divideScalar(3);
         const azi = azimuth(centroid);
         correctUV(uvA, j + 0, a, azi);
         correctUV(uvB, j + 2, b, azi);
-        correctUV(uvC, j + 4, c, azi);
+        correctUV(uvC, j + 4, c2, azi);
       }
     }
     function correctUV(uv, stride, vector, azimuth2) {
@@ -85834,14 +86134,14 @@ class EdgesGeometry extends BufferGeometry {
           indexArr[1] = i + 1;
           indexArr[2] = i + 2;
         }
-        const { a, b, c } = _triangle;
+        const { a, b, c: c2 } = _triangle;
         a.fromBufferAttribute(positionAttr, indexArr[0]);
         b.fromBufferAttribute(positionAttr, indexArr[1]);
-        c.fromBufferAttribute(positionAttr, indexArr[2]);
+        c2.fromBufferAttribute(positionAttr, indexArr[2]);
         _triangle.getNormal(_normal);
         hashes[0] = `${Math.round(a.x * precision)},${Math.round(a.y * precision)},${Math.round(a.z * precision)}`;
         hashes[1] = `${Math.round(b.x * precision)},${Math.round(b.y * precision)},${Math.round(b.z * precision)}`;
-        hashes[2] = `${Math.round(c.x * precision)},${Math.round(c.y * precision)},${Math.round(c.z * precision)}`;
+        hashes[2] = `${Math.round(c2.x * precision)},${Math.round(c2.y * precision)},${Math.round(c2.z * precision)}`;
         if (hashes[0] === hashes[1] || hashes[1] === hashes[2] || hashes[2] === hashes[0]) {
           continue;
         }
@@ -86032,39 +86332,39 @@ function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
   }
 }
 function isEar(ear) {
-  const a = ear.prev, b = ear, c = ear.next;
-  if (area(a, b, c) >= 0)
+  const a = ear.prev, b = ear, c2 = ear.next;
+  if (area(a, b, c2) >= 0)
     return false;
   let p = ear.next.next;
   while (p !== ear.prev) {
-    if (pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
+    if (pointInTriangle(a.x, a.y, b.x, b.y, c2.x, c2.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
       return false;
     p = p.next;
   }
   return true;
 }
 function isEarHashed(ear, minX, minY, invSize) {
-  const a = ear.prev, b = ear, c = ear.next;
-  if (area(a, b, c) >= 0)
+  const a = ear.prev, b = ear, c2 = ear.next;
+  if (area(a, b, c2) >= 0)
     return false;
-  const minTX = a.x < b.x ? a.x < c.x ? a.x : c.x : b.x < c.x ? b.x : c.x, minTY = a.y < b.y ? a.y < c.y ? a.y : c.y : b.y < c.y ? b.y : c.y, maxTX = a.x > b.x ? a.x > c.x ? a.x : c.x : b.x > c.x ? b.x : c.x, maxTY = a.y > b.y ? a.y > c.y ? a.y : c.y : b.y > c.y ? b.y : c.y;
+  const minTX = a.x < b.x ? a.x < c2.x ? a.x : c2.x : b.x < c2.x ? b.x : c2.x, minTY = a.y < b.y ? a.y < c2.y ? a.y : c2.y : b.y < c2.y ? b.y : c2.y, maxTX = a.x > b.x ? a.x > c2.x ? a.x : c2.x : b.x > c2.x ? b.x : c2.x, maxTY = a.y > b.y ? a.y > c2.y ? a.y : c2.y : b.y > c2.y ? b.y : c2.y;
   const minZ = zOrder(minTX, minTY, minX, minY, invSize), maxZ = zOrder(maxTX, maxTY, minX, minY, invSize);
   let p = ear.prevZ, n = ear.nextZ;
   while (p && p.z >= minZ && n && n.z <= maxZ) {
-    if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
+    if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c2.x, c2.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
       return false;
     p = p.prevZ;
-    if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0)
+    if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c2.x, c2.y, n.x, n.y) && area(n.prev, n, n.next) >= 0)
       return false;
     n = n.nextZ;
   }
   while (p && p.z >= minZ) {
-    if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
+    if (p !== ear.prev && p !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c2.x, c2.y, p.x, p.y) && area(p.prev, p, p.next) >= 0)
       return false;
     p = p.prevZ;
   }
   while (n && n.z <= maxZ) {
-    if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c.x, c.y, n.x, n.y) && area(n.prev, n, n.next) >= 0)
+    if (n !== ear.prev && n !== ear.next && pointInTriangle(a.x, a.y, b.x, b.y, c2.x, c2.y, n.x, n.y) && area(n.prev, n, n.next) >= 0)
       return false;
     n = n.nextZ;
   }
@@ -86092,11 +86392,11 @@ function splitEarcut(start2, triangles, dim, minX, minY, invSize) {
     let b = a.next.next;
     while (b !== a.prev) {
       if (a.i !== b.i && isValidDiagonal(a, b)) {
-        let c = splitPolygon(a, b);
+        let c2 = splitPolygon(a, b);
         a = filterPoints(a, a.next);
-        c = filterPoints(c, c.next);
+        c2 = filterPoints(c2, c2.next);
         earcutLinked(a, triangles, dim, minX, minY, invSize);
-        earcutLinked(c, triangles, dim, minX, minY, invSize);
+        earcutLinked(c2, triangles, dim, minX, minY, invSize);
         return;
       }
       b = b.next;
@@ -86671,8 +86971,8 @@ class ExtrudeGeometry extends BufferGeometry {
           for (let s = 0, sl = steps + bevelSegments * 2; s < sl; s++) {
             const slen1 = vlen * s;
             const slen2 = vlen * (s + 1);
-            const a = layeroffset + j + slen1, b = layeroffset + k + slen1, c = layeroffset + k + slen2, d = layeroffset + j + slen2;
-            f4(a, b, c, d);
+            const a = layeroffset + j + slen1, b = layeroffset + k + slen1, c2 = layeroffset + k + slen2, d = layeroffset + j + slen2;
+            f4(a, b, c2, d);
           }
         }
       }
@@ -86681,22 +86981,22 @@ class ExtrudeGeometry extends BufferGeometry {
         placeholder.push(y);
         placeholder.push(z);
       }
-      function f3(a, b, c) {
+      function f3(a, b, c2) {
         addVertex(a);
         addVertex(b);
-        addVertex(c);
+        addVertex(c2);
         const nextIndex = verticesArray.length / 3;
         const uvs = uvgen.generateTopUV(scope, verticesArray, nextIndex - 3, nextIndex - 2, nextIndex - 1);
         addUV(uvs[0]);
         addUV(uvs[1]);
         addUV(uvs[2]);
       }
-      function f4(a, b, c, d) {
+      function f4(a, b, c2, d) {
         addVertex(a);
         addVertex(b);
         addVertex(d);
         addVertex(b);
-        addVertex(c);
+        addVertex(c2);
         addVertex(d);
         const nextIndex = verticesArray.length / 3;
         const uvs = uvgen.generateSideWallUV(scope, verticesArray, nextIndex - 6, nextIndex - 3, nextIndex - 2, nextIndex - 1);
@@ -87009,10 +87309,10 @@ class RingGeometry extends BufferGeometry {
         const segment = i + thetaSegmentLevel;
         const a = segment;
         const b = segment + thetaSegments + 1;
-        const c = segment + thetaSegments + 2;
+        const c2 = segment + thetaSegments + 2;
         const d = segment + 1;
         indices.push(a, b, d);
-        indices.push(b, c, d);
+        indices.push(b, c2, d);
       }
     }
     this.setIndex(indices);
@@ -87081,8 +87381,8 @@ class ShapeGeometry extends BufferGeometry {
         const face2 = faces[i];
         const a = face2[0] + indexOffset;
         const b = face2[1] + indexOffset;
-        const c = face2[2] + indexOffset;
-        indices.push(a, b, c);
+        const c2 = face2[2] + indexOffset;
+        indices.push(a, b, c2);
         groupCount += 3;
       }
     }
@@ -87163,12 +87463,12 @@ class SphereGeometry extends BufferGeometry {
       for (let ix = 0; ix < widthSegments; ix++) {
         const a = grid2[iy][ix + 1];
         const b = grid2[iy][ix];
-        const c = grid2[iy + 1][ix];
+        const c2 = grid2[iy + 1][ix];
         const d = grid2[iy + 1][ix + 1];
         if (iy !== 0 || thetaStart > 0)
           indices.push(a, b, d);
         if (iy !== heightSegments - 1 || thetaEnd < Math.PI)
-          indices.push(b, c, d);
+          indices.push(b, c2, d);
       }
     }
     this.setIndex(indices);
@@ -87261,10 +87561,10 @@ class TorusGeometry extends BufferGeometry {
       for (let i = 1; i <= tubularSegments; i++) {
         const a = (tubularSegments + 1) * j + i - 1;
         const b = (tubularSegments + 1) * (j - 1) + i - 1;
-        const c = (tubularSegments + 1) * (j - 1) + i;
+        const c2 = (tubularSegments + 1) * (j - 1) + i;
         const d = (tubularSegments + 1) * j + i;
         indices.push(a, b, d);
-        indices.push(b, c, d);
+        indices.push(b, c2, d);
       }
     }
     this.setIndex(indices);
@@ -87329,10 +87629,10 @@ class TorusKnotGeometry extends BufferGeometry {
       for (let i = 1; i <= radialSegments; i++) {
         const a = (radialSegments + 1) * (j - 1) + (i - 1);
         const b = (radialSegments + 1) * j + (i - 1);
-        const c = (radialSegments + 1) * j + i;
+        const c2 = (radialSegments + 1) * j + i;
         const d = (radialSegments + 1) * (j - 1) + i;
         indices.push(a, b, d);
-        indices.push(b, c, d);
+        indices.push(b, c2, d);
       }
     }
     this.setIndex(indices);
@@ -87413,10 +87713,10 @@ class TubeGeometry extends BufferGeometry {
         for (let i = 1; i <= radialSegments; i++) {
           const a = (radialSegments + 1) * (j - 1) + (i - 1);
           const b = (radialSegments + 1) * j + (i - 1);
-          const c = (radialSegments + 1) * j + i;
+          const c2 = (radialSegments + 1) * j + i;
           const d = (radialSegments + 1) * (j - 1) + i;
           indices.push(a, b, d);
-          indices.push(b, c, d);
+          indices.push(b, c2, d);
         }
       }
     }
@@ -93130,13 +93430,13 @@ Triangle.prototype.plane = function(target) {
   console.warn("THREE.Triangle: .plane() has been renamed to .getPlane().");
   return this.getPlane(target);
 };
-Triangle.barycoordFromPoint = function(point2, a, b, c, target) {
+Triangle.barycoordFromPoint = function(point2, a, b, c2, target) {
   console.warn("THREE.Triangle: .barycoordFromPoint() has been renamed to .getBarycoord().");
-  return Triangle.getBarycoord(point2, a, b, c, target);
+  return Triangle.getBarycoord(point2, a, b, c2, target);
 };
-Triangle.normal = function(a, b, c, target) {
+Triangle.normal = function(a, b, c2, target) {
   console.warn("THREE.Triangle: .normal() has been renamed to .getNormal().");
-  return Triangle.getNormal(a, b, c, target);
+  return Triangle.getNormal(a, b, c2, target);
 };
 Shape.prototype.extractAllPoints = function(divisions) {
   console.warn("THREE.Shape: .extractAllPoints() has been removed. Use .extractPoints() instead.");
@@ -96233,9 +96533,31 @@ const addCubeBox = {
     editor.context.sceneManager.select(mesh);
   }
 };
-var commands = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   addCubeBox
+}, Symbol.toStringTag, { value: "Module" }));
+var editor_config_body_event = {
+  command: "change.bodyEvent",
+  description: "fire when bodyEvent was set",
+  execute: function(editor) {
+    const $target = Dom.create(editor.context.config.get("bodyEvent").target);
+    editor.context.config.init("onMouseMovepageContainer", $target);
+  }
+};
+var __glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editor_config_body_event
+}, Symbol.toStringTag, { value: "Module" }));
+const modules = { "./command_list/addCubeBox.js": __glob_0_0, "./command_list/editor.config.body.event.js": __glob_0_1 };
+const obj = {};
+Object.entries(modules).forEach(([key, value]) => {
+  key = key.replace("./command_list/", "").replace(".js", "");
+  obj[key] = value.default;
+});
+var commands = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": obj
 }, Symbol.toStringTag, { value: "Module" }));
 function threeHelpers(editor) {
   editor.registerUI("render.view", {});
@@ -96478,7 +96800,7 @@ var whiteboardPlugins = [
 class WhiteBoard extends BaseLayout {
   initialize() {
     super.initialize();
-    this.$pathkit.load();
+    this.$context.pathkit.load();
   }
   getManagers() {
     return {
@@ -96489,7 +96811,8 @@ class WhiteBoard extends BaseLayout {
       modelManager: ModelManager,
       lockManager: LockManager,
       visibleManager: VisibleManager,
-      clipboard: ClipboardManager
+      clipboard: ClipboardManager,
+      pathkit: PathKitManager
     };
   }
   components() {
@@ -96552,4 +96875,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathParser, PathSegmentType, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, classnames, clone$1 as clone, collectProps, combineKeyArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, get, getRef, getRootElementInstanceList, getVariable, hasVariable, ifCheck, initializeGroupVariables, isArray, isBoolean, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, normalizeWheelEvent, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, spreadVariable, start$1 as start, throttle, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };

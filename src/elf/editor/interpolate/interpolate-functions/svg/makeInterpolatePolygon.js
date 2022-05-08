@@ -1,6 +1,6 @@
 import { makeInterpolateNumber } from "../makeInterpolateNumber";
 
-import PolygonParser from "elf/editor/parser/PolygonParser";
+import { PolygonParser } from "elf/core/parser/PolygonParser";
 
 export function makeInterpolatePolygon(layer, property, startValue, endValue) {
   var returnParser = new PolygonParser();

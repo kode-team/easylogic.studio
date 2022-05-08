@@ -2,7 +2,7 @@ import { LOAD, INPUT, DEBOUNCE, CLICK } from "sapa";
 
 import "./PathDataEditor.scss";
 
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class PathDataEditor extends EditorElement {

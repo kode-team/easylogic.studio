@@ -1,7 +1,8 @@
 import { mat4, vec3 } from "gl-matrix";
 
 import {
-  polyPoly,
+  vertiesToRectangle,
+  rectRect,
   rectToVerties,
   rectToVertiesForArea,
 } from "../../../core/collision";
@@ -193,6 +194,8 @@ export class ViewportManager {
   refresh() {
     if (this.cachedViewport) {
       this.verties = vertiesMap(this.cachedViewport, this.matrixInverse);
+      this.originVerties = this.verties.filter((_, index) => index < 4);
+      this.originRect = vertiesToRectangle(this.originVerties);
     }
   }
 
@@ -381,8 +384,21 @@ export class ViewportManager {
     return xInViewport && yInViewport;
   }
 
+  // verties 의 rect 를 구해서 rectRect 로 충돌한다.
   checkInViewportArea(verties = []) {
-    return polyPoly(verties, this.verties);
+    const source = vertiesToRectangle(verties);
+    const target = this.originRect;
+
+    return rectRect(
+      source.x,
+      source.y,
+      source.width,
+      source.height,
+      target.x,
+      target.y,
+      target.width,
+      target.height
+    );
   }
 
   applyVertex(vertex) {

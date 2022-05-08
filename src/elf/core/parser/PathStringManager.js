@@ -1,4 +1,4 @@
-export default class PathStringManager {
+export class PathStringManager {
   constructor() {
     this.pathArray = [];
   }

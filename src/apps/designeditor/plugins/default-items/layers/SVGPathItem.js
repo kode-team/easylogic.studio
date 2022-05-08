@@ -1,7 +1,7 @@
 import { SVGItem } from "./SVGItem";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
-import { PathParser } from "elf/editor/parser/PathParser";
 
 export class SVGPathItem extends SVGItem {
   getIcon() {

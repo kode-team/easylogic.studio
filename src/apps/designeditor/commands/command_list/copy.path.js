@@ -1,4 +1,4 @@
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 
 export default {
   command: "copy.path",

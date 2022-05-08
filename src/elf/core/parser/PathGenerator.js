@@ -3,9 +3,9 @@ import { mat4, vec3 } from "gl-matrix";
 import { clone } from "sapa";
 
 import { PathParser } from "./PathParser";
-import PathStringManager from "./PathStringManager";
-import Point from "./Point";
-import SegmentManager from "./SegmentManager";
+import { PathStringManager } from "./PathStringManager";
+import { Point } from "./Point";
+import { SegmentManager } from "./SegmentManager";
 
 import { toRectVerties } from "elf/core/collision";
 import { getDist, getXYInCircle, calculateAngle360 } from "elf/core/math";
@@ -186,7 +186,7 @@ function checkInArea(area, point) {
   return true;
 }
 
-export default class PathGenerator {
+export class PathGenerator {
   static generatorPathString(points, minX = 0, minY = 0, scale = 1) {
     return toPath(points, minX, minY, scale).d;
   }

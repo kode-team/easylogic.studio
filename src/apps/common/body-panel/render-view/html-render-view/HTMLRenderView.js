@@ -286,7 +286,7 @@ export default class HTMLRenderView extends EditorElement {
           $content.select();
         }, 100);
       } else {
-        this.emit("doubleclick.item", e, id);
+        this.$context.commands.emit("doubleclick.item", e, id);
       }
     }
   }
@@ -488,7 +488,7 @@ export default class HTMLRenderView extends EditorElement {
       3 / this.$viewport.scale // 확대 영역이 크면 snap 포인트를 사용하지 않는다.
     );
 
-    const localDist = vec3.add([], snap, dist);
+    const localDist = vec3.add([], snap.dist, dist);
 
     const result = {};
     this.$context.selection.cachedItemMatrices.forEach((it) => {

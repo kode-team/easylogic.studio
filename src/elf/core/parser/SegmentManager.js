@@ -1,6 +1,6 @@
 import { getDist } from "elf/core/math";
 
-export default class SegmentManager {
+export class SegmentManager {
   /**
    *
    * @param {ViewportManager} viewport

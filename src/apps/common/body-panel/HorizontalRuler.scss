@@ -31,6 +31,7 @@
     }
   }
   svg {
+    transform: translateY(2px);
     text {
       text-anchor: middle;
       fill: var(--elf--font-color);

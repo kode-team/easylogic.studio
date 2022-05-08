@@ -33,7 +33,7 @@ export const NotifyType = {
   ALERT: "alert",
 };
 
-export const IntersectEpsilonType = {
+export const IntersectEpsilonNumberType = {
   RECT: 30,
 };
 

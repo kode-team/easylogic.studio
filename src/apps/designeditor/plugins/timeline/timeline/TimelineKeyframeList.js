@@ -14,9 +14,9 @@ import {
   classnames,
 } from "sapa";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import { timecode, second } from "elf/core/time";
 import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
-import { PathParser } from "elf/editor/parser/PathParser";
 import { MOVE, END, RESIZE_WINDOW } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";

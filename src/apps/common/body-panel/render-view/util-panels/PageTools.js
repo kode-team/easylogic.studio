@@ -10,9 +10,9 @@ import {
 
 import "./PageTools.scss";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import { iconUse } from "elf/editor/icon/icon";
-import { PathParser } from "elf/editor/parser/PathParser";
-import { UPDATE_VIEWPORT, REFRESH_SELECTION } from "elf/editor/types/event";
+import { UPDATE_VIEWPORT } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class PageTools extends EditorElement {
@@ -51,9 +51,9 @@ export default class PageTools extends EditorElement {
         })}" data-tooltip="Hand | H" data-direction="top">${iconUse(
       "pantool"
     )}</button>   
-        <span class="divider">|</span>
-        <button type="button" ref="$selectedCount" style="color:var(--elf--selected-color);font-weight: bold;text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1)"></button>
-        <span ref="$buttons"></span>
+        <!--span class="divider">|</span>
+        <button type="button" ref="$selectedCount" style="color:var(--elf--selected-color);font-weight: bold;text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1)"></button-->
+        <!--span ref="$buttons"></span-->
         ${this.$injectManager.generate(
           "page.tools"
         )}                             
@@ -139,48 +139,49 @@ export default class PageTools extends EditorElement {
     this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
   }
 
-  [SUBSCRIBE(REFRESH_SELECTION)]() {
-    this.refs.$selectedCount.html(this.$context.selection.length + "");
+  // [SUBSCRIBE(REFRESH_SELECTION)]() {
+  //   this.refs.$selectedCount.html(this.$context.selection.length + "");
 
-    this.load("$buttons");
-  }
+  //   this.load("$buttons");
+  // }
 
   [LOAD("$buttons") + DOMDIFF]() {
-    if (this.$context.selection.isEmpty) return "";
+    return "";
+    // if (this.$context.selection.isEmpty) return "";
 
-    const buttons = [];
+    // const buttons = [];
 
-    this.$context.selection.items.forEach((selectedItem) => {
-      selectedItem.allLayers.forEach((item) => {
-        if (item.isNot("boolean-path")) {
-          const list = PathParser.fromSVGString(
-            item.absolutePath().d
-          ).toPathList();
+    // this.$context.selection.items.forEach((selectedItem) => {
+    //   selectedItem.allLayers.forEach((item) => {
+    //     if (item.isNot("boolean-path")) {
+    //       const list = PathParser.fromSVGString(
+    //         item.absolutePath().d
+    //       ).toPathList();
 
-          list.forEach((path, index) => {
-            buttons.push({
-              item,
-              index,
-              path,
-            });
-          });
-        }
-      });
-    });
+    //       list.forEach((path, index) => {
+    //         buttons.push({
+    //           item,
+    //           index,
+    //           path,
+    //         });
+    //       });
+    //     }
+    //   });
+    // });
 
-    return buttons.map((it) => {
-      const { item, index, path } = it;
-      return /*html*/ `
-        <button type="button" data-item-id="${
-          item.id
-        }" data-path-index="${index}">
-          <svg width="16" height="16" overflow="visible">
-            <path d="${path.scaleWith(16, 16).d}" style="fill:${
-        item.fill
-      };stroke:currentColor" stroke-width="1" />
-          </svg>
-        </button>
-      `;
-    });
+    // return buttons.map((it) => {
+    //   const { item, index, path } = it;
+    //   return /*html*/ `
+    //     <button type="button" data-item-id="${
+    //       item.id
+    //     }" data-path-index="${index}">
+    //       <svg width="16" height="16" overflow="visible">
+    //         <path d="${path.scaleWith(16, 16).d}" style="fill:${
+    //     item.fill
+    //   };stroke:currentColor" stroke-width="1" />
+    //       </svg>
+    //     </button>
+    //   `;
+    // });
   }
 }

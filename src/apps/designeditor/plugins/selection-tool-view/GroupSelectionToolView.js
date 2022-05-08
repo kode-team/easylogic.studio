@@ -24,6 +24,7 @@ import {
   vertiesMap,
 } from "elf/core/math";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
+import { ViewModeType } from "elf/editor/types/editor";
 import {
   UPDATE_VIEWPORT,
   END,
@@ -46,7 +47,7 @@ var directionType = {
 
 const SelectionToolEvent = class extends EditorElement {
   checkViewMode() {
-    return this.$modeView.isCurrentMode("CanvasView");
+    return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
 
   [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
@@ -303,7 +304,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     const nextVertex = vec3.add(
       [],
       currentVertex,
-      vec3.add([], distVector, snap)
+      vec3.add([], distVector, snap.dist)
     );
 
     // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.

@@ -15,6 +15,7 @@ import clipPath from "./clip-path";
 import ClippathEditorView from "./clippath-editor-view";
 import codeview from "./codeview";
 import commands from "./commands";
+import configs from "./configs";
 import defaultItems from "./default-items";
 import defaultPatterns from "./default-patterns";
 import exportResource from "./export-resource";
@@ -66,6 +67,7 @@ import defaultMessages from "plugins/default-messages";
 import propertyEditor from "plugins/property-editor";
 
 export default [
+  configs,
   commands,
   defaultConfigs,
   defaultIcons,

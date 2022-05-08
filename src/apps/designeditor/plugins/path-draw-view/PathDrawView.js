@@ -4,7 +4,7 @@ import { POINTERSTART, BIND, KEYUP, IF, ESCAPE, ENTER, SUBSCRIBE } from "sapa";
 
 import "./PathDrawView.scss";
 
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { SVGFill } from "elf/editor/property-parser/SVGFill";
 import { END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
@@ -165,7 +165,7 @@ export default class PathDrawView extends EditorElement {
     });
 
     this.emit("hidePathEditor");
-    this.emit("push.mode.view", "PathDrawView");
+    this.$context.commands.emit("push.mode.view", "PathDrawView");
   }
 
   [SUBSCRIBE("initPathDrawEditor")]() {

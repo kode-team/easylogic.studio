@@ -1,4 +1,4 @@
-import { BIND, CLICK, createComponent } from "sapa";
+import { CLICK, createComponent } from "sapa";
 
 import AssetItems from "./object-list/AssetItems";
 import CustomAssets from "./object-list/CustomAssets";
@@ -21,20 +21,6 @@ export default class LayerTab extends EditorElement {
   initState() {
     return {
       selectedIndexValue: 2,
-    };
-  }
-  afterRender() {
-    this.$el.toggle(this.$config.get("editor.design.mode") === "design");
-  }
-
-  [BIND("$el")]() {
-    return {
-      style: {
-        display:
-          this.$config.get("editor.design.mode") === "design"
-            ? "block"
-            : "none",
-      },
     };
   }
 

@@ -20,8 +20,8 @@ import "./LayerAppendView.scss";
 
 import { rectToVerties, vertiesToRectangle } from "elf/core/collision";
 import { CSS_TO_STRING } from "elf/core/func";
-import { PathParser } from "elf/editor/parser/PathParser";
-import PathStringManager from "elf/editor/parser/PathStringManager";
+import { PathParser } from "elf/core/parser/PathParser";
+import { PathStringManager } from "elf/core/parser/PathStringManager";
 import { EditingMode } from "elf/editor/types/editor";
 import { UPDATE_VIEWPORT, END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
@@ -522,7 +522,7 @@ export default class LayerAppendView extends EditorElement {
       this.state.bboxRect = this.state.d.rect();
     }
 
-    this.emit("push.mode.view", "LayerAppendView");
+    this.$context.commands.emit("push.mode.view", "LayerAppendView");
   }
 
   [SUBSCRIBE("hideLayerAppendView")]() {

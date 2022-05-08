@@ -11,6 +11,7 @@ import { ClipboardManager } from "../designeditor/managers/ClipboardManager";
 import { HistoryManager } from "../designeditor/managers/HistoryManager";
 import { LockManager } from "../designeditor/managers/LockManager";
 import { ModelManager } from "../designeditor/managers/ModelManager";
+import { PathKitManager } from "../designeditor/managers/PathKitManager";
 import { SegmentSelectionManager } from "../designeditor/managers/SegmentSelectionManager";
 import { SelectionManager } from "../designeditor/managers/SelectionManager";
 import { SnapManager } from "../designeditor/managers/SnapManager";
@@ -37,7 +38,7 @@ export class WhiteBoard extends BaseLayout {
   initialize() {
     super.initialize();
 
-    this.$pathkit.load();
+    this.$context.pathkit.load();
   }
 
   getManagers() {
@@ -50,6 +51,7 @@ export class WhiteBoard extends BaseLayout {
       lockManager: LockManager,
       visibleManager: VisibleManager,
       clipboard: ClipboardManager,
+      pathkit: PathKitManager,
     };
   }
 

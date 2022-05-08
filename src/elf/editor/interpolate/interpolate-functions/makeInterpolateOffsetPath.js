@@ -2,7 +2,7 @@ import { Transform } from "../../property-parser/Transform";
 import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
 
 import { calculateAngle } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { Length } from "elf/editor/unit/Length";
 
 export function makeInterpolateOffsetPath(

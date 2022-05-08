@@ -4,10 +4,10 @@ import { clone, isUndefined } from "sapa";
 
 import { toRectVerties } from "elf/core/collision";
 import { getDist, getXYInCircle, calculateAngle360 } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
-import PathStringManager from "elf/editor/parser/PathStringManager";
-import Point from "elf/editor/parser/Point";
-import SegmentManager from "elf/editor/parser/SegmentManager";
+import { PathParser } from "elf/core/parser/PathParser";
+import { PathStringManager } from "elf/core/parser/PathStringManager";
+import { Point } from "elf/core/parser/Point";
+import { SegmentManager } from "elf/core/parser/SegmentManager";
 
 const SEGMENT_DIRECTION = ["startPoint", "endPoint", "reversePoint"];
 

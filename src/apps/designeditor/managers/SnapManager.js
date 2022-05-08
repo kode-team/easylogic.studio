@@ -5,7 +5,7 @@ import { isNotZero } from "sapa";
 import { toRectVertiesWithoutTransformOrigin } from "elf/core/collision";
 
 const MAX_SNAP_DISTANCE = 3;
-const DEFAULT_DIST_VECTOR = vec3.fromValues(0, 0, 0);
+const DEFAULT_DIST_VECTOR = { dist: vec3.fromValues(0, 0, 0) };
 const AXIS_X = "x";
 const AXIS_Y = "y";
 
@@ -64,7 +64,7 @@ export class SnapManager {
 
       // viewport 안에 존재 하는 것만 대상으로 한다.
       const inViewport = this.context.viewport.checkInViewportArea(
-        item.verties.filter((_, index) => index < 4)
+        item.originVerties
       );
 
       return inViewport;
@@ -203,7 +203,11 @@ export class SnapManager {
       const x = this.checkX(target.xList, sourceXList, dist)[0];
       const y = this.checkY(target.yList, sourceYList, dist)[0];
 
-      snaps.push(vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0));
+      const distVector = vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+
+      if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+        snaps.push({ target, dist: distVector });
+      }
     });
 
     // // 그 다음에 x grid 체크
@@ -237,7 +241,7 @@ export class SnapManager {
 
   checkPoint(sourceVertex) {
     const snap = this.check([sourceVertex]);
-    return vec3.add([], sourceVertex, snap);
+    return vec3.add([], sourceVertex, snap.dist);
   }
 
   /**
@@ -317,7 +321,7 @@ export class SnapManager {
       // vertex 대 vertex 를 기준으로 좌표 설정
       const points = this.getGuidesByPointPoint(
         sourceVerties,
-        target.verties,
+        target.guideVerties,
         dist
       );
 

@@ -23,6 +23,7 @@ import {
 } from "elf/core/math";
 import GridLayoutEngine from "elf/editor/layout-engine/GridLayoutEngine";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
+import { ViewModeType } from "elf/editor/types/editor";
 import {
   REFRESH_SELECTION_TOOL,
   UPDATE_VIEWPORT,
@@ -55,7 +56,7 @@ var directionType = {
 
 const SelectionToolEvent = class extends EditorElement {
   checkViewMode() {
-    return this.$modeView.isCurrentMode("CanvasView");
+    return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
 
   /**
@@ -249,7 +250,7 @@ export default class SelectionToolView extends SelectionToolEvent {
       3 / this.$viewport.scale
     );
 
-    const nextVertex = vec3.add([], moveVertex, snap);
+    const nextVertex = vec3.add([], moveVertex, snap.dist);
 
     // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.
     // var currentResult = vec3.transformMat4([], currentVertex, reverseMatrix);62849
@@ -758,7 +759,8 @@ export default class SelectionToolView extends SelectionToolEvent {
   updateGridArea() {
     return GridLayoutEngine.updateGridArea(
       this.$context.selection.current,
-      this.$context.selection.gridInformation
+      this.$context.selection.gridInformation,
+      this.$context.viewport.scale
     );
   }
 
@@ -1125,7 +1127,7 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   checkShow() {
-    if (this.$modeView.isCurrentMode("CanvasView") === false) {
+    if (this.$modeView.isCurrentMode(ViewModeType.CanvasView) === false) {
       return false;
     }
 

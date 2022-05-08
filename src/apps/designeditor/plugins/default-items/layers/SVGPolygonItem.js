@@ -2,8 +2,8 @@ import { vec3 } from "gl-matrix";
 
 import { SVGItem } from "./SVGItem";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
-import { PathParser } from "elf/editor/parser/PathParser";
 
 export class SVGPolygonItem extends SVGItem {
   getIcon() {

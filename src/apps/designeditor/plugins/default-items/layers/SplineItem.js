@@ -3,8 +3,8 @@ import nurbs from "nurbs";
 
 import { SVGItem } from "./SVGItem";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
-import { PathParser } from "elf/editor/parser/PathParser";
 
 export class SplineItem extends SVGItem {
   getIcon() {

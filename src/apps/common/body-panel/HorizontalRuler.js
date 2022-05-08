@@ -91,7 +91,7 @@ export default class HorizontalRuler extends EditorElement {
 
       text[
         text.length
-      ] = `<text x="${x}" y="${0}" dx="0" dy="8" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`;
+      ] = `<text x="${x}" y="${0}" dx="0" dy="6" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`;
     }
 
     return text.join("");
@@ -156,7 +156,18 @@ export default class HorizontalRuler extends EditorElement {
 
     pathString = [];
 
-    this.makeLine(pathString, 200, minX, maxX, realWidth, width, 10, 20, 10000);
+    this.makeLine(
+      pathString,
+      1000,
+      minX,
+      maxX,
+      realWidth,
+      width,
+      10,
+      24,
+      10000
+    );
+    this.makeLine(pathString, 200, minX, maxX, realWidth, width, 10, 20, 5000);
     this.makeLine(pathString, 100, minX, maxX, realWidth, width, 10, 20, 200);
     this.makeLine(pathString, 50, minX, maxX, realWidth, width, 10, 20, 100);
     this.makeLine(pathString, 10, minX, maxX, realWidth, width, 10, 18, 50);
@@ -174,7 +185,7 @@ export default class HorizontalRuler extends EditorElement {
 
     return [
       dist > 3000
-        ? this.makeLineText(1000, minX, maxX, realWidth, width, 24)
+        ? this.makeLineText(3000, minX, maxX, realWidth, width, 24)
         : "",
       2000 < dist && dist < 3000
         ? this.makeLineText(500, minX, maxX, realWidth, width, 22)

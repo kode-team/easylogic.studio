@@ -18,8 +18,8 @@ import svgFilterPreset from "./editor/svg-filter-preset";
 import "./SVGFilterEditor.scss";
 
 import { mapjoin, repeat } from "elf/core/func";
+import { PathStringManager } from "elf/core/parser/PathStringManager";
 import { iconUse } from "elf/editor/icon/icon";
-import PathStringManager from "elf/editor/parser/PathStringManager";
 import {
   SVGFilter,
   SVGFilterSpecList,

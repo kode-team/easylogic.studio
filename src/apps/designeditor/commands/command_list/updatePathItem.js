@@ -6,7 +6,7 @@ import {
   calculateMatrix,
   calculateMatrixInverse,
 } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { Transform } from "elf/editor/property-parser/Transform";
 
 export default {

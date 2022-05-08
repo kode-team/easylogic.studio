@@ -31,7 +31,7 @@ import {
 } from "elf/core/bezier";
 import { vertiesToRectangle } from "elf/core/collision";
 import { getDist } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";

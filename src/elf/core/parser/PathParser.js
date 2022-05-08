@@ -4,7 +4,7 @@ import arcToBezier from "svg-arc-to-cubic-bezier";
 
 import { isNotUndefined, clone } from "sapa";
 
-import Point from "./Point";
+import { Point } from "./Point";
 import { Segment } from "./Segment";
 
 import {

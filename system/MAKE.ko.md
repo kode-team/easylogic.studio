@@ -35,7 +35,7 @@ npm test
 
 내부적으로는 vitest 를 사용해서 테스트 합니다. 
 
-xxx.test.js 형태로 테스트 파일을 작성하면 됩니다. ([여기](src/elf/editor/parser/PathParser.test.js)를 참고해주세요.)
+xxx.test.js 형태로 테스트 파일을 작성하면 됩니다. ([여기](src/elf/core/parser/PathParser.test.js)를 참고해주세요.)
 
 # Sapa 와 이벤트 시스템 
 

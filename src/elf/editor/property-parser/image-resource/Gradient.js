@@ -4,9 +4,9 @@ import { ColorStep } from "./ColorStep";
 import { ImageResource } from "./ImageResource";
 
 import * as Color from "elf/core/color";
+import { PathParser } from "elf/core/parser/PathParser";
 import { createTimingFunction } from "elf/editor/interpolate";
 import { step } from "elf/editor/interpolate/timing-functions/steps";
-import { PathParser } from "elf/editor/parser/PathParser";
 import { FuncType, TimingFunction } from "elf/editor/types/model";
 import { parseOneValue } from "elf/utils/css-function-parser";
 

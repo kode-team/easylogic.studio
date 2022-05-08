@@ -21,7 +21,7 @@ import {
   round,
   vertiesMap,
 } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { Length } from "elf/editor/unit/Length";
 

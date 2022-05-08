@@ -30,8 +30,8 @@ import {
 } from "elf/core/bezier";
 import { vertiesToRectangle } from "elf/core/collision";
 import { getDist } from "elf/core/math";
-import PathGenerator from "elf/editor/parser/PathGenerator";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathGenerator } from "elf/core/parser/PathGenerator";
+import { PathParser } from "elf/core/parser/PathParser";
 import {
   REFRESH_SELECTION_TOOL,
   UPDATE_VIEWPORT,
@@ -506,7 +506,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     this.emit("showPathManager", { mode: this.state.mode });
     this.emit("hidePathDrawEditor");
-    this.emit("push.mode.view", "PathEditorView");
+    this.$context.commands.emit("push.mode.view", "PathEditorView");
   }
 
   [SUBSCRIBE("hidePathEditor")]() {
@@ -518,7 +518,7 @@ export default class PathEditorView extends PathTransformEditor {
       this.$el.hide();
       // this.emit('finishPathEdit')
       this.emit("hidePathManager");
-      this.emit("pop.mode.view", "PathEditorView");
+      this.$context.commands.emit("pop.mode.view", "PathEditorView");
       this.emit(REFRESH_SELECTION_TOOL);
     }
   }

@@ -91,7 +91,7 @@ export default class VerticalRuler extends EditorElement {
 
       text[
         text.length
-      ] = `<text x="${1}" y="${y}" dy="6" dominant-baseline="central" transform="rotate(-90, 1, ${y})">${i}</text>`;
+      ] = `<text x="${0}" y="${y}" dy="4" dominant-baseline="central" transform="rotate(-90, 1, ${y})">${i}</text>`;
     }
 
     return text.join("");
@@ -158,14 +158,25 @@ export default class VerticalRuler extends EditorElement {
 
     this.makeLine(
       pathString,
+      1000,
+      minY,
+      maxY,
+      realHeight,
+      height,
+      10,
+      20,
+      10000
+    );
+    this.makeLine(
+      pathString,
       200,
       minY,
       maxY,
       realHeight,
       height,
       10,
-      18,
-      10000
+      16,
+      5000
     );
     this.makeLine(pathString, 100, minY, maxY, realHeight, height, 10, 18, 200);
     this.makeLine(pathString, 50, minY, maxY, realHeight, height, 10, 18, 100);
@@ -184,7 +195,7 @@ export default class VerticalRuler extends EditorElement {
 
     return [
       dist > 3000
-        ? this.makeLineText(1000, minY, maxY, realHeight, height, 24)
+        ? this.makeLineText(3000, minY, maxY, realHeight, height, 24)
         : "",
       2000 < dist && dist < 3000
         ? this.makeLineText(500, minY, maxY, realHeight, height, 22)

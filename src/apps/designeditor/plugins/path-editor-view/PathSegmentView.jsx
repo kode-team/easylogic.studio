@@ -4,8 +4,8 @@ import { DOMDIFF, IF, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
 
 import "./PathSegmentView.scss";
 
-import { PathParser } from "elf/editor/parser/PathParser";
-import { Segment } from "elf/editor/parser/Segment";
+import { PathParser } from "elf/core/parser/PathParser";
+import { Segment } from "elf/core/parser/Segment";
 import {
   END,
   MOVE,

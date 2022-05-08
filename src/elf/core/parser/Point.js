@@ -12,7 +12,7 @@ import { clone } from "sapa";
  *
  */
 
-export default class Point {
+export class Point {
   static isEqual(a, b, c) {
     if (arguments.length === 2) {
       return a.x === b.x && a.y === b.y;

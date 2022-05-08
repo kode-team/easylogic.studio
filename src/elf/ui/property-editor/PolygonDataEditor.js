@@ -2,7 +2,7 @@ import { LOAD, INPUT, DEBOUNCE } from "sapa";
 
 import "./PolygonDataEditor.scss";
 
-import PolygonParser from "elf/editor/parser/PolygonParser";
+import { PolygonParser } from "elf/core/parser/PolygonParser";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class PolygonDataEditor extends EditorElement {

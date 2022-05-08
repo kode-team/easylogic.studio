@@ -13,6 +13,12 @@ import {
   isString,
 } from "sapa";
 
+import "./GridGrowToolView.scss";
+
+import { rectToVerties, vertiesToRectangle } from "elf/core/collision";
+import { calculateAngle360, vertiesMap } from "elf/core/math";
+import { iconUse } from "elf/editor/icon/icon";
+import { Grid } from "elf/editor/property-parser/Grid";
 import {
   REFRESH_SELECTION,
   UPDATE_VIEWPORT,
@@ -20,13 +26,7 @@ import {
   FIRSTMOVE,
   MOVE,
   UPDATE_CANVAS,
-} from "../../../../elf/editor/types/event";
-import "./GridGrowToolView.scss";
-
-import { rectToVerties, vertiesToRectangle } from "elf/core/collision";
-import { calculateAngle360, vertiesMap } from "elf/core/math";
-import { iconUse } from "elf/editor/icon/icon";
-import { Grid } from "elf/editor/property-parser/Grid";
+} from "elf/editor/types/event";
 import { Layout } from "elf/editor/types/model";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -749,6 +749,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const current = this.getGridTargetLayer();
 
     if (!current) return "";
+
+    if (this.$config.true("set.move.control.point")) return "";
 
     if (!this.$context.selection.current) return "";
 

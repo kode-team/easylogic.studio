@@ -107,6 +107,9 @@ export class CommandManager {
 
   emit(command, ...args) {
     const callback = this.getCallback(command);
-    return callback(...args);
+
+    if (callback) {
+      return callback(...args);
+    }
   }
 }

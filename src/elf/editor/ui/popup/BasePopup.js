@@ -111,7 +111,6 @@ export default class BasePopup extends EditorElement {
   }
 
   showByRect(rect) {
-    console.log(rect);
     this.$el
       .css({
         top: Length.px(rect.top),

@@ -1,0 +1,12 @@
+.elf--popup-manager {
+    pointer-events: none;
+    position: fixed;
+    left:0px;
+    right:0px;
+    top:0px;
+    bottom:0px;
+    pointer-events: none;
+    > * {
+        pointer-events: all;
+    }
+}

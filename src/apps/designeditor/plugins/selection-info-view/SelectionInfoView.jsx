@@ -65,7 +65,7 @@ export default class SelectionInfoView extends EditorElement {
       3
     );
 
-    const localDist = vec3.add([], snap, dist);
+    const localDist = vec3.add([], snap.dist, dist);
 
     const result = {};
     this.$context.selection.cachedItemMatrices.forEach((it) => {

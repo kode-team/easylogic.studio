@@ -11,7 +11,7 @@ import {
   vertiesToPath,
   vertiesToRectangle,
 } from "elf/core/collision";
-import { IntersectEpsilonType } from "elf/editor/types/editor";
+import { IntersectEpsilonNumberType } from "elf/editor/types/editor";
 import {
   AlignItems,
   FlexDirection,
@@ -549,6 +549,9 @@ export default class GhostToolView extends EditorElement {
     const currentVerties = this.ghostVerties.filter((_, index) => index < 4);
     const targetRect = vertiesToRectangle(currentVerties);
 
+    const epsilon =
+      IntersectEpsilonNumberType.RECT / this.$context.viewport.scale;
+
     const checkedItems = items
       ?.filter((it) => {
         return polyPoly(it.originVerties, currentVerties);
@@ -559,8 +562,8 @@ export default class GhostToolView extends EditorElement {
         const intersect = intersectRectRect(it.originRect, targetRect);
 
         return (
-          Math.floor(intersect.width) > IntersectEpsilonType.RECT &&
-          Math.floor(intersect.height) > IntersectEpsilonType.RECT
+          Math.floor(intersect.width) > epsilon &&
+          Math.floor(intersect.height) > epsilon
         );
       });
 

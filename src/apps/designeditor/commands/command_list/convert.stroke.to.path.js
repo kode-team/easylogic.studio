@@ -1,4 +1,4 @@
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { Length } from "elf/editor/unit/Length";
 export default {
   command: "convert.stroke.to.path",

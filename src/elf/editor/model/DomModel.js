@@ -10,7 +10,7 @@ import {
   degreeToRadian,
   vertiesMap,
 } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
 import { Border } from "elf/editor/property-parser/Border";
 import { ClipPath } from "elf/editor/property-parser/ClipPath";

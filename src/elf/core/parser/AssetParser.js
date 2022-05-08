@@ -1,4 +1,4 @@
-export default class AssetParser {
+export class AssetParser {
   static parse(datauri, enableParselocal = false) {
     var [, data] = datauri.split("data:");
     var [mediaType, ...content] = data.split(",");

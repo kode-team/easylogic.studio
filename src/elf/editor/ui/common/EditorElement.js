@@ -146,10 +146,6 @@ export class EditorElement extends UIElement {
     return this.$context.modeViewManager;
   }
 
-  get $pathkit() {
-    return this.$context.pathKitManager;
-  }
-
   get $icon() {
     return this.$context.icon;
   }

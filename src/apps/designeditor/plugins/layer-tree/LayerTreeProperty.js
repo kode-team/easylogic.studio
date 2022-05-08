@@ -21,8 +21,8 @@ import {
 
 import "./LayerTreeProperty.scss";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import { iconUse, iconUseForPath } from "elf/editor/icon/icon";
-import { PathParser } from "elf/editor/parser/PathParser";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { TargetActionType } from "elf/editor/types/model";

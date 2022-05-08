@@ -1,4 +1,4 @@
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 export default {
   command: "convert.polygonal.path",
   description: "convert path to polygonal path",

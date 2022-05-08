@@ -5,6 +5,7 @@ import { CONFIG, SUBSCRIBE, IF, Dom } from "sapa";
 import "./HoverView.scss";
 
 import { vertiesToPath } from "elf/core/collision";
+import { ViewModeType } from "elf/editor/types/editor";
 import { UPDATE_VIEWPORT, UPDATE_CANVAS } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -30,7 +31,7 @@ export default class HoverView extends EditorElement {
     if (!canvas) return false;
 
     return (
-      this.$modeView.isCurrentMode("CanvasView") &&
+      this.$modeView.isCurrentMode(ViewModeType.CanvasView) &&
       this.$stateManager.isPointerUp
     );
   }

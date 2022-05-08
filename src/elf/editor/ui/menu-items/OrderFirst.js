@@ -10,6 +10,10 @@ export default class OrderFirst extends MenuItem {
   }
 
   clickButton() {
-    this.commands.executeCommand("send.back", "send back", this.$context.selection.current);
+    this.$commands.executeCommand(
+      "send.back",
+      "send back",
+      this.$context.selection.current
+    );
   }
 }

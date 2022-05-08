@@ -12,12 +12,6 @@ import {
   SUBSCRIBE,
 } from "sapa";
 
-import {
-  UPDATE_CANVAS,
-  UPDATE_VIEWPORT,
-  END,
-  MOVE,
-} from "../../../../elf/editor/types/event";
 import "./GradientEditorView.scss";
 
 import { CSS_TO_STRING, STRING_TO_CSS } from "elf/core/func";
@@ -27,8 +21,14 @@ import {
   calculateRotationOriginMat4,
   vertiesMap,
 } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
+import {
+  UPDATE_CANVAS,
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+} from "elf/editor/types/event";
 import {
   GradientType,
   RadialGradientType,
@@ -1075,7 +1075,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
     this.refresh();
     this.$commands.emit("recoverCursor");
 
-    this.emit("push.mode.view", "GradientEditorView");
+    this.$context.commands.emit("push.mode.view", "GradientEditorView");
   }
 
   [SUBSCRIBE("hideGradientEditorView")]() {

@@ -1,4 +1,4 @@
-import { IntersectEpsilonType } from "../types/editor";
+import { IntersectEpsilonNumberType } from "../types/editor";
 
 import {
   intersectRectRect,
@@ -16,7 +16,7 @@ export default {
    *
    * @param {*} item
    */
-  updateGridArea(currentItem, gridInformation) {
+  updateGridArea(currentItem, gridInformation, scale = 1) {
     if (currentItem.isInGrid() === false) return;
 
     const lastVerties = currentItem.originVerties;
@@ -27,6 +27,7 @@ export default {
     // 2. 그런 이후 수집된 그리드 정보를 가지고 시작과 끝 영역을 분리해야한다.
     // 3. 그런 다음 grid-column-start, end, grid-row-start-end 를 처리하면 된다.
     const { items } = gridInformation;
+    const epsilon = IntersectEpsilonNumberType.RECT / scale;
     const checkedGridRowColumnList = items
       .filter((it) => {
         return polyPoly(lastVerties, it.originVerties);
@@ -36,8 +37,8 @@ export default {
         const intersect = intersectRectRect(it.originRect, targetRect);
 
         return (
-          Math.floor(intersect.width) > IntersectEpsilonType.RECT &&
-          Math.floor(intersect.height) > IntersectEpsilonType.RECT
+          Math.floor(intersect.width) > epsilon &&
+          Math.floor(intersect.height) > epsilon
         );
       });
 

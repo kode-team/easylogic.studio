@@ -1,7 +1,7 @@
 import { SVGPathItem } from "./SVGPathItem";
 
+import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
-import { PathParser } from "elf/editor/parser/PathParser";
 import { BooleanOperation } from "elf/editor/types/model";
 
 export class BooleanPathItem extends SVGPathItem {

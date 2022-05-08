@@ -1,11 +1,14 @@
+import { ViewModeType } from "elf/editor/types/editor";
 export class ModeViewManager {
   constructor(editor) {
     this.editor = editor;
-    this.modes = ["CanvasView"];
+    this.modes = [ViewModeType.CanvasView];
   }
 
   pushMode(mode) {
-    this.modes.push(mode);
+    if (!this.isCurrentMode(mode)) {
+      this.modes.push(mode);
+    }
   }
 
   popMode(mode = undefined) {

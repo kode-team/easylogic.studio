@@ -4,7 +4,7 @@ import makeInterpolateQuard from "./makeInterpolateQuard";
 
 import { getCurveDist, getQuardDist } from "elf/core/bezier";
 import { getDist } from "elf/core/math";
-import Point from "elf/editor/parser/Point";
+import { Point } from "elf/core/parser/Point";
 
 export default function makeInterpolateOffset(segments) {
   var interpolateList = [];

@@ -6,7 +6,7 @@ import "./GuideLineView.scss";
 
 import { toRectVerties } from "elf/core/collision";
 import { makeGuidePoint } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import {
   UPDATE_VIEWPORT,
   REFRESH_SELECTION,
@@ -185,16 +185,36 @@ export default class GuideLineView extends EditorElement {
     // return lines.join("");
   }
 
+  filterGuideLine(list) {
+    list = list.filter(Boolean);
+
+    // let xList = list.filter((item) => item[2] === "x");
+    // let yList = list.filter((item) => item[2] === "y");
+
+    // xList.sort((a, b) => {
+    //   return a[3] - b[3];
+    // });
+
+    // yList.sort((a, b) => {
+    //   return a[3] - b[3];
+    // });
+
+    // list = [...xList.slice(0, 5), ...yList.slice(0, 5)];
+
+    return list;
+  }
+
   createGuideLine(list) {
     var images = [];
     var texts = [];
-    list = list.filter(Boolean);
+    list = this.filterGuideLine(list);
 
     for (var i = 0, len = list.length; i < len; i++) {
       const [
         source,
         target,
         axis,
+        // eslint-disable-next-line no-unused-vars
         dist,
         newTarget,
         sourceVerties,

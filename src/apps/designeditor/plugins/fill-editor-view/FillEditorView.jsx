@@ -17,7 +17,7 @@ import {
   calculateRotationOriginMat4,
   vertiesMap,
 } from "elf/core/math";
-import { PathParser } from "elf/editor/parser/PathParser";
+import { PathParser } from "elf/core/parser/PathParser";
 import {
   UPDATE_VIEWPORT,
   END,
@@ -904,7 +904,7 @@ export default class FillEditorView extends FillColorstepEditor {
 
     this.$el.show();
 
-    this.emit("push.mode.view", "FillEditorView");
+    this.$context.commands.emit("push.mode.view", "FillEditorView");
   }
 
   [SUBSCRIBE("hideFillEditorView")]() {

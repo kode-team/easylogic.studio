@@ -1,6 +1,6 @@
 import { beforeAll, expect, test } from "vitest";
 
-import PathGenerator from "./PathGenerator";
+import { PathGenerator } from "./PathGenerator";
 import { PathParser } from "./PathParser";
 
 let pathEditor = {};

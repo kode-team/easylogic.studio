@@ -13,7 +13,6 @@ import { InjectManager } from "./manager-items/InjectManager";
 import { KeyBoardManager } from "./manager-items/KeyboardManager";
 import { MenuManager } from "./manager-items/MenuManager";
 import { ModeViewManager } from "./manager-items/ModeViewManager";
-import { PathKitManager } from "./manager-items/PathKitManager";
 import { PluginManager } from "./manager-items/PluginManager";
 import { RendererManager } from "./manager-items/RendererManager";
 import { ShortCutManager } from "./manager-items/ShortCutManager";
@@ -58,7 +57,6 @@ export class Editor {
       viewport: ViewportManager,
       storageManager: StorageManager,
       modeViewManager: ModeViewManager,
-      pathKitManager: PathKitManager,
       cursorManager: CursorManager,
       assetManager: AssetManager,
       injectManager: InjectManager,

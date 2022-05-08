@@ -15,6 +15,7 @@ import { ClipboardManager } from "./managers/ClipboardManager";
 import { HistoryManager } from "./managers/HistoryManager";
 import { LockManager } from "./managers/LockManager";
 import { ModelManager } from "./managers/ModelManager";
+import { PathKitManager } from "./managers/PathKitManager";
 import { SegmentSelectionManager } from "./managers/SegmentSelectionManager";
 import { SelectionManager } from "./managers/SelectionManager";
 import { SnapManager } from "./managers/SnapManager";
@@ -47,7 +48,7 @@ export class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
 
-    this.$pathkit.load();
+    this.$context.pathkit.load();
   }
 
   afterRender() {
@@ -70,6 +71,7 @@ export class DesignEditor extends BaseLayout {
       lockManager: LockManager,
       visibleManager: VisibleManager,
       clipboard: ClipboardManager,
+      pathkit: PathKitManager,
     };
   }
 

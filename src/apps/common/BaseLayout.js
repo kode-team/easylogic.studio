@@ -220,6 +220,7 @@ export class BaseLayout extends EditorElement {
     var newPos = e.xy || EMPTY_POS;
 
     this.$config.init("bodyEvent", e);
+    this.$commands.emit("change.bodyEvent");
     this.pos = newPos;
 
     if (!this.__requestId) {
