@@ -145,26 +145,26 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     this.state.dragging = true;
     // this.renderPointers();
-    this.emit("setAttributeForMulti", this.$context.selection.pack("angle"));
+    this.$commands.emit("setAttribute", this.$context.selection.pack("angle"));
   }
 
   rotateEndVertex() {
     this.state.dragging = false;
     this.state.isRotate = false;
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
     // this.$config.set("set.move.control.point", false);
     // 마지막 변경 시점 업데이트
     this.verties = null;
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate",
       this.$context.selection.pack("angle")
     );
   }
 
   refreshRotatePointerIcon() {
-    this.emit("refreshCursor", "rotate");
+    this.$commands.emit("refreshCursor", "rotate");
   }
 
   refreshPointerIcon(e) {
@@ -180,9 +180,13 @@ export default class SelectionToolView extends SelectionToolEvent {
       );
       const angle = calculateAngle360(diff[0], diff[1]);
       let iconAngle = Math.floor(angle);
-      this.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 8 8)`);
+      this.$commands.emit(
+        "refreshCursor",
+        "open_in_full",
+        `rotate(${iconAngle} 8 8)`
+      );
     } else {
-      this.emit("recoverCursor");
+      this.$commands.emit("recoverCursor");
     }
   }
 
@@ -205,7 +209,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
   [POINTEROUT("$pointerRect .pointer,.rotate-pointer") +
     IF("checkPointerIsNotMoved")]() {
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
   }
 
   [POINTERSTART("$pointerRect .pointer") +
@@ -236,16 +240,16 @@ export default class SelectionToolView extends SelectionToolEvent {
   calculateDistance(vertex, distVector, reverseMatrix) {
     // 1. 움직이는 vertex 를 구한다.
     const currentVertex = vec3.clone(vertex);
-    const moveVertext = vec3.add([], currentVertex, distVector);
+    const moveVertex = vec3.add([], currentVertex, distVector);
 
     // 2. dx, dy 만큼 옮긴 vertex 를 구한다.
     // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다
     const snap = this.$context.snapManager.check(
-      [moveVertext],
+      [moveVertex],
       3 / this.$viewport.scale
     );
 
-    const nextVertex = vec3.add([], moveVertext, snap);
+    const nextVertex = vec3.add([], moveVertex, snap);
 
     // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.
     // var currentResult = vec3.transformMat4([], currentVertex, reverseMatrix);62849
@@ -712,8 +716,8 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     const current = this.$context.selection.current;
     if (current.isInGrid()) {
-      this.emit(
-        "setAttributeForMulti",
+      this.$commands.emit(
+        "setAttribute",
         this.$context.selection.pack(
           "x",
           "y",
@@ -729,8 +733,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         )
       );
     } else {
-      this.emit(
-        "setAttributeForMulti",
+      this.$commands.emit(
+        "setAttribute",
         this.$context.selection.pack(
           "x",
           "y",
@@ -760,7 +764,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
   moveEndVertex() {
     this.state.dragging = false;
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
     this.$context.selection.reselect();
     // this.$config.set("set.move.control.point", false);
 
@@ -769,8 +773,8 @@ export default class SelectionToolView extends SelectionToolEvent {
       this.$context.selection.recoverChildren();
 
       if (this.$context.selection.current.isInGrid()) {
-        this.command(
-          "setAttributeForMulti",
+        this.$commands.executeCommand(
+          "setAttribute",
           "move selection pointer",
           this.$context.selection.pack(
             "x",
@@ -787,8 +791,8 @@ export default class SelectionToolView extends SelectionToolEvent {
           )
         );
       } else {
-        this.command(
-          "setAttributeForMulti",
+        this.$commands.executeCommand(
+          "setAttribute",
           "move selection pointer",
           this.$context.selection.pack(
             "x",
@@ -802,7 +806,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         );
       }
 
-      this.emit("recoverBooleanPath");
+      this.$commands.emit("recoverBooleanPath");
     });
   }
 

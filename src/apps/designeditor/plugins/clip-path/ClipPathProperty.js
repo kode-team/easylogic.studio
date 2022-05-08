@@ -140,8 +140,8 @@ export default class ClipPathProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current) return;
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "delete clip-path",
       this.$context.selection.packByValue({
         "clip-path": "",
@@ -187,8 +187,8 @@ export default class ClipPathProperty extends BaseProperty {
         "clip-path": ClipPathSample[e.$dt.data("value")],
       });
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change clip-path",
         this.$context.selection.pack("clip-path")
       );
@@ -234,8 +234,8 @@ export default class ClipPathProperty extends BaseProperty {
     current.reset(data);
 
     this.refresh();
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clip-path",
       this.$context.selection.packByValue(data)
     );

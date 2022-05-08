@@ -19,6 +19,11 @@ export class BaseUI extends UIElement {
     if (isFunction(this.props.onClick)) {
       this.props.onClick(key, value, params);
     }
+
+    // command 가 있으면 command 를 실행한다.
+    else if (this.props.command) {
+      this.$commands.emit(this.props.command, ...(this.props.args || []));
+    }
     // action 이 있으면 emit 을  실행
     else if (isString(this.props.action)) {
       this.emit(this.props.action, key, value, params);

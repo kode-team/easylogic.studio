@@ -80,8 +80,8 @@ export default class PatternProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changePatternEditor")](key, pattern) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change pattern",
       this.$context.selection.packByValue({
         pattern,

@@ -45,8 +45,8 @@ export default class TextShadowProperty extends BaseProperty {
       key: "text-shadow",
       value: current["text-shadow"],
       onchange: (key, value) => {
-        this.command(
-          "setAttributeForMulti",
+        this.$commands.executeCommand(
+          "setAttribute",
           "change text shadow",
           this.$context.selection.packByValue({
             [key]: value,

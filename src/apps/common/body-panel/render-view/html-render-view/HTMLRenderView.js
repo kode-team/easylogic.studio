@@ -304,8 +304,10 @@ export default class HTMLRenderView extends EditorElement {
     this.emit(OPEN_CONTEXT_MENU, {
       target: "context.menu.layer",
       items: [
+        "-",
         {
           type: "button",
+          checked: true,
           title: "yellow",
           action: () => {
             console.log("console.log", "yellow");
@@ -347,7 +349,7 @@ export default class HTMLRenderView extends EditorElement {
     if ($target.hasClass("canvas-view")) {
       this.$context.selection.select();
       this.initializeDragSelection();
-      this.emit("history.refreshSelection");
+      this.$commands.emit("history.refreshSelection");
 
       return false;
     }
@@ -374,7 +376,7 @@ export default class HTMLRenderView extends EditorElement {
         this.emit("refreshLayerTreeView");
 
         this.initializeDragSelection();
-        this.emit("history.refreshSelection");
+        this.$commands.emit("history.refreshSelection");
       }
     } else {
       if (isInSelectedArea) {
@@ -404,7 +406,7 @@ export default class HTMLRenderView extends EditorElement {
       }
 
       this.initializeDragSelection();
-      this.emit("history.refreshSelection");
+      this.$commands.emit("history.refreshSelection");
     }
   }
 
@@ -461,7 +463,7 @@ export default class HTMLRenderView extends EditorElement {
       this.emit("refreshLayerTreeView");
     }
 
-    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y"));
+    this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y"));
   }
 
   /**
@@ -540,9 +542,8 @@ export default class HTMLRenderView extends EditorElement {
     } else {
       this.$context.selection.reselect();
       this.$context.snapManager.clear();
-      // this.emit('removeGuideLine');
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "move item",
         this.$context.selection.pack("x", "y")
       );
@@ -550,7 +551,7 @@ export default class HTMLRenderView extends EditorElement {
       this.nextTick(() => {
         // boolean path 의 조정이 끝나면
         // box 를 재구성한다.
-        this.emit("recoverBooleanPath");
+        this.$commands.emit("recoverBooleanPath");
       });
     }
 

@@ -116,8 +116,8 @@ export default class FilterProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change filter",
       this.$context.selection.packByValue({
         [key]: filter,

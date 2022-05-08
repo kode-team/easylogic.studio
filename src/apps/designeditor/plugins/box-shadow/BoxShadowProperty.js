@@ -45,8 +45,8 @@ export default class BoxShadowProperty extends BaseProperty {
       key: "box-shadow",
       value: current["box-shadow"],
       onchange: (key, value) => {
-        this.command(
-          "setAttributeForMulti",
+        this.$commands.executeCommand(
+          "setAttribute",
           "change box shadow",
           this.$context.selection.packByValue({
             [key]: value,

@@ -39,10 +39,10 @@ export class BaseStore {
     this.callbacks[event] = list;
   }
 
-  debug() {
-    // if (this.editor && this.editor.context.config.get('debug')) {
-    //   console.debug(...args);
-    // }
+  debug(...args) {
+    if (this.editor && this.editor.context.config.get("debug.mode")) {
+      console.debug(...args);
+    }
   }
 
   /**
@@ -236,7 +236,7 @@ export class BaseStore {
             }
           }
         } else {
-          // console.warn(`message event ${event} is not exist.`)
+          this.debug(`message event ${event} is not exist.`);
         }
       });
     });
@@ -261,7 +261,7 @@ export class BaseStore {
           f.callback.apply(f.context, args);
         });
       } else {
-        console.warn(event, " is not valid event");
+        this.debug(event, " is not valid event");
       }
     });
   }

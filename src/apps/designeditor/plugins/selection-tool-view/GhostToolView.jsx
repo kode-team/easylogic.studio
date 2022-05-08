@@ -448,7 +448,7 @@ export default class GhostToolView extends EditorElement {
 
     if (current.isLayoutItem() === false) return;
 
-    this.command(
+    this.$commands.executeCommand(
       "moveLayerToTarget",
       "change target with move",
       current,
@@ -463,12 +463,12 @@ export default class GhostToolView extends EditorElement {
 
     // this.$context.selection.currentProject.appendChild(current);
 
-    // this.command(
-    //   "setAttributeForMulti",
+    // this.$commands.executeCommand(
+    //   "setAttribute",
     //   "change move",
     //   this.$context.selection.pack("x", "y")
     // );
-    // this.command("setAttributeForMulti", "change move", this.$context.selection.packByIds([lastParent.id], "children"));
+    // this.$commands.executeCommand("setAttribute", "change move", this.$context.selection.packByIds([lastParent.id], "children"));
 
     // this.emit("refreshAllCanvas");
   }
@@ -523,7 +523,7 @@ export default class GhostToolView extends EditorElement {
 
       if (this.targetParent.isLayout(Layout.FLEX)) {
         if (targetAction) {
-          this.command(
+          this.$commands.executeCommand(
             "moveLayerToTarget",
             "change target with move",
             current,
@@ -573,8 +573,8 @@ export default class GhostToolView extends EditorElement {
       const columnEnd = Math.max(...columnList) + 1;
       const rowEnd = Math.max(...rowList) + 1;
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change grid item",
         this.$context.selection.packByValue({
           "grid-column-start": columnStart,
@@ -586,7 +586,7 @@ export default class GhostToolView extends EditorElement {
 
       // 해당 자식을 가지고 있지 않는 경우는 자식으로 변경해준다.
       if (info.current.hasChild(current.id) === false) {
-        this.command(
+        this.$commands.executeCommand(
           "moveLayerToTarget",
           "change target with move",
           current,
@@ -600,7 +600,7 @@ export default class GhostToolView extends EditorElement {
       if (this.targetItem) {
         // targetItem 에 대한 grid 정보 다시 수집
         this.emit("refreshGridToolInfo", this.targetItem);
-        this.command(
+        this.$commands.executeCommand(
           "moveLayerToTarget",
           "change target with move",
           current,
@@ -666,7 +666,7 @@ export default class GhostToolView extends EditorElement {
         this.targetItem.isLayout(Layout.FLEX) &&
         isCtrl === false // ctrl 이 눌러져 있으면 다음 로직으로 넘김
       ) {
-        this.command(
+        this.$commands.executeCommand(
           "moveLayerToTarget",
           "change target with move",
           current,
@@ -711,7 +711,7 @@ export default class GhostToolView extends EditorElement {
 
     // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함
     if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
-      this.command(
+      this.$commands.executeCommand(
         "moveLayerToTarget",
         "change target with move",
         current,

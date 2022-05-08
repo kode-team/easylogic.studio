@@ -14,7 +14,9 @@ import boxShadow from "./box-shadow";
 import clipPath from "./clip-path";
 import ClippathEditorView from "./clippath-editor-view";
 import codeview from "./codeview";
+import commands from "./commands";
 import defaultItems from "./default-items";
+import defaultPatterns from "./default-patterns";
 import exportResource from "./export-resource";
 import fillEditorView from "./fill-editor-view";
 import filter from "./filter";
@@ -61,10 +63,10 @@ import content from "plugins/content";
 import defaultConfigs from "plugins/default-configs";
 import defaultIcons from "plugins/default-icons";
 import defaultMessages from "plugins/default-messages";
-import defaultPatterns from "plugins/default-patterns";
 import propertyEditor from "plugins/property-editor";
 
 export default [
+  commands,
   defaultConfigs,
   defaultIcons,
   defaultMessages,

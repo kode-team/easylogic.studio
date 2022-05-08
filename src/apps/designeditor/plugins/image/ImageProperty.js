@@ -59,8 +59,8 @@ export default class ImageProperty extends BaseProperty {
   [SUBSCRIBE_SELF("changeImageSize")](key, value) {
     var [width, height] = value.split("x").map((it) => it);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "resize image",
       this.$context.selection.packByValue({
         width,
@@ -73,8 +73,8 @@ export default class ImageProperty extends BaseProperty {
     var current = this.$context.selection.current;
 
     if (current) {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "resize image",
         this.$context.selection.packByValue({
           width: (item) => item.naturalWidth.clone(),
@@ -117,8 +117,8 @@ export default class ImageProperty extends BaseProperty {
 
       this.bindData("$sizeInfo");
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change image",
         this.$context.selection.packByValue({
           src: value,

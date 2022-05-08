@@ -38,9 +38,13 @@ export default class BlankCanvasView extends EditorElement {
 
   afterRender() {
     this.nextTick(() => {
-      this.trigger(RESIZE_CANVAS);
+      this.refreshCanvasSize();
+
+      // 초기에 캔버스 이동하는 것을 넣으세요.
+      // this.$commands.emit("moveSelectionToCenter", true);
+
       this.refreshCursor();
-    }, 100);
+    });
   }
   template() {
     return (
@@ -87,9 +91,9 @@ export default class BlankCanvasView extends EditorElement {
     if (value) {
       this.startMovePan();
 
-      this.emit("refreshCursor", "grab");
+      this.$commands.emit("refreshCursor", "grab");
     } else {
-      this.emit("recoverCursor", "auto");
+      this.$commands.emit("recoverCursor", "auto");
     }
   }
 
@@ -98,7 +102,7 @@ export default class BlankCanvasView extends EditorElement {
   }
 
   movePan(dx, dy) {
-    this.emit("refreshCursor", "grabbing");
+    this.$commands.emit("refreshCursor", "grabbing");
     const currentDist = vec3.fromValues(dx, dy, 0);
     this.$context.viewport.pan(
       ...vec3.transformMat4(
@@ -112,9 +116,9 @@ export default class BlankCanvasView extends EditorElement {
 
   refreshCursor() {
     if (this.$context.config.get("set.tool.hand") === false) {
-      this.emit("refreshCursor", "auto");
+      this.$commands.emit("refreshCursor", "auto");
     } else {
-      this.emit("refreshCursor", "grab");
+      this.$commands.emit("refreshCursor", "grab");
     }
   }
 
@@ -228,6 +232,6 @@ export default class BlankCanvasView extends EditorElement {
   }
 
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
-    this.emit("refreshCursor", "auto");
+    this.$commands.emit("refreshCursor", "auto");
   }
 }

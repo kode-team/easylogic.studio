@@ -129,8 +129,8 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeConstraints")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "apply constraints",
       this.$context.selection.packByValue({
         [key]: value,

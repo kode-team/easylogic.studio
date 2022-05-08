@@ -75,8 +75,8 @@ export default class RotateEditorView extends EditorElement {
     });
 
     this.bindData("$rotateZ");
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change direction",
       this.$context.selection.pack("transform")
     );
@@ -120,8 +120,8 @@ export default class RotateEditorView extends EditorElement {
       })
     );
     // this.$context.selection.reselect();
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change direction",
       this.$context.selection.pack("transform")
     );
@@ -167,8 +167,8 @@ export default class RotateEditorView extends EditorElement {
 
     this.bindData("$rotateContainer");
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate",
       this.$context.selection.pack("transform")
     );
@@ -176,8 +176,8 @@ export default class RotateEditorView extends EditorElement {
   }
 
   moveEndRotateXY() {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate",
       this.$context.selection.pack("transform")
     );
@@ -194,8 +194,8 @@ export default class RotateEditorView extends EditorElement {
     );
     // this.$context.selection.reselect();
     this.bindData("$rotateZ");
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate handle",
       this.$context.selection.pack("transform")
     );
@@ -226,8 +226,8 @@ export default class RotateEditorView extends EditorElement {
     this.modifyRotateZ(dx, dy);
 
     this.bindData("$rotateZ");
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate handle",
       this.$context.selection.pack("transform")
     );
@@ -235,8 +235,8 @@ export default class RotateEditorView extends EditorElement {
   }
 
   end() {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate handle",
       this.$context.selection.pack("transform")
     );

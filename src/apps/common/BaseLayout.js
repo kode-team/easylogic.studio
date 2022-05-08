@@ -28,9 +28,7 @@ const MOVE_CHECK_MS = 0;
 export class BaseLayout extends EditorElement {
   async created() {
     // register data manager (as context)
-    this.$editor.registerManager({
-      ...this.getManagers(),
-    });
+    this.$editor.registerManager(this.getManagers());
 
     // register local plugins
     this.$editor.registerPluginList(this.getPlugins());
@@ -243,7 +241,7 @@ export class BaseLayout extends EditorElement {
 
   [SUBSCRIBE("refreshAll")]() {
     this.emit("refreshProjectList");
-    this.emit("refreshArtboard");
+    this.$commands.emit("refreshArtboard");
   }
 
   [SUBSCRIBE("changed.locale")]() {

@@ -462,7 +462,7 @@ export default class LayerAppendView extends EditorElement {
         }
         break;
       default:
-        this.emit(
+        this.$commands.emit(
           "newComponent",
           this.state.type,
           rect,
@@ -590,7 +590,7 @@ export default class LayerAppendView extends EditorElement {
           rectVerties[0]
         );
 
-        this.emit(
+        this.$commands.emit(
           "newComponent",
           this.state.type,
           rect,
@@ -609,12 +609,22 @@ export default class LayerAppendView extends EditorElement {
 
   [CHANGE("$file")]() {
     this.refs.$file.files.forEach((item) => {
-      this.emit("updateImage", item, this.state.rect, this.state.containerItem);
+      this.$commands.emit(
+        "updateImage",
+        item,
+        this.state.rect,
+        this.state.containerItem
+      );
     });
   }
   [CHANGE("$video")]() {
     this.refs.$video.files.forEach((item) => {
-      this.emit("updateVideo", item, this.state.rect, this.state.containerItem);
+      this.$commands.emit(
+        "updateVideo",
+        item,
+        this.state.rect,
+        this.state.containerItem
+      );
     });
   }
 

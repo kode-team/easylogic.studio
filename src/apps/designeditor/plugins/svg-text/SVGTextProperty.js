@@ -93,8 +93,8 @@ export default class SVGTextProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeTextValue")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change svg text property: ${key}`,
       this.$context.selection.packByValue({
         [key]: value,

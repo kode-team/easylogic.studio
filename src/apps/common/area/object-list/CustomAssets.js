@@ -61,7 +61,7 @@ export default class CustomAssets extends EditorElement {
   }
 
   [CLICK("$addCustomAsset")]() {
-    this.emit("savePNG", async (datauri) => {
+    this.$commands.emit("savePNG", async (datauri) => {
       await this.$storageManager.saveCustomAsset(datauri);
       this.refresh();
     });

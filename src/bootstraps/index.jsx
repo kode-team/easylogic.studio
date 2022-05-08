@@ -29,4 +29,4 @@ function startEditor() {
   });
 }
 
-window.EasylogicEditor = startEditor();
+window.elfEditor = startEditor();

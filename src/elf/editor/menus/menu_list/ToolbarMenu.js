@@ -12,7 +12,7 @@ export default {
         type: "button",
         icon: "navigation",
         action: (editor) => {
-          editor.emit("addCubeBox");
+          editor.context.commands.emit("addCubeBox");
         },
       },
     ];

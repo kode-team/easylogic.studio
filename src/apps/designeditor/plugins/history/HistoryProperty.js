@@ -38,7 +38,7 @@ export default class HistoryProperty extends BaseProperty {
     });
   }
 
-  [SUBSCRIBE("refreshHistory")]() {
+  [SUBSCRIBE("refreshHistoryList")]() {
     this.refresh();
   }
 }

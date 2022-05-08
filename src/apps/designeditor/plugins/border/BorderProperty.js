@@ -42,8 +42,8 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change border",
       this.$context.selection.packByValue({
         [key]: value,

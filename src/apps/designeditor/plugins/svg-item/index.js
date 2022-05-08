@@ -208,7 +208,7 @@ export default function (editor) {
         editorOptions: {
           label: "Copy ",
           text: "as path",
-          action: "copy.path",
+          command: "copy.path",
         },
       },
 

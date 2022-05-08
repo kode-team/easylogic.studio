@@ -107,8 +107,8 @@ export default class PathSegmentView extends EditorElement {
       this.targetPathSegmentList
     ).transformMat4(current.absoluteMatrixInverse);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "update path",
       this.$context.selection.packByValue(current.updatePath(target.d))
     );

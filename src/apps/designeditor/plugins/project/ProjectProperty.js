@@ -42,7 +42,7 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [LOAD("$projectList") + DOMDIFF]() {
-    var projects = this.$model.projects || [];
+    var projects = this.$model?.projects || [];
 
     return projects.map((projectId) => {
       var selected =
@@ -94,7 +94,11 @@ export default class ProjectProperty extends BaseProperty {
   [CLICK("$projectList .project-item label")](e) {
     var id = e.$dt.attr("data-id");
 
-    this.command("refreshSelectionPorject", "change project", id);
+    this.commands.executeCommand(
+      "refreshSelectionPorject",
+      "change project",
+      id
+    );
 
     this.nextTick(() => {
       this.refresh();
@@ -104,7 +108,7 @@ export default class ProjectProperty extends BaseProperty {
   [CLICK("$projectList .project-item .remove")](e) {
     var id = e.$dt.attr("data-id");
 
-    this.command("removeProject", "remove project", id);
+    this.commands.executeCommand("removeProject", "remove project", id);
 
     this.nextTick(() => {
       this.refresh();

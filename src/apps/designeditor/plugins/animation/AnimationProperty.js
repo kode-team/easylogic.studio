@@ -112,8 +112,8 @@ export default class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
 
     if (current) {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "add animation property",
         this.$context.selection.packByValue({
           animation: (item) => Animation.add(item.animation, { name: null }),
@@ -139,7 +139,12 @@ export default class AnimationProperty extends BaseProperty {
       animation: Animation.remove(current.animation, removeIndex),
     });
 
-    this.emit("refreshElement", current);
+    this.$commands.emit(
+      "setAttribute",
+      this.$context.selection.packByValue({
+        animation: Animation.remove(current.animation, removeIndex),
+      })
+    );
 
     this.refresh();
   }
@@ -156,11 +161,12 @@ export default class AnimationProperty extends BaseProperty {
 
       e.$dt.attr("data-play-state-selected-value", animation.playState);
 
-      current.reset({
-        animation: Animation.join(list),
-      });
-
-      this.emit("refreshElement", current);
+      this.$commands.emit(
+        "setAttribute",
+        this.$context.selection.packByValue({
+          animation: Animation.join(list),
+        })
+      );
     }
   }
 
@@ -213,8 +219,8 @@ export default class AnimationProperty extends BaseProperty {
       this.currentAnimation.reset({ ...data });
 
       if (this.current) {
-        this.command(
-          "setAttributeForMulti",
+        this.$commands.executeCommand(
+          "setAttribute",
           "change animation property",
           this.$context.selection.packByValue({
             animation: (item) =>

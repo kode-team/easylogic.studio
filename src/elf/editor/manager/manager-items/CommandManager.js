@@ -1,7 +1,5 @@
 import { isObject, isFunction } from "sapa";
 
-import commands from "../../commands";
-
 export class CommandManager {
   constructor(editor) {
     this.$editor = editor;
@@ -23,12 +21,12 @@ export class CommandManager {
     });
   }
 
-  loadCommands() {
-    Object.keys(commands).forEach((command) => {
-      if (isFunction(commands[command])) {
-        this.registerCommand(command, commands[command]);
+  loadCommands(userCommands = {}) {
+    Object.keys(userCommands).forEach((command) => {
+      if (isFunction(userCommands[command])) {
+        this.registerCommand(command, userCommands[command]);
       } else {
-        this.registerCommand(commands[command]);
+        this.registerCommand(userCommands[command]);
       }
     });
   }
@@ -57,7 +55,7 @@ export class CommandManager {
       // local command 에 등록
       this.localCommands[command] = callback;
 
-      return this.$editor.on(command, callback, this, 0);
+      // return this.$editor.on(command, callback, this, 0);
     } else if (isObject(command)) {
       // command object { command, title, description, debounce, execute }
       const callback = (...args) => {
@@ -71,12 +69,12 @@ export class CommandManager {
       // local command 에 등록
       this.localCommands[command.command] = callback;
 
-      return this.$editor.on(
-        command.command,
-        callback,
-        command,
-        command.debounce || 0
-      );
+      // return this.$editor.on(
+      //   command.command,
+      //   callback,
+      //   command,
+      //   command.debounce || 0
+      // );
     }
   }
 
@@ -93,5 +91,22 @@ export class CommandManager {
           resolve(callback(...args));
         });
     }
+  }
+
+  executeCommand(command, description, ...args) {
+    if (this.$editor.context.stateManager.isPointerUp) {
+      command = `history.${command}`;
+
+      const callback = this.getCallback(command);
+
+      return callback(description, ...args);
+    } else {
+      return this.emit(command, ...args);
+    }
+  }
+
+  emit(command, ...args) {
+    const callback = this.getCallback(command);
+    return callback(...args);
   }
 }

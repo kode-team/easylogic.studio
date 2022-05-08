@@ -1,5 +1,6 @@
 import { BaseStore, registAlias, registElement } from "sapa";
 
+import commands from "./commands";
 import { AssetManager } from "./manager-items/AssetManager";
 import { CommandMaker } from "./manager-items/CommandMaker";
 import { CommandManager } from "./manager-items/CommandManager";
@@ -75,6 +76,11 @@ export class Editor {
         shortcuts: ShortCutManager,
       });
     }
+
+    /**
+     * 기본 커맨드 등록
+     */
+    this.loadCommands(commands);
 
     this.initPlugins();
     this.initStorage();
@@ -189,6 +195,8 @@ export class Editor {
   }
 
   command(command, message, ...args) {
+    console.warn("command", command, message, args);
+
     if (this.context.stateManager.isPointerUp) {
       return this.context.store.emit(`history.${command}`, message, ...args);
     } else {
@@ -358,6 +366,15 @@ export class Editor {
     return this.renderer("json");
   }
 
+  /**
+   * command 리스트 등록
+   *
+   * @param {object} userCommands
+   * @returns
+   */
+  loadCommands(userCommands) {
+    return this.context.commands.loadCommands(userCommands);
+  }
   /**
    *
    * @param {object|function} commandObject

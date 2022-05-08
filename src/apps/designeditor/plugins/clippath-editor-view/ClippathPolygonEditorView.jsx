@@ -62,8 +62,8 @@ export default class ClippathPolygonEditorView extends EditorElement {
   moveEndPolygonPointer() {
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );
@@ -109,10 +109,7 @@ export default class ClippathPolygonEditorView extends EditorElement {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
-      this.$context.selection.packByValue(value)
-    );
+    this.emit("setAttribute", this.$context.selection.packByValue(value));
   }
 
   [POINTERSTART("$el .polygon .polygon-center") +
@@ -139,8 +136,8 @@ export default class ClippathPolygonEditorView extends EditorElement {
             value: `50% at 50% 50%`,
           });
 
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             "change clippath",
             this.$context.selection.packByValue(value)
           );
@@ -151,8 +148,8 @@ export default class ClippathPolygonEditorView extends EditorElement {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );

@@ -90,11 +90,13 @@ src/plugins/ 를 참고하세요.
 
 ```js
 
-editor.command('setAttributeForMulti', 'change property', editor.context.selection.packByValue({
+// 커맨드 상에서 
+editor.context.commands.executeCommand('setAttribute', 'change property', editor.context.selection.packByValue({
     'background-color': 'red'
 }))
 
-this.command('setAttributeForMulti', 'change property', this.$context.selection.packByValue({
+// ui 상에서 
+this.$commands.executeCommand('setAttribute', 'change property', this.$context.selection.packByValue({
     'background-color': 'red'
 }))
 

@@ -31,14 +31,14 @@ export default {
 
 ```js
 export default {
-    command : 'history.setAttributeForMulti',
+    command : 'history.setAttribute',
     execute: function (editor, message, multiAttrs = {}, context = {origin: '*'}) {
 
-        editor.emit('setAttributeForMulti', multiAttrs, context)
+        editor.context.commands.emit('setAttribute', multiAttrs, context)
 
         editor.context.history.add(message, this, {
             currentValues: [multiAttrs],
-            undoValues: editor.context.history.getUndoValuesForMulti(multiAttrs)
+            undoValues: editor.context.history.getUndoValues(multiAttrs)
         })
 
         editor.nextTick(() =>  {
@@ -47,7 +47,7 @@ export default {
     },
 
     redo: function (editor, {currentValues}) {
-        editor.emit('setAttributeForMulti', ...currentValues)
+        editor.context.commands.emit('setAttribute', ...currentValues)
         editor.nextTick(() => {
             editor.context.selection.reselect();            
             editor.emit('refreshAll');         
@@ -79,11 +79,11 @@ editor 객체의 emit 메소드를 통해서 특정 커맨드를 실행합니다
 ```js
 
 // command 내에서 실행 
-editor.emit('zoom.in')
+editor.context.commands.emit('zoom.in')
 
 // UI 에서 실행 
 
-this.$editor.emit('zoom.in');
+this.$commands.emit('zoom.in');
 
 ```
 

@@ -7,11 +7,11 @@ import {
   MOVE,
   UPDATE_VIEWPORT,
   REFRESH_SELECTION,
+  UPDATE_CANVAS,
 } from "elf/editor/types/event";
 import { FlexDirection, Layout, ResizingMode } from "elf/editor/types/model";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
-import { UPDATE_CANVAS } from 'elf/editor/types/event';
 
 export default class FlexGrowToolView extends EditorElement {
   template() {
@@ -110,7 +110,7 @@ export default class FlexGrowToolView extends EditorElement {
 
     let flexGrow = this.getFlexGrow(parentLayoutDirection, item, grow, dx, dy);
 
-    this.emit("setAttributeForMulti", {
+    this.$commands.emit("setAttribute", {
       [id]: {
         "flex-grow": flexGrow,
       },
@@ -136,7 +136,7 @@ export default class FlexGrowToolView extends EditorElement {
         parentLayoutDirection === FlexDirection.ROW &&
         item.resizingHorizontal !== ResizingMode.FILL_CONTAINER
       ) {
-        this.command("setAttributeForMulti", "change self resizing", {
+        this.commands.executeCommand("setAttribute", "change self resizing", {
           [id]: {
             "flex-grow": 1,
             resizingHorizontal: ResizingMode.FILL_CONTAINER,
@@ -146,7 +146,7 @@ export default class FlexGrowToolView extends EditorElement {
         parentLayoutDirection === FlexDirection.COLUMN &&
         item.resizingVertical !== ResizingMode.FILL_CONTAINER
       ) {
-        this.command("setAttributeForMulti", "change self resizing", {
+        this.commands.executeCommand("setAttribute", "change self resizing", {
           [id]: {
             "flex-grow": 1,
             resizingVertical: ResizingMode.FILL_CONTAINER,
@@ -154,7 +154,7 @@ export default class FlexGrowToolView extends EditorElement {
         });
       }
     } else {
-      this.command("setAttributeForMulti", "change self resizing", {
+      this.commands.executeCommand("setAttribute", "change self resizing", {
         [id]: {
           "flex-grow": flexGrow,
         },

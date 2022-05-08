@@ -1,3 +1,4 @@
+import * as commands from "../commands";
 import threeHelpers from "./three-helpers";
 
 // import layerTree from "apps/designeditor/plugins/layer-tree";
@@ -19,4 +20,8 @@ export default [
   // layerTree,
   project,
   threeHelpers,
+
+  function (editor) {
+    editor.loadCommands(commands);
+  },
 ];

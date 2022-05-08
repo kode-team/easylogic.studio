@@ -28,21 +28,7 @@ export class HistoryManager {
     this.selection = this.$editor.context.selection.toCloneObject();
   }
 
-  getUndoValues(attrs = {}) {
-    let result = {};
-
-    Object.keys(this.selection).forEach((id) => {
-      result[id] = {};
-
-      Object.keys(attrs).forEach((key) => {
-        result[id][key] = this.selection[id][key];
-      });
-    });
-
-    return result;
-  }
-
-  getUndoValuesForMulti(multiAttrs = {}) {
+  getUndoValues(multiAttrs = {}) {
     let result = {};
 
     Object.keys(multiAttrs).forEach((id) => {
@@ -87,7 +73,8 @@ export class HistoryManager {
       this.undoHistories.length = this.currentIndex + 1;
     }
 
-    this.$editor.emit("refreshHistory", command.command);
+    this.$context.commands.emit("refreshHistory", command.command);
+    this.$editor.emit("refreshHistoryList");
 
     return historyObject;
   }
@@ -127,7 +114,8 @@ export class HistoryManager {
       this.currentIndex--;
       // this.redoHistories.unshift(commandObject);
       this.$editor.nextTick(() => {
-        this.$editor.emit("refreshHistory", commandObject.command);
+        this.$context.commands.emit("refreshHistory", commandObject.command);
+        this.$editor.emit("refreshHistoryList");
       });
     }
   }
@@ -153,7 +141,8 @@ export class HistoryManager {
       this.$editor.debug(commandObject);
 
       this.$editor.nextTick(() => {
-        this.$editor.emit("refreshHistory", commandObject.command);
+        this.$context.commands.emit("refreshHistory", commandObject.command);
+        this.$editor.emit("refreshHistoryList");
       });
     }
   }

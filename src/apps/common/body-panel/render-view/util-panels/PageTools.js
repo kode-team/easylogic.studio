@@ -85,7 +85,7 @@ export default class PageTools extends EditorElement {
   }
 
   [CLICK("$center")]() {
-    this.emit("moveSelectionToCenter");
+    this.$commands.emit("moveSelectionToCenter");
   }
 
   [CLICK("$pantool")]() {
@@ -125,7 +125,7 @@ export default class PageTools extends EditorElement {
             PathParser.joinPathList(pathList).d
           ).d;
 
-          this.command("setAttributeForMulti", "modify sub path", {
+          this.$commands.executeCommand("setAttribute", "modify sub path", {
             [itemId]: current.updatePath(newPathD),
           });
         },

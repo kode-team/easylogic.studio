@@ -45,7 +45,7 @@ export default class SelectionInfoView extends EditorElement {
     }
 
     this.initializeDragSelection();
-    this.emit("history.refreshSelection");
+    this.$commands.emit("history.refreshSelection");
     this.$config.set("set.move.control.point", true);
   }
 
@@ -102,7 +102,7 @@ export default class SelectionInfoView extends EditorElement {
 
     this.moveTo(newDist);
 
-    this.emit("setAttributeForMulti", this.$context.selection.pack("x", "y"));
+    this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y"));
     this.emit(UPDATE_CANVAS);
     this.refresh();
   }
@@ -113,15 +113,15 @@ export default class SelectionInfoView extends EditorElement {
    * @param {string} title
    */
   [SUBSCRIBE("refreshItemName")](id, title) {
-    this.emit("setAttributeForMulti", {
+    this.$commands.emit("setAttribute", {
       [id]: { name: title },
     });
     this.$el.$(`[data-artboard-title-id='${id}']`)?.text(title);
   }
 
   calculateEndedElement() {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "move item",
       this.$context.selection.pack("x", "y")
     );

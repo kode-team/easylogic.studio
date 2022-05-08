@@ -7,6 +7,14 @@ import {
   createComponent,
 } from "sapa";
 
+import { ClipboardManager } from "../designeditor/managers/ClipboardManager";
+import { HistoryManager } from "../designeditor/managers/HistoryManager";
+import { LockManager } from "../designeditor/managers/LockManager";
+import { ModelManager } from "../designeditor/managers/ModelManager";
+import { SegmentSelectionManager } from "../designeditor/managers/SegmentSelectionManager";
+import { SelectionManager } from "../designeditor/managers/SelectionManager";
+import { SnapManager } from "../designeditor/managers/SnapManager";
+import { VisibleManager } from "../designeditor/managers/VisibleManager";
 import "./layout.scss";
 import whiteboardPlugins from "./plugins/whiteboard-plugins";
 
@@ -30,9 +38,19 @@ export class WhiteBoard extends BaseLayout {
     super.initialize();
 
     this.$pathkit.load();
+  }
 
-    // load default data
-    this.emit("load.json", this.opt.data);
+  getManagers() {
+    return {
+      snapManager: SnapManager,
+      selection: SelectionManager,
+      segmentSelection: SegmentSelectionManager,
+      history: HistoryManager,
+      modelManager: ModelManager,
+      lockManager: LockManager,
+      visibleManager: VisibleManager,
+      clipboard: ClipboardManager,
+    };
   }
 
   components() {
@@ -74,6 +92,9 @@ export class WhiteBoard extends BaseLayout {
     super.afterRender();
 
     this.$config.init("editor.layout.elements", this.refs);
+
+    // load default data
+    this.$commands.emit("load.json", this.opt.data);
   }
 
   /** 드랍존 설정을 위해서 남겨놔야함 */

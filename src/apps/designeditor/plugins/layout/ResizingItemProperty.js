@@ -136,8 +136,8 @@ export default class ResizingItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "apply self resizing",
       this.$context.selection.packByValue({
         [key]: value,

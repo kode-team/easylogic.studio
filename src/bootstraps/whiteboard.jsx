@@ -7,6 +7,7 @@ function startEditor() {
     return createWhiteBoard({
       container: document.getElementById(id),
       config: {
+        "debug.mode": true,
         "editor.theme": "light",
         // 'editor.layout.mode': 'svg',
         // 'show.left.panel': false,
@@ -18,4 +19,4 @@ function startEditor() {
   });
 }
 
-window.EasylogicEditor = startEditor();
+window.elfEditor = startEditor();

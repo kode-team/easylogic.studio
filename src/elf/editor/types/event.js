@@ -66,3 +66,20 @@ export const CHANGE_ICON_VIEW = "changeIconView";
 export const UPDATE_CANVAS = "updateCanvas";
 
 export const OPEN_CONTEXT_MENU = "openContextMenu";
+
+/**
+ * cursor
+ */
+export const START_GUESTURE = "startGuesture";
+export const END_GUESTURE = "endGuesture";
+
+/**
+ * keyboard event
+ */
+export const KEYMAP_KEYDOWN = "keymapKeydown";
+export const KEYMAP_KEYUP = "keymapKeyup";
+
+export const SET_LOCALE = "setLocale";
+
+export const PUSH_MODE_VIEW = "pushModeView";
+export const POP_MODE_VIEW = "popModeView";

@@ -1,11 +1,12 @@
 import { UIElement } from "sapa";
+
+import { NotifyType } from "elf/editor/types/editor";
 import {
   ADD_BODY_FIRST_MOUSEMOVE,
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP,
   SHOW_NOTIFY,
 } from "elf/editor/types/event";
-import { NotifyType } from "elf/editor/types/editor";
 
 export class EditorElement extends UIElement {
   /**
@@ -161,22 +162,22 @@ export class EditorElement extends UIElement {
     return this.$context.menuManager;
   }
 
-  /**
-   * history 가 필요한 커맨드는 command 함수를 사용하자.
-   * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다.
-   * 기존 emit 과 거의 동일하게 사용할 수 있다.
-   *
-   * @param {string} command
-   * @param {string} description
-   * @param {any[]} args
-   */
-  command(command, description, ...args) {
-    if (this.$stateManager.isPointerUp) {
-      return this.emit(`history.${command}`, description, ...args);
-    } else {
-      return this.emit(command, ...args);
-    }
-  }
+  // /**
+  //  * history 가 필요한 커맨드는 command 함수를 사용하자.
+  //  * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다.
+  //  * 기존 emit 과 거의 동일하게 사용할 수 있다.
+  //  *
+  //  * @param {string} command
+  //  * @param {string} description
+  //  * @param {any[]} args
+  //  */
+  // command(command, description, ...args) {
+  //   if (this.$stateManager.isPointerUp) {
+  //     return this.emit(`history.${command}`, description, ...args);
+  //   } else {
+  //     return this.emit(command, ...args);
+  //   }
+  // }
 
   /**
    *

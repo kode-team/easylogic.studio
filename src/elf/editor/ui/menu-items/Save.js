@@ -9,7 +9,7 @@ export default class Save extends MenuItem {
   }
 
   clickButton() {
-    this.emit("saveJSON");
+    this.$commands.emit("saveJSON");
     this.nextTick(() => {
       this.emit(
         "notify",

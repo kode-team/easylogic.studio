@@ -68,8 +68,8 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.packByValue(value)
     );
   }
@@ -77,8 +77,8 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
   moveEndCircleRadius() {
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );
@@ -134,8 +134,8 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.packByValue(value)
     );
   }
@@ -150,8 +150,8 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
             value: `${this.state.circle.radius} ${this.state.circle.radius} at ${this.state.circle.x} ${this.state.circle.y}`,
           });
 
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             "change clippath",
             this.$context.selection.packByValue(value)
           );
@@ -162,8 +162,8 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );

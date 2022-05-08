@@ -22,10 +22,10 @@ export class KeyboardManager extends EditorElement {
   }
 
   [KEYDOWN("document") + IF("isNotFormElement")](e) {
-    this.emit("keymap.keydown", e);
+    this.$commands.emit("keymap.keydown", e);
   }
 
   [KEYUP("document") + IF("isNotFormElement")](e) {
-    this.emit("keymap.keyup", e);
+    this.$commands.emit("keymap.keyup", e);
   }
 }

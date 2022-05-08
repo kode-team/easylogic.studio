@@ -126,8 +126,8 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.packByValue(value)
     );
   }
@@ -135,8 +135,8 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
   moveEndInsetRadius() {
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );
@@ -201,10 +201,7 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
-      this.$context.selection.packByValue(value)
-    );
+    this.emit("setAttribute", this.$context.selection.packByValue(value));
   }
 
   moveEndInsetCenter(dx, dy) {
@@ -217,8 +214,8 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
             value: `0% 0%, 100% 0%, 100% 100%, 0% 100%`,
           });
 
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             "change clippath",
             this.$context.selection.packByValue(value)
           );
@@ -229,8 +226,8 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );

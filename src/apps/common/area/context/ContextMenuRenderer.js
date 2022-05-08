@@ -59,6 +59,7 @@ export default class ContextMenuRenderer extends EditorElement {
       disabled: item.disabled,
       selected: item.selected,
       selectedKey: item.selectedKey,
+      checked: item.checked,
       action: item.action,
       events: item.events,
       style: item.style,

@@ -85,8 +85,8 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF("changeBackgroundImage")](key, value) {
     this.nextTick(() => {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change background image",
         this.$context.selection.packByValue({
           [key]: value,

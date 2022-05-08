@@ -37,8 +37,8 @@ export default class BackgroundClipProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change background clip",
       this.$context.selection.packByValue({
         [key]: value,

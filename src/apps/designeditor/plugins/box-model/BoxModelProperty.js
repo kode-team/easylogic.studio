@@ -110,8 +110,8 @@ export default class BoxModelProperty extends BaseProperty {
       data[key] = this.refs["$" + key].value;
     });
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change padding or margin",
       this.$context.selection.packByValue(data)
     );

@@ -92,7 +92,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   [CHANGE("$imageList .add-image-item input[type=file]")](e) {
     this.executeImage(() => {
       [...e.target.files].forEach((item) => {
-        this.emit("updateImageAssetItem", item);
+        this.$commands.emit("updateImageAssetItem", item);
       });
     });
   }

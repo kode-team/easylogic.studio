@@ -169,7 +169,7 @@ export class ShortCutManager {
         e.preventDefault();
 
         filteredCommands.forEach((it) => {
-          this.$editor.emit(it.command, ...it.args);
+          this.$editor.context.commands.emit(it.command, ...it.args);
         });
       }
     }

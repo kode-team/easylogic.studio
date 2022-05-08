@@ -181,7 +181,7 @@ export default class DragAreaRectView extends EditorElement {
     this.trigger("initDrawAreaView");
 
     this.$context.selection.reselect();
-    this.emit("history.refreshSelection");
+    this.$commands.emit("history.refreshSelection");
     this.emit(REFRESH_SELECTION_TOOL, true);
 
     // this.emit("removeGuideLine");

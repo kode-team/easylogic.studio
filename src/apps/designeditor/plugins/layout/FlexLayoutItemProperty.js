@@ -123,8 +123,8 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeFlexItem")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change flex layout",
       this.$context.selection.packByValue({
         [key]: value,
@@ -133,8 +133,8 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change flex layout",
       this.$context.selection.packByValue({
         flex: value,

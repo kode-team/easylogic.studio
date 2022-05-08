@@ -83,14 +83,14 @@ export default class LayoutProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF("changeLayoutInfo")](key, value) {
     if (key === "padding") {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change padding",
         this.$context.selection.packByValue(value)
       );
     } else {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change layout info",
         this.$context.selection.packByValue({
           [key]: value,
@@ -112,8 +112,8 @@ export default class LayoutProperty extends BaseProperty {
 
     this.updateTitle();
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change layout type",
       this.$context.selection.packByValue({
         [key]: value,

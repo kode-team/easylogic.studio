@@ -119,8 +119,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
     this.refresh();
   }
 
-  [SUBSCRIBE("refreshTimeline", REFRESH_SELECTION, "refreshArtboard") +
-    DEBOUNCE(100)]() {
+  [SUBSCRIBE("refreshTimeline", REFRESH_SELECTION) + DEBOUNCE(100)]() {
     this.refresh();
   }
 }

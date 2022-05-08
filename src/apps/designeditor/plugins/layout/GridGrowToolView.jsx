@@ -44,7 +44,7 @@ class GridGrowBaseView extends EditorElement {
       };
     });
 
-    this.command("setAttributeForMulti", "change grid rows", {
+    this.$commands.executeCommand("setAttribute", "change grid rows", {
       ...data,
       [current.id]: {
         "grid-template-rows": Grid.join(newRows),
@@ -67,7 +67,7 @@ class GridGrowBaseView extends EditorElement {
       };
     });
 
-    this.command("setAttributeForMulti", "change grid columns", {
+    this.$commands.executeCommand("setAttribute", "change grid columns", {
       ...data,
       [current.id]: {
         "grid-template-columns": Grid.join(newColumns),
@@ -76,7 +76,7 @@ class GridGrowBaseView extends EditorElement {
   }
 
   updateColumnGap(current, columnGap) {
-    this.command("setAttributeForMulti", "change grid column gap", {
+    this.$commands.executeCommand("setAttribute", "change grid column gap", {
       [current.id]: {
         "grid-column-gap": `${columnGap}`,
       },
@@ -84,7 +84,7 @@ class GridGrowBaseView extends EditorElement {
   }
 
   updateRowGap(current, rowGap) {
-    this.command("setAttributeForMulti", "change grid row gap", {
+    this.$commands.executeCommand("setAttribute", "change grid row gap", {
       [current.id]: {
         "grid-row-gap": `${rowGap}`,
       },

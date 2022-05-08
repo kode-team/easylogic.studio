@@ -49,8 +49,8 @@ export default class PerspectiveProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changePerspective")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change perspective",
       this.$context.selection.packByValue({
         [key]: value,

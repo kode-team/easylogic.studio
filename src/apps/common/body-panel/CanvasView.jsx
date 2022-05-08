@@ -15,6 +15,12 @@ import {
   createComponent,
 } from "sapa";
 
+import "./CanvasView.scss";
+import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
+import DragAreaView from "./render-view/draw-panels/DragAreaView";
+import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
+import PageTools from "./render-view/util-panels/PageTools";
+
 import {
   CHANGE_ICON_VIEW,
   UPDATE_VIEWPORT,
@@ -22,13 +28,7 @@ import {
   MOVE,
   RESIZE_WINDOW,
   RESIZE_CANVAS,
-} from "../../../elf/editor/types/event";
-import "./CanvasView.scss";
-import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
-import DragAreaView from "./render-view/draw-panels/DragAreaView";
-import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
-import PageTools from "./render-view/util-panels/PageTools";
-
+} from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -50,11 +50,15 @@ export default class CanvasView extends EditorElement {
   }
 
   afterRender() {
+    // 그려진 이후에 시간차를 두고 크기를 구해야한다.
     this.nextTick(() => {
-      this.trigger(RESIZE_CANVAS);
-      this.emit("moveSelectionToCenter", true);
+      // 캔버스 사이즈를 먼저 정의하고
+      this.refreshCanvasSize();
+      // 가운데로 움직인다.
+      this.$commands.emit("moveSelectionToCenter", true);
+      // 커서를 바꾼다.
       this.refreshCursor();
-    }, 100);
+    });
   }
   template() {
     return (
@@ -106,9 +110,9 @@ export default class CanvasView extends EditorElement {
     if (value) {
       this.startMovePan();
 
-      this.emit("refreshCursor", "grab");
+      this.$commands.emit("refreshCursor", "grab");
     } else {
-      this.emit("recoverCursor", "auto");
+      this.$commands.emit("recoverCursor", "auto");
     }
   }
 
@@ -117,7 +121,7 @@ export default class CanvasView extends EditorElement {
   }
 
   movePan(dx, dy) {
-    this.emit("refreshCursor", "grabbing");
+    this.$commands.emit("refreshCursor", "grabbing");
     const currentDist = vec3.fromValues(dx, dy, 0);
     this.$viewport.pan(
       ...vec3.transformMat4(
@@ -131,9 +135,9 @@ export default class CanvasView extends EditorElement {
 
   refreshCursor() {
     if (this.$config.get("set.tool.hand") === false) {
-      this.emit("refreshCursor", "auto");
+      this.$commands.emit("refreshCursor", "auto");
     } else {
-      this.emit("refreshCursor", "grab");
+      this.$commands.emit("refreshCursor", "grab");
     }
   }
 
@@ -245,6 +249,6 @@ export default class CanvasView extends EditorElement {
   }
 
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
-    this.emit("refreshCursor", "auto");
+    this.$commands.emit("refreshCursor", "auto");
   }
 }

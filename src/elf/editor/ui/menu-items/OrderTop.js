@@ -10,7 +10,7 @@ export default class OrderTop extends MenuItem {
   }
 
   clickButton() {
-    this.command(
+    this.commands.executeCommand(
       "bring.forward",
       "bring forward",
       this.$context.selection.current

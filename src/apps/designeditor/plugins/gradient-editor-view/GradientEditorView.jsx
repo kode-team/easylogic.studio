@@ -83,8 +83,8 @@ class GradientBaseEditor extends EditorElement {
       BackgroundImage.toProperty(this.state.backgroundImages)
     );
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
         "background-image": value,
@@ -648,8 +648,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
       BackgroundImage.toProperty(this.state.backgroundImages)
     );
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
         "background-image": value,
@@ -678,8 +678,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
         BackgroundImage.toProperty(this.state.backgroundImages)
       );
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change background image",
         this.$context.selection.packByValue({
           "background-image": value,
@@ -702,8 +702,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
       BackgroundImage.toProperty(this.state.backgroundImages)
     );
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
         "background-image": value,
@@ -1073,7 +1073,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
     this.state.isShow = true;
 
     this.refresh();
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
 
     this.emit("push.mode.view", "GradientEditorView");
   }

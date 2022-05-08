@@ -23,7 +23,7 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   isShow() {
-    var current = this.$context.selection.current;
+    var current = this.$context.selection?.current;
     const inspector = this.$context.components.createInspector(current);
     if (current && (current.is("component") || inspector.length > 0)) {
       return true;
@@ -58,7 +58,7 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   [LOAD("$body")]() {
-    var current = this.$context.selection.current;
+    var current = this.$context.selection?.current;
 
     if (!current) return "";
 
@@ -86,8 +86,8 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeComponentProperty")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change component : " + key,
       this.$context.selection.packByValue({
         [key]: value,

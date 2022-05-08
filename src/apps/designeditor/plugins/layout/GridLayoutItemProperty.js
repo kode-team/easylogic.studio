@@ -130,8 +130,8 @@ export default class GridLayoutItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeGridItem")]() {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change grid layout item",
       this.$context.selection.packByValue({
         "grid-layout-item": this.getGridValue(),
@@ -151,8 +151,8 @@ export default class GridLayoutItemProperty extends BaseProperty {
       value = this.getGridValue();
     }
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change grid layout item",
       this.$context.selection.packByValue({
         "grid-layout-item": value,

@@ -103,8 +103,8 @@ export default class BackdropFilterProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change backdrop filter",
       this.$context.selection.packByValue({
         [key]: filter,

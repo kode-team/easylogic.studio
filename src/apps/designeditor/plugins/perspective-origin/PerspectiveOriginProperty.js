@@ -57,8 +57,8 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change perspective origin",
       this.$context.selection.packByValue({
         "perspective-origin": value,

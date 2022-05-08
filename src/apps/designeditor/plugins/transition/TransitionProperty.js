@@ -77,8 +77,8 @@ export default class TransitionProperty extends BaseProperty {
     var current = this.$context.selection.current;
 
     if (current) {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "add transition",
         this.$context.selection.packByValue({
           transition: (item) => Transition.add(item.transition),

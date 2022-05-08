@@ -19,6 +19,7 @@ import { EditorElement } from "elf/editor/ui/common/EditorElement";
  *  selected?: function;
  *  selectedKey: string;
  *  action: function;
+ *  checked: boolean|function;
  *  events: string[];
  *  style: object;
  * }

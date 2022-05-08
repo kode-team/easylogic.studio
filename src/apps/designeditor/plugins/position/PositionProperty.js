@@ -168,8 +168,8 @@ export default class PositionProperty extends BaseProperty {
   [SUBSCRIBE_SELF("changRangeEditor")](key, value) {
     // FIXME: key 가 width, height 일 때는 개별 transform 을 모두 적용한 상태로 맞춰야 한다.
     // FIXME: selection tool view 에 있는 right, bottom 기능을 자체적으로 구현해야한다.
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change position or size",
       this.$context.selection.packByValue({
         [key]: value,
@@ -178,8 +178,8 @@ export default class PositionProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeRotate")](key, rotate) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change rotate",
       this.$context.selection.packByValue({
         angle: rotate.value,
@@ -188,8 +188,8 @@ export default class PositionProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${key}`,
       this.$context.selection.packByValue({
         [key]: value,

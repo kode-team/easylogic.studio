@@ -293,7 +293,7 @@ export default class LayerTreeProperty extends BaseProperty {
     // history.xxx 형태로 emit 을 바로 날린다.
     switch (this.state.lastDragOverItemDirection) {
       case "self":
-        this.emit(
+        this.$commands.emit(
           "history.moveLayerToTarget",
           "change target with move",
           sourceItem,
@@ -303,7 +303,7 @@ export default class LayerTreeProperty extends BaseProperty {
         );
         break;
       case "before":
-        this.emit(
+        this.$commands.emit(
           "history.moveLayerToTarget",
           "change target with move",
           sourceItem,
@@ -313,7 +313,7 @@ export default class LayerTreeProperty extends BaseProperty {
         );
         break;
       case "after":
-        this.emit(
+        this.$commands.emit(
           "history.moveLayerToTarget",
           "change target with move",
           sourceItem,
@@ -325,7 +325,7 @@ export default class LayerTreeProperty extends BaseProperty {
     }
 
     this.nextTick(() => {
-      this.emit("recoverBooleanPath");
+      this.$commands.emit("recoverBooleanPath");
       this.$context.selection.select(sourceItem);
       this.setState({
         hideDragPointer: true,
@@ -343,7 +343,7 @@ export default class LayerTreeProperty extends BaseProperty {
         var id = input.closest("layer-item").attr("data-layer-id");
         var text = input.text();
 
-        this.command("setAttributeForMulti", "change name", {
+        this.$commands.executeCommand("setAttribute", "change name", {
           [id]: {
             name: text,
           },
@@ -353,7 +353,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var id = input.closest("layer-item").attr("data-layer-id");
       var text = input.text();
 
-      this.command("setAttributeForMulti", "change name", {
+      this.$commands.executeCommand("setAttribute", "change name", {
         [id]: {
           name: text,
         },
@@ -382,7 +382,7 @@ export default class LayerTreeProperty extends BaseProperty {
     if (layer) {
       this.$context.selection.select(layer);
 
-      this.emit("refreshArtboard");
+      this.$commands.emit("refreshArtboard");
     }
   }
 
@@ -401,7 +401,7 @@ export default class LayerTreeProperty extends BaseProperty {
     var id = $item.attr("data-layer-id");
     this.$context.selection.select(id);
 
-    this.command(REFRESH_SELECTION);
+    this.$commands.executeCommand(REFRESH_SELECTION);
   }
 
   [CLICK("$layerList .layer-item label .folder")](e) {
@@ -432,13 +432,11 @@ export default class LayerTreeProperty extends BaseProperty {
     var $item = e.$dt.closest("layer-item");
     var id = $item.attr("data-layer-id");
 
-    this.command("removeLayer", "remove a layer", [id]);
+    this.$commands.executeCommand("removeLayer", "remove a layer", [id]);
 
     this.nextTick(() => {
       this.refresh();
     }, 1000);
-
-    // this.emit('refreshArtboard');
   }
 
   [CLICK("$layerList .layer-item .lock")](e) {

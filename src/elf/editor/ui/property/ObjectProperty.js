@@ -104,10 +104,15 @@ export class ObjectProperty {
 
       [SUBSCRIBE_SELF("changeComponentProperty")](key, value) {
         if (json.action) {
-          this.command(json.action, `change attribute : ${key}`, key, value);
+          this.$commands.executeCommand(
+            json.action,
+            `change attribute : ${key}`,
+            key,
+            value
+          );
         } else {
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             `change attribute : ${key}`,
             this.$context.selection.packByValue({
               [key]: value,

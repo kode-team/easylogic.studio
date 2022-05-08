@@ -39,8 +39,8 @@ export default class BorderRadiusProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeBorderRadius")](value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change border radius",
       this.$context.selection.packByValue({
         "border-radius": value,

@@ -59,9 +59,12 @@ export default class BorderImageProperty extends BaseProperty {
 
     var applyBorderImage = this.refs.$apply.checked();
 
-    current.reset({ applyBorderImage });
-
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      this.$context.selection.packByValue({
+        applyBorderImage,
+      })
+    );
   }
 
   getColorStepList(image) {
@@ -273,7 +276,10 @@ export default class BorderImageProperty extends BaseProperty {
 
     this.viewChangeImage(data);
 
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      this.$context.selection.pack("borderImage")
+    );
   }
 
   viewChangeGradient(data) {
@@ -310,7 +316,10 @@ export default class BorderImageProperty extends BaseProperty {
 
     this.viewChangeGradient(data);
 
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      this.$context.selection.pack("borderImage")
+    );
   }
 
   [SUBSCRIBE("changeBorderImageFillPopup")](data) {
@@ -348,7 +357,10 @@ export default class BorderImageProperty extends BaseProperty {
       });
     }
 
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      this.$context.selection.pack("borderImage")
+    );
   }
 
   [CLICK("$selector button")](e) {

@@ -96,8 +96,8 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeTransformEditor")](transform) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change transform property",
       this.$context.selection.packByValue({
         transform,

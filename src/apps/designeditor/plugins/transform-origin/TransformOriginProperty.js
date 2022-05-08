@@ -54,8 +54,8 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF("changeTransformOrigin")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change transform-origin",
       this.$context.selection.packByValue({
         "transform-origin": value,

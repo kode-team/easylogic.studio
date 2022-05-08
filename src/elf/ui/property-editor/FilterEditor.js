@@ -314,8 +314,8 @@ export default class FilterEditor extends EditorElement {
             filters: params.filters,
           });
 
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             "change filter",
             this.$context.selection.pack("svgfilters", "filter")
           );

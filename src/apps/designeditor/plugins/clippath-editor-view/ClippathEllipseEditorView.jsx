@@ -69,8 +69,8 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.packByValue(value)
     );
   }
@@ -132,8 +132,8 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.packByValue(value)
     );
   }
@@ -141,8 +141,8 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
   moveEndEllipseRadiusX() {
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );
@@ -198,10 +198,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit(
-      "setAttributeForMulti",
-      this.$context.selection.packByValue(value)
-    );
+    this.emit("setAttribute", this.$context.selection.packByValue(value));
   }
 
   moveEndEllipseCenter(dx, dy) {
@@ -214,8 +211,8 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
             value: "",
           });
 
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             "change clippath",
             this.$context.selection.packByValue(value)
           );
@@ -226,8 +223,8 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change clippath",
       this.$context.selection.packByValue(value)
     );

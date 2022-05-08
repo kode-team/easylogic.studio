@@ -1,5 +1,5 @@
 export default {
-  key: "debug",
+  key: "debug.mode",
   defaultValue: false,
   title: "debug mode",
   description: "Set debug mode to on ",

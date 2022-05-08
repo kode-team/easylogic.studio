@@ -18,7 +18,12 @@ import {
   vertiesMap,
 } from "elf/core/math";
 import { PathParser } from "elf/editor/parser/PathParser";
-import { UPDATE_VIEWPORT, END, MOVE } from "elf/editor/types/event";
+import {
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+  UPDATE_CANVAS,
+} from "elf/editor/types/event";
 import {
   GradientType,
   RadialGradientType,
@@ -28,7 +33,6 @@ import {
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
-import { UPDATE_CANVAS } from "elf/editor/types/event";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
@@ -90,8 +94,8 @@ class FillTimingStepEditor extends FillBaseEditor {
         break;
     }
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${this.state.key} fragment`,
       this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
@@ -122,8 +126,8 @@ class FillTimingStepEditor extends FillBaseEditor {
           this.localColorStep.timing.direction =
             this.localColorStep.timing.direction === "start" ? "end" : "start";
 
-          this.command(
-            "setAttributeForMulti",
+          this.$commands.executeCommand(
+            "setAttribute",
             `change ${this.state.key} fragment`,
             this.$context.selection.packByValue({
               [this.state.key]: `${this.state.imageResult.image}`,
@@ -151,8 +155,8 @@ class FillTimingStepEditor extends FillBaseEditor {
                 `path(${value})`
               ).parsed;
 
-              this.command(
-                "setAttributeForMulti",
+              this.$commands.executeCommand(
+                "setAttribute",
                 `change ${this.state.key} fragment`,
                 this.$context.selection.packByValue({
                   [this.state.key]: `${this.state.imageResult.image}`,
@@ -180,8 +184,8 @@ class FillTimingStepEditor extends FillBaseEditor {
             ],
             changeEvent: (key, value) => {
               this.localColorStep.timing = parseOneValue(value).parsed;
-              this.command(
-                "setAttributeForMulti",
+              this.$commands.executeCommand(
+                "setAttribute",
                 `change ${this.state.key} fragment`,
                 this.$context.selection.packByValue({
                   [this.state.key]: `${this.state.imageResult.image}`,
@@ -194,8 +198,8 @@ class FillTimingStepEditor extends FillBaseEditor {
       }
     }
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${this.state.key} fragment`,
       this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
@@ -381,8 +385,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
         break;
     }
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${this.state.key} fragment`,
       this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
@@ -554,8 +558,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
         break;
     }
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${this.state.key} fragment`,
       this.$context.selection.packByValue({
         [this.state.key]: `${this.state.imageResult.image}`,
@@ -635,8 +639,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
     }
 
     this.emit("updateFillEditor", image);
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${this.state.key} fragment`,
       this.$context.selection.packByValue({
         [this.state.key]: `${image}`,
@@ -740,8 +744,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
 
     this.emit("updateFillEditor", nextImage, targetColorStep);
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       `change ${this.state.key} fragment`,
       this.$context.selection.packByValue({
         [this.state.key]: `${nextImage}`,
@@ -766,8 +770,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
 
       this.emit("updateFillEditor", image, targetColorStep);
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change background image",
         this.$context.selection.packByValue({
           [this.state.key]: `${image}`,
@@ -784,8 +788,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
     const { color, percent } = image.colorsteps[index] || {};
     this.emit("updateFillEditor", image, { color, percent });
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
         [this.state.key]: `${image}`,
@@ -872,7 +876,7 @@ export default class FillEditorView extends FillColorstepEditor {
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     this.refresh();
   }
-  
+
   [SUBSCRIBE(UPDATE_CANVAS)]() {
     if (this.$context.selection.current) {
       if (

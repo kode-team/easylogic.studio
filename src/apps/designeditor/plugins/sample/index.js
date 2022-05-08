@@ -80,7 +80,7 @@ export default function (editor) {
                 const backgroundColor = Color.random();
 
                 // current 에 색깔 적용
-                editor.emit("setAttributeForMulti", {
+                editor.context.commands.emit("setAttribute", {
                   [current.id]: {
                     color: textColor,
                     "background-color": backgroundColor,

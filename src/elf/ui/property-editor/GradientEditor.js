@@ -69,7 +69,7 @@ export default class GradientEditor extends EditorElement {
     var project = this.$context.selection.currentProject;
     if (project) {
       [...e.target.files].forEach((item) => {
-        this.emit("updateImageAssetItem", item, (local) => {
+        this.$commands.emit("updateImageAssetItem", item, (local) => {
           this.trigger("setImageUrl", local);
         });
       });

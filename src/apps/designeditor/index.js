@@ -56,7 +56,7 @@ export class DesignEditor extends BaseLayout {
     this.$config.init("editor.layout.elements", this.refs);
 
     // load default data
-    this.emit("load.json", this.opt.data);
+    this.$commands.emit("load.json", this.opt.data);
   }
 
   getManagers() {

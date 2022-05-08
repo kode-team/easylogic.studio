@@ -41,8 +41,8 @@ export default class IFrameProperty extends BaseProperty {
         [key]: value,
       });
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "change iframe url",
         this.$context.selection.packByValue({
           [key]: value,

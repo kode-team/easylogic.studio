@@ -163,8 +163,8 @@ export default class VideoProperty extends BaseProperty {
 
   [SUBSCRIBE("changeCurrentTime")](key, currentTime) {
     this.setState({ currentTime }, false);
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change video property",
       this.$context.selection.packByValue({ currentTime })
     );
@@ -173,8 +173,8 @@ export default class VideoProperty extends BaseProperty {
   [SUBSCRIBE("changePlaybackRate")](key, playbackRate) {
     this.setState({ playbackRate }, false);
     // this.video.playbackRate = playbackRate;
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change video property",
       this.$context.selection.packByValue({ playbackRate })
     );
@@ -184,8 +184,8 @@ export default class VideoProperty extends BaseProperty {
     const volume = Number(this.refs.$volume.value);
     this.setState({ volume }, false);
     this.bindData("$volume_control");
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change video property",
       this.$context.selection.packByValue({ volume })
     );
@@ -223,16 +223,16 @@ export default class VideoProperty extends BaseProperty {
   [SUBSCRIBE_SELF("changeValue") + DEBOUNCE(100)](key, value) {
     if (!this.state.$video) return;
 
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change video property",
       this.$context.selection.packByValue({ [key]: value })
     );
   }
 
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.command(
-      "setAttributeForMulti",
+    this.$commands.executeCommand(
+      "setAttribute",
       "change video property",
       this.$context.selection.packByValue({ [key]: value })
     );

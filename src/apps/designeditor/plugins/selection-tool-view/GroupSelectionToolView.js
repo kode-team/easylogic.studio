@@ -169,8 +169,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     this.state.dragging = true;
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.pack("x", "y", "width", "height", "angle")
     );
   }
@@ -178,15 +178,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   rotateEndVertex() {
     this.state.dragging = false;
     this.state.isRotate = false;
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
 
     // 개별 verties 의 캐쉬를 다시 한다.
     this.$context.selection.reselect();
     this.initMatrix(true);
     this.nextTick(() => {
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "rotate selection pointer",
         this.$context.selection.pack("x", "y", "width", "height", "angle")
       );
@@ -194,7 +194,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   }
 
   refreshRotatePointerIcon() {
-    this.emit("refreshCursor", "rotate");
+    this.$commands.emit("refreshCursor", "rotate");
   }
 
   refreshPointerIcon(e) {
@@ -210,9 +210,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       );
       const angle = calculateAngle360(diff[0], diff[1]);
       let iconAngle = Math.floor(angle);
-      this.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 8 8)`);
+      this.$commands.emit(
+        "refreshCursor",
+        "open_in_full",
+        `rotate(${iconAngle} 8 8)`
+      );
     } else {
-      this.emit("recoverCursor");
+      this.$commands.emit("recoverCursor");
     }
   }
 
@@ -238,7 +242,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
   [POINTEROUT("$pointerRect .pointer,.rotate-pointer") +
     IF("checkPointerIsNotMoved") +
     PREVENT]() {
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
   }
 
   [POINTERSTART("$pointerRect .pointer") +
@@ -605,8 +609,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       this.moveBottomVertex(distVector);
     }
 
-    this.emit(
-      "setAttributeForMulti",
+    this.$commands.emit(
+      "setAttribute",
       this.$context.selection.pack("x", "y", "width", "height")
     );
 
@@ -615,20 +619,20 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
   moveEndVertex() {
     this.state.dragging = false;
-    this.emit("recoverCursor");
+    this.$commands.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
     this.$context.selection.reselect();
     this.initMatrix(true);
     this.nextTick(() => {
       this.$context.selection.recoverChildren();
 
-      this.command(
-        "setAttributeForMulti",
+      this.$commands.executeCommand(
+        "setAttribute",
         "move selection pointer",
         this.$context.selection.pack("x", "y", "width", "height")
       );
 
-      this.emit("recoverBooleanPath");
+      this.$commands.emit("recoverBooleanPath");
     });
   }
 
