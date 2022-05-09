@@ -13,6 +13,6 @@ export default class Redo extends MenuItem {
   }
 
   clickButton() {
-    this.emit("history.redo");
+    this.$commands.emit("history.redo");
   }
 }

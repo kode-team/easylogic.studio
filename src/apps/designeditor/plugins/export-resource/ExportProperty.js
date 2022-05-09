@@ -36,10 +36,10 @@ export default class ExportProperty extends BaseProperty {
   }
 
   [CLICK("$svg")]() {
-    this.emit("downloadSVG");
+    this.$commands.emit("downloadSVG");
   }
 
   [CLICK("$png")]() {
-    this.emit("downloadPNG");
+    this.$commands.emit("downloadPNG");
   }
 }

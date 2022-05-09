@@ -24,7 +24,6 @@ import {
   FIRSTMOVE,
   MOVE,
   UPDATE_VIEWPORT,
-  REFRESH_SELECTION_TOOL,
   REFRESH_SELECTION,
   UPDATE_CANVAS,
   OPEN_CONTEXT_MENU,
@@ -48,6 +47,7 @@ export default class HTMLRenderView extends EditorElement {
       width: 10000,
       height: 10000,
       cachedCurrentElement: {},
+      doubleClickTime: 0,
     };
   }
 
@@ -196,6 +196,17 @@ export default class HTMLRenderView extends EditorElement {
    * @param {PointerEvent} e
    */
   checkEditMode(e) {
+    this.state.hasDoubleClick = false;
+    // 0.2초 이내에 다시 클릭되면 클릭은 더블클릭으로 인지함으로 실행하지 않는다.
+    if (
+      window.performance.now() - this.state.doubleClickTime <
+      this.$config.get("event.doubleclick.timing")
+    ) {
+      // double click 이면 멈춤
+      this.state.hasDoubleClick = true;
+      return false;
+    }
+
     // hand tool 이 on 되어 있으면 드래그 하지 않는다.
     if (this.$config.get("set.tool.hand")) {
       return false;
@@ -269,6 +280,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   [DOUBLECLICK("$view")](e) {
+    this.state.doubleClickTime = window.performance.now();
     const $item = Dom.create(e.target).closest("element-item");
 
     if ($item) {
@@ -299,7 +311,7 @@ export default class HTMLRenderView extends EditorElement {
 
     this.$context.selection.select(id);
 
-    this.emit(REFRESH_SELECTION_TOOL, true);
+    this.emit(REFRESH_SELECTION);
 
     this.emit(OPEN_CONTEXT_MENU, {
       target: "context.menu.layer",
@@ -415,8 +427,6 @@ export default class HTMLRenderView extends EditorElement {
     this.$context.snapManager.clear();
 
     this.emit("startGhostToolView");
-
-    this.emit(REFRESH_SELECTION_TOOL, true);
   }
 
   calculateFirstMovedElement() {
@@ -524,6 +534,12 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   calculateEndedElement(dx, dy) {
+    if (this.state.hasDoubleClick) {
+      // double click 이면 멈춤
+      this.state.doubleClickTime = window.performance.now();
+      return;
+    }
+
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
     this.$config.init("set.move.control.point", false);
@@ -556,7 +572,6 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     this.emit(REFRESH_SELECTION);
-    this.emit(REFRESH_SELECTION_TOOL);
     this.$config.set("editing.mode.itemType", "select");
   }
 
@@ -647,7 +662,7 @@ export default class HTMLRenderView extends EditorElement {
     this.refreshSelectionStyleView(item);
 
     if (this.$context.selection.check(item)) {
-      this.emit(REFRESH_SELECTION_TOOL);
+      this.emit(REFRESH_SELECTION);
     }
 
     this.emit(UPDATE_CANVAS, item);

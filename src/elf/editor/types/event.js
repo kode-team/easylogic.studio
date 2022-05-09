@@ -26,14 +26,6 @@ export const END = (method = "end") => {
 export const UPDATE_VIEWPORT = "updateViewport";
 
 /**
- * selection tool 을 다시 렌더링 하고 싶을 때
- *
- *
- * @type {striig}
- */
-export const REFRESH_SELECTION_TOOL = "refreshSelectionTool";
-
-/**
  * fullscreen 모드로 변환
  *
  * @type {string}

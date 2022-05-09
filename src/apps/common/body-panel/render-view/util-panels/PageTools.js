@@ -107,7 +107,7 @@ export default class PageTools extends EditorElement {
     const current = this.$editor.get(itemId);
 
     if (current.editablePath) {
-      this.emit("open.editor", current);
+      this.$commands.emit("open.editor", current);
     } else {
       const pathList = PathParser.fromSVGString(
         current.absolutePath().d

@@ -387,7 +387,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [CLICK("$add")]() {
-    this.emit("newComponent", "rect", {
+    this.$commands.emit("newComponent", "rect", {
       "background-color": "#ececec",
       width: 200,
       height: 100,

@@ -1,4 +1,11 @@
-import { INPUT, CHANGE, LOAD, SUBSCRIBE_SELF, createComponent } from "sapa";
+import {
+  INPUT,
+  CHANGE,
+  LOAD,
+  SUBSCRIBE_SELF,
+  createComponent,
+  DOMDIFF,
+} from "sapa";
 
 import "./BorderRadiusEditor.scss";
 
@@ -41,7 +48,7 @@ export default class BorderRadiusEditor extends EditorElement {
     this.setBorderRadius();
   }
 
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     // var selectedValue = BorderGroup.ALL;
     var borderRadius = this.state["border-radius"];
 

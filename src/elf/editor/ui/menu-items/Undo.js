@@ -13,6 +13,6 @@ export default class Undo extends MenuItem {
   }
 
   clickButton() {
-    this.emit("history.undo");
+    this.$commands.emit("history.undo");
   }
 }

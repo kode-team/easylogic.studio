@@ -8,6 +8,7 @@ import {
   FOCUSOUT,
   createComponent,
   classnames,
+  DOMDIFF,
 } from "sapa";
 
 import "./InputRangeEditor.scss";
@@ -50,7 +51,7 @@ export default class InputRangeEditor extends EditorElement {
     return /*html*/ `<div class='small-editor' ref='$body'></div>`;
   }
 
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var {
       min,
       max,

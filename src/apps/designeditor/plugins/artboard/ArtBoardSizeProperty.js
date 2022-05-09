@@ -81,7 +81,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   [CLICK("$list .device-item")](e) {
     var size = e.$dt.attr("data-size");
 
-    this.emit("resizeArtBoard", size);
+    this.$command.emit("resizeArtBoard", size);
   }
 
   makeGroup(group) {

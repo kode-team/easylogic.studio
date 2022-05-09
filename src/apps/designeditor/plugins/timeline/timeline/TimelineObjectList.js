@@ -142,7 +142,7 @@ export default class TimelineObjectList extends EditorElement {
     if (property) {
       var current = this.$context.selection.current;
 
-      this.emit("addTimelineProperty", {
+      this.$commands.emit("addTimelineProperty", {
         layerId,
         property,
         value: current[property],
@@ -154,7 +154,7 @@ export default class TimelineObjectList extends EditorElement {
     var layerId = e.$dt.attr("data-layer-id");
 
     if (layerId) {
-      this.emit("removeTimeline", layerId);
+      this.$commands.emit("removeTimeline", layerId);
     }
   }
 
@@ -163,7 +163,7 @@ export default class TimelineObjectList extends EditorElement {
     var property = e.$dt.attr("data-property");
 
     if (property) {
-      this.emit("copyTimelineProperty", layerId, property);
+      this.$commands.emit("copyTimelineProperty", layerId, property);
     }
   }
 
@@ -172,7 +172,7 @@ export default class TimelineObjectList extends EditorElement {
     var property = e.$dt.attr("data-property");
 
     if (property) {
-      this.emit("removeTimelineProperty", layerId, property);
+      this.$commands.emit("removeTimelineProperty", layerId, property);
     }
   }
 

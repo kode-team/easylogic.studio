@@ -13,6 +13,6 @@ export default class LeftAlign extends MenuItem {
   }
 
   clickButton() {
-    this.emit("sort.left");
+    this.$commands.emit("sort.left");
   }
 }

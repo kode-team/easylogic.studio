@@ -59,7 +59,9 @@ export function createComponent(ComponentName, props = {}, children = []) {
   let targetVariable;
   targetVariable = Object.keys(props).length ? variable(props) : "";
 
-  return /*html*/ `<object refClass="${ComponentName}" ${targetVariable}>${children}</object>`;
+  const ref = props.ref ? `ref="${props.ref}"` : "";
+
+  return /*html*/ `<object refClass="${ComponentName}" ${ref} ${targetVariable}>${children}</object>`;
 }
 
 export function createComponentList(...args) {

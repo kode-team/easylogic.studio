@@ -13,6 +13,6 @@ export default class CenterAlign extends MenuItem {
   }
 
   clickButton() {
-    this.emit("sort.center");
+    this.$commands.emit("sort.center");
   }
 }

@@ -8,6 +8,7 @@ import {
   PREVENT,
   SUBSCRIBE,
   clone,
+  THROTTLE,
 } from "sapa";
 
 import "./SelectionView.scss";
@@ -26,10 +27,10 @@ import {
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { ViewModeType } from "elf/editor/types/editor";
 import {
+  REFRESH_SELECTION,
   UPDATE_VIEWPORT,
   END,
   MOVE,
-  REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -50,7 +51,7 @@ const SelectionToolEvent = class extends EditorElement {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
 
-  [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
     if (this.$context.selection.isMany) {
       this.initSelectionTool();
     } else {
@@ -174,6 +175,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       "setAttribute",
       this.$context.selection.pack("x", "y", "width", "height", "angle")
     );
+
+    this.renderPointers();
   }
 
   rotateEndVertex() {
@@ -614,6 +617,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       "setAttribute",
       this.$context.selection.pack("x", "y", "width", "height")
     );
+
+    this.renderPointers();
 
     this.state.dragging = true;
   }

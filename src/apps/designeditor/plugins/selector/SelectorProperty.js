@@ -93,7 +93,11 @@ export default class SelectorProperty extends BaseProperty {
 
     current.removeSelector(removeIndex);
 
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      "change selectors",
+      this.$context.selection.pack("selectors")
+    );
 
     this.refresh();
   }
@@ -142,7 +146,11 @@ export default class SelectorProperty extends BaseProperty {
 
     current.sortSelector(this.startIndex, targetIndex);
 
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      "change selectors",
+      this.$context.selection.pack("selectors")
+    );
 
     this.refresh();
   }
@@ -154,7 +162,11 @@ export default class SelectorProperty extends BaseProperty {
         selector: this.children.$select.getValue(),
       });
 
-      this.emit("refreshElement", current);
+      this.$commands.executeCommand(
+        "setAttribute",
+        "change selectors",
+        this.$context.selection.pack("selectors")
+      );
     }
 
     this.refresh();
@@ -220,6 +232,10 @@ export default class SelectorProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit("refreshElement", this.current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      "change selectors",
+      this.$context.selection.pack("selectors")
+    );
   }
 }

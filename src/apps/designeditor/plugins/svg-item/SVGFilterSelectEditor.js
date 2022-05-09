@@ -110,7 +110,7 @@ export default class SVGFilterSelectEditor extends EditorElement {
     var value = this.refs.$options.value;
 
     if (value == "new") {
-      this.emit("addSVGFilterAssetItem", (index, id) => {
+      this.$commands.emit("addSVGFilterAssetItem", (index, id) => {
         this.updateData({ value: id });
 
         this.refresh();

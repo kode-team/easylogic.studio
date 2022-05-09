@@ -46,7 +46,7 @@ export class ToolbarButtonMenuItem extends EditorElement {
 
   [CLICK("$el")]() {
     if (this.props.command) {
-      this.emit(this.props.command, ...(this.props.args || []));
+      this.$commands.emit(this.props.command, ...(this.props.args || []));
     } else if (isFunction(this.props.action)) {
       this.props.action(this.$editor, this);
     } else if (isFunction(this.props.onClick)) {

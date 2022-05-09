@@ -283,7 +283,7 @@ export default class KeyframeTimeView extends EditorElement {
   }
 
   moveEndCurrentTime() {
-    this.emit("resetSelection");
+    this.emit(REFRESH_SELECTION);
   }
 
   [SUBSCRIBE(RESIZE_WINDOW) + DEBOUNCE(100)]() {

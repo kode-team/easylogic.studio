@@ -1,4 +1,3 @@
-import AddIFrame from "./AddIFrame";
 import HTMLIFrameRender from "./HTMLIFrameRender";
 import { IFrameLayer } from "./IFrameLayer";
 import IFrameProperty from "./IFrameProperty";
@@ -17,8 +16,4 @@ export default function (editor) {
   });
 
   editor.registerRenderer("html", "iframe", new HTMLIFrameRender());
-
-  editor.registerUI("tool.menu.css", {
-    AddIFrame,
-  });
 }

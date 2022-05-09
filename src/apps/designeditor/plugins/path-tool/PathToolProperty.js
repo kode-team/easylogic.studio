@@ -121,9 +121,9 @@ export default class PathToolProperty extends BaseProperty {
     const args = e.$dt.data("args");
 
     if (command === "convert.smooth.path") {
-      this.emit(command);
+      this.$commands.emit(command);
     } else {
-      this.emit(command, args);
+      this.$commands.emit(command, args);
     }
 
     // if (command === 'stroke') {

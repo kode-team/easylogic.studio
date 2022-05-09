@@ -108,12 +108,19 @@ const applyElementAttribute = (
   }
 };
 
+const FunctionMap = {};
+
 export default class BindHandler extends BaseHandler {
   async initialize() {
-    this.destroy();
+    // this.destroy();
 
-    if (!this._bindMethods || this._bindMethods.length === 0) {
-      this._bindMethods = this.context.filterMethodes("bind", true);
+    if (!FunctionMap[this.context.sourceName]) {
+      FunctionMap[this.context.sourceName] = this.context.filterMethodes(
+        "bind",
+        true
+      );
+
+      this._bindMethods = FunctionMap[this.context.sourceName];
     }
   }
 
@@ -132,47 +139,47 @@ export default class BindHandler extends BaseHandler {
    *
    * @param {string} refName
    */
-  async bindLocalValue(refName) {
-    let target = this.context.refBindVariables;
+  // async bindLocalValue(refName) {
+  //   let target = this.context.refBindVariables;
 
-    if (refName && this.context.refBindVariables[refName]) {
-      target = {
-        [refName]: this.context.refBindVariables[refName],
-      };
-    }
+  //   if (refName && this.context.refBindVariables[refName]) {
+  //     target = {
+  //       [refName]: this.context.refBindVariables[refName],
+  //     };
+  //   }
 
-    await Promise.all(
-      Object.values(target).map(async (it) => {
-        const refCallback = it.callback;
-        let $element = this.context.refs[it.ref];
+  //   await Promise.all(
+  //     Object.values(target).map(async (it) => {
+  //       const refCallback = it.callback;
+  //       let $element = this.context.refs[it.ref];
 
-        // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-        if ($element) {
-          const results = await refCallback.call(this.context);
+  //       // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
+  //       if ($element) {
+  //         const results = await refCallback.call(this.context);
 
-          if (!results) return;
+  //         if (!results) return;
 
-          const keys = Object.keys(results);
-          for (
-            var elementKeyIndex = 0, len = keys.length;
-            elementKeyIndex < len;
-            elementKeyIndex++
-          ) {
-            const key = keys[elementKeyIndex];
-            const value = results[key];
+  //         const keys = Object.keys(results);
+  //         for (
+  //           var elementKeyIndex = 0, len = keys.length;
+  //           elementKeyIndex < len;
+  //           elementKeyIndex++
+  //         ) {
+  //           const key = keys[elementKeyIndex];
+  //           const value = results[key];
 
-            applyElementAttribute($element, key, value, this.context.isServer);
-          }
-        }
-      })
-    );
-  }
+  //           applyElementAttribute($element, key, value, this.context.isServer);
+  //         }
+  //       }
+  //     })
+  //   );
+  // }
 
   // 어떻게 실행하는게 좋을까?
   // this.runHandle('bind', ...);
   async bindData(...args) {
     // local 로 등록된 bind 를 모두 실행한다.
-    await this.bindLocalValue(...args);
+    // await this.bindLocalValue(...args);
 
     if (!this._bindMethods?.length) return;
 

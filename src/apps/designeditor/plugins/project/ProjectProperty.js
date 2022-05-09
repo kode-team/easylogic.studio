@@ -32,7 +32,7 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [CLICK("$add")]() {
-    this.emit("addProject");
+    this.$commands.emit("addProject");
   }
 
   getBody() {

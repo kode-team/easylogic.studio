@@ -29,6 +29,6 @@ export default class LanguageSelector extends EditorElement {
   }
 
   [SUBSCRIBE_SELF("changeLocale")](key, locale) {
-    this.emit("setLocale", locale);
+    this.$command.emit("setLocale", locale);
   }
 }

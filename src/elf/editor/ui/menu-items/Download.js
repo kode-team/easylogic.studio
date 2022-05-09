@@ -9,6 +9,6 @@ export default class Download extends MenuItem {
   }
 
   clickButton() {
-    this.emit("downloadJSON");
+    this.$commands.emit("downloadJSON");
   }
 }

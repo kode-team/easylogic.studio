@@ -915,7 +915,7 @@ export default class FillEditorView extends FillColorstepEditor {
     });
     this.$el.hide();
 
-    this.emit("pop.mode.view", "FillEditorView");
+    this.$commands.emit("pop.mode.view", "FillEditorView");
   }
 
   makeTimingLine(timing, width = 10, startX = 0, startY = 0) {

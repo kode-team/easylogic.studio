@@ -13,6 +13,6 @@ export default class MiddleAlign extends MenuItem {
   }
 
   clickButton() {
-    this.emit("sort.middle");
+    this.$commands.emit("sort.middle");
   }
 }

@@ -129,6 +129,6 @@ export default class GradientAssetsProperty extends BaseProperty {
     var $item = e.$dt.closest("gradient-item");
     var gradient = $item.attr("data-gradient");
 
-    this.emit("drop.asset", { gradient });
+    this.$commands.emit("drop.asset", { gradient });
   }
 }

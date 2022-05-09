@@ -13,6 +13,6 @@ export default class BottomAlign extends MenuItem {
   }
 
   clickButton() {
-    this.emit("sort.bottom");
+    this.$commands.emit("sort.bottom");
   }
 }

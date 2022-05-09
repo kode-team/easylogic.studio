@@ -8,10 +8,7 @@ import {
   toRectVerties,
   toRectVertiesWithoutTransformOrigin,
 } from "elf/core/collision";
-import {
-  REFRESH_SELECTION_TOOL,
-  REFRESH_SELECTION,
-} from "elf/editor/types/event";
+import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -51,7 +48,7 @@ export default class DragAreaRectView extends EditorElement {
 
   [SUBSCRIBE("startDragAreaView")]() {
     this.initMousePoint = this.$viewport.getWorldPosition();
-    this.$config.init("set.move.control.point", true);
+    // this.$config.init("set.move.control.point", true);
 
     this.dragRect = {
       left: Length.px(this.initMousePoint[0]),
@@ -160,10 +157,8 @@ export default class DragAreaRectView extends EditorElement {
       toRectVertiesWithoutTransformOrigin([startVertex, endVertex])
     );
 
-    if (this.$context.selection.selectByGroup(...selectedItems)) {
-      this.emit(REFRESH_SELECTION);
-      this.emit(REFRESH_SELECTION_TOOL, true);
-    }
+    this.$context.selection.selectByGroup(...selectedItems);
+    this.emit(REFRESH_SELECTION);
   }
 
   [SUBSCRIBE("endDragAreaView")]() {
@@ -182,8 +177,5 @@ export default class DragAreaRectView extends EditorElement {
 
     this.$context.selection.reselect();
     this.$commands.emit("history.refreshSelection");
-    this.emit(REFRESH_SELECTION_TOOL, true);
-
-    // this.emit("removeGuideLine");
   }
 }

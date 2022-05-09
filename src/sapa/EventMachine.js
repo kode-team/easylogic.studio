@@ -47,6 +47,7 @@ export class EventMachine {
   #propsKeys = {};
   #isServer = false;
   #propsKeyList = [];
+  #prefLoadTemplate = {};
 
   constructor(opt, props) {
     this.refs = {};
@@ -400,6 +401,8 @@ export class EventMachine {
 
     html = (html || "").trim();
 
+    // console.log(html, this.sourceName, isLoad);
+
     const list = TEMP_DIV.html(html).childNodes || [];
     ///////////////////////////////////////////////////////////////
 
@@ -436,7 +439,7 @@ export class EventMachine {
           this.refs[name] = $dom;
         }
 
-        this.parseLocalMethod($dom, name);
+        // this.parseLocalMethod($dom, name);
       }
     }
 
@@ -715,35 +718,35 @@ export class EventMachine {
     await this.parseComponent();
   }
 
-  async loadLocalValue(refName) {
-    let target = this.#refLoadVariables;
+  // async loadLocalValue(refName) {
+  //   let target = this.#refLoadVariables;
 
-    if (refName && this.#refLoadVariables[refName]) {
-      target = {
-        [refName]: this.#refLoadVariables[refName],
-      };
-    }
+  //   if (refName && this.#refLoadVariables[refName]) {
+  //     target = {
+  //       [refName]: this.#refLoadVariables[refName],
+  //     };
+  //   }
 
-    Object.keys(target).forEach(async (key) => {
-      const loadObj = this.#refLoadVariables[key];
-      const isDomDiff = loadObj.domdiff;
-      var newTemplate = await loadObj.callback.call(this);
+  //   Object.keys(target).forEach(async (key) => {
+  //     const loadObj = this.#refLoadVariables[key];
+  //     const isDomDiff = loadObj.domdiff;
+  //     var newTemplate = await loadObj.callback.call(this);
 
-      if (Array.isArray(newTemplate)) {
-        newTemplate = newTemplate.join("");
-      }
+  //     if (Array.isArray(newTemplate)) {
+  //       newTemplate = newTemplate.join("");
+  //     }
 
-      const targetRef = this.refs[loadObj.ref];
-      // create fragment
-      const fragment = this.parseTemplate(newTemplate, true);
-      if (isDomDiff) {
-        targetRef.htmlDiff(fragment);
-      } else {
-        targetRef.html(fragment);
-      }
-      this.refreshElementReference(targetRef, loadObj.ref);
-    });
-  }
+  //     const targetRef = this.refs[loadObj.ref];
+  //     // create fragment
+  //     const fragment = this.parseTemplate(newTemplate, true);
+  //     if (isDomDiff) {
+  //       targetRef.htmlDiff(fragment);
+  //     } else {
+  //       targetRef.html(fragment);
+  //     }
+  //     this.refreshElementReference(targetRef, loadObj.ref);
+  //   });
+  // }
 
   async makeLoadAction(magicMethod) {
     const [elName, ...args] = magicMethod.args;
@@ -759,13 +762,19 @@ export class EventMachine {
         newTemplate = newTemplate.join("");
       }
 
-      // create fragment
-      const fragment = this.parseTemplate(newTemplate, true);
-      if (isDomDiff) {
-        refTarget.htmlDiff(fragment);
+      if (this.#prefLoadTemplate[elName] != newTemplate) {
+        this.#prefLoadTemplate[elName] = newTemplate;
+        // create fragment
+        const fragment = this.parseTemplate(newTemplate, true);
+        if (isDomDiff) {
+          refTarget.htmlDiff(fragment);
+        } else {
+          refTarget.html(fragment);
+        }
       } else {
-        refTarget.html(fragment);
+        // console.log("newTemplate", newTemplate);
       }
+
       this.refreshElementReference(refTarget, elName);
     }
   }
@@ -776,7 +785,7 @@ export class EventMachine {
     }
 
     // local 로 등록된 load 를 모두 실행한다.
-    await this.loadLocalValue(...args);
+    // await this.loadLocalValue(...args);
 
     // method 형태로 등록된 load 를 모두 실행한다.
     const filtedLoadMethodList = this.#loadMethods.filter((it) =>

@@ -162,7 +162,7 @@ export default class CanvasView extends EditorElement {
     const newCenter = this.$viewport.getWorldPosition(e);
 
     if (e.dataTransfer.getData("text/asset")) {
-      this.emit("drop.asset", {
+      this.$commands.emit("drop.asset", {
         asset: { id: e.dataTransfer.getData("text/asset"), center: newCenter },
       });
     } else {
@@ -170,7 +170,7 @@ export default class CanvasView extends EditorElement {
       const id = Dom.create(e.target).attr("data-id");
 
       if (id) {
-        this.emit(
+        this.$commands.emit(
           "drop.asset",
           {
             gradient: e.dataTransfer.getData("text/gradient"),
@@ -182,7 +182,7 @@ export default class CanvasView extends EditorElement {
         );
       } else {
         const imageUrl = e.dataTransfer.getData("image/info");
-        this.emit("dropImageUrl", imageUrl);
+        this.$commands.emit("dropImageUrl", imageUrl);
       }
     }
   }

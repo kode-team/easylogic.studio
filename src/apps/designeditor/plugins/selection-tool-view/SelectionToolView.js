@@ -7,6 +7,7 @@ import {
   IF,
   SUBSCRIBE,
   clone,
+  THROTTLE,
 } from "sapa";
 
 import "./SelectionView.scss";
@@ -25,7 +26,7 @@ import GridLayoutEngine from "elf/editor/layout-engine/GridLayoutEngine";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { ViewModeType } from "elf/editor/types/editor";
 import {
-  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
   UPDATE_VIEWPORT,
   END,
   MOVE,
@@ -64,7 +65,7 @@ const SelectionToolEvent = class extends EditorElement {
    *
    * @param {*} isShow
    */
-  [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
     this.initSelectionTool();
   }
 
@@ -145,8 +146,9 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     this.state.dragging = true;
-    // this.renderPointers();
     this.$commands.emit("setAttribute", this.$context.selection.pack("angle"));
+
+    this.makeSelectionTool();
   }
 
   rotateEndVertex() {
@@ -226,7 +228,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     this.state.moveType = direction;
     this.state.moveTarget = num;
 
-    this.$context.selection.reselect();
+    // this.$context.selection.reselect();
     this.$context.snapManager.clear();
     this.verties = this.$context.selection.verties;
 
@@ -713,7 +715,6 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     this.$context.selection.recoverChildren();
-    // this.$context.selection.reselect();
 
     const current = this.$context.selection.current;
     if (current.isInGrid()) {
@@ -749,6 +750,8 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     this.state.dragging = true;
+
+    this.makeSelectionTool();
   }
 
   /**

@@ -248,7 +248,7 @@ export default class TimelineKeyframeList extends EditorElement {
   }
 
   [KEYUP("$el") + KEY("Backspace")]() {
-    this.emit("deleteTimelineKeyframe");
+    this.$commands.emit("deleteTimelineKeyframe");
   }
 
   isNotMoved(dx, dy) {
@@ -420,7 +420,7 @@ export default class TimelineKeyframeList extends EditorElement {
   [DOUBLECLICK("$el .layer-property")](e) {
     var [layerId, property] = e.$dt.attrs("data-layer-id", "data-property");
     var time = this.getTimeRateByPosition(this.getRealPosition(e).rate);
-    this.emit("addTimelineKeyframe", { layerId, property, time });
+    this.$commands.emit("addTimelineKeyframe", { layerId, property, time });
 
     this.doubleClicked = true;
     this.refresh();

@@ -143,7 +143,7 @@ export default class BlankCanvasView extends EditorElement {
     const newCenter = this.$context.viewport.getWorldPosition(e);
 
     if (e.dataTransfer.getData("text/asset")) {
-      this.emit("drop.asset", {
+      this.$command.emit("drop.asset", {
         asset: { id: e.dataTransfer.getData("text/asset"), center: newCenter },
       });
     } else {
@@ -151,7 +151,7 @@ export default class BlankCanvasView extends EditorElement {
       const id = Dom.create(e.target).attr("data-id");
 
       if (id) {
-        this.emit(
+        this.$command.emit(
           "drop.asset",
           {
             gradient: e.dataTransfer.getData("text/gradient"),
@@ -163,7 +163,7 @@ export default class BlankCanvasView extends EditorElement {
         );
       } else {
         const imageUrl = e.dataTransfer.getData("image/info");
-        this.emit("dropImageUrl", imageUrl);
+        this.$command.emit("dropImageUrl", imageUrl);
       }
     }
   }

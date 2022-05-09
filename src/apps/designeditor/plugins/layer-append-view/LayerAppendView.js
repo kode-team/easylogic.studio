@@ -530,7 +530,7 @@ export default class LayerAppendView extends EditorElement {
       this.state.isShow = false;
       // this.refs.$area.empty()
       this.$el.hide();
-      this.emit("pop.mode.view", "LayerAppendView");
+      this.$commands.emit("pop.mode.view", "LayerAppendView");
       this.$config.set("editing.mode", EditingMode.SELECT);
     }
   }

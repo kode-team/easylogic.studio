@@ -128,7 +128,7 @@ export default class KeyframeProperty extends BaseProperty {
     current.removeKeyframe(removeIndex);
 
     // project 는 항상 최상위이기 때문에  true 옵션을 줘서 혼자서 갱신 해야함
-    this.emit("refreshProject", current);
+    this.$commands.emit("refreshProject", current);
 
     this.refresh();
   }
@@ -162,7 +162,7 @@ export default class KeyframeProperty extends BaseProperty {
     if (current) {
       current.createKeyframe();
       this.refresh();
-      this.emit("refreshProject", current);
+      this.$commands.emit("refreshProject", current);
     } else {
       window.alert("Please select a project.");
     }
@@ -228,6 +228,6 @@ export default class KeyframeProperty extends BaseProperty {
     this.refresh();
 
     // todo: add history
-    this.emit("refreshProject", project);
+    this.$commands.emit("refreshProject", project);
   }
 }

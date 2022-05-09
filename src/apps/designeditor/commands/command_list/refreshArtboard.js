@@ -1,8 +1,4 @@
-import {
-  REFRESH_SELECTION,
-  REFRESH_SELECTION_TOOL,
-  UPDATE_CANVAS,
-} from "elf/editor/types/event";
+import { REFRESH_SELECTION, UPDATE_CANVAS } from "elf/editor/types/event";
 
 export default {
   command: "refreshArtboard",
@@ -17,9 +13,5 @@ export default {
     command.emit(REFRESH_SELECTION);
 
     command.run();
-
-    editor.nextTick(() => {
-      editor.emit(REFRESH_SELECTION_TOOL);
-    });
   },
 };

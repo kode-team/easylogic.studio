@@ -117,14 +117,14 @@ export class Dom {
    * @param {string} key
    * @param {string[]} value
    */
-  attr(key, value) {
-    if (arguments.length == 1) {
-      return this.el.getAttribute && this.el.getAttribute(key);
+  attr(...args) {
+    if (args.length == 1) {
+      return this.el.getAttribute && this.el.getAttribute(args[0]);
     }
 
     // 동일한 속성 값이 있다면 변경하지 않는다.
-    if (this.el.getAttribute(key) != value) {
-      this.el.setAttribute(key, value);
+    if (this.el.getAttribute(args[0]) != args[1]) {
+      this.el.setAttribute(args[0], args[1]);
     }
 
     return this;

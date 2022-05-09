@@ -104,28 +104,28 @@ export default class PatternSizeEditor extends EditorElement {
   }
 
   viewBackgroundPositionPopup() {
-    this.emit("getLayoutElement", (layoutElement) => {
-      const bodyRect = layoutElement.$bodyPanel.rect();
-      const rect = this.$el.rect();
+    const layoutElement = this.$config.get("editor.layout.elements");
 
-      const newRect = {
-        left: bodyRect.left + bodyRect.width - 240,
-        top: rect.top,
-        width: 240,
-        height: 300,
-      };
+    const bodyRect = layoutElement.$bodyPanel.rect();
+    const rect = this.$el.rect();
 
-      this.emit(
-        "showPatternInfoPopup",
-        {
-          changeEvent: (pattern) => {
-            this.updateData({ ...pattern });
-          },
-          data: this.state,
-          instance: this,
+    const newRect = {
+      left: bodyRect.left + bodyRect.width - 240,
+      top: rect.top,
+      width: 240,
+      height: 300,
+    };
+
+    this.emit(
+      "showPatternInfoPopup",
+      {
+        changeEvent: (pattern) => {
+          this.updateData({ ...pattern });
         },
-        newRect
-      );
-    });
+        data: this.state,
+        instance: this,
+      },
+      newRect
+    );
   }
 }

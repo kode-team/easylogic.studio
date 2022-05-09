@@ -1082,7 +1082,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
     this.$el.hide();
     this.state.isShow = false;
 
-    this.emit("pop.mode.view", "GradientEditorView");
+    this.$commands.emit("pop.mode.view", "GradientEditorView");
   }
 
   makeTimingLine(timing, width = 10, startX = 0, startY = 0) {

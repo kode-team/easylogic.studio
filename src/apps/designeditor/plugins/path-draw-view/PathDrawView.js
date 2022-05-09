@@ -179,7 +179,7 @@ export default class PathDrawView extends EditorElement {
       this.$el.hide();
       // this.emit('finishPathEdit')
       this.emit("hideDrawManager");
-      this.emit("pop.mode.view", "PathDrawView");
+      this.$commands.emit("pop.mode.view", "PathDrawView");
     }
   }
 

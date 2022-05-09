@@ -1,5 +1,5 @@
 import { EditingMode } from "elf/editor/types/editor";
-import { REFRESH_SELECTION_TOOL } from "elf/editor/types/event";
+import { REFRESH_SELECTION } from "elf/editor/types/event";
 /**
  * 객체 추가 모드로 변경
  *
@@ -12,7 +12,7 @@ export default {
   execute: async function (editor, type, data = {}) {
     // editor.emit('hideSubEditor');
     editor.context.selection.empty();
-    await editor.emit(REFRESH_SELECTION_TOOL);
+    await editor.emit(REFRESH_SELECTION);
     await editor.emit("hideAddViewLayer");
     await editor.emit("removeGuideLine");
 

@@ -124,7 +124,6 @@ export default class HoverView extends EditorElement {
     if (items.length === 0) {
       // hide render hover layer
       this.refs.$hoverRect.updateDiff("");
-      // this.emit("removeGuideLine");
     } else {
       // refresh hover view
       const verties = items[0].verties;
@@ -133,8 +132,6 @@ export default class HoverView extends EditorElement {
       const offsetLine = this.createOffsetLine();
 
       this.refs.$hoverRect.updateDiff(line + offsetLine);
-
-      // this.emit("refreshGuideLineByTarget", [items[0].verties]);
     }
   }
 

@@ -16,7 +16,7 @@ export default class Outline extends MenuItem {
 
   clickButton() {
     this.$config.toggle("show.outline");
-    this.emit("addLayerView", "select");
+    this.$commands.emit("addLayerView", "select");
   }
 
   [CONFIG("show.outline")](isShow) {

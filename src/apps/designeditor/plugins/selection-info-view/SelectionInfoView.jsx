@@ -10,7 +10,7 @@ import {
   END,
   MOVE,
   UPDATE_VIEWPORT,
-  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
   UPDATE_CANVAS,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
@@ -53,7 +53,7 @@ export default class SelectionInfoView extends EditorElement {
     this.$context.selection.reselect();
     this.$context.snapManager.clear();
 
-    this.emit(REFRESH_SELECTION_TOOL);
+    this.emit(REFRESH_SELECTION);
   }
 
   moveTo(dist) {

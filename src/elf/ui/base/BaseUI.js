@@ -30,7 +30,9 @@ export class BaseUI extends UIElement {
     }
     // action 이 array 일 때 emit 을 실행
     else if (isArray(this.props.action)) {
-      this.emit(...this.props.action, key, value, params);
+      this.emit(
+        this.props.action.map((action) => [action, key, value, params])
+      );
     }
     // 아무것도 없을 때는 선택할 수 있는 버튼 처럼 동작한다.
     // key, value 를 던질 수 있도록 한다.

@@ -201,7 +201,10 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttribute", this.$context.selection.packByValue(value));
+    this.$commands.emit(
+      "setAttribute",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndInsetCenter(dx, dy) {

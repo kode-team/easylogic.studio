@@ -13,6 +13,6 @@ export default class RightAlign extends MenuItem {
   }
 
   clickButton() {
-    this.emit("sort.right");
+    this.$commands.emit("sort.right");
   }
 }

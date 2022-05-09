@@ -135,23 +135,23 @@ export default class TimelinePlayControl extends EditorElement {
   }
 
   first() {
-    this.emit("firstTimelineItem");
+    this.$commands.emit("firstTimelineItem");
   }
 
   prev() {
-    this.emit("prevTimelineItem");
+    this.$commands.emit("prevTimelineItem");
   }
 
   next() {
-    this.emit("nextTimelineItem");
+    this.$commands.emit("nextTimelineItem");
   }
 
   last() {
-    this.emit("lastTimelineItem");
+    this.$commands.emit("lastTimelineItem");
   }
 
   play() {
-    this.emit(
+    this.$commands.emit(
       "playTimelineItem",
       this.state.speed,
       this.state.iterationCount,
@@ -160,7 +160,7 @@ export default class TimelinePlayControl extends EditorElement {
   }
 
   pause() {
-    this.emit("pauseTimelineItem");
+    this.$commands.emit("pauseTimelineItem");
   }
 
   [SUBSCRIBE("stopTimeline")]() {

@@ -104,7 +104,7 @@ export default class PatternAssetsProperty extends BaseProperty {
 
     // view 에 따라 다른 속성을 가진다.
     if (this.$modeView.isCurrentMode(ViewModeType.CanvasView)) {
-      this.emit("addBackgroundImagePattern", pattern);
+      this.$commands.emit("addBackgroundImagePattern", pattern);
     } else {
       this.emit("setPatternAsset", pattern);
     }

@@ -1,4 +1,11 @@
-import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
+import {
+  IF,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+  DOMDIFF,
+} from "sapa";
 
 import "./LayoutProperty.scss";
 
@@ -43,7 +50,7 @@ export default class LayoutProperty extends BaseProperty {
     });
   }
 
-  [LOAD("$layoutProperty")]() {
+  [LOAD("$layoutProperty") + DOMDIFF]() {
     var current = this.$context.selection.current || { layout: "default" };
     return /*html*/ `
       <div class='layout-list' ref='$layoutList'>

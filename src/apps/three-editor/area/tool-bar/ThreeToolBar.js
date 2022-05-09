@@ -9,10 +9,8 @@ import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import Download from "elf/editor/ui/menu-items/Download";
 import ExportView from "elf/editor/ui/menu-items/ExportView";
 import Outline from "elf/editor/ui/menu-items/Outline";
-import Projects from "elf/editor/ui/menu-items/Projects";
 import Redo from "elf/editor/ui/menu-items/Redo";
 import Save from "elf/editor/ui/menu-items/Save";
-import SelectTool from "elf/editor/ui/menu-items/SelectTool";
 import ThemeChanger from "elf/editor/ui/menu-items/ThemeChanger";
 import Undo from "elf/editor/ui/menu-items/Undo";
 import { DropdownMenu } from "elf/editor/ui/view/DropdownMenu";
@@ -92,14 +90,12 @@ export default class ThreeToolBar extends EditorElement {
       ToolBarRenderer,
       ThemeChanger,
       Outline,
-      SelectTool,
       ExportView,
       Download,
       Save,
       Undo,
       Redo,
       DropdownMenu,
-      Projects,
       // AddArtboard,
       // AddRect,
       // AddSVGRect

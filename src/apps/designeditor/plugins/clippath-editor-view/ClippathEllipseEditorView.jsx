@@ -198,7 +198,10 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
 
     const value = ClipPath.toCSS(this.state.clippath);
 
-    this.emit("setAttribute", this.$context.selection.packByValue(value));
+    this.$commands.emit(
+      "setAttribute",
+      this.$context.selection.packByValue(value)
+    );
   }
 
   moveEndEllipseCenter(dx, dy) {

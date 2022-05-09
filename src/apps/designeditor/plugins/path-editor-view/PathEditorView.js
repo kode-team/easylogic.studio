@@ -33,7 +33,7 @@ import { getDist } from "elf/core/math";
 import { PathGenerator } from "elf/core/parser/PathGenerator";
 import { PathParser } from "elf/core/parser/PathParser";
 import {
-  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
   UPDATE_VIEWPORT,
   END,
   MOVE,
@@ -519,7 +519,7 @@ export default class PathEditorView extends PathTransformEditor {
       // this.emit('finishPathEdit')
       this.emit("hidePathManager");
       this.$context.commands.emit("pop.mode.view", "PathEditorView");
-      this.emit(REFRESH_SELECTION_TOOL);
+      this.emit(REFRESH_SELECTION);
     }
   }
 

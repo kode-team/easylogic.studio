@@ -14,6 +14,6 @@ export default class SameHeight extends MenuItem {
   }
 
   clickButton() {
-    this.emit("same.height");
+    this.$commands.emit("same.height");
   }
 }

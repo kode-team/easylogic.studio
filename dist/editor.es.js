@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
+var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -469,12 +469,12 @@ class Dom {
     }
     return this;
   }
-  attr(key, value) {
-    if (arguments.length == 1) {
-      return this.el.getAttribute && this.el.getAttribute(key);
+  attr(...args2) {
+    if (args2.length == 1) {
+      return this.el.getAttribute && this.el.getAttribute(args2[0]);
     }
-    if (this.el.getAttribute(key) != value) {
-      this.el.setAttribute(key, value);
+    if (this.el.getAttribute(args2[0]) != args2[1]) {
+      this.el.setAttribute(args2[0], args2[1]);
     }
     return this;
   }
@@ -1750,39 +1750,16 @@ const applyElementAttribute = ($element, key, value, hasStyleAttribute = false) 
     }
   }
 };
+const FunctionMap = {};
 class BindHandler extends BaseHandler {
   async initialize() {
-    this.destroy();
-    if (!this._bindMethods || this._bindMethods.length === 0) {
-      this._bindMethods = this.context.filterMethodes("bind", true);
+    if (!FunctionMap[this.context.sourceName]) {
+      FunctionMap[this.context.sourceName] = this.context.filterMethodes("bind", true);
+      this._bindMethods = FunctionMap[this.context.sourceName];
     }
-  }
-  async bindLocalValue(refName) {
-    let target = this.context.refBindVariables;
-    if (refName && this.context.refBindVariables[refName]) {
-      target = {
-        [refName]: this.context.refBindVariables[refName]
-      };
-    }
-    await Promise.all(Object.values(target).map(async (it) => {
-      const refCallback = it.callback;
-      let $element = this.context.refs[it.ref];
-      if ($element) {
-        const results = await refCallback.call(this.context);
-        if (!results)
-          return;
-        const keys2 = Object.keys(results);
-        for (var elementKeyIndex = 0, len2 = keys2.length; elementKeyIndex < len2; elementKeyIndex++) {
-          const key = keys2[elementKeyIndex];
-          const value = results[key];
-          applyElementAttribute($element, key, value, this.context.isServer);
-        }
-      }
-    }));
   }
   async bindData(...args2) {
     var _a, _b;
-    await this.bindLocalValue(...args2);
     if (!((_a = this._bindMethods) == null ? void 0 : _a.length))
       return;
     const bindList = (_b = this._bindMethods) == null ? void 0 : _b.filter((it) => {
@@ -2345,6 +2322,7 @@ const _EventMachine = class {
     __privateAdd(this, _propsKeys, {});
     __privateAdd(this, _isServer, false);
     __privateAdd(this, _propsKeyList, []);
+    __privateAdd(this, _prefLoadTemplate, {});
     this.refs = {};
     this.children = {};
     this.id = uuid$1();
@@ -2539,7 +2517,6 @@ const _EventMachine = class {
         if (!isLoad) {
           this.refs[name] = $dom;
         }
-        this.parseLocalMethod($dom, name);
       }
     }
     if (!isLoad) {
@@ -2700,30 +2677,6 @@ const _EventMachine = class {
     await this.bindData();
     await this.parseComponent();
   }
-  async loadLocalValue(refName) {
-    let target = __privateGet(this, _refLoadVariables);
-    if (refName && __privateGet(this, _refLoadVariables)[refName]) {
-      target = {
-        [refName]: __privateGet(this, _refLoadVariables)[refName]
-      };
-    }
-    Object.keys(target).forEach(async (key) => {
-      const loadObj = __privateGet(this, _refLoadVariables)[key];
-      const isDomDiff = loadObj.domdiff;
-      var newTemplate = await loadObj.callback.call(this);
-      if (Array.isArray(newTemplate)) {
-        newTemplate = newTemplate.join("");
-      }
-      const targetRef = this.refs[loadObj.ref];
-      const fragment2 = this.parseTemplate(newTemplate, true);
-      if (isDomDiff) {
-        targetRef.htmlDiff(fragment2);
-      } else {
-        targetRef.html(fragment2);
-      }
-      this.refreshElementReference(targetRef, loadObj.ref);
-    });
-  }
   async makeLoadAction(magicMethod) {
     const [elName, ...args2] = magicMethod.args;
     let isDomDiff = magicMethod.hasKeyword("domdiff");
@@ -2733,11 +2686,14 @@ const _EventMachine = class {
       if (Array.isArray(newTemplate)) {
         newTemplate = newTemplate.join("");
       }
-      const fragment2 = this.parseTemplate(newTemplate, true);
-      if (isDomDiff) {
-        refTarget.htmlDiff(fragment2);
-      } else {
-        refTarget.html(fragment2);
+      if (__privateGet(this, _prefLoadTemplate)[elName] != newTemplate) {
+        __privateGet(this, _prefLoadTemplate)[elName] = newTemplate;
+        const fragment2 = this.parseTemplate(newTemplate, true);
+        if (isDomDiff) {
+          refTarget.htmlDiff(fragment2);
+        } else {
+          refTarget.html(fragment2);
+        }
       }
       this.refreshElementReference(refTarget, elName);
     }
@@ -2746,7 +2702,6 @@ const _EventMachine = class {
     if (!__privateGet(this, _loadMethods)) {
       __privateSet(this, _loadMethods, this.filterMethodes("load"));
     }
-    await this.loadLocalValue(...args2);
     const filtedLoadMethodList = __privateGet(this, _loadMethods).filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
     await Promise.all(filtedLoadMethodList.map(async (magicMethod) => {
       await this.makeLoadAction(magicMethod);
@@ -2831,6 +2786,7 @@ _props = new WeakMap();
 _propsKeys = new WeakMap();
 _isServer = new WeakMap();
 _propsKeyList = new WeakMap();
+_prefLoadTemplate = new WeakMap();
 _setProps = new WeakSet();
 setProps_fn = function(props) {
   __privateSet(this, _props, this.checkProps(props));
@@ -3039,7 +2995,8 @@ function createComponent(ComponentName, props = {}, children2 = []) {
   children2 = children2.flat(Infinity).join("");
   let targetVariable;
   targetVariable = Object.keys(props).length ? variable$4(props) : "";
-  return `<object refClass="${ComponentName}" ${targetVariable}>${children2}</object>`;
+  const ref = props.ref ? `ref="${props.ref}"` : "";
+  return `<object refClass="${ComponentName}" ${ref} ${targetVariable}>${children2}</object>`;
 }
 function createComponentList(...args2) {
   return args2.map((it) => {
@@ -4156,7 +4113,6 @@ const END = (method = "end") => {
   return AFTER(`bodyMouseUp ${method}`);
 };
 const UPDATE_VIEWPORT = "updateViewport";
-const REFRESH_SELECTION_TOOL = "refreshSelectionTool";
 const TOGGLE_FULLSCREEN = "toggle.fullscreen";
 const REFRESH_SELECTION = "refreshSelection";
 const REFRESH_CONTENT = "refreshContent";
@@ -4575,13 +4531,13 @@ class BlankCanvasView extends EditorElement {
   [DROP("$lock") + PREVENT](e) {
     const newCenter = this.$context.viewport.getWorldPosition(e);
     if (e.dataTransfer.getData("text/asset")) {
-      this.emit("drop.asset", {
+      this.$command.emit("drop.asset", {
         asset: { id: e.dataTransfer.getData("text/asset"), center: newCenter }
       });
     } else {
       const id = Dom.create(e.target).attr("data-id");
       if (id) {
-        this.emit("drop.asset", {
+        this.$command.emit("drop.asset", {
           gradient: e.dataTransfer.getData("text/gradient"),
           pattern: e.dataTransfer.getData("text/pattern"),
           color: e.dataTransfer.getData("text/color"),
@@ -4589,7 +4545,7 @@ class BlankCanvasView extends EditorElement {
         }, id);
       } else {
         const imageUrl = e.dataTransfer.getData("image/info");
-        this.emit("dropImageUrl", imageUrl);
+        this.$command.emit("dropImageUrl", imageUrl);
       }
     }
   }
@@ -4689,7 +4645,7 @@ class BaseUI extends UIElement {
     } else if (isString(this.props.action)) {
       this.emit(this.props.action, key, value, params);
     } else if (isArray(this.props.action)) {
-      this.emit(...this.props.action, key, value, params);
+      this.emit(this.props.action.map((action) => [action, key, value, params]));
     } else {
       if (this.props.onChange) {
         this.parent.trigger(this.props.onChange, key, value, params);
@@ -5047,7 +5003,7 @@ var __glob_0_6$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   "default": align_center
 }, Symbol.toStringTag, { value: "Module" }));
 var align_horizontal_center = _icon_template(`<polygon points="11,2 13,2 13,7 21,7 21,10 13,10 13,14 18,14 18,17 13,17 13,22 11,22 11,17 6,17 6,14 11,14 11,10 3,10 3,7 11,7"/>`);
-var __glob_0_7$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": align_horizontal_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5702,7 +5658,7 @@ var __glob_0_120$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.define
   "default": layout_grid
 }, Symbol.toStringTag, { value: "Module" }));
 var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_121$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6387,7 +6343,7 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$5, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$2, "./icon_list/arrow_right.js": __glob_0_22$2, "./icon_list/artboard.js": __glob_0_23$2, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/doc.js": __glob_0_63$1, "./icon_list/drag_handle.js": __glob_0_64$1, "./icon_list/drag_indicator.js": __glob_0_65$1, "./icon_list/draw.js": __glob_0_66$1, "./icon_list/east.js": __glob_0_67$1, "./icon_list/edit.js": __glob_0_68$1, "./icon_list/end.js": __glob_0_69$1, "./icon_list/exit_to_app.js": __glob_0_70$1, "./icon_list/expand.js": __glob_0_71$1, "./icon_list/expand_more.js": __glob_0_72$1, "./icon_list/export.js": __glob_0_73$1, "./icon_list/face.js": __glob_0_74$1, "./icon_list/fast_forward.js": __glob_0_75$1, "./icon_list/fast_rewind.js": __glob_0_76$1, "./icon_list/file_copy.js": __glob_0_77$1, "./icon_list/filter.js": __glob_0_78$1, "./icon_list/flag.js": __glob_0_79$1, "./icon_list/flash_on.js": __glob_0_80$1, "./icon_list/flatten.js": __glob_0_81$1, "./icon_list/flex.js": __glob_0_82$1, "./icon_list/flip.js": __glob_0_83$1, "./icon_list/flipY.js": __glob_0_84$1, "./icon_list/flip_camera.js": __glob_0_85$1, "./icon_list/folder.js": __glob_0_86$1, "./icon_list/font_download.js": __glob_0_87$1, "./icon_list/format_bold.js": __glob_0_88$1, "./icon_list/format_indent.js": __glob_0_89$1, "./icon_list/format_line_spacing.js": __glob_0_90$1, "./icon_list/format_shapes.js": __glob_0_91$1, "./icon_list/format_size.js": __glob_0_92$1, "./icon_list/fullscreen.js": __glob_0_93$1, "./icon_list/gps_fixed.js": __glob_0_94$1, "./icon_list/gradient.js": __glob_0_95$1, "./icon_list/grid.js": __glob_0_96$1, "./icon_list/grid3x3.js": __glob_0_97$1, "./icon_list/group.js": __glob_0_98$1, "./icon_list/height.js": __glob_0_99$1, "./icon_list/highlight_at.js": __glob_0_100$1, "./icon_list/horizontal_align_center.js": __glob_0_101$1, "./icon_list/horizontal_distribute.js": __glob_0_102$1, "./icon_list/horizontal_rule.js": __glob_0_103$1, "./icon_list/image.js": __glob_0_104$1, "./icon_list/input.js": __glob_0_105$1, "./icon_list/italic.js": __glob_0_106$1, "./icon_list/join_full.js": __glob_0_107$1, "./icon_list/join_right.js": __glob_0_108$1, "./icon_list/justify_content_space_around.js": __glob_0_109$1, "./icon_list/keyboard.js": __glob_0_110$1, "./icon_list/keyboard_arrow_down.js": __glob_0_111$1, "./icon_list/keyboard_arrow_left.js": __glob_0_112$1, "./icon_list/keyboard_arrow_right.js": __glob_0_113$1, "./icon_list/keyboard_arrow_up.js": __glob_0_114$1, "./icon_list/landscape.js": __glob_0_115$1, "./icon_list/launch.js": __glob_0_116$1, "./icon_list/layers.js": __glob_0_117$1, "./icon_list/layout_default.js": __glob_0_118$1, "./icon_list/layout_flex.js": __glob_0_119$1, "./icon_list/layout_grid.js": __glob_0_120$1, "./icon_list/left.js": __glob_0_121$1, "./icon_list/left_hide.js": __glob_0_122, "./icon_list/lens.js": __glob_0_123, "./icon_list/light.js": __glob_0_124, "./icon_list/line_cap_butt.js": __glob_0_125, "./icon_list/line_cap_round.js": __glob_0_126, "./icon_list/line_cap_square.js": __glob_0_127, "./icon_list/line_chart.js": __glob_0_128, "./icon_list/line_join_bevel.js": __glob_0_129, "./icon_list/line_join_miter.js": __glob_0_130, "./icon_list/line_join_round.js": __glob_0_131, "./icon_list/line_style.js": __glob_0_132, "./icon_list/line_weight.js": __glob_0_133, "./icon_list/list.js": __glob_0_134, "./icon_list/local_library.js": __glob_0_135, "./icon_list/local_movie.js": __glob_0_136, "./icon_list/lock.js": __glob_0_137, "./icon_list/lock_open.js": __glob_0_138, "./icon_list/looks.js": __glob_0_139, "./icon_list/margin.js": __glob_0_140, "./icon_list/merge.js": __glob_0_141, "./icon_list/middle.js": __glob_0_142, "./icon_list/navigation.js": __glob_0_143, "./icon_list/near_me.js": __glob_0_144, "./icon_list/north.js": __glob_0_145, "./icon_list/note.js": __glob_0_146, "./icon_list/nowrap.js": __glob_0_147, "./icon_list/opacity.js": __glob_0_148, "./icon_list/open_in_full.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$2, "./icon_list/arrow_right.js": __glob_0_22$2, "./icon_list/artboard.js": __glob_0_23$2, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/doc.js": __glob_0_63$1, "./icon_list/drag_handle.js": __glob_0_64$1, "./icon_list/drag_indicator.js": __glob_0_65$1, "./icon_list/draw.js": __glob_0_66$1, "./icon_list/east.js": __glob_0_67$1, "./icon_list/edit.js": __glob_0_68$1, "./icon_list/end.js": __glob_0_69$1, "./icon_list/exit_to_app.js": __glob_0_70$1, "./icon_list/expand.js": __glob_0_71$1, "./icon_list/expand_more.js": __glob_0_72$1, "./icon_list/export.js": __glob_0_73$1, "./icon_list/face.js": __glob_0_74$1, "./icon_list/fast_forward.js": __glob_0_75$1, "./icon_list/fast_rewind.js": __glob_0_76$1, "./icon_list/file_copy.js": __glob_0_77$1, "./icon_list/filter.js": __glob_0_78$1, "./icon_list/flag.js": __glob_0_79$1, "./icon_list/flash_on.js": __glob_0_80$1, "./icon_list/flatten.js": __glob_0_81$1, "./icon_list/flex.js": __glob_0_82$1, "./icon_list/flip.js": __glob_0_83$1, "./icon_list/flipY.js": __glob_0_84$1, "./icon_list/flip_camera.js": __glob_0_85$1, "./icon_list/folder.js": __glob_0_86$1, "./icon_list/font_download.js": __glob_0_87$1, "./icon_list/format_bold.js": __glob_0_88$1, "./icon_list/format_indent.js": __glob_0_89$1, "./icon_list/format_line_spacing.js": __glob_0_90$1, "./icon_list/format_shapes.js": __glob_0_91$1, "./icon_list/format_size.js": __glob_0_92$1, "./icon_list/fullscreen.js": __glob_0_93$1, "./icon_list/gps_fixed.js": __glob_0_94$1, "./icon_list/gradient.js": __glob_0_95$1, "./icon_list/grid.js": __glob_0_96$1, "./icon_list/grid3x3.js": __glob_0_97$1, "./icon_list/group.js": __glob_0_98$1, "./icon_list/height.js": __glob_0_99$1, "./icon_list/highlight_at.js": __glob_0_100$1, "./icon_list/horizontal_align_center.js": __glob_0_101$1, "./icon_list/horizontal_distribute.js": __glob_0_102$1, "./icon_list/horizontal_rule.js": __glob_0_103$1, "./icon_list/image.js": __glob_0_104$1, "./icon_list/input.js": __glob_0_105$1, "./icon_list/italic.js": __glob_0_106$1, "./icon_list/join_full.js": __glob_0_107$1, "./icon_list/join_right.js": __glob_0_108$1, "./icon_list/justify_content_space_around.js": __glob_0_109$1, "./icon_list/keyboard.js": __glob_0_110$1, "./icon_list/keyboard_arrow_down.js": __glob_0_111$1, "./icon_list/keyboard_arrow_left.js": __glob_0_112$1, "./icon_list/keyboard_arrow_right.js": __glob_0_113$1, "./icon_list/keyboard_arrow_up.js": __glob_0_114$1, "./icon_list/landscape.js": __glob_0_115$1, "./icon_list/launch.js": __glob_0_116$1, "./icon_list/layers.js": __glob_0_117$1, "./icon_list/layout_default.js": __glob_0_118$1, "./icon_list/layout_flex.js": __glob_0_119$1, "./icon_list/layout_grid.js": __glob_0_120$1, "./icon_list/left.js": __glob_0_121, "./icon_list/left_hide.js": __glob_0_122, "./icon_list/lens.js": __glob_0_123, "./icon_list/light.js": __glob_0_124, "./icon_list/line_cap_butt.js": __glob_0_125, "./icon_list/line_cap_round.js": __glob_0_126, "./icon_list/line_cap_square.js": __glob_0_127, "./icon_list/line_chart.js": __glob_0_128, "./icon_list/line_join_bevel.js": __glob_0_129, "./icon_list/line_join_miter.js": __glob_0_130, "./icon_list/line_join_round.js": __glob_0_131, "./icon_list/line_style.js": __glob_0_132, "./icon_list/line_weight.js": __glob_0_133, "./icon_list/list.js": __glob_0_134, "./icon_list/local_library.js": __glob_0_135, "./icon_list/local_movie.js": __glob_0_136, "./icon_list/lock.js": __glob_0_137, "./icon_list/lock_open.js": __glob_0_138, "./icon_list/looks.js": __glob_0_139, "./icon_list/margin.js": __glob_0_140, "./icon_list/merge.js": __glob_0_141, "./icon_list/middle.js": __glob_0_142, "./icon_list/navigation.js": __glob_0_143, "./icon_list/near_me.js": __glob_0_144, "./icon_list/north.js": __glob_0_145, "./icon_list/note.js": __glob_0_146, "./icon_list/nowrap.js": __glob_0_147, "./icon_list/opacity.js": __glob_0_148, "./icon_list/open_in_full.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
 const obj$3 = {};
 Object.entries(modules$7).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -6435,7 +6391,7 @@ class ToolbarButtonMenuItem extends EditorElement {
   }
   [CLICK("$el")]() {
     if (this.props.command) {
-      this.emit(this.props.command, ...this.props.args || []);
+      this.$commands.emit(this.props.command, ...this.props.args || []);
     } else if (isFunction(this.props.action)) {
       this.props.action(this.$editor, this);
     } else if (isFunction(this.props.onClick)) {
@@ -7472,7 +7428,7 @@ class DropdownMenu extends EditorElement {
     const action = menuItem.action;
     const nextTick = menuItem.nextTick;
     if (command) {
-      this.emit(command, ...args2);
+      this.$commands.emit(command, ...args2);
     } else if (action && isFunction(action)) {
       this.emit(action);
     }
@@ -7765,6 +7721,17 @@ var __glob_0_2$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": editor_theme
 }, Symbol.toStringTag, { value: "Module" }));
+var event_doubleclick_timing = {
+  key: "event.doubleclick.timing",
+  defaultValue: 500,
+  title: "doubleclick timing",
+  description: "whether doubleclick timing is in some seconds",
+  type: "number"
+};
+var __glob_0_3$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": event_doubleclick_timing
+}, Symbol.toStringTag, { value: "Module" }));
 var language_locale = {
   key: "language.locale",
   defaultValue: Language.EN,
@@ -7772,7 +7739,7 @@ var language_locale = {
   description: "set locale for editor",
   type: "string"
 };
-var __glob_0_3$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": language_locale
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7784,7 +7751,7 @@ var set_tool_hand$2 = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_4$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": set_tool_hand$2
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7795,7 +7762,7 @@ var store_key = {
   description: "Set localStorage key",
   type: "string"
 };
-var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": store_key
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7806,11 +7773,11 @@ var style_canvas_background_color = {
   description: "Set canvas background color",
   type: "color"
 };
-var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": style_canvas_background_color
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.theme.js": __glob_0_2$5, "./config_list/language.locale.js": __glob_0_3$5, "./config_list/set.tool.hand.js": __glob_0_4$5, "./config_list/store.key.js": __glob_0_5$5, "./config_list/style.canvas.background.color.js": __glob_0_6$5 };
+const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.theme.js": __glob_0_2$5, "./config_list/event.doubleclick.timing.js": __glob_0_3$5, "./config_list/language.locale.js": __glob_0_4$5, "./config_list/set.tool.hand.js": __glob_0_5$5, "./config_list/store.key.js": __glob_0_6$5, "./config_list/style.canvas.background.color.js": __glob_0_7$5 };
 var configs$2 = Object.values(modules$6).map((it) => it.default);
 function defaultConfigs(editor) {
   configs$2.forEach((config) => {
@@ -18981,7 +18948,7 @@ class InputRangeEditor extends EditorElement {
   template() {
     return `<div class='small-editor' ref='$body'></div>`;
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var {
       min,
       max,
@@ -29085,7 +29052,7 @@ class BottomAlign extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("sort.bottom");
+    this.$commands.emit("sort.bottom");
   }
 }
 class CenterAlign extends MenuItem {
@@ -29099,7 +29066,7 @@ class CenterAlign extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("sort.center");
+    this.$commands.emit("sort.center");
   }
 }
 class LeftAlign extends MenuItem {
@@ -29113,7 +29080,7 @@ class LeftAlign extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("sort.left");
+    this.$commands.emit("sort.left");
   }
 }
 class MiddleAlign extends MenuItem {
@@ -29127,7 +29094,7 @@ class MiddleAlign extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("sort.middle");
+    this.$commands.emit("sort.middle");
   }
 }
 class RightAlign extends MenuItem {
@@ -29141,7 +29108,7 @@ class RightAlign extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("sort.right");
+    this.$commands.emit("sort.right");
   }
 }
 class SameHeight extends MenuItem {
@@ -29155,7 +29122,7 @@ class SameHeight extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("same.height");
+    this.$commands.emit("same.height");
   }
 }
 class SameWidth extends MenuItem {
@@ -29169,7 +29136,7 @@ class SameWidth extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("same.width");
+    this.$commands.emit("same.width");
   }
 }
 class TopAlign extends MenuItem {
@@ -29183,7 +29150,7 @@ class TopAlign extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("sort.top");
+    this.$commands.emit("sort.top");
   }
 }
 var BaseProperty$1 = "";
@@ -30141,7 +30108,7 @@ class ArtBoardSizeProperty extends BaseProperty {
   }
   [CLICK("$list .device-item")](e) {
     var size2 = e.$dt.attr("data-size");
-    this.emit("resizeArtBoard", size2);
+    this.$command.emit("resizeArtBoard", size2);
   }
   makeGroup(group2) {
     return `
@@ -31386,7 +31353,7 @@ class BorderRadiusEditor extends EditorElement {
     }
     this.setBorderRadius();
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var borderRadius2 = this.state["border-radius"];
     return `
       <div class="border-radius-item">
@@ -32106,7 +32073,7 @@ class ClippathPolygonEditorView extends EditorElement {
       ].join(" ");
     }).join(",");
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttribute", this.$context.selection.packByValue(value));
+    this.$commands.emit("setAttribute", this.$context.selection.packByValue(value));
   }
   [POINTERSTART("$el .polygon .polygon-center") + MOVE("movePolygonCenter") + END("moveEndPolygonCenter")]() {
     this.initializePolygon();
@@ -32279,7 +32246,7 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
       left2.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0])
     ].join(" ");
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttribute", this.$context.selection.packByValue(value));
+    this.$commands.emit("setAttribute", this.$context.selection.packByValue(value));
   }
   moveEndInsetCenter(dx, dy) {
     if (dx == 0 && dy == 0) {
@@ -32574,7 +32541,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     ];
     this.state.clippath.value = `${radiusX} ${radiusY} at ${result[2]} ${result[3]}`;
     const value = ClipPath.toCSS(this.state.clippath);
-    this.emit("setAttribute", this.$context.selection.packByValue(value));
+    this.$commands.emit("setAttribute", this.$context.selection.packByValue(value));
   }
   moveEndEllipseCenter(dx, dy) {
     if (dx == 0 && dy == 0) {
@@ -33237,7 +33204,7 @@ var addLayerView = {
   command: "addLayerView",
   execute: async function(editor, type, data = {}) {
     editor.context.selection.empty();
-    await editor.emit(REFRESH_SELECTION_TOOL);
+    await editor.emit(REFRESH_SELECTION);
     await editor.emit("hideAddViewLayer");
     await editor.emit("removeGuideLine");
     editor.context.config.set("editing.mode.itemType", type);
@@ -34888,7 +34855,6 @@ var doubleclick_item = {
       if (editor.context.selection.checkChildren(item.id)) {
         editor.context.selection.select(item);
         editor.emit(REFRESH_SELECTION);
-        editor.emit(REFRESH_SELECTION_TOOL);
       } else {
         if (editor.context.selection.check(item)) {
           editor.context.commands.emit("open.editor");
@@ -34906,7 +34872,6 @@ var doubleclick_item = {
     if (editor.context.selection.hasPoint(point2) || editor.context.selection.hasChildrenPoint(point2)) {
       editor.context.selection.select(item);
       editor.snapManager.clear();
-      editor.emit(REFRESH_SELECTION_TOOL, true);
       editor.context.commands.emit("history.refreshSelection");
     }
   }
@@ -35646,7 +35611,6 @@ var history_refreshSelection = {
     editor.nextTick(() => {
       editor.context.history.saveSelection();
       editor.emit(REFRESH_SELECTION);
-      editor.emit(REFRESH_SELECTION_TOOL);
     });
   },
   redo: function(editor, { currentValues: [ids, projectId] }) {
@@ -36350,9 +36314,6 @@ var refreshArtboard = {
     command.emit("refreshAllElementBoundSize");
     command.emit(REFRESH_SELECTION);
     command.run();
-    editor.nextTick(() => {
-      editor.emit(REFRESH_SELECTION_TOOL);
-    });
   }
 };
 var __glob_0_78 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -36451,7 +36412,6 @@ var removeLayer = {
     editor.context.selection.removeById(removedIds);
     editor.nextTick(() => {
       editor.emit("refreshAll");
-      editor.emit(REFRESH_SELECTION_TOOL);
     });
   }
 };
@@ -36491,13 +36451,6 @@ var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": removeTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
-function resetSelection(editor) {
-  editor.emit(REFRESH_SELECTION_TOOL);
-}
-var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": resetSelection
-}, Symbol.toStringTag, { value: "Module" }));
 function resizeArtBoard(editor, size2 = "") {
   var current = editor.context.selection.current;
   if (current && current.is("artboard")) {
@@ -36511,7 +36464,7 @@ function resizeArtBoard(editor, size2 = "") {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": resizeArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36524,7 +36477,7 @@ var rotateLayer = {
     }));
   }
 };
-var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": rotateLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36544,7 +36497,7 @@ var same_height = {
     }
   }
 };
-var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_height
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36561,7 +36514,7 @@ var same_width = {
     }
   }
 };
-var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_width
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36571,7 +36524,7 @@ var saveJSON = {
     editor.saveItem("model", editor.context.modelManager.toJSON());
   }
 };
-var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": saveJSON
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36592,7 +36545,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": savePNG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36602,7 +36555,7 @@ var segment_delete = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_delete
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36613,7 +36566,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36624,7 +36577,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36635,7 +36588,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36646,7 +36599,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36660,7 +36613,7 @@ var select_all = {
     }
   }
 };
-var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": select_all
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36675,7 +36628,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": selectTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36734,7 +36687,7 @@ var setAttribute = {
     }
   }
 };
-var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setAttribute
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36749,7 +36702,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setTimelineOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36759,7 +36712,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": showExportView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36784,7 +36737,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_bottom
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36808,7 +36761,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36833,7 +36786,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36857,7 +36810,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_middle
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36882,7 +36835,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36907,7 +36860,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_top
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36935,7 +36888,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": switch_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36957,7 +36910,7 @@ var ungroup_item = {
     }
   }
 };
-var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ungroup_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36970,7 +36923,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateClipPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36992,7 +36945,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37019,7 +36972,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37325,7 +37278,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updatePathItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37354,7 +37307,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateResource
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37398,7 +37351,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateUriList
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37420,7 +37373,7 @@ var updateVideo = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37447,7 +37400,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37464,11 +37417,11 @@ var update = {
     }
   }
 };
-var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21, "./command_list/clipboard.copy.js": __glob_0_22, "./command_list/clipboard.paste.js": __glob_0_23, "./command_list/convert.flatten.path.js": __glob_0_24, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshCursor.js": __glob_0_79, "./command_list/refreshElement.js": __glob_0_80, "./command_list/refreshHistory.js": __glob_0_81, "./command_list/refreshProject.js": __glob_0_82, "./command_list/refreshSelectedOffset.js": __glob_0_83, "./command_list/removeAnimationItem.js": __glob_0_84, "./command_list/removeLayer.js": __glob_0_85, "./command_list/removeTimeline.js": __glob_0_86, "./command_list/removeTimelineProperty.js": __glob_0_87, "./command_list/resetSelection.js": __glob_0_88, "./command_list/resizeArtBoard.js": __glob_0_89, "./command_list/rotateLayer.js": __glob_0_90, "./command_list/same.height.js": __glob_0_91, "./command_list/same.width.js": __glob_0_92, "./command_list/saveJSON.js": __glob_0_93, "./command_list/savePNG.js": __glob_0_94, "./command_list/segment.delete.js": __glob_0_95, "./command_list/segment.move.down.js": __glob_0_96, "./command_list/segment.move.left.js": __glob_0_97, "./command_list/segment.move.right.js": __glob_0_98, "./command_list/segment.move.up.js": __glob_0_99, "./command_list/select.all.js": __glob_0_100, "./command_list/selectTimelineItem.js": __glob_0_101, "./command_list/setAttribute.js": __glob_0_102, "./command_list/setTimelineOffset.js": __glob_0_103, "./command_list/showExportView.js": __glob_0_104, "./command_list/sort.bottom.js": __glob_0_105, "./command_list/sort.center.js": __glob_0_106, "./command_list/sort.left.js": __glob_0_107, "./command_list/sort.middle.js": __glob_0_108, "./command_list/sort.right.js": __glob_0_109, "./command_list/sort.top.js": __glob_0_110, "./command_list/switch.path.js": __glob_0_111, "./command_list/ungroup.item.js": __glob_0_112, "./command_list/updateClipPath.js": __glob_0_113, "./command_list/updateImage.js": __glob_0_114, "./command_list/updateImageAssetItem.js": __glob_0_115, "./command_list/updatePathItem.js": __glob_0_116, "./command_list/updateResource.js": __glob_0_117, "./command_list/updateUriList.js": __glob_0_118, "./command_list/updateVideo.js": __glob_0_119, "./command_list/updateVideoAssetItem.js": __glob_0_120, "./command_list/model/update.js": __glob_0_121 };
+const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21, "./command_list/clipboard.copy.js": __glob_0_22, "./command_list/clipboard.paste.js": __glob_0_23, "./command_list/convert.flatten.path.js": __glob_0_24, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshCursor.js": __glob_0_79, "./command_list/refreshElement.js": __glob_0_80, "./command_list/refreshHistory.js": __glob_0_81, "./command_list/refreshProject.js": __glob_0_82, "./command_list/refreshSelectedOffset.js": __glob_0_83, "./command_list/removeAnimationItem.js": __glob_0_84, "./command_list/removeLayer.js": __glob_0_85, "./command_list/removeTimeline.js": __glob_0_86, "./command_list/removeTimelineProperty.js": __glob_0_87, "./command_list/resizeArtBoard.js": __glob_0_88, "./command_list/rotateLayer.js": __glob_0_89, "./command_list/same.height.js": __glob_0_90, "./command_list/same.width.js": __glob_0_91, "./command_list/saveJSON.js": __glob_0_92, "./command_list/savePNG.js": __glob_0_93, "./command_list/segment.delete.js": __glob_0_94, "./command_list/segment.move.down.js": __glob_0_95, "./command_list/segment.move.left.js": __glob_0_96, "./command_list/segment.move.right.js": __glob_0_97, "./command_list/segment.move.up.js": __glob_0_98, "./command_list/select.all.js": __glob_0_99, "./command_list/selectTimelineItem.js": __glob_0_100, "./command_list/setAttribute.js": __glob_0_101, "./command_list/setTimelineOffset.js": __glob_0_102, "./command_list/showExportView.js": __glob_0_103, "./command_list/sort.bottom.js": __glob_0_104, "./command_list/sort.center.js": __glob_0_105, "./command_list/sort.left.js": __glob_0_106, "./command_list/sort.middle.js": __glob_0_107, "./command_list/sort.right.js": __glob_0_108, "./command_list/sort.top.js": __glob_0_109, "./command_list/switch.path.js": __glob_0_110, "./command_list/ungroup.item.js": __glob_0_111, "./command_list/updateClipPath.js": __glob_0_112, "./command_list/updateImage.js": __glob_0_113, "./command_list/updateImageAssetItem.js": __glob_0_114, "./command_list/updatePathItem.js": __glob_0_115, "./command_list/updateResource.js": __glob_0_116, "./command_list/updateUriList.js": __glob_0_117, "./command_list/updateVideo.js": __glob_0_118, "./command_list/updateVideoAssetItem.js": __glob_0_119, "./command_list/model/update.js": __glob_0_120 };
 const obj$1 = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -44775,10 +44728,10 @@ class ExportProperty extends BaseProperty {
       `;
   }
   [CLICK("$svg")]() {
-    this.emit("downloadSVG");
+    this.$commands.emit("downloadSVG");
   }
   [CLICK("$png")]() {
-    this.emit("downloadPNG");
+    this.$commands.emit("downloadPNG");
   }
 }
 function exportResource(editor) {
@@ -45325,7 +45278,7 @@ class FillEditorView extends FillColorstepEditor {
       onchange: null
     });
     this.$el.hide();
-    this.emit("pop.mode.view", "FillEditorView");
+    this.$commands.emit("pop.mode.view", "FillEditorView");
   }
   makeTimingLine(timing, width2 = 10, startX = 0, startY = 0) {
     switch (timing.name) {
@@ -46640,7 +46593,6 @@ class FillSingleEditor extends EditorElement {
     this.viewGradientPopup();
   }
   viewGradientPopup() {
-    console.log(this.$el.offsetRect(), this.$el.rect());
     this.emit("showFillPickerPopup", {
       instance: this,
       key: this.props.key,
@@ -46966,7 +46918,7 @@ class GradientAssetsProperty extends BaseProperty {
   [CLICK("$gradientList .preview")](e) {
     var $item = e.$dt.closest("gradient-item");
     var gradient2 = $item.attr("data-gradient");
-    this.emit("drop.asset", { gradient: gradient2 });
+    this.$commands.emit("drop.asset", { gradient: gradient2 });
   }
 }
 function gradientAsset(editor) {
@@ -47605,7 +47557,7 @@ class GradientEditorView extends GradientColorstepEditor {
   [SUBSCRIBE("hideGradientEditorView")]() {
     this.$el.hide();
     this.state.isShow = false;
-    this.emit("pop.mode.view", "GradientEditorView");
+    this.$commands.emit("pop.mode.view", "GradientEditorView");
   }
   makeTimingLine(timing, width2 = 10, startX = 0, startY = 0) {
     switch (timing.name) {
@@ -49130,7 +49082,7 @@ class KeyframeProperty extends BaseProperty {
     if (!current)
       return;
     current.removeKeyframe(removeIndex);
-    this.emit("refreshProject", current);
+    this.$commands.emit("refreshProject", current);
     this.refresh();
   }
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
@@ -49155,7 +49107,7 @@ class KeyframeProperty extends BaseProperty {
     if (current) {
       current.createKeyframe();
       this.refresh();
-      this.emit("refreshProject", current);
+      this.$commands.emit("refreshProject", current);
     } else {
       window.alert("Please select a project.");
     }
@@ -49207,7 +49159,7 @@ class KeyframeProperty extends BaseProperty {
       this.currentKeyframe.reset(data);
     }
     this.refresh();
-    this.emit("refreshProject", project2);
+    this.$commands.emit("refreshProject", project2);
   }
 }
 class OffsetEditor extends EditorElement {
@@ -49769,7 +49721,7 @@ class LayerAppendView extends EditorElement {
     if (this.$el.isShow()) {
       this.state.isShow = false;
       this.$el.hide();
-      this.emit("pop.mode.view", "LayerAppendView");
+      this.$commands.emit("pop.mode.view", "LayerAppendView");
       this.$config.set("editing.mode", EditingMode.SELECT);
     }
   }
@@ -50094,7 +50046,7 @@ class LayerTreeProperty extends BaseProperty {
     }
   }
   [CLICK("$add")]() {
-    this.emit("newComponent", "rect", {
+    this.$commands.emit("newComponent", "rect", {
       "background-color": "#ececec",
       width: 200,
       height: 100
@@ -51670,7 +51622,7 @@ class LayoutProperty extends BaseProperty {
       onchange: "changeLayoutType"
     });
   }
-  [LOAD("$layoutProperty")]() {
+  [LOAD("$layoutProperty") + DOMDIFF]() {
     var current = this.$context.selection.current || { layout: "default" };
     return `
       <div class='layout-list' ref='$layoutList'>
@@ -52233,7 +52185,7 @@ class PathDrawView extends EditorElement {
       this.trigger("initPathDrawEditor");
       this.$el.hide();
       this.emit("hideDrawManager");
-      this.emit("pop.mode.view", "PathDrawView");
+      this.$commands.emit("pop.mode.view", "PathDrawView");
     }
   }
   [SUBSCRIBE("hideAddViewLayer")]() {
@@ -53720,7 +53672,7 @@ class PathEditorView extends PathTransformEditor {
       this.$el.hide();
       this.emit("hidePathManager");
       this.$context.commands.emit("pop.mode.view", "PathEditorView");
-      this.emit(REFRESH_SELECTION_TOOL);
+      this.emit(REFRESH_SELECTION);
     }
   }
   [SUBSCRIBE("hideAddViewLayer")]() {
@@ -54136,9 +54088,9 @@ class PathToolProperty extends BaseProperty {
     const command = e.$dt.data("command");
     const args2 = e.$dt.data("args");
     if (command === "convert.smooth.path") {
-      this.emit(command);
+      this.$commands.emit(command);
     } else {
-      this.emit(command, args2);
+      this.$commands.emit(command, args2);
     }
   }
   [SUBSCRIBE(REFRESH_SELECTION)]() {
@@ -54335,7 +54287,7 @@ class PatternAssetsProperty extends BaseProperty {
   [CLICK("$patternList .pattern-item")](e) {
     const pattern = e.$dt.attr("data-pattern");
     if (this.$modeView.isCurrentMode(ViewModeType.CanvasView)) {
-      this.emit("addBackgroundImagePattern", pattern);
+      this.$commands.emit("addBackgroundImagePattern", pattern);
     } else {
       this.emit("setPatternAsset", pattern);
     }
@@ -54825,23 +54777,22 @@ class PatternSizeEditor extends EditorElement {
     this.viewBackgroundPositionPopup();
   }
   viewBackgroundPositionPopup() {
-    this.emit("getLayoutElement", (layoutElement) => {
-      const bodyRect = layoutElement.$bodyPanel.rect();
-      const rect2 = this.$el.rect();
-      const newRect = {
-        left: bodyRect.left + bodyRect.width - 240,
-        top: rect2.top,
-        width: 240,
-        height: 300
-      };
-      this.emit("showPatternInfoPopup", {
-        changeEvent: (pattern) => {
-          this.updateData(__spreadValues({}, pattern));
-        },
-        data: this.state,
-        instance: this
-      }, newRect);
-    });
+    const layoutElement = this.$config.get("editor.layout.elements");
+    const bodyRect = layoutElement.$bodyPanel.rect();
+    const rect2 = this.$el.rect();
+    const newRect = {
+      left: bodyRect.left + bodyRect.width - 240,
+      top: rect2.top,
+      width: 240,
+      height: 300
+    };
+    this.emit("showPatternInfoPopup", {
+      changeEvent: (pattern) => {
+        this.updateData(__spreadValues({}, pattern));
+      },
+      data: this.state,
+      instance: this
+    }, newRect);
   }
 }
 function patternAsset(editor) {
@@ -55263,7 +55214,7 @@ class ProjectProperty extends BaseProperty {
     `;
   }
   [CLICK("$add")]() {
-    this.emit("addProject");
+    this.$commands.emit("addProject");
   }
   getBody() {
     return `
@@ -59341,7 +59292,7 @@ class SelectionInfoView extends EditorElement {
   initializeDragSelection() {
     this.$context.selection.reselect();
     this.$context.snapManager.clear();
-    this.emit(REFRESH_SELECTION_TOOL);
+    this.emit(REFRESH_SELECTION);
   }
   moveTo(dist2) {
     const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
@@ -59835,7 +59786,7 @@ const SelectionToolEvent$1 = class extends EditorElement {
   checkViewMode() {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
-  [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
     if (this.$context.selection.isMany) {
       this.initSelectionTool();
     } else {
@@ -59902,6 +59853,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     });
     this.state.dragging = true;
     this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y", "width", "height", "angle"));
+    this.renderPointers();
   }
   rotateEndVertex() {
     this.state.dragging = false;
@@ -60109,6 +60061,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
       this.moveBottomVertex(distVector);
     }
     this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y", "width", "height"));
+    this.renderPointers();
     this.state.dragging = true;
   }
   moveEndVertex() {
@@ -60333,7 +60286,7 @@ const SelectionToolEvent = class extends EditorElement {
   checkViewMode() {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
-  [SUBSCRIBE(REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
     this.initSelectionTool();
   }
   [SUBSCRIBE(UPDATE_VIEWPORT) + IF("checkViewMode")]() {
@@ -60387,6 +60340,7 @@ class SelectionToolView extends SelectionToolEvent {
     }
     this.state.dragging = true;
     this.$commands.emit("setAttribute", this.$context.selection.pack("angle"));
+    this.makeSelectionTool();
   }
   rotateEndVertex() {
     this.state.dragging = false;
@@ -60430,7 +60384,6 @@ class SelectionToolView extends SelectionToolEvent {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     this.state.moveType = direction;
     this.state.moveTarget = num;
-    this.$context.selection.reselect();
     this.$context.snapManager.clear();
     this.verties = this.$context.selection.verties;
     this.hasRotate = this.$context.selection.current.angle !== 0;
@@ -60685,6 +60638,7 @@ class SelectionToolView extends SelectionToolEvent {
       this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
     }
     this.state.dragging = true;
+    this.makeSelectionTool();
   }
   updateGridArea() {
     return GridLayoutEngine.updateGridArea(this.$context.selection.current, this.$context.selection.gridInformation, this.$context.viewport.scale);
@@ -61056,7 +61010,7 @@ class SelectorProperty extends BaseProperty {
     if (!current)
       return;
     current.removeSelector(removeIndex);
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
     this.refresh();
   }
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
@@ -61090,7 +61044,7 @@ class SelectorProperty extends BaseProperty {
     if (!current)
       return;
     current.sortSelector(this.startIndex, targetIndex);
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
     this.refresh();
   }
   [CLICK("$add")]() {
@@ -61099,7 +61053,7 @@ class SelectorProperty extends BaseProperty {
       current.createSelector({
         selector: this.children.$select.getValue()
       });
-      this.emit("refreshElement", current);
+      this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
     }
     this.refresh();
   }
@@ -61150,7 +61104,7 @@ class SelectorProperty extends BaseProperty {
       this.currentSelector.reset(data);
     }
     this.refresh();
-    this.emit("refreshElement", this.current);
+    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
   }
 }
 function selector(editor) {
@@ -62925,7 +62879,7 @@ class SVGFilterSelectEditor extends EditorElement {
   [CHANGE("$options")]() {
     var value = this.refs.$options.value;
     if (value == "new") {
-      this.emit("addSVGFilterAssetItem", (index2, id) => {
+      this.$commands.emit("addSVGFilterAssetItem", (index2, id) => {
         this.updateData({ value: id });
         this.refresh();
         this.trigger("openSVGFilterPopup", index2);
@@ -64797,7 +64751,7 @@ class LanguageSelector extends EditorElement {
         `;
   }
   [SUBSCRIBE_SELF("changeLocale")](key, locale) {
-    this.emit("setLocale", locale);
+    this.$command.emit("setLocale", locale);
   }
 }
 class LayoutSelector extends EditorElement {
@@ -65223,7 +65177,7 @@ class Download extends MenuItem {
     return this.$i18n("menu.item.download.title");
   }
   clickButton() {
-    this.emit("downloadJSON");
+    this.$commands.emit("downloadJSON");
   }
 }
 class Outline extends MenuItem {
@@ -65238,24 +65192,10 @@ class Outline extends MenuItem {
   }
   clickButton() {
     this.$config.toggle("show.outline");
-    this.emit("addLayerView", "select");
+    this.$commands.emit("addLayerView", "select");
   }
   [CONFIG("show.outline")](isShow) {
     this.setSelected(isShow);
-  }
-}
-class Projects extends MenuItem {
-  getIconString() {
-    return "note";
-  }
-  getTitle() {
-    return this.$i18n("menu.item.projects.title");
-  }
-  isHideTitle() {
-    return true;
-  }
-  clickButton() {
-    this.emit("open.projects");
   }
 }
 class Redo extends MenuItem {
@@ -65269,7 +65209,7 @@ class Redo extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("history.redo");
+    this.$commands.emit("history.redo");
   }
 }
 class Save extends MenuItem {
@@ -65286,32 +65226,6 @@ class Save extends MenuItem {
     });
   }
 }
-class SelectTool extends MenuItem {
-  afterRender() {
-    this.$el.$(".icon").css("transform", "rotate(-30deg)");
-  }
-  getIconString() {
-    return "navigation";
-  }
-  getTitle() {
-    return this.props.title || "Select";
-  }
-  clickButton() {
-    this.emit("addLayerView", "select");
-  }
-  doSelect() {
-    this.setSelected(this.$config.is("editing.mode", EditingMode.SELECT));
-  }
-  [SUBSCRIBE(REFRESH_SELECTION)]() {
-    this.doSelect();
-  }
-  isHideTitle() {
-    return true;
-  }
-  [CONFIG("editing.mode")]() {
-    this.doSelect();
-  }
-}
 class Undo extends MenuItem {
   getIconString() {
     return "undo";
@@ -65323,7 +65237,7 @@ class Undo extends MenuItem {
     return true;
   }
   clickButton() {
-    this.emit("history.undo");
+    this.$commands.emit("history.undo");
   }
 }
 class ToolBar extends EditorElement {
@@ -65396,14 +65310,12 @@ class ToolBar extends EditorElement {
       LanguageSelector,
       ThemeChanger,
       Outline,
-      SelectTool,
       ExportView,
       Download,
       Save,
       Undo,
       Redo,
-      DropdownMenu,
-      Projects
+      DropdownMenu
     };
   }
   template() {
@@ -65477,7 +65389,6 @@ class DragAreaRectView extends EditorElement {
   }
   [SUBSCRIBE("startDragAreaView")]() {
     this.initMousePoint = this.$viewport.getWorldPosition();
-    this.$config.init("set.move.control.point", true);
     this.dragRect = {
       left: Length.px(this.initMousePoint[0]),
       top: Length.px(this.initMousePoint[1]),
@@ -65548,10 +65459,8 @@ class DragAreaRectView extends EditorElement {
       height: height2
     };
     const selectedItems = this.getSelectedItems(rect2, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]));
-    if (this.$context.selection.selectByGroup(...selectedItems)) {
-      this.emit(REFRESH_SELECTION);
-      this.emit(REFRESH_SELECTION_TOOL, true);
-    }
+    this.$context.selection.selectByGroup(...selectedItems);
+    this.emit(REFRESH_SELECTION);
   }
   [SUBSCRIBE("endDragAreaView")]() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -65563,7 +65472,6 @@ class DragAreaRectView extends EditorElement {
     this.trigger("initDrawAreaView");
     this.$context.selection.reselect();
     this.$commands.emit("history.refreshSelection");
-    this.emit(REFRESH_SELECTION_TOOL, true);
   }
 }
 class DragAreaView extends EditorElement {
@@ -65636,7 +65544,7 @@ class DragAreaView extends EditorElement {
   initializeDragSelection() {
     this.$context.selection.reselect();
     this.$context.snapManager.clear();
-    this.emit(REFRESH_SELECTION_TOOL, true);
+    this.emit(REFRESH_SELECTION);
   }
   movePointer() {
     if (this.$config.get("set.dragarea.mode")) {
@@ -65822,7 +65730,8 @@ class HTMLRenderView extends EditorElement {
       y: 0,
       width: 1e4,
       height: 1e4,
-      cachedCurrentElement: {}
+      cachedCurrentElement: {},
+      doubleClickTime: 0
     };
   }
   template() {
@@ -65914,6 +65823,11 @@ class HTMLRenderView extends EditorElement {
     this.emit("refreshContent", arr);
   }
   checkEditMode(e) {
+    this.state.hasDoubleClick = false;
+    if (window.performance.now() - this.state.doubleClickTime < this.$config.get("event.doubleclick.timing")) {
+      this.state.hasDoubleClick = true;
+      return false;
+    }
     if (this.$config.get("set.tool.hand")) {
       return false;
     }
@@ -65959,6 +65873,7 @@ class HTMLRenderView extends EditorElement {
     return true;
   }
   [DOUBLECLICK("$view")](e) {
+    this.state.doubleClickTime = window.performance.now();
     const $item = Dom.create(e.target).closest("element-item");
     if ($item) {
       const id = $item.attr("data-id");
@@ -65981,7 +65896,7 @@ class HTMLRenderView extends EditorElement {
     const $element = $target.closest("element-item");
     var id = $element && $element.attr("data-id");
     this.$context.selection.select(id);
-    this.emit(REFRESH_SELECTION_TOOL, true);
+    this.emit(REFRESH_SELECTION);
     this.emit(OPEN_CONTEXT_MENU, {
       target: "context.menu.layer",
       items: [
@@ -66060,7 +65975,6 @@ class HTMLRenderView extends EditorElement {
     this.$context.selection.reselect();
     this.$context.snapManager.clear();
     this.emit("startGhostToolView");
-    this.emit(REFRESH_SELECTION_TOOL, true);
   }
   calculateFirstMovedElement() {
     this.emit("hideSelectionToolView");
@@ -66112,6 +66026,10 @@ class HTMLRenderView extends EditorElement {
     this.$context.selection.reset(result);
   }
   calculateEndedElement(dx, dy) {
+    if (this.state.hasDoubleClick) {
+      this.state.doubleClickTime = window.performance.now();
+      return;
+    }
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = dist(targetMousePoint, this.initMousePoint);
     this.$config.init("set.move.control.point", false);
@@ -66133,7 +66051,6 @@ class HTMLRenderView extends EditorElement {
       });
     }
     this.emit(REFRESH_SELECTION);
-    this.emit(REFRESH_SELECTION_TOOL);
     this.$config.set("editing.mode.itemType", "select");
   }
   refreshSelectionStyleView(obj2) {
@@ -66197,7 +66114,7 @@ class HTMLRenderView extends EditorElement {
     item.reset(offset);
     this.refreshSelectionStyleView(item);
     if (this.$context.selection.check(item)) {
-      this.emit(REFRESH_SELECTION_TOOL);
+      this.emit(REFRESH_SELECTION);
     }
     this.emit(UPDATE_CANVAS, item);
   }
@@ -66288,7 +66205,7 @@ class PageTools extends EditorElement {
     const pathIndex = e.$dt.data("path-index");
     const current = this.$editor.get(itemId);
     if (current.editablePath) {
-      this.emit("open.editor", current);
+      this.$commands.emit("open.editor", current);
     } else {
       const pathList = PathParser.fromSVGString(current.absolutePath().d).toPathList();
       this.emit("showPathEditor", "modify", {
@@ -66411,13 +66328,13 @@ class CanvasView extends EditorElement {
   [DROP("$lock") + PREVENT](e) {
     const newCenter = this.$viewport.getWorldPosition(e);
     if (e.dataTransfer.getData("text/asset")) {
-      this.emit("drop.asset", {
+      this.$commands.emit("drop.asset", {
         asset: { id: e.dataTransfer.getData("text/asset"), center: newCenter }
       });
     } else {
       const id = Dom.create(e.target).attr("data-id");
       if (id) {
-        this.emit("drop.asset", {
+        this.$commands.emit("drop.asset", {
           gradient: e.dataTransfer.getData("text/gradient"),
           pattern: e.dataTransfer.getData("text/pattern"),
           color: e.dataTransfer.getData("text/color"),
@@ -66425,7 +66342,7 @@ class CanvasView extends EditorElement {
         }, id);
       } else {
         const imageUrl = e.dataTransfer.getData("image/info");
-        this.emit("dropImageUrl", imageUrl);
+        this.$commands.emit("dropImageUrl", imageUrl);
       }
     }
   }
@@ -96152,14 +96069,12 @@ class ThreeToolBar extends EditorElement {
       ToolBarRenderer,
       ThemeChanger,
       Outline,
-      SelectTool,
       ExportView,
       Download,
       Save,
       Undo,
       Redo,
-      DropdownMenu,
-      Projects
+      DropdownMenu
     };
   }
   template() {
@@ -96875,4 +96790,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
