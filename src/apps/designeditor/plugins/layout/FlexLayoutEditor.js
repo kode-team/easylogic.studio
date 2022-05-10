@@ -12,6 +12,15 @@ import {
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class FlexLayoutEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+
+    this.directionOptions = this.getDirectionOptions();
+    this.wrapOptions = this.getWrapOptions();
+    this.justifyContentOptions = this.getJustifyContentOptions();
+    this.alignItemsOptions = this.getAlignItemsOptions();
+  }
+
   getDirectionOptions() {
     return this.makeOptionsFunction("row,column");
   }
@@ -85,7 +94,7 @@ export default class FlexLayoutEditor extends EditorElement {
                           ref: "$flexDirection",
                           value:
                             this.state["flex-direction"] || FlexDirection.ROW,
-                          options: this.getDirectionOptions(),
+                          options: this.directionOptions,
                           icons: ["east", "south"],
                           onchange: "changeKeyValue",
                         })}
@@ -214,7 +223,7 @@ export default class FlexLayoutEditor extends EditorElement {
                   ref: "$justify",
                   value:
                     this.state["justify-content"] || JustifyContent.FLEX_START,
-                  options: this.getJustifyContentOptions(),
+                  options: this.justifyContentOptions,
                   icons: [
                     "start",
                     "end",
@@ -233,7 +242,7 @@ export default class FlexLayoutEditor extends EditorElement {
                   key: "align-items",
                   ref: "$alignItems",
                   value: this.state["align-items"] || AlignItems.FLEX_START,
-                  options: this.getAlignItemsOptions(),
+                  options: this.alignItemsOptions,
                   icons: [
                     "vertical_align_top",
                     "vertical_align_bottom",

@@ -471,7 +471,7 @@ class Dom {
   }
   attr(...args2) {
     if (args2.length == 1) {
-      return this.el.getAttribute && this.el.getAttribute(args2[0]);
+      return isFunction(this.el.getAttribute) && this.el.getAttribute(args2[0]);
     }
     if (this.el.getAttribute(args2[0]) != args2[1]) {
       this.el.setAttribute(args2[0], args2[1]);
@@ -1246,23 +1246,27 @@ class BaseStore {
   sendMessage(source2, event, ...args2) {
     this.sendMessageList(source2, [[event, ...args2]]);
   }
+  runMessage(runnableFunction, args2) {
+    const result = runnableFunction.callback.apply(runnableFunction.context, args2);
+    if (isNotUndefined(result)) {
+      if (result === false) {
+        return;
+      } else if (isFunction(result)) {
+        result();
+        return;
+      }
+    }
+  }
   sendMessageList(source2, messages = []) {
     window.Promise.resolve().then(() => {
       messages.forEach(([event, ...args2]) => {
         var list2 = this.getCachedCallbacks(event);
         if (list2 && list2.length) {
           const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
-          for (let i = 0, len2 = runnableFunctions.length; i < len2; i++) {
+          let i = runnableFunctions.length;
+          while (i--) {
             const f = runnableFunctions[i];
-            const result = f.callback.apply(f.context, args2);
-            if (isNotUndefined(result)) {
-              if (result === false) {
-                return;
-              } else if (isFunction(result)) {
-                result();
-                return;
-              }
-            }
+            this.runMessage(f, args2);
           }
         } else {
           this.debug(`message event ${event} is not exist.`);
@@ -1383,6 +1387,9 @@ class MagicMethod {
   }
   execute(...args2) {
     return this.originalCallback.call(this.context, ...args2);
+  }
+  executeWithContext(context, ...args2) {
+    return this.originalCallback.call(context, ...args2);
   }
   static make(str, ...args2) {
     return `${MAGIC_METHOD}${str} ${args2.join(SPLITTER)}`;
@@ -1755,14 +1762,16 @@ class BindHandler extends BaseHandler {
   async initialize() {
     if (!FunctionMap[this.context.sourceName]) {
       FunctionMap[this.context.sourceName] = this.context.filterMethodes("bind", true);
-      this._bindMethods = FunctionMap[this.context.sourceName];
     }
   }
+  getBindMethods() {
+    return FunctionMap[this.context.sourceName] || [];
+  }
   async bindData(...args2) {
-    var _a, _b;
-    if (!((_a = this._bindMethods) == null ? void 0 : _a.length))
+    const list2 = this.getBindMethods();
+    if (!(list2 == null ? void 0 : list2.length))
       return;
-    const bindList = (_b = this._bindMethods) == null ? void 0 : _b.filter((it) => {
+    const bindList = list2 == null ? void 0 : list2.filter((it) => {
       if (!args2.length)
         return true;
       return args2.indexOf(it.args[0]) > -1;
@@ -1779,7 +1788,7 @@ class BindHandler extends BaseHandler {
       let $element = this.context.refs[elName];
       const isBindCheck = typeof refCallback === "function" && refCallback.call(this.context);
       if ($element && isBindCheck) {
-        const results = await magicMethod.execute(...args2);
+        const results = await magicMethod.executeWithContext(this.context, ...args2);
         if (!results)
           return;
         const keys2 = Object.keys(results);
@@ -12606,7 +12615,7 @@ class ComponentEditor extends EditorElement {
     } else if (childEditor.type === "column") {
       const size2 = (childEditor.size || [2]).join("-");
       return `
-        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
+        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap || 0}px; --row-gap: ${childEditor.rowGap || 0}px" >
           ${childEditor.columns.map((it, itemIndex) => {
         if (it === "-") {
           return `<div class="column-item"></div>`;
@@ -23708,7 +23717,7 @@ class ViewportManager {
     this.mouse = create$3();
     this.scale = 1;
     this.translate = create$3(), this.transformOrigin = create$3(), this.maxScale = 250;
-    this.minScale = 0.05;
+    this.minScale = 0.02;
     this.zoomFactor = 1;
     this.resetWorldMatrix();
   }
@@ -24054,7 +24063,7 @@ class Editor {
     }
   }
   get(idOrModel) {
-    return this.context.modelManager.get(idOrModel.id || idOrModel);
+    return this.context.modelManager.get((idOrModel == null ? void 0 : idOrModel.id) || idOrModel);
   }
   replaceLocalUrltoRealUrl(str) {
     var project2 = this.context.selection.currentProject;
@@ -25505,7 +25514,7 @@ class BasePopup extends EditorElement {
     }
     return {
       top: top2,
-      left: left2 < rect2.left && rect2.left <= left2 + width2 ? left2 - (left2 + width2 - rect2.left) - 10 : left2,
+      left: left2,
       width: width2,
       height: height2
     };
@@ -35538,7 +35547,7 @@ var history_moveLayerToTarget = {
   command: "history.moveLayerToTarget",
   description: "move layer to target in world ",
   execute: function(editor, message, layer, target, dist2 = [0, 0, 0], targetAction = TargetActionType.APPEND_CHILD) {
-    const currentLayer = editor.get(layer);
+    const currentLayer = editor.get(layer) || layer;
     const currentParentLayer = currentLayer.parent;
     const currentTarget = editor.get(target);
     const lastValues = currentLayer.hierachy;
@@ -36079,7 +36088,15 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
     });
   }
   const newObjAttrs = __spreadValues({ itemType }, obj2);
-  editor.context.commands.executeCommand("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
+  const item = editor.createModel(newObjAttrs);
+  editor.context.commands.executeCommand("moveLayerToTarget", `add layer - ${itemType}`, item, containerItem);
+  editor.nextTick(() => {
+    editor.emit("appendLayer", item);
+    if (isSelected) {
+      editor.context.selection.select(item);
+      editor.emit(REFRESH_SELECTION);
+    }
+  });
 }
 var __glob_0_71 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -36142,11 +36159,11 @@ var open_editor = {
               editor.context.selection.select(newPath);
               newCurrent.insertAfter(newPath);
               editor.nextTick(() => {
-                editor.emit("removeLayer", [newCurrent.id]);
-                editor.emit("updatePathItem", data);
+                editor.context.commands.emit("removeLayer", [newCurrent.id]);
+                editor.context.commands.emit("updatePathItem", data);
               });
             } else {
-              editor.emit("updatePathItem", data);
+              editor.context.commands.emit("updatePathItem", data);
               editor.nextTick(() => {
                 if (editor.context.stateManager.isPointerUp) {
                   editor.context.commands.emit("recoverBooleanPath");
@@ -38659,61 +38676,118 @@ class MovableModel extends BaseAssetModel {
     return `rotateZ(${Length.deg(this.json.angle)})`;
   }
   get localMatrix() {
-    return this._cachedLocalTransform || this.getLocalTransformMatrix();
+    if (!this.hasCache("localTransform")) {
+      this.addCache("localTransform", this.getLocalTransformMatrix());
+    }
+    return this.getCache("localTransform") || this.getLocalTransformMatrix();
   }
   get localMatrixInverse() {
-    return this._cachedLocalTransformInverse || this.getLocalTransformMatrixInverse();
+    if (!this.hasCache("localTransformInverse")) {
+      this.addCache("localTransformInverse", this.getLocalTransformMatrixInverse());
+    }
+    return this.getCache("localTransformInverse") || this.getLocalTransformMatrixInverse();
   }
   get transformWithTranslate() {
-    return this._cachedTransformWithTranslate || this.getTransformWithTranslate(this);
+    if (!this.hasCache("transformWithTranslate")) {
+      this.addCache("transformWithTranslate", this.getTransformWithTranslate(this));
+    }
+    return this.getCache("transformWithTranslate") || this.getTransformWithTranslate(this);
   }
   get transformWithTranslateToTranspose() {
-    return this._cachedTransformWithTranslateTranspose || transpose([], this.getTransformWithTranslate(this));
+    if (!this.hasCache("transformWithTranslateTranspose")) {
+      this.addCache("transformWithTranslateTranspose", this.getTransformWithTranslate(this));
+    }
+    return this.getCache("transformWithTranslateTranspose") || transpose([], this.getTransformWithTranslate(this));
   }
   get transformWithTranslateInverse() {
-    return this._cachedTransformWithTranslateInverse || invert([], this.getTransformWithTranslate(this));
+    if (!this.hasCache("transformWithTranslateInverse")) {
+      this.addCache("transformWithTranslateInverse", this.getTransformWithTranslate(this));
+    }
+    return this.getCache("transformWithTranslateInverse") || invert([], this.getTransformWithTranslate(this));
   }
   get itemMatrix() {
-    return this._cachedItemTransform || this.getItemTransformMatrix();
+    if (!this.hasCache("itemTransform")) {
+      this.addCache("itemTransform", this.getItemTransformMatrix());
+    }
+    return this.getCache("itemTransform") || this.getItemTransformMatrix();
   }
   get itemMatrixInverse() {
-    return this._cachedItemTransformInverse || this.getItemTransformMatrixInverse();
+    if (!this.hasCache("itemTransformInverse")) {
+      this.addCache("itemTransformInverse", this.getItemTransformMatrixInverse());
+    }
+    return this.getCache("itemTransformInverse") || this.getItemTransformMatrixInverse();
   }
   get absoluteMatrix() {
-    return this._cachedAbsoluteMatrix || this.getAbsoluteMatrix();
+    if (!this.hasCache("absoluteMatrix")) {
+      this.addCache("absoluteMatrix", this.getAbsoluteMatrix());
+    }
+    return this.getCache("absoluteMatrix") || this.getAbsoluteMatrix();
   }
   get absoluteMatrixInverse() {
-    return this._cachedAbsoluteMatrixInverse || this.getAbsoluteMatrixInverse();
+    if (!this.hasCache("absoluteMatrixInverse")) {
+      this.addCache("absoluteMatrixInverse", this.getAbsoluteMatrixInverse());
+    }
+    return this.getCache("absoluteMatrixInverse") || this.getAbsoluteMatrixInverse();
   }
   get relativeMatrix() {
-    return this._cachedRelativeMatrix || this.getRelativeMatrix();
+    if (!this.hasCache("relativeMatrix")) {
+      this.addCache("relativeMatrix", this.getRelativeMatrix());
+    }
+    return this.getCache("relativeMatrix") || this.getRelativeMatrix();
   }
   get relativeMatrixInverse() {
-    return this._cachedRelativeMatrixInverse || this.getRelativeMatrixInverse();
+    if (!this.hasCache("relativeMatrixInverse")) {
+      this.addCache("relativeMatrixInverse", this.getRelativeMatrixInverse());
+    }
+    return this.getCache("relativeMatrixInverse") || this.getRelativeMatrixInverse();
   }
   get verties() {
-    return this._cachedVerties || this.getVerties();
+    if (!this.hasCache("verties")) {
+      this.addCache("verties", this.getVerties());
+    }
+    return this.getCache("verties") || this.getVerties();
   }
   get contentVerties() {
-    return this._cachedContentVerties || this.getContentVerties();
+    if (!this.hasCache("contentVerties")) {
+      this.addCache("contentVerties", this.getContentVerties());
+    }
+    return this.getCache("contentVerties") || this.getContentVerties();
   }
   get originVerties() {
-    return this._cachedVertiesWithoutTransformOrigin || this.rectVerties();
+    if (!this.hasCache("vertiesWithoutTransformOrigin")) {
+      this.addCache("vertiesWithoutTransformOrigin", this.rectVerties());
+    }
+    return this.getCache("vertiesWithoutTransformOrigin") || this.rectVerties();
   }
   get localVerties() {
-    return this._cachedLocalVerties || this.getLocalVerties();
+    if (!this.hasCache("localVerties")) {
+      this.addCache("localVerties", this.getLocalVerties());
+    }
+    return this.getCache("localVerties") || this.getLocalVerties();
   }
   get guideVerties() {
-    return this._cachedGuideVerties || this.getGuideVerties();
+    if (!this.hasCache("guideVerties")) {
+      this.addCache("guideVerties", this.getGuideVerties());
+    }
+    return this.getCache("guideVerties") || this.getGuideVerties();
   }
   get xList() {
-    return this._cachedXList || this.getXList();
+    if (!this.hasCache("xList")) {
+      this.addCache("xList", this.getXList());
+    }
+    return this.getCache("xList") || this.getXList();
   }
   get yList() {
-    return this._cachedYList || this.getYList();
+    if (!this.hasCache("yList")) {
+      this.addCache("yList", this.getYList());
+    }
+    return this.getCache("yList") || this.getYList();
   }
   get areaPosition() {
-    return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
+    if (!this.hasCache("areaPosition")) {
+      this.addCache("areaPosition", this.getAreaPosition(100));
+    }
+    return this.getCache("areaPosition") || this.getAreaPosition(100);
   }
   get offsetX() {
     return this.json.x;
@@ -38801,43 +38875,37 @@ class MovableModel extends BaseAssetModel {
     });
   }
   setCacheItemTransformMatrix() {
-    this._cachedItemTransform = this.getItemTransformMatrix();
-    this._cachedItemTransformInverse = invert([], this._cachedItemTransform);
+    this.addCache("itemTransform", this.getItemTransformMatrix());
+    this.addCache("itemTransformInverse", invert([], this.getCache("itemTransform")));
   }
   setCacheLocalTransformMatrix() {
-    this._cachedLocalTransform = this.getLocalTransformMatrix();
-    this._cachedLocalTransformInverse = invert([], this._cachedLocalTransform);
-    this._cachedTransformWithTranslate = this.getTransformWithTranslate(this);
-    this._cachedTransformWithTranslateInverse = invert([], this._cachedTransformWithTranslate);
-    this._cachedTransformWithTranslateTranspose = transpose([], this._cachedTransformWithTranslate);
+    this.addCache("localTransform", this.getLocalTransformMatrix());
+    this.addCache("localTransformInverse", invert([], this.getCache("localTransform")));
+    this.addCache("transformWithTranslate", this.getTransformWithTranslate(this));
+    this.addCache("transformWithTranslateInverse", invert([], this.getCache("transformWithTranslate")));
+    this.addCache("transformWithTranslateTranspose", transpose([], this.getCache("transformWithTranslate")));
   }
   setCacheAbsoluteMatrix() {
-    this._cachedAbsoluteMatrix = this.getAbsoluteMatrix();
-    this._cachedAbsoluteMatrixInverse = invert([], this._cachedAbsoluteMatrix);
-    this._cachedRelativeMatrix = this.getRelativeMatrix();
-    this._cachedRelativeMatrixInverse = invert([], this._cachedRelativeMatrix);
+    this.addCache("absoluteMatrix", this.getAbsoluteMatrix());
+    this.addCache("absoluteMatrixInverse", invert([], this.getCache("absoluteMatrix")));
+    this.addCache("relativeMatrix", this.getRelativeMatrix());
+    this.addCache("relativeMatrixInverse", invert([], this.getCache("relativeMatrix")));
   }
   setCacheVerties() {
-    this._cachedVerties = this.getVerties();
-    this._cachedContentVerties = this.getContentVerties();
-    this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
+    this.addCache("verties", this.getVerties());
+    this.addCache("contentVerties", this.getContentVerties());
+    this.addCache("vertiesWithoutTransformOrigin", this.rectVerties());
   }
   setCacheLocalVerties() {
-    this._cachedLocalVerties = this.getLocalVerties();
+    this.addCache("localVerties", this.getLocalVerties());
   }
   setCacheGuideVerties() {
-    this._cachedGuideVerties = this.getGuideVerties();
-    this._cachedXList = this.getXList();
-    this._cachedYList = this.getYList();
+    this.addCache("guideVerties", this.getGuideVerties());
+    this.addCache("xList", this.getXList());
+    this.addCache("yList", this.getYList());
   }
   setCacheAreaPosition() {
-    this._cachedAreaPosition = this.getAreaPosition(this._cachedAreaWidth || 100);
-  }
-  setCacheAreaWidth(areaWidth) {
-    if (this._cachedAreaWidth !== areaWidth) {
-      this._cachedAreaWidth = areaWidth;
-      this.setCacheAreaPosition();
-    }
+    this.addCache("areaPosition", this.getAreaPosition(100));
   }
   move(distVector = [0, 0, 0]) {
     this.reset({
@@ -49680,7 +49748,7 @@ class LayerAppendView extends EditorElement {
         }
         break;
       default:
-        this.$commands.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
+        this.$commands.emit("newComponent", this.state.type, rect2, true, parentArtBoard || this.$context.selection.currentProject);
         this.$config.set("editing.mode.itemType", "select");
         break;
     }
@@ -49756,7 +49824,7 @@ class LayerAppendView extends EditorElement {
           "font-size": newFontSize
         };
         const parentArtBoard = this.$context.selection.getArtboardByPoint(rectVerties[0]);
-        this.$commands.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
+        this.$commands.emit("newComponent", this.state.type, rect2, true, parentArtBoard || this.$context.selection.currentProject);
         break;
     }
     this.state.dragStart = false;
@@ -49868,10 +49936,9 @@ class LayerTreeProperty extends BaseProperty {
   }
   getIcon(item) {
     if (item.d) {
-      const path = PathParser.fromSVGString(item.absolutePath().d);
-      return iconUseForPath(path.scaleWith(24, 24).d, {
-        width: 24,
-        height: 24,
+      return iconUseForPath(item.d, {
+        width: item.screenWidth,
+        height: item.screenHeight,
         fill: "currentColor",
         stroke: "currentColor"
       });
@@ -50131,7 +50198,9 @@ class LayerTreeProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE(REFRESH_SELECTION, "refreshAllCanvas")]() {
-    this.refresh();
+    if (this.$config.false("set.move.control.point")) {
+      this.refresh();
+    }
   }
   [SUBSCRIBE("refreshLayerTreeView") + THROTTLE(100)]() {
     this.refresh();
@@ -50389,6 +50458,13 @@ class FlexGrowToolView extends EditorElement {
 }
 var FlexLayoutEditor$1 = "";
 class FlexLayoutEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.directionOptions = this.getDirectionOptions();
+    this.wrapOptions = this.getWrapOptions();
+    this.justifyContentOptions = this.getJustifyContentOptions();
+    this.alignItemsOptions = this.getAlignItemsOptions();
+  }
   getDirectionOptions() {
     return this.makeOptionsFunction("row,column");
   }
@@ -50438,7 +50514,7 @@ class FlexLayoutEditor extends EditorElement {
       key: "flex-direction",
       ref: "$flexDirection",
       value: this.state["flex-direction"] || FlexDirection.ROW,
-      options: this.getDirectionOptions(),
+      options: this.directionOptions,
       icons: ["east", "south"],
       onchange: "changeKeyValue"
     })}
@@ -50546,7 +50622,7 @@ class FlexLayoutEditor extends EditorElement {
       key: "justify-content",
       ref: "$justify",
       value: this.state["justify-content"] || JustifyContent.FLEX_START,
-      options: this.getJustifyContentOptions(),
+      options: this.justifyContentOptions,
       icons: [
         "start",
         "end",
@@ -50563,7 +50639,7 @@ class FlexLayoutEditor extends EditorElement {
       key: "align-items",
       ref: "$alignItems",
       value: this.state["align-items"] || AlignItems.FLEX_START,
-      options: this.getAlignItemsOptions(),
+      options: this.alignItemsOptions,
       icons: [
         "vertical_align_top",
         "vertical_align_bottom",
@@ -50910,6 +50986,9 @@ class GridGrowBaseView extends EditorElement {
   copyNewGridItems(arr, index2) {
     return [...arr.slice(0, index2 + 1), ...arr.slice(index2)];
   }
+  getScaleDist(num) {
+    return num / this.$viewport.scale;
+  }
 }
 class GridGrowClickEventView extends GridGrowBaseView {
   checkTargetLayer() {
@@ -50944,7 +51023,7 @@ class GridGrowClickEventView extends GridGrowBaseView {
   [CLICK("$grid .column-add") + IF("checkTargetLayer")](e) {
     const info = this.getGridLayoutInformation();
     const index2 = +e.$dt.data("index");
-    this.updateColumns(info.current, this.copyNewGridItems(info.columns, index2));
+    this.updateColumns(info.current, this.copyNewGridItems(info.columns, index2), index2 + 1);
   }
   [CLICK("$grid .row-add") + IF("checkTargetLayer")](e) {
     const info = this.getGridLayoutInformation();
@@ -50988,14 +51067,14 @@ class GridGrowDragEventView extends GridGrowClickEventView {
   moveColumnGap() {
     const targetPosition = this.$viewport.getWorldPosition();
     const newDist = subtract([], targetPosition, this.initMousePosition);
-    const stepRate = newDist[0] / 100;
+    const stepRate = newDist[0] / this.getScaleDist(100);
     const columnGap = this.columnGap;
     let newColumnGap = columnGap;
     if (columnGap instanceof Length) {
       if (columnGap.isPercent()) {
-        newColumnGap = Length.percent(Math.max(columnGap.value + stepRate * 5, 0)).round(1e3);
+        newColumnGap = Length.percent(Math.max(columnGap.value + stepRate * this.getScaleDist(5), 0)).round(1e3);
       } else if (columnGap.isPx()) {
-        newColumnGap = Length.px(Math.max(columnGap.value + stepRate * 100, 0)).floor();
+        newColumnGap = Length.px(Math.max(columnGap.value + stepRate * this.getScaleDist(100), 0)).floor();
       }
     }
     this.lastColumnGap = newColumnGap;
@@ -51025,14 +51104,14 @@ class GridGrowDragEventView extends GridGrowClickEventView {
   moveRowGap() {
     const targetPosition = this.$viewport.getWorldPosition();
     const newDist = subtract([], targetPosition, this.initMousePosition);
-    const stepRate = newDist[1] / 100;
+    const stepRate = newDist[1] / this.getScaleDist(100);
     const rowGap = this.rowGap;
     let newRowGap = rowGap;
     if (rowGap instanceof Length) {
       if (rowGap.isPercent()) {
-        newRowGap = Length.percent(Math.max(rowGap.value + stepRate * 5, 0)).round(1e3);
+        newRowGap = Length.percent(Math.max(rowGap.value + stepRate * this.getScaleDist(5), 0)).round(1e3);
       } else if (rowGap.isPx()) {
-        newRowGap = Length.px(Math.max(rowGap.value + stepRate * 100, 0)).floor();
+        newRowGap = Length.px(Math.max(rowGap.value + stepRate * this.getScaleDist(100), 0)).floor();
       }
     }
     this.lastRowGap = newRowGap;
@@ -51067,17 +51146,17 @@ class GridGrowDragEventView extends GridGrowClickEventView {
   moveColumn() {
     const targetPosition = this.$viewport.getWorldPosition();
     const newDist = subtract([], targetPosition, this.initMousePosition);
-    const stepRate = newDist[0] / 100;
+    const stepRate = newDist[0] / this.getScaleDist(100);
     const columnWidth = this.selectedColumnWidth;
     if (columnWidth instanceof Length) {
       if (columnWidth.isPercent()) {
-        var newWidth = Math.max(columnWidth.value + stepRate * 5, 1);
+        var newWidth = Math.max(columnWidth.value + stepRate * this.getScaleDist(5), 1);
         this.columns[this.selectedColumnIndex] = Length.percent(newWidth).round(1e3);
       } else if (columnWidth.isPx()) {
-        var newWidth = Math.max(10, columnWidth.value + stepRate * 100);
+        var newWidth = Math.max(10, columnWidth.value + stepRate * this.getScaleDist(100));
         this.columns[this.selectedColumnIndex] = Length.px(newWidth).floor();
       } else if (columnWidth.isFr()) {
-        var newWidth = Math.max(columnWidth.value + Math.floor(newDist[0] / 20) * 0.25, 0.25);
+        var newWidth = Math.max(columnWidth.value + Math.floor(newDist[0] / this.getScaleDist(20)) * 0.25, 0.25);
         this.columns[this.selectedColumnIndex] = Length.fr(newWidth);
       } else {
         var newWidth = Math.max(columnWidth.value + stepRate * 1, 10);
@@ -51124,17 +51203,17 @@ class GridGrowDragEventView extends GridGrowClickEventView {
   moveRow() {
     const targetPosition = this.$viewport.getWorldPosition();
     const newDist = subtract([], targetPosition, this.initMousePosition);
-    const stepRate = newDist[1] / 30;
+    const stepRate = newDist[1] / this.getScaleDist(30);
     const rowHeight = this.selectedRowHeight;
     if (rowHeight instanceof Length) {
       if (rowHeight.isPercent()) {
-        var newHeight = Math.max(rowHeight.value - stepRate * 5, 1);
+        var newHeight = Math.max(rowHeight.value - stepRate * this.getScaleDist(5), 1);
         this.rows[this.selectedRowIndex] = Length.percent(newHeight).round(1e3);
       } else if (rowHeight.isPx()) {
-        var newHeight = Math.max(10, rowHeight.value - stepRate * 100);
+        var newHeight = Math.max(10, rowHeight.value - stepRate * this.getScaleDist(100));
         this.rows[this.selectedRowIndex] = Length.px(newHeight).floor();
       } else if (rowHeight.isFr()) {
-        var newHeight = Math.max(rowHeight.value + Math.floor(newDist[1] / 20) * 0.25, 0.25);
+        var newHeight = Math.max(rowHeight.value + Math.floor(newDist[1] / this.getScaleDist(20)) * 0.25, 0.25);
         this.rows[this.selectedRowIndex] = Length.fr(newHeight);
       } else {
         var newHeight = Math.max(rowHeight.value - stepRate * 1, 10);
@@ -56885,10 +56964,10 @@ class DomRender$1 extends ItemRender$1 {
       obj2 = __spreadValues(__spreadValues({}, obj2), item.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
       const columns = Grid.parseStyle(item.parent["grid-template-columns"]);
       const rows = Grid.parseStyle(item.parent["grid-template-rows"]);
-      obj2["grid-column-start"] = Math.max(1, Math.min(columns.length, obj2["grid-column-start"]));
-      obj2["grid-column-end"] = Math.min(columns.length + 1, obj2["grid-column-end"]);
-      obj2["grid-row-start"] = Math.max(1, Math.min(rows.length, obj2["grid-row-start"]));
-      obj2["grid-row-end"] = Math.min(rows.length + 1, obj2["grid-row-end"]);
+      obj2["grid-column-start"] = Math.max(1, Math.min(columns.length, obj2["grid-column-start"] || 1));
+      obj2["grid-column-end"] = Math.min(columns.length + 1, obj2["grid-column-end"] || 2);
+      obj2["grid-row-start"] = Math.max(1, Math.min(rows.length, obj2["grid-row-start"] || 1));
+      obj2["grid-row-end"] = Math.min(rows.length + 1, obj2["grid-row-end"] || 2);
     }
     return obj2;
   }
@@ -59388,6 +59467,9 @@ class SelectionInfoView extends EditorElement {
   [SUBSCRIBE("refreshAll")]() {
     this.refresh();
   }
+  [SUBSCRIBE("appendLayer")]() {
+    this.refresh();
+  }
 }
 function selectionInfoView(editor) {
   editor.registerUI("canvas.view", {
@@ -60286,7 +60368,7 @@ const SelectionToolEvent = class extends EditorElement {
   checkViewMode() {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode")]() {
     this.initSelectionTool();
   }
   [SUBSCRIBE(UPDATE_VIEWPORT) + IF("checkViewMode")]() {
@@ -60666,9 +60748,9 @@ class SelectionToolView extends SelectionToolEvent {
     this.state.show = false;
   }
   initSelectionTool() {
-    if (this.$el.isShow() && this.$context.selection.isOne === false) {
-      this.hide();
-    } else if (this.$el.isHide() && this.$context.selection.isOne) {
+    if (this.$el.isShow() && this.$context.selection.isOne === false)
+      ;
+    else if (this.$el.isHide() && this.$context.selection.isOne) {
       this.show();
     }
     this.makeSelectionTool();
@@ -65798,9 +65880,7 @@ class HTMLRenderView extends EditorElement {
     this.state.cachedCurrentElement[id] = void 0;
   }
   getElement(id) {
-    if (!this.state.cachedCurrentElement[id]) {
-      this.state.cachedCurrentElement[id] = this.refs.$view.$(`[data-id="${id}"]`);
-    }
+    this.state.cachedCurrentElement[id] = this.refs.$view.$(`[data-id="${id}"]`);
     return this.state.cachedCurrentElement[id];
   }
   [FOCUSOUT("$view .element-item.text .text-content")](e) {
@@ -65977,7 +66057,6 @@ class HTMLRenderView extends EditorElement {
     this.emit("startGhostToolView");
   }
   calculateFirstMovedElement() {
-    this.emit("hideSelectionToolView");
     this.emit("moveFirstGhostToolView");
   }
   calculateMovedElement() {
@@ -66110,7 +66189,10 @@ class HTMLRenderView extends EditorElement {
   }
   refreshElementRect(item) {
     var $el = this.getElement(item.id);
-    const offset = $el.offsetRect();
+    let offset = $el.offsetRect();
+    if (offset.width === 0 || offset.height === 0) {
+      return;
+    }
     item.reset(offset);
     this.refreshSelectionStyleView(item);
     if (this.$context.selection.check(item)) {
@@ -66131,6 +66213,18 @@ class HTMLRenderView extends EditorElement {
         this.refreshElementBoundSize(child);
       });
     }
+  }
+  [OBSERVER("mutation") + PARAMS({
+    childList: true,
+    subtree: true
+  })](mutations) {
+    const s = new Set(mutations.map((mutation) => {
+      return Dom.create(mutation.target).attr("data-id");
+    }).filter(Boolean));
+    [...s].forEach((id) => {
+      const item = this.$editor.get(id);
+      this.refreshElementBoundSize(item);
+    });
   }
 }
 var PageTools$1 = "";

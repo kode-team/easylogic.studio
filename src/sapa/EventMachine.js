@@ -401,8 +401,6 @@ export class EventMachine {
 
     html = (html || "").trim();
 
-    // console.log(html, this.sourceName, isLoad);
-
     const list = TEMP_DIV.html(html).childNodes || [];
     ///////////////////////////////////////////////////////////////
 
@@ -700,6 +698,12 @@ export class EventMachine {
     }
   }
 
+  // removeChild(child) {
+  //   if (this.children[child.props.ref]) {
+  //     delete this.children[child.props.ref];
+  //   }
+  // }
+
   /**
    * refresh 는 load 함수들을 실행한다.
    */
@@ -872,6 +876,8 @@ export class EventMachine {
 
     this.#refLoadVariables = {};
     this.#refBindVariables = {};
+
+    // this.parent.removeChild(this);
   }
 
   /**

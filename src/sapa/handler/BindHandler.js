@@ -110,6 +110,23 @@ const applyElementAttribute = (
 
 const FunctionMap = {};
 
+/**
+ * BindHandler
+ *
+ * 특정 dom 에 데이타를 바인딩해준다
+ *
+ * * class
+ * * style
+ * * attribute
+ * * html
+ * * htmlDiff
+ * * svgDiff
+ *
+ * 기본적으로 클래스별 magic method 를 캐슁 하기 때문에
+ * 실행하기전 항상 context 를 맞춰줘야 제대로 동작을 한다.
+ *
+ */
+
 export default class BindHandler extends BaseHandler {
   async initialize() {
     // this.destroy();
@@ -120,8 +137,12 @@ export default class BindHandler extends BaseHandler {
         true
       );
 
-      this._bindMethods = FunctionMap[this.context.sourceName];
+      // this._bindMethods = FunctionMap[this.context.sourceName];
     }
+  }
+
+  getBindMethods() {
+    return FunctionMap[this.context.sourceName] || [];
   }
 
   /**
@@ -181,14 +202,17 @@ export default class BindHandler extends BaseHandler {
     // local 로 등록된 bind 를 모두 실행한다.
     // await this.bindLocalValue(...args);
 
-    if (!this._bindMethods?.length) return;
+    // method 가 캐쉬되어 있어서 캐쉬된 곳에서 가지고 와야 한다.
+    const list = this.getBindMethods();
+
+    if (!list?.length) return;
 
     /**
      * BIND 를 해보자.
      * 이시점에 하는게 맞는지는 모르겠지만 일단은 해보자.
      * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
      */
-    const bindList = this._bindMethods?.filter((it) => {
+    const bindList = list?.filter((it) => {
       if (!args.length) return true;
 
       return args.indexOf(it.args[0]) > -1;
@@ -197,6 +221,8 @@ export default class BindHandler extends BaseHandler {
     await Promise.all(
       bindList?.map(async (magicMethod) => {
         let refObject = this.getRef(`${magicMethod.keywords[0]}`);
+
+        // if (!refObject) return;
 
         let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
 
@@ -212,7 +238,11 @@ export default class BindHandler extends BaseHandler {
         const isBindCheck =
           typeof refCallback === "function" && refCallback.call(this.context);
         if ($element && isBindCheck) {
-          const results = await magicMethod.execute(...args);
+          // method 를 캐슁한  상태라서 context 를 바꿔서 실행해줘야함.
+          const results = await magicMethod.executeWithContext(
+            this.context,
+            ...args
+          );
 
           if (!results) return;
 

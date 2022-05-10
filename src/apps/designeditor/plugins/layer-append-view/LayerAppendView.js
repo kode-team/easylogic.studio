@@ -467,7 +467,7 @@ export default class LayerAppendView extends EditorElement {
           this.state.type,
           rect,
           /* isSelected */ true,
-          parentArtBoard
+          parentArtBoard || this.$context.selection.currentProject
         );
         this.$config.set("editing.mode.itemType", "select");
         break;
@@ -595,7 +595,7 @@ export default class LayerAppendView extends EditorElement {
           this.state.type,
           rect,
           /* isSelected */ true,
-          parentArtBoard
+          parentArtBoard || this.$context.selection.currentProject
         );
         break;
     }

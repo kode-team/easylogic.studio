@@ -47,7 +47,7 @@ export default class ComponentEditor extends EditorElement {
 
       return /*html*/ `
         <div class='column column-${size}' style="--column-gap: ${
-        childEditor.gap
+        childEditor.gap || 0
       }px; --row-gap: ${childEditor.rowGap || 0}px" >
           ${childEditor.columns
             .map((it, itemIndex) => {
@@ -86,6 +86,7 @@ export default class ComponentEditor extends EditorElement {
 
   [LOAD("$body")]() {
     const inspector = this.state.inspector;
+
     var self = inspector.map((it, index) => {
       if (isString(it) || it.type === "label") {
         // label, title

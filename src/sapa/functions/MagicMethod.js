@@ -136,6 +136,10 @@ export class MagicMethod {
     return this.originalCallback.call(this.context, ...args);
   }
 
+  executeWithContext(context, ...args) {
+    return this.originalCallback.call(context, ...args);
+  }
+
   static make(str, ...args) {
     return `${MAGIC_METHOD}${str} ${args.join(SPLITTER)}`;
   }

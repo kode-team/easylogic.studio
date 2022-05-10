@@ -21,7 +21,6 @@ import {
 
 import "./LayerTreeProperty.scss";
 
-import { PathParser } from "elf/core/parser/PathParser";
 import { iconUse, iconUseForPath } from "elf/editor/icon/icon";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
@@ -123,11 +122,9 @@ export default class LayerTreeProperty extends BaseProperty {
     // return '';
 
     if (item.d) {
-      const path = PathParser.fromSVGString(item.absolutePath().d);
-
-      return iconUseForPath(path.scaleWith(24, 24).d, {
-        width: 24,
-        height: 24,
+      return iconUseForPath(item.d, {
+        width: item.screenWidth,
+        height: item.screenHeight,
         fill: "currentColor",
         stroke: "currentColor",
       });
@@ -501,7 +498,9 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [SUBSCRIBE(REFRESH_SELECTION, "refreshAllCanvas")]() {
-    this.refresh();
+    if (this.$config.false("set.move.control.point")) {
+      this.refresh();
+    }
   }
 
   [SUBSCRIBE("refreshLayerTreeView") + THROTTLE(100)]() {

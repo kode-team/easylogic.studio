@@ -1,4 +1,5 @@
 import { DomDiff } from "./DomDiff";
+import { isFunction } from "./func";
 import { recoverVariable } from "./registElement";
 
 /**
@@ -119,7 +120,7 @@ export class Dom {
    */
   attr(...args) {
     if (args.length == 1) {
-      return this.el.getAttribute && this.el.getAttribute(args[0]);
+      return isFunction(this.el.getAttribute) && this.el.getAttribute(args[0]);
     }
 
     // 동일한 속성 값이 있다면 변경하지 않는다.

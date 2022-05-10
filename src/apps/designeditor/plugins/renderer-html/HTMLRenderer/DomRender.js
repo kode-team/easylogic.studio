@@ -140,20 +140,20 @@ export default class DomRender extends ItemRender {
       // 자식의 grid-column-start, grid-column-end 값이 자동으로 변경된다.
       obj["grid-column-start"] = Math.max(
         1,
-        Math.min(columns.length, obj["grid-column-start"])
+        Math.min(columns.length, obj["grid-column-start"] || 1)
       );
       obj["grid-column-end"] = Math.min(
         columns.length + 1,
-        obj["grid-column-end"]
+        obj["grid-column-end"] || 2
       );
 
       // 부모의 grid-template-rows 의 개수가 조정이 되면
       // 자식의 grid-row-start, grid-row-end 값이 자동으로 변경된다.
       obj["grid-row-start"] = Math.max(
         1,
-        Math.min(rows.length, obj["grid-row-start"])
+        Math.min(rows.length, obj["grid-row-start"] || 1)
       );
-      obj["grid-row-end"] = Math.min(rows.length + 1, obj["grid-row-end"]);
+      obj["grid-row-end"] = Math.min(rows.length + 1, obj["grid-row-end"] || 2);
     }
 
     return obj;

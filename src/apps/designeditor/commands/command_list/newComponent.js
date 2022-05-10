@@ -1,4 +1,5 @@
 import { PathParser } from "elf/core/parser/PathParser";
+import { REFRESH_SELECTION } from "elf/editor/types/event";
 
 /**
  * 새로운 객체 생성
@@ -56,11 +57,21 @@ export default function newComponent(
 
   const newObjAttrs = { itemType, ...obj };
 
+  const item = editor.createModel(newObjAttrs);
+
   editor.context.commands.executeCommand(
-    "addLayer",
+    "moveLayerToTarget",
     `add layer - ${itemType}`,
-    editor.createModel(newObjAttrs),
-    isSelected,
+    item,
     containerItem
   );
+
+  editor.nextTick(() => {
+    editor.emit("appendLayer", item);
+
+    if (isSelected) {
+      editor.context.selection.select(item);
+      editor.emit(REFRESH_SELECTION);
+    }
+  });
 }

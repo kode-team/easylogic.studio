@@ -71,11 +71,11 @@ export default {
               newCurrent.insertAfter(newPath);
 
               editor.nextTick(() => {
-                editor.emit("removeLayer", [newCurrent.id]);
-                editor.emit("updatePathItem", data);
+                editor.context.commands.emit("removeLayer", [newCurrent.id]);
+                editor.context.commands.emit("updatePathItem", data);
               });
             } else {
-              editor.emit("updatePathItem", data);
+              editor.context.commands.emit("updatePathItem", data);
 
               editor.nextTick(() => {
                 if (editor.context.stateManager.isPointerUp) {

@@ -19,7 +19,7 @@ export default {
     dist = [0, 0, 0],
     targetAction = TargetActionType.APPEND_CHILD
   ) {
-    const currentLayer = editor.get(layer);
+    const currentLayer = editor.get(layer) || layer;
     const currentParentLayer = currentLayer.parent;
     const currentTarget = editor.get(target);
 

@@ -222,7 +222,7 @@ export class Editor {
    * @param {string} idOrModel
    */
   get(idOrModel) {
-    return this.context.modelManager.get(idOrModel.id || idOrModel);
+    return this.context.modelManager.get(idOrModel?.id || idOrModel);
   }
 
   replaceLocalUrltoRealUrl(str) {

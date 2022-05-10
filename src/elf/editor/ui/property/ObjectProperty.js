@@ -6,6 +6,7 @@ import {
   isFunction,
   isUndefined,
   createComponent,
+  // DOMDIFF,
 } from "sapa";
 
 import { REFRESH_SELECTION } from "../../types/event";

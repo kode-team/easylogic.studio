@@ -106,6 +106,10 @@ class GridGrowBaseView extends EditorElement {
   copyNewGridItems(arr, index) {
     return [...arr.slice(0, index + 1), ...arr.slice(index)];
   }
+
+  getScaleDist(num) {
+    return num / this.$viewport.scale;
+  }
 }
 
 class GridGrowClickEventView extends GridGrowBaseView {
@@ -155,7 +159,8 @@ class GridGrowClickEventView extends GridGrowBaseView {
 
     this.updateColumns(
       info.current,
-      this.copyNewGridItems(info.columns, index)
+      this.copyNewGridItems(info.columns, index),
+      index + 1
     );
   }
 
@@ -222,17 +227,17 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
     // step 에 따라 달라진다.
-    const stepRate = newDist[0] / 100;
+    const stepRate = newDist[0] / this.getScaleDist(100);
     const columnGap = this.columnGap;
     let newColumnGap = columnGap;
     if (columnGap instanceof Length) {
       if (columnGap.isPercent()) {
         newColumnGap = Length.percent(
-          Math.max(columnGap.value + stepRate * 5, 0)
+          Math.max(columnGap.value + stepRate * this.getScaleDist(5), 0)
         ).round(1000);
       } else if (columnGap.isPx()) {
         newColumnGap = Length.px(
-          Math.max(columnGap.value + stepRate * 100, 0)
+          Math.max(columnGap.value + stepRate * this.getScaleDist(100), 0)
         ).floor();
       }
     }
@@ -283,17 +288,17 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
     // step 에 따라 달라진다.
-    const stepRate = newDist[1] / 100;
+    const stepRate = newDist[1] / this.getScaleDist(100);
     const rowGap = this.rowGap;
     let newRowGap = rowGap;
     if (rowGap instanceof Length) {
       if (rowGap.isPercent()) {
         newRowGap = Length.percent(
-          Math.max(rowGap.value + stepRate * 5, 0)
+          Math.max(rowGap.value + stepRate * this.getScaleDist(5), 0)
         ).round(1000);
       } else if (rowGap.isPx()) {
         newRowGap = Length.px(
-          Math.max(rowGap.value + stepRate * 100, 0)
+          Math.max(rowGap.value + stepRate * this.getScaleDist(100), 0)
         ).floor();
       }
     }
@@ -348,19 +353,26 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
     // step 에 따라 달라진다.
-    const stepRate = newDist[0] / 100;
+    const stepRate = newDist[0] / this.getScaleDist(100);
     const columnWidth = this.selectedColumnWidth;
     if (columnWidth instanceof Length) {
       if (columnWidth.isPercent()) {
-        var newWidth = Math.max(columnWidth.value + stepRate * 5, 1);
+        var newWidth = Math.max(
+          columnWidth.value + stepRate * this.getScaleDist(5),
+          1
+        );
         this.columns[this.selectedColumnIndex] =
           Length.percent(newWidth).round(1000);
       } else if (columnWidth.isPx()) {
-        var newWidth = Math.max(10, columnWidth.value + stepRate * 100);
+        var newWidth = Math.max(
+          10,
+          columnWidth.value + stepRate * this.getScaleDist(100)
+        );
         this.columns[this.selectedColumnIndex] = Length.px(newWidth).floor();
       } else if (columnWidth.isFr()) {
         var newWidth = Math.max(
-          columnWidth.value + Math.floor(newDist[0] / 20) * 0.25,
+          columnWidth.value +
+            Math.floor(newDist[0] / this.getScaleDist(20)) * 0.25,
           0.25
         );
         this.columns[this.selectedColumnIndex] = Length.fr(newWidth);
@@ -445,19 +457,26 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
     // step 에 따라 달라진다.
-    const stepRate = newDist[1] / 30;
+    const stepRate = newDist[1] / this.getScaleDist(30);
     const rowHeight = this.selectedRowHeight;
     if (rowHeight instanceof Length) {
       if (rowHeight.isPercent()) {
-        var newHeight = Math.max(rowHeight.value - stepRate * 5, 1);
+        var newHeight = Math.max(
+          rowHeight.value - stepRate * this.getScaleDist(5),
+          1
+        );
         this.rows[this.selectedRowIndex] =
           Length.percent(newHeight).round(1000);
       } else if (rowHeight.isPx()) {
-        var newHeight = Math.max(10, rowHeight.value - stepRate * 100);
+        var newHeight = Math.max(
+          10,
+          rowHeight.value - stepRate * this.getScaleDist(100)
+        );
         this.rows[this.selectedRowIndex] = Length.px(newHeight).floor();
       } else if (rowHeight.isFr()) {
         var newHeight = Math.max(
-          rowHeight.value + Math.floor(newDist[1] / 20) * 0.25,
+          rowHeight.value +
+            Math.floor(newDist[1] / this.getScaleDist(20)) * 0.25,
           0.25
         );
         this.rows[this.selectedRowIndex] = Length.fr(newHeight);

@@ -198,6 +198,22 @@ export class BaseStore {
     this.sendMessageList(source, [[event, ...args]]);
   }
 
+  runMessage(runnableFunction, args) {
+    const result = runnableFunction.callback.apply(
+      runnableFunction.context,
+      args
+    );
+
+    if (isNotUndefined(result)) {
+      if (result === false) {
+        return;
+      } else if (isFunction(result)) {
+        result();
+        return;
+      }
+    }
+  }
+
   /**
    *
    * run multi messages
@@ -221,19 +237,11 @@ export class BaseStore {
               (f) => f.enableAllTrigger || f.originalCallback.source !== source
             );
 
-          for (let i = 0, len = runnableFunctions.length; i < len; i++) {
+          let i = runnableFunctions.length;
+          while (i--) {
             const f = runnableFunctions[i];
 
-            const result = f.callback.apply(f.context, args);
-
-            if (isNotUndefined(result)) {
-              if (result === false) {
-                return;
-              } else if (isFunction(result)) {
-                result();
-                return;
-              }
-            }
+            this.runMessage(f, args);
           }
         } else {
           this.debug(`message event ${event} is not exist.`);

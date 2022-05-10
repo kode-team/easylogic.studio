@@ -213,4 +213,8 @@ export default class SelectionInfoView extends EditorElement {
   [SUBSCRIBE("refreshAll")]() {
     this.refresh();
   }
+
+  [SUBSCRIBE("appendLayer")]() {
+    this.refresh();
+  }
 }

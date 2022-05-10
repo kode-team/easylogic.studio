@@ -5,8 +5,7 @@ import {
   rectRect,
   rectToVerties,
   rectToVertiesForArea,
-} from "../../../core/collision";
-
+} from "elf/core/collision";
 import {
   calculateMatrix,
   calculateMatrixInverse,
@@ -32,7 +31,7 @@ export class ViewportManager {
     (this.translate = vec3.create()),
       (this.transformOrigin = vec3.create()),
       (this.maxScale = 250);
-    this.minScale = 0.05;
+    this.minScale = 0.02;
     this.zoomFactor = 1;
 
     this.resetWorldMatrix();

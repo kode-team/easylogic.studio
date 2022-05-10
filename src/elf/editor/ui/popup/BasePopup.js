@@ -101,10 +101,7 @@ export default class BasePopup extends EditorElement {
 
     return {
       top: top,
-      left:
-        left < rect.left && rect.left <= left + width
-          ? left - (left + width - rect.left) - 10
-          : left,
+      left: left,
       width: width,
       height: height,
     };

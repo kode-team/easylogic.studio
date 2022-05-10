@@ -70,93 +70,170 @@ export class MovableModel extends BaseAssetModel {
   }
 
   get localMatrix() {
-    return this._cachedLocalTransform || this.getLocalTransformMatrix();
+    if (!this.hasCache("localTransform")) {
+      this.addCache("localTransform", this.getLocalTransformMatrix());
+    }
+    return this.getCache("localTransform") || this.getLocalTransformMatrix();
   }
 
   get localMatrixInverse() {
+    if (!this.hasCache("localTransformInverse")) {
+      this.addCache(
+        "localTransformInverse",
+        this.getLocalTransformMatrixInverse()
+      );
+    }
     return (
-      this._cachedLocalTransformInverse || this.getLocalTransformMatrixInverse()
+      this.getCache("localTransformInverse") ||
+      this.getLocalTransformMatrixInverse()
     );
   }
 
   get transformWithTranslate() {
+    if (!this.hasCache("transformWithTranslate")) {
+      this.addCache(
+        "transformWithTranslate",
+        this.getTransformWithTranslate(this)
+      );
+    }
     return (
-      this._cachedTransformWithTranslate || this.getTransformWithTranslate(this)
+      this.getCache("transformWithTranslate") ||
+      this.getTransformWithTranslate(this)
     );
   }
 
   get transformWithTranslateToTranspose() {
+    if (!this.hasCache("transformWithTranslateTranspose")) {
+      this.addCache(
+        "transformWithTranslateTranspose",
+        this.getTransformWithTranslate(this)
+      );
+    }
     return (
-      this._cachedTransformWithTranslateTranspose ||
+      this.getCache("transformWithTranslateTranspose") ||
       mat4.transpose([], this.getTransformWithTranslate(this))
     );
   }
 
   get transformWithTranslateInverse() {
+    if (!this.hasCache("transformWithTranslateInverse")) {
+      this.addCache(
+        "transformWithTranslateInverse",
+        this.getTransformWithTranslate(this)
+      );
+    }
     return (
-      this._cachedTransformWithTranslateInverse ||
+      this.getCache("transformWithTranslateInverse") ||
       mat4.invert([], this.getTransformWithTranslate(this))
     );
   }
 
   get itemMatrix() {
-    return this._cachedItemTransform || this.getItemTransformMatrix();
+    if (!this.hasCache("itemTransform")) {
+      this.addCache("itemTransform", this.getItemTransformMatrix());
+    }
+    return this.getCache("itemTransform") || this.getItemTransformMatrix();
   }
 
   get itemMatrixInverse() {
+    if (!this.hasCache("itemTransformInverse")) {
+      this.addCache(
+        "itemTransformInverse",
+        this.getItemTransformMatrixInverse()
+      );
+    }
     return (
-      this._cachedItemTransformInverse || this.getItemTransformMatrixInverse()
+      this.getCache("itemTransformInverse") ||
+      this.getItemTransformMatrixInverse()
     );
   }
 
   get absoluteMatrix() {
-    return this._cachedAbsoluteMatrix || this.getAbsoluteMatrix();
+    if (!this.hasCache("absoluteMatrix")) {
+      this.addCache("absoluteMatrix", this.getAbsoluteMatrix());
+    }
+    return this.getCache("absoluteMatrix") || this.getAbsoluteMatrix();
   }
 
   get absoluteMatrixInverse() {
-    return this._cachedAbsoluteMatrixInverse || this.getAbsoluteMatrixInverse();
+    if (!this.hasCache("absoluteMatrixInverse")) {
+      this.addCache("absoluteMatrixInverse", this.getAbsoluteMatrixInverse());
+    }
+    return (
+      this.getCache("absoluteMatrixInverse") || this.getAbsoluteMatrixInverse()
+    );
   }
 
   get relativeMatrix() {
-    return this._cachedRelativeMatrix || this.getRelativeMatrix();
+    if (!this.hasCache("relativeMatrix")) {
+      this.addCache("relativeMatrix", this.getRelativeMatrix());
+    }
+    return this.getCache("relativeMatrix") || this.getRelativeMatrix();
   }
 
   get relativeMatrixInverse() {
-    return this._cachedRelativeMatrixInverse || this.getRelativeMatrixInverse();
+    if (!this.hasCache("relativeMatrixInverse")) {
+      this.addCache("relativeMatrixInverse", this.getRelativeMatrixInverse());
+    }
+    return (
+      this.getCache("relativeMatrixInverse") || this.getRelativeMatrixInverse()
+    );
   }
 
   get verties() {
-    return this._cachedVerties || this.getVerties();
+    if (!this.hasCache("verties")) {
+      this.addCache("verties", this.getVerties());
+    }
+    return this.getCache("verties") || this.getVerties();
   }
 
   get contentVerties() {
-    return this._cachedContentVerties || this.getContentVerties();
+    if (!this.hasCache("contentVerties")) {
+      this.addCache("contentVerties", this.getContentVerties());
+    }
+    return this.getCache("contentVerties") || this.getContentVerties();
   }
 
   get originVerties() {
-    return this._cachedVertiesWithoutTransformOrigin || this.rectVerties();
+    if (!this.hasCache("vertiesWithoutTransformOrigin")) {
+      this.addCache("vertiesWithoutTransformOrigin", this.rectVerties());
+    }
+    return this.getCache("vertiesWithoutTransformOrigin") || this.rectVerties();
   }
 
   get localVerties() {
-    return this._cachedLocalVerties || this.getLocalVerties();
+    if (!this.hasCache("localVerties")) {
+      this.addCache("localVerties", this.getLocalVerties());
+    }
+    return this.getCache("localVerties") || this.getLocalVerties();
   }
 
   get guideVerties() {
-    return this._cachedGuideVerties || this.getGuideVerties();
+    if (!this.hasCache("guideVerties")) {
+      this.addCache("guideVerties", this.getGuideVerties());
+    }
+    return this.getCache("guideVerties") || this.getGuideVerties();
   }
 
   get xList() {
-    return this._cachedXList || this.getXList();
+    if (!this.hasCache("xList")) {
+      this.addCache("xList", this.getXList());
+    }
+    return this.getCache("xList") || this.getXList();
   }
 
   get yList() {
-    return this._cachedYList || this.getYList();
+    if (!this.hasCache("yList")) {
+      this.addCache("yList", this.getYList());
+    }
+    return this.getCache("yList") || this.getYList();
   }
 
   get areaPosition() {
-    return (
-      this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth)
-    );
+    if (!this.hasCache("areaPosition")) {
+      this.addCache("areaPosition", this.getAreaPosition(100));
+    }
+    return this.getCache("areaPosition") || this.getAreaPosition(100);
   }
 
   get offsetX() {
@@ -312,7 +389,6 @@ export class MovableModel extends BaseAssetModel {
   refreshMatrixCache() {
     // return;
     // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true })
-
     this.setCacheItemTransformMatrix();
     this.setCacheLocalTransformMatrix();
     this.setCacheAbsoluteMatrix();
@@ -332,73 +408,68 @@ export class MovableModel extends BaseAssetModel {
   }
 
   setCacheItemTransformMatrix() {
-    this._cachedItemTransform = this.getItemTransformMatrix();
-    this._cachedItemTransformInverse = mat4.invert(
-      [],
-      this._cachedItemTransform
+    this.addCache("itemTransform", this.getItemTransformMatrix());
+    this.addCache(
+      "itemTransformInverse",
+      mat4.invert([], this.getCache("itemTransform"))
     );
   }
 
   setCacheLocalTransformMatrix() {
-    this._cachedLocalTransform = this.getLocalTransformMatrix();
-    this._cachedLocalTransformInverse = mat4.invert(
-      [],
-      this._cachedLocalTransform
+    this.addCache("localTransform", this.getLocalTransformMatrix());
+    this.addCache(
+      "localTransformInverse",
+      mat4.invert([], this.getCache("localTransform"))
     );
 
-    this._cachedTransformWithTranslate = this.getTransformWithTranslate(this);
-    this._cachedTransformWithTranslateInverse = mat4.invert(
-      [],
-      this._cachedTransformWithTranslate
+    this.addCache(
+      "transformWithTranslate",
+      this.getTransformWithTranslate(this)
     );
-    this._cachedTransformWithTranslateTranspose = mat4.transpose(
-      [],
-      this._cachedTransformWithTranslate
+
+    this.addCache(
+      "transformWithTranslateInverse",
+      mat4.invert([], this.getCache("transformWithTranslate"))
+    );
+
+    this.addCache(
+      "transformWithTranslateTranspose",
+      mat4.transpose([], this.getCache("transformWithTranslate"))
     );
   }
 
   setCacheAbsoluteMatrix() {
-    this._cachedAbsoluteMatrix = this.getAbsoluteMatrix();
-    this._cachedAbsoluteMatrixInverse = mat4.invert(
-      [],
-      this._cachedAbsoluteMatrix
+    this.addCache("absoluteMatrix", this.getAbsoluteMatrix());
+    this.addCache(
+      "absoluteMatrixInverse",
+      mat4.invert([], this.getCache("absoluteMatrix"))
     );
 
-    this._cachedRelativeMatrix = this.getRelativeMatrix();
-    this._cachedRelativeMatrixInverse = mat4.invert(
-      [],
-      this._cachedRelativeMatrix
+    this.addCache("relativeMatrix", this.getRelativeMatrix());
+    this.addCache(
+      "relativeMatrixInverse",
+      mat4.invert([], this.getCache("relativeMatrix"))
     );
   }
 
   setCacheVerties() {
-    this._cachedVerties = this.getVerties();
-    this._cachedContentVerties = this.getContentVerties();
-    this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
+    this.addCache("verties", this.getVerties());
+    this.addCache("contentVerties", this.getContentVerties());
+    this.addCache("vertiesWithoutTransformOrigin", this.rectVerties());
   }
 
   setCacheLocalVerties() {
-    this._cachedLocalVerties = this.getLocalVerties();
+    this.addCache("localVerties", this.getLocalVerties());
   }
 
   setCacheGuideVerties() {
-    this._cachedGuideVerties = this.getGuideVerties();
-    this._cachedXList = this.getXList();
-    this._cachedYList = this.getYList();
+    this.addCache("guideVerties", this.getGuideVerties());
+    this.addCache("xList", this.getXList());
+    this.addCache("yList", this.getYList());
   }
 
   setCacheAreaPosition() {
-    this._cachedAreaPosition = this.getAreaPosition(
-      this._cachedAreaWidth || 100
-    );
-  }
-
-  setCacheAreaWidth(areaWidth) {
-    if (this._cachedAreaWidth !== areaWidth) {
-      this._cachedAreaWidth = areaWidth;
-
-      this.setCacheAreaPosition();
-    }
+    this.addCache("areaPosition", this.getAreaPosition(100));
   }
 
   /**
@@ -834,6 +905,8 @@ export class MovableModel extends BaseAssetModel {
 
   getGuideVerties() {
     const verties = this.originVerties;
+
+    // console.log("this.getGuideVerties", this.ref, this.id);
 
     return [
       ...verties,

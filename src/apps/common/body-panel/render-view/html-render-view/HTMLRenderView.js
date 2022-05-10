@@ -14,6 +14,8 @@ import {
   createComponent,
   CONTEXTMENU,
   PREVENT,
+  OBSERVER,
+  PARAMS,
 } from "sapa";
 
 import "./HTMLRenderView.scss";
@@ -154,11 +156,11 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   getElement(id) {
-    if (!this.state.cachedCurrentElement[id]) {
-      this.state.cachedCurrentElement[id] = this.refs.$view.$(
-        `[data-id="${id}"]`
-      );
-    }
+    // if (!this.state.cachedCurrentElement[id]) {
+    this.state.cachedCurrentElement[id] = this.refs.$view.$(
+      `[data-id="${id}"]`
+    );
+    // }
 
     return this.state.cachedCurrentElement[id];
   }
@@ -430,7 +432,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   calculateFirstMovedElement() {
-    this.emit("hideSelectionToolView");
+    // this.emit("hideSelectionToolView");
     this.emit("moveFirstGhostToolView");
   }
 
@@ -619,6 +621,8 @@ export default class HTMLRenderView extends EditorElement {
 
     // 최초 전체 객체를 돌면서 update 함수를 실행해줄 트리거가 필요하다.
     this.updateAllCanvas(project);
+
+    // this.refreshAllElementBoundSize();
   }
 
   updateAllCanvas(parentLayer) {
@@ -655,7 +659,11 @@ export default class HTMLRenderView extends EditorElement {
 
   refreshElementRect(item) {
     var $el = this.getElement(item.id);
-    const offset = $el.offsetRect();
+    let offset = $el.offsetRect();
+
+    if (offset.width === 0 || offset.height === 0) {
+      return;
+    }
 
     item.reset(offset);
 
@@ -684,5 +692,29 @@ export default class HTMLRenderView extends EditorElement {
         this.refreshElementBoundSize(child);
       });
     }
+  }
+
+  /**
+   * 객체의 변화를 캐치해서 offsetRect 를 다시 설정해준다.
+   *
+   * @param {Mutation} mutations
+   */
+  [OBSERVER("mutation") +
+    PARAMS({
+      childList: true,
+      subtree: true,
+    })](mutations) {
+    const s = new Set(
+      mutations
+        .map((mutation) => {
+          return Dom.create(mutation.target).attr("data-id");
+        })
+        .filter(Boolean)
+    );
+
+    [...s].forEach((id) => {
+      const item = this.$editor.get(id);
+      this.refreshElementBoundSize(item);
+    });
   }
 }

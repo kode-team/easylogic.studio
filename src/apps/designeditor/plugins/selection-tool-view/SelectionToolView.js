@@ -7,7 +7,6 @@ import {
   IF,
   SUBSCRIBE,
   clone,
-  THROTTLE,
 } from "sapa";
 
 import "./SelectionView.scss";
@@ -65,7 +64,7 @@ const SelectionToolEvent = class extends EditorElement {
    *
    * @param {*} isShow
    */
-  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
+  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode")]() {
     this.initSelectionTool();
   }
 
@@ -827,7 +826,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
   initSelectionTool() {
     if (this.$el.isShow() && this.$context.selection.isOne === false) {
-      this.hide();
+      // this.hide();
     } else if (this.$el.isHide() && this.$context.selection.isOne) {
       this.show();
     }
