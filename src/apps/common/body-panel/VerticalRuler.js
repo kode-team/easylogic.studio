@@ -1,4 +1,15 @@
-import { LOAD, SUBSCRIBE, THROTTLE, CONFIG, BIND } from "sapa";
+import { vec3 } from "gl-matrix";
+
+import {
+  LOAD,
+  SUBSCRIBE,
+  THROTTLE,
+  CONFIG,
+  BIND,
+  POINTERSTART,
+  DOMDIFF,
+  MOUSEOVER,
+} from "sapa";
 
 import "./VerticalRuler.scss";
 
@@ -8,6 +19,8 @@ import {
   RESIZE_WINDOW,
   RESIZE_CANVAS,
   UPDATE_CANVAS,
+  END,
+  MOVE,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -16,17 +29,18 @@ let pathString = [];
 export default class VerticalRuler extends EditorElement {
   template() {
     return /*html*/ `
-            <div class="elf--vertical-ruler">
-                <div class='vertical-ruler-container' ref='$layerRuler'>
-                    <svg class="lines" width="100%" height="100%" overflow="hidden">
-                        <path ref="$rulerLines" d=""/>
-                    </svg>
-                </div>                                        
-                <div class='vertical-ruler-container' ref='$body'></div>
-                <div class='vertical-ruler-container'>
-                    <div class="cursor" ref="$cursor"></div>
-                </div>                
-            </div>
+          <div class="elf--vertical-ruler">
+            <div class='vertical-ruler-container' ref='$layerRuler'>
+                <svg class="lines" width="100%" height="100%" overflow="hidden">
+                    <path ref="$rulerLines" d=""/>
+                </svg>
+            </div>                                        
+            <div class='vertical-ruler-container' ref='$body'></div>
+            <div class='vertical-ruler-container' ref='$lines'></div>            
+            <div class='vertical-ruler-container'>
+                <div class="cursor" ref="$cursor"></div>
+            </div>                
+          </div>
         `;
   }
 
@@ -42,6 +56,38 @@ export default class VerticalRuler extends EditorElement {
     if (!this.state.rect || this.state.rect.width == 0) {
       this.state.rect = this.$el.rect();
     }
+  }
+
+  [MOUSEOVER()]() {
+    this.$commands.emit("refreshCursor", "ew-resize");
+  }
+
+  [POINTERSTART() + MOVE() + END()]() {
+    const pos = vec3.round([], this.$viewport.getWorldPosition());
+    this.startIndex = this.$config.push("horizontal.line", pos[0]);
+    this.$config.init("horizontal.line.selected.index", this.startIndex);
+
+    this.$context.snapManager.clear();
+  }
+
+  move() {
+    const newPos = this.$context.snapManager.getWorldPosition();
+
+    if (this.$viewport.minX < newPos[0] && newPos[0] < this.$viewport.maxX) {
+      this.$config.setIndexValue("horizontal.line", this.startIndex, newPos[0]);
+    }
+  }
+
+  end() {
+    const pos = vec3.round([], this.$viewport.getWorldPosition());
+    if (this.$viewport.minX < pos[0] && pos[0] < this.$viewport.maxX) {
+      // NOOP
+    } else {
+      this.$config.removeIndex("horizontal.line", this.startIndex);
+    }
+
+    this.startIndex = null;
+    this.$commands.emit("recoverCursor");
   }
 
   makeLine(
@@ -227,7 +273,7 @@ export default class VerticalRuler extends EditorElement {
     ].join("");
   }
 
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     if (!this.state.rect || this.state.rect.width == 0) {
       this.state.rect = this.$el.rect();
     }
@@ -237,6 +283,23 @@ export default class VerticalRuler extends EditorElement {
                 <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0, 0.5)" />
                 ${this.makeRulerText()}
             </svg>
+        `;
+  }
+
+  [LOAD("$lines") + DOMDIFF]() {
+    this.initializeRect();
+
+    const lines = this.$config
+      .get("vertical.line")
+      .map((it) => {
+        const pos = this.$viewport.applyVertex([0, it, 0]);
+
+        return `<path d="M 0 ${pos[1]} L 30 ${pos[1]}"  transform="translate(0, 0.5)" />`;
+      })
+      .join("");
+
+    return /*html*/ `
+            <svg width="100%" height="100%" class="vertical-line" overflow="hidden">${lines}</svg>
         `;
   }
 
@@ -290,5 +353,9 @@ export default class VerticalRuler extends EditorElement {
   [CONFIG("onMouseMovepageContainer")]() {
     this.bindData("$cursor");
     this.bindData("$rulerLines");
+  }
+
+  [CONFIG("vertical.line")]() {
+    this.load("$lines");
   }
 }

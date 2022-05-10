@@ -22,7 +22,6 @@ import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
 import PageTools from "./render-view/util-panels/PageTools";
 
 import {
-  CHANGE_ICON_VIEW,
   UPDATE_VIEWPORT,
   END,
   MOVE,
@@ -145,18 +144,6 @@ export default class CanvasView extends EditorElement {
     this.refreshCursor();
   }
 
-  async [BIND("$container")]() {
-    const cursor = await this.$context.cursorManager.load(
-      this.state.cursor,
-      ...(this.state.cursorArgs || [])
-    );
-    return {
-      style: {
-        cursor,
-      },
-    };
-  }
-
   [DRAGOVER("$lock") + PREVENT]() {}
   [DROP("$lock") + PREVENT](e) {
     const newCenter = this.$viewport.getWorldPosition(e);
@@ -234,18 +221,6 @@ export default class CanvasView extends EditorElement {
 
   [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.refreshCanvasSize();
-  }
-
-  [SUBSCRIBE(CHANGE_ICON_VIEW)](cursor, ...args) {
-    if (
-      `${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args}`
-    ) {
-      return;
-    }
-
-    this.state.cursor = cursor;
-    this.state.cursorArgs = args;
-    this.bindData("$container");
   }
 
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {

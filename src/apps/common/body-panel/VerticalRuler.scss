@@ -24,6 +24,13 @@
       }        
     }    
 
+    svg.vertical-line {
+      path {
+        stroke: var(--elf--selected-color);
+      }
+    }
+
+
     .cursor {
       --elf--vertical-cursor-position: 0px;
       height: 2px;

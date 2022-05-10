@@ -62,7 +62,7 @@ export default class SelectionInfoView extends EditorElement {
       this.$context.selection.cachedRectVerties.map((v) => {
         return vec3.add([], v, dist);
       }),
-      3
+      3 / this.$viewport.scale
     );
 
     const localDist = vec3.add([], snap.dist, dist);

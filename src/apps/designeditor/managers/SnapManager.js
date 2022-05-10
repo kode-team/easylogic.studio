@@ -198,6 +198,21 @@ export class SnapManager {
     const sourceXList = sourceVerties.map((it) => it[0]);
     const sourceYList = sourceVerties.map((it) => it[1]);
 
+    // guide line 체크
+    const guideXList = this.context.config.get("horizontal.line");
+    const guideYList = this.context.config.get("vertical.line");
+
+    const x = this.checkX(guideXList, sourceXList, dist)[0];
+    const y = this.checkY(guideYList, sourceYList, dist)[0];
+
+    const distVector = vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+
+    if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+      snaps.push({ target: null, dist: distVector });
+    }
+
+    // grid 간격 체크 하기
+
     // 객체간의 우선 순위가 먼저
     this.snapTargetLayers.forEach((target) => {
       const x = this.checkX(target.xList, sourceXList, dist)[0];
@@ -210,28 +225,7 @@ export class SnapManager {
       }
     });
 
-    // // 그 다음에 x grid 체크
-    // if (snaps.filter(it => it[0] !== 0).length === 0) {
-    //     sourceXList.forEach((sourceX) => {
-
-    //         const localGridDistX = this.gridSize - ((sourceX + 10000000000) % this.gridSize);
-    //         if (Math.abs(localGridDistX) <= dist) {
-    //             snaps.push(vec3.fromValues(localGridDistX, 0, 0))
-    //         }
-
-    //     })
-    // }
-
-    // // 그 다음에 y grid 체크
-    // if (snaps.filter(it => it[1] !== 0).length === 0) {
-    //     sourceYList.forEach((sourceY) => {
-    //         const localGridDistY = this.gridSize - ((sourceY + 10000000000) % this.gridSize);
-    //         if (Math.abs(localGridDistY) <= dist) {
-    //             snaps.push(vec3.fromValues(0, localGridDistY, 0))
-    //         }
-
-    //     })
-    // }
+    // grid 간격 체크 하기
 
     return (
       snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) ||
@@ -333,5 +327,15 @@ export class SnapManager {
 
   findGuideOne(sourceVerties) {
     return [this.findGuide(sourceVerties)[0]];
+  }
+
+  getWorldPosition() {
+    const pos = vec3.round([], this.context.viewport.getWorldPosition());
+
+    const snap = this.check([pos], 3 / this.context.viewport.scale);
+
+    const newPos = vec3.add([], snap.dist, pos);
+
+    return newPos;
   }
 }

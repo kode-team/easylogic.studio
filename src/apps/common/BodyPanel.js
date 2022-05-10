@@ -24,7 +24,7 @@ export default class BodyPanel extends EditorElement {
         <div class="submenu-area">
           ${createComponent("PageSubEditor")}
         </div>
-        <div class='editing-area'>
+        <div class='editing-area' ref="$area">
           ${createComponent("HorizontalRuler")}
           ${createComponent("VerticalRuler")}
           <div class="canvas-layout">
@@ -48,5 +48,29 @@ export default class BodyPanel extends EditorElement {
 
   [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
     this.refs.$el.toggleFullscreen();
+  }
+
+  [CONFIG("editor.cursor")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$container");
+  }
+
+  [CONFIG("editor.cursor.args")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$area");
+  }
+
+  async [BIND("$area")]() {
+    const cursor = await this.$context.cursorManager.load(
+      this.state.cursor,
+      ...(this.state.cursorArgs || [])
+    );
+    return {
+      style: {
+        cursor,
+      },
+    };
   }
 }

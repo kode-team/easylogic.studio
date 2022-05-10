@@ -34,6 +34,7 @@ import keyframe from "./keyframe";
 import layerAppendView from "./layer-append-view";
 import layerTree from "./layer-tree";
 import layout from "./layout";
+import lineView from "./line-view";
 import pathDrawView from "./path-draw-view";
 import pathEditorView from "./path-editor-view";
 import pathTool from "./path-tool";
@@ -159,6 +160,7 @@ export default [
   selectionToolView,
   guideLineView,
   layerAppendView,
+  lineView,
   hoverView,
   pathDrawView,
   pathEditorView,

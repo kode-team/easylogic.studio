@@ -4129,7 +4129,6 @@ const SHOW_COMPONENT_POPUP = "showComponentPopup";
 const SHOW_NOTIFY = "showNotify";
 const RESIZE_WINDOW = "resize.window";
 const RESIZE_CANVAS = "resizeCanvas";
-const CHANGE_ICON_VIEW = "changeIconView";
 const UPDATE_CANVAS = "updateCanvas";
 const OPEN_CONTEXT_MENU = "openContextMenu";
 const START_GUESTURE = "startGuesture";
@@ -4588,12 +4587,14 @@ class BlankCanvasView extends EditorElement {
   [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.refreshCanvasSize();
   }
-  [SUBSCRIBE(CHANGE_ICON_VIEW)](cursor, ...args2) {
-    if (`${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args2}`) {
-      return;
-    }
-    this.state.cursor = cursor;
-    this.state.cursorArgs = args2;
+  [CONFIG("editor.cursor")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$container");
+  }
+  [CONFIG("editor.cursor.args")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
     this.bindData("$container");
   }
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
@@ -5017,7 +5018,7 @@ var __glob_0_7$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   "default": align_horizontal_center
 }, Symbol.toStringTag, { value: "Module" }));
 var align_horizontal_left = _icon_template(`<path d="M4,22H2V2h2V22z M22,7H6v3h16V7z M16,14H6v3h10V14z"/>`);
-var __glob_0_8$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": align_horizontal_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5082,22 +5083,22 @@ var __glob_0_20$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": arrowLeft
 }, Symbol.toStringTag, { value: "Module" }));
 var arrowRight = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
-var __glob_0_21$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": arrowRight
 }, Symbol.toStringTag, { value: "Module" }));
 var arrow_right = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
-var __glob_0_22$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": arrow_right
 }, Symbol.toStringTag, { value: "Module" }));
 var artboard$1 = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
-var __glob_0_23$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_23$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": artboard$1
 }, Symbol.toStringTag, { value: "Module" }));
 var auto_awesome = _icon_template(`<path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>`);
-var __glob_0_24$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": auto_awesome
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5356,113 +5357,122 @@ var __glob_0_62$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": diffuse
 }, Symbol.toStringTag, { value: "Module" }));
-var doc = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
+function direction(transform2 = "") {
+  return _icon_template(`
+        <g transform='${transform2}'><path fill='#fff' d='M2.6 5.6L0 8.3 2.6 11l1.2-1.2-.5-.5h9.4l-.5.5 1.2 1.2L16 8.3l-2.6-2.7-1.2 1.2.5.5H3.3l.5-.5-1.2-1.2z'/><path fill='#231f20' d='M5.1 279h-4v1h5v-5h-1zm5 0v5h-5v1h5v5h1v-5h5v-1h-5v-5z'/><path fill='#fff' d='M.6 278.5h4v-4h2v6h-6zm4.5.5h-4v1h5v-5h-1zm4.5-.5h2v5h5v2h-5v5h-2v-5h-5v-2h5zm.5 5.5h-5v1h5v5h1v-5h5v-1h-5v-5h-1z'/><path fill='#000' d='M2.6 6.3l-2 2 2 2 .6-.5-1-1H14l-1 1 .5.5 2-2-2-2-.5.5 1 1H2.1l1-1-.5-.5z'/></g>
+    `, { width: 24, height: 24, viewBoxWidth: 16, viewBoxHeight: 16 });
+}
 var __glob_0_63$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": direction
+}, Symbol.toStringTag, { value: "Module" }));
+var doc = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
+var __glob_0_64$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": doc
 }, Symbol.toStringTag, { value: "Module" }));
 var drag_handle = _icon_template(`<path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z"/>`);
-var __glob_0_64$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_65$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": drag_handle
 }, Symbol.toStringTag, { value: "Module" }));
 var drag_indicator = _icon_template(`<path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>`);
-var __glob_0_65$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_66$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": drag_indicator
 }, Symbol.toStringTag, { value: "Module" }));
 var draw = _icon_template(`<path d="M18.85,10.39l1.06-1.06c0.78-0.78,0.78-2.05,0-2.83L18.5,5.09c-0.78-0.78-2.05-0.78-2.83,0l-1.06,1.06L18.85,10.39z M14.61,11.81L7.41,19H6v-1.41l7.19-7.19L14.61,11.81z M13.19,7.56L4,16.76V21h4.24l9.19-9.19L13.19,7.56L13.19,7.56z M19,17.5 c0,2.19-2.54,3.5-5,3.5c-0.55,0-1-0.45-1-1s0.45-1,1-1c1.54,0,3-0.73,3-1.5c0-0.47-0.48-0.87-1.23-1.2l1.48-1.48 C18.32,15.45,19,16.29,19,17.5z M4.58,13.35C3.61,12.79,3,12.06,3,11c0-1.8,1.89-2.63,3.56-3.36C7.59,7.18,9,6.56,9,6 c0-0.41-0.78-1-2-1C5.74,5,5.2,5.61,5.17,5.64C4.82,6.05,4.19,6.1,3.77,5.76C3.36,5.42,3.28,4.81,3.62,4.38C3.73,4.24,4.76,3,7,3 c2.24,0,4,1.32,4,3c0,1.87-1.93,2.72-3.64,3.47C6.42,9.88,5,10.5,5,11c0,0.31,0.43,0.6,1.07,0.86L4.58,13.35z" />`);
-var __glob_0_66$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_67$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": draw
 }, Symbol.toStringTag, { value: "Module" }));
 var east = _icon_template(`<path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z"/>`);
-var __glob_0_67$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_68$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": east
 }, Symbol.toStringTag, { value: "Module" }));
 var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
-var __glob_0_68$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_69$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": edit
 }, Symbol.toStringTag, { value: "Module" }));
 var end = _icon_template(`<path transform="translate(24,0) scale(-1, 1)" d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_69$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_70$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": end
 }, Symbol.toStringTag, { value: "Module" }));
 var exit_to_app = _icon_template(`<path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_70$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_71$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": exit_to_app
 }, Symbol.toStringTag, { value: "Module" }));
 var expand = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`);
-var __glob_0_71$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_72$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": expand
 }, Symbol.toStringTag, { value: "Module" }));
 var expand_more = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>`);
-var __glob_0_72$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_73$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": expand_more
 }, Symbol.toStringTag, { value: "Module" }));
 var _export = _icon_template(`<path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/>`);
-var __glob_0_73$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_74$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _export
 }, Symbol.toStringTag, { value: "Module" }));
 var face = _icon_template(`<path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/>`);
-var __glob_0_74$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_75$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": face
 }, Symbol.toStringTag, { value: "Module" }));
 var fast_forward = _icon_template(`<path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>`);
-var __glob_0_75$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_76$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": fast_forward
 }, Symbol.toStringTag, { value: "Module" }));
 var fast_rewind = _icon_template(`<path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>`);
-var __glob_0_76$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_77$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": fast_rewind
 }, Symbol.toStringTag, { value: "Module" }));
 var file_copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var __glob_0_77$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_78$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": file_copy
 }, Symbol.toStringTag, { value: "Module" }));
 var filter$1 = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_78$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_79$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": filter$1
 }, Symbol.toStringTag, { value: "Module" }));
 var flag = _icon_template(`<path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>`);
-var __glob_0_79$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_80$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flag
 }, Symbol.toStringTag, { value: "Module" }));
 var flash_on = _icon_template(`<path d="M7 2v11h3v9l7-12h-4l4-8z"/>`);
-var __glob_0_80$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_81$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flash_on
 }, Symbol.toStringTag, { value: "Module" }));
 var flatten$1 = _icon_template(`<path d="M4,9v2h16V9H4z M16,4l-1.41-1.41L13,4.17V1h-2v3.19L9.39,2.61L8,4l4,4L16,4z M4,14h16v-2H4V14z M8,19l1.39,1.39L11,18.81 V22h2v-3.17l1.59,1.59L16,19l-4-4L8,19z"/>`);
-var __glob_0_81$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_82$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flatten$1
 }, Symbol.toStringTag, { value: "Module" }));
 var flex = _icon_template(`<path d="M3,5v14h18V5H3z M8.33,17H5V7h3.33V17z M13.67,17h-3.33V7h3.33V17z M19,17h-3.33V7H19V17z"/>`);
-var __glob_0_82$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_83$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flex
 }, Symbol.toStringTag, { value: "Module" }));
 var flip = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_83$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_84$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flip
 }, Symbol.toStringTag, { value: "Module" }));
 var flipY = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_84$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_85$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flipY
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5473,114 +5483,114 @@ var flip_camera = _icon_template(`
     <path d="M16,14v2h2.91c-1.38,2.39-3.96,4-6.91,4c-3.72,0-6.85-2.56-7.74-6H2.2c0.93,4.56,4.96,8,9.8,8c3.27,0,6.18-1.58,8-4.01V20
         h2v-6H16z"/>
 `);
-var __glob_0_85$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_86$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": flip_camera
 }, Symbol.toStringTag, { value: "Module" }));
 var folder = _icon_template(`<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>`);
-var __glob_0_86$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_87$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": folder
 }, Symbol.toStringTag, { value: "Module" }));
 var font_download = _icon_template(`<path d="M9.93 13.5h4.14L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.05 16.5l-1.14-3H9.17l-1.12 3H5.96l5.11-13h1.86l5.11 13h-2.09z"/>`);
-var __glob_0_87$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_88$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": font_download
 }, Symbol.toStringTag, { value: "Module" }));
 var format_bold = _icon_template(`<path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_88$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_89$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": format_bold
 }, Symbol.toStringTag, { value: "Module" }));
 var format_indent = _icon_template(`<path d="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z"/>`);
-var __glob_0_89$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_90$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": format_indent
 }, Symbol.toStringTag, { value: "Module" }));
 var format_line_spacing = _icon_template(`<path d="M6 7h2.5L5 3.5 1.5 7H4v10H1.5L5 20.5 8.5 17H6V7zm4-2v2h12V5H10zm0 14h12v-2H10v2zm0-6h12v-2H10v2z"/>`);
-var __glob_0_90$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_91$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": format_line_spacing
 }, Symbol.toStringTag, { value: "Module" }));
 var format_shapes = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2zm-5.27 9h-3.49l-.73 2H7.89l3.4-9h1.4l3.41 9h-1.63l-.74-2zm-3.04-1.26h2.61L12 8.91l-1.31 3.83z"/>`);
-var __glob_0_91$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_92$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": format_shapes
 }, Symbol.toStringTag, { value: "Module" }));
 var format_size = _icon_template(`<path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/>`);
-var __glob_0_92$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_93$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": format_size
 }, Symbol.toStringTag, { value: "Module" }));
 var fullscreen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_93$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_94$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": fullscreen
 }, Symbol.toStringTag, { value: "Module" }));
 var gps_fixed = _icon_template(`<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_94$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_95$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": gps_fixed
 }, Symbol.toStringTag, { value: "Module" }));
 var gradient$2 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
-var __glob_0_95$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_96$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": gradient$2
 }, Symbol.toStringTag, { value: "Module" }));
 var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_96$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_97$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": grid$1
 }, Symbol.toStringTag, { value: "Module" }));
 var grid3x3 = _icon_template(`<path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>`);
-var __glob_0_97$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_98$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": grid3x3
 }, Symbol.toStringTag, { value: "Module" }));
 var group = _icon_template(`
         <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>
     `);
-var __glob_0_98$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_99$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": group
 }, Symbol.toStringTag, { value: "Module" }));
 var height = _icon_template(`<polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
-var __glob_0_99$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_100$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": height
 }, Symbol.toStringTag, { value: "Module" }));
 var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
-var __glob_0_100$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_101$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": highlight_at
 }, Symbol.toStringTag, { value: "Module" }));
 var horizontal_align_center = _icon_template(`<path d="M8 19h3v4h2v-4h3l-4-4-4 4zm8-14h-3V1h-2v4H8l4 4 4-4zM4 11v2h16v-2H4z" transform="rotate(-90 12 12)" />`);
-var __glob_0_101$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_102$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": horizontal_align_center
 }, Symbol.toStringTag, { value: "Module" }));
 var horizontal_distribute = _icon_template(`<path d="M4,22H2V2h2V22z M22,2h-2v20h2V2z M13.5,7h-3v10h3V7z"/>`);
-var __glob_0_102$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_103$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": horizontal_distribute
 }, Symbol.toStringTag, { value: "Module" }));
 var horizontal_rule = _icon_template(`<rect fill-rule="evenodd" height="2" width="16" x="4" y="11"/>`);
-var __glob_0_103$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_104$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": horizontal_rule
 }, Symbol.toStringTag, { value: "Module" }));
 var image$1 = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_104$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_105$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": image$1
 }, Symbol.toStringTag, { value: "Module" }));
 var input = _icon_template(`<path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"/>`);
-var __glob_0_105$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_106$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": input
 }, Symbol.toStringTag, { value: "Module" }));
 var italic = _icon_template(`<path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/>`);
-var __glob_0_106$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_107$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": italic
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5592,7 +5602,7 @@ var join_full = _icon_template(`
     </g>
 </g>
 `);
-var __glob_0_107$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_108$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": join_full
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5600,89 +5610,89 @@ var join_right = _icon_template(`
 <ellipse cx="12" cy="12" rx="3" ry="5.74"/>
 <path d="M16.5,12c0,0.97-0.23,4.16-3.03,6.5C14.25,18.81,15.1,19,16,19c3.86,0,7-3.14,7-7s-3.14-7-7-7c-0.9,0-1.75,0.19-2.53,0.5 C16.27,7.84,16.5,11.03,16.5,12z"/></g><g><path d="M8,19c0.9,0,1.75-0.19,2.53-0.5c-0.61-0.51-1.1-1.07-1.49-1.63C8.71,16.95,8.36,17,8,17c-2.76,0-5-2.24-5-5s2.24-5,5-5 c0.36,0,0.71,0.05,1.04,0.13c0.39-0.56,0.88-1.12,1.49-1.63C9.75,5.19,8.9,5,8,5c-3.86,0-7,3.14-7,7S4.14,19,8,19z"/>
 `);
-var __glob_0_108$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_109$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": join_right
 }, Symbol.toStringTag, { value: "Module" }));
 var justify_content_space_around = _icon_template(`<path d="M15,7v10H9V7H15z M21,5h-3v14h3V5z M17,5H7v14h10V5z M6,5H3v14h3V5z"/>`);
-var __glob_0_109$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_110$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": justify_content_space_around
 }, Symbol.toStringTag, { value: "Module" }));
 var keyboard = _icon_template(`<path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>`);
-var __glob_0_110$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_111$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keyboard
 }, Symbol.toStringTag, { value: "Module" }));
 var keyboard_arrow_down = _icon_template(`<path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>`);
-var __glob_0_111$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_112$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keyboard_arrow_down
 }, Symbol.toStringTag, { value: "Module" }));
 var keyboard_arrow_left = _icon_template(`<path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>`);
-var __glob_0_112$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_113$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keyboard_arrow_left
 }, Symbol.toStringTag, { value: "Module" }));
 var keyboard_arrow_right = _icon_template(`<path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>`);
-var __glob_0_113$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_114$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keyboard_arrow_right
 }, Symbol.toStringTag, { value: "Module" }));
 var keyboard_arrow_up = _icon_template(`<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/>`);
-var __glob_0_114$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_115$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keyboard_arrow_up
 }, Symbol.toStringTag, { value: "Module" }));
 var landscape = _icon_template(`<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>`);
-var __glob_0_115$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_116$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": landscape
 }, Symbol.toStringTag, { value: "Module" }));
 var launch = _icon_template(`
         <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
     `);
-var __glob_0_116$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_117$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": launch
 }, Symbol.toStringTag, { value: "Module" }));
 var layers = _icon_template(`<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>`);
-var __glob_0_117$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_118$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": layers
 }, Symbol.toStringTag, { value: "Module" }));
 var layout_default = _icon_template(`<path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm4-8H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"/>`);
-var __glob_0_118$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_119$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": layout_default
 }, Symbol.toStringTag, { value: "Module" }));
 var layout_flex = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
-var __glob_0_119$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": layout_flex
 }, Symbol.toStringTag, { value: "Module" }));
 var layout_grid = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_120$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": layout_grid
 }, Symbol.toStringTag, { value: "Module" }));
 var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_122 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": left
 }, Symbol.toStringTag, { value: "Module" }));
 var left_hide = _icon_template(`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>`);
-var __glob_0_122 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_123 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": left_hide
 }, Symbol.toStringTag, { value: "Module" }));
 var lens = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>`);
-var __glob_0_123 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_124 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": lens
 }, Symbol.toStringTag, { value: "Module" }));
 var light$1 = _icon_template(`<path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/>`);
-var __glob_0_124 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_125 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": light$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5690,7 +5700,7 @@ var line_cap_butt = _icon_template(`
         <rect class="base" width="13" height="12" x="3" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M3.5,6.06300874 C4.20280365,6.2438979 4.7561021,6.79719635 4.93699126,7.5 L16,7.5 L16,8.5 L4.93699126,8.5 C4.7561021,9.20280365 4.20280365,9.7561021 3.5,9.93699126 L3.5,13.5 L16,13.5 L16,14.5 L2.5,14.5 L2.5,9.93699126 C1.63738639,9.71496986 1,8.93191971 1,8 C1,7.06808029 1.63738639,6.28503014 2.5,6.06300874 L2.5,1.5 L16,1.5 L16,2.5 L3.5,2.5 L3.5,6.06300874 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_125 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_126 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_cap_butt
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5698,7 +5708,7 @@ var line_cap_round = _icon_template(`
         <path class="base" fill="transparent" fill-rule="nonzero" d="M8,2 L16,2 L16,14 L8,14 C4.6862915,14 2,11.3137085 2,8 L2,8 C2,4.6862915 4.6862915,2 8,2 Z"></path>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M16,13.5 L16,14.5 L8,14.5 C4.41014913,14.5 1.5,11.5898509 1.5,8 C1.5,4.41014913 4.41014913,1.5 8,1.5 L16,1.5 L16,2.5 L8,2.5 C4.96243388,2.5 2.5,4.96243388 2.5,8 C2.5,11.0375661 4.96243388,13.5 8,13.5 L16,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_126 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_127 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_cap_round
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5706,123 +5716,114 @@ var line_cap_square = _icon_template(`
         <rect class="base" width="14" height="12" x="2" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M2.5,13.5 L16,13.5 L16,14.5 L1.5,14.5 L1.5,1.5 L16,1.5 L16,2.5 L2.5,2.5 L2.5,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_127 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_128 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_cap_square
 }, Symbol.toStringTag, { value: "Module" }));
 var line_chart = _icon_template(`<path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>`);
-var __glob_0_128 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_129 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_chart
 }, Symbol.toStringTag, { value: "Module" }));
 var line_join_bevel = _icon_template(`<g fill="none" fill-rule="evenodd"><polygon class="base" fill="transparent" fill-rule="nonzero" points="2 14.5 2 7.538 7.382 1.5 16 1.5 16 14.5"></polygon><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,7.95245414 L2.96551724,14.5 L2,14.5 L2,7.53775146 L7.38172454,1.5 L16,1.5 L16,2.46 L7.76471206,2.46 L2.96551724,7.95245414 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_129 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_130 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_join_bevel
 }, Symbol.toStringTag, { value: "Module" }));
 var line_join_miter = _icon_template(`<g fill="none" fill-rule="evenodd"><rect class="base" width="14" height="13" x="2" y="1.5" fill="transparent" fill-rule="nonzero"></rect><path fill="currentColor" fill-rule="nonzero" d="M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z M3,2.5 L3,14.5 L2,14.5 L2,1.5 L16,1.5 L16,2.5 L3,2.5 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_130 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_131 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_join_miter
 }, Symbol.toStringTag, { value: "Module" }));
 var line_join_round = _icon_template(`<g fill="none" fill-rule="evenodd"><path class="base" fill="transparent" fill-rule="nonzero" d="M9,1.5 L16,1.5 L16,14.5 L2,14.5 L2,8.5 C2,4.63400675 5.13400675,1.5 9,1.5 Z"></path><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,14.5 L2,14.5 L2,7.74 C2,4.29374316 4.80979916,1.5 8.27586207,1.5 L16,1.5 L16,2.46 L8.27586207,2.46 C5.3430396,2.46 2.96551724,4.82393652 2.96551724,7.74 L2.96551724,14.5 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_131 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_132 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_join_round
 }, Symbol.toStringTag, { value: "Module" }));
 var line_style = _icon_template(`<path d="M3 16h5v-2H3v2zm6.5 0h5v-2h-5v2zm6.5 0h5v-2h-5v2zM3 20h2v-2H3v2zm4 0h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zM3 12h8v-2H3v2zm10 0h8v-2h-8v2zM3 4v4h18V4H3z"/>`);
-var __glob_0_132 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_133 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_style
 }, Symbol.toStringTag, { value: "Module" }));
 var line_weight = _icon_template(`<path d="M3 17h18v-2H3v2zm0 3h18v-1H3v1zm0-7h18v-3H3v3zm0-9v4h18V4H3z"/>`);
-var __glob_0_133 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_134 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": line_weight
 }, Symbol.toStringTag, { value: "Module" }));
 var list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_134 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_135 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": list
 }, Symbol.toStringTag, { value: "Module" }));
 var local_library = _icon_template(`<path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>`);
-var __glob_0_135 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_136 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": local_library
 }, Symbol.toStringTag, { value: "Module" }));
 var local_movie = _icon_template(`<path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>`);
-var __glob_0_136 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_137 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": local_movie
 }, Symbol.toStringTag, { value: "Module" }));
 var lock = _icon_template(`<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`);
-var __glob_0_137 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_138 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": lock
 }, Symbol.toStringTag, { value: "Module" }));
 var lock_open = _icon_template(`<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>`);
-var __glob_0_138 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_139 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": lock_open
 }, Symbol.toStringTag, { value: "Module" }));
 var looks = _icon_template(`<path d="M12 10c-3.86 0-7 3.14-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.86-3.14-7-7-7zm0-4C5.93 6 1 10.93 1 17h2c0-4.96 4.04-9 9-9s9 4.04 9 9h2c0-6.07-4.93-11-11-11z"/>`);
-var __glob_0_139 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_140 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": looks
 }, Symbol.toStringTag, { value: "Module" }));
 var margin = _icon_template(`<path d="M3,3v18h18V3H3z M19,19H5V5h14V19z M11,7h2v2h-2V7z M7,7h2v2H7V7z M15,7h2v2h-2V7z M7,11h2v2H7V11z M11,11h2v2h-2V11z M15,11h2v2h-2V11z"/>`);
-var __glob_0_140 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_141 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": margin
 }, Symbol.toStringTag, { value: "Module" }));
 var merge = _icon_template(`<path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>`);
-var __glob_0_141 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_142 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": merge
 }, Symbol.toStringTag, { value: "Module" }));
 var middle = _icon_template(`<path d="M4,12 L20,12Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_142 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_143 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": middle
 }, Symbol.toStringTag, { value: "Module" }));
 var navigation = _icon_template(`<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" transform="rotate(-30 12 12)" stroke-width="1" fill="transparent"/>`);
-var __glob_0_143 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_144 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": navigation
 }, Symbol.toStringTag, { value: "Module" }));
 var near_me = _icon_template(`<path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>`);
-var __glob_0_144 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_145 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": near_me
 }, Symbol.toStringTag, { value: "Module" }));
 var north = _icon_template(`<path d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z"/>`);
-var __glob_0_145 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_146 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": north
 }, Symbol.toStringTag, { value: "Module" }));
 var note = _icon_template(`<path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>`);
-var __glob_0_146 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_147 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": note
 }, Symbol.toStringTag, { value: "Module" }));
 var nowrap = _icon_template(`<path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/>`);
-var __glob_0_147 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_148 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": nowrap
 }, Symbol.toStringTag, { value: "Module" }));
 var opacity = _icon_template(`<path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"/>`);
-var __glob_0_148 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": opacity
-}, Symbol.toStringTag, { value: "Module" }));
-function open_in_full(transform2 = "") {
-  return _icon_template(`
-        <g transform='${transform2}'><path fill='#fff' d='M2.6 5.6L0 8.3 2.6 11l1.2-1.2-.5-.5h9.4l-.5.5 1.2 1.2L16 8.3l-2.6-2.7-1.2 1.2.5.5H3.3l.5-.5-1.2-1.2z'/><path fill='#231f20' d='M5.1 279h-4v1h5v-5h-1zm5 0v5h-5v1h5v5h1v-5h5v-1h-5v-5z'/><path fill='#fff' d='M.6 278.5h4v-4h2v6h-6zm4.5.5h-4v1h5v-5h-1zm4.5-.5h2v5h5v2h-5v5h-2v-5h-5v-2h5zm.5 5.5h-5v1h5v5h1v-5h5v-1h-5v-5h-1z'/><path fill='#000' d='M2.6 6.3l-2 2 2 2 .6-.5-1-1H14l-1 1 .5.5 2-2-2-2-.5.5 1 1H2.1l1-1-.5-.5z'/></g>
-    `, { width: 24, height: 24, viewBoxWidth: 16, viewBoxHeight: 16 });
-}
 var __glob_0_149 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": open_in_full
+  "default": opacity
 }, Symbol.toStringTag, { value: "Module" }));
 var outline = _icon_template(`
     <path d="M19.77 4.93l1.4 1.4L8.43 19.07l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 4.93m0-2.83L8.43 13.44l-4.2-4.2L0 13.47l8.43 8.43L24 6.33 19.77 2.1z"/>
@@ -6352,7 +6353,7 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$2, "./icon_list/arrow_right.js": __glob_0_22$2, "./icon_list/artboard.js": __glob_0_23$2, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/doc.js": __glob_0_63$1, "./icon_list/drag_handle.js": __glob_0_64$1, "./icon_list/drag_indicator.js": __glob_0_65$1, "./icon_list/draw.js": __glob_0_66$1, "./icon_list/east.js": __glob_0_67$1, "./icon_list/edit.js": __glob_0_68$1, "./icon_list/end.js": __glob_0_69$1, "./icon_list/exit_to_app.js": __glob_0_70$1, "./icon_list/expand.js": __glob_0_71$1, "./icon_list/expand_more.js": __glob_0_72$1, "./icon_list/export.js": __glob_0_73$1, "./icon_list/face.js": __glob_0_74$1, "./icon_list/fast_forward.js": __glob_0_75$1, "./icon_list/fast_rewind.js": __glob_0_76$1, "./icon_list/file_copy.js": __glob_0_77$1, "./icon_list/filter.js": __glob_0_78$1, "./icon_list/flag.js": __glob_0_79$1, "./icon_list/flash_on.js": __glob_0_80$1, "./icon_list/flatten.js": __glob_0_81$1, "./icon_list/flex.js": __glob_0_82$1, "./icon_list/flip.js": __glob_0_83$1, "./icon_list/flipY.js": __glob_0_84$1, "./icon_list/flip_camera.js": __glob_0_85$1, "./icon_list/folder.js": __glob_0_86$1, "./icon_list/font_download.js": __glob_0_87$1, "./icon_list/format_bold.js": __glob_0_88$1, "./icon_list/format_indent.js": __glob_0_89$1, "./icon_list/format_line_spacing.js": __glob_0_90$1, "./icon_list/format_shapes.js": __glob_0_91$1, "./icon_list/format_size.js": __glob_0_92$1, "./icon_list/fullscreen.js": __glob_0_93$1, "./icon_list/gps_fixed.js": __glob_0_94$1, "./icon_list/gradient.js": __glob_0_95$1, "./icon_list/grid.js": __glob_0_96$1, "./icon_list/grid3x3.js": __glob_0_97$1, "./icon_list/group.js": __glob_0_98$1, "./icon_list/height.js": __glob_0_99$1, "./icon_list/highlight_at.js": __glob_0_100$1, "./icon_list/horizontal_align_center.js": __glob_0_101$1, "./icon_list/horizontal_distribute.js": __glob_0_102$1, "./icon_list/horizontal_rule.js": __glob_0_103$1, "./icon_list/image.js": __glob_0_104$1, "./icon_list/input.js": __glob_0_105$1, "./icon_list/italic.js": __glob_0_106$1, "./icon_list/join_full.js": __glob_0_107$1, "./icon_list/join_right.js": __glob_0_108$1, "./icon_list/justify_content_space_around.js": __glob_0_109$1, "./icon_list/keyboard.js": __glob_0_110$1, "./icon_list/keyboard_arrow_down.js": __glob_0_111$1, "./icon_list/keyboard_arrow_left.js": __glob_0_112$1, "./icon_list/keyboard_arrow_right.js": __glob_0_113$1, "./icon_list/keyboard_arrow_up.js": __glob_0_114$1, "./icon_list/landscape.js": __glob_0_115$1, "./icon_list/launch.js": __glob_0_116$1, "./icon_list/layers.js": __glob_0_117$1, "./icon_list/layout_default.js": __glob_0_118$1, "./icon_list/layout_flex.js": __glob_0_119$1, "./icon_list/layout_grid.js": __glob_0_120$1, "./icon_list/left.js": __glob_0_121, "./icon_list/left_hide.js": __glob_0_122, "./icon_list/lens.js": __glob_0_123, "./icon_list/light.js": __glob_0_124, "./icon_list/line_cap_butt.js": __glob_0_125, "./icon_list/line_cap_round.js": __glob_0_126, "./icon_list/line_cap_square.js": __glob_0_127, "./icon_list/line_chart.js": __glob_0_128, "./icon_list/line_join_bevel.js": __glob_0_129, "./icon_list/line_join_miter.js": __glob_0_130, "./icon_list/line_join_round.js": __glob_0_131, "./icon_list/line_style.js": __glob_0_132, "./icon_list/line_weight.js": __glob_0_133, "./icon_list/list.js": __glob_0_134, "./icon_list/local_library.js": __glob_0_135, "./icon_list/local_movie.js": __glob_0_136, "./icon_list/lock.js": __glob_0_137, "./icon_list/lock_open.js": __glob_0_138, "./icon_list/looks.js": __glob_0_139, "./icon_list/margin.js": __glob_0_140, "./icon_list/merge.js": __glob_0_141, "./icon_list/middle.js": __glob_0_142, "./icon_list/navigation.js": __glob_0_143, "./icon_list/near_me.js": __glob_0_144, "./icon_list/north.js": __glob_0_145, "./icon_list/note.js": __glob_0_146, "./icon_list/nowrap.js": __glob_0_147, "./icon_list/opacity.js": __glob_0_148, "./icon_list/open_in_full.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$6, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119$1, "./icon_list/layout_flex.js": __glob_0_120, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
 const obj$3 = {};
 Object.entries(modules$7).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -7355,11 +7356,11 @@ class DropdownMenu extends EditorElement {
     return this.state.items.find((it) => it.key && it.key === searchKey);
   }
   template() {
-    const { direction } = this.state;
+    const { direction: direction2 } = this.state;
     return `
         <div class="${classnames("dropdown-menu", {
       opened: false
-    })}" data-direction="${direction}">
+    })}" data-direction="${direction2}">
           <span class='icon' ref="$icon"></span>
           <span class='label' ref='$label'></span>
           <span class='dropdown-arrow' ref="$arrow">${iconUse("keyboard_arrow_down")}</span>
@@ -7719,6 +7720,17 @@ var __glob_0_1$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": debug_mode$1
 }, Symbol.toStringTag, { value: "Module" }));
+var editor_cursor = {
+  key: "editor.cursor",
+  defaultValue: "auto",
+  title: "Editor Cursor ",
+  description: "Set editor's cursor",
+  type: "string"
+};
+var __glob_0_2$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": editor_cursor
+}, Symbol.toStringTag, { value: "Module" }));
 var editor_theme = {
   key: "editor.theme",
   defaultValue: "light",
@@ -7726,7 +7738,7 @@ var editor_theme = {
   description: "Set editor's theme",
   type: "string"
 };
-var __glob_0_2$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": editor_theme
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7737,7 +7749,7 @@ var event_doubleclick_timing = {
   description: "whether doubleclick timing is in some seconds",
   type: "number"
 };
-var __glob_0_3$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": event_doubleclick_timing
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7748,7 +7760,7 @@ var language_locale = {
   description: "set locale for editor",
   type: "string"
 };
-var __glob_0_4$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": language_locale
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7760,7 +7772,7 @@ var set_tool_hand$2 = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": set_tool_hand$2
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7771,7 +7783,7 @@ var store_key = {
   description: "Set localStorage key",
   type: "string"
 };
-var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": store_key
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7782,11 +7794,11 @@ var style_canvas_background_color = {
   description: "Set canvas background color",
   type: "color"
 };
-var __glob_0_7$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": style_canvas_background_color
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.theme.js": __glob_0_2$5, "./config_list/event.doubleclick.timing.js": __glob_0_3$5, "./config_list/language.locale.js": __glob_0_4$5, "./config_list/set.tool.hand.js": __glob_0_5$5, "./config_list/store.key.js": __glob_0_6$5, "./config_list/style.canvas.background.color.js": __glob_0_7$5 };
+const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.cursor.js": __glob_0_2$5, "./config_list/editor.theme.js": __glob_0_3$5, "./config_list/event.doubleclick.timing.js": __glob_0_4$5, "./config_list/language.locale.js": __glob_0_5$5, "./config_list/set.tool.hand.js": __glob_0_6$5, "./config_list/store.key.js": __glob_0_7$5, "./config_list/style.canvas.background.color.js": __glob_0_8$5 };
 var configs$2 = Object.values(modules$6).map((it) => it.default);
 function defaultConfigs(editor) {
   configs$2.forEach((config) => {
@@ -13534,7 +13546,7 @@ class DirectionEditor extends EditorElement {
   }
   [LOAD("$body")]() {
     var selectedValue = this.state.isAll ? "all" : "partitial";
-    var direction = this.state.all;
+    var direction2 = this.state.all;
     var display = selectedValue === "all" ? "display:none" : "display:block";
     return `
       <div class="property-item direction-item">
@@ -13548,7 +13560,7 @@ class DirectionEditor extends EditorElement {
           ${createComponent("RangeEditor", {
       ref: "$all",
       key: "all",
-      value: direction,
+      value: direction2,
       onchange: "changeBorderRadius"
     })}
         </div>
@@ -17090,14 +17102,14 @@ function easeOutElastic() {
     return Math.pow(2, -10 * rate) * Math.sin((rate - 0.1) * 5 * Math.PI) + 1;
   };
 }
-const stepTimingFunction = (step2 = 1, direction = "end") => {
+const stepTimingFunction = (step2 = 1, direction2 = "end") => {
   var stepDist = 1 / step2;
   return function(rate) {
     let pos = 0;
     const offset = round(rate / stepDist, 1e7);
-    if (direction == "start") {
+    if (direction2 == "start") {
       pos = Math.ceil(offset);
-    } else if (direction == "end") {
+    } else if (direction2 == "end") {
       if (rate === 0)
         return 0;
       else if (rate === 1)
@@ -17107,8 +17119,8 @@ const stepTimingFunction = (step2 = 1, direction = "end") => {
     return Math.min(Math.max(stepDist * pos, 0), 1);
   };
 };
-function step(step2 = 1, direction = "end") {
-  return stepTimingFunction(step2, direction);
+function step(step2 = 1, direction2 = "end") {
+  return stepTimingFunction(step2, direction2);
 }
 function stepStart() {
   return stepTimingFunction(1, "start");
@@ -22309,22 +22321,24 @@ var __glob_0_9$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
 var recoverCursor = {
   command: "recoverCursor",
   execute: function(editor) {
-    editor.emit(CHANGE_ICON_VIEW, "auto");
+    editor.context.config.set("editor.cursor", "auto");
+    editor.context.config.set("editor.cursor.args", []);
   }
 };
 var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": recoverCursor
 }, Symbol.toStringTag, { value: "Module" }));
-var refreshCursor$1 = {
+var refreshCursor = {
   command: "refreshCursor",
   execute: function(editor, iconType, ...args2) {
-    editor.emit(CHANGE_ICON_VIEW, iconType, ...args2);
+    editor.context.config.set("editor.cursor", iconType);
+    editor.context.config.set("editor.cursor.args", args2);
   }
 };
 var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": refreshCursor$1
+  "default": refreshCursor
 }, Symbol.toStringTag, { value: "Module" }));
 var setLocale = {
   command: "setLocale",
@@ -22609,6 +22623,26 @@ class ConfigManager {
         this.save();
       }
     }
+  }
+  push(key, value) {
+    const list2 = this.get(key);
+    const lastIndex = list2.length;
+    this.setIndexValue(key, lastIndex, value);
+    return lastIndex;
+  }
+  setIndexValue(key, index2, value) {
+    const list2 = this.get(key);
+    list2[index2] = value;
+    this.set(key, [...list2]);
+  }
+  getIndexValue(key, index2) {
+    const list2 = this.get(key);
+    return list2[index2];
+  }
+  removeByIndex(key, index2) {
+    const list2 = this.get(key);
+    list2.splice(index2, 1);
+    this.set(key, [...list2]);
   }
   init(key, value) {
     this.set(key, value, false);
@@ -23164,7 +23198,7 @@ var item_move_key_right = {
   args: [1, 0],
   when: "CanvasView"
 };
-var __glob_0_21$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_key_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23176,7 +23210,7 @@ var item_move_key_up = {
   args: [0, -1],
   when: "CanvasView"
 };
-var __glob_0_22$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_key_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23188,7 +23222,7 @@ var item_move_shift_down = {
   args: [0, 10],
   when: "CanvasView"
 };
-var __glob_0_23$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_23$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_shift_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23200,7 +23234,7 @@ var item_move_shift_left = {
   args: [-10, 0],
   when: "CanvasView"
 };
-var __glob_0_24$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_shift_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23520,7 +23554,7 @@ var __glob_0_51$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": zoom_out
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$2, "./shortcuts_list/add.circle.l.js": __glob_0_3$2, "./shortcuts_list/add.path.js": __glob_0_4$2, "./shortcuts_list/add.rect.js": __glob_0_5$2, "./shortcuts_list/add.rect.m.js": __glob_0_6$2, "./shortcuts_list/add.text.js": __glob_0_7$2, "./shortcuts_list/clipboard.copy.js": __glob_0_8$2, "./shortcuts_list/clipboard.paste.js": __glob_0_9$2, "./shortcuts_list/group.item.js": __glob_0_10$2, "./shortcuts_list/history.redo.js": __glob_0_11$2, "./shortcuts_list/history.undo.js": __glob_0_12$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$2, "./shortcuts_list/item.move.key.down.js": __glob_0_19$2, "./shortcuts_list/item.move.key.left.js": __glob_0_20$2, "./shortcuts_list/item.move.key.right.js": __glob_0_21$1, "./shortcuts_list/item.move.key.up.js": __glob_0_22$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
+const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$2, "./shortcuts_list/add.circle.l.js": __glob_0_3$2, "./shortcuts_list/add.path.js": __glob_0_4$2, "./shortcuts_list/add.rect.js": __glob_0_5$2, "./shortcuts_list/add.rect.m.js": __glob_0_6$2, "./shortcuts_list/add.text.js": __glob_0_7$2, "./shortcuts_list/clipboard.copy.js": __glob_0_8$2, "./shortcuts_list/clipboard.paste.js": __glob_0_9$2, "./shortcuts_list/group.item.js": __glob_0_10$2, "./shortcuts_list/history.redo.js": __glob_0_11$2, "./shortcuts_list/history.undo.js": __glob_0_12$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$2, "./shortcuts_list/item.move.key.down.js": __glob_0_19$2, "./shortcuts_list/item.move.key.left.js": __glob_0_20$2, "./shortcuts_list/item.move.key.right.js": __glob_0_21$2, "./shortcuts_list/item.move.key.up.js": __glob_0_22$2, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$2, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$2, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
 var shortcuts = Object.values(modules$3).map((it) => it.default);
 function joinKeys(...args2) {
   return args2.filter(Boolean).join("+");
@@ -28724,12 +28758,20 @@ class SnapManager {
     const snaps = [];
     const sourceXList = sourceVerties.map((it) => it[0]);
     const sourceYList = sourceVerties.map((it) => it[1]);
+    const guideXList = this.context.config.get("horizontal.line");
+    const guideYList = this.context.config.get("vertical.line");
+    const x = this.checkX(guideXList, sourceXList, dist2)[0];
+    const y = this.checkY(guideYList, sourceYList, dist2)[0];
+    const distVector = fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+    if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+      snaps.push({ target: null, dist: distVector });
+    }
     this.snapTargetLayers.forEach((target) => {
-      const x = this.checkX(target.xList, sourceXList, dist2)[0];
-      const y = this.checkY(target.yList, sourceYList, dist2)[0];
-      const distVector = fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
-      if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
-        snaps.push({ target, dist: distVector });
+      const x2 = this.checkX(target.xList, sourceXList, dist2)[0];
+      const y2 = this.checkY(target.yList, sourceYList, dist2)[0];
+      const distVector2 = fromValues(x2 ? x2.dx : 0, y2 ? y2.dy : 0, 0);
+      if (isNotZero(distVector2[0]) || isNotZero(distVector2[1])) {
+        snaps.push({ target, dist: distVector2 });
       }
     });
     return snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR;
@@ -28790,6 +28832,12 @@ class SnapManager {
   }
   findGuideOne(sourceVerties) {
     return [this.findGuide(sourceVerties)[0]];
+  }
+  getWorldPosition() {
+    const pos = round$2([], this.context.viewport.getWorldPosition());
+    const snap = this.check([pos], 3 / this.context.viewport.scale);
+    const newPos = add$1([], snap.dist, pos);
+    return newPos;
   }
 }
 class TimelineSelectionManager {
@@ -30838,9 +30886,9 @@ const borderTypeTitle = {
 class BorderEditor extends EditorElement {
   initState() {
     var borders = Border.parseStyle(this.props.value);
-    var direction = Object.keys(borders)[0] || "border";
+    var direction2 = Object.keys(borders)[0] || "border";
     return {
-      direction,
+      direction: direction2,
       borders
     };
   }
@@ -32584,8 +32632,8 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     const radiusYPos = verties[2];
     const distX = dist(center2, radiusXPos);
     const distY = dist(center2, radiusYPos);
-    const direction = subtract([], radiusXPos, center2);
-    const angle = calculateAngle(direction[0], direction[1]);
+    const direction2 = subtract([], radiusXPos, center2);
+    const angle = calculateAngle(direction2[0], direction2[1]);
     return /* @__PURE__ */ createElementJsx("div", {
       class: "ellipse"
     }, /* @__PURE__ */ createElementJsx("div", {
@@ -33413,7 +33461,7 @@ var addVideoAssetItem = {
     }
   }
 };
-var __glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33428,7 +33476,7 @@ var clipboard_copy = {
     });
   }
 };
-var __glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_copy
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33445,7 +33493,7 @@ var clipboard_paste = {
     }
   }
 };
-var __glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_23$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_paste
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33493,7 +33541,7 @@ var convert_flatten_path = {
     }
   }
 };
-var __glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_flatten_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36218,7 +36266,7 @@ var __glob_0_74 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 var playTimelineItem = {
   command: "playTimelineItem",
   description: "Play button action",
-  execute: function(editor, speed2 = 1, iterationCount = 1, direction = "normal") {
+  execute: function(editor, speed2 = 1, iterationCount = 1, direction2 = "normal") {
     editor.context.selection.empty();
     editor.emit(REFRESH_SELECTION);
     _currentProject(editor, (project2, timeline) => {
@@ -36231,7 +36279,7 @@ var playTimelineItem = {
           speed: speed2,
           duration: lastTime * 1e3,
           iterationCount,
-          direction
+          direction: direction2
         });
       }
       editor.timer.play({
@@ -36239,7 +36287,7 @@ var playTimelineItem = {
         elapsed: timeline.currentTime * 1e3,
         speed: speed2,
         iterationCount,
-        direction,
+        direction: direction2,
         tick: (elapsed) => {
           project2.seek(timecode(timeline.fps, elapsed / 1e3));
           editor.emit("playTimeline");
@@ -36337,16 +36385,6 @@ var __glob_0_78 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": refreshArtboard
 }, Symbol.toStringTag, { value: "Module" }));
-var refreshCursor = {
-  command: "refreshCursor",
-  execute: function(editor, iconType, ...args2) {
-    editor.emit(CHANGE_ICON_VIEW, iconType, ...args2);
-  }
-};
-var __glob_0_79 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": refreshCursor
-}, Symbol.toStringTag, { value: "Module" }));
 var refreshElement = {
   command: "refreshElement",
   execute: function(editor, current, checkRefreshCanvas = true) {
@@ -36370,21 +36408,21 @@ var refreshElement = {
     maker.run();
   }
 };
-var __glob_0_80 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_79 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshElement
 }, Symbol.toStringTag, { value: "Module" }));
 function refreshHistory(editor) {
   editor.context.commands.emit("saveJSON");
 }
-var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_80 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshHistory
 }, Symbol.toStringTag, { value: "Module" }));
 function refreshProject(editor, current) {
   editor.emit("refreshStyleView", current, true);
 }
-var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36397,7 +36435,7 @@ var refreshSelectedOffset = {
     }
   }
 };
-var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshSelectedOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36413,7 +36451,7 @@ var removeAnimationItem = {
     }
   }
 };
-var __glob_0_84 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeAnimationItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36432,7 +36470,7 @@ var removeLayer = {
     });
   }
 };
-var __glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_84 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36448,7 +36486,7 @@ var removeTimeline = {
     }
   }
 };
-var __glob_0_86 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimeline
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36464,7 +36502,7 @@ var removeTimelineProperty = {
     }
   }
 };
-var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_86 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36481,7 +36519,7 @@ function resizeArtBoard(editor, size2 = "") {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": resizeArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36494,7 +36532,7 @@ var rotateLayer = {
     }));
   }
 };
-var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": rotateLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36514,7 +36552,7 @@ var same_height = {
     }
   }
 };
-var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_height
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36531,7 +36569,7 @@ var same_width = {
     }
   }
 };
-var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_width
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36541,7 +36579,7 @@ var saveJSON = {
     editor.saveItem("model", editor.context.modelManager.toJSON());
   }
 };
-var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": saveJSON
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36562,7 +36600,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": savePNG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36572,7 +36610,7 @@ var segment_delete = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_delete
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36583,7 +36621,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36594,7 +36632,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36605,7 +36643,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36616,7 +36654,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36630,7 +36668,7 @@ var select_all = {
     }
   }
 };
-var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": select_all
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36645,7 +36683,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": selectTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36704,7 +36742,7 @@ var setAttribute = {
     }
   }
 };
-var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setAttribute
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36719,7 +36757,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setTimelineOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36729,7 +36767,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": showExportView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36754,7 +36792,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_bottom
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36778,7 +36816,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36803,7 +36841,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36827,7 +36865,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_middle
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36852,7 +36890,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36877,7 +36915,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_top
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36905,7 +36943,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": switch_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36927,7 +36965,7 @@ var ungroup_item = {
     }
   }
 };
-var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ungroup_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36940,7 +36978,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateClipPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36962,7 +37000,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36989,7 +37027,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37295,7 +37333,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updatePathItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37324,7 +37362,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateResource
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37368,7 +37406,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateUriList
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37390,7 +37428,7 @@ var updateVideo = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37417,7 +37455,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37434,11 +37472,11 @@ var update = {
     }
   }
 };
-var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21, "./command_list/clipboard.copy.js": __glob_0_22, "./command_list/clipboard.paste.js": __glob_0_23, "./command_list/convert.flatten.path.js": __glob_0_24, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshCursor.js": __glob_0_79, "./command_list/refreshElement.js": __glob_0_80, "./command_list/refreshHistory.js": __glob_0_81, "./command_list/refreshProject.js": __glob_0_82, "./command_list/refreshSelectedOffset.js": __glob_0_83, "./command_list/removeAnimationItem.js": __glob_0_84, "./command_list/removeLayer.js": __glob_0_85, "./command_list/removeTimeline.js": __glob_0_86, "./command_list/removeTimelineProperty.js": __glob_0_87, "./command_list/resizeArtBoard.js": __glob_0_88, "./command_list/rotateLayer.js": __glob_0_89, "./command_list/same.height.js": __glob_0_90, "./command_list/same.width.js": __glob_0_91, "./command_list/saveJSON.js": __glob_0_92, "./command_list/savePNG.js": __glob_0_93, "./command_list/segment.delete.js": __glob_0_94, "./command_list/segment.move.down.js": __glob_0_95, "./command_list/segment.move.left.js": __glob_0_96, "./command_list/segment.move.right.js": __glob_0_97, "./command_list/segment.move.up.js": __glob_0_98, "./command_list/select.all.js": __glob_0_99, "./command_list/selectTimelineItem.js": __glob_0_100, "./command_list/setAttribute.js": __glob_0_101, "./command_list/setTimelineOffset.js": __glob_0_102, "./command_list/showExportView.js": __glob_0_103, "./command_list/sort.bottom.js": __glob_0_104, "./command_list/sort.center.js": __glob_0_105, "./command_list/sort.left.js": __glob_0_106, "./command_list/sort.middle.js": __glob_0_107, "./command_list/sort.right.js": __glob_0_108, "./command_list/sort.top.js": __glob_0_109, "./command_list/switch.path.js": __glob_0_110, "./command_list/ungroup.item.js": __glob_0_111, "./command_list/updateClipPath.js": __glob_0_112, "./command_list/updateImage.js": __glob_0_113, "./command_list/updateImageAssetItem.js": __glob_0_114, "./command_list/updatePathItem.js": __glob_0_115, "./command_list/updateResource.js": __glob_0_116, "./command_list/updateUriList.js": __glob_0_117, "./command_list/updateVideo.js": __glob_0_118, "./command_list/updateVideoAssetItem.js": __glob_0_119, "./command_list/model/update.js": __glob_0_120 };
+const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21$1, "./command_list/clipboard.copy.js": __glob_0_22$1, "./command_list/clipboard.paste.js": __glob_0_23$1, "./command_list/convert.flatten.path.js": __glob_0_24$1, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshElement.js": __glob_0_79, "./command_list/refreshHistory.js": __glob_0_80, "./command_list/refreshProject.js": __glob_0_81, "./command_list/refreshSelectedOffset.js": __glob_0_82, "./command_list/removeAnimationItem.js": __glob_0_83, "./command_list/removeLayer.js": __glob_0_84, "./command_list/removeTimeline.js": __glob_0_85, "./command_list/removeTimelineProperty.js": __glob_0_86, "./command_list/resizeArtBoard.js": __glob_0_87, "./command_list/rotateLayer.js": __glob_0_88, "./command_list/same.height.js": __glob_0_89, "./command_list/same.width.js": __glob_0_90, "./command_list/saveJSON.js": __glob_0_91, "./command_list/savePNG.js": __glob_0_92, "./command_list/segment.delete.js": __glob_0_93, "./command_list/segment.move.down.js": __glob_0_94, "./command_list/segment.move.left.js": __glob_0_95, "./command_list/segment.move.right.js": __glob_0_96, "./command_list/segment.move.up.js": __glob_0_97, "./command_list/select.all.js": __glob_0_98, "./command_list/selectTimelineItem.js": __glob_0_99, "./command_list/setAttribute.js": __glob_0_100, "./command_list/setTimelineOffset.js": __glob_0_101, "./command_list/showExportView.js": __glob_0_102, "./command_list/sort.bottom.js": __glob_0_103, "./command_list/sort.center.js": __glob_0_104, "./command_list/sort.left.js": __glob_0_105, "./command_list/sort.middle.js": __glob_0_106, "./command_list/sort.right.js": __glob_0_107, "./command_list/sort.top.js": __glob_0_108, "./command_list/switch.path.js": __glob_0_109, "./command_list/ungroup.item.js": __glob_0_110, "./command_list/updateClipPath.js": __glob_0_111, "./command_list/updateImage.js": __glob_0_112, "./command_list/updateImageAssetItem.js": __glob_0_113, "./command_list/updatePathItem.js": __glob_0_114, "./command_list/updateResource.js": __glob_0_115, "./command_list/updateUriList.js": __glob_0_116, "./command_list/updateVideo.js": __glob_0_117, "./command_list/updateVideoAssetItem.js": __glob_0_118, "./command_list/model/update.js": __glob_0_119 };
 const obj$1 = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -37580,6 +37618,28 @@ var __glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": history_delay_ms
 }, Symbol.toStringTag, { value: "Module" }));
+var horizontal_line = {
+  key: "horizontal.line",
+  defaultValue: [],
+  title: "horizontal guide line for snap ",
+  description: "horizontal guide line for snap",
+  type: "array"
+};
+var __glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": horizontal_line
+}, Symbol.toStringTag, { value: "Module" }));
+var horizontal_line_selected_index = {
+  key: "horizontal.line.selected.index",
+  defaultValue: -1,
+  title: "selected horizontal guide line index",
+  description: "selected horizontal guide line index",
+  type: "number"
+};
+var __glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": horizontal_line_selected_index
+}, Symbol.toStringTag, { value: "Module" }));
 var set_drag_path_area = {
   key: "set.drag.path.area",
   defaultValue: false,
@@ -37588,7 +37648,7 @@ var set_drag_path_area = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": set_drag_path_area
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37600,7 +37660,7 @@ var set_move_control_point = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": set_move_control_point
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37612,7 +37672,7 @@ var set_tool_hand = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": set_tool_hand
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37623,7 +37683,7 @@ var show_left_panel = {
   description: "Set left panel visibility to on",
   type: "boolean"
 };
-var __glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_left_panel
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37634,7 +37694,7 @@ var show_outline = {
   description: "Set outline visibility to on",
   type: "boolean"
 };
-var __glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_outline
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37645,7 +37705,7 @@ var show_right_panel = {
   description: "Set right panel visibility to on",
   type: "boolean"
 };
-var __glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_right_panel
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37656,7 +37716,7 @@ var show_ruler = {
   description: "Set ruler visibility to on",
   type: "boolean"
 };
-var __glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_ruler
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37667,7 +37727,7 @@ var snap_distance = {
   description: "Set snap distance",
   type: "number"
 };
-var __glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": snap_distance
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37678,11 +37738,33 @@ var snap_grid = {
   description: "Set snap grid size",
   type: "number"
 };
-var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": snap_grid
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/debug.mode.js": __glob_0_1$1, "./config_list/editing.css.itemType.js": __glob_0_2, "./config_list/editing.draw.itemType.js": __glob_0_3, "./config_list/editing.mode.itemType.js": __glob_0_4, "./config_list/editing.mode.js": __glob_0_5, "./config_list/editing.svg.itemType.js": __glob_0_6, "./config_list/editor.design.mode.js": __glob_0_7, "./config_list/editor.layout.mode.js": __glob_0_8, "./config_list/fixed.angle.js": __glob_0_9, "./config_list/fixed.gradient.angle.js": __glob_0_10, "./config_list/history.delay.ms.js": __glob_0_11, "./config_list/set.drag.path.area.js": __glob_0_12, "./config_list/set.move.control.point.js": __glob_0_13, "./config_list/set.tool.hand.js": __glob_0_14, "./config_list/show.left.panel.js": __glob_0_15, "./config_list/show.outline.js": __glob_0_16, "./config_list/show.right.panel.js": __glob_0_17, "./config_list/show.ruler.js": __glob_0_18, "./config_list/snap.distance.js": __glob_0_19, "./config_list/snap.grid.js": __glob_0_20 };
+var vertical_line = {
+  key: "vertical.line",
+  defaultValue: [],
+  title: "vertical guide line for snap ",
+  description: "vertical guide line for snap",
+  type: "array"
+};
+var __glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": vertical_line
+}, Symbol.toStringTag, { value: "Module" }));
+var vertical_line_selected_index = {
+  key: "vertical.line.selected.index",
+  defaultValue: -1,
+  title: "selected vertical guide line index",
+  description: "selected vertical guide line index",
+  type: "number"
+};
+var __glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": vertical_line_selected_index
+}, Symbol.toStringTag, { value: "Module" }));
+const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/debug.mode.js": __glob_0_1$1, "./config_list/editing.css.itemType.js": __glob_0_2, "./config_list/editing.draw.itemType.js": __glob_0_3, "./config_list/editing.mode.itemType.js": __glob_0_4, "./config_list/editing.mode.js": __glob_0_5, "./config_list/editing.svg.itemType.js": __glob_0_6, "./config_list/editor.design.mode.js": __glob_0_7, "./config_list/editor.layout.mode.js": __glob_0_8, "./config_list/fixed.angle.js": __glob_0_9, "./config_list/fixed.gradient.angle.js": __glob_0_10, "./config_list/history.delay.ms.js": __glob_0_11, "./config_list/horizontal.line.js": __glob_0_12, "./config_list/horizontal.line.selected.index.js": __glob_0_13, "./config_list/set.drag.path.area.js": __glob_0_14, "./config_list/set.move.control.point.js": __glob_0_15, "./config_list/set.tool.hand.js": __glob_0_16, "./config_list/show.left.panel.js": __glob_0_17, "./config_list/show.outline.js": __glob_0_18, "./config_list/show.right.panel.js": __glob_0_19, "./config_list/show.ruler.js": __glob_0_20, "./config_list/snap.distance.js": __glob_0_21, "./config_list/snap.grid.js": __glob_0_22, "./config_list/vertical.line.js": __glob_0_23, "./config_list/vertical.line.selected.index.js": __glob_0_24 };
 var configs$1 = Object.values(modules$1).map((it) => it.default);
 function configs(editor) {
   configs$1.forEach((config) => {
@@ -39438,8 +39520,8 @@ class GroupModel extends MovableModel {
     const isChanged = super.reset(obj2);
     return isChanged;
   }
-  changeConstraints(direction, value, shiftKey = false) {
-    const h = this.json[direction];
+  changeConstraints(direction2, value, shiftKey = false) {
+    const h = this.json[direction2];
     let newConstraints = value;
     if (h === Constraints.MAX) {
       if (value === Constraints.MAX) {
@@ -39462,7 +39544,7 @@ class GroupModel extends MovableModel {
       }
     }
     this.reset({
-      [direction]: newConstraints
+      [direction2]: newConstraints
     });
   }
   startToCacheChildren() {
@@ -48180,8 +48262,8 @@ const rect = (rectVerties) => {
     />
 `;
 };
-const point = (target, dist2 = 3, direction = "left") => {
-  if (direction === "left") {
+const point = (target, dist2 = 3, direction2 = "left") => {
+  if (direction2 === "left") {
     return `
         <path 
             class="arrow"
@@ -48193,7 +48275,7 @@ const point = (target, dist2 = 3, direction = "left") => {
         />
     `;
   }
-  if (direction === "right") {
+  if (direction2 === "right") {
     return `
         <path 
             class="arrow"
@@ -48205,7 +48287,7 @@ const point = (target, dist2 = 3, direction = "left") => {
         />
     `;
   }
-  if (direction === "up") {
+  if (direction2 === "up") {
     return `
         <path 
             class="arrow"
@@ -48217,7 +48299,7 @@ const point = (target, dist2 = 3, direction = "left") => {
         />
     `;
   }
-  if (direction === "down") {
+  if (direction2 === "down") {
     return `
         <path 
             class="arrow"
@@ -52010,6 +52092,70 @@ function layout$2(editor) {
     FlexGrowToolView,
     GridGrowToolView
   }, CanvasViewToolLevel.LAYOUT_TOOL);
+}
+var LineView$1 = "";
+class LineView extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--line-view sepia(0.2)"
+    });
+  }
+  [CONFIG("vertical.line")]() {
+    this.refresh();
+  }
+  [CONFIG("horizontal.line")]() {
+    this.refresh();
+  }
+  [SUBSCRIBE(UPDATE_VIEWPORT, UPDATE_CANVAS)]() {
+    this.refresh();
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    return [
+      ...this.$config.get("vertical.line").map((it, index2) => {
+        const screen2 = this.$viewport.applyVertex([0, it, 0]);
+        return /* @__PURE__ */ createElementJsx("div", {
+          class: "vertical-line",
+          "data-index": index2,
+          style: `transform: translate3d(0px, ${screen2[1]}px, 0px);`
+        });
+      }),
+      ...this.$config.get("horizontal.line").map((it, index2) => {
+        const screen2 = this.$viewport.applyVertex([it, 0, 0]);
+        return /* @__PURE__ */ createElementJsx("div", {
+          class: "horizontal-line",
+          "data-index": index2,
+          style: `transform: translate3d(${screen2[0]}px, 0px, 0px);`
+        });
+      })
+    ];
+  }
+  [POINTERSTART("$el .horizontal-line") + MOVE("moveHorizontalLine") + END("moveEndHorizontalLine")](e) {
+    this.startIndex = +e.$dt.data("index");
+    this.$context.snapManager.clear();
+  }
+  moveHorizontalLine() {
+    const newPos = this.$context.snapManager.getWorldPosition();
+    this.$config.setIndexValue("horizontal.line", this.startIndex, newPos[0]);
+  }
+  moveEndHorizontalLine() {
+    this.$commands.emit("recoverCursor");
+  }
+  [POINTERSTART("$el .vertical-line") + MOVE("moveVerticalLine") + END("moveEndVerticalLine")](e) {
+    this.startIndex = +e.$dt.data("index");
+    this.$context.snapManager.clear();
+  }
+  moveVerticalLine() {
+    const newPos = this.$context.snapManager.getWorldPosition();
+    this.$config.setIndexValue("vertical.line", this.startIndex, newPos[1]);
+  }
+  moveEndVerticalLine() {
+    this.$commands.emit("recoverCursor");
+  }
+}
+function lineView(editor) {
+  editor.registerUI("canvas.view", {
+    LineView
+  });
 }
 var DrawManager$1 = "";
 class DrawManager extends EditorElement {
@@ -57099,8 +57245,8 @@ class DomRender$1 extends ItemRender$1 {
       obj2.height = Length.px(item.screenHeight);
     }
     if (item.isInFlex()) {
-      const direction = item.parent["flex-direction"];
-      if (direction === FlexDirection.ROW || direction === FlexDirection.ROW_REVERSE) {
+      const direction2 = item.parent["flex-direction"];
+      if (direction2 === FlexDirection.ROW || direction2 === FlexDirection.ROW_REVERSE) {
         obj2.width = Length.px(item.screenWidth);
         obj2.height = Length.px(item.screenHeight);
         if (item.parent["align-items"] === AlignItems.STRETCH) {
@@ -59376,7 +59522,7 @@ class SelectionInfoView extends EditorElement {
   moveTo(dist2) {
     const snap = this.$context.snapManager.check(this.$context.selection.cachedRectVerties.map((v) => {
       return add$1([], v, dist2);
-    }), 3);
+    }), 3 / this.$viewport.scale);
     const localDist = add$1([], snap.dist, dist2);
     const result = {};
     this.$context.selection.cachedItemMatrices.forEach((it) => {
@@ -59601,8 +59747,8 @@ class GhostToolView extends EditorElement {
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([this.targetOriginPosition[1], this.targetOriginPosition[2]], "flex-target"));
     }
   }
-  renderLayoutFlexForFirstItem(direction) {
-    const isColumn = direction === FlexDirection.COLUMN;
+  renderLayoutFlexForFirstItem(direction2) {
+    const isColumn = direction2 === FlexDirection.COLUMN;
     const verticalField = isColumn ? "align-items" : "justify-content";
     const verticalConst = isColumn ? AlignItems : JustifyContent;
     const horizontalField = isColumn ? "justify-content" : "align-items";
@@ -59958,7 +60104,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
       const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
       const angle = calculateAngle360(diff[0], diff[1]);
       let iconAngle = Math.floor(angle);
-      this.$commands.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 8 8)`);
+      this.$commands.emit("refreshCursor", "direction", `rotate(${iconAngle} 8 8)`);
     } else {
       this.$commands.emit("recoverCursor");
     }
@@ -60056,11 +60202,11 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     const newHeight = groupItem.height - realDy;
     this.moveDirectionVertex(groupItem, 0, realDy, newWidth, newHeight, "to bottom left", [0, newHeight, 0]);
   }
-  moveDirectionVertex(groupItem, realDx, realDy, newWidth, newHeight, direction, directionNewVector) {
+  moveDirectionVertex(groupItem, realDx, realDy, newWidth, newHeight, direction2, directionNewVector) {
     const scaleX = newWidth / groupItem.width;
     const scaleY = newHeight / groupItem.height;
     if (scaleX >= 0 && scaleY >= 0) {
-      const view = calculateMatrix(groupItem.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, groupItem.originalTransformOrigin, groupItem.itemMatrix));
+      const view = calculateMatrix(groupItem.directionMatrix[direction2], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, groupItem.originalTransformOrigin, groupItem.itemMatrix));
       const lastStartVertex = getTranslation([], view);
       this.moveGroupItem(lastStartVertex, newWidth, newHeight);
       this.recoverItemForGroup(groupItem, scaleX, scaleY, realDx, realDy);
@@ -60441,7 +60587,7 @@ class SelectionToolView extends SelectionToolEvent {
       const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
       const angle = calculateAngle360(diff[0], diff[1]);
       let iconAngle = Math.floor(angle);
-      this.$commands.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 8 8)`);
+      this.$commands.emit("refreshCursor", "direction", `rotate(${iconAngle} 8 8)`);
     } else {
       this.$commands.emit("recoverCursor");
     }
@@ -60462,9 +60608,9 @@ class SelectionToolView extends SelectionToolEvent {
     this.refreshPointerIcon(e);
     this.state.dragging = true;
     const num = +e.$dt.attr("data-number");
-    const direction = directionType[`${num}`];
+    const direction2 = directionType[`${num}`];
     this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.state.moveType = direction;
+    this.state.moveType = direction2;
     this.state.moveTarget = num;
     this.$context.snapManager.clear();
     this.verties = this.$context.selection.verties;
@@ -60505,10 +60651,10 @@ class SelectionToolView extends SelectionToolEvent {
       instance.reset(__spreadValues(__spreadValues({}, data), options2));
     }
   }
-  moveDirectionVertex(item, newWidth, newHeight, direction, directionNewVector, options2 = {}) {
+  moveDirectionVertex(item, newWidth, newHeight, direction2, directionNewVector, options2 = {}) {
     const center2 = subtract([], TransformOrigin.scale(item.originalTransformOrigin, newWidth, newHeight), directionNewVector);
     const newOffsetInverse = calculateMatrixInverse(fromTranslation([], directionNewVector), fromTranslation([], center2), item.itemMatrix, fromTranslation([], negate([], center2)));
-    const view = calculateMatrix(item.directionMatrix[direction], newOffsetInverse);
+    const view = calculateMatrix(item.directionMatrix[direction2], newOffsetInverse);
     const lastStartVertex = getTranslation([], view);
     this.moveItem(this.$model.get(item.id), lastStartVertex, newWidth, newHeight, options2);
   }
@@ -64370,6 +64516,7 @@ var designEditorPlugins = [
   selectionToolView,
   guideLineView,
   layerAppendView,
+  lineView,
   hoverView,
   pathDrawView,
   pathEditorView,
@@ -66409,14 +66556,6 @@ class CanvasView extends EditorElement {
   moveEndPan() {
     this.refreshCursor();
   }
-  async [BIND("$container")]() {
-    const cursor = await this.$context.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
-    return {
-      style: {
-        cursor
-      }
-    };
-  }
   [DRAGOVER("$lock") + PREVENT]() {
   }
   [DROP("$lock") + PREVENT](e) {
@@ -66470,14 +66609,6 @@ class CanvasView extends EditorElement {
   [SUBSCRIBE(RESIZE_WINDOW, RESIZE_CANVAS)]() {
     this.refreshCanvasSize();
   }
-  [SUBSCRIBE(CHANGE_ICON_VIEW)](cursor, ...args2) {
-    if (`${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args2}`) {
-      return;
-    }
-    this.state.cursor = cursor;
-    this.state.cursorArgs = args2;
-    this.bindData("$container");
-  }
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     this.$commands.emit("refreshCursor", "auto");
   }
@@ -66494,6 +66625,7 @@ class HorizontalRuler extends EditorElement {
                     </svg>
                 </div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
+                <div class='horizontal-ruler-container' ref='$lines'></div>
                 <div class='horizontal-ruler-container'>
                     <div class="cursor" ref="$cursor"></div>
                 </div>
@@ -66609,13 +66741,23 @@ class HorizontalRuler extends EditorElement {
       0 < dist2 && dist2 < 15 ? this.makeLineText(1, minX, maxX, realWidth, width2, 20) : ""
     ].join("");
   }
-  [LOAD("$ruler")]() {
+  [LOAD("$ruler") + DOMDIFF]() {
     this.initializeRect();
     return `
             <svg width="100%" width="100%" overflow="hidden">
                 <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, 0)" />
                 ${this.makeRulerText()}                
             </svg>
+        `;
+  }
+  [LOAD("$lines") + DOMDIFF]() {
+    this.initializeRect();
+    const lines = this.$config.get("horizontal.line").map((it) => {
+      const pos = this.$viewport.applyVertex([it, 0, 0]);
+      return `<path d="M ${pos[0]} 0 L ${pos[0]} 30"  transform="translate(0.5, 0)" />`;
+    }).join("");
+    return `
+            <svg width="100%" height="100%" class="horizontal-line" overflow="hidden">${lines}</svg>
         `;
   }
   [BIND("$rulerLines")]() {
@@ -66645,6 +66787,31 @@ class HorizontalRuler extends EditorElement {
             `
     };
   }
+  [MOUSEOVER()]() {
+    this.$commands.emit("refreshCursor", "ns-resize");
+  }
+  [POINTERSTART() + MOVE() + END()]() {
+    const pos = round$2([], this.$viewport.getWorldPosition());
+    this.startIndex = this.$config.push("vertical.line", pos[1]);
+    this.$config.init("vertical.line.selected.index", this.startIndex);
+    this.$context.snapManager.clear();
+  }
+  move() {
+    const newPos = this.$context.snapManager.getWorldPosition();
+    if (this.$viewport.minY < newPos[1] && newPos[1] < this.$viewport.maxY) {
+      this.$config.setIndexValue("vertical.line", this.startIndex, newPos[1]);
+    }
+  }
+  end() {
+    const pos = round$2([], this.$viewport.getWorldPosition());
+    if (this.$viewport.minY < pos[1] && pos[1] < this.$viewport.maxY)
+      ;
+    else {
+      this.$config.removeIndex("vertical.line", this.startIndex);
+    }
+    this.startIndex = null;
+    this.$commands.emit("recoverCursor");
+  }
   refresh() {
     if (this.$config.get("show.ruler")) {
       this.load();
@@ -66668,23 +66835,27 @@ class HorizontalRuler extends EditorElement {
     this.bindData("$cursor");
     this.bindData("$rulerLines");
   }
+  [CONFIG("horizontal.line")]() {
+    this.load("$lines");
+  }
 }
 var VerticalRuler$1 = "";
 let pathString = [];
 class VerticalRuler extends EditorElement {
   template() {
     return `
-            <div class="elf--vertical-ruler">
-                <div class='vertical-ruler-container' ref='$layerRuler'>
-                    <svg class="lines" width="100%" height="100%" overflow="hidden">
-                        <path ref="$rulerLines" d=""/>
-                    </svg>
-                </div>                                        
-                <div class='vertical-ruler-container' ref='$body'></div>
-                <div class='vertical-ruler-container'>
-                    <div class="cursor" ref="$cursor"></div>
-                </div>                
-            </div>
+          <div class="elf--vertical-ruler">
+            <div class='vertical-ruler-container' ref='$layerRuler'>
+                <svg class="lines" width="100%" height="100%" overflow="hidden">
+                    <path ref="$rulerLines" d=""/>
+                </svg>
+            </div>                                        
+            <div class='vertical-ruler-container' ref='$body'></div>
+            <div class='vertical-ruler-container' ref='$lines'></div>            
+            <div class='vertical-ruler-container'>
+                <div class="cursor" ref="$cursor"></div>
+            </div>                
+          </div>
         `;
   }
   afterRender() {
@@ -66697,6 +66868,31 @@ class VerticalRuler extends EditorElement {
     if (!this.state.rect || this.state.rect.width == 0) {
       this.state.rect = this.$el.rect();
     }
+  }
+  [MOUSEOVER()]() {
+    this.$commands.emit("refreshCursor", "ew-resize");
+  }
+  [POINTERSTART() + MOVE() + END()]() {
+    const pos = round$2([], this.$viewport.getWorldPosition());
+    this.startIndex = this.$config.push("horizontal.line", pos[0]);
+    this.$config.init("horizontal.line.selected.index", this.startIndex);
+    this.$context.snapManager.clear();
+  }
+  move() {
+    const newPos = this.$context.snapManager.getWorldPosition();
+    if (this.$viewport.minX < newPos[0] && newPos[0] < this.$viewport.maxX) {
+      this.$config.setIndexValue("horizontal.line", this.startIndex, newPos[0]);
+    }
+  }
+  end() {
+    const pos = round$2([], this.$viewport.getWorldPosition());
+    if (this.$viewport.minX < pos[0] && pos[0] < this.$viewport.maxX)
+      ;
+    else {
+      this.$config.removeIndex("horizontal.line", this.startIndex);
+    }
+    this.startIndex = null;
+    this.$commands.emit("recoverCursor");
   }
   makeLine(pathString2, baseNumber, minY, maxY, realHeight, height2, epsilon = 3, lineWidth = 30, expect = 10) {
     let startY = minY - minY % baseNumber;
@@ -66796,7 +66992,7 @@ class VerticalRuler extends EditorElement {
       0 < dist2 && dist2 < 15 ? this.makeLineText(1, minY, maxY, realHeight, height2, 20) : ""
     ].join("");
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     if (!this.state.rect || this.state.rect.width == 0) {
       this.state.rect = this.$el.rect();
     }
@@ -66805,6 +67001,16 @@ class VerticalRuler extends EditorElement {
                 <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0, 0.5)" />
                 ${this.makeRulerText()}
             </svg>
+        `;
+  }
+  [LOAD("$lines") + DOMDIFF]() {
+    this.initializeRect();
+    const lines = this.$config.get("vertical.line").map((it) => {
+      const pos = this.$viewport.applyVertex([0, it, 0]);
+      return `<path d="M 0 ${pos[1]} L 30 ${pos[1]}"  transform="translate(0, 0.5)" />`;
+    }).join("");
+    return `
+            <svg width="100%" height="100%" class="vertical-line" overflow="hidden">${lines}</svg>
         `;
   }
   [BIND("$rulerLines")]() {
@@ -66846,6 +67052,9 @@ class VerticalRuler extends EditorElement {
     this.bindData("$cursor");
     this.bindData("$rulerLines");
   }
+  [CONFIG("vertical.line")]() {
+    this.load("$lines");
+  }
 }
 var BodyPanel$1 = "";
 class BodyPanel extends EditorElement {
@@ -66863,7 +67072,7 @@ class BodyPanel extends EditorElement {
         <div class="submenu-area">
           ${createComponent("PageSubEditor")}
         </div>
-        <div class='editing-area'>
+        <div class='editing-area' ref="$area">
           ${createComponent("HorizontalRuler")}
           ${createComponent("VerticalRuler")}
           <div class="canvas-layout">
@@ -66884,6 +67093,24 @@ class BodyPanel extends EditorElement {
   }
   [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
     this.refs.$el.toggleFullscreen();
+  }
+  [CONFIG("editor.cursor")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$container");
+  }
+  [CONFIG("editor.cursor.args")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$area");
+  }
+  async [BIND("$area")]() {
+    const cursor = await this.$context.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
+    return {
+      style: {
+        cursor
+      }
+    };
   }
 }
 var ContextMenuManager$1 = "";
@@ -70472,13 +70699,13 @@ const _edge1 = /* @__PURE__ */ new Vector3();
 const _edge2 = /* @__PURE__ */ new Vector3();
 const _normal$1 = /* @__PURE__ */ new Vector3();
 class Ray {
-  constructor(origin2 = new Vector3(), direction = new Vector3(0, 0, -1)) {
+  constructor(origin2 = new Vector3(), direction2 = new Vector3(0, 0, -1)) {
     this.origin = origin2;
-    this.direction = direction;
+    this.direction = direction2;
   }
-  set(origin2, direction) {
+  set(origin2, direction2) {
     this.origin.copy(origin2);
-    this.direction.copy(direction);
+    this.direction.copy(direction2);
     return this;
   }
   copy(ray) {
@@ -72061,10 +72288,10 @@ class Triangle {
     target.addScaledVector(uv3, _v3$1.z);
     return target;
   }
-  static isFrontFacing(a, b, c2, direction) {
+  static isFrontFacing(a, b, c2, direction2) {
     _v0$1.subVectors(c2, b);
     _v1$3.subVectors(a, b);
-    return _v0$1.cross(_v1$3).dot(direction) < 0 ? true : false;
+    return _v0$1.cross(_v1$3).dot(direction2) < 0 ? true : false;
   }
   set(a, b, c2) {
     this.a.copy(a);
@@ -72116,8 +72343,8 @@ class Triangle {
   containsPoint(point2) {
     return Triangle.containsPoint(point2, this.a, this.b, this.c);
   }
-  isFrontFacing(direction) {
-    return Triangle.isFrontFacing(this.a, this.b, this.c, direction);
+  isFrontFacing(direction2) {
+    return Triangle.isFrontFacing(this.a, this.b, this.c, direction2);
   }
   intersectsBox(box) {
     return box.intersectsTriangle(this);
@@ -74248,8 +74475,8 @@ class Plane {
     return target.copy(this.normal).multiplyScalar(-this.distanceToPoint(point2)).add(point2);
   }
   intersectLine(line2, target) {
-    const direction = line2.delta(_vector1);
-    const denominator = this.normal.dot(direction);
+    const direction2 = line2.delta(_vector1);
+    const denominator = this.normal.dot(direction2);
     if (denominator === 0) {
       if (this.distanceToPoint(line2.start) === 0) {
         return target.copy(line2.start);
@@ -74260,7 +74487,7 @@ class Plane {
     if (t < 0 || t > 1) {
       return null;
     }
-    return target.copy(direction).multiplyScalar(t).add(line2.start);
+    return target.copy(direction2).multiplyScalar(t).add(line2.start);
   }
   intersectsLine(line2) {
     const startSign = this.distanceToPoint(line2.start);
@@ -76215,10 +76442,10 @@ class PMREMGenerator {
     this._halfBlur(cubeUVRenderTarget, pingPongRenderTarget, lodIn, lodOut, sigma, "latitudinal", poleAxis);
     this._halfBlur(pingPongRenderTarget, cubeUVRenderTarget, lodOut, lodOut, sigma, "longitudinal", poleAxis);
   }
-  _halfBlur(targetIn, targetOut, lodIn, lodOut, sigmaRadians, direction, poleAxis) {
+  _halfBlur(targetIn, targetOut, lodIn, lodOut, sigmaRadians, direction2, poleAxis) {
     const renderer = this._renderer;
     const blurMaterial = this._blurMaterial;
-    if (direction !== "latitudinal" && direction !== "longitudinal") {
+    if (direction2 !== "latitudinal" && direction2 !== "longitudinal") {
       console.error("blur direction must be either latitudinal or longitudinal!");
     }
     const STANDARD_DEVIATIONS = 3;
@@ -76249,7 +76476,7 @@ class PMREMGenerator {
     blurUniforms["envMap"].value = targetIn.texture;
     blurUniforms["samples"].value = samples;
     blurUniforms["weights"].value = weights;
-    blurUniforms["latitudinal"].value = direction === "latitudinal";
+    blurUniforms["latitudinal"].value = direction2 === "latitudinal";
     if (poleAxis) {
       blurUniforms["poleAxis"].value = poleAxis;
     }
@@ -92666,8 +92893,8 @@ class InstancedInterleavedBuffer extends InterleavedBuffer {
 }
 InstancedInterleavedBuffer.prototype.isInstancedInterleavedBuffer = true;
 class Raycaster {
-  constructor(origin2, direction, near = 0, far = Infinity) {
-    this.ray = new Ray(origin2, direction);
+  constructor(origin2, direction2, near = 0, far = Infinity) {
+    this.ray = new Ray(origin2, direction2);
     this.near = near;
     this.far = far;
     this.camera = null;
@@ -92680,8 +92907,8 @@ class Raycaster {
       Sprite: {}
     };
   }
-  set(origin2, direction) {
-    this.ray.set(origin2, direction);
+  set(origin2, direction2) {
+    this.ray.set(origin2, direction2);
   }
   setFromCamera(coords, camera) {
     if (camera.isPerspectiveCamera) {
@@ -96884,4 +97111,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHANGE_ICON_VIEW, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };

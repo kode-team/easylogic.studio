@@ -49,8 +49,6 @@ export const RESIZE_WINDOW = "resize.window";
 
 export const RESIZE_CANVAS = "resizeCanvas";
 
-export const CHANGE_ICON_VIEW = "changeIconView";
-
 /**
  * canvas를 다시 그릴 때
  *

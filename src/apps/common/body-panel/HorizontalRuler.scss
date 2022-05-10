@@ -22,6 +22,12 @@
       }
     }
 
+    svg.horizontal-line {
+      path {
+        stroke: var(--elf--selected-color);
+      }
+    }
+
     .cursor {
       --elf--horizontal-cursor-position: 0px;
       height: 100%;

@@ -21,7 +21,6 @@ import {
   MOVE,
   UPDATE_VIEWPORT,
   RESIZE_WINDOW,
-  CHANGE_ICON_VIEW,
   RESIZE_CANVAS,
 } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
@@ -219,15 +218,15 @@ export default class BlankCanvasView extends EditorElement {
     this.refreshCanvasSize();
   }
 
-  [SUBSCRIBE(CHANGE_ICON_VIEW)](cursor, ...args) {
-    if (
-      `${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args}`
-    ) {
-      return;
-    }
+  [CONFIG("editor.cursor")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$container");
+  }
 
-    this.state.cursor = cursor;
-    this.state.cursorArgs = args;
+  [CONFIG("editor.cursor.args")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
     this.bindData("$container");
   }
 

@@ -1,4 +1,15 @@
-import { BIND, CONFIG, LOAD, SUBSCRIBE, THROTTLE } from "sapa";
+import { vec3 } from "gl-matrix";
+
+import {
+  BIND,
+  CONFIG,
+  LOAD,
+  SUBSCRIBE,
+  THROTTLE,
+  POINTERSTART,
+  DOMDIFF,
+  MOUSEOVER,
+} from "sapa";
 
 import "./HorizontalRuler.scss";
 
@@ -8,6 +19,8 @@ import {
   RESIZE_WINDOW,
   RESIZE_CANVAS,
   UPDATE_CANVAS,
+  END,
+  MOVE,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -23,6 +36,7 @@ export default class HorizontalRuler extends EditorElement {
                     </svg>
                 </div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
+                <div class='horizontal-ruler-container' ref='$lines'></div>
                 <div class='horizontal-ruler-container'>
                     <div class="cursor" ref="$cursor"></div>
                 </div>
@@ -217,7 +231,7 @@ export default class HorizontalRuler extends EditorElement {
     ].join("");
   }
 
-  [LOAD("$ruler")]() {
+  [LOAD("$ruler") + DOMDIFF]() {
     this.initializeRect();
 
     return /*html*/ `
@@ -225,6 +239,23 @@ export default class HorizontalRuler extends EditorElement {
                 <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, 0)" />
                 ${this.makeRulerText()}                
             </svg>
+        `;
+  }
+
+  [LOAD("$lines") + DOMDIFF]() {
+    this.initializeRect();
+
+    const lines = this.$config
+      .get("horizontal.line")
+      .map((it) => {
+        const pos = this.$viewport.applyVertex([it, 0, 0]);
+
+        return `<path d="M ${pos[0]} 0 L ${pos[0]} 30"  transform="translate(0.5, 0)" />`;
+      })
+      .join("");
+
+    return /*html*/ `
+            <svg width="100%" height="100%" class="horizontal-line" overflow="hidden">${lines}</svg>
         `;
   }
 
@@ -268,6 +299,38 @@ export default class HorizontalRuler extends EditorElement {
     };
   }
 
+  [MOUSEOVER()]() {
+    this.$commands.emit("refreshCursor", "ns-resize");
+  }
+
+  [POINTERSTART() + MOVE() + END()]() {
+    const pos = vec3.round([], this.$viewport.getWorldPosition());
+    this.startIndex = this.$config.push("vertical.line", pos[1]);
+    this.$config.init("vertical.line.selected.index", this.startIndex);
+
+    this.$context.snapManager.clear();
+  }
+
+  move() {
+    const newPos = this.$context.snapManager.getWorldPosition();
+
+    if (this.$viewport.minY < newPos[1] && newPos[1] < this.$viewport.maxY) {
+      this.$config.setIndexValue("vertical.line", this.startIndex, newPos[1]);
+    }
+  }
+
+  end() {
+    const pos = vec3.round([], this.$viewport.getWorldPosition());
+    if (this.$viewport.minY < pos[1] && pos[1] < this.$viewport.maxY) {
+      // NOOP
+    } else {
+      this.$config.removeIndex("vertical.line", this.startIndex);
+    }
+
+    this.startIndex = null;
+    this.$commands.emit("recoverCursor");
+  }
+
   refresh() {
     if (this.$config.get("show.ruler")) {
       this.load();
@@ -295,5 +358,9 @@ export default class HorizontalRuler extends EditorElement {
   [CONFIG("onMouseMovepageContainer")]() {
     this.bindData("$cursor");
     this.bindData("$rulerLines");
+  }
+
+  [CONFIG("horizontal.line")]() {
+    this.load("$lines");
   }
 }

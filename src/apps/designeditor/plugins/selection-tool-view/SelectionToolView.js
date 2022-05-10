@@ -184,7 +184,7 @@ export default class SelectionToolView extends SelectionToolEvent {
       let iconAngle = Math.floor(angle);
       this.$commands.emit(
         "refreshCursor",
-        "open_in_full",
+        "direction",
         `rotate(${iconAngle} 8 8)`
       );
     } else {

@@ -1,8 +1,7 @@
-import { CHANGE_ICON_VIEW } from "elf/editor/types/event";
-
 export default {
   command: "refreshCursor",
   execute: function (editor, iconType, ...args) {
-    editor.emit(CHANGE_ICON_VIEW, iconType, ...args);
+    editor.context.config.set("editor.cursor", iconType);
+    editor.context.config.set("editor.cursor.args", args);
   },
 };

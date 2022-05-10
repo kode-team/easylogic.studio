@@ -64,6 +64,38 @@ export class ConfigManager {
     }
   }
 
+  push(key, value) {
+    const list = this.get(key);
+
+    const lastIndex = list.length;
+
+    this.setIndexValue(key, lastIndex, value);
+
+    return lastIndex;
+  }
+
+  setIndexValue(key, index, value) {
+    const list = this.get(key);
+
+    list[index] = value;
+
+    this.set(key, [...list]);
+  }
+
+  getIndexValue(key, index) {
+    const list = this.get(key);
+
+    return list[index];
+  }
+
+  removeByIndex(key, index) {
+    const list = this.get(key);
+
+    list.splice(index, 1);
+
+    this.set(key, [...list]);
+  }
+
   init(key, value) {
     this.set(key, value, false);
   }
