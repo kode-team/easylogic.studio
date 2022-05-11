@@ -12,8 +12,16 @@ export class BaseAssetModel extends BaseModel {
     });
   }
 
+  get keyframes() {
+    return this.get("keyframes");
+  }
+
+  get svgfilters() {
+    return this.get("svgfilters");
+  }
+
   addKeyframe(keyframe) {
-    this.json.keyframes.push(keyframe);
+    this.keyframes.push(keyframe);
     return keyframe;
   }
 
@@ -27,7 +35,7 @@ export class BaseAssetModel extends BaseModel {
   }
 
   removeKeyframe(removeIndex) {
-    this.removePropertyList(this.json.keyframes, removeIndex);
+    this.removePropertyList(this.keyframes, removeIndex);
   }
 
   sortItem(arr, startIndex, targetIndex) {
@@ -39,18 +47,18 @@ export class BaseAssetModel extends BaseModel {
   }
 
   sortKeyframe(startIndex, targetIndex) {
-    this.sortItem(this.json.keyframes, startIndex, targetIndex);
+    this.sortItem(this.keyframes, startIndex, targetIndex);
   }
 
   updateKeyframe(index, data = {}) {
-    this.json.keyframes[+index].reset(data);
+    this.keyframes[+index].reset(data);
   }
 
   /**
    * `@keyframes` 문자열만 따로 생성
    */
   toKeyframeString(isAnimate = false) {
-    return this.json.keyframes
+    return this.keyframes
       .map((keyframe) => keyframe.toString(isAnimate))
       .join("\n\n");
   }
@@ -70,12 +78,12 @@ export class BaseAssetModel extends BaseModel {
     arr.splice(index, 0, copyObject);
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("svgfilters", "keyframes"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("svgfilters", "keyframes"),
+  //   };
+  // }
 
   removePropertyList(arr, removeIndex) {
     arr.splice(removeIndex, 1);
@@ -84,7 +92,7 @@ export class BaseAssetModel extends BaseModel {
   /* svg filters  */
 
   getSVGFilterIndex(id) {
-    var filter = this.json.svgfilters
+    var filter = this.svgfilters
       .map((it, index) => {
         return { id: it.id, index };
       })
@@ -96,24 +104,24 @@ export class BaseAssetModel extends BaseModel {
   }
 
   removeSVGFilter(removeIndex) {
-    this.removePropertyList(this.json.svgfilters, removeIndex);
+    this.removePropertyList(this.svgfilters, removeIndex);
   }
 
   copySVGFilter(index) {
-    this.copyPropertyList(this.json.svgfilters, index);
+    this.copyPropertyList(this.svgfilters, index);
   }
 
   sortSVGFilter(startIndex, targetIndex) {
-    this.sortItem(this.json.svgfilters, startIndex, targetIndex);
+    this.sortItem(this.svgfilters, startIndex, targetIndex);
   }
 
   setSVGFilterValue(index, value) {
-    this.json.svgfilters[index] = { ...this.json.svgfilters[index], ...value };
+    this.svgfilters[index] = { ...this.svgfilters[index], ...value };
   }
 
   addSVGFilter(obj = {}) {
-    this.json.svgfilters.push(obj);
-    var index = this.json.svgfilters.length - 1;
+    this.svgfilters.push(obj);
+    var index = this.svgfilters.length - 1;
     return index;
   }
 

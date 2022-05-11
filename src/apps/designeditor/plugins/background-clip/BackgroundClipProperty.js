@@ -25,10 +25,10 @@ export default class BackgroundClipProperty extends BaseProperty {
   [LOAD("$backgroundClip")]() {
     var current = this.$context.selection.current || {};
 
-    var clip = current["background-clip"] || "";
+    var clip = current.backgroundClip || "";
     return createComponent("SelectEditor", {
       ref: "$1",
-      key: "background-clip",
+      key: "backgroundClip",
       icon: true,
       value: clip,
       options: ["", "paddinb-box", "border-box", "content-box", "text"],

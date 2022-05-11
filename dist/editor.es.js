@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance;
+var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -421,11 +421,7 @@ class Dom {
   }
   static createByHTML(htmlString) {
     var div2 = Dom.create("div");
-    var list2 = div2.html(htmlString).children();
-    if (list2.length) {
-      return Dom.create(list2[0].el);
-    }
-    return null;
+    return div2.html(htmlString).firstChild;
   }
   static getScrollTop() {
     return Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
@@ -439,6 +435,9 @@ class Dom {
   }
   static body() {
     return Dom.create(document.body);
+  }
+  get exists() {
+    return Boolean(this.el);
   }
   setAttr(obj2) {
     Object.keys(obj2).forEach((key) => {
@@ -2311,7 +2310,7 @@ class ObserverHandler extends BaseHandler {
 const REFERENCE_PROPERTY = "ref";
 const BIND_PROPERTY = "bind";
 const LOAD_PROPERTY = "load";
-const TEMP_DIV$1 = Dom.create("div");
+const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = "refclass";
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
@@ -2342,8 +2341,14 @@ const _EventMachine = class {
   get refBindVariables() {
     return __privateGet(this, _refBindVariables);
   }
-  get _timestamp() {
+  get __timestamp() {
     return __privateWrapper(this, _localTimestamp)._++;
+  }
+  get timestamp() {
+    return __privateGet(this, _timestamp);
+  }
+  set timestamp(value) {
+    __privateSet(this, _timestamp, value);
   }
   get target() {
     return this.$el.el;
@@ -2504,7 +2509,7 @@ const _EventMachine = class {
       html = html.join("");
     }
     html = (html || "").trim();
-    const list2 = TEMP_DIV$1.html(html).childNodes || [];
+    const list2 = TEMP_DIV.html(html).childNodes || [];
     for (var i = 0, len2 = list2.length; i < len2; i++) {
       const $el = list2[i];
       var ref = $el.attr(REFERENCE_PROPERTY);
@@ -2531,7 +2536,7 @@ const _EventMachine = class {
     if (!isLoad) {
       return list2[0];
     }
-    return TEMP_DIV$1.createChildrenFragment();
+    return TEMP_DIV.createChildrenFragment();
   }
   parsePropertyInfo($dom) {
     let props = {};
@@ -2588,11 +2593,11 @@ const _EventMachine = class {
     var instance = null;
     if (this.children[refName]) {
       instance = this.children[refName];
-      __privateSet(instance, _timestamp, __privateGet(this, _localTimestamp));
+      instance.timestamp = this.__timestamp;
       instance._reload(props);
     } else {
       instance = this.createInstanceForComponent(component2, $dom.$parent.el, props);
-      __privateSet(instance, _timestamp, __privateGet(this, _localTimestamp));
+      instance.timestamp = this.__timestamp;
       this.children[refName || instance.id] = instance;
       if (isFunction(instance.render)) {
         await instance.render();
@@ -2660,7 +2665,7 @@ const _EventMachine = class {
       }
     }));
     keyEach(this.children, (key, child) => {
-      if (__privateGet(child, _timestamp) !== __privateGet(this, _localTimestamp)) {
+      if (child.timestamp !== this.__timestamp) {
         child.clean();
       }
     });
@@ -2672,8 +2677,8 @@ const _EventMachine = class {
           child.clean();
         }
       });
+      console.log("clean", this.sourceName);
       this.destroy();
-      this.$el = null;
       return true;
     }
   }
@@ -2681,7 +2686,7 @@ const _EventMachine = class {
     this.load();
   }
   async _afterLoad() {
-    this._timestamp;
+    this.__timestamp;
     this.runHandlers("initialize");
     await this.bindData();
     await this.parseComponent();
@@ -2749,6 +2754,7 @@ const _EventMachine = class {
     this.render($parent);
   }
   destroy() {
+    console.log(this.sourceName, "destroy");
     this.eachChildren((childComponent) => {
       childComponent.destroy();
     });
@@ -3698,7 +3704,7 @@ function perspectiveNO(out, fovy, aspect2, near, far) {
   }
   return out;
 }
-var perspective$1 = perspectiveNO;
+var perspective = perspectiveNO;
 function create$3() {
   var out = new ARRAY_TYPE(3);
   if (ARRAY_TYPE != Float32Array) {
@@ -4124,6 +4130,7 @@ const END = (method = "end") => {
 const UPDATE_VIEWPORT = "updateViewport";
 const TOGGLE_FULLSCREEN = "toggle.fullscreen";
 const REFRESH_SELECTION = "refreshSelection";
+const REFRESH_SELECTION_TOOL = "refreshSelectionTool";
 const REFRESH_CONTENT = "refreshContent";
 const SHOW_COMPONENT_POPUP = "showComponentPopup";
 const SHOW_NOTIFY = "showNotify";
@@ -5662,7 +5669,7 @@ var __glob_0_118$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.define
   "default": layers
 }, Symbol.toStringTag, { value: "Module" }));
 var layout_default = _icon_template(`<path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm4-8H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"/>`);
-var __glob_0_119$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": layout_default
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6353,7 +6360,7 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$6, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119$1, "./icon_list/layout_flex.js": __glob_0_120, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$6, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119, "./icon_list/layout_flex.js": __glob_0_120, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
 const obj$3 = {};
 Object.entries(modules$7).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -6836,11 +6843,11 @@ function calculateAngle(rx, ry) {
 function calculateAngleForVec3(point2, center2, dist2) {
   return calculateAnglePointDistance({ x: point2[0], y: point2[1] }, { x: center2[0], y: center2[1] }, { dx: dist2[0], dy: dist2[1] });
 }
-function calculateRotationOriginMat4(angle, origin2) {
+function calculateRotationOriginMat4(angle, origin) {
   const view = create$4();
-  translate(view, view, origin2);
+  translate(view, view, origin);
   rotateZ(view, view, degreeToRadian(angle));
-  translate(view, view, negate([], origin2));
+  translate(view, view, negate([], origin));
   return view;
 }
 function calculateMatrix(...args2) {
@@ -10403,7 +10410,7 @@ class TransformOriginCache {
   }
 }
 class TransformOrigin {
-  static parseStyle(transformOrigin = "50% 50% 0%") {
+  static parseStyle(transformOrigin = "50% 50% 0px") {
     if (TransformOriginCache.has(transformOrigin)) {
       return TransformOriginCache.get(transformOrigin);
     }
@@ -10579,8 +10586,8 @@ function polyPoly(verties = [], targetVerties = [], withoutPoint = false) {
     return false;
   });
 }
-function rectToVerties(x, y, width2, height2, origin2 = "50% 50% 0px") {
-  const center2 = TransformOrigin.scale(origin2, width2, height2);
+function rectToVerties(x, y, width2, height2, origin = "50% 50% 0px") {
+  const center2 = TransformOrigin.scale(origin, width2, height2);
   return [
     [x, y, 0],
     [x + width2, y, 0],
@@ -13512,7 +13519,7 @@ class DirectionLength {
     return [temp.length, top2, right2, bottom2, left2];
   }
 }
-const typeList$3 = [
+const typeList$2 = [
   { key: "top", title: "Top" },
   { key: "right", title: "Right" },
   { key: "bottom", title: "Bottom" },
@@ -13535,7 +13542,7 @@ class DirectionEditor extends EditorElement {
   }
   [SUBSCRIBE("changeBorderRadius")](key, value) {
     if (key === "all") {
-      typeList$3.forEach((it) => {
+      typeList$2.forEach((it) => {
         this.state[it.key] = value.clone();
         this.children[`$${it.key}`].setValue(value.clone());
       });
@@ -13571,7 +13578,7 @@ class DirectionEditor extends EditorElement {
         style="${display}"
       >
         <div class="radius-setting-box">
-          ${typeList$3.map((it) => {
+          ${typeList$2.map((it) => {
       var value = this.state[it.key];
       return `
               <div>
@@ -18248,7 +18255,7 @@ class BackgroundImage extends PropertyItem {
   toCloneObject() {
     var json = this.json;
     return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("checked", "blendMode", "size", "repeat", "width", "height", "x", "y")), {
-      image: json.image.clone()
+      image: json.image.toString()
     });
   }
   convert(json) {
@@ -18574,6 +18581,9 @@ class BackgroundImage extends PropertyItem {
   }
   static joinCSS(list2) {
     return BackgroundImage.toCSS(list2.map((it) => BackgroundImage.parse(it)));
+  }
+  static parseList(list2 = []) {
+    return list2.map((it) => BackgroundImage.parse(it));
   }
 }
 class GradientEditor extends EditorElement {
@@ -23003,7 +23013,12 @@ var add_rect = {
   category: "Tool",
   key: "r",
   command: "addLayerView",
-  args: ["rect"],
+  args: [
+    "rect",
+    {
+      backgroundColor: "gray"
+    }
+  ],
   description: "Add rect layer",
   when: "CanvasView"
 };
@@ -23824,12 +23839,12 @@ class ViewportManager {
     if (!this.canvasSize) {
       return create$3();
     }
-    const origin2 = {
+    const origin = {
       x: x - this.canvasSize.x,
       y: y - this.canvasSize.y
     };
-    const mouseX = this.verties[0][0] + (this.verties[2][0] - this.verties[0][0]) * (origin2.x / this.canvasSize.width);
-    const mouseY = this.verties[0][1] + (this.verties[2][1] - this.verties[0][1]) * (origin2.y / this.canvasSize.height);
+    const mouseX = this.verties[0][0] + (this.verties[2][0] - this.verties[0][0]) * (origin.x / this.canvasSize.width);
+    const mouseY = this.verties[0][1] + (this.verties[2][1] - this.verties[0][1]) * (origin.y / this.canvasSize.height);
     return [mouseX, mouseY, 0];
   }
   setMousePoint(x, y) {
@@ -24714,7 +24729,7 @@ class PopupManager extends EditorElement {
   template() {
     return /* @__PURE__ */ createElementJsx("div", {
       class: "elf--popup-manager"
-    }, createComponent("ExportWindow"), createComponent("EmbedEditorWindow"), createComponent("ProjectWindow"), createComponent("ShortcutWindow"), createComponent("NotificationView"), this.$injectManager.generate("popup"));
+    }, createComponent("ExportWindow"), createComponent("EmbedEditorWindow"), createComponent("ProjectWindow"), createComponent("ShortcutWindow"), createComponent("NotificationView"), this.$injectManager.generate("popup", true));
   }
 }
 class BlankEditor extends BaseLayout {
@@ -25965,17 +25980,17 @@ class ModelManager {
   recover(id) {
     const obj2 = this.items.get(id);
     const parent = this.getParent(id);
-    if (!obj2.removedLeftSibling && obj2.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex(() => obj2.removedRightSibling) - 1, 0, id);
-    } else if (obj2.removedLeftSibling && !obj2.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex(() => obj2.removedLeftSibling) + 1, 0, id);
+    if (!obj2.get("removedLeftSibling") && obj2.get("removedRightSibling")) {
+      parent.children.splice(parent.children.findIndex(() => obj2.get("removedRightSibling")) - 1, 0, id);
+    } else if (obj2.get("removedLeftSibling") && !obj2.get("removedRightSibling")) {
+      parent.children.splice(parent.children.findIndex(() => obj2.get("removedLeftSibling")) + 1, 0, id);
     } else {
-      parent.children.splice(obj2.removedIndex, 0, id);
+      parent.children.splice(obj2.get("removedIndex"), 0, id);
     }
-    delete obj2.removed;
-    delete obj2.removedLeftSibling;
-    delete obj2.removedRightSibling;
-    delete obj2.removedIndex;
+    obj2.removeField("removed");
+    obj2.removeField("removedLeftSibling");
+    obj2.removeField("removedRightSibling");
+    obj2.removeField("removedIndex");
     this.setChanged("recover", id);
   }
   clear() {
@@ -26122,10 +26137,10 @@ class ModelManager {
     }
     return results;
   }
-  getLayers(rootId, defaultRef = null) {
+  getLayers(rootId) {
     var _a;
-    const obj2 = this.get(rootId) || defaultRef;
-    return (_a = obj2 == null ? void 0 : obj2.children) == null ? void 0 : _a.map((childId) => this.get(childId));
+    const obj2 = this.get(rootId);
+    return ((_a = obj2 == null ? void 0 : obj2.children) == null ? void 0 : _a.map((childId) => this.get(childId))) || [];
   }
   eachLayers(rootId, callback) {
     const obj2 = this.get(rootId);
@@ -28839,6 +28854,15 @@ class SnapManager {
     const newPos = add$1([], snap.dist, pos);
     return newPos;
   }
+  getSnapTarget() {
+    const pos = round$2([], this.context.viewport.getWorldPosition());
+    const snap = this.check([pos], 3 / this.context.viewport.scale);
+    const newPos = add$1([], snap.dist, pos);
+    return {
+      vertex: newPos,
+      snap
+    };
+  }
 }
 class TimelineSelectionManager {
   constructor(editor) {
@@ -29992,22 +30016,22 @@ function appearance(editor) {
             size: [1, 1],
             columns: [
               {
-                key: "background-color",
+                key: "backgroundColor",
                 editor: "color-view",
                 editorOptions: {
                   compact: true,
                   format: true
                 },
-                defaultValue: current["background-color"]
+                defaultValue: current.backgroundColor
               },
               {
-                key: "mix-blend-mode",
+                key: "mixBlendMode",
                 editor: "blend-select",
                 editorOptions: {
                   label: "tonality",
                   compact: true
                 },
-                defaultValue: current["mix-blend-mode"] || "normal"
+                defaultValue: current.mixBlendMode || BlendMode.NORMAL
               }
             ]
           },
@@ -30028,7 +30052,7 @@ function appearance(editor) {
                 };
               })
             },
-            defaultValue: current["overflow"]
+            defaultValue: current.overflow
           }
         ];
       }
@@ -30116,7 +30140,7 @@ class ArtBoardSizeProperty extends BaseProperty {
     return "elf--artboard-size-list";
   }
   get editableProperty() {
-    return "artboard-size";
+    return "artboardSize";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
     this.refresh();
@@ -30165,7 +30189,7 @@ class ArtBoardSizeProperty extends BaseProperty {
   }
   [CLICK("$list .device-item")](e) {
     var size2 = e.$dt.attr("data-size");
-    this.$command.emit("resizeArtBoard", size2);
+    this.$commands.emit("resizeArtBoard", size2);
   }
   makeGroup(group2) {
     return `
@@ -30265,12 +30289,12 @@ class BackdropFilterProperty extends BaseProperty {
   }
   [LOAD("$body")]() {
     var current = this.$context.selection.current || {};
-    var value = current["backdrop-filter"];
+    var value = current.backdropFilter;
     return `
       <div>
         ${createComponent("FilterEditor", {
       ref: "$filterEditor",
-      key: "backdrop-filter",
+      key: "backdropFilter",
       value,
       hideLabel: true,
       onchange: "changeFilterEditor"
@@ -30284,7 +30308,7 @@ class BackdropFilterProperty extends BaseProperty {
     }));
   }
   get editableProperty() {
-    return "backdrop-filter";
+    return "backdropFilter";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow") + DEBOUNCE(1e3)]() {
     this.refresh();
@@ -30307,10 +30331,10 @@ class BackgroundClipProperty extends BaseProperty {
   }
   [LOAD("$backgroundClip")]() {
     var current = this.$context.selection.current || {};
-    var clip = current["background-clip"] || "";
+    var clip = current.backgroundClip || "";
     return createComponent("SelectEditor", {
       ref: "$1",
-      key: "background-clip",
+      key: "backgroundClip",
       icon: true,
       value: clip,
       options: ["", "paddinb-box", "border-box", "content-box", "text"],
@@ -30721,33 +30745,34 @@ class BackgroundImageProperty extends BaseProperty {
   }
   [LOAD("$property")]() {
     var current = this.$context.selection.current || {};
-    var value = current["background-image"] || "";
+    var value = current.backgroundImage || "";
     return createComponent("BackgroundImageEditor", {
       ref: "$backgroundImageEditor",
-      key: "background-image",
+      key: "backgroundImage",
       value,
       onchange: "changeBackgroundImage"
     });
   }
   get editableProperty() {
-    return "background-image";
+    return "backgroundImage";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
     this.refresh();
   }
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  checkCurrentItem(item) {
+    return this.$context.selection.current === item;
+  }
+  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkCurrentItem") + DEBOUNCE(100)]() {
     if (this.$context.selection.current) {
-      if (this.$context.selection.hasChangedField("background-image")) {
+      if (this.$context.selection.hasChangedField("backgroundImage")) {
         this.refresh();
       }
     }
   }
   [SUBSCRIBE_SELF("changeBackgroundImage")](key, value) {
-    this.nextTick(() => {
-      this.$commands.executeCommand("setAttribute", "change background image", this.$context.selection.packByValue({
-        [key]: value
-      }));
-    }, 10);
+    this.$commands.executeCommand("setAttribute", "change background image", this.$context.selection.packByValue({
+      [key]: value
+    }));
   }
 }
 var BackgroundPositionEditor$1 = "";
@@ -30945,7 +30970,7 @@ class BorderProperty extends BaseProperty {
   }
   [LOAD("$body")]() {
     var current = this.$context.selection.current || {};
-    var value = current["border"] || "";
+    var value = current.border || "";
     return createComponent("BorderEditor", {
       ref: "$1",
       key: "border",
@@ -31053,13 +31078,13 @@ function border(editor) {
     BorderProperty
   });
 }
-const typeList$2 = [
+const typeList$1 = [
   { key: "top", title: "Top" },
   { key: "bottom", title: "Bottom" },
   { key: "left", title: "Left" },
   { key: "right", title: "Right" }
 ];
-const keyList$2 = typeList$2.map((it) => it.key);
+const keyList$1 = typeList$1.map((it) => it.key);
 const names = {
   image: "Image",
   "static-gradient": "Static",
@@ -31136,7 +31161,7 @@ class BorderImageProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeBorderImage")](key, value) {
     if (key === "border-image-slice") {
-      keyList$2.forEach((type) => {
+      keyList$1.forEach((type) => {
         this.children[`$${type}Slice`].setValue(value);
       });
     }
@@ -31166,7 +31191,7 @@ class BorderImageProperty extends BaseProperty {
         style="display: none;"
       >
         <div class="slice-setting-box" ref="$sliceSettingBox">
-          ${typeList$2.map((it) => {
+          ${typeList$1.map((it) => {
       return `
               <div>
                 <label class='title'>${it.title}</label>
@@ -31332,7 +31357,7 @@ class BorderImageProperty extends BaseProperty {
         }
       });
     } else {
-      keyList$2.forEach((type2) => {
+      keyList$1.forEach((type2) => {
         borderImage2.slice[type2] = this.children[`$${type2}Slice`].getValue();
         borderImage2.width[type2] = this.children[`$${type2}Width`].getValue();
       });
@@ -31384,13 +31409,13 @@ class BorderRadius {
     return obj2;
   }
 }
-const typeList$1 = [
+const typeList = [
   { key: "border-top-left-radius", title: "topLeft", label: "TL" },
   { key: "border-top-right-radius", title: "topRight", label: "TR" },
   { key: "border-bottom-left-radius", title: "bottomLeft", label: "BL" },
   { key: "border-bottom-right-radius", title: "bottomRight", label: "BR" }
 ];
-const keyList$1 = typeList$1.map((it) => it.key);
+const keyList = typeList.map((it) => it.key);
 const BorderGroup = {
   ALL: "all",
   PARTITIAL: "partial"
@@ -31404,7 +31429,7 @@ class BorderRadiusEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeBorderRadius")](key, value) {
     if (key === "border-radius") {
-      keyList$1.forEach((type) => {
+      keyList.forEach((type) => {
         this.children[`$${type}`].setValue(value.clone());
       });
     }
@@ -31445,7 +31470,7 @@ class BorderRadiusEditor extends EditorElement {
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           <div>
-            ${typeList$1.map((it) => {
+            ${typeList.map((it) => {
       var value = this.state[it.key];
       var title2 = this.$i18n("border.radius.editor." + it.title);
       var label = it.label;
@@ -31481,7 +31506,7 @@ class BorderRadiusEditor extends EditorElement {
     if (type === BorderGroup.ALL) {
       this.state["border-radius"] = this.children[`$all`].getValue();
     } else {
-      keyList$1.forEach((key) => {
+      keyList.forEach((key) => {
         this.state[key] = this.children[`$${key}`].getValue();
       });
     }
@@ -31492,7 +31517,7 @@ class BorderRadiusEditor extends EditorElement {
     if (this.selectedValue === BorderGroup.ALL) {
       value = this.state["border-radius"] + "";
     } else {
-      value = keyList$1.map((key) => `${this.state[key]}`).join(" ");
+      value = keyList.map((key) => `${this.state[key]}`).join(" ");
     }
     this.parent.trigger(this.props.onchange, value);
   }
@@ -31517,7 +31542,7 @@ class BorderRadiusProperty extends BaseProperty {
   }
   [LOAD("$body")]() {
     var current = this.$context.selection.current || {};
-    var value = current["border-radius"] || "";
+    var value = current.borderRadius || "0px";
     return createComponent("BorderRadiusEditor", {
       ref: "$1",
       value,
@@ -31525,14 +31550,16 @@ class BorderRadiusProperty extends BaseProperty {
     });
   }
   get editableProperty() {
-    return "border-radius";
+    return "borderRadius";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
-    this.refresh();
+    if (this.$context.selection.hasChangedField("borderRadius")) {
+      this.refresh();
+    }
   }
   [SUBSCRIBE_SELF("changeBorderRadius")](value) {
     this.$commands.executeCommand("setAttribute", "change border radius", this.$context.selection.packByValue({
-      "border-radius": value
+      borderRadius: value
     }));
   }
 }
@@ -31555,12 +31582,15 @@ class BoxModelProperty extends BaseProperty {
     return this.$i18n("box.model.property.title");
   }
   get editableProperty() {
-    return "box-model-block";
+    return "boxModel";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
     this.refresh();
   }
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  checkCurrentItem(item) {
+    return this.$context.selection.current === item;
+  }
+  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkCurrentItem") + DEBOUNCE(100)]() {
     const current = this.$context.selection.current;
     if (current == null ? void 0 : current.hasChangedField("padding-left", "padding-right", "padding-top", "padding-bottom")) {
       this.refresh();
@@ -31711,8 +31741,8 @@ class BoxShadowProperty extends BaseProperty {
     var current = this.$context.selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
-      key: "box-shadow",
-      value: current["box-shadow"],
+      key: "boxShadow",
+      value: current.boxShadow,
       onchange: (key, value) => {
         this.$commands.executeCommand("setAttribute", "change box shadow", this.$context.selection.packByValue({
           [key]: value
@@ -31721,7 +31751,7 @@ class BoxShadowProperty extends BaseProperty {
     });
   }
   get editableProperty() {
-    return "box-shadow";
+    return "boxShadow";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
     this.refresh();
@@ -32005,7 +32035,7 @@ class ClipPathProperty extends BaseProperty {
     if (!current)
       return;
     this.$commands.executeCommand("setAttribute", "delete clip-path", this.$context.selection.packByValue({
-      "clip-path": ""
+      clipPath: ""
     }));
     this.emit("hideClipPathPopup");
     window.setTimeout(() => {
@@ -32013,7 +32043,7 @@ class ClipPathProperty extends BaseProperty {
     }, 100);
   }
   get editableProperty() {
-    return "clip-path";
+    return "clipPath";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
     this.refresh();
@@ -32022,23 +32052,23 @@ class ClipPathProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return "";
-    if (!current["clip-path"])
+    if (!current.clipPath)
       return "";
-    return this.makeClipPathTemplate(current["clip-path"].split("(")[0], current["clip-path"]);
+    return this.makeClipPathTemplate(current.clipPath.split("(")[0], current.clipPath);
   }
   [CLICK("$tools [data-value]")](e) {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    if (current["clip-path"]) {
+    if (current.clipPath) {
       window.alert("clip-path is already exists.");
       return;
     }
     if (current) {
       current.reset({
-        "clip-path": ClipPathSample[e.$dt.data("value")]
+        clipPath: ClipPathSample[e.$dt.data("value")]
       });
-      this.$commands.executeCommand("setAttribute", "change clip-path", this.$context.selection.pack("clip-path"));
+      this.$commands.executeCommand("setAttribute", "change clipPath", this.$context.selection.pack("clipPath"));
     }
     this.refresh();
   }
@@ -32046,7 +32076,7 @@ class ClipPathProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    var obj2 = ClipPath.parseStyle(current["clip-path"]);
+    var obj2 = ClipPath.parseStyle(current.clipPath);
     switch (obj2.type) {
       case "path":
         var d = current.absolutePath(current.clipPathString).d;
@@ -32055,7 +32085,7 @@ class ClipPathProperty extends BaseProperty {
           changeEvent: (data) => {
             data.d = current.invertPath(data.d).d;
             this.updatePathInfo({
-              "clip-path": `path(${data.d})`
+              clipPath: `path(${data.d})`
             });
           },
           current,
@@ -32072,7 +32102,7 @@ class ClipPathProperty extends BaseProperty {
       return;
     current.reset(data);
     this.refresh();
-    this.$commands.executeCommand("setAttribute", "change clip-path", this.$context.selection.packByValue(data));
+    this.$commands.executeCommand("setAttribute", "change clipPath", this.$context.selection.packByValue(data));
   }
 }
 function clipPath(editor) {
@@ -32707,7 +32737,7 @@ class ClippathEditorView$1 extends ClippathEllipseEditorView {
       return false;
     return this.$context.selection.current.hasChangedField("clip-path", "angle", "x", "y", "width", "height");
   }
-  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkClipPath")]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkClipPath") + DEBOUNCE(10)]() {
     this.refresh();
   }
   [CLICK("$el")](e) {
@@ -32825,7 +32855,7 @@ var addBackgroundColor = {
   command: "addBackgroundColor",
   execute: function(editor, color2, id = null) {
     editor.context.commands.executeCommand("setAttribute", "add background color", editor.context.selection.packByValue({
-      "background-color": color2
+      backgroundColor: color2
     }, id));
   }
 };
@@ -32839,7 +32869,7 @@ var addBackgroundImageAsset = {
     var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
-      let images = BackgroundImage.parseStyle(STRING_TO_CSS(item["background-image"]));
+      let images = BackgroundImage.parseStyle(STRING_TO_CSS(item.backgroundImage));
       images.unshift(new BackgroundImage({
         image: new URLImageResource({ url })
       }));
@@ -32860,7 +32890,7 @@ var addBackgroundImageGradient = {
     var items = editor.context.selection.itemsByIds(id);
     let itemsMap = {};
     items.forEach((item) => {
-      let images = BackgroundImage.parseStyle(STRING_TO_CSS(item["background-image"]));
+      let images = BackgroundImage.parseStyle(STRING_TO_CSS(item.backgroundImage));
       images.unshift(new BackgroundImage({
         image: BackgroundImage.parseImage(gradient2)
       }));
@@ -33599,7 +33629,7 @@ var convert_path_operation = {
       return;
     const changeBooleanOperation = (booleanOperation2) => {
       editor.context.commands.executeCommand("setAttribute", "change boolean operation", editor.context.selection.packByValue({
-        "boolean-operation": booleanOperation2
+        booleanOperation: booleanOperation2
       }));
       recoverBooleanPath2();
     };
@@ -34816,7 +34846,7 @@ var convertPasteText = {
         y: center2[1] - height2 / 2,
         width: width2,
         height: height2,
-        "background-color": "transparent",
+        backgroundColor: "transparent",
         url: embedUrl
       });
     }
@@ -34837,14 +34867,14 @@ function convertPath(editor, pathString2, rect2 = null) {
         d = parser.d;
       }
       editor.context.commands.executeCommand("setAttribute", "set attribute -d", editor.context.selection.packByValue({ d }, current.id));
-    } else if (current["clip-path"].includes("path")) {
+    } else if (current.clipPath.includes("path")) {
       var d = pathString2;
       if (rect2) {
         var parser = new PathParser(pathString2);
         parser.scale(current.width / rect2.width, current.height / rect2.height);
         d = parser.d;
       }
-      editor.context.commands.executeCommand("setAttribute", "change clip path", editor.context.selection.packByValue({ "clip-path": `path(${d})` }, current.id));
+      editor.context.commands.executeCommand("setAttribute", "change clip path", editor.context.selection.packByValue({ clipPath: `path(${d})` }, current.id));
     }
   }
 }
@@ -35351,7 +35381,7 @@ var history_bring_forward = {
     const oldParentLayer = currentLayer.parent;
     let currentValues = {};
     let nextParentLayer = null;
-    if (currentLayer.isLast()) {
+    if (currentLayer.isLast) {
       nextParentLayer = oldParentLayer.next;
       if (nextParentLayer.enableHasChildren()) {
         nextParentLayer.appendChild(currentLayer);
@@ -35406,7 +35436,7 @@ var history_bring_front = {
     const lastValues = currentLayer.hierachy;
     const oldParentLayer = currentLayer.parent;
     let currentValues = {};
-    if (currentLayer.isLast()) {
+    if (currentLayer.isLast) {
       return;
     } else {
       currentLayer.parent.bringFront(currentLayer.id);
@@ -36107,21 +36137,21 @@ var __glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
 function newComponent(editor, itemType, obj2, isSelected = true, containerItem = void 0) {
   if (itemType === "svg-textpath") {
     obj2 = __spreadProps(__spreadValues({}, obj2), {
-      "font-size": obj2.height,
+      fontSize: obj2.height,
       textLength: "100%",
       d: PathParser.makeLine(0, obj2.height, obj2.width, obj2.height).d
     });
   } else if (itemType === "svg-circle") {
     itemType = "svg-path";
     obj2 = __spreadProps(__spreadValues({}, obj2), {
-      "background-color": void 0,
+      backgroundColor: void 0,
       fill: `#C4C4C4`,
       d: PathParser.makeCircle(0, 0, obj2.width, obj2.height).d
     });
   } else if (itemType === "svg-rect") {
     itemType = "svg-path";
     obj2 = __spreadProps(__spreadValues({}, obj2), {
-      "background-color": void 0,
+      backgroundColor: void 0,
       fill: `#C4C4C4`,
       d: PathParser.makeRect(0, 0, obj2.width, obj2.height).d
     });
@@ -36132,7 +36162,7 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
     }, obj2);
   } else if (itemType === "artboard") {
     obj2 = __spreadProps(__spreadValues({}, obj2), {
-      "background-color": "white"
+      backgroundColor: "white"
     });
   }
   const newObjAttrs = __spreadValues({ itemType }, obj2);
@@ -36221,8 +36251,8 @@ var open_editor = {
           }
         });
         editor.emit("hideSelectionToolView");
-      } else if (current["clip-path"]) {
-        var obj2 = ClipPath.parseStyle(current["clip-path"]);
+      } else if (current.clipPath) {
+        var obj2 = ClipPath.parseStyle(current.clipPath);
         if (obj2.type === "path") {
           var d = current.absolutePath(current.clipPathString).d;
           var mode = d ? "modify" : "path";
@@ -36230,7 +36260,7 @@ var open_editor = {
             changeEvent: (data) => {
               const resultPath = current.invertPath(data.d).d;
               editor.context.commands.executeCommand("setAttribute", "change clip-path", editor.context.selection.packByValue({
-                "clip-path": `path(${resultPath})`
+                clipPath: `path(${resultPath})`
               }));
             },
             current,
@@ -36374,7 +36404,6 @@ var refreshArtboard = {
     const command = editor.createCommandMaker();
     command.emit("refreshLayerTreeView");
     command.emit("refreshAllCanvas");
-    command.emit("refreshStyleView");
     command.emit(UPDATE_CANVAS);
     command.emit("refreshAllElementBoundSize");
     command.emit(REFRESH_SELECTION);
@@ -36419,13 +36448,6 @@ var __glob_0_80 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": refreshHistory
 }, Symbol.toStringTag, { value: "Module" }));
-function refreshProject(editor, current) {
-  editor.emit("refreshStyleView", current, true);
-}
-var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": refreshProject
-}, Symbol.toStringTag, { value: "Module" }));
 var refreshSelectedOffset = {
   command: "refreshSelectedOffset",
   execute: function(editor) {
@@ -36435,7 +36457,7 @@ var refreshSelectedOffset = {
     }
   }
 };
-var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshSelectedOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36451,7 +36473,7 @@ var removeAnimationItem = {
     }
   }
 };
-var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeAnimationItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36470,7 +36492,7 @@ var removeLayer = {
     });
   }
 };
-var __glob_0_84 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36486,7 +36508,7 @@ var removeTimeline = {
     }
   }
 };
-var __glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_84 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimeline
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36502,7 +36524,7 @@ var removeTimelineProperty = {
     }
   }
 };
-var __glob_0_86 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36514,12 +36536,12 @@ function resizeArtBoard(editor, size2 = "") {
     var [width2, height2] = size2.split("x");
     width2 = +width2;
     height2 = +height2;
-    current.reset({ width: width2, height: height2 });
+    current.resize(width2, height2);
     editor.context.selection.select(current);
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_86 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": resizeArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36532,7 +36554,7 @@ var rotateLayer = {
     }));
   }
 };
-var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": rotateLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36552,7 +36574,7 @@ var same_height = {
     }
   }
 };
-var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_height
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36569,7 +36591,7 @@ var same_width = {
     }
   }
 };
-var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_width
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36579,7 +36601,7 @@ var saveJSON = {
     editor.saveItem("model", editor.context.modelManager.toJSON());
   }
 };
-var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": saveJSON
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36600,7 +36622,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": savePNG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36610,7 +36632,7 @@ var segment_delete = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_delete
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36621,7 +36643,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36632,7 +36654,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36643,7 +36665,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36654,7 +36676,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36668,7 +36690,7 @@ var select_all = {
     }
   }
 };
-var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": select_all
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36683,7 +36705,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": selectTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36742,7 +36764,7 @@ var setAttribute = {
     }
   }
 };
-var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setAttribute
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36757,7 +36779,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setTimelineOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36767,7 +36789,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": showExportView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36792,7 +36814,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_bottom
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36816,7 +36838,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36841,7 +36863,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36865,7 +36887,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_middle
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36890,7 +36912,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36915,7 +36937,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_top
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36932,7 +36954,7 @@ var switch_path = {
       }
       editor.context.selection.select(parent);
       editor.context.commands.executeCommand("setAttribute", "change boolean operation", editor.context.selection.packByValue({
-        "boolean-operation": parent["boolean-operation"],
+        booleanOperation: parent["boolean-operation"],
         children: parent.children.reverse()
       }));
       editor.nextTick(() => {
@@ -36943,7 +36965,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": switch_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36965,7 +36987,7 @@ var ungroup_item = {
     }
   }
 };
-var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ungroup_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36974,11 +36996,11 @@ var updateClipPath = {
   description: "update clip-path property ",
   execute: function(editor, pathObject) {
     editor.context.commands.executeCommand("setAttribute", "change clip-path", editor.context.selection.packByValue({
-      "clip-path": `path(${pathObject.d})`
+      clipPath: `path(${pathObject.d})`
     }));
   }
 };
-var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateClipPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37000,7 +37022,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37027,7 +37049,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37281,7 +37303,7 @@ class Transform extends PropertyItem {
           break;
         case "perspective":
           var values = it.value;
-          perspective$1(view, Math.PI * 0.5, width2 / height2, 1, values[0].value);
+          perspective(view, Math.PI * 0.5, width2 / height2, 1, values[0].value);
           break;
       }
     }
@@ -37333,7 +37355,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updatePathItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37362,7 +37384,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateResource
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37406,7 +37428,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateUriList
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37428,7 +37450,7 @@ var updateVideo = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37455,7 +37477,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37464,19 +37486,21 @@ var update = {
   description: "Update the model",
   execute: function(editor, id = null, attrs = {}, context = { origin: "*" }) {
     const item = editor.get(id);
+    console.log(item);
     if (item) {
       const isChanged = item.reset(attrs, context);
+      console.log(item, attrs, isChanged);
       if (isChanged) {
         editor.context.commands.emit("refreshElement", item);
       }
     }
   }
 };
-var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21$1, "./command_list/clipboard.copy.js": __glob_0_22$1, "./command_list/clipboard.paste.js": __glob_0_23$1, "./command_list/convert.flatten.path.js": __glob_0_24$1, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshElement.js": __glob_0_79, "./command_list/refreshHistory.js": __glob_0_80, "./command_list/refreshProject.js": __glob_0_81, "./command_list/refreshSelectedOffset.js": __glob_0_82, "./command_list/removeAnimationItem.js": __glob_0_83, "./command_list/removeLayer.js": __glob_0_84, "./command_list/removeTimeline.js": __glob_0_85, "./command_list/removeTimelineProperty.js": __glob_0_86, "./command_list/resizeArtBoard.js": __glob_0_87, "./command_list/rotateLayer.js": __glob_0_88, "./command_list/same.height.js": __glob_0_89, "./command_list/same.width.js": __glob_0_90, "./command_list/saveJSON.js": __glob_0_91, "./command_list/savePNG.js": __glob_0_92, "./command_list/segment.delete.js": __glob_0_93, "./command_list/segment.move.down.js": __glob_0_94, "./command_list/segment.move.left.js": __glob_0_95, "./command_list/segment.move.right.js": __glob_0_96, "./command_list/segment.move.up.js": __glob_0_97, "./command_list/select.all.js": __glob_0_98, "./command_list/selectTimelineItem.js": __glob_0_99, "./command_list/setAttribute.js": __glob_0_100, "./command_list/setTimelineOffset.js": __glob_0_101, "./command_list/showExportView.js": __glob_0_102, "./command_list/sort.bottom.js": __glob_0_103, "./command_list/sort.center.js": __glob_0_104, "./command_list/sort.left.js": __glob_0_105, "./command_list/sort.middle.js": __glob_0_106, "./command_list/sort.right.js": __glob_0_107, "./command_list/sort.top.js": __glob_0_108, "./command_list/switch.path.js": __glob_0_109, "./command_list/ungroup.item.js": __glob_0_110, "./command_list/updateClipPath.js": __glob_0_111, "./command_list/updateImage.js": __glob_0_112, "./command_list/updateImageAssetItem.js": __glob_0_113, "./command_list/updatePathItem.js": __glob_0_114, "./command_list/updateResource.js": __glob_0_115, "./command_list/updateUriList.js": __glob_0_116, "./command_list/updateVideo.js": __glob_0_117, "./command_list/updateVideoAssetItem.js": __glob_0_118, "./command_list/model/update.js": __glob_0_119 };
+const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21$1, "./command_list/clipboard.copy.js": __glob_0_22$1, "./command_list/clipboard.paste.js": __glob_0_23$1, "./command_list/convert.flatten.path.js": __glob_0_24$1, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.group.item.js": __glob_0_51, "./command_list/history.moveLayer.js": __glob_0_52, "./command_list/history.moveLayerToTarget.js": __glob_0_53, "./command_list/history.refreshSelection.js": __glob_0_54, "./command_list/history.refreshSelectionProject.js": __glob_0_55, "./command_list/history.removeLayer.js": __glob_0_56, "./command_list/history.removeProject.js": __glob_0_57, "./command_list/history.send.back.js": __glob_0_58, "./command_list/history.send.backward.js": __glob_0_59, "./command_list/history.setAttribute.js": __glob_0_60, "./command_list/item.move.depth.down.js": __glob_0_61, "./command_list/item.move.depth.first.js": __glob_0_62, "./command_list/item.move.depth.last.js": __glob_0_63, "./command_list/item.move.depth.up.js": __glob_0_64, "./command_list/keymap.keydown.js": __glob_0_65, "./command_list/lastTimelineItem.js": __glob_0_66, "./command_list/load.json.js": __glob_0_67, "./command_list/moveLayer.js": __glob_0_68, "./command_list/moveLayerForItems.js": __glob_0_69, "./command_list/moveSelectionToCenter.js": __glob_0_70, "./command_list/newComponent.js": __glob_0_71, "./command_list/nextTimelineItem.js": __glob_0_72, "./command_list/open.editor.js": __glob_0_73, "./command_list/pauseTimelineItem.js": __glob_0_74, "./command_list/playTimelineItem.js": __glob_0_75, "./command_list/prevTimelineItem.js": __glob_0_76, "./command_list/recoverBooleanPath.js": __glob_0_77, "./command_list/refreshArtboard.js": __glob_0_78, "./command_list/refreshElement.js": __glob_0_79, "./command_list/refreshHistory.js": __glob_0_80, "./command_list/refreshSelectedOffset.js": __glob_0_81, "./command_list/removeAnimationItem.js": __glob_0_82, "./command_list/removeLayer.js": __glob_0_83, "./command_list/removeTimeline.js": __glob_0_84, "./command_list/removeTimelineProperty.js": __glob_0_85, "./command_list/resizeArtBoard.js": __glob_0_86, "./command_list/rotateLayer.js": __glob_0_87, "./command_list/same.height.js": __glob_0_88, "./command_list/same.width.js": __glob_0_89, "./command_list/saveJSON.js": __glob_0_90, "./command_list/savePNG.js": __glob_0_91, "./command_list/segment.delete.js": __glob_0_92, "./command_list/segment.move.down.js": __glob_0_93, "./command_list/segment.move.left.js": __glob_0_94, "./command_list/segment.move.right.js": __glob_0_95, "./command_list/segment.move.up.js": __glob_0_96, "./command_list/select.all.js": __glob_0_97, "./command_list/selectTimelineItem.js": __glob_0_98, "./command_list/setAttribute.js": __glob_0_99, "./command_list/setTimelineOffset.js": __glob_0_100, "./command_list/showExportView.js": __glob_0_101, "./command_list/sort.bottom.js": __glob_0_102, "./command_list/sort.center.js": __glob_0_103, "./command_list/sort.left.js": __glob_0_104, "./command_list/sort.middle.js": __glob_0_105, "./command_list/sort.right.js": __glob_0_106, "./command_list/sort.top.js": __glob_0_107, "./command_list/switch.path.js": __glob_0_108, "./command_list/ungroup.item.js": __glob_0_109, "./command_list/updateClipPath.js": __glob_0_110, "./command_list/updateImage.js": __glob_0_111, "./command_list/updateImageAssetItem.js": __glob_0_112, "./command_list/updatePathItem.js": __glob_0_113, "./command_list/updateResource.js": __glob_0_114, "./command_list/updateUriList.js": __glob_0_115, "./command_list/updateVideo.js": __glob_0_116, "./command_list/updateVideoAssetItem.js": __glob_0_117, "./command_list/model/update.js": __glob_0_118 };
 const obj$1 = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -38191,45 +38215,23 @@ ${tabString}${it.properties.map((p) => {
 }
 class BaseModel {
   constructor(json = {}, modelManager) {
-    this.modelManager = modelManager;
-    const self2 = this;
-    this.ref = new Proxy(self2, {
-      get(target, key) {
-        if (self2.hasCache(key)) {
-          return self2.getCache(key);
-        }
-        const prop = self2[key];
-        if (isFunction(prop)) {
-          if (!self2.hasCache(key)) {
-            self2.addCache(key, (...args2) => {
-              return prop.apply(self2, args2);
-            });
-          }
-          return self2.getCache(key);
-        } else {
-          return isNotUndefined(prop) ? prop : self2.json[key];
-        }
-      },
-      set(target, key, value) {
-        const isDiff = self2.json[key] != value;
-        if (isDiff) {
-          self2.reset({ [key]: value });
-        }
-        return true;
-      },
-      deleteProperty(target, key) {
-        self2.reset({ [key]: void 0 });
-      }
-    });
-    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-    this.lastChangedField = {};
-    this.lastChangedFieldKeys = [];
-    this.cachedValue = {};
-    this.timestamp = 0;
-    return this.ref;
+    __privateAdd(this, _modelManager, null);
+    __privateAdd(this, _json, {});
+    __privateAdd(this, _cachedValue, {});
+    __privateAdd(this, _timestamp2, 0);
+    __privateAdd(this, _lastChangedField, {});
+    __privateAdd(this, _collapsed, false);
+    this.setModelManager(modelManager);
+    this.initializeModel(json);
+  }
+  initializeModel(json) {
+    __privateSet(this, _json, this.convert(Object.assign(this.getDefaultObject(), json)));
+  }
+  get manager() {
+    return __privateGet(this, _modelManager);
   }
   setModelManager(modelManager) {
-    this.modelManager = modelManager;
+    __privateSet(this, _modelManager, modelManager);
   }
   getDefaultTitle() {
     return "Item";
@@ -38238,16 +38240,35 @@ class BaseModel {
     return "";
   }
   isChanged(timestamp) {
+    console.log("isChanged", timestamp);
     return this.timestamp != Number(timestamp);
   }
   changed() {
-    this.timestamp += Date.now();
+    __privateSet(this, _timestamp2, __privateGet(this, _timestamp2) + Date.now());
+  }
+  get timestamp() {
+    return __privateGet(this, _timestamp2);
   }
   get title() {
-    return this.json.name || this.getDefaultTitle();
+    return this.name || this.getDefaultTitle();
+  }
+  get itemType() {
+    return this.get("itemType");
+  }
+  get name() {
+    return this.get("name");
+  }
+  get children() {
+    return this.get("children");
+  }
+  get collapsed() {
+    return __privateGet(this, _collapsed);
+  }
+  set collapsed(value) {
+    __privateSet(this, _collapsed, value);
   }
   renameWithCount() {
-    let arr = this.json.name.split(" ");
+    let arr = __privateGet(this, _json).name.split(" ");
     if (arr.length < 2) {
       return;
     }
@@ -38264,19 +38285,19 @@ class BaseModel {
     });
   }
   get allLayers() {
-    return this.modelManager.getAllLayers(this.id);
-  }
-  filteredAllLayers(filterCallback) {
-    return this.modelManager.getAllLayers(this.id, filterCallback);
-  }
-  get id() {
-    return this.json.id;
+    return this.manager.getAllLayers(this.id);
   }
   get layers() {
-    return this.modelManager.getLayers(this.id, this.ref);
+    return this.manager.getLayers(this.id) || [];
+  }
+  filteredAllLayers(filterCallback) {
+    return this.manager.getAllLayers(this.id, filterCallback);
+  }
+  get id() {
+    return __privateGet(this, _json).id;
   }
   get parentId() {
-    const parentId = this.json.parentId;
+    const parentId = __privateGet(this, _json).parentId;
     if (parentId === this.id)
       return void 0;
     return parentId;
@@ -38284,32 +38305,32 @@ class BaseModel {
   get parent() {
     if (!this.parentId)
       return void 0;
-    return this.modelManager.get(this.parentId);
-  }
-  setParentId(parentId) {
-    this.reset({ parentId });
-    this.modelManager.setChanged("setParentId", this.id, { parentId });
+    return this.manager.get(this.parentId);
   }
   get depth() {
-    return this.modelManager.getDepth(this.id);
+    return this.manager.getDepth(this.id);
   }
   get top() {
-    return this.modelManager.getRoot(this.id);
+    return this.manager.getRoot(this.id);
   }
   get project() {
-    return this.modelManager.getProject(this.id);
+    return this.manager.getProject(this.id);
   }
   get artboard() {
-    return this.modelManager.getArtBoard(this.id);
+    return this.manager.getArtBoard(this.id);
   }
   get path() {
-    return this.modelManager.getPath(this.id, this.ref);
+    return this.manager.getPath(this.id);
   }
   get pathIds() {
     return this.path.map((it) => it.id);
   }
+  setParentId(parentId) {
+    this.reset({ parentId });
+    this.manager.setChanged("setParentId", this.id, { parentId });
+  }
   get childrenLength() {
-    return this.json.children.length;
+    return __privateGet(this, _json).children.length;
   }
   get index() {
     return this.parent.findIndex(this);
@@ -38324,19 +38345,20 @@ class BaseModel {
     return this.parent.layers[0];
   }
   get last() {
-    return this.parent.layers[this.parent.childrenLength - 1];
+    const parent = this.parent;
+    return parent.layers[parent.childrenLength - 1];
   }
   get prev() {
     const index2 = this.index;
-    if (this.isFirst()) {
-      return this.ref;
+    if (this.isFirst) {
+      return this;
     }
     return this.parent.layers[index2 - 1];
   }
   get next() {
-    const index2 = this.index();
-    if (this.isLast()) {
-      return this.ref;
+    const index2 = this.index;
+    if (this.isLast) {
+      return this;
     }
     return this.parent.layers[index2 + 1];
   }
@@ -38344,44 +38366,51 @@ class BaseModel {
     return this.getInformationForHierarchy("x", "y", "angle");
   }
   getInformationForHierarchy(...args2) {
+    const parent = this.parent;
     const index2 = this.index;
     return {
       id: this.id,
       index: index2,
       parentId: this.parentId,
-      prev: index2 === 0 ? void 0 : this.parent.children[index2 - 1],
-      next: index2 === this.parent.childrenLength - 1 ? void 0 : this.parent.children[index2 + 1],
+      prev: index2 === 0 ? void 0 : parent.children[index2 - 1],
+      next: index2 === parent.childrenLength - 1 ? void 0 : parent.children[index2 + 1],
       attrs: this.attrs(...args2)
     };
   }
   getInnerId(postfix = "") {
-    return this.json.id + postfix;
+    return __privateGet(this, _json).id + postfix;
   }
   is(checkItemType) {
-    return this.json.itemType === checkItemType;
+    return __privateGet(this, _json).itemType === checkItemType;
   }
   isNot(checkItemType) {
     return this.is(checkItemType) === false;
   }
   get(key) {
-    return this.json[key];
+    return __privateGet(this, _json)[key];
+  }
+  removeField(key) {
+    delete __privateGet(this, _json)[key];
+  }
+  set(key, value) {
+    this.reset({ [key]: value });
   }
   isSVG() {
     return false;
   }
   addCache(key, value) {
-    this.cachedValue[key] = value;
+    __privateGet(this, _cachedValue)[key] = value;
   }
   getCache(key) {
-    return this.cachedValue[key];
+    return __privateGet(this, _cachedValue)[key];
   }
   hasCache(key) {
-    return Boolean(this.cachedValue[key]);
+    return Boolean(__privateGet(this, _cachedValue)[key]);
   }
   computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`;
     const parsedKey = `${cachedKey}__parseValue`;
-    const value = this.json[key];
+    const value = __privateGet(this, _json)[key];
     if (isForce)
       ;
     else {
@@ -38390,7 +38419,7 @@ class BaseModel {
       }
     }
     this.addCache(cachedKey, value);
-    this.addCache(parsedKey, newValueCallback(value, this.ref));
+    this.addCache(parsedKey, newValueCallback(value, this));
     return this.getCache(parsedKey);
   }
   computedValue(key) {
@@ -38413,29 +38442,34 @@ class BaseModel {
   setCache() {
   }
   toCloneObject(isDeep = true) {
-    var json = this.attrs("itemType", "name", "elementType", "type", "selected", "parentId", "children");
+    const json = {};
+    Object.keys(__privateGet(this, _json)).forEach((field) => {
+      if (isNotUndefined(this.get(field))) {
+        json[field] = clone$1(this.get(field));
+      }
+    });
     if (isDeep) {
-      json.layers = this.json.children.map((childId) => {
-        return this.modelManager.clone(childId, isDeep);
+      json.layers = this.layers.map((layer) => {
+        return layer.clone(isDeep);
       });
     }
     return json;
   }
   clone(isDeep = true) {
-    return this.modelManager.clone(this.id, isDeep);
+    return __privateGet(this, _modelManager).clone(this.id, isDeep);
   }
   reset(obj2, context = { origin: "*" }) {
-    this.json = this.convert(Object.assign(this.json, obj2));
-    this.lastChangedField = obj2;
-    this.lastChangedFieldKeys = Object.keys(obj2);
+    var _a;
+    __privateSet(this, _json, this.convert(Object.assign(__privateGet(this, _json), obj2)));
+    __privateSet(this, _lastChangedField, obj2);
     if (context.origin === "*") {
-      this.modelManager.setChanged("reset", this.id, obj2);
+      (_a = __privateGet(this, _modelManager)) == null ? void 0 : _a.setChanged("reset", this.id, obj2);
     }
     this.changed();
     return true;
   }
   hasChangedField(...args2) {
-    return args2.some((it) => this.lastChangedField[it] !== void 0);
+    return args2.some((it) => __privateGet(this, _lastChangedField)[it] !== void 0);
   }
   get hasChangedHirachy() {
     return this.hasChangedField("children", "parentId");
@@ -38444,8 +38478,9 @@ class BaseModel {
     var id = obj2.id || uuid();
     return __spreadValues({
       id,
+      name: "",
+      itemType: "base",
       children: [],
-      offsetInParent: 1,
       parentId: ""
     }, obj2);
   }
@@ -38464,14 +38499,14 @@ class BaseModel {
     };
   }
   hasChildren() {
-    return this.json.children.length > 0;
+    return this.children.length > 0;
   }
   appendChild(layer) {
     if (layer.parentId === this.id) {
-      const hasId = this.json.children.find((it) => it === layer.id);
+      const hasId = this.children.find((it) => it === layer.id);
       if (Boolean(hasId) === false) {
-        this.json.children.push(layer.id);
-        this.modelManager.setChanged("appendChild", this.id, {
+        this.children.push(layer.id);
+        __privateGet(this, _modelManager).setChanged("appendChild", this.id, {
           child: layer.id,
           oldParentId: layer.parentId
         });
@@ -38483,7 +38518,7 @@ class BaseModel {
       layer.remove();
     }
     layer.setParentId(this.id);
-    this.json.children.push(layer.id);
+    this.children.push(layer.id);
     return layer;
   }
   resetMatrix() {
@@ -38497,7 +38532,7 @@ class BaseModel {
       layer.remove();
     }
     layer.setParentId(this.id);
-    let list2 = this.json.children.map((id, childIndex) => {
+    let list2 = this.children.map((id, childIndex) => {
       return { id, index: childIndex };
     });
     const childItem = list2.find((it) => it.id === layer.id);
@@ -38510,8 +38545,10 @@ class BaseModel {
     list2.sort((a, b) => {
       return a.index - b.index;
     });
-    this.json.children = list2.map((it) => it.id);
-    this.modelManager.setChanged("insertChild", this.id, {
+    this.reset({
+      children: list2.map((it) => it.id)
+    });
+    __privateGet(this, _modelManager).setChanged("insertChild", this.id, {
       childId: layer.id,
       index: 0
     });
@@ -38528,7 +38565,7 @@ class BaseModel {
   toggle(field, toggleValue) {
     if (isUndefined(toggleValue)) {
       this.reset({
-        [field]: !this.json[field]
+        [field]: !this.get(field)
       });
     } else {
       this.reset({
@@ -38548,20 +38585,19 @@ class BaseModel {
     return Boolean(collapsedList.filter(Boolean).length);
   }
   expectJSON(key) {
-    if (isUndefined(this.json[key]))
+    if (isUndefined(this.get(key)))
       return false;
     return true;
   }
   toJSON() {
-    const json = this.json;
+    const json = __privateGet(this, _json);
     let newJSON = {};
     Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
       newJSON[key] = json[key];
     });
     if (this.hasChildren()) {
-      newJSON.layers = this.json.children.map((childId) => {
-        var _a;
-        return (_a = this.modelManager.get(childId)) == null ? void 0 : _a.toJSON();
+      newJSON.layers = this.layers.map((layer) => {
+        return layer.toJSON();
       });
     }
     return newJSON;
@@ -38571,20 +38607,20 @@ class BaseModel {
   copy(dist2 = 0) {
     return this.parent.copyItem(this.id, dist2);
   }
-  findIndex(item) {
-    return this.json.children.indexOf(item.id);
+  findIndex(child) {
+    return this.children.indexOf(child.id);
   }
   find(id) {
-    return this.modelManager.get(id);
+    return __privateGet(this, _modelManager).get(id);
   }
   copyItem(childItemId, dist2 = 10) {
-    const childItem = this.modelManager.get(childItemId);
+    const childItem = this.find(childItemId);
     var child = childItem.clone();
     child.renameWithCount();
     child.absoluteMove([dist2, dist2, 0]);
     var childIndex = this.findIndex(childItem);
     if (childIndex > -1) {
-      this.json.children.push(child.id);
+      this.children.push(child.id);
     }
     return child;
   }
@@ -38592,18 +38628,18 @@ class BaseModel {
     this.parent.removeChild(this.id);
   }
   removeChild(childItemId) {
-    return this.modelManager.removeChild(this.id, childItemId);
+    return __privateGet(this, _modelManager).removeChild(this.id, childItemId);
   }
   hasParent(parentId) {
-    return this.modelManager.hasParent(this.id, parentId);
+    return __privateGet(this, _modelManager).hasParent(this.id, parentId);
   }
   hasChild(childId) {
-    return this.json.children.includes(childId);
+    return this.children.includes(childId);
   }
   to() {
   }
   sendBackward(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
     const result = {};
     let selectedIndex = -1;
     siblings.forEach((id, index2) => {
@@ -38619,7 +38655,7 @@ class BaseModel {
     });
   }
   sendBack(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
     const result = {};
     siblings.forEach((id, index2) => {
       result[id] = { id, index: index2 };
@@ -38631,7 +38667,7 @@ class BaseModel {
     });
   }
   bringForward(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
     const result = {};
     let selectedIndex = -1;
     siblings.forEach((id, index2) => {
@@ -38647,7 +38683,7 @@ class BaseModel {
     });
   }
   bringFront(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
     const result = {};
     siblings.forEach((id, index2) => {
       result[id] = { id, index: index2 };
@@ -38659,6 +38695,12 @@ class BaseModel {
     });
   }
 }
+_modelManager = new WeakMap();
+_json = new WeakMap();
+_cachedValue = new WeakMap();
+_timestamp2 = new WeakMap();
+_lastChangedField = new WeakMap();
+_collapsed = new WeakMap();
 class BaseAssetModel extends BaseModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -38666,8 +38708,14 @@ class BaseAssetModel extends BaseModel {
       keyframes: []
     }, obj2));
   }
+  get keyframes() {
+    return this.get("keyframes");
+  }
+  get svgfilters() {
+    return this.get("svgfilters");
+  }
   addKeyframe(keyframe2) {
-    this.json.keyframes.push(keyframe2);
+    this.keyframes.push(keyframe2);
     return keyframe2;
   }
   createKeyframe(data = {}) {
@@ -38676,33 +38724,30 @@ class BaseAssetModel extends BaseModel {
     }, data)));
   }
   removeKeyframe(removeIndex) {
-    this.removePropertyList(this.json.keyframes, removeIndex);
+    this.removePropertyList(this.keyframes, removeIndex);
   }
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
   }
   sortKeyframe(startIndex, targetIndex) {
-    this.sortItem(this.json.keyframes, startIndex, targetIndex);
+    this.sortItem(this.keyframes, startIndex, targetIndex);
   }
   updateKeyframe(index2, data = {}) {
-    this.json.keyframes[+index2].reset(data);
+    this.keyframes[+index2].reset(data);
   }
   toKeyframeString(isAnimate = false) {
-    return this.json.keyframes.map((keyframe2) => keyframe2.toString(isAnimate)).join("\n\n");
+    return this.keyframes.map((keyframe2) => keyframe2.toString(isAnimate)).join("\n\n");
   }
   copyPropertyList(arr, index2) {
     var copyObject = __spreadValues({}, arr[index2]);
     arr.splice(index2, 0, copyObject);
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("svgfilters", "keyframes"));
   }
   removePropertyList(arr, removeIndex) {
     arr.splice(removeIndex, 1);
   }
   getSVGFilterIndex(id) {
     var _a;
-    var filter2 = this.json.svgfilters.map((it, index2) => {
+    var filter2 = this.svgfilters.map((it, index2) => {
       return { id: it.id, index: index2 };
     }).filter((it) => {
       return it.id === id;
@@ -38710,20 +38755,20 @@ class BaseAssetModel extends BaseModel {
     return filter2.length ? (_a = filter2 == null ? void 0 : filter2[0]) == null ? void 0 : _a.index : -1;
   }
   removeSVGFilter(removeIndex) {
-    this.removePropertyList(this.json.svgfilters, removeIndex);
+    this.removePropertyList(this.svgfilters, removeIndex);
   }
   copySVGFilter(index2) {
-    this.copyPropertyList(this.json.svgfilters, index2);
+    this.copyPropertyList(this.svgfilters, index2);
   }
   sortSVGFilter(startIndex, targetIndex) {
-    this.sortItem(this.json.svgfilters, startIndex, targetIndex);
+    this.sortItem(this.svgfilters, startIndex, targetIndex);
   }
   setSVGFilterValue(index2, value) {
-    this.json.svgfilters[index2] = __spreadValues(__spreadValues({}, this.json.svgfilters[index2]), value);
+    this.svgfilters[index2] = __spreadValues(__spreadValues({}, this.svgfilters[index2]), value);
   }
   addSVGFilter(obj2 = {}) {
-    this.json.svgfilters.push(obj2);
-    var index2 = this.json.svgfilters.length - 1;
+    this.svgfilters.push(obj2);
+    var index2 = this.svgfilters.length - 1;
     return index2;
   }
   createSVGFilter(data = {}) {
@@ -38739,11 +38784,15 @@ class MovableModel extends BaseAssetModel {
       x: 0,
       y: 0,
       width: 300,
-      height: 300
+      height: 300,
+      position: "absolute",
+      perspective: "",
+      perspectiveOrigin: "",
+      transformOrigin: "50% 50% 0px"
     }, obj2));
   }
   get isAbsolute() {
-    return this.json.position === "absolute";
+    return this.position === "absolute";
   }
   get isDragSelectable() {
     return true;
@@ -38754,8 +38803,14 @@ class MovableModel extends BaseAssetModel {
   get resizableWitChildren() {
     return false;
   }
+  get perspective() {
+    return this.get("perspective");
+  }
+  get perspectiveOrigin() {
+    return this.get("perspectiveOrigin");
+  }
   get transform() {
-    return `rotateZ(${Length.deg(this.json.angle)})`;
+    return `rotateZ(${Length.deg(this.angle)})`;
   }
   get localMatrix() {
     if (!this.hasCache("localTransform")) {
@@ -38872,31 +38927,60 @@ class MovableModel extends BaseAssetModel {
     return this.getCache("areaPosition") || this.getAreaPosition(100);
   }
   get offsetX() {
-    return this.json.x;
+    return this.x;
   }
   get offsetY() {
-    return this.json.y;
+    return this.y;
   }
   get screenWidth() {
-    return this.json.width;
+    return this.width;
   }
   get screenHeight() {
-    return this.json.height;
+    return this.height;
   }
   get y() {
-    return this.json.y;
+    return this.get("y");
+  }
+  set y(value) {
+    this.set("y", value);
   }
   get x() {
-    return this.json.x;
+    return this.get("x");
+  }
+  set x(value) {
+    this.set("x", value);
   }
   get width() {
-    return this.json.width;
+    return this.get("width");
+  }
+  set width(value) {
+    this.set("width", value);
   }
   get height() {
-    return this.json.height;
+    return this.get("height");
+  }
+  set height(value) {
+    this.set("height", value);
   }
   get angle() {
-    return this.json.angle;
+    return this.get("angle");
+  }
+  set angle(value) {
+    this.set("angle", value);
+  }
+  get position() {
+    return this.get("position");
+  }
+  set position(value) {
+    this.set("position", value);
+  }
+  get transformOrigin() {
+    return this.get("transformOrigin");
+  }
+  set transformOrigin(value) {
+    this.reset({
+      transformOrigin: value
+    });
   }
   get translate() {
     return [0, 0, 0];
@@ -38905,10 +38989,10 @@ class MovableModel extends BaseAssetModel {
     return [1, 1, 1];
   }
   get rotate() {
-    return [0, 0, degreeToRadian(this.json.angle)];
+    return [0, 0, degreeToRadian(this.angle)];
   }
   get origin() {
-    return TransformOrigin.scale(this.json["transform-origin"] || "50% 50% 0px", this.screenWidth, this.screenHeight);
+    return TransformOrigin.scale(this.transformOrigin || "50% 50% 0px", this.screenWidth, this.screenHeight);
   }
   get absoluteOrigin() {
     return vertiesMap([this.origin], this.absoluteMatrix)[0];
@@ -38926,19 +39010,16 @@ class MovableModel extends BaseAssetModel {
       row: [startRow, endRow]
     };
   }
-  toCloneObject(isDeep = true) {
-    return __spreadValues(__spreadValues({}, super.toCloneObject(isDeep)), this.attrs("x", "y", "right", "bottom", "width", "height", "angle"));
-  }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = super.reset(obj2, context);
-    if (this.hasChangedField("children", "x", "y", "width", "height", "box-model", "angle", "transform-origin", "transform", "perspective", "perspective-origin", "resizingVertical", "resizingHorizontal", "contraints-vertical", "contraints-horizontal") || this.changedLayout) {
+    if (this.hasChangedField("children", "x", "y", "width", "height", "boxModel", "angle", "transformOrigin", "resizingVertical", "resizingHorizontal", "contraintsVertical", "contraintsHorizontal") || this.changedLayout) {
       this.refreshMatrixCache();
     }
     return isChanged;
   }
   changed() {
     super.changed();
-    this.changedRect = this.hasChangedField("children", "x", "y", "width", "height", "box-model", "angle", "transform-origin", "transform", "perspective", "perspective-origin", "resizingVertical", "resizingHorizontal", "contraints-vertical", "contraints-horizontal");
+    this.changedRect = this.hasChangedField("children", "x", "y", "width", "height", "angle", "transformOrigin", "resizingVertical", "resizingHorizontal", "contraintsVertical", "contraintsHorizontal");
   }
   setParentId(otherParentId) {
     super.setParentId(otherParentId);
@@ -39043,22 +39124,22 @@ class MovableModel extends BaseAssetModel {
     }).filter(Boolean).length === 4;
   }
   getPerspectiveMatrix() {
-    const hasPerspective = this.json["perspective"];
+    const hasPerspective = this.perspective;
     if (!hasPerspective) {
       return void 0;
     }
     let [
       perspectiveOriginX = Length.percent(50),
       perspectiveOriginY = Length.percent(50)
-    ] = TransformOrigin.parseStyle(this.json["perspective-origin"]);
+    ] = TransformOrigin.parseStyle(this.perspectiveOrigin);
     const width2 = this.screenWidth;
     const height2 = this.screenHeight;
     perspectiveOriginX = perspectiveOriginX.toPx(width2).value;
     perspectiveOriginY = perspectiveOriginY.toPx(height2).value;
     const view = create$4();
     translate(view, view, [perspectiveOriginX, perspectiveOriginY, 0]);
-    if (this.json["perspective"] && this.json["perspective"] != "none") {
-      multiply$1(view, view, fromValues$1(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1 / Length.parse(this.json["perspective"]).value, 1));
+    if (this.perspective && this.perspective != "none") {
+      multiply$1(view, view, fromValues$1(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -1 / Length.parse(this.perspective).value, 1));
     } else {
       return void 0;
     }
@@ -39075,11 +39156,11 @@ class MovableModel extends BaseAssetModel {
     return invert([], this.getItemTransformMatrix());
   }
   getLocalTransformMatrix(width2, height2) {
-    const origin2 = TransformOrigin.scale(this.json["transform-origin"] || "50% 50% 0px", isUndefined(width2) ? this.screenWidth : width2, isUndefined(height2) ? this.screenHeight : height2);
+    const origin = TransformOrigin.scale(this.transformOrigin || "50% 50% 0px", isUndefined(width2) ? this.screenWidth : width2, isUndefined(height2) ? this.screenHeight : height2);
     const view = create$4();
-    translate(view, view, origin2);
+    translate(view, view, origin);
     multiply$1(view, view, this.itemMatrix);
-    translate(view, view, negate([], origin2));
+    translate(view, view, negate([], origin));
     return view;
   }
   getLocalTransformMatrixInverse(width2, height2) {
@@ -39088,7 +39169,7 @@ class MovableModel extends BaseAssetModel {
   getDirectionTransformMatrix(vertexOffset, width2, height2) {
     const x = this.offsetX;
     const y = this.offsetY;
-    const center2 = add$1([], TransformOrigin.scale(this.json["transform-origin"] || "50% 50% 0px", width2, height2), negate([], vertexOffset));
+    const center2 = add$1([], TransformOrigin.scale(this.transformOrigin || "50% 50% 0px", width2, height2), negate([], vertexOffset));
     const view = create$4();
     translate(view, view, [x, y, 0]);
     translate(view, view, vertexOffset);
@@ -39164,7 +39245,7 @@ class MovableModel extends BaseAssetModel {
   getLocalVerties(width2, height2) {
     width2 = isNotUndefined(width2) ? width2 : this.screenWidth;
     height2 = isNotUndefined(height2) ? height2 : this.screenHeight;
-    let model = rectToVerties(0, 0, width2, height2, this.json["transform-origin"]);
+    let model = rectToVerties(0, 0, width2, height2, this.transformOrigin);
     return model;
   }
   getVerties(width2, height2) {
@@ -39177,18 +39258,18 @@ class MovableModel extends BaseAssetModel {
       x = contentBox.x;
       y = contentBox.y;
     }
-    let model = rectToVerties(x, y, width2, height2, this.json["transform-origin"]);
+    let model = rectToVerties(x, y, width2, height2, this.transformOrigin);
     return vertiesMap(model, this.absoluteMatrix);
   }
   getContentVerties(width2, height2) {
     width2 = isNotUndefined(width2) ? width2 : this.screenWidth;
     height2 = isNotUndefined(height2) ? height2 : this.screenHeight;
-    const center2 = TransformOrigin.scale(this.json["transform-origin"], width2, height2);
-    const paddingTop = this.json["padding-top"] || 0;
-    const paddingRight = this.json["padding-right"] || 0;
-    const paddingBottom = this.json["padding-bottom"] || 0;
-    const paddingLeft = this.json["padding-left"] || 0;
-    const model = rectToVerties(0 + paddingLeft, 0 + paddingTop, width2 - paddingLeft - paddingRight, height2 - paddingTop - paddingBottom, this.json["transform-origin"]);
+    const center2 = TransformOrigin.scale(this.transformOrigin, width2, height2);
+    const paddingTop = this.get("padding-top") || 0;
+    const paddingRight = this.get("padding-right") || 0;
+    const paddingBottom = this.get("padding-bottom") || 0;
+    const paddingLeft = this.get("padding-left") || 0;
+    const model = rectToVerties(0 + paddingLeft, 0 + paddingTop, width2 - paddingLeft - paddingRight, height2 - paddingTop - paddingBottom, this.transformOrigin);
     model[4] = center2;
     return vertiesMap(model, this.absoluteMatrix);
   }
@@ -39213,9 +39294,9 @@ class MovableModel extends BaseAssetModel {
   }
   get nestedAngle() {
     if (this.parent) {
-      return this.parent.nestedAngle + this.json.angle;
+      return this.parent.nestedAngle + this.angle;
     }
-    return this.json.angle || 0;
+    return this.angle || 0;
   }
   get toRectVerties() {
     return itemsToRectVerties([this]);
@@ -39227,7 +39308,7 @@ class MovableModel extends BaseAssetModel {
     const width2 = this.screenWidth;
     const height2 = this.screenHeight;
     const originalTransform = this.transform;
-    const originalTransformOrigin = this.json["transform-origin"] || "50% 50% 0%";
+    const originalTransformOrigin = this.transformOrigin || "50% 50% 0px";
     const transformOriginMatrix = this.getTransformOriginMatrix();
     const transformOriginMatrixInverse = this.getTransformOriginMatrixInverse();
     const parentMatrix = this.parent.absoluteMatrix;
@@ -39322,7 +39403,7 @@ class MovableModel extends BaseAssetModel {
     if (this.is("project"))
       return items;
     if (this.checkInArea(areaVerties)) {
-      items.push(this.ref);
+      items.push(this);
     }
     return items;
   }
@@ -39337,7 +39418,7 @@ class MovableModel extends BaseAssetModel {
     return items;
   }
   getTransformOriginMatrix() {
-    return fromTranslation([], TransformOrigin.scale(this.json["transform-origin"] || "50% 50% 0px", this.screenWidth, this.screenHeight));
+    return fromTranslation([], TransformOrigin.scale(this.transformOrigin || "50% 50% 0px", this.screenWidth, this.screenHeight));
   }
   getTransformOriginMatrixInverse() {
     return invert([], this.getTransformOriginMatrix());
@@ -39368,20 +39449,9 @@ class MovableModel extends BaseAssetModel {
       childItemId: childItem == null ? void 0 : childItem.id
     });
   }
-  getIndex() {
-    var parentLayers = this.parent.layers;
-    var startIndex = -1;
-    for (var i = 0, len2 = parentLayers.length; i < len2; i++) {
-      if (parentLayers[i] === this.ref) {
-        startIndex = i;
-        break;
-      }
-    }
-    return startIndex;
-  }
   setOrder(targetIndex) {
     var parent = this.parent;
-    var startIndex = this.getIndex();
+    var startIndex = this.index;
     if (startIndex > -1) {
       parent.children[startIndex] = parent.children[targetIndex];
       parent.children[targetIndex] = this.id;
@@ -39392,24 +39462,10 @@ class MovableModel extends BaseAssetModel {
       });
     }
   }
-  next() {
-    if (this.isLast()) {
-      return this.ref;
-    }
-    const index2 = this.getIndex();
-    return this.parent.layers[index2 + 1];
-  }
-  prev() {
-    if (this.isFirst()) {
-      return this.ref;
-    }
-    const index2 = this.getIndex();
-    return this.parent.layers[index2 - 1];
-  }
   orderNext() {
-    if (this.isLast()) {
+    if (this.isLast) {
       if (this.parent.next) {
-        let next = this.parent.next();
+        let next = this.parent.next;
         if (next.enableHasChildren()) {
           next.appendChild(this);
         } else {
@@ -39418,26 +39474,20 @@ class MovableModel extends BaseAssetModel {
       }
       return;
     }
-    var startIndex = this.getIndex();
+    var startIndex = this.index;
     if (startIndex > -1) {
       this.setOrder(startIndex + 1);
     }
   }
-  isFirst() {
-    return this.getIndex() === 0;
-  }
-  isLast() {
-    return this.getIndex() === this.parent.children.length - 1;
-  }
   orderPrev() {
-    if (this.isFirst()) {
-      const prev = this.parent.prev();
+    if (this.isFirst) {
+      const prev = this.parent.prev;
       if (prev) {
         prev.insertBefore(this);
       }
       return;
     }
-    var startIndex = this.getIndex();
+    var startIndex = this.index;
     if (startIndex > 0) {
       this.setOrder(startIndex - 1);
     }
@@ -39461,32 +39511,208 @@ class GroupModel extends MovableModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       layout: Layout.DEFAULT,
-      "constraints-horizontal": Constraints.NONE,
-      "constraints-vertical": Constraints.NONE,
-      "flex-direction": FlexDirection.ROW,
-      "flex-wrap": FlexWrap.NOWRAP,
-      "justify-content": JustifyContent.FLEX_START,
-      "align-items": AlignItems.FLEX_START,
-      "align-content": AlignContent.FLEX_START,
+      constraintsHorizontal: Constraints.NONE,
+      constraintsVertical: Constraints.NONE,
+      flexDirection: FlexDirection.ROW,
+      flexWrap: FlexWrap.NOWRAP,
+      justifyContent: JustifyContent.FLEX_START,
+      alignItems: AlignItems.FLEX_START,
+      alignContent: AlignContent.FLEX_START,
       order: 0,
-      "flex-grow": 0,
-      "flex-shrink": 0,
-      "flex-basis": "auto",
+      flexGrow: 0,
+      flexShrink: 0,
+      flexBasis: "auto",
       gap: 0,
       resizingHorizontal: ResizingMode.FIXED,
       resizingVertical: ResizingMode.FIXED,
-      "grid-template-rows": "auto",
-      "grid-column-gap": "0px",
-      "grid-template-columns": "auto",
-      "grid-row-gap": "0px",
-      "grid-template-areas": "",
-      "grid-auto-rows": "auto",
-      "grid-auto-columns": "auto",
-      "grid-auto-flow": "row"
+      gridTemplateRows: "auto",
+      gridColumnGap: "0px",
+      gridTemplateColumns: "auto",
+      gridRowGap: "0px",
+      gridTemplateAreas: "",
+      gridAutoRows: "auto",
+      gridAutoColumns: "auto",
+      gridAutoFlow: "row"
     }, obj2));
   }
   get layout() {
-    return this.json.layout;
+    return this.get("layout");
+  }
+  get constraintsHorizontal() {
+    return this.get("constraintsHorizontal");
+  }
+  set constraintsHorizontal(value) {
+    this.reset({
+      constraintsHorizontal: value
+    });
+  }
+  get constraintsVertical() {
+    return this.get("constraintsVertical");
+  }
+  set constraintsVertical(value) {
+    this.reset({
+      constraintsVertical: value
+    });
+  }
+  get flexDirection() {
+    return this.get("flexDirection");
+  }
+  set flexDirection(value) {
+    this.reset({
+      flexDirection: value
+    });
+  }
+  get flexWrap() {
+    return this.get("flexWrap");
+  }
+  set flexWrap(value) {
+    this.reset({
+      flexWrap: value
+    });
+  }
+  get justifyContent() {
+    return this.get("justifyContent");
+  }
+  set justifyContent(value) {
+    this.reset({
+      justifyContent: value
+    });
+  }
+  get alignItems() {
+    return this.get("alignItems");
+  }
+  set alignItems(value) {
+    this.reset({
+      alignItems: value
+    });
+  }
+  get alignContent() {
+    return this.get("alignContent");
+  }
+  set alignContent(value) {
+    this.reset({
+      alignContent: value
+    });
+  }
+  get order() {
+    return this.get("order");
+  }
+  set order(value) {
+    this.reset({
+      order: value
+    });
+  }
+  get flexGrow() {
+    return this.get("flexGrow");
+  }
+  set flexGrow(value) {
+    this.reset({
+      flexGrow: value
+    });
+  }
+  get flexShrink() {
+    return this.get("flexShrink");
+  }
+  set flexShrink(value) {
+    this.reset({
+      flexShrink: value
+    });
+  }
+  get flexBasis() {
+    return this.get("flexBasis");
+  }
+  set flexBasis(value) {
+    this.reset({
+      flexBasis: value
+    });
+  }
+  get gap() {
+    return this.get("gap");
+  }
+  set gap(value) {
+    this.reset({
+      gap: value
+    });
+  }
+  get resizingHorizontal() {
+    return this.get("resizingHorizontal");
+  }
+  set resizingHorizontal(value) {
+    this.reset({
+      resizingHorizontal: value
+    });
+  }
+  get resizingVertical() {
+    return this.get("resizingVertical");
+  }
+  set resizingVertical(value) {
+    this.reset({
+      resizingVertical: value
+    });
+  }
+  get gridTemplateRows() {
+    return this.get("gridTemplateRows");
+  }
+  set gridTemplateRows(value) {
+    this.reset({
+      gridTemplateRows: value
+    });
+  }
+  get gridColumnGap() {
+    return this.get("gridColumnGap");
+  }
+  set gridColumnGap(value) {
+    this.reset({
+      gridColumnGap: value
+    });
+  }
+  get gridTemplateColumns() {
+    return this.get("gridTemplateColumns");
+  }
+  set gridTemplateColumns(value) {
+    this.reset({
+      gridTemplateColumns: value
+    });
+  }
+  get gridRowGap() {
+    return this.get("gridRowGap");
+  }
+  set gridRowGap(value) {
+    this.reset({
+      gridRowGap: value
+    });
+  }
+  get gridTemplateAreas() {
+    return this.get("gridTemplateAreas");
+  }
+  set gridTemplateAreas(value) {
+    this.reset({
+      gridTemplateAreas: value
+    });
+  }
+  get gridAutoRows() {
+    return this.get("gridAutoRows");
+  }
+  set gridAutoRows(value) {
+    this.reset({
+      gridAutoRows: value
+    });
+  }
+  get gridAutoColumns() {
+    return this.get("gridAutoColumns");
+  }
+  set gridAutoColumns(value) {
+    this.reset({
+      gridAutoColumns: value
+    });
+  }
+  get gridAutoFlow() {
+    return this.get("gridAutoFlow");
+  }
+  set gridAutoFlow(value) {
+    this.reset({
+      gridAutoFlow: value
+    });
   }
   isLayoutItem() {
     var _a;
@@ -39496,10 +39722,10 @@ class GroupModel extends MovableModel {
     return this.isLayout(Layout.DEFAULT);
   }
   hasLayout() {
-    return !this.hasConstraints() || Boolean(this.json.layout) === false;
+    return !this.hasConstraints() || Boolean(this.layout) === false;
   }
   isLayout(layout2) {
-    return this.json.layout === layout2;
+    return this.layout === layout2;
   }
   isInDefault() {
     var _a;
@@ -39516,12 +39742,8 @@ class GroupModel extends MovableModel {
     var _a;
     return ((_a = this.parent) == null ? void 0 : _a.layout) === layout2;
   }
-  reset(obj2) {
-    const isChanged = super.reset(obj2);
-    return isChanged;
-  }
   changeConstraints(direction2, value, shiftKey = false) {
-    const h = this.json[direction2];
+    const h = this.get(direction2);
     let newConstraints = value;
     if (h === Constraints.MAX) {
       if (value === Constraints.MAX) {
@@ -39565,19 +39787,19 @@ const editableList = [
   "variable",
   "transform",
   "filter",
-  "backdrop-filter",
-  "background-color",
-  "background-image",
-  "border-radius",
+  "backdropFilter",
+  "backgroundColor",
+  "backgroundImage",
+  "borderRadius",
   "border",
-  "box-shadow",
-  "clip-path",
+  "boxShadow",
+  "clipPath",
   "color",
-  "perspective-origin",
-  "transform-origin",
-  "transform-style",
+  "perspectiveOrigin",
+  "transformOrigin",
+  "transformStyle",
   "perspective",
-  "mix-blend-mode",
+  "mixBlendMode",
   "overflow",
   "opacity",
   "box-model",
@@ -39596,40 +39818,436 @@ editableList.forEach(function(key) {
 class DomModel extends GroupModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
-      position: "absolute",
       rootVariable: "",
       variable: "",
       color: "black",
       overflow: "visible",
       opacity: 1,
-      layout: Layout.DEFAULT,
-      "flex-layout": "display:flex;",
-      "grid-layout": "display:grid;",
-      "constraints-vertical": Constraints.MIN,
-      "constraints-horizontal": Constraints.MIN,
+      pattern: "",
       selectors: [],
-      svg: []
+      svg: [],
+      gridColumnStart: "",
+      gridColumnEnd: "",
+      gridRowStart: "",
+      gridRowEnd: "",
+      gridColumnGap: "",
+      gridRowGap: ""
     }, obj2));
   }
-  toCloneObject() {
-    var json = this.json;
-    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "border-top", "border-left", "border-right", "border-bottom", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "flex-layout", "grid-layout", "animation", "transition", "margin-top", "margin-left", "margin-right", "margin-bottom", "padding-top", "padding-right", "padding-left", "padding-bottom", "constraints-horizontal", "constraints-vertical")), {
-      selectors: json.selectors.map((selector2) => selector2.clone()),
-      svg: json.svg.map((svg) => svg.clone())
+  get gridColumnStart() {
+    return this.get("gridColumnStart");
+  }
+  set gridColumnStart(value) {
+    this.set("gridColumnStart", value);
+  }
+  get gridColumnEnd() {
+    return this.get("gridColumnEnd");
+  }
+  set gridColumnEnd(value) {
+    this.set("gridColumnEnd", value);
+  }
+  get gridRowStart() {
+    return this.get("gridRowStart");
+  }
+  set gridRowStart(value) {
+    this.set("gridRowStart", value);
+  }
+  get gridRowEnd() {
+    return this.get("gridRowEnd");
+  }
+  set gridRowEnd(value) {
+    this.set("gridRowEnd", value);
+  }
+  get gridColumnGap() {
+    return this.get("gridColumnGap");
+  }
+  set gridColumnGap(value) {
+    this.set("gridColumnGap", value);
+  }
+  get gridRowGap() {
+    return this.get("gridRowGap");
+  }
+  set gridRowGap(value) {
+    this.set("gridRowGap", value);
+  }
+  get pattern() {
+    return this.get("pattern");
+  }
+  set pattern(value) {
+    this.reset({
+      pattern: value
+    });
+  }
+  get selectors() {
+    return this.get("selectors");
+  }
+  set selectors(value) {
+    this.reset({
+      selectors: value
+    });
+  }
+  get svg() {
+    return this.get("svg");
+  }
+  set svg(value) {
+    this.reset({ svg: value });
+  }
+  get rootVariable() {
+    return this.get("rootVariable");
+  }
+  set rootVariable(value) {
+    this.reset({
+      rootVariable: value
+    });
+  }
+  get variable() {
+    return this.get("variable");
+  }
+  set variable(value) {
+    this.reset({
+      variable: value
+    });
+  }
+  get filter() {
+    return this.get("filter");
+  }
+  set filter(value) {
+    this.reset({
+      filter: value
+    });
+  }
+  get backdropFilter() {
+    return this.get("backdropFilter");
+  }
+  set backdropFilter(value) {
+    this.reset({
+      backdropFilter: value
+    });
+  }
+  get backgroundColor() {
+    return this.get("backgroundColor");
+  }
+  set backgroundColor(value) {
+    this.reset({
+      backgroundColor: value
+    });
+  }
+  get backgroundImage() {
+    return this.get("backgroundImage");
+  }
+  set backgroundImage(value) {
+    this.reset({
+      backgroundImage: value
+    });
+  }
+  get textClip() {
+    return this.get("textClip");
+  }
+  set textClip(value) {
+    this.reset({
+      textClip: value
+    });
+  }
+  get borderRadius() {
+    return this.get("borderRadius");
+  }
+  set borderRadius(value) {
+    this.reset({
+      borderRadius: value
+    });
+  }
+  get border() {
+    return this.get("border");
+  }
+  set border(value) {
+    this.reset({
+      border: value
+    });
+  }
+  get boxShadow() {
+    return this.get("boxShadow");
+  }
+  set boxShadow(value) {
+    this.reset({
+      boxShadow: value
+    });
+  }
+  get textShadow() {
+    return this.get("textShadow");
+  }
+  set textShadow(value) {
+    this.reset({
+      textShadow: value
+    });
+  }
+  get clipPath() {
+    return this.get("clipPath");
+  }
+  set clipPath(value) {
+    this.reset({
+      clipPath: value
+    });
+  }
+  get color() {
+    return this.get("color");
+  }
+  set color(value) {
+    this.reset({
+      color: value
+    });
+  }
+  get opacity() {
+    return this.get("opacity");
+  }
+  set opacity(value) {
+    this.reset({
+      opacity: value
+    });
+  }
+  get transformStyle() {
+    return this.get("transformStyle");
+  }
+  set transformStyle(value) {
+    this.reset({
+      transformStyle: value
+    });
+  }
+  get fontSize() {
+    return this.get("fontSize");
+  }
+  set fontSize(value) {
+    this.reset({
+      fontSize: value
+    });
+  }
+  get fontFamily() {
+    return this.get("fontFamily");
+  }
+  set fontFamily(value) {
+    this.reset({
+      fontFamily: value
+    });
+  }
+  get fontWeight() {
+    return this.get("fontWeight");
+  }
+  set fontWeight(value) {
+    this.reset({
+      fontWeight: value
+    });
+  }
+  get fontStyle() {
+    return this.get("fontStyle");
+  }
+  set fontStyle(value) {
+    this.reset({
+      fontStyle: value
+    });
+  }
+  get fontVariant() {
+    return this.get("fontVariant");
+  }
+  set fontVariant(value) {
+    this.reset({
+      fontVariant: value
+    });
+  }
+  get fontStretch() {
+    return this.get("fontStretch");
+  }
+  set fontStretch(value) {
+    this.reset({
+      fontStretch: value
+    });
+  }
+  get lineHeight() {
+    return this.get("lineHeight");
+  }
+  set lineHeight(value) {
+    this.reset({
+      lineHeight: value
+    });
+  }
+  get letterSpacing() {
+    return this.get("letterSpacing");
+  }
+  set letterSpacing(value) {
+    this.reset({
+      letterSpacing: value
+    });
+  }
+  get wordSpacing() {
+    return this.get("wordSpacing");
+  }
+  set wordSpacing(value) {
+    this.reset({
+      wordSpacing: value
+    });
+  }
+  get textDecoration() {
+    return this.get("textDecoration");
+  }
+  set textDecoration(value) {
+    this.reset({
+      textDecoration: value
+    });
+  }
+  get textAlign() {
+    return this.get("textAlign");
+  }
+  set textAlign(value) {
+    this.reset({
+      textAlign: value
+    });
+  }
+  get textTransform() {
+    return this.get("textTransform");
+  }
+  set textTransform(value) {
+    this.reset({
+      textTransform: value
+    });
+  }
+  get textOverflow() {
+    return this.get("text-overflow");
+  }
+  set textOverflow(value) {
+    this.reset({
+      "text-overflow": value
+    });
+  }
+  get textIndent() {
+    return this.get("textIndent");
+  }
+  set textIndent(value) {
+    this.reset({
+      textIndent: value
+    });
+  }
+  get mixBlendMode() {
+    return this.get("mixBlendMode");
+  }
+  set mixBlendMode(value) {
+    this.reset({
+      mixBlendMode: value
+    });
+  }
+  get visibility() {
+    return this.get("visibility");
+  }
+  set visibility(value) {
+    this.reset({
+      visibility: value
+    });
+  }
+  get zIndex() {
+    return this.get("z-index");
+  }
+  set zIndex(value) {
+    this.reset({
+      "z-index": value
+    });
+  }
+  get overflow() {
+    return this.get("overflow");
+  }
+  set overflow(value) {
+    this.reset({
+      overflow: value
+    });
+  }
+  get animation() {
+    return this.get("animation");
+  }
+  set animation(value) {
+    this.reset({
+      animation: value
+    });
+  }
+  get transition() {
+    return this.get("transition");
+  }
+  set transition(value) {
+    this.reset({
+      transition: value
+    });
+  }
+  get marginTop() {
+    return this.get("marginTop");
+  }
+  set marginTop(value) {
+    this.reset({
+      marginTop: value
+    });
+  }
+  get marginRight() {
+    return this.get("marginRight");
+  }
+  set marginRight(value) {
+    this.reset({
+      marginRight: value
+    });
+  }
+  get marginBottom() {
+    return this.get("marginBottom");
+  }
+  set marginBottom(value) {
+    this.reset({
+      marginBottom: value
+    });
+  }
+  get marginLeft() {
+    return this.get("marginLeft");
+  }
+  set marginLeft(value) {
+    this.reset({
+      marginLeft: value
+    });
+  }
+  get paddingTop() {
+    return this.get("paddingTop");
+  }
+  set paddingTop(value) {
+    this.reset({
+      paddingTop: value
+    });
+  }
+  get paddingRight() {
+    return this.get("paddingRight");
+  }
+  set paddingRight(value) {
+    this.reset({
+      paddingRight: value
+    });
+  }
+  get paddingBottom() {
+    return this.get("paddingBottom");
+  }
+  set paddingBottom(value) {
+    this.reset({
+      paddingBottom: value
+    });
+  }
+  get paddingLeft() {
+    return this.get("paddingLeft");
+  }
+  set paddingLeft(value) {
+    this.reset({
+      paddingLeft: value
     });
   }
   editable(editablePropertyName) {
     switch (editablePropertyName) {
       case "svg-item":
-      case "transform-origin":
+      case "transformOrigin":
       case "perspective":
-      case "perspective-origin":
+      case "perspectiveOrigin":
         return false;
     }
     return Boolean(editableKeys[editablePropertyName]);
   }
   get changedBoxModel() {
-    return this.hasChangedField("margin-top", "margin-left", "margin-bottom", "margin-right", "padding-top", "padding-left", "padding-right", "padding-bottom");
+    return this.hasChangedField("marginTop", "marginLeft", "marginBottom", "marginRight", "paddingTop", "paddingLeft", "paddingRight", "paddingBottom");
   }
   get changedFlexLayout() {
     return this.hasChangedField("flex-direction", "flex-wrap", "justify-content", "align-items", "align-content", "order", "flex-basis", "flex-grow", "flex-shrink", "flex-flow");
@@ -39644,7 +40262,7 @@ class DomModel extends GroupModel {
     return this.hasChangedField("layout") || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout || this.changedLayoutItem;
   }
   addSelector(selector2) {
-    this.json.selectors.push(selector2);
+    this.selectors.push(selector2);
     return selector2;
   }
   createSelector(data = {}) {
@@ -39656,7 +40274,7 @@ class DomModel extends GroupModel {
     arr.splice(removeIndex, 1);
   }
   removeSelector(removeIndex) {
-    this.removePropertyList(this.json.selectors, removeIndex);
+    this.removePropertyList(this.selectors, removeIndex);
   }
   enableHasChildren() {
     return true;
@@ -39665,7 +40283,7 @@ class DomModel extends GroupModel {
     arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
   }
   updateSelector(index2, data = {}) {
-    this.json.selectors[+index2].reset(data);
+    this.selectors[+index2].reset(data);
   }
   traverse(item, results, hasLayoutItem) {
     if (item.isAttribute())
@@ -39687,36 +40305,36 @@ class DomModel extends GroupModel {
   convert(json) {
     json = super.convert(json);
     if (json.padding) {
-      json["padding-top"] = Length.parse(json.padding);
-      json["padding-right"] = Length.parse(json.padding);
-      json["padding-bottom"] = Length.parse(json.padding);
-      json["padding-left"] = Length.parse(json.padding);
+      json["paddingTop"] = Length.parse(json.padding);
+      json["paddingRight"] = Length.parse(json.padding);
+      json["paddingBottom"] = Length.parse(json.padding);
+      json["paddingLeft"] = Length.parse(json.padding);
       delete json.padding;
     }
     return json;
   }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = super.reset(obj2, context);
-    if (this.hasChangedField("clip-path")) {
+    if (this.hasChangedField("clipPath")) {
       this.setClipPathCache();
     }
     if (this.hasChangedField("width", "height")) {
       if (this.cacheClipPath) {
-        const d = this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
-        this.json["clip-path"] = `path(${d})`;
+        const d = this.cacheClipPath.clone().scale(this.width / this.cacheClipPathWidth, this.height / this.cacheClipPathHeight).d;
+        this.clipPath = `path(${d})`;
         this.modelManager.setChanged("reset", this.id, {
-          "clip-path": this.json["clip-path"]
+          clipPath: this.clipPath
         });
       }
     }
-    if (this.hasChangedField("background-image", "pattern")) {
+    if (this.hasChangedField("backgroundImage", "pattern")) {
       this.setBackgroundImageCache();
     }
     return isChanged;
   }
   setBackgroundImageCache() {
     let list2 = [];
-    if (this.json.pattern) {
+    if (this.pattern) {
       const patternList = this.computed("pattern", (pattern) => {
         return Pattern.parseStyle(pattern).map((it) => {
           return BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS()));
@@ -39726,8 +40344,8 @@ class DomModel extends GroupModel {
         list2.push.apply(list2, patternList[i]);
       }
     }
-    if (this.json["background-image"]) {
-      const backgroundList = this.computed("background-image", (backgroundImage2) => {
+    if (this.backgroundImage) {
+      const backgroundList = this.computed("backgroundImage", (backgroundImage2) => {
         return BackgroundImage.parseStyle(STRING_TO_CSS(backgroundImage2));
       });
       list2.push.apply(list2, backgroundList.filter((it) => it.visibility !== VisibilityType.HIDDEN));
@@ -39748,12 +40366,12 @@ class DomModel extends GroupModel {
     }
   }
   setClipPathCache() {
-    var obj2 = ClipPath.parseStyle(this.json["clip-path"]);
+    var obj2 = ClipPath.parseStyle(this.clipPath);
     this.cacheClipPathObject = obj2;
     if (obj2.type === "path") {
       this.cacheClipPath = new PathParser(obj2.value.trim());
-      this.cacheClipPathWidth = this.json.width;
-      this.cacheClipPathHeight = this.json.height;
+      this.cacheClipPathWidth = this.width;
+      this.cacheClipPathHeight = this.height;
     }
   }
   setCache() {
@@ -39765,15 +40383,15 @@ class DomModel extends GroupModel {
       this.setClipPathCache();
     }
     if (this.cacheClipPath) {
-      return this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
+      return this.cacheClipPath.clone().scale(this.width / this.cacheClipPathWidth, this.height / this.cacheClipPathHeight).d;
     }
   }
   getBackgroundImage(index2) {
-    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(this.json["background-image"]));
+    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(this.backgroundImage));
     return backgroundImages[index2 || 0];
   }
   get borderWidth() {
-    const border2 = Border.parseStyle(this.json.border);
+    const border2 = Border.parseStyle(this.border);
     const borderObject = Border.parseValue(border2.border);
     if (borderObject == null ? void 0 : borderObject.width) {
       return {
@@ -39928,9 +40546,6 @@ class LayerModel extends DomModel {
   getDefaultTitle() {
     return "Layer";
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("tagName"));
-  }
 }
 class ArtBoard extends LayerModel {
   getDefaultObject(obj2 = {}) {
@@ -39939,12 +40554,9 @@ class ArtBoard extends LayerModel {
       name: "New ArtBoard",
       width: 1e3,
       height: 1e3,
-      "background-color": "white",
-      "transform-style": "flat"
+      backgroundColor: "white",
+      transformStyle: "flat"
     }, obj2));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name"));
   }
   getDefaultTitle() {
     return "ArtBoard";
@@ -39955,9 +40567,9 @@ class ArtBoard extends LayerModel {
   editable(editablePropertyName) {
     switch (editablePropertyName) {
       case "border":
-      case "border-radius":
+      case "borderRadius":
         return false;
-      case "artboard-size":
+      case "artboardSize":
       case "layout":
         return true;
     }
@@ -40420,25 +41032,25 @@ class SVGFill extends PropertyItem {
 const expectedProperties = [
   "appearance",
   "border",
-  "border-radius",
-  "background-image",
-  "backdrop-filter",
-  "clip-path",
+  "borderRadius",
+  "backgroundImage",
+  "backdropFilter",
+  "clipPath",
   "pattern",
-  "box-shadow",
+  "boxShadow",
   "layout",
   "transform",
-  "transform-origin",
+  "transformOrigin",
   "perspective",
-  "perspective-origin",
-  "backdrop-filter",
-  "box-model"
+  "perspectiveOrigin",
+  "backdropFilter",
+  "boxModel"
 ];
 const expectedPropertiesKeys = {};
 expectedProperties.forEach((key) => {
   expectedPropertiesKeys[key] = true;
 });
-class SVGItem extends LayerModel {
+class SVGModel extends LayerModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "svg",
@@ -40446,13 +41058,76 @@ class SVGItem extends LayerModel {
       elementType: "svg",
       overflow: "visible",
       stroke: "black",
-      "stroke-width": 1,
+      strokeWidth: 1,
       fill: "transparent",
-      "fill-rule": "nonzero",
-      "text-anchor": "start",
-      "stroke-dasharray": [],
-      "stroke-dashoffset": 0
+      fillOpacity: 1,
+      fillRule: "nonzero",
+      textAnchor: "start",
+      strokeLinecap: "",
+      strokeLinejoin: "",
+      strokeDasharray: [],
+      strokeDashoffset: 0
     }, obj2));
+  }
+  get stroke() {
+    return this.get("stroke");
+  }
+  set stroke(value) {
+    this.set("stroke", value);
+  }
+  get strokeWidth() {
+    return this.get("strokeWidth");
+  }
+  set strokeWidth(value) {
+    this.set("strokeWidth", value);
+  }
+  get fill() {
+    return this.get("fill");
+  }
+  set fill(value) {
+    this.set("fill", value);
+  }
+  get fillOpacity() {
+    return this.get("fillOpacity");
+  }
+  set fillOpacity(value) {
+    this.set("fillOpacity", value);
+  }
+  get fillRule() {
+    return this.get("fillRule");
+  }
+  set fillRule(value) {
+    this.set("fillRule", value);
+  }
+  get textAnchor() {
+    return this.get("textAnchor");
+  }
+  set textAnchor(value) {
+    this.set("textAnchor", value);
+  }
+  get strokeDasharray() {
+    return this.get("strokeDasharray");
+  }
+  set strokeDasharray(value) {
+    this.set("strokeDasharray", value);
+  }
+  get strokeDashoffset() {
+    return this.get("strokeDashoffset");
+  }
+  set strokeDashoffset(value) {
+    this.set("strokeDashoffset", value);
+  }
+  get strokeLinejoin() {
+    return this.get("strokeLinejoin");
+  }
+  set strokeLinejoin(value) {
+    this.set("strokeLinejoin", value);
+  }
+  get strokeLinecap() {
+    return this.get("strokeLinecap");
+  }
+  set strokeLinecap(value) {
+    this.set("strokeLinecap", value);
   }
   get isDragSelectable() {
     return this.isBooleanItem === false;
@@ -40465,13 +41140,10 @@ class SVGItem extends LayerModel {
       return false;
     }
     switch (editablePropertyName) {
-      case "svg-item":
+      case "svgItem":
         return true;
     }
     return super.editable(editablePropertyName);
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("overflow", "stroke", "stroke-width", "svgfilter", "fill", "fill-rule", "fill-opacity", "stroke-linecap", "stroke-linejoin", "stroke-dashoffset", "stroke-dasharray", "text-anchor"));
   }
   getDefaultTitle() {
     return "SVG";
@@ -40480,10 +41152,9 @@ class SVGItem extends LayerModel {
     return true;
   }
   hasPoint(x, y) {
-    const obj2 = this.attrs("fill", "stroke", "fill-opacity", "stroke-width");
-    const fill = obj2.fill;
-    const fillOpacity = obj2["fill-opacity"];
-    const strokeWidth = obj2["stroke-width"];
+    const fill = this.fill;
+    const fillOpacity = this.fillOpacity;
+    const strokeWidth = this.strokeWidth;
     const isTransparent = fill === "transparent" || fillOpacity === 0 || parse(fill).a === 0;
     const isZeroStroke = strokeWidth === 0;
     if (isTransparent) {
@@ -40538,7 +41209,7 @@ class SVGItem extends LayerModel {
     });
   }
   createFragmentMatrix(field) {
-    const value = this.json[field];
+    const value = this.get(field);
     const image2 = SVGFill.parseImage(value);
     const backRect = {
       x: 0,
@@ -40610,7 +41281,7 @@ class SVGItem extends LayerModel {
     return result;
   }
 }
-class SVGPathItem extends SVGItem {
+class PathModel extends SVGModel {
   getIcon() {
     return obj$3.edit;
   }
@@ -40618,7 +41289,7 @@ class SVGPathItem extends SVGItem {
     return super.getDefaultObject(__spreadValues({
       itemType: "svg-path",
       name: "New Path",
-      "stroke-width": 1,
+      strokeWidth: 1,
       d: "",
       totalLength: 0
     }, obj2));
@@ -40629,50 +41300,48 @@ class SVGPathItem extends SVGItem {
   reset(json, context = { origin: "*" }) {
     const isChanged = super.reset(json, context);
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.d);
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     }
     return isChanged;
   }
   refreshMatrixCache() {
     super.refreshMatrixCache();
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.d);
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     } else if (this.hasChangedField("width", "height")) {
-      this.json.d = this.cachePath.clone().scale(this.json.width / this.cacheWidth, this.json.height / this.cacheHeight).d;
-      this.modelManager.setChanged("reset", this.id, { d: this.json.d });
+      this.d = this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+      this.modelManager.setChanged("reset", this.id, { d: this.d });
     }
   }
   setCache() {
     super.setCache();
-    this.cachePath = new PathParser(this.json.d);
-    this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;
+    this.cachePath = new PathParser(this.get("d"));
+    this.cacheWidth = this.width;
+    this.cacheHeight = this.height;
   }
   get d() {
-    if (!this.json.d) {
+    if (!this.get("d")) {
       return null;
     }
     if (!this.cachePath) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.get("d"));
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     }
-    return this.cachePath.clone().scale(this.json.width / this.cacheWidth, this.json.height / this.cacheHeight).d;
+    return this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
   }
-  toCloneObject() {
-    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
-      d: this.json.d
-    });
+  set d(value) {
+    this.set("d", value);
   }
   getDefaultTitle() {
     return "Path";
   }
 }
-class BooleanPathItem extends SVGPathItem {
+class BooleanPathModel extends PathModel {
   getIcon() {
     return obj$3.edit;
   }
@@ -40680,10 +41349,16 @@ class BooleanPathItem extends SVGPathItem {
     return super.getDefaultObject(__spreadValues({
       itemType: "boolean-path",
       name: "New Boolean Path",
-      "stroke-width": 1,
+      strokeWidth: 1,
       d: "",
-      "boolean-operation": "none"
+      booleanOperation: "none"
     }, obj2));
+  }
+  get booleanOperation() {
+    return this.get("booleanOperation");
+  }
+  set booleanOperation(value) {
+    this.set("booleanOperation", value);
   }
   enableHasChildren() {
     return true;
@@ -40694,23 +41369,23 @@ class BooleanPathItem extends SVGPathItem {
     if (!this.cachePath) {
       this.setCache();
     }
-    if (this.hasChangedField("changedChildren", "boolean-operation")) {
-      if (this.json.children.length === 1) {
+    if (this.hasChangedField("changedChildren", "booleanOperation")) {
+      if (this.children.length === 1) {
         const newPath = this.layers[0].absolutePath().d;
-        this.json.d = this.invertPath(newPath).d;
+        this.d = this.invertPath(newPath).d;
         this.setCache();
         this.modelManager.setChanged("reset", this.id, { d: newPath });
-      } else if (this.json["boolean-operation"] !== "none") {
-        if (((_a = this.json.children) == null ? void 0 : _a.length) >= 2) {
+      } else if (this.booleanOperation !== "none") {
+        if (((_a = this.children) == null ? void 0 : _a.length) >= 2) {
           if (this.modelManager.editor.pathKitManager.has()) {
             const paths = this.layers.filter((it) => it.d);
             if (paths.length >= 2) {
               const newPath = this.doBooleanOperation();
-              this.json.d = newPath;
+              this.d = newPath;
               this.setCache();
               this.modelManager.setChanged("reset", this.id, { d: newPath });
             } else {
-              this.json.d = void 0;
+              this.d = void 0;
               this.removeCache();
               this.modelManager.setChanged("reset", this.id, { d: void 0 });
             }
@@ -40725,8 +41400,8 @@ class BooleanPathItem extends SVGPathItem {
   }
   startToCacheChildren() {
     this.cachedSize = {
-      width: this.json.width.clone(),
-      height: this.json.height.clone()
+      width: this.width,
+      height: this.height
     };
     this.cachedLayerMatrix = this.layers.map((item) => {
       item.startToCacheChildren();
@@ -40738,8 +41413,8 @@ class BooleanPathItem extends SVGPathItem {
   }
   recoverChildren() {
     const obj2 = {
-      width: this.json.width.clone(),
-      height: this.json.height.clone()
+      width: this.width,
+      height: this.height
     };
     const scaleX = obj2.width / this.cachedSize.width;
     const scaleY = obj2.height / this.cachedSize.height;
@@ -40760,7 +41435,7 @@ class BooleanPathItem extends SVGPathItem {
     } else if (layers2.length === 1) {
       return layers2[0][field];
     }
-    const op = this["boolean-operation"];
+    const op = this.booleanOperation;
     switch (op) {
       case BooleanOperation.DIFFERENCE:
         return layers2[1][field];
@@ -40775,9 +41450,9 @@ class BooleanPathItem extends SVGPathItem {
   }
   setCache() {
     super.setCache();
-    this.cachePath = new PathParser(this.json.d);
-    this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;
+    this.cachePath = new PathParser(this.d);
+    this.cacheWidth = this.width;
+    this.cacheHeight = this.height;
   }
   removeCache() {
     super.removeCache();
@@ -40785,16 +41460,11 @@ class BooleanPathItem extends SVGPathItem {
     this.cacheWidth = void 0;
     this.cacheHeight = void 0;
   }
-  toCloneObject() {
-    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
-      d: this.json.d
-    });
-  }
   getDefaultTitle() {
     return "Path";
   }
   doBooleanOperation() {
-    const op = this.json["boolean-operation"];
+    const op = this.booleanOperation;
     switch (op) {
       case BooleanOperation.INTERSECTION:
         return this.intersection();
@@ -40856,7 +41526,7 @@ class CircleLayer extends LayerModel {
     return super.getDefaultObject(__spreadValues({
       itemType: "circle",
       name: "New Circle",
-      "border-radius": "100%"
+      borderRadius: "100%"
     }, obj2));
   }
   getDefaultTitle() {
@@ -40875,20 +41545,77 @@ class ImageLayer extends LayerModel {
       src: ""
     }, obj2));
   }
+  get src() {
+    return this.get("src");
+  }
+  set src(value) {
+    this.set("src", value);
+  }
+  get naturalWidth() {
+    return this.get("naturalWidth");
+  }
+  set naturalWidth(value) {
+    this.set("naturalWidth", value);
+  }
+  get naturalHeight() {
+    return this.get("naturalHeight");
+  }
+  set naturalHeight(value) {
+    this.set("naturalHeight", value);
+  }
   enableHasChildren() {
     return false;
   }
   getDefaultTitle() {
     return "Image";
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("src"));
-  }
   resize() {
     this.reset({
-      width: this.json.naturalWidth.clone(),
-      height: this.json.naturalHeight.clone()
+      width: this.naturalWidth.clone(),
+      height: this.naturalHeight.clone()
     });
+  }
+}
+class PolygonModel extends SVGModel {
+  getIcon() {
+    return obj$3.edit;
+  }
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "polygon",
+      name: "New Polygon",
+      strokeWidth: 1,
+      count: 3
+    }, obj2));
+  }
+  get count() {
+    return this.get("count");
+  }
+  set count(value) {
+    this.set("count", value);
+  }
+  convert(json) {
+    json = super.convert(json);
+    if (json.count)
+      json.count = +json.count;
+    return json;
+  }
+  enableHasChildren() {
+    return false;
+  }
+  get editablePath() {
+    return false;
+  }
+  get d() {
+    const { width: width2, height: height2, count } = this;
+    return PathParser.makePolygon(width2, height2, count).d;
+  }
+  getDefaultTitle() {
+    return "Polygon";
+  }
+  isPointInPath(point2) {
+    const localPoint = transformMat4([], point2, this.absoluteMatrixInverse);
+    return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.strokeWidth || 0);
   }
 }
 function makeInterpolateIdentity(layer, property, value) {
@@ -41773,7 +42500,7 @@ function makeInterpolateOffsetPath(layer, property, startValue, endValue, artboa
     };
   }
   return (rate, t, timing) => {
-    var arr = (layer["transform-origin"] || "50% 50%").split(" ").map((it) => Length.parse(it));
+    var arr = (layer.transformOrigin || "50% 50% 0px").split(" ").map((it) => Length.parse(it));
     var tx = arr[0].toPx(layer.width);
     var ty = arr[1].toPx(layer.height);
     var obj2 = innerInterpolate(rate, t, timing);
@@ -42253,8 +42980,41 @@ class AssetModel extends BaseModel {
       audios: []
     }, obj2));
   }
+  get comments() {
+    return this.get("comments");
+  }
+  get colors() {
+    return this.get("colors");
+  }
+  get gradients() {
+    return this.get("gradients");
+  }
+  get svgfilters() {
+    return this.get("svgfilters");
+  }
+  get svgimages() {
+    return this.get("svgimages");
+  }
+  get keyframes() {
+    return this.get("keyframes");
+  }
+  get videos() {
+    return this.get("videos");
+  }
+  get images() {
+    return this.get("images");
+  }
+  set images(value) {
+    this.set("images", value);
+  }
+  get imageKeys() {
+    return this.get("imageKeys");
+  }
+  get videoKeys() {
+    return this.get("videoKeys");
+  }
   addKeyframe(keyframe2) {
-    this.json.keyframes.push(keyframe2);
+    this.keyframes.push(keyframe2);
     return keyframe2;
   }
   createKeyframe(data = {}) {
@@ -42263,85 +43023,82 @@ class AssetModel extends BaseModel {
     }, data)));
   }
   removeKeyframe(removeIndex) {
-    this.removePropertyList(this.json.keyframes, removeIndex);
+    this.removePropertyList(this.keyframes, removeIndex);
   }
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
   }
   sortKeyframe(startIndex, targetIndex) {
-    this.sortItem(this.json.keyframes, startIndex, targetIndex);
+    this.sortItem(this.keyframes, startIndex, targetIndex);
   }
   updateKeyframe(index2, data = {}) {
-    this.json.keyframes[+index2].reset(data);
+    this.keyframes[+index2].reset(data);
   }
   toKeyframeString(isAnimate = false) {
-    return this.json.keyframes.map((keyframe2) => keyframe2.toString(isAnimate)).join("\n\n");
+    return this.keyframes.map((keyframe2) => keyframe2.toString(isAnimate)).join("\n\n");
   }
   copyPropertyList(arr, index2) {
     var copyObject = __spreadValues({}, arr[index2]);
     arr.splice(index2, 0, copyObject);
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("colors", "gradients", "svgfilters", "svgimages", "images", "keyframes"));
-  }
   removePropertyList(arr, removeIndex) {
     arr.splice(removeIndex, 1);
   }
   removeColor(removeIndex) {
-    this.removePropertyList(this.json.colors, removeIndex);
+    this.removePropertyList(this.colors, removeIndex);
   }
   copyColor(index2) {
-    this.copyPropertyList(this.json.colors, index2);
+    this.copyPropertyList(this.colors, index2);
   }
   sortColor(startIndex, targetIndex) {
-    this.sortItem(this.json.colors, startIndex, targetIndex);
+    this.sortItem(this.colors, startIndex, targetIndex);
   }
   setColorValue(index2, value = {}) {
-    this.json.colors[index2] = __spreadValues(__spreadValues({}, this.json.colors[index2]), value);
+    this.colors[index2] = __spreadValues(__spreadValues({}, this.colors[index2]), value);
   }
   getColorIndex(index2) {
-    return this.json.colors[index2];
+    return this.colors[index2];
   }
   getColor(name) {
-    return this.json.colors.filter((item) => item.name === name)[0];
+    return this.colors.filter((item) => item.name === name)[0];
   }
   addColor(obj2) {
-    this.json.colors.push(obj2);
+    this.colors.push(obj2);
     return obj2;
   }
   createColor(data = {}) {
     return this.addColor(data);
   }
   removeImage(removeIndex) {
-    this.removePropertyList(this.json.images, removeIndex);
+    this.removePropertyList(this.images, removeIndex);
     this.refreshImageKeys();
   }
   copyImage(index2) {
-    this.copyPropertyList(this.json.images, index2);
+    this.copyPropertyList(this.images, index2);
     this.refreshImageKeys();
   }
   sortImage(startIndex, targetIndex) {
-    this.sortItem(this.json.images, startIndex, targetIndex);
+    this.sortItem(this.images, startIndex, targetIndex);
   }
   setImageValue(index2, value = {}) {
-    this.json.images[index2] = __spreadValues(__spreadValues({}, this.json.images[index2]), value);
+    this.images[index2] = __spreadValues(__spreadValues({}, this.images[index2]), value);
     this.refreshImageKeys();
   }
   getImageValueById(id, defaultValue2 = "") {
-    const image2 = this.json.imageKeys[id];
+    const image2 = this.imageKeys[id];
     if (!image2)
       return id || defaultValue2;
     return image2.local;
   }
   getImageDataURIById(id) {
-    const image2 = this.json.imageKeys[id];
+    const image2 = this.imageKeys[id];
     if (!image2)
       return void 0;
     return image2.original;
   }
   refreshImageKeys() {
     let imageKeys = {};
-    this.json.images.forEach((it) => {
+    this.images.forEach((it) => {
       imageKeys[it.id] = it;
     });
     this.reset({
@@ -42349,7 +43106,7 @@ class AssetModel extends BaseModel {
     });
   }
   addImage(obj2) {
-    this.json.images.push(obj2);
+    this.images.push(obj2);
     this.refreshImageKeys();
     return obj2;
   }
@@ -42357,28 +43114,28 @@ class AssetModel extends BaseModel {
     return this.addImage(data);
   }
   removeVideo(removeIndex) {
-    this.removePropertyList(this.json.videos, removeIndex);
+    this.removePropertyList(this.videos, removeIndex);
     this.refreshVideoKeys();
   }
   copyVideo(index2) {
-    this.copyPropertyList(this.json.videos, index2);
+    this.copyPropertyList(this.videos, index2);
     this.refreshVideoKeys();
   }
   sortVideo(startIndex, targetIndex) {
-    this.sortItem(this.json.videos, startIndex, targetIndex);
+    this.sortItem(this.videos, startIndex, targetIndex);
   }
   setVideoValue(index2, value = {}) {
-    this.json.videos[index2] = __spreadValues(__spreadValues({}, this.json.videos[index2]), value);
+    this.videos[index2] = __spreadValues(__spreadValues({}, this.videos[index2]), value);
   }
   getVideoValueById(id) {
-    const video2 = this.json.videoKeys[id];
+    const video2 = this.videoKeys[id];
     if (!video2)
       return void 0;
     return video2.local;
   }
   refreshVideoKeys() {
     let videoKeys = {};
-    this.json.videos.forEach((it) => {
+    this.videos.forEach((it) => {
       videoKeys[it.id] = it;
     });
     this.reset({
@@ -42386,7 +43143,7 @@ class AssetModel extends BaseModel {
     });
   }
   addVideo(obj2) {
-    this.json.videos.push(obj2);
+    this.videos.push(obj2);
     this.refreshVideoKeys();
     return obj2;
   }
@@ -42394,25 +43151,25 @@ class AssetModel extends BaseModel {
     return this.addVideo(data);
   }
   removeGradient(removeIndex) {
-    this.removePropertyList(this.json.gradients, removeIndex);
+    this.removePropertyList(this.gradients, removeIndex);
   }
   copyGradient(index2) {
-    this.copyPropertyList(this.json.gradients, index2);
+    this.copyPropertyList(this.gradients, index2);
   }
   sortGradient(startIndex, targetIndex) {
-    this.sortItem(this.json.gradients, startIndex, targetIndex);
+    this.sortItem(this.gradients, startIndex, targetIndex);
   }
   setGradientValue(index2, value) {
-    this.json.gradients[index2] = __spreadValues(__spreadValues({}, this.json.gradients[index2]), value);
+    this.gradients[index2] = __spreadValues(__spreadValues({}, this.gradients[index2]), value);
   }
   getGradientIndex(index2) {
-    return this.json.gradients[index2];
+    return this.gradients[index2];
   }
   getGradient(name) {
-    return this.json.gradients.filter((item) => item.name === name)[0];
+    return this.gradients.filter((item) => item.name === name)[0];
   }
   addGradient(obj2 = {}) {
-    this.json.gradients.push(obj2);
+    this.gradients.push(obj2);
     return obj2;
   }
   createGradient(data = {}) {
@@ -42420,7 +43177,7 @@ class AssetModel extends BaseModel {
   }
   getSVGFilterIndex(id) {
     var _a;
-    var filter2 = this.json.svgfilters.map((it, index2) => {
+    var filter2 = this.svgfilters.map((it, index2) => {
       return { id: it.id, index: index2 };
     }).filter((it) => {
       return it.id === id;
@@ -42428,27 +43185,27 @@ class AssetModel extends BaseModel {
     return filter2.length ? (_a = filter2 == null ? void 0 : filter2[0]) == null ? void 0 : _a.index : -1;
   }
   removeSVGFilter(removeIndex) {
-    this.removePropertyList(this.json.svgfilters, removeIndex);
+    this.removePropertyList(this.svgfilters, removeIndex);
   }
   copySVGFilter(index2) {
-    this.copyPropertyList(this.json.svgfilters, index2);
+    this.copyPropertyList(this.svgfilters, index2);
   }
   sortSVGFilter(startIndex, targetIndex) {
-    this.sortItem(this.json.svgfilters, startIndex, targetIndex);
+    this.sortItem(this.svgfilters, startIndex, targetIndex);
   }
   setSVGFilterValue(index2, value) {
-    this.json.svgfilters[index2] = __spreadValues(__spreadValues({}, this.json.svgfilters[index2]), value);
+    this.svgfilters[index2] = __spreadValues(__spreadValues({}, this.svgfilters[index2]), value);
   }
   addSVGFilter(obj2 = {}) {
-    this.json.svgfilters.push(obj2);
-    var index2 = this.json.svgfilters.length - 1;
+    this.svgfilters.push(obj2);
+    var index2 = this.svgfilters.length - 1;
     return index2;
   }
   createSVGFilter(data = {}) {
     return this.addSVGFilter(data);
   }
   getSVGImageIndex(id) {
-    var filter2 = this.json.svgimages.map((it, index2) => {
+    var filter2 = this.svgimages.map((it, index2) => {
       return { id: it.id, index: index2 };
     }).filter((it) => {
       return it.id === id;
@@ -42456,20 +43213,20 @@ class AssetModel extends BaseModel {
     return filter2 ? filter2.index : -1;
   }
   removeSVGImage(removeIndex) {
-    this.removePropertyList(this.json.svgimages, removeIndex);
+    this.removePropertyList(this.svgimages, removeIndex);
   }
   copySVGImage(index2) {
-    this.copyPropertyList(this.json.svgimages, index2);
+    this.copyPropertyList(this.svgimages, index2);
   }
   sortSVGImage(startIndex, targetIndex) {
-    this.sortItem(this.json.svgimages, startIndex, targetIndex);
+    this.sortItem(this.svgimages, startIndex, targetIndex);
   }
   setSVGImageValue(index2, value) {
-    this.json.svgimages[index2] = __spreadValues(__spreadValues({}, this.json.svgimages[index2]), value);
+    this.svgimages[index2] = __spreadValues(__spreadValues({}, this.svgimages[index2]), value);
   }
   addSVGImage(obj2 = {}) {
-    this.json.svgimages.push(obj2);
-    var index2 = this.json.svgimages.length - 1;
+    this.svgimages.push(obj2);
+    var index2 = this.svgimages.length - 1;
     return index2;
   }
   createSVGImage(data = {}) {
@@ -42477,11 +43234,21 @@ class AssetModel extends BaseModel {
   }
 }
 class TimelineModel extends AssetModel {
+  constructor() {
+    super(...arguments);
+    __privateAdd(this, _compiledTimeline, []);
+  }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       timeline: [],
       compiledTimeline: {}
     }, obj2));
+  }
+  get timeline() {
+    return this.get("timeline");
+  }
+  set timeline(value) {
+    this.set("timeline", value);
   }
   expectJSON(key) {
     if (key === "compiledTimeline")
@@ -42500,7 +43267,7 @@ class TimelineModel extends AssetModel {
   }
   compileAll() {
     var timeline = this.getSelectedTimeline();
-    this.json.compiledTimeline = {};
+    __privateSet(this, _compiledTimeline, {});
     if (timeline) {
       timeline.animations.forEach((animation2) => {
         animation2.properties.forEach((property) => {
@@ -42527,7 +43294,7 @@ class TimelineModel extends AssetModel {
     return filteredTimeline.filter((it) => it);
   }
   getCompiledTimingFunction(layerId, property) {
-    return this.json.compiledTimeline[`${layerId}.${property}`];
+    return __privateGet(this, _compiledTimeline)[`${layerId}.${property}`];
   }
   compiledTimingFunction(layerId, property) {
     var artboard2 = this;
@@ -42535,12 +43302,12 @@ class TimelineModel extends AssetModel {
     var layer = this.modelManager.get(layerId);
     var key = `${layerId}.${property}`;
     if (p.keyframes.length === 1) {
-      this.json.compiledTimeline[key] = [];
+      __privateGet(this, _compiledTimeline)[key] = [];
       return;
     }
     let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
     let editorString = p.keyframes.map((it) => it.editor)[0];
-    this.json.compiledTimeline[key] = p.keyframes.map((offset, index2) => {
+    __privateGet(this, _compiledTimeline)[key] = p.keyframes.map((offset, index2) => {
       var currentOffset = offset;
       var nextOffset = p.keyframes[index2 + 1];
       offset.editor = editorString;
@@ -42607,7 +43374,7 @@ class TimelineModel extends AssetModel {
     }
   }
   getSelectedTimeline() {
-    var timeline = this.json.timeline;
+    var timeline = this.timeline;
     var a = timeline.filter((it) => it.selected);
     var selectedTimeline = a.length ? a[0] : timeline[0];
     return selectedTimeline || null;
@@ -42669,7 +43436,7 @@ class TimelineModel extends AssetModel {
     return time;
   }
   setTimelineTitle(id, text2) {
-    var timeline = this.json.timeline.find((it) => {
+    var timeline = this.timeline.find((it) => {
       return it.id === id;
     });
     if (timeline) {
@@ -42678,27 +43445,27 @@ class TimelineModel extends AssetModel {
   }
   selectTimeline(id) {
     if (id) {
-      this.json.timeline.forEach((it) => {
+      this.timeline.forEach((it) => {
         it.selected = it.id === id;
       });
     } else {
-      var selectedTimeline = this.json.timeline.filter((it) => it.selected);
+      var selectedTimeline = this.timeline.filter((it) => it.selected);
       if (selectedTimeline.length)
         ;
       else {
-        if (this.json.timeline.length) {
-          this.json.timeline.selected = true;
+        if (this.timeline.length) {
+          this.timeline.selected = true;
         }
       }
     }
     this.compileAll();
   }
   removeAnimation(id) {
-    this.json.timeline = this.json.timeline.filter((it) => {
+    this.timeline = this.timeline.filter((it) => {
       return it.id !== id;
     });
-    if (this.json.timeline.length) {
-      this.json.timeline[0].selected = true;
+    if (this.timeline.length) {
+      this.timeline[0].selected = true;
     }
     this.compileAll();
   }
@@ -42710,7 +43477,7 @@ class TimelineModel extends AssetModel {
     }, this.getTimelineLayerInfo(fps, endTimecode)), {
       animations: []
     });
-    this.json.timeline.push(selectedTimeline);
+    this.timeline.push(selectedTimeline);
     this.selectTimeline(id);
     return selectedTimeline;
   }
@@ -43002,12 +43769,8 @@ class TimelineModel extends AssetModel {
       timeline.totalTimecode = timecode(fps, timeline.totalTime);
     }
   }
-  toCloneObject() {
-    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
-      timeline: clone$1(this.json.timeline)
-    });
-  }
 }
+_compiledTimeline = new WeakMap();
 const identity = create$4();
 class Project extends TimelineModel {
   getDefaultTitle() {
@@ -43024,7 +43787,7 @@ class Project extends TimelineModel {
   }
   toRootVariableCSS() {
     var obj2 = {};
-    this.json.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+    this.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
       var [key, value] = it.split(":");
       obj2[`--${key}`] = value;
     });
@@ -43038,8 +43801,17 @@ class Project extends TimelineModel {
       rootVariable: ""
     }, obj2));
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "description", "rootVariable"));
+  get description() {
+    return this.get("description");
+  }
+  set description(value) {
+    this.set("description", value);
+  }
+  get rootVariable() {
+    return this.get("rootVariable");
+  }
+  set rootVariable(value) {
+    this.set("rootVariable", value);
   }
   get artboards() {
     return (this.layers || []).filter((it) => it.is("artboard"));
@@ -44123,7 +44895,7 @@ function nurbs(points, degree, knots, weights, boundary, opts) {
   return ctor;
 }
 var nurbs_1 = nurbs;
-class SplineItem extends SVGItem {
+class SplineModel extends SVGModel {
   getIcon() {
     return obj$3.star;
   }
@@ -44131,12 +44903,36 @@ class SplineItem extends SVGItem {
     return super.getDefaultObject(__spreadValues({
       itemType: "spline",
       name: "New Spline",
-      "stroke-width": 1,
+      strokeWidth: 1,
       points: [],
       traceCount: 100,
       degree: 2,
       boundary: "clamped"
     }, obj2));
+  }
+  get points() {
+    return this.get("points");
+  }
+  set points(value) {
+    this.set("points", value);
+  }
+  get degree() {
+    return this.get("degree");
+  }
+  set degree(value) {
+    this.set("degree", value);
+  }
+  get traceCount() {
+    return this.get("traceCount");
+  }
+  set traceCount(value) {
+    this.set("traceCount", value);
+  }
+  get boundary() {
+    return this.get("boundary");
+  }
+  set boundary(value) {
+    this.set("boundary", value);
   }
   enableHasChildren() {
     return false;
@@ -44149,20 +44945,20 @@ class SplineItem extends SVGItem {
       if (!this.cachePath) {
         this.setCache();
       }
-      this.json.points = this.cachePath.clone().scale(this.json.width / this.cacheWidth, this.json.height / this.cacheHeight).verties;
+      this.points = this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).verties;
       this.modelManager.setChanged("reset", this.id, {
-        points: this.json.points
+        points: this.points
       });
     }
   }
   setCache() {
     super.setCache();
-    this.cachePath = PathParser.makePathByVerties(this.json.points);
-    this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;
+    this.cachePath = PathParser.makePathByVerties(this.points);
+    this.cacheWidth = this.width;
+    this.cacheHeight = this.height;
   }
   get editablePath() {
-    let { width: width2, height: height2, points } = this.json;
+    let { width: width2, height: height2, points } = this;
     if (!points || points.length == 0) {
       points = [
         [0, height2],
@@ -44182,15 +44978,15 @@ class SplineItem extends SVGItem {
     }, pathData);
   }
   get d() {
-    return this.getPath(this.json.points, this.json.boundary);
+    return this.getPath(this.points, this.boundary);
   }
   getPath(points, boundary) {
-    let { width: width2, height: height2 } = this.json;
+    let { width: width2, height: height2 } = this;
     if (!points) {
-      points = this.json.points;
+      points = this.points;
     }
     if (!boundary) {
-      boundary = this.json.boundary;
+      boundary = this.boundary;
     }
     if (!points || points.length == 0) {
       points = [
@@ -44217,53 +45013,11 @@ class SplineItem extends SVGItem {
     }
     return PathParser.makePathByVerties(verties, false).round(1e3).d;
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("points", "degree", "boundary"));
-  }
   getDefaultTitle() {
     return "BSpline";
   }
 }
-class SVGPolygonItem extends SVGItem {
-  getIcon() {
-    return obj$3.edit;
-  }
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      itemType: "polygon",
-      name: "New Polygon",
-      "stroke-width": 1,
-      count: 3
-    }, obj2));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (json.count)
-      json.count = +json.count;
-    return json;
-  }
-  enableHasChildren() {
-    return false;
-  }
-  get editablePath() {
-    return false;
-  }
-  get d() {
-    const { width: width2, height: height2, count } = this.json;
-    return PathParser.makePolygon(width2, height2, count).d;
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("count"));
-  }
-  getDefaultTitle() {
-    return "Polygon";
-  }
-  isPointInPath(point2) {
-    const localPoint = transformMat4([], point2, this.absoluteMatrixInverse);
-    return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.json["stroke-width"] || 0);
-  }
-}
-class SVGStarItem extends SVGItem {
+class StarModel extends SVGModel {
   getIcon() {
     return obj$3.star;
   }
@@ -44271,13 +45025,33 @@ class SVGStarItem extends SVGItem {
     return super.getDefaultObject(__spreadValues({
       itemType: "star",
       name: "New Star",
-      "stroke-width": 1,
-      d: "",
+      strokeWidth: 1,
       isCurve: false,
       count: 5,
       radius: 0.5,
       tension: 0.5
     }, obj2));
+  }
+  get count() {
+    return this.get("count");
+  }
+  set count(value) {
+    this.set("count", value);
+  }
+  get radius() {
+    return this.get("radius");
+  }
+  set radius(value) {
+    this.set("radius", value);
+  }
+  get tension() {
+    return this.get("tension");
+  }
+  set tension(value) {
+    this.set("tension", value);
+  }
+  get isCurve() {
+    return this.get("isCurve");
   }
   convert(json) {
     json = super.convert(json);
@@ -44293,7 +45067,7 @@ class SVGStarItem extends SVGItem {
     return false;
   }
   get d() {
-    const { width: width2, height: height2, count, radius, tension, isCurve } = this.json;
+    const { width: width2, height: height2, count, radius, tension, isCurve } = this;
     let newPath = "";
     if (isCurve) {
       newPath = PathParser.makeCurvedStar(width2, height2, count, radius, tension).d;
@@ -44302,14 +45076,11 @@ class SVGStarItem extends SVGItem {
     }
     return newPath;
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("count", "radius", "tension", "isCurve"));
-  }
   getDefaultTitle() {
     return "Star";
   }
 }
-class SVGTextItem extends SVGItem {
+class SVGTextItem extends SVGModel {
   getIcon() {
     return obj$3.title;
   }
@@ -44320,14 +45091,28 @@ class SVGTextItem extends SVGItem {
       totalLength: 0,
       fill: "rgba(0, 0, 0, 1)",
       text: "Insert a text",
-      "font-weight": Length.number(100),
+      "fontWeight": Length.number(100),
       textLength: Length.em(0),
-      lengthAdjust: "spacingAndGlyphs",
-      "shape-inside": "",
-      "shape-subtract": "",
-      "shape-margin": "",
-      "shape-padding": ""
+      lengthAdjust: "spacingAndGlyphs"
     }, obj2));
+  }
+  get text() {
+    return this.get("text");
+  }
+  set text(value) {
+    this.set("text", value);
+  }
+  get textLength() {
+    return this.get("textLength");
+  }
+  set textLength(value) {
+    this.set("textLength", value);
+  }
+  get lengthAdjust() {
+    return this.get("lengthAdjust");
+  }
+  set lengthAdjust(value) {
+    this.set("lengthAdjust", value);
   }
   enableHasChildren() {
     return false;
@@ -44337,14 +45122,11 @@ class SVGTextItem extends SVGItem {
     json.textLength = Length.parse(json.textLength);
     return json;
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("totalLength", "text", "textLength", "lengthAdjust", "shape-inside"));
-  }
   getDefaultTitle() {
     return "Text";
   }
 }
-class SVGTextPathItem extends SVGItem {
+class SVGTextPathItem extends SVGModel {
   getIcon() {
     return obj$3.text_rotate;
   }
@@ -44361,39 +45143,63 @@ class SVGTextPathItem extends SVGItem {
       startOffset: Length.em(0)
     }, obj2));
   }
+  get d() {
+    if (!this.get("d")) {
+      return null;
+    }
+    if (!this.cachePath) {
+      this.cachePath = new PathParser(this.get("d"));
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
+    }
+    return this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+  }
+  set d(value) {
+    this.set("d", value);
+  }
+  get text() {
+    return this.get("text");
+  }
+  set text(value) {
+    this.set("text", value);
+  }
+  get textLength() {
+    return this.get("textLength");
+  }
+  set textLength(value) {
+    this.set("textLength", value);
+  }
+  get lengthAdjust() {
+    return this.get("lengthAdjust");
+  }
+  set lengthAdjust(value) {
+    this.set("lengthAdjust", value);
+  }
+  get startOffset() {
+    return this.get("startOffset");
+  }
+  set startOffset(value) {
+    this.set("startOffset", value);
+  }
   enableHasChildren() {
     return false;
   }
   refreshMatrixCache() {
     super.refreshMatrixCache();
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.get("d"));
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     } else if (this.hasChangedField("width", "height")) {
-      this.json.d = this.cachePath.clone().scale(this.json.width / this.cacheWidth, this.json.height / this.cacheHeight).d;
-      this.modelManager.setChanged("reset", this.id, { d: this.json.d });
+      this.d = this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+      this.modelManager.setChanged("reset", this.id, { d: this.d });
     }
-  }
-  get d() {
-    if (!this.json.d) {
-      return null;
-    }
-    if (!this.cachePath) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
-    }
-    return this.cachePath.clone().scale(this.json.width / this.cacheWidth, this.json.height / this.cacheHeight).d;
   }
   convert(json) {
     json = super.convert(json);
     json.textLength = Length.parse(json.textLength);
     json.startOffset = Length.parse(json.startOffset);
     return json;
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("totalLength", "d", "text", "textLength", "lengthAdjust", "startOffset"));
   }
   getDefaultTitle() {
     return "TextPath";
@@ -44425,9 +45231,6 @@ class Component extends LayerModel {
           name: "New Component"
         }, attrs));
       }
-      toCloneObject() {
-        return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs(...Object.keys(attrs)));
-      }
       enableHasChildren() {
         return enableHasChildren || false;
       }
@@ -44442,7 +45245,7 @@ const DEFAULT_TEMPLATE = `
     <rect width="100%" height="100%" fill="black" />
   </svg>
 `;
-class TemplateLayer extends Component {
+class TemplateModel extends Component {
   getIcon() {
     return obj$3.auto_awesome;
   }
@@ -44454,6 +45257,24 @@ class TemplateLayer extends Component {
       template: DEFAULT_TEMPLATE,
       params: []
     }, obj2));
+  }
+  get template() {
+    return this.get("template");
+  }
+  set template(value) {
+    this.set("template", value);
+  }
+  get params() {
+    return this.get("params");
+  }
+  set params(value) {
+    this.set("params", value);
+  }
+  get engine() {
+    return this.get("engine");
+  }
+  set engine(value) {
+    this.set("engine", value);
   }
   enableHasChildren() {
     return false;
@@ -44468,11 +45289,8 @@ class TemplateLayer extends Component {
     }
     return super.editable(editablePropertyName);
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("template"));
-  }
 }
-class TextLayer extends LayerModel {
+class TextModel extends LayerModel {
   getIcon() {
     return obj$3.title;
   }
@@ -44484,35 +45302,38 @@ class TextLayer extends LayerModel {
       content: ""
     }, obj2));
   }
+  get content() {
+    return this.get("content");
+  }
+  set content(value) {
+    this.set("content", value);
+  }
   enableHasChildren() {
     return false;
   }
   getDefaultTitle() {
     return "Text";
   }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("content"));
-  }
   editable(editablePropertyName) {
     switch (editablePropertyName) {
       case "svg-item":
       case "transform":
-      case "transform-origin":
+      case "transformOrigin":
       case "perspective":
-      case "perspective-origin":
+      case "perspectiveOrigin":
       case "layout":
         return false;
       case "font":
-      case "font-spacing":
-      case "text-style":
-      case "text-shadow":
-      case "text-fill":
-      case "text-clip":
-      case "background-image":
+      case "fontSpacing":
+      case "textStyle":
+      case "textShadow":
+      case "textFill":
+      case "textClip":
+      case "backgroundImage":
       case "box-model":
       case "border":
-      case "border-radius":
-      case "backdrop-filter":
+      case "borderRadius":
+      case "backdropFilter":
       case "pattern":
         return true;
     }
@@ -44525,15 +45346,15 @@ function defaultItems(editor) {
   editor.registerItem("rect", RectLayer);
   editor.registerItem("circle", CircleLayer);
   editor.registerItem("image", ImageLayer);
-  editor.registerItem("text", TextLayer);
-  editor.registerItem("boolean-path", BooleanPathItem);
-  editor.registerItem("svg-path", SVGPathItem);
+  editor.registerItem("text", TextModel);
+  editor.registerItem("boolean-path", BooleanPathModel);
+  editor.registerItem("svg-path", PathModel);
   editor.registerItem("svg-text", SVGTextItem);
   editor.registerItem("svg-textpath", SVGTextPathItem);
-  editor.registerItem("template", TemplateLayer);
-  editor.registerItem("polygon", SVGPolygonItem);
-  editor.registerItem("star", SVGStarItem);
-  editor.registerItem("spline", SplineItem);
+  editor.registerItem("template", TemplateModel);
+  editor.registerItem("polygon", PolygonModel);
+  editor.registerItem("star", StarModel);
+  editor.registerItem("spline", SplineModel);
 }
 var texture = `
 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
@@ -44546,21 +45367,21 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-color": "#ececec"
+      backgroundColor: "#ececec"
     }
   },
   {
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-color": "black"
+      backgroundColor: "black"
     }
   },
   {
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-color": "red"
+      backgroundColor: "red"
     }
   },
   {
@@ -44617,7 +45438,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "path",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       d: PathParser.makeRect(0, 0, 80, 80).d
@@ -44627,7 +45448,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "line",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       d: PathParser.makeLine(0, 0, 80, 80).d
@@ -44637,7 +45458,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "line 2",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44648,7 +45469,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "circle",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44661,7 +45482,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 3",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44675,7 +45496,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44689,7 +45510,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44703,7 +45524,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44717,7 +45538,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44731,7 +45552,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44745,7 +45566,7 @@ const svgPatterns = [
     itemType: "star",
     name: "star - 5",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44760,7 +45581,7 @@ const svgPatterns = [
     itemType: "star",
     name: "curved star - 5",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -44827,12 +45648,14 @@ class TextureView extends EditorElement {
       value: "css",
       title: "CSS"
     }, /* @__PURE__ */ createElementJsx("object", {
-      refClass: "CSSTextureView"
+      refClass: "CSSTextureView",
+      ref: "$css"
     })), /* @__PURE__ */ createElementJsx(TabPanel, {
       value: "svg",
       title: "SVG"
     }, /* @__PURE__ */ createElementJsx("object", {
-      refClass: "SVGTextureView"
+      refClass: "SVGTextureView",
+      ref: "$svg"
     }))));
   }
 }
@@ -45405,7 +46228,7 @@ class FillEditorView extends FillColorstepEditor {
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     this.refresh();
   }
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + DEBOUNCE(100)]() {
     if (this.$context.selection.current) {
       if (this.$context.selection.hasChangedField("x", "y", "width", "height", "angle", "fill", "stroke")) {
         this.refresh();
@@ -45771,7 +46594,7 @@ class FilterProperty extends BaseProperty {
     }
     return arr;
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var current = this.$context.selection.current || {};
     var value = current.filter;
     return createComponent("FilterEditor", {
@@ -45842,7 +46665,7 @@ function font(editor) {
             "system-ui"
           ]
         },
-        defaultValue: current["font-family"] || ""
+        defaultValue: current.fontFamily || ""
       },
       {
         type: "column",
@@ -45859,7 +46682,7 @@ function font(editor) {
               max: 1e3,
               step: 1
             },
-            defaultValue: Length.parse(current["font-size"]).value,
+            defaultValue: Length.parse(current.fontSize).value,
             convert: (key, value) => Length.px(value)
           },
           {
@@ -45872,7 +46695,7 @@ function font(editor) {
               max: 1e3,
               step: 1
             },
-            defaultValue: Length.parse(current["padding-top"]).value,
+            defaultValue: Length.parse(current.paddingTop).value,
             convert: (key, value) => Length.px(value)
           }
         ]
@@ -45887,7 +46710,7 @@ function font(editor) {
             editorOptions: {
               compact: true
             },
-            defaultValue: current["color"] || "#000"
+            defaultValue: current.color || "#000"
           },
           {
             key: "font-weight",
@@ -45899,7 +46722,7 @@ function font(editor) {
               max: 900,
               step: 100
             },
-            defaultValue: current["font-weight"] || 400
+            defaultValue: current.fontWeight || 400
           }
         ]
       },
@@ -45918,7 +46741,7 @@ function font(editor) {
               step: 1,
               compact: true
             },
-            defaultValue: Length.parse(current["text-indent"]).value,
+            defaultValue: Length.parse(current.textIndent).value,
             convert: (key, value) => Length.px(value)
           },
           {
@@ -45931,7 +46754,7 @@ function font(editor) {
               step: 0.01,
               compact: true
             },
-            defaultValue: current["line-height"] || 1.2
+            defaultValue: current.lineHeight || 1.2
           },
           {
             key: "letter-spacing",
@@ -45943,7 +46766,7 @@ function font(editor) {
               step: 1,
               compact: true
             },
-            defaultValue: Length.parse(current["letter-spacing"]).value,
+            defaultValue: Length.parse(current.letterSpacing).value,
             convert: (key, value) => Length.px(value)
           }
         ]
@@ -47100,7 +47923,7 @@ var repeatTypeList = [
 const TOOL_SIZE = 20;
 class GradientBaseEditor extends EditorElement {
   initializeData() {
-    const value = this.$context.selection.current["background-image"];
+    const value = this.$context.selection.current.backgroundImage;
     const cssValue = STRING_TO_CSS(value);
     this.state.backgroundImages = BackgroundImage.parseStyle(cssValue);
     this.state.backImages = BackgroundImage.parseStyle(cssValue);
@@ -47112,7 +47935,7 @@ class GradientBaseEditor extends EditorElement {
   updateData() {
     var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
     this.$commands.executeCommand("setAttribute", "change background image", this.$context.selection.packByValue({
-      "background-image": value
+      backgroundImage: value
     }));
   }
 }
@@ -47476,7 +48299,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.emit("updateGradientEditor", nextImage, targetColorStep);
     var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
     this.$commands.executeCommand("setAttribute", "change background image", this.$context.selection.packByValue({
-      "background-image": value
+      backgroundImage: value
     }));
   }
   moveEndColorStep(dx, dy) {
@@ -47494,7 +48317,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
       this.emit("updateGradientEditor", image2, targetColorStep);
       var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
       this.$commands.executeCommand("setAttribute", "change background image", this.$context.selection.packByValue({
-        "background-image": value
+        backgroundImage: value
       }));
     }
     this.$el.toggleClass("dragging", false);
@@ -47506,7 +48329,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.state.backgroundImages[this.state.index].image = image2;
     var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.backgroundImages));
     this.$commands.executeCommand("setAttribute", "change background image", this.$context.selection.packByValue({
-      "background-image": value
+      backgroundImage: value
     }));
     this.state.hoverColorStep = null;
   }
@@ -47689,9 +48512,9 @@ class GradientEditorView extends GradientColorstepEditor {
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
     this.refresh();
   }
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + DEBOUNCE(10)]() {
     if (this.$context.selection.current) {
-      if (this.$context.selection.hasChangedField("x", "y", "width", "height", "angle", "background-image", "border", "padding")) {
+      if (this.$context.selection.hasChangedField("x", "y", "width", "height", "angle", "backgroundImage", "border", "padding", "paddingTop", "paddingLeft", "paddingRight", "paddingBottom")) {
         this.refresh();
       }
     }
@@ -48472,7 +49295,7 @@ class GuideLineView extends EditorElement {
       return;
     const expect = this.$context.selection.hasChangedField("d", "clip-path");
     if (!expect) {
-      this.refreshSmartGuidesForVerties(1);
+      this.refreshSmartGuidesForVerties(1 / this.$viewport.scale);
     }
   }
 }
@@ -49789,15 +50612,15 @@ class LayerAppendView extends EditorElement {
       y: Math.floor(y),
       width: Math.floor(width2),
       height: Math.floor(height2),
-      "background-color": color2,
+      backgroundColor: color2,
       content: content2,
-      "font-size": fontSize
+      fontSize
     }, patternInfo.attrs), this.state.options);
     switch (this.state.type) {
       case "text":
       case "svg-text":
       case "svg-textpath":
-        delete rect2["background-color"];
+        delete rect2.backgroundColor;
         break;
       case "svg-path":
         rect2["d"] = this.state.d.clone().scale(width2 / this.state.bboxRect.width, height2 / this.state.bboxRect.height).d;
@@ -49818,7 +50641,7 @@ class LayerAppendView extends EditorElement {
         break;
       case "text":
         if (hasArea) {
-          rect2["font-size"] = Length.px(this.state.fontSize).floor();
+          rect2.fontSize = Length.px(this.state.fontSize).floor();
         } else {
           const scaledFontSize = this.state.fontSize / this.$viewport.scale;
           const $drawItem = this.refs.$area.$(".draw-item > p");
@@ -49859,7 +50682,7 @@ class LayerAppendView extends EditorElement {
       width: true,
       height: true,
       transform: true,
-      "transform-origin": true
+      transformOrigin: true
     }));
     if (options2.d) {
       this.state.d = new PathParser(options2.d);
@@ -50196,7 +51019,7 @@ class LayerTreeProperty extends BaseProperty {
   }
   [CLICK("$add")]() {
     this.$commands.emit("newComponent", "rect", {
-      "background-color": "#ececec",
+      backgroundColor: "#ececec",
       width: 200,
       height: 100
     });
@@ -50583,10 +51406,10 @@ class FlexLayoutEditor extends EditorElement {
     const current = this.$context.selection.current;
     if (!current)
       return "";
-    const realPaddingTop = Math.min(current["padding-top"] || 0, 50);
-    const realPaddingLeft = Math.min(current["padding-left"] || 0, 50);
-    const realPaddingRight = Math.min(current["padding-right"] || 0, 50);
-    const realPaddingBottom = Math.min(current["padding-bottom"] || 0, 50);
+    const realPaddingTop = Math.min(current.paddingTop || 0, 50);
+    const realPaddingLeft = Math.min(current.paddingLeft || 0, 50);
+    const realPaddingRight = Math.min(current.paddingRight || 0, 50);
+    const realPaddingBottom = Math.min(current.paddingBottom || 0, 50);
     const padding2 = `padding-top:${realPaddingTop}px;padding-left: ${realPaddingLeft}px;padding-right:${realPaddingRight}px;padding-bottom: ${realPaddingBottom}px;`;
     return `
             <div class='flex-layout-item'>
@@ -50620,7 +51443,7 @@ class FlexLayoutEditor extends EditorElement {
       label: iconUse("padding"),
       key: "padding",
       ref: "$padding",
-      value: current["padding-top"],
+      value: current.paddingTop,
       min: 0,
       max: 100,
       step: 1,
@@ -50648,10 +51471,10 @@ class FlexLayoutEditor extends EditorElement {
             <div class="select-flex-direction">
                 <div>
                     <div class="flex-group-padding">            
-                        <div class="padding-top" style="height: ${current["padding-top"]}px"></div>
-                        <div class="padding-left" style="width: ${current["padding-left"]}px"></div>
-                        <div class="padding-right" style="width: ${current["padding-right"]}px"></div>
-                        <div class="padding-bottom" style="height: ${current["padding-bottom"]}px"></div>
+                        <div class="padding-top" style="height: ${current.paddingTop}px"></div>
+                        <div class="padding-left" style="width: ${current.paddingLeft}px"></div>
+                        <div class="padding-right" style="width: ${current.paddingRight}px"></div>
+                        <div class="padding-bottom" style="height: ${current.paddingBottom}px"></div>
                     </div>
                     <div class="flex-group" style="
                             --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
@@ -50751,10 +51574,10 @@ class FlexLayoutEditor extends EditorElement {
       [key]: value
     }, false);
     this.modifyData(key, {
-      "padding-top": value,
-      "padding-left": value,
-      "padding-right": value,
-      "padding-bottom": value
+      paddingTop: value,
+      paddingLeft: value,
+      paddingRight: value,
+      paddingBottom: value
     });
     this.refresh();
   }
@@ -51366,17 +52189,17 @@ class GridGrowToolView extends GridGrowDragEventView {
     const rect2 = vertiesToRectangle(this.$viewport.applyVerties(current.verties));
     const info = this.getGridLayoutInformation();
     const [paddingTop, paddingRight, paddingBottom, paddingLeft] = this.getScaledInformation([
-      Length.px(info.current["padding-top"]),
-      Length.px(info.current["padding-right"]),
-      Length.px(info.current["padding-bottom"]),
-      Length.px(info.current["padding-left"])
+      Length.px(info.current.paddingTop),
+      Length.px(info.current.paddingRight),
+      Length.px(info.current.paddingBottom),
+      Length.px(info.current.paddingLeft)
     ]);
     const columns = this.getScaledInformation(info.columns);
     const rows = this.getScaledInformation(info.rows);
     const columnGap = this.getScaledLength(info.columnGap);
     const rowGap = this.getScaledLength(info.rowGap);
-    const origin2 = subtract([], current.verties[1], current.verties[0]);
-    const angle = calculateAngle360(origin2[0], origin2[1]) - 180;
+    const origin = subtract([], current.verties[1], current.verties[0]);
+    const angle = calculateAngle360(origin[0], origin[1]) - 180;
     return {
       style: {
         display: "grid",
@@ -51404,8 +52227,8 @@ class GridGrowToolView extends GridGrowDragEventView {
     if (current.isLayout(Layout.GRID) === false)
       return "";
     const rect2 = vertiesToRectangle(this.$viewport.applyVerties(current.verties));
-    const origin2 = subtract([], current.verties[1], current.verties[0]);
-    const angle = calculateAngle360(origin2[0], origin2[1]) - 180;
+    const origin = subtract([], current.verties[1], current.verties[0]);
+    const angle = calculateAngle360(origin[0], origin[1]) - 180;
     return {
       style: {
         left: Length.px(rect2.left),
@@ -51454,14 +52277,14 @@ class GridGrowToolView extends GridGrowDragEventView {
   }
   getGridLayoutInformation() {
     const current = this.getGridTargetLayer();
-    const columns = Grid.parseStyle(current["grid-template-columns"]);
-    const rows = Grid.parseStyle(current["grid-template-rows"]);
+    const columns = Grid.parseStyle(current.gridTemplateColumns);
+    const rows = Grid.parseStyle(current.gridTemplateRows);
     return {
       current,
       columns,
-      columnGap: this.getParsedValue(current["grid-column-gap"]),
+      columnGap: this.getParsedValue(current.gridColumnGap),
       rows,
-      rowGap: this.getParsedValue(current["grid-row-gap"])
+      rowGap: this.getParsedValue(current.gridRowGap)
     };
   }
   afterLoadRendering(targetRef, refName) {
@@ -51585,11 +52408,11 @@ class GridGrowToolView extends GridGrowDragEventView {
   }
   isSelectedColumn(index2) {
     const current = this.$context.selection.current;
-    return current["grid-column-start"] <= index2 && index2 < current["grid-column-end"];
+    return current.gridColumnStart <= index2 && index2 < current.gridColumnEnd;
   }
   isSelectedRow(index2) {
     const current = this.$context.selection.current;
-    return current["grid-row-start"] <= index2 && index2 < current["grid-row-end"];
+    return current.gridRowStart <= index2 && index2 < current.gridRowEnd;
   }
   [LOAD("$grid") + DOMDIFF]() {
     var _a;
@@ -51712,7 +52535,7 @@ class GridLayoutEditor extends EditorElement {
       label: "grid padding",
       key: "padding",
       ref: "$padding",
-      value: current["padding-top"],
+      value: current.paddingTop,
       min: 0,
       max: 300,
       step: 1,
@@ -51723,8 +52546,8 @@ class GridLayoutEditor extends EditorElement {
                 ${createComponent("GridGapEditor", {
       label: this.$i18n("grid.layout.editor.column.gap"),
       ref: "$columnGap",
-      key: "grid-column-gap",
-      value: current["grid-column-gap"] || "",
+      key: "gridColumnGap",
+      value: current.gridColumnGap || "",
       onchange: "changeKeyValue"
     })}
             </div>              
@@ -51732,8 +52555,8 @@ class GridLayoutEditor extends EditorElement {
                 ${createComponent("GridGapEditor", {
       label: this.$i18n("grid.layout.editor.row.gap"),
       ref: "$rowGap",
-      key: "grid-row-gap",
-      value: current["grid-row-gap"] || "",
+      key: "gridRowGap",
+      value: current.gridRowGap || "",
       onchange: "changeKeyValue"
     })}
             </div>
@@ -51741,10 +52564,10 @@ class GridLayoutEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changePadding")](key, value) {
     this.modifyData(key, {
-      "padding-top": value,
-      "padding-left": value,
-      "padding-right": value,
-      "padding-bottom": value
+      paddingTop: value,
+      paddingLeft: value,
+      paddingRight: value,
+      paddingBottom: value
     });
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value, params) {
@@ -51793,11 +52616,11 @@ class LayoutProperty extends BaseProperty {
       ref: "$flex",
       key: "flex-layout",
       value: {
-        "flex-direction": current["flex-direction"],
-        "flex-wrap": current["flex-wrap"],
-        "justify-content": current["justify-content"],
-        "align-items": current["align-items"],
-        "align-content": current["align-content"],
+        "flex-direction": current.flexDirection,
+        "flex-wrap": current.flexWrap,
+        "justify-content": current.justifyContent,
+        "align-items": current.alignItems,
+        "align-content": current.alignContent,
         gap: current.gap
       },
       onchange: "changeLayoutInfo"
@@ -52173,8 +52996,8 @@ class DrawManager extends EditorElement {
     var _a, _b;
     var current = this.$context.selection.current;
     if (current) {
-      (_a = this.children.$stroke) == null ? void 0 : _a.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
-      (_b = this.children.$strokeWidth) == null ? void 0 : _b.setValue(current["stroke-width"] || Length.number(1));
+      (_a = this.children.$stroke) == null ? void 0 : _a.setValue(current.stroke || "rgba(0, 0, 0, 1)");
+      (_b = this.children.$strokeWidth) == null ? void 0 : _b.setValue(current.strokeWidth || Length.number(1));
     }
   }
   [SUBSCRIBE("setColorAsset")]({ color: color2 }) {
@@ -52223,8 +53046,8 @@ class DrawManager extends EditorElement {
             <label>${this.$i18n("svg.item.property.strokeWidth")}</label>          
             ${createComponent("NumberInputEditor", {
       ref: "$strokeWidth",
-      key: "stroke-width",
-      value: this.state["stroke-width"],
+      key: "strokeWidth",
+      value: this.state["strokeWidth"],
       onchange: "changeValue"
     })}
           </div>      
@@ -52234,8 +53057,8 @@ class DrawManager extends EditorElement {
             <label data-tooltip="${this.$i18n("svg.item.property.lineCap")}">Cap</label>          
             ${createComponent("SelectEditor", {
       ref: "$strokeLineCap",
-      key: "stroke-linecap",
-      value: this.state["stroke-linecap"],
+      key: "strokeLinecap",
+      value: this.state["strokeLinecap"],
       options: ["butt", "round", "square"],
       onchange: "changeValue"
     })}
@@ -52244,8 +53067,8 @@ class DrawManager extends EditorElement {
             <label data-tooltip="${this.$i18n("svg.item.property.lineJoin")}">Join</label>          
             ${createComponent("SelectEditor", {
       ref: "$strokeLineJoin",
-      key: "stroke-linejoin",
-      value: this.state["stroke-linejoin"],
+      key: "strokeLinejoin",
+      value: this.state["strokeLinejoin"],
       options: ["miter", "bevel", "round"],
       onchange: "changeValue"
     })}
@@ -55033,254 +55856,6 @@ function patternAsset(editor) {
     PatternInfoPopup
   });
 }
-class PerspectiveProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("perspective.property.title");
-  }
-  getKeyframeProperty() {
-    return "perspective";
-  }
-  getTools() {
-    return `
-        <button type="button" class="remove" ref='$remove'>${obj$3.remove}</button>
-    `;
-  }
-  [CLICK("$remove")]() {
-    this.trigger("changePerspective", "perspective", "");
-  }
-  getBody() {
-    return `<div class='property-item' ref='$perspective'></div>`;
-  }
-  [LOAD("$perspective")]() {
-    var current = this.$context.selection.current || {};
-    var perspective2 = current["perspective"] || "";
-    return createComponent("RangeEditor", {
-      ref: "$1",
-      key: "perspective",
-      value: perspective2,
-      max: "2000px",
-      onchange: "changePerspective"
-    });
-  }
-  [SUBSCRIBE_SELF("changePerspective")](key, value) {
-    this.$commands.executeCommand("setAttribute", "change perspective", this.$context.selection.packByValue({
-      [key]: value
-    }));
-  }
-  get editableProperty() {
-    return "perspective";
-  }
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
-    this.refresh();
-  }
-}
-function perspective(editor) {
-  editor.registerUI("inspector.tab.style", {
-    PerspectiveProperty
-  });
-}
-var PerspectiveOriginEditor$1 = "";
-const typeList = [
-  { key: "perspective-origin-x", title: "X" },
-  { key: "perspective-origin-y", title: "Y" }
-];
-const keyList = typeList.map((it) => it.key);
-const origin = {
-  top: "50% 0%",
-  "top left": "0% 0%",
-  "top right": "100% 0%",
-  left: "0% 50%",
-  center: "50% 50%",
-  right: "100% 50%",
-  bottom: "50% 100%",
-  "bottom left": "0% 100%",
-  "bottom right": "100% 100%"
-};
-class PerspectiveOriginEditor extends EditorElement {
-  initState() {
-    var arr = this.props.value.split(" ");
-    var obj2 = {
-      isAll: true,
-      "perspective-origin": 0,
-      "perspective-origin-x": 0,
-      "perspective-origin-y": 0
-    };
-    if (this.props.value) {
-      if (arr.length === 1) {
-        obj2["isAll"] = true;
-        obj2["perspective-origin"] = Length.parse(arr[0]);
-        obj2["perspective-origin-x"] = Length.parse(arr[0]);
-        obj2["perspective-origin-y"] = Length.parse(arr[0]);
-      } else if (arr.length == 2) {
-        obj2["isAll"] = false;
-        obj2["perspective-origin-x"] = Length.parse(arr[0]);
-        obj2["perspective-origin-y"] = Length.parse(arr[1]);
-      }
-    }
-    return obj2;
-  }
-  template() {
-    return `
-      <div class='elf--perspective-origin-editor' ref='$body'>
-        <div class='direction' ref='$direction'>
-          <div class='pos' data-value='top'></div>
-          <div class='pos' data-value='top left'></div>
-          <div class='pos' data-value='top right'></div>
-          <div class='pos' data-value='bottom'></div>
-          <div class='pos' data-value='bottom left'></div>
-          <div class='pos' data-value='bottom right'></div>
-          <div class='pos' data-value='left'></div>
-          <div class='pos' data-value='right'></div>
-          <div class='pos' data-value='center'></div>
-        </div>
-        <div ref='$body'></div>
-      </div>
-    `;
-  }
-  [CLICK("$direction .pos")](e) {
-    var direct = e.$dt.attr("data-value");
-    this.state.isAll = false;
-    var [x, y] = origin[direct].split(" ");
-    this.state["perspective-origin-x"] = Length.parse(x);
-    this.state["perspective-origin-y"] = Length.parse(y);
-    this.refresh();
-    this.modifyPerspectiveOrigin();
-  }
-  [SUBSCRIBE_SELF("changePerspectiveOrigin")](key, value) {
-    if (key === "perspective-origin") {
-      keyList.forEach((type) => {
-        this.children[`$${type}`].setValue(value.toString());
-      });
-    }
-    this.setPerspectiveOrigin();
-  }
-  [LOAD("$body")]() {
-    var selectedValue = this.state.isAll ? "all" : "partitial";
-    var perspectiveOrigin2 = this.state["perspective-origin"];
-    return `
-      <div class="property-item perspective-origin-item">
-        <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${obj$3.border_all}</button>
-          <button type="button" data-value="partitial">
-            ${obj$3.border_inner}
-          </button>
-        </div>
-        <div class="radius-value">
-          ${createComponent("RangeEditor", {
-      ref: "$all",
-      key: "perspective-origin",
-      value: perspectiveOrigin2,
-      onchange: "changePerspectiveOrigin"
-    })}
-          
-        </div>
-      </div>
-      <div
-        class="property-item full perspective-origin-item"
-        ref="$partitialSetting"
-        style="display: none;"
-      >
-        <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList.map((it) => {
-      var label = this.$i18n(it.title);
-      return `
-              <div>
-                ${createComponent("RangeEditor", {
-        ref: `$${it.key}`,
-        label,
-        key: it.key,
-        value: this.state[it.key],
-        onchange: "changePerspectiveOrigin"
-      })}
-              </div>  
-            `;
-    }).join("")}
-        </div>
-      </div>
-    `;
-  }
-  setPerspectiveOrigin() {
-    var type = this.refs.$selector.attr("data-selected-value");
-    if (type === "all") {
-      this.state.isAll = true;
-      this.state["perspective-origin"] = this.children[`$all`].getValue();
-    } else {
-      this.state.isAll = false;
-      keyList.forEach((key) => {
-        this.state[key] = this.children[`$${key}`].getValue();
-      });
-    }
-    this.modifyPerspectiveOrigin();
-  }
-  modifyPerspectiveOrigin() {
-    var value = "";
-    if (this.state.isAll) {
-      value = `${this.state["perspective-origin"]}`;
-    } else {
-      value = `${this.state["perspective-origin-x"]} ${this.state["perspective-origin-y"]}`;
-    }
-    this.parent.trigger(this.props.onchange, value);
-  }
-  [CLICK("$selector button")](e) {
-    var type = e.$dt.attr("data-value");
-    this.refs.$selector.attr("data-selected-value", type);
-    if (type === "all") {
-      this.refs.$partitialSetting.hide();
-    } else {
-      this.refs.$partitialSetting.show("grid");
-    }
-    this.setPerspectiveOrigin();
-  }
-}
-class PerspectiveOriginProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("perspective.origin.property.title");
-  }
-  getKeyframeProperty() {
-    return "perspective-origin";
-  }
-  getTools() {
-    return `
-        <button type="button" class="remove" ref='$remove'>${obj$3.remove}</button>
-    `;
-  }
-  [CLICK("$remove")]() {
-    this.trigger("changePerspectiveOrigin", "");
-  }
-  getBody() {
-    return `
-      <div class="property-item full perspective-origin-item" ref='$body'></div>
-    `;
-  }
-  [LOAD("$body")]() {
-    var current = this.$context.selection.current || {};
-    var value = current["perspective-origin"] || "";
-    return createComponent("PerspectiveOriginEditor", {
-      ref: "$1",
-      value,
-      onchange: "changePerspectiveOrigin"
-    });
-  }
-  get editableProperty() {
-    return "perspective-origin";
-  }
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
-    this.refresh();
-  }
-  [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
-    this.$commands.executeCommand("setAttribute", "change perspective origin", this.$context.selection.packByValue({
-      "perspective-origin": value
-    }));
-  }
-}
-function perspectiveOrigin(editor) {
-  editor.registerElement({
-    PerspectiveOriginEditor
-  });
-  editor.registerUI("inspector.tab.style", {
-    PerspectiveOriginProperty
-  });
-}
 var PositionProperty$1 = "";
 const DEFAULT_SIZE = 0;
 class PositionProperty extends BaseProperty {
@@ -55307,7 +55882,7 @@ class PositionProperty extends BaseProperty {
     this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
     this.children.$width.setValue(round(current.width || DEFAULT_SIZE, 100));
     this.children.$height.setValue(round(current.height || DEFAULT_SIZE, 100));
-    this.children.$opacity.setValue(current["opacity"] || "1");
+    this.children.$opacity.setValue(current.opacity || "1");
     this.children.$rotate.setValue(Length.deg(current.angle).round(100));
   }
   isHideHeader() {
@@ -55396,7 +55971,7 @@ class PositionProperty extends BaseProperty {
       this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
       this.children.$width.setValue(round(current.width || DEFAULT_SIZE, 100));
       this.children.$height.setValue(round(current.height || DEFAULT_SIZE, 100));
-      this.children.$opacity.setValue(current["opacity"] || "1");
+      this.children.$opacity.setValue(current.opacity || "1");
       this.children.$rotate.setValue(Length.deg(current.angle));
     }
   }
@@ -55629,7 +56204,7 @@ class HTMLRenderer {
   update(item, currentElement, editor) {
     const currentRenderer = this.getRendererInstance(item);
     if (isFunction(currentRenderer.update)) {
-      return currentRenderer.update(item, currentElement, editor);
+      return currentRenderer.update(item, currentElement, editor, this);
     }
     return this.getDefaultRendererInstance().update(item, currentElement, editor);
   }
@@ -57051,9 +57626,18 @@ const WEBKIT_ATTRIBUTE_FOR_CSS = [
   "text-stroke-width",
   "background-clip"
 ];
+function valueFilter(obj2) {
+  const result = {};
+  Object.keys(obj2).forEach((key) => {
+    if (isNotUndefined(obj2[key])) {
+      result[key] = obj2[key];
+    }
+  });
+  return result;
+}
 class DomRender$1 extends ItemRender$1 {
   toStringPropertyCSS(item, field) {
-    return STRING_TO_CSS(item[field]);
+    return STRING_TO_CSS(item.get(field));
   }
   toBackgroundImageCSS(item) {
     if (!item.cacheBackgroundImage) {
@@ -57097,19 +57681,19 @@ class DomRender$1 extends ItemRender$1 {
       obj2 = this.toDefaultLayoutItemCSS(item);
     }
     if (parentLayout === Layout.FLEX) {
-      obj2 = __spreadValues(__spreadValues({}, obj2), item.attrs("flex-basis", "flex-shrink"));
-      const parentLayoutDirection = (_b = item == null ? void 0 : item.parent) == null ? void 0 : _b["flex-direction"];
+      obj2 = __spreadValues(__spreadValues({}, obj2), item.attrs("flexBasis", "flexShrink"));
+      const parentLayoutDirection = (_b = item == null ? void 0 : item.parent) == null ? void 0 : _b.flexDirection;
       if (parentLayoutDirection === FlexDirection.ROW && item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
         obj2.width = "auto";
-        obj2["flex-grow"] = item["flex-grow"] || 1;
+        obj2["flex-grow"] = item.flexGrow || 1;
       } else if (parentLayoutDirection === FlexDirection.COLUMN && item.resizingVertical === ResizingMode.FILL_CONTAINER) {
         obj2.height = "auto";
-        obj2["flex-grow"] = item["flex-grow"] || 1;
+        obj2["flex-grow"] = item.flexGrow || 1;
       }
     } else if (parentLayout === Layout.GRID) {
-      obj2 = __spreadValues(__spreadValues({}, obj2), item.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
-      const columns = Grid.parseStyle(item.parent["grid-template-columns"]);
-      const rows = Grid.parseStyle(item.parent["grid-template-rows"]);
+      obj2 = __spreadValues(__spreadValues({}, obj2), item.attrs("gridColumnStart", "gridColumnEnd", "gridRowStart", "gridRowEnd"));
+      const columns = Grid.parseStyle(item.parent.gridTemplateColumns);
+      const rows = Grid.parseStyle(item.parent.gridTemplateRows);
       obj2["grid-column-start"] = Math.max(1, Math.min(columns.length, obj2["grid-column-start"] || 1));
       obj2["grid-column-end"] = Math.min(columns.length + 1, obj2["grid-column-end"] || 2);
       obj2["grid-row-start"] = Math.max(1, Math.min(rows.length, obj2["grid-row-start"] || 1));
@@ -57187,35 +57771,36 @@ class DomRender$1 extends ItemRender$1 {
     }, item.attrs("grid-template-columns", "grid-template-rows", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "grid-column-gap", "grid-row-gap"));
   }
   toBorderCSS(item) {
-    const obj2 = __spreadValues({}, STRING_TO_CSS(item["border"]));
+    const obj2 = __spreadValues({}, STRING_TO_CSS(item.border));
     return obj2;
   }
   toBoxModelCSS(item) {
     let obj2 = {};
-    if (item["margin-top"])
-      obj2["margin-top"] = Length.px(item["margin-top"]);
-    if (item["margin-bottom"])
-      obj2["margin-bottom"] = Length.px(item["margin-bottom"]);
-    if (item["margin-left"])
-      obj2["margin-left"] = Length.px(item["margin-left"]);
-    if (item["margin-right"])
-      obj2["margin-right"] = Length.px(item["margin-right"]);
-    if (item["padding-top"])
-      obj2["padding-top"] = Length.px(item["padding-top"]);
-    if (item["padding-bottom"])
-      obj2["padding-bottom"] = Length.px(item["padding-bottom"]);
-    if (item["padding-left"])
-      obj2["padding-left"] = Length.px(item["padding-left"]);
-    if (item["padding-right"])
-      obj2["padding-right"] = Length.px(item["padding-right"]);
+    if (item.marginTop)
+      obj2["margin-top"] = Length.px(item.marginTop);
+    if (item.marginBottom)
+      obj2["margin-bottom"] = Length.px(item.marginBottom);
+    if (item.marginLeft)
+      obj2["margin-left"] = Length.px(item.marginLeft);
+    if (item.marginRight)
+      obj2["margin-right"] = Length.px(item.marginRight);
+    if (item.paddingTop)
+      obj2["padding-top"] = Length.px(item.paddingTop);
+    if (item.paddingBottom)
+      obj2["padding-bottom"] = Length.px(item.paddingBottom);
+    if (item.paddingLeft)
+      obj2["padding-left"] = Length.px(item.paddingLeft);
+    if (item.paddingRight)
+      obj2["padding-right"] = Length.px(item.paddingRight);
     return obj2;
   }
   toKeyListCSS(item, args2 = []) {
     let obj2 = {};
     for (var i = 0; i < args2.length; i++) {
       const key = args2[i];
-      if (isNotUndefined(item[key])) {
-        obj2[key] = item[key];
+      const value = item.get(key);
+      if (isNotUndefined(value)) {
+        obj2[key] = value || item[key];
       }
     }
     return obj2;
@@ -57245,7 +57830,7 @@ class DomRender$1 extends ItemRender$1 {
       obj2.height = Length.px(item.screenHeight);
     }
     if (item.isInFlex()) {
-      const direction2 = item.parent["flex-direction"];
+      const direction2 = item.parent.flexDirection;
       if (direction2 === FlexDirection.ROW || direction2 === FlexDirection.ROW_REVERSE) {
         obj2.width = Length.px(item.screenWidth);
         obj2.height = Length.px(item.screenHeight);
@@ -57284,37 +57869,36 @@ class DomRender$1 extends ItemRender$1 {
       "box-sizing": "border-box"
     };
     result = Object.assign(result, obj2);
-    result = Object.assign(result, this.toKeyListCSS(item, [
-      "position",
-      "overflow",
-      "z-index",
-      "background-color",
-      "color",
-      "opacity",
-      "mix-blend-mode",
-      "transform-origin",
-      "perspective",
-      "perspective-origin",
-      "font-size",
-      "line-height",
-      "font-weight",
-      "font-family",
-      "font-style",
-      "text-align",
-      "text-transform",
-      "text-decoration",
-      "letter-spacing",
-      "word-spacing",
-      "text-indent",
-      "border-radius",
-      "filter",
-      "backdrop-filter",
-      "box-shadow",
-      "text-shadow",
-      "offset-path",
-      "animation",
-      "transition"
-    ]));
+    result = Object.assign(result, {
+      "background-color": item.backgroundColor,
+      color: item.color,
+      "font-size": item.fontSize,
+      "font-weight": item.fontWeight,
+      "font-style": item.fontStyle,
+      "font-family": item.fontFamily,
+      "text-align": item.textAlign,
+      "text-decoration": item.textDecoration,
+      "text-transform": item.textTransform,
+      "letter-spacing": item.letterSpacing,
+      "word-spacing": item.wordSpacing,
+      "line-height": item.lineHeight,
+      "text-indent": item.textIndent,
+      "text-shadow": item.textShadow,
+      "text-overflow": item.textOverflow,
+      "text-wrap": item.textWrap,
+      position: item.position,
+      overflow: item.overflow,
+      "z-index": item.zIndex,
+      opacity: item.opacity,
+      "mix-blend-mode": item.mixBlendMode,
+      "transform-origin": item.transformOrigin,
+      "border-radius": item.borderRadius,
+      filter: item.filter,
+      "backdrop-filter": item.backdropFilter,
+      "box-shadow": item.boxShadow,
+      animation: item.animation,
+      transition: item.transition
+    });
     return result;
   }
   toVariableCSS(item) {
@@ -57342,13 +57926,13 @@ class DomRender$1 extends ItemRender$1 {
   toWebkitCSS(item) {
     var results = {};
     WEBKIT_ATTRIBUTE_FOR_CSS.forEach((key) => {
-      results[`-webkit-${key}`] = item[key];
+      results[`-webkit-${key}`] = item.get(key);
     });
     return results;
   }
   toTextClipCSS(item) {
     let results = {};
-    if (item["text-clip"] === "text") {
+    if (item.textClip === "text") {
       results["-webkit-background-clip"] = "text";
       results["-webkit-text-fill-color"] = "transparent";
       results["color"] = "transparent";
@@ -57357,7 +57941,7 @@ class DomRender$1 extends ItemRender$1 {
   }
   toTransformCSS(item) {
     const results = {
-      transform: item["transform"]
+      transform: item.transform
     };
     if (results.transform === "rotateZ(0deg)") {
       delete results.transform;
@@ -57373,7 +57957,7 @@ class DomRender$1 extends ItemRender$1 {
     `.trim();
   }
   toClipPath(item) {
-    if (item["clip-path"] === "")
+    if (item.clipPath === "")
       return "";
     if (!item.cacheClipPathObject) {
       item.setClipPathCache();
@@ -57389,7 +57973,7 @@ class DomRender$1 extends ItemRender$1 {
     return ``;
   }
   toClipPathCSS(item) {
-    let str = item["clip-path"];
+    let str = item.clipPath;
     if (Boolean(str) === false) {
       return null;
     }
@@ -57450,7 +58034,7 @@ class DomRender$1 extends ItemRender$1 {
     return cssString;
   }
   toCSS(item) {
-    return Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item));
+    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
   }
   toStyleCode(item, renderer) {
     const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`);
@@ -57513,9 +58097,26 @@ ${cssString}
     const result = [];
     return result;
   }
+  updateStyle(item) {
+    if (item.hasCache("style")) {
+      const styleText = this.toStyleData(item, item.manager.editor.html).cssString;
+      if (item.hasCache("styleText")) {
+        if (item.getCache("styleText") === styleText) {
+          return;
+        }
+      }
+      item.addCache("styleText", styleText);
+      item.getCache("style").text(styleText);
+    } else {
+      const style = Dom.createByHTML(this.toStyleData(item, item.manager.editor.html).styleTag);
+      item.addCache("style", style);
+      document.head.appendChild(style.el);
+    }
+  }
   update(item, currentElement) {
     if (!currentElement)
       return;
+    this.updateStyle(item);
     let $svg = currentElement.el.$svg;
     if (!$svg) {
       currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId(item)}"]`);
@@ -57655,7 +58256,7 @@ class SVGItemRender$2 extends LayerRender$1 {
       "fill-rule",
       "text-anchor"
     ]), {
-      "stroke-dasharray": (_a = item["stroke-dasharray"]) == null ? void 0 : _a.join(" ")
+      "stroke-dasharray": (_a = item.strokeDasharray) == null ? void 0 : _a.join(" ")
     });
   }
   toSVGAttribute(item) {
@@ -57665,7 +58266,7 @@ class SVGItemRender$2 extends LayerRender$1 {
 class BooleanPathRender$2 extends SVGItemRender$2 {
   toFillSVG(item) {
     const layers2 = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
     switch (op) {
       case BooleanOperation.DIFFERENCE:
         return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item));
@@ -57674,7 +58275,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
   }
   toStrokeSVG(item) {
     const layers2 = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
     switch (op) {
       case BooleanOperation.DIFFERENCE:
         return SVGFill.parseImage(layers2[1].stroke || "transparent").toSVGString(this.strokeId(item));
@@ -57684,7 +58285,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
   toFillValue(item) {
     var _a, _b;
     const layers2 = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
     switch (op) {
       case BooleanOperation.DIFFERENCE:
         return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item));
@@ -57697,7 +58298,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
   toStrokeValue(item) {
     var _a, _b, _c, _d;
     const layers2 = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
     switch (op) {
       case BooleanOperation.DIFFERENCE:
         return (_b = (_a = SVGFill.parseImage(layers2[1].stroke || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.strokeId(item));
@@ -57731,17 +58332,17 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
       }
       if (item.hasChangedField("fill-rule")) {
         $path.setAttrNS({
-          "fill-rule": item["fill-rule"] || "nonezero"
+          "fill-rule": item.fillRule || "nonezero"
         });
       }
       if (item.hasChangedField("stroke-linejoin")) {
         $path.setAttrNS({
-          "stroke-linejoin": item["stroke-linejoin"]
+          "stroke-linejoin": item.strokeLinejoin
         });
       }
       if (item.hasChangedField("stroke-linecap")) {
         $path.setAttrNS({
-          "stroke-linecap": item["stroke-linecap"]
+          "stroke-linecap": item.strokeLinecap
         });
       }
     }
@@ -57768,12 +58369,12 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
       class="svg-path-item"
       d="${item.d}"
       data-boolean-path-id="${id}" 
-      fill-rule="${item["fill-rule"]}"
+      fill-rule="${item.fillRule}"
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item["stroke-linejoin"]}"
-      stroke-linecap="${item["stroke-linecap"]}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
     />
   </svg>
 </div>
@@ -57781,144 +58382,6 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
   }
 }
 class CircleRender$2 extends LayerRender$1 {
-}
-const faceKeys = ["front", "back", "left", "right", "top", "bottom"];
-class CubeRender extends LayerRender$1 {
-  toDefaultCSS(item) {
-    let obj2 = {};
-    if (item.x)
-      obj2.left = item.x;
-    if (item.y)
-      obj2.top = item.y;
-    obj2.visibility = item.visible ? "visible" : "hidden";
-    return __spreadValues(__spreadValues({}, obj2), this.toKeyListCSS(item, [
-      "position",
-      "right",
-      "bottom",
-      "width",
-      "height",
-      "transform-origin",
-      "transform",
-      "transform-style",
-      "perspective",
-      "perspective-origin",
-      "animation",
-      "transition"
-    ]));
-  }
-  toCSS(item) {
-    return __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, this.toVariableCSS(item)), this.toDefaultCSS(item)), this.toWebkitCSS(item)), this.toBoxModelCSS(item)), this.toLayoutItemCSS(item));
-  }
-  toNestedCSS(item) {
-    var rate = item.rate.value;
-    var width2 = item.width;
-    var height2 = item.height;
-    var halfWidth = width2 / 2;
-    var halfHeight = height2 / 2;
-    var backfaceVisibility = item["backface-visibility"];
-    var css = __spreadValues(__spreadValues(__spreadValues(__spreadValues({}, this.toKeyListCSS(item, [
-      "filter",
-      "mix-blend-mode",
-      "border-radius",
-      "background-color",
-      "opacity",
-      "color"
-    ])), this.toClipPathCSS(item)), this.toBackgroundImageCSS(item)), this.toBorderCSS(item));
-    return [
-      {
-        selector: "div",
-        cssText: `
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          bottom: 0px;
-          right: 0px;
-          opacity: 1;
-          pointer-events: none;
-          ${CSS_TO_STRING(css)}
-        `.trim()
-      },
-      {
-        selector: ".front",
-        cssText: `
-          transform:rotateY(0deg) translateZ(${halfWidth * rate}px);
-          width: ${width2};
-          height: ${height2};     
-          backface-visibility: ${backfaceVisibility};          
-          ${item["front.color"] ? `background-color: ${item["front.color"]};` : ""}
-          ${item["front.background"] ? `${item["front.background"]};` : ""}
-
-        `.trim()
-      },
-      {
-        selector: ".back",
-        cssText: `
-          transform: rotateY(180deg) translateZ(${halfWidth * rate}px);
-          width: ${width2};
-          height: ${height2};        
-          backface-visibility: ${backfaceVisibility};              
-          ${item["back.color"] ? `background-color: ${item["back.color"]};` : ""}                  
-          ${item["back.background"] ? `${item["back.background"]};` : ""}
-        `.trim()
-      },
-      {
-        selector: ".left",
-        cssText: `
-          transform: rotateY(-90deg) translateZ(${halfWidth * rate}px);
-          width: ${width2};
-          height: ${height2};    
-          backface-visibility: ${backfaceVisibility};          
-          ${item["left.color"] ? `background-color: ${item["left.color"]};` : ""}                          
-          ${item["left.background"] ? `${item["left.background"]};` : ""}
-        `.trim()
-      },
-      {
-        selector: ".right",
-        cssText: `
-          transform: rotateY(90deg) translateZ(${halfWidth * rate}px);
-          width: ${width2};
-          height: ${height2};      
-          backface-visibility: ${backfaceVisibility};          
-          ${item["right.color"] ? `background-color: ${item["right.color"]};` : ""}                        
-          ${item["right.background"] ? `${item["right.background"]};` : ""}          
-        `.trim()
-      },
-      {
-        selector: ".top",
-        cssText: `
-          transform: rotateX(90deg) translateZ(${halfHeight * rate}px);
-          top: ${halfHeight - halfWidth}px;
-          width: ${width2};
-          height: ${width2};
-          backface-visibility: ${backfaceVisibility};          
-          ${item["top.color"] ? `background-color: ${item["top.color"]};` : ""}      
-          ${item["top.background"] ? `${item["top.background"]};` : ""}              
-        `.trim()
-      },
-      {
-        selector: ".bottom",
-        cssText: `
-          transform: rotateX(-90deg) translateZ(${halfHeight * rate}px);
-          top: ${halfHeight - halfWidth}px;          
-          width: ${width2};
-          height: ${width2};    
-          backface-visibility: ${backfaceVisibility};          
-          ${item["bottom.color"] ? `background-color: ${item["bottom.color"]};` : ""}
-          ${item["bottom.background"] ? `${item["bottom.background"]};` : ""}                          
-        `.trim()
-      }
-    ];
-  }
-  render(item) {
-    var { id } = item;
-    return `
-      <div class='element-item cube' data-id="${id}">
-        ${this.toDefString(item)}
-        ${faceKeys.map((key) => {
-      return `<div class='${key}'></div>`;
-    }).join("")}
-      </div>`;
-  }
 }
 class ImageRender$2 extends LayerRender$1 {
   toNestedCSS() {
@@ -58031,24 +58494,23 @@ class SVGPathRender$2 extends SVGItemRender$2 {
       }
       if (item.hasChangedField("fill-rule")) {
         $path.setAttrNS({
-          "fill-rule": item["fill-rule"] || "nonezero"
+          "fill-rule": item.fillRule || "nonezero"
         });
       }
       if (item.hasChangedField("stroke-linejoin")) {
         $path.setAttrNS({
-          "stroke-linejoin": item["stroke-linejoin"]
+          "stroke-linejoin": item.strokeLinejoin
         });
       }
       if (item.hasChangedField("stroke-linecap")) {
         $path.setAttrNS({
-          "stroke-linecap": item["stroke-linecap"]
+          "stroke-linecap": item.strokeLinecap
         });
       }
       if (item.hasChangedField("stroke-dasharray")) {
         $path.setAttrNS({
-          "stroke-dasharray": item["stroke-dasharray"].join(" ")
+          "stroke-dasharray": item.strokeDasharray.join(" ")
         });
-        console.log(item["stroke-dasharray"].join(" "));
       }
     }
     super.update(item, currentElement);
@@ -58062,13 +58524,13 @@ class SVGPathRender$2 extends SVGItemRender$2 {
     <path 
       class="svg-path-item"
       d="${item.d}"
-      fill-rule="${item["fill-rule"]}"
+      fill-rule="${item.fillRule}"
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item["stroke-linejoin"]}"
-      stroke-linecap="${item["stroke-linecap"]}"
-      stroke-dasharray="${item["stroke-dasharray"].join(" ")}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
+      stroke-dasharray="${item.strokeDasharray.join(" ")}"
     />
   </svg>
 </div>
@@ -58118,17 +58580,17 @@ class SVGPolygonRender$2 extends SVGItemRender$2 {
       }
       if (item.hasChangedField("fill-rule")) {
         $path.setAttrNS({
-          "fill-rule": item["fill-rule"] || "nonezero"
+          "fill-rule": item.fillRule || "nonezero"
         });
       }
       if (item.hasChangedField("stroke-linejoin")) {
         $path.setAttrNS({
-          "stroke-linejoin": item["stroke-linejoin"]
+          "stroke-linejoin": item.strokeLinejoin
         });
       }
       if (item.hasChangedField("stroke-linecap")) {
         $path.setAttrNS({
-          "stroke-linecap": item["stroke-linecap"]
+          "stroke-linecap": item.strokeLinecap
         });
       }
     }
@@ -58143,12 +58605,12 @@ class SVGPolygonRender$2 extends SVGItemRender$2 {
     <path 
       class="svg-path-item"
       d="${item.d}"
-      fill-rule="${item["fill-rule"]}"
+      fill-rule="${item.fillRule}"
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item["stroke-linejoin"]}"
-      stroke-linecap="${item["stroke-linecap"]}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
     />
   </svg>
 </div>
@@ -58183,17 +58645,17 @@ class SVGStarRender$2 extends SVGItemRender$2 {
       }
       if (item.hasChangedField("fill-rule")) {
         $path.setAttrNS({
-          "fill-rule": item["fill-rule"] || "nonezero"
+          "fill-rule": item.fillRule || "nonezero"
         });
       }
       if (item.hasChangedField("stroke-linejoin")) {
         $path.setAttrNS({
-          "stroke-linejoin": item["stroke-linejoin"]
+          "stroke-linejoin": item.strokeLinejoin
         });
       }
       if (item.hasChangedField("stroke-linecap")) {
         $path.setAttrNS({
-          "stroke-linecap": item["stroke-linecap"]
+          "stroke-linecap": item.strokeLinecap
         });
       }
     }
@@ -58208,12 +58670,12 @@ class SVGStarRender$2 extends SVGItemRender$2 {
     <path 
       class="svg-path-item"
       d="${item.d}"
-      fill-rule="${item["fill-rule"]}"
+      fill-rule="${item.fillRule}"
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item["stroke-linejoin"]}"
-      stroke-linecap="${item["stroke-linecap"]}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
     />
   </svg>
 </div>
@@ -58490,7 +58952,6 @@ function rendererHtml(editor) {
   editor.registerRenderer("html", "spline", new SplineRender$2());
   editor.registerRenderer("html", "svg-text", new SVGTextRender$2());
   editor.registerRenderer("html", "svg-textpath", new SVGTextPathRender$2());
-  editor.registerRenderer("html", "cube", new CubeRender());
   editor.registerRenderer("html", "template", new TemplateRender$2());
 }
 class JSONRenderer {
@@ -58545,17 +59006,17 @@ class BaseAssetRender extends ItemRender {
 }
 class GroupRender extends BaseAssetRender {
   async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("layout", "constraints-horizontal", "constraints-vertical", "resizingMode", "flex-direction", "flex-wrap", "flex-flow", "justify-content", "align-items", "align-content", "order", "flex-basis", "flex-grow", "flex-shrink", "gap", "grid-template-rows", "grid-template-columns", "grid-template-areas", "grid-auto-rows", "grid-auto-columns", "grid-auto-flow", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end", "grid-column-gap", "grid-row-gap", "animation", "transition", "padding-top", "padding-right", "padding-left", "padding-bottom"));
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("layout", "constraintsHorizontal", "constraintsVertical", "resizingMode", "flexDirection", "flexWrap", "flexFlow", "justifyContent", "alignItems", "alignContent", "order", "flexBasis", "flexGrow", "flexShrink", "gap", "gridTemplateRows", "gridTemplateColumns", "gridTemplateAreas", "gridAutoRows", "gridAutoColumns", "gridAutoFlow", "gridColumnStart", "gridColumnEnd", "gridRowStart", "gridRowEnd", "gridColumnGap", "gridRowGap", "animation", "transition", "paddingTop", "paddingRight", "paddingLeft", "paddingBottom"));
   }
 }
 class MovableRender extends GroupRender {
   async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("x", "y", "right", "bottom", "width", "height", "angle", "transform-origin"));
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("x", "y", "right", "bottom", "width", "height", "angle", "transformOrigin"));
   }
 }
 class DomRender extends MovableRender {
   async toCloneObject(item, renderer) {
-    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("position", "rootVariable", "variable", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "animation", "transition")), {
+    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("position", "rootVariable", "variable", "filter", "backdropFilter", "backgroundColor", "backgroundImage", "textClip", "borderRadius", "border", "boxShadow", "textShadow", "clipPath", "color", "fontSize", "lineHeight", "textAlign", "textTransform", "textDecoration", "letterSpacing", "wordSpacing", "textIndent", "perspectiveOrigin", "transformStyle", "perspective", "mixBlendMode", "overflow", "opacity", "animation", "transition")), {
       selectors: item.selectors.map((selector2) => selector2.clone()),
       svg: item.svg.map((svg) => svg.clone())
     });
@@ -58578,7 +59039,7 @@ class SVGItemRender$1 extends LayerRender {
 }
 class BooleanPathRender$1 extends SVGItemRender$1 {
   async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("d", "boolean-operation"));
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("d", "booleanOperation"));
   }
 }
 class CircleRender$1 extends LayerRender {
@@ -58736,31 +59197,33 @@ ${svgCode && `<div><pre title='SVG'>${svgCode}</pre></div>`}
 }
 class SVGRender extends DomRender$1 {
   toDefaultCSS(item) {
-    return __spreadValues({
-      overflow: "visible"
-    }, this.toKeyListCSS(item, [
-      "font-size",
-      "line-height",
-      "font-weight",
-      "font-family",
-      "font-style",
-      "text-align",
-      "text-transform",
-      "text-decoration",
-      "letter-spacing",
-      "word-spacing",
-      "text-indent",
-      "background-color",
-      "border-radius",
-      "transform-style",
-      "filter",
-      "filter",
-      "backdrop-filter",
-      "box-shadow",
-      "text-shadow",
-      "animation",
-      "transition"
-    ]));
+    return {
+      overflow: "visible",
+      "font-size": item.fontSize,
+      "font-weight": item.fontWeight,
+      "font-style": item.fontStyle,
+      "font-family": item.fontFamily,
+      "text-align": item.textAlign,
+      "text-decoration": item.textDecoration,
+      "text-transform": item.textTransform,
+      "letter-spacing": item.letterSpacing,
+      "word-spacing": item.wordSpacing,
+      "line-height": item.lineHeight,
+      "text-indent": item.textIndent,
+      "text-shadow": item.textShadow,
+      "text-overflow": item.textOverflow,
+      "text-wrap": item.textWrap,
+      "z-index": item.zIndex,
+      opacity: item.opacity,
+      "mix-blend-mode": item.mixBlendMode,
+      "transform-origin": item.transformOrigin,
+      "border-radius": item.borderRadius,
+      filter: item.filter,
+      "backdrop-filter": item.backdropFilter,
+      "box-shadow": item.boxShadow,
+      animation: item.animation,
+      transition: item.transition
+    };
   }
   toCSS(item) {
     const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item));
@@ -58773,16 +59236,14 @@ class SVGRender extends DomRender$1 {
   }
   toSVGAttribute(item) {
     var _a;
-    return __spreadValues(__spreadValues(__spreadValues({}, this.toDefaultCSS(item)), this.toKeyListCSS(item, [
-      "stroke-width",
-      "stroke-linecap",
-      "stroke-linejoin",
-      "stroke-dashoffset",
-      "fill-opacity",
-      "fill-rule",
-      "text-anchor"
-    ])), {
-      "stroke-dasharray": (_a = item["stroke-dasharray"]) == null ? void 0 : _a.join(" ")
+    return __spreadProps(__spreadValues({}, this.toDefaultCSS(item)), {
+      strokeWidth: item.strokeWidth,
+      "fill-opacity": item.fillOpacity,
+      "fill-rule": item.fillRule,
+      "stroke-linecap": item.strokeLinecap,
+      "stroke-linejoin": item.strokeLinejoin,
+      "text-anchor": item.textAnchor,
+      "stroke-dasharray": (_a = item.strokeDasharray) == null ? void 0 : _a.join(" ")
     });
   }
   wrappedRender(item, callback) {
@@ -59375,6 +59836,18 @@ class SampleLayer extends LayerModel {
       sampleText: "Sample Text 1",
       sampleNumber: 1
     }, obj2));
+  }
+  get sampleText() {
+    return this.get("sampleText");
+  }
+  set sampleText(value) {
+    this.set("sampleText", value);
+  }
+  get sampleNumber() {
+    return this.get("sampleNumber");
+  }
+  set sampleNumber(value) {
+    this.set("sampleNumber", value);
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("sampleText", "sampleNumber"));
@@ -60014,7 +60487,7 @@ const SelectionToolEvent$1 = class extends EditorElement {
   checkViewMode() {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
+  [SUBSCRIBE(REFRESH_SELECTION, REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
     if (this.$context.selection.isMany) {
       this.initSelectionTool();
     } else {
@@ -60134,8 +60607,8 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     this.$config.set("set.move.control.point", true);
     this.$context.selection.startToCacheChildren();
   }
-  calculateNewOffsetMatrixInverse(vertextOffset, width2, height2, origin2, itemMatrix) {
-    const center2 = add$1([], TransformOrigin.scale(origin2, width2, height2), negate([], vertextOffset));
+  calculateNewOffsetMatrixInverse(vertextOffset, width2, height2, origin, itemMatrix) {
+    const center2 = add$1([], TransformOrigin.scale(origin, width2, height2), negate([], vertextOffset));
     return calculateMatrixInverse(fromTranslation([], vertextOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
   }
   calculateDistance(vertext, distVector, reverseMatrix) {
@@ -60351,7 +60824,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
     this.renderPointers();
   }
   renderPointers() {
-    if (this.$context.selection.isEmpty || this.$config.true("set.move.control.point")) {
+    if (this.$context.selection.isEmpty) {
       this.refs.$pointerRect.empty();
       return;
     }
@@ -60514,12 +60987,14 @@ const SelectionToolEvent = class extends EditorElement {
   checkViewMode() {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode")]() {
+  [SUBSCRIBE(REFRESH_SELECTION, REFRESH_SELECTION_TOOL) + IF("checkViewMode")]() {
     this.initSelectionTool();
   }
   [SUBSCRIBE(UPDATE_VIEWPORT) + IF("checkViewMode")]() {
     if (this.$context.selection.isOne) {
       this.initSelectionTool();
+    } else {
+      this.hide();
     }
   }
   [SUBSCRIBE("updateModeView")]() {
@@ -60774,7 +61249,7 @@ class SelectionToolView extends SelectionToolEvent {
     }
   }
   moveRightVertex(distVector) {
-    const { altKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item = this.cachedCurrentItemMatrix;
     if (item) {
       let [realDx] = this.calculateRealDist(item, 1, distVector);
@@ -60782,7 +61257,12 @@ class SelectionToolView extends SelectionToolEvent {
         realDx = realDx * 2;
       }
       const newWidth = item.width + realDx;
-      const newHeight = item.height;
+      let newHeight = item.height;
+      if (metaKey) {
+        newHeight = newWidth;
+      } else if (shiftKey) {
+        newHeight = item.height * (1 + realDx / item.width);
+      }
       let directionNewVector = fromValues(0, newHeight / 2, 0);
       if (altKey) {
         directionNewVector = fromValues(realDx / 2, newHeight / 2, 0);
@@ -60794,7 +61274,7 @@ class SelectionToolView extends SelectionToolEvent {
     }
   }
   moveLeftVertex(distVector) {
-    const { altKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item = this.cachedCurrentItemMatrix;
     if (item) {
       let [realDx] = this.calculateRealDist(item, 0, distVector);
@@ -60802,7 +61282,12 @@ class SelectionToolView extends SelectionToolEvent {
         realDx = realDx * 2;
       }
       const newWidth = item.width - realDx;
-      const newHeight = item.height;
+      let newHeight = item.height;
+      if (metaKey) {
+        newHeight = newWidth;
+      } else if (shiftKey) {
+        newHeight = item.height * (1 - realDx / item.width);
+      }
       let directionNewVector = fromValues(newWidth, newHeight / 2, 0);
       if (altKey) {
         directionNewVector = fromValues(newWidth + realDx / 2, newHeight / 2, 0);
@@ -60894,9 +61379,9 @@ class SelectionToolView extends SelectionToolEvent {
     this.state.show = false;
   }
   initSelectionTool() {
-    if (this.$el.isShow() && this.$context.selection.isOne === false)
-      ;
-    else if (this.$el.isHide() && this.$context.selection.isOne) {
+    if (this.$el.isShow() && this.$context.selection.isOne === false) {
+      this.hide();
+    } else if (this.$el.isHide() && this.$context.selection.isOne) {
       this.show();
     }
     this.makeSelectionTool();
@@ -61255,8 +61740,6 @@ class SelectorProperty extends BaseProperty {
     if (!current)
       return "";
     var selectors = current.selector ? Selector.parseStyle(current) : current.selectors;
-    current.selector = "";
-    current.selectors = selectors;
     return (selectors || []).map((selector2, index2) => {
       return this.makeSelectorTemplate(selector2, index2);
     });
@@ -63183,13 +63666,13 @@ function svgItem(editor) {
         columns: [
           { type: "label", label: editor.$i18n("svg.item.property.fill") },
           {
-            key: "fill-rule",
+            key: "fillRule",
             editor: "ToggleCheckBox",
             editorOptions: {
               toggleLabels: [iconUse("join_full"), iconUse("join_right")],
               toggleValues: ["nonzero", "evenodd"]
             },
-            defaultValue: current["fill-rule"] || "nonzero"
+            defaultValue: current.fillRule || "nonzero"
           }
         ]
       },
@@ -63203,10 +63686,10 @@ function svgItem(editor) {
             editorOptions: {
               wide: true
             },
-            defaultValue: current["fill"]
+            defaultValue: current.fill
           },
           {
-            key: "fill-opacity",
+            key: "fillOpacity",
             editor: "number-input",
             editorOptions: {
               compact: true,
@@ -63215,7 +63698,7 @@ function svgItem(editor) {
               max: 1,
               step: 0.01
             },
-            defaultValue: current["fill-opacity"]
+            defaultValue: current.fillOpacity
           }
         ]
       },
@@ -63236,16 +63719,16 @@ function svgItem(editor) {
             editorOptions: {
               wide: true
             },
-            defaultValue: current["stroke"]
+            defaultValue: current.stroke
           },
           {
-            key: "stroke-width",
+            key: "strokeWidth",
             editor: "number-input",
             editorOptions: {
               compact: true,
               label: "line_weight"
             },
-            defaultValue: current["stroke-width"]
+            defaultValue: current.strokeWidth
           }
         ]
       },
@@ -63254,15 +63737,15 @@ function svgItem(editor) {
         size: [2, 1],
         columns: [
           {
-            key: "stroke-dasharray",
+            key: "strokeDasharray",
             editor: "StrokeDashArrayEditor",
             editorOptions: {
               label: editor.$i18n("svg.item.property.dashArray")
             },
-            defaultValue: current["stroke-dasharray"] || ""
+            defaultValue: current.strokeDasharray || ""
           },
           {
-            key: "stroke-dashoffset",
+            key: "strokeDashoffset",
             editor: "number-input",
             editorOptions: {
               compact: true,
@@ -63271,12 +63754,12 @@ function svgItem(editor) {
               max: 1e3,
               step: 1
             },
-            defaultValue: current["stroke-dashoffset"]
+            defaultValue: current.strokeDashoffset
           }
         ]
       },
       {
-        key: "stroke-linecap",
+        key: "strokeLinecap",
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineCap"),
@@ -63291,10 +63774,10 @@ function svgItem(editor) {
             StrokeLineCap.SQUARE
           ]
         },
-        defaultValue: current["stroke-linecap"] || StrokeLineCap.BUTT
+        defaultValue: current.strokeLinecap || StrokeLineCap.BUTT
       },
       {
-        key: "stroke-linejoin",
+        key: "strokeLinejoin",
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineJoin"),
@@ -63309,15 +63792,15 @@ function svgItem(editor) {
             StrokeLineJoin.BEVEL
           ]
         },
-        defaultValue: current["stroke-linejoin"] || StrokeLineJoin.MITER
+        defaultValue: current.strokeLinejoin || StrokeLineJoin.MITER
       },
       {
-        key: "mix-blend-mode",
+        key: "mixBlendMode",
         editor: "BlendSelectEditor",
         editorOptions: {
           label: editor.$i18n("svg.item.property.blend")
         },
-        defaultValue: current["mix-blend-mode"]
+        defaultValue: current.mixBlendMode
       }
     ];
   });
@@ -63489,7 +63972,7 @@ class SVGTextProperty extends BaseProperty {
         ${createComponent("SelectIconEditor", {
       ref: "$text-anchor",
       label: this.$i18n("svg.text.property.anchor"),
-      key: "text-anchor",
+      key: "textAnchor",
       options: ["start", "middle", "end"],
       onchange: "changeTextValue"
     })}
@@ -63558,7 +64041,7 @@ function text(editor) {
         size: [2, 1, 1],
         columns: [
           {
-            key: "text-align",
+            key: "textAlign",
             editor: "SelectIconEditor",
             editorOptions: {
               compact: true,
@@ -63570,11 +64053,11 @@ function text(editor) {
                 "align_justify"
               ]
             },
-            defaultValue: current["text-align"] || "left"
+            defaultValue: current.textAlign || TextAlign.LEFT
           },
           "-",
           {
-            key: "text-transform",
+            key: "textTransform",
             editor: "SelectIconEditor",
             editorOptions: {
               options: [
@@ -63584,7 +64067,8 @@ function text(editor) {
               ],
               compact: true,
               icons: ["horizontal_rule"]
-            }
+            },
+            defaultValue: current.textTransform
           }
         ]
       },
@@ -63594,7 +64078,7 @@ function text(editor) {
         gap: 20,
         columns: [
           {
-            key: "text-decoration",
+            key: "textDecoration",
             editor: "SelectIconEditor",
             editorOptions: {
               options: [
@@ -63605,20 +64089,20 @@ function text(editor) {
               icons: ["horizontal_rule", "underline", "strikethrough"],
               onchange: "changeTextValue"
             },
-            defaultValue: current["text-tranform"]
+            defaultValue: current.textDecoration
           },
           {
-            key: "font-style",
+            key: "fontStyle",
             editor: "SelectIconEditor",
             editorOptions: {
               compact: true,
               options: ["normal", "italic"],
               icons: ["title", "italic"]
             },
-            defaultValue: current["font-style"]
+            defaultValue: current.fontStyle
           },
           {
-            key: "text-clip",
+            key: "textClip",
             editor: "ToggleButton",
             editorOptions: {
               checkedValue: TextClip.TEXT,
@@ -63626,7 +64110,7 @@ function text(editor) {
               toggleTitles: ["", "Text Clip"],
               toggleValues: [TextClip.NONE, TextClip.TEXT]
             },
-            defaultValue: current["text-clip"] || TextClip.NONE
+            defaultValue: current.textClip || TextClip.NONE
           }
         ]
       }
@@ -63684,8 +64168,8 @@ class TextShadowProperty extends BaseProperty {
     var current = this.$context.selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
-      key: "text-shadow",
-      value: current["text-shadow"],
+      key: "textShadow",
+      value: current.textShadow,
       onchange: (key, value) => {
         this.$commands.executeCommand("setAttribute", "change text shadow", this.$context.selection.packByValue({
           [key]: value
@@ -63694,7 +64178,7 @@ class TextShadowProperty extends BaseProperty {
     });
   }
   get editableProperty() {
-    return "text-shadow";
+    return "textShadow";
   }
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow") + DEBOUNCE(100)]() {
     this.refresh();
@@ -64492,8 +64976,6 @@ var designEditorPlugins = [
   borderRadius,
   video,
   image,
-  perspective,
-  perspectiveOrigin,
   svgFilterAsset,
   svgItem,
   layerTree,
@@ -64595,7 +65077,7 @@ class Inspector extends EditorElement {
       title: this.$i18n("inspector.tab.title.design")
     }, /* @__PURE__ */ createElementJsx("div", {
       style: "display: flex; flex-direction: column;"
-    }, this.$injectManager.generate("inspector.tab.style"), /* @__PURE__ */ createElementJsx("div", {
+    }, this.$injectManager.generate("inspector.tab.style", true), /* @__PURE__ */ createElementJsx("div", {
       class: "empty",
       style: "order: 1000000;"
     }))), /* @__PURE__ */ createElementJsx(TabPanel, {
@@ -64603,7 +65085,7 @@ class Inspector extends EditorElement {
       title: this.$i18n("inspector.tab.title.transition")
     }, /* @__PURE__ */ createElementJsx("div", {
       style: "display: flex; flex-direction: column;"
-    }, this.$injectManager.generate("inspector.tab.transition"), /* @__PURE__ */ createElementJsx("div", {
+    }, this.$injectManager.generate("inspector.tab.transition", true), /* @__PURE__ */ createElementJsx("div", {
       class: "empty",
       style: "order: 1000000;"
     }))), /* @__PURE__ */ createElementJsx(TabPanel, {
@@ -64611,7 +65093,7 @@ class Inspector extends EditorElement {
       title: this.$i18n("inspector.tab.title.code")
     }, /* @__PURE__ */ createElementJsx("div", {
       style: "display: flex; flex-direction: column;"
-    }, this.$injectManager.generate("inspector.tab.code"), /* @__PURE__ */ createElementJsx("div", {
+    }, this.$injectManager.generate("inspector.tab.code", true), /* @__PURE__ */ createElementJsx("div", {
       class: "empty",
       style: "order: 1000000;"
     }))), this.$injectManager.getTargetUI("inspector.tab").map((it) => {
@@ -64622,7 +65104,7 @@ class Inspector extends EditorElement {
         icon: it.icon
       }, /* @__PURE__ */ createElementJsx("div", {
         style: "display: flex: flex-direction: column;"
-      }, loadElements.map((element) => createElement(element)), this.$injectManager.generate("inspector.tab." + it.value), /* @__PURE__ */ createElementJsx("div", {
+      }, loadElements.map((element) => createElement(element)), this.$injectManager.generate("inspector.tab." + it.value, true), /* @__PURE__ */ createElementJsx("div", {
         class: "empty",
         style: "order: 1000000;"
       })));
@@ -65110,7 +65592,12 @@ var DefaultMenu = [
         title: "Rect Layer",
         key: "rect",
         command: "addLayerView",
-        args: ["rect"],
+        args: [
+          "rect",
+          {
+            backgroundColor: "#ececec"
+          }
+        ],
         closable: true,
         nextTick: (editor) => {
           editor.context.config.set("editing.css.itemType", "rect");
@@ -65285,7 +65772,7 @@ var DefaultMenu = [
         args: [
           "polygon",
           {
-            "background-color": "transparent"
+            backgroundColor: "transparent"
           }
         ],
         closable: true,
@@ -65302,7 +65789,7 @@ var DefaultMenu = [
         args: [
           "star",
           {
-            "background-color": "transparent"
+            backgroundColor: "transparent"
           }
         ],
         closable: true,
@@ -65320,7 +65807,7 @@ var DefaultMenu = [
         args: [
           "spline",
           {
-            "background-color": "transparent"
+            backgroundColor: "transparent"
           }
         ],
         closable: true,
@@ -65337,7 +65824,7 @@ var DefaultMenu = [
         args: [
           "svg-textpath",
           {
-            "background-color": "transparent"
+            backgroundColor: "transparent"
           }
         ],
         closable: true,
@@ -65688,8 +66175,9 @@ class DragAreaRectView extends EditorElement {
       height: height2
     };
     const selectedItems = this.getSelectedItems(rect2, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]));
-    this.$context.selection.selectByGroup(...selectedItems);
-    this.emit(REFRESH_SELECTION);
+    if (this.$context.selection.selectByGroup(...selectedItems)) {
+      this.emit(REFRESH_SELECTION);
+    }
   }
   [SUBSCRIBE("endDragAreaView")]() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -65789,169 +66277,7 @@ class DragAreaView extends EditorElement {
   }
 }
 var HTMLRenderView$1 = "";
-const TEMP_DIV = Dom.create("div");
-class StyleView extends EditorElement {
-  initState() {
-    return {
-      cacheStyleElement: {},
-      lastChangedList: {}
-    };
-  }
-  template() {
-    return `
-    <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
-      <div ref='$svgArea'></div>
-      <style ref="$innerStyleView" type="text/css"></style>
-    </div>
-    `;
-  }
-  initialize() {
-    super.initialize();
-    this.refs.$styleView = Dom.create(document.head);
-  }
-  makeStyle(item) {
-    return this.$editor.html.toStyle(item);
-  }
-  toStyleData(item) {
-    return this.$editor.html.toStyleData(item);
-  }
-  refreshStyleHead() {
-    var project2 = this.$context.selection.currentProject || this.$editor.createProject();
-    this.refs.$styleView.$$(`style[data-renderer-type="html"]`).forEach(($style) => $style.remove());
-    this.changeStyleHead(project2);
-    project2.layers.forEach((item) => this.changeStyleHead(item));
-  }
-  changeStyleHead(item) {
-    var $temp = Dom.create("div");
-    const styleTag = this.makeStyle(item);
-    $temp.html(styleTag).children().forEach(($item) => {
-      this.refs.$styleView.append($item);
-    });
-  }
-  refreshStyleHeadOne(item, isOnlyOne = false) {
-    var list2 = [item];
-    if (!isOnlyOne) {
-      list2 = item.allLayers;
-    }
-    var selector2 = list2.map((it) => {
-      return `style[data-renderer-type="html"][data-id="${it.id}"]`;
-    }).join(",");
-    let isChanged = false;
-    this.refs.$styleView.$$(selector2).forEach((it) => {
-      const renderItem = this.$model.get(it.data("id"));
-      if (renderItem.isChanged(this.state.lastChangedList[renderItem.id])) {
-        isChanged = true;
-        it.remove();
-        this.state.lastChangedList[renderItem.id] = renderItem.timestamp;
-      }
-    });
-    if (isChanged) {
-      this.changeStyleHead(item);
-    }
-  }
-  [SUBSCRIBE("refreshStyleView", "moveTimeline", "playTimeline")](current, isOnlyOne = false) {
-    if (current) {
-      this.load();
-      this.refreshStyleHeadOne(current, isOnlyOne);
-    } else {
-      this.refresh();
-    }
-  }
-  [SUBSCRIBE("refreshSVGArea")]() {
-    this.load("$svgArea");
-  }
-  getStyleElement(item) {
-    var _a;
-    if (!this.state.cacheStyleElement[item.id]) {
-      const selector2 = `style[data-renderer-type="html"][data-id="${item.id}"]`;
-      this.state.cacheStyleElement[item.id] = this.refs.$styleView.$(selector2);
-    }
-    if (!((_a = this.state.cacheStyleElement[item.id]) == null ? void 0 : _a.$parent)) {
-      this.state.cacheStyleElement[item.id] = void 0;
-      return null;
-    }
-    return this.state.cacheStyleElement[item.id];
-  }
-  loadStyle(items) {
-    const obj2 = {};
-    for (let i = 0, len2 = items.length; i < len2; i++) {
-      const item = items[i];
-      obj2[item.id] = item;
-      const $itemStyle = this.getStyleElement(item);
-      if ($itemStyle) {
-        const cssString = this.toStyleData(item).cssString;
-        $itemStyle.text(cssString);
-      } else {
-        const styleCode = this.makeStyle(item);
-        var $fragment = TEMP_DIV.html(styleCode).createChildrenFragment();
-        this.refs.$styleView.append($fragment);
-      }
-    }
-  }
-  [SUBSCRIBE(UPDATE_CANVAS)](obj2 = null) {
-    var ids = obj2;
-    if (Array.isArray(obj2)) {
-      ids = obj2;
-    } else if (obj2 !== null) {
-      ids = [obj2];
-    }
-    let items = [];
-    if (!ids) {
-      items = this.$context.selection.items;
-    } else if (isString(ids[0])) {
-      items = this.$context.selection.itemsByIds(ids);
-    } else {
-      items = ids;
-    }
-    if (items.length === 1) {
-      this.loadStyle(items);
-      return;
-    }
-    const styleTags = [];
-    const removeStyleSelector = [];
-    for (let i = 0, len2 = items.length; i < len2; i++) {
-      const item = items[i];
-      if (item.is("project")) {
-        var selector2 = `style[data-renderer-type="html"][data-id="${item.id}"]`;
-      } else {
-        var selector2 = item.allLayers.map((it) => {
-          return `style[data-renderer-type="html"][data-id="${it.id}"]`;
-        }).join(",");
-      }
-      removeStyleSelector.push(selector2);
-      styleTags.push(this.makeStyle(item));
-    }
-    if (removeStyleSelector.length) {
-      this.refs.$styleView.$$(removeStyleSelector).forEach((it) => {
-        it.remove();
-      });
-    }
-    var $fragment = TEMP_DIV.html(styleTags.join("")).createChildrenFragment();
-    this.refs.$styleView.append($fragment);
-  }
-  refresh() {
-    this.load();
-    this.refreshStyleHead();
-  }
-  [BIND("$innerStyleView")]() {
-    return {
-      html: `${this.$visibleManager.list.map((id) => {
-        return `[data-id="${id}"]`;
-      }).join(",")} { 
-        display: none;
-      }`
-    };
-  }
-  [SUBSCRIBE("refreshVisibleView")]() {
-    this.bindData("$innerStyleView");
-  }
-}
 class HTMLRenderView extends EditorElement {
-  components() {
-    return {
-      StyleView
-    };
-  }
   initState() {
     return {
       mode: "selection",
@@ -65966,7 +66292,6 @@ class HTMLRenderView extends EditorElement {
   template() {
     return `
             <div class='elf--element-view' ref='$body'>
-                ${createComponent("StyleView", { ref: "$styleView" })}
                 <div class='canvas-view' 
                         data-renderer-id='${this.$editor.EDITOR_ID}' 
                         ref='$view' 
@@ -65977,9 +66302,9 @@ class HTMLRenderView extends EditorElement {
         `;
   }
   [BIND("$view")]() {
-    const { translate: translate2, transformOrigin: origin2, scale: scale2 } = this.$viewport;
+    const { translate: translate2, transformOrigin: origin, scale: scale2 } = this.$viewport;
     const transform2 = `translate(${translate2[0]}px, ${translate2[1]}px) scale(${scale2 || 1})`;
-    const transformOrigin = `${origin2[0]}px ${origin2[1]}px`;
+    const transformOrigin = `${origin[0]}px ${origin[1]}px`;
     return {
       style: {
         "transform-origin": transformOrigin,
@@ -66276,7 +66601,7 @@ class HTMLRenderView extends EditorElement {
         this.$commands.emit("recoverBooleanPath");
       });
     }
-    this.emit(REFRESH_SELECTION);
+    this.emit(REFRESH_SELECTION_TOOL);
     this.$config.set("editing.mode.itemType", "select");
   }
   refreshSelectionStyleView(obj2) {
@@ -66343,7 +66668,7 @@ class HTMLRenderView extends EditorElement {
     item.reset(offset);
     this.refreshSelectionStyleView(item);
     if (this.$context.selection.check(item)) {
-      this.emit(REFRESH_SELECTION);
+      this.emit(REFRESH_SELECTION_TOOL);
     }
     this.emit(UPDATE_CANVAS, item);
   }
@@ -66511,7 +66836,7 @@ class CanvasView extends EditorElement {
       ref: "$htmlRenderView"
     }), /* @__PURE__ */ createElementJsx(DragAreaRectView, {
       ref: "$dragAreaRectView"
-    }), this.$injectManager.generate("canvas.view"))), "$", createComponent("PageTools"));
+    }), this.$injectManager.generate("canvas.view", true))), "$", createComponent("PageTools", { ref: "pageTools" }));
   }
   [BIND("$pageView")]() {
     return {
@@ -67070,13 +67395,13 @@ class BodyPanel extends EditorElement {
     return `
       <div class="elf--body-panel">
         <div class="submenu-area">
-          ${createComponent("PageSubEditor")}
+          ${createComponent("PageSubEditor", { ref: "subeditor" })}
         </div>
         <div class='editing-area' ref="$area">
-          ${createComponent("HorizontalRuler")}
-          ${createComponent("VerticalRuler")}
+          ${createComponent("HorizontalRuler", { ref: "hruler" })}
+          ${createComponent("VerticalRuler", { ref: "vruler" })}
           <div class="canvas-layout">
-            ${createComponent("CanvasView")}
+            ${createComponent("CanvasView", { ref: "canvas" })}
           </div>
 
         </div>
@@ -70699,12 +71024,12 @@ const _edge1 = /* @__PURE__ */ new Vector3();
 const _edge2 = /* @__PURE__ */ new Vector3();
 const _normal$1 = /* @__PURE__ */ new Vector3();
 class Ray {
-  constructor(origin2 = new Vector3(), direction2 = new Vector3(0, 0, -1)) {
-    this.origin = origin2;
+  constructor(origin = new Vector3(), direction2 = new Vector3(0, 0, -1)) {
+    this.origin = origin;
     this.direction = direction2;
   }
-  set(origin2, direction2) {
-    this.origin.copy(origin2);
+  set(origin, direction2) {
+    this.origin.copy(origin);
     this.direction.copy(direction2);
     return this;
   }
@@ -70854,20 +71179,20 @@ class Ray {
   intersectBox(box, target) {
     let tmin, tmax, tymin, tymax, tzmin, tzmax;
     const invdirx = 1 / this.direction.x, invdiry = 1 / this.direction.y, invdirz = 1 / this.direction.z;
-    const origin2 = this.origin;
+    const origin = this.origin;
     if (invdirx >= 0) {
-      tmin = (box.min.x - origin2.x) * invdirx;
-      tmax = (box.max.x - origin2.x) * invdirx;
+      tmin = (box.min.x - origin.x) * invdirx;
+      tmax = (box.max.x - origin.x) * invdirx;
     } else {
-      tmin = (box.max.x - origin2.x) * invdirx;
-      tmax = (box.min.x - origin2.x) * invdirx;
+      tmin = (box.max.x - origin.x) * invdirx;
+      tmax = (box.min.x - origin.x) * invdirx;
     }
     if (invdiry >= 0) {
-      tymin = (box.min.y - origin2.y) * invdiry;
-      tymax = (box.max.y - origin2.y) * invdiry;
+      tymin = (box.min.y - origin.y) * invdiry;
+      tymax = (box.max.y - origin.y) * invdiry;
     } else {
-      tymin = (box.max.y - origin2.y) * invdiry;
-      tymax = (box.min.y - origin2.y) * invdiry;
+      tymin = (box.max.y - origin.y) * invdiry;
+      tymax = (box.min.y - origin.y) * invdiry;
     }
     if (tmin > tymax || tymin > tmax)
       return null;
@@ -70876,11 +71201,11 @@ class Ray {
     if (tymax < tmax || tmax !== tmax)
       tmax = tymax;
     if (invdirz >= 0) {
-      tzmin = (box.min.z - origin2.z) * invdirz;
-      tzmax = (box.max.z - origin2.z) * invdirz;
+      tzmin = (box.min.z - origin.z) * invdirz;
+      tzmax = (box.max.z - origin.z) * invdirz;
     } else {
-      tzmin = (box.max.z - origin2.z) * invdirz;
-      tzmax = (box.min.z - origin2.z) * invdirz;
+      tzmin = (box.max.z - origin.z) * invdirz;
+      tzmax = (box.min.z - origin.z) * invdirz;
     }
     if (tmin > tzmax || tzmin > tmax)
       return null;
@@ -92893,8 +93218,8 @@ class InstancedInterleavedBuffer extends InterleavedBuffer {
 }
 InstancedInterleavedBuffer.prototype.isInstancedInterleavedBuffer = true;
 class Raycaster {
-  constructor(origin2, direction2, near = 0, far = Infinity) {
-    this.ray = new Ray(origin2, direction2);
+  constructor(origin, direction2, near = 0, far = Infinity) {
+    this.ray = new Ray(origin, direction2);
     this.near = near;
     this.far = far;
     this.camera = null;
@@ -92907,8 +93232,8 @@ class Raycaster {
       Sprite: {}
     };
   }
-  set(origin2, direction2) {
-    this.ray.set(origin2, direction2);
+  set(origin, direction2) {
+    this.ray.set(origin, direction2);
   }
   setFromCamera(coords, camera) {
     if (camera.isPerspectiveCamera) {
@@ -97111,4 +97436,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };

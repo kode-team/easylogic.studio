@@ -42,8 +42,8 @@ export default class TextShadowProperty extends BaseProperty {
     var current = this.$context.selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
-      key: "text-shadow",
-      value: current["text-shadow"],
+      key: "textShadow",
+      value: current.textShadow,
       onchange: (key, value) => {
         this.$commands.executeCommand(
           "setAttribute",
@@ -57,7 +57,7 @@ export default class TextShadowProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "text-shadow";
+    return "textShadow";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow") + DEBOUNCE(100)]() {

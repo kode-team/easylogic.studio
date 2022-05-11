@@ -139,7 +139,7 @@ export class BackgroundImage extends PropertyItem {
         "x",
         "y"
       ),
-      image: json.image.clone(),
+      image: json.image.toString(),
     };
   }
 
@@ -602,5 +602,9 @@ export class BackgroundImage extends PropertyItem {
 
   static joinCSS(list) {
     return BackgroundImage.toCSS(list.map((it) => BackgroundImage.parse(it)));
+  }
+
+  static parseList(list = []) {
+    return list.map((it) => BackgroundImage.parse(it));
   }
 }

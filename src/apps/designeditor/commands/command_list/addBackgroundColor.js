@@ -6,7 +6,7 @@ export default {
       "add background color",
       editor.context.selection.packByValue(
         {
-          "background-color": color,
+          backgroundColor: color,
         },
         id
       )

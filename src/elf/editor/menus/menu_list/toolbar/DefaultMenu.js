@@ -137,7 +137,12 @@ export default [
         title: "Rect Layer",
         key: "rect",
         command: "addLayerView",
-        args: ["rect"],
+        args: [
+          "rect",
+          {
+            backgroundColor: "#ececec",
+          },
+        ],
         closable: true,
         nextTick: (editor) => {
           editor.context.config.set("editing.css.itemType", "rect");
@@ -327,7 +332,7 @@ export default [
         args: [
           "polygon",
           {
-            "background-color": "transparent",
+            backgroundColor: "transparent",
           },
         ],
         closable: true,
@@ -344,7 +349,7 @@ export default [
         args: [
           "star",
           {
-            "background-color": "transparent",
+            backgroundColor: "transparent",
           },
         ],
         closable: true,
@@ -362,7 +367,7 @@ export default [
         args: [
           "spline",
           {
-            "background-color": "transparent",
+            backgroundColor: "transparent",
           },
         ],
         closable: true,
@@ -379,7 +384,7 @@ export default [
         args: [
           "svg-textpath",
           {
-            "background-color": "transparent",
+            backgroundColor: "transparent",
           },
         ],
         closable: true,

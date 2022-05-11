@@ -2,7 +2,12 @@ export default {
   category: "Tool",
   key: "r",
   command: "addLayerView",
-  args: ["rect"],
+  args: [
+    "rect",
+    {
+      backgroundColor: "gray",
+    },
+  ],
   description: "Add rect layer",
   when: "CanvasView",
 };

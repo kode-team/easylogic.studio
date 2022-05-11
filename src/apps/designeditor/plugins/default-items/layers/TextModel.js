@@ -1,7 +1,7 @@
 import icon from "elf/editor/icon/icon";
 import { LayerModel } from "elf/editor/model/LayerModel";
 
-export class TextLayer extends LayerModel {
+export class TextModel extends LayerModel {
   getIcon() {
     return icon.title;
   }
@@ -14,6 +14,15 @@ export class TextLayer extends LayerModel {
       ...obj,
     });
   }
+
+  get content() {
+    return this.get("content");
+  }
+
+  set content(value) {
+    this.set("content", value);
+  }
+
   enableHasChildren() {
     return false;
   }
@@ -22,33 +31,33 @@ export class TextLayer extends LayerModel {
     return "Text";
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("content"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("content"),
+  //   };
+  // }
 
   editable(editablePropertyName) {
     switch (editablePropertyName) {
       case "svg-item":
       case "transform":
-      case "transform-origin":
+      case "transformOrigin":
       case "perspective":
-      case "perspective-origin":
+      case "perspectiveOrigin":
       case "layout":
         return false;
       case "font":
-      case "font-spacing":
-      case "text-style":
-      case "text-shadow":
-      case "text-fill":
-      case "text-clip":
-      case "background-image":
+      case "fontSpacing":
+      case "textStyle":
+      case "textShadow":
+      case "textFill":
+      case "textClip":
+      case "backgroundImage":
       case "box-model":
       case "border":
-      case "border-radius":
-      case "backdrop-filter":
+      case "borderRadius":
+      case "backdropFilter":
       case "pattern":
         return true;
     }

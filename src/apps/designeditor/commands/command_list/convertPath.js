@@ -22,7 +22,7 @@ export default function convertPath(editor, pathString, rect = null) {
         "set attribute -d",
         editor.context.selection.packByValue({ d }, current.id)
       );
-    } else if (current["clip-path"].includes("path")) {
+    } else if (current.clipPath.includes("path")) {
       var d = pathString;
 
       if (rect) {
@@ -37,7 +37,7 @@ export default function convertPath(editor, pathString, rect = null) {
         "setAttribute",
         "change clip path",
         editor.context.selection.packByValue(
-          { "clip-path": `path(${d})` },
+          { clipPath: `path(${d})` },
           current.id
         )
       );

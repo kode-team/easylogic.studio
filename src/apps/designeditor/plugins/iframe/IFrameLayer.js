@@ -15,12 +15,20 @@ export class IFrameLayer extends Component {
     });
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("url"),
-    };
+  get url() {
+    return this.get("url");
   }
+
+  set url(value) {
+    this.set("url", value);
+  }
+
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("url"),
+  //   };
+  // }
 
   getDefaultTitle() {
     return "IFrame";

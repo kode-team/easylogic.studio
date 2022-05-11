@@ -1,12 +1,12 @@
 import { vec3 } from "gl-matrix";
 import nurbs from "nurbs";
 
-import { SVGItem } from "./SVGItem";
+import { SVGModel } from "./SVGModel";
 
 import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
 
-export class SplineItem extends SVGItem {
+export class SplineModel extends SVGModel {
   getIcon() {
     return icon.star;
   }
@@ -14,13 +14,45 @@ export class SplineItem extends SVGItem {
     return super.getDefaultObject({
       itemType: "spline",
       name: "New Spline",
-      "stroke-width": 1,
+      strokeWidth: 1,
       points: [],
       traceCount: 100,
       degree: 2,
       boundary: "clamped",
       ...obj,
     });
+  }
+
+  get points() {
+    return this.get("points");
+  }
+
+  set points(value) {
+    this.set("points", value);
+  }
+
+  get degree() {
+    return this.get("degree");
+  }
+
+  set degree(value) {
+    this.set("degree", value);
+  }
+
+  get traceCount() {
+    return this.get("traceCount");
+  }
+
+  set traceCount(value) {
+    this.set("traceCount", value);
+  }
+
+  get boundary() {
+    return this.get("boundary");
+  }
+
+  set boundary(value) {
+    this.set("boundary", value);
   }
 
   enableHasChildren() {
@@ -37,14 +69,14 @@ export class SplineItem extends SVGItem {
         this.setCache();
       }
 
-      this.json.points = this.cachePath
+      this.points = this.cachePath
         .clone()
         .scale(
-          this.json.width / this.cacheWidth,
-          this.json.height / this.cacheHeight
+          this.width / this.cacheWidth,
+          this.height / this.cacheHeight
         ).verties;
       this.modelManager.setChanged("reset", this.id, {
-        points: this.json.points,
+        points: this.points,
       });
     }
   }
@@ -52,13 +84,13 @@ export class SplineItem extends SVGItem {
   setCache() {
     super.setCache();
 
-    this.cachePath = PathParser.makePathByVerties(this.json.points);
-    this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;
+    this.cachePath = PathParser.makePathByVerties(this.points);
+    this.cacheWidth = this.width;
+    this.cacheHeight = this.height;
   }
 
   get editablePath() {
-    let { width, height, points } = this.json;
+    let { width, height, points } = this;
 
     if (!points || points.length == 0) {
       points = [
@@ -84,17 +116,17 @@ export class SplineItem extends SVGItem {
   }
 
   get d() {
-    return this.getPath(this.json.points, this.json.boundary);
+    return this.getPath(this.points, this.boundary);
   }
 
   getPath(points, boundary) {
-    let { width, height } = this.json;
+    let { width, height } = this;
 
     if (!points) {
-      points = this.json.points;
+      points = this.points;
     }
     if (!boundary) {
-      boundary = this.json.boundary;
+      boundary = this.boundary;
     }
 
     if (!points || points.length == 0) {
@@ -127,12 +159,12 @@ export class SplineItem extends SVGItem {
     return PathParser.makePathByVerties(verties, false).round(1000).d;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("points", "degree", "boundary"),
-    };
-  }
+  // toCloneObject(isDeep = true) {
+  //   return {
+  //     ...super.toCloneObject(isDeep),
+  //     ...this.attrs("points", "degree", "boundary", "traceCount"),
+  //   };
+  // }
 
   getDefaultTitle() {
     return "BSpline";

@@ -25,7 +25,7 @@ export class Project extends TimelineModel {
 
   toRootVariableCSS() {
     var obj = {};
-    this.json.rootVariable
+    this.rootVariable
       .split(";")
       .filter((it) => it.trim())
       .forEach((it) => {
@@ -47,12 +47,28 @@ export class Project extends TimelineModel {
     });
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("name", "description", "rootVariable"),
-    };
+  get description() {
+    return this.get("description");
   }
+
+  set description(value) {
+    this.set("description", value);
+  }
+
+  get rootVariable() {
+    return this.get("rootVariable");
+  }
+
+  set rootVariable(value) {
+    this.set("rootVariable", value);
+  }
+
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("name", "description", "rootVariable"),
+  //   };
+  // }
 
   get artboards() {
     return (this.layers || []).filter((it) => it.is("artboard"));

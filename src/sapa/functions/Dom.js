@@ -31,13 +31,7 @@ export class Dom {
 
   static createByHTML(htmlString) {
     var div = Dom.create("div");
-    var list = div.html(htmlString).children();
-
-    if (list.length) {
-      return Dom.create(list[0].el);
-    }
-
-    return null;
+    return div.html(htmlString).firstChild;
   }
 
   static getScrollTop() {
@@ -63,6 +57,10 @@ export class Dom {
 
   static body() {
     return Dom.create(document.body);
+  }
+
+  get exists() {
+    return Boolean(this.el);
   }
 
   setAttr(obj) {

@@ -87,13 +87,13 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   [LOAD("$body")]() {
     var current = this.$context.selection.current || {};
-    var value = current["backdrop-filter"];
+    var value = current.backdropFilter;
 
     return /*html*/ `
       <div>
         ${createComponent("FilterEditor", {
           ref: "$filterEditor",
-          key: "backdrop-filter",
+          key: "backdropFilter",
           value,
           hideLabel: true,
           onchange: "changeFilterEditor",
@@ -113,7 +113,7 @@ export default class BackdropFilterProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "backdrop-filter";
+    return "backdropFilter";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow") + DEBOUNCE(1000)]() {

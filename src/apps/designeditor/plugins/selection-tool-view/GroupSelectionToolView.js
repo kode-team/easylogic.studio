@@ -8,9 +8,15 @@ import {
   PREVENT,
   SUBSCRIBE,
   clone,
-  THROTTLE,
 } from "sapa";
 
+import {
+  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+} from "../../../../elf/editor/types/event";
 import "./SelectionView.scss";
 
 import { getRotatePointer, rectToVerties } from "elf/core/collision";
@@ -26,12 +32,6 @@ import {
 } from "elf/core/math";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { ViewModeType } from "elf/editor/types/editor";
-import {
-  REFRESH_SELECTION,
-  UPDATE_VIEWPORT,
-  END,
-  MOVE,
-} from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -51,7 +51,8 @@ const SelectionToolEvent = class extends EditorElement {
     return this.$modeView.isCurrentMode(ViewModeType.CanvasView);
   }
 
-  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode") + THROTTLE(10)]() {
+  [SUBSCRIBE(REFRESH_SELECTION, REFRESH_SELECTION_TOOL) +
+    IF("checkViewMode")]() {
     if (this.$context.selection.isMany) {
       this.initSelectionTool();
     } else {
@@ -715,10 +716,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
    * 선택영역 컴포넌트 그리기
    */
   renderPointers() {
-    if (
-      this.$context.selection.isEmpty ||
-      this.$config.true("set.move.control.point")
-    ) {
+    if (this.$context.selection.isEmpty) {
       this.refs.$pointerRect.empty();
       return;
     }

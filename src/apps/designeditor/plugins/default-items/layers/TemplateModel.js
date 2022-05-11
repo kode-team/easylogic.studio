@@ -7,7 +7,7 @@ const DEFAULT_TEMPLATE = `
   </svg>
 `;
 
-export class TemplateLayer extends Component {
+export class TemplateModel extends Component {
   getIcon() {
     return icon.auto_awesome;
   }
@@ -20,6 +20,30 @@ export class TemplateLayer extends Component {
       params: [],
       ...obj,
     });
+  }
+
+  get template() {
+    return this.get("template");
+  }
+
+  set template(value) {
+    this.set("template", value);
+  }
+
+  get params() {
+    return this.get("params");
+  }
+
+  set params(value) {
+    this.set("params", value);
+  }
+
+  get engine() {
+    return this.get("engine");
+  }
+
+  set engine(value) {
+    this.set("engine", value);
   }
 
   enableHasChildren() {
@@ -39,10 +63,10 @@ export class TemplateLayer extends Component {
     return super.editable(editablePropertyName);
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("template"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("template", "engine", "params"),
+  //   };
+  // }
 }

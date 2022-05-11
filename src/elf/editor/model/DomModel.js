@@ -15,12 +15,7 @@ import { BackgroundImage } from "elf/editor/property-parser/BackgroundImage";
 import { Border } from "elf/editor/property-parser/Border";
 import { ClipPath } from "elf/editor/property-parser/ClipPath";
 import { Pattern } from "elf/editor/property-parser/Pattern";
-import {
-  Constraints,
-  GradientType,
-  Layout,
-  VisibilityType,
-} from "elf/editor/types/model";
+import { GradientType, VisibilityType } from "elf/editor/types/model";
 import { Length } from "elf/editor/unit/Length";
 
 const editableList = [
@@ -32,19 +27,19 @@ const editableList = [
   "variable",
   "transform",
   "filter",
-  "backdrop-filter",
-  "background-color",
-  "background-image",
-  "border-radius",
+  "backdropFilter",
+  "backgroundColor",
+  "backgroundImage",
+  "borderRadius",
   "border",
-  "box-shadow",
-  "clip-path",
+  "boxShadow",
+  "clipPath",
   "color",
-  "perspective-origin",
-  "transform-origin",
-  "transform-style",
+  "perspectiveOrigin",
+  "transformOrigin",
+  "transformStyle",
   "perspective",
-  "mix-blend-mode",
+  "mixBlendMode",
   "overflow",
   "opacity",
   "box-model",
@@ -65,89 +60,582 @@ editableList.forEach(function (key) {
 export class DomModel extends GroupModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      position: "absolute",
+      // position: "absolute",
       rootVariable: "",
       variable: "",
       color: "black",
-      // 'font-size': 13,
       overflow: "visible",
       opacity: 1,
-      // 'transform-style': 'preserve-3d',
-      layout: Layout.DEFAULT,
-      "flex-layout": "display:flex;",
-      "grid-layout": "display:grid;",
-      // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
-      // keyframes: [],
-      "constraints-vertical": Constraints.MIN,
-      "constraints-horizontal": Constraints.MIN,
+      pattern: "",
       selectors: [],
       svg: [],
+      gridColumnStart: "",
+      gridColumnEnd: "",
+      gridRowStart: "",
+      gridRowEnd: "",
+      gridColumnGap: "",
+      gridRowGap: "",
       ...obj,
     });
   }
 
-  toCloneObject() {
-    var json = this.json;
-
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs(
-        "position",
-        "rootVariable",
-        "variable",
-        "transform",
-        "filter",
-        "backdrop-filter",
-        "background-color",
-        "background-image",
-        "text-clip",
-        "border-radius",
-        "border",
-        "border-top",
-        "border-left",
-        "border-right",
-        "border-bottom",
-        "box-shadow",
-        "text-shadow",
-        "clip-path",
-        "color",
-        "font-size",
-        "line-height",
-        "text-align",
-        "text-transform",
-        "text-decoration",
-        "letter-spacing",
-        "word-spacing",
-        "text-indent",
-        "perspective-origin",
-        "transform-origin",
-        "transform-style",
-        "perspective",
-        "mix-blend-mode",
-        "overflow",
-        "opacity",
-        "flex-layout",
-        "grid-layout",
-        "animation",
-        "transition",
-        "margin-top",
-        "margin-left",
-        "margin-right",
-        "margin-bottom",
-        "padding-top",
-        "padding-right",
-        "padding-left",
-        "padding-bottom",
-        "constraints-horizontal",
-        "constraints-vertical"
-      ),
-
-      // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
-      // keyframes: json.keyframes.map(keyframe => keyframe.clone()),
-      selectors: json.selectors.map((selector) => selector.clone()),
-      svg: json.svg.map((svg) => svg.clone()),
-    };
+  get gridColumnStart() {
+    return this.get("gridColumnStart");
   }
+
+  set gridColumnStart(value) {
+    this.set("gridColumnStart", value);
+  }
+
+  get gridColumnEnd() {
+    return this.get("gridColumnEnd");
+  }
+
+  set gridColumnEnd(value) {
+    this.set("gridColumnEnd", value);
+  }
+
+  get gridRowStart() {
+    return this.get("gridRowStart");
+  }
+
+  set gridRowStart(value) {
+    this.set("gridRowStart", value);
+  }
+
+  get gridRowEnd() {
+    return this.get("gridRowEnd");
+  }
+
+  set gridRowEnd(value) {
+    this.set("gridRowEnd", value);
+  }
+
+  get gridColumnGap() {
+    return this.get("gridColumnGap");
+  }
+
+  set gridColumnGap(value) {
+    this.set("gridColumnGap", value);
+  }
+
+  get gridRowGap() {
+    return this.get("gridRowGap");
+  }
+
+  set gridRowGap(value) {
+    this.set("gridRowGap", value);
+  }
+
+  get pattern() {
+    return this.get("pattern");
+  }
+
+  set pattern(value) {
+    this.reset({
+      pattern: value,
+    });
+  }
+
+  get selectors() {
+    return this.get("selectors");
+  }
+
+  set selectors(value) {
+    this.reset({
+      selectors: value,
+    });
+  }
+
+  get svg() {
+    return this.get("svg");
+  }
+
+  set svg(value) {
+    this.reset({ svg: value });
+  }
+
+  get rootVariable() {
+    return this.get("rootVariable");
+  }
+
+  set rootVariable(value) {
+    this.reset({
+      rootVariable: value,
+    });
+  }
+
+  get variable() {
+    return this.get("variable");
+  }
+
+  set variable(value) {
+    this.reset({
+      variable: value,
+    });
+  }
+
+  get filter() {
+    return this.get("filter");
+  }
+
+  set filter(value) {
+    this.reset({
+      filter: value,
+    });
+  }
+
+  get backdropFilter() {
+    return this.get("backdropFilter");
+  }
+
+  set backdropFilter(value) {
+    this.reset({
+      backdropFilter: value,
+    });
+  }
+
+  get backgroundColor() {
+    return this.get("backgroundColor");
+  }
+
+  set backgroundColor(value) {
+    this.reset({
+      backgroundColor: value,
+    });
+  }
+
+  get backgroundImage() {
+    return this.get("backgroundImage");
+  }
+
+  set backgroundImage(value) {
+    this.reset({
+      backgroundImage: value,
+    });
+  }
+
+  get textClip() {
+    return this.get("textClip");
+  }
+
+  set textClip(value) {
+    this.reset({
+      textClip: value,
+    });
+  }
+
+  get borderRadius() {
+    return this.get("borderRadius");
+  }
+
+  set borderRadius(value) {
+    this.reset({
+      borderRadius: value,
+    });
+  }
+
+  get border() {
+    return this.get("border");
+  }
+
+  set border(value) {
+    this.reset({
+      border: value,
+    });
+  }
+
+  get boxShadow() {
+    return this.get("boxShadow");
+  }
+
+  set boxShadow(value) {
+    this.reset({
+      boxShadow: value,
+    });
+  }
+
+  get textShadow() {
+    return this.get("textShadow");
+  }
+
+  set textShadow(value) {
+    this.reset({
+      textShadow: value,
+    });
+  }
+
+  get clipPath() {
+    return this.get("clipPath");
+  }
+
+  set clipPath(value) {
+    this.reset({
+      clipPath: value,
+    });
+  }
+
+  get color() {
+    return this.get("color");
+  }
+
+  set color(value) {
+    this.reset({
+      color: value,
+    });
+  }
+
+  get opacity() {
+    return this.get("opacity");
+  }
+
+  set opacity(value) {
+    this.reset({
+      opacity: value,
+    });
+  }
+
+  get transformStyle() {
+    return this.get("transformStyle");
+  }
+
+  set transformStyle(value) {
+    this.reset({
+      transformStyle: value,
+    });
+  }
+
+  get fontSize() {
+    return this.get("fontSize");
+  }
+
+  set fontSize(value) {
+    this.reset({
+      fontSize: value,
+    });
+  }
+
+  get fontFamily() {
+    return this.get("fontFamily");
+  }
+
+  set fontFamily(value) {
+    this.reset({
+      fontFamily: value,
+    });
+  }
+
+  get fontWeight() {
+    return this.get("fontWeight");
+  }
+
+  set fontWeight(value) {
+    this.reset({
+      fontWeight: value,
+    });
+  }
+
+  get fontStyle() {
+    return this.get("fontStyle");
+  }
+
+  set fontStyle(value) {
+    this.reset({
+      fontStyle: value,
+    });
+  }
+
+  get fontVariant() {
+    return this.get("fontVariant");
+  }
+
+  set fontVariant(value) {
+    this.reset({
+      fontVariant: value,
+    });
+  }
+
+  get fontStretch() {
+    return this.get("fontStretch");
+  }
+
+  set fontStretch(value) {
+    this.reset({
+      fontStretch: value,
+    });
+  }
+
+  get lineHeight() {
+    return this.get("lineHeight");
+  }
+
+  set lineHeight(value) {
+    this.reset({
+      lineHeight: value,
+    });
+  }
+
+  get letterSpacing() {
+    return this.get("letterSpacing");
+  }
+
+  set letterSpacing(value) {
+    this.reset({
+      letterSpacing: value,
+    });
+  }
+
+  get wordSpacing() {
+    return this.get("wordSpacing");
+  }
+
+  set wordSpacing(value) {
+    this.reset({
+      wordSpacing: value,
+    });
+  }
+
+  get textDecoration() {
+    return this.get("textDecoration");
+  }
+
+  set textDecoration(value) {
+    this.reset({
+      textDecoration: value,
+    });
+  }
+
+  get textAlign() {
+    return this.get("textAlign");
+  }
+
+  set textAlign(value) {
+    this.reset({
+      textAlign: value,
+    });
+  }
+
+  get textTransform() {
+    return this.get("textTransform");
+  }
+
+  set textTransform(value) {
+    this.reset({
+      textTransform: value,
+    });
+  }
+
+  get textOverflow() {
+    return this.get("text-overflow");
+  }
+
+  set textOverflow(value) {
+    this.reset({
+      "text-overflow": value,
+    });
+  }
+
+  get textIndent() {
+    return this.get("textIndent");
+  }
+
+  set textIndent(value) {
+    this.reset({
+      textIndent: value,
+    });
+  }
+
+  get mixBlendMode() {
+    return this.get("mixBlendMode");
+  }
+
+  set mixBlendMode(value) {
+    this.reset({
+      mixBlendMode: value,
+    });
+  }
+
+  get visibility() {
+    return this.get("visibility");
+  }
+
+  set visibility(value) {
+    this.reset({
+      visibility: value,
+    });
+  }
+
+  get zIndex() {
+    return this.get("z-index");
+  }
+
+  set zIndex(value) {
+    this.reset({
+      "z-index": value,
+    });
+  }
+
+  get overflow() {
+    return this.get("overflow");
+  }
+
+  set overflow(value) {
+    this.reset({
+      overflow: value,
+    });
+  }
+
+  get animation() {
+    return this.get("animation");
+  }
+
+  set animation(value) {
+    this.reset({
+      animation: value,
+    });
+  }
+
+  get transition() {
+    return this.get("transition");
+  }
+
+  set transition(value) {
+    this.reset({
+      transition: value,
+    });
+  }
+
+  get marginTop() {
+    return this.get("marginTop");
+  }
+
+  set marginTop(value) {
+    this.reset({
+      marginTop: value,
+    });
+  }
+
+  get marginRight() {
+    return this.get("marginRight");
+  }
+
+  set marginRight(value) {
+    this.reset({
+      marginRight: value,
+    });
+  }
+
+  get marginBottom() {
+    return this.get("marginBottom");
+  }
+
+  set marginBottom(value) {
+    this.reset({
+      marginBottom: value,
+    });
+  }
+
+  get marginLeft() {
+    return this.get("marginLeft");
+  }
+
+  set marginLeft(value) {
+    this.reset({
+      marginLeft: value,
+    });
+  }
+
+  get paddingTop() {
+    return this.get("paddingTop");
+  }
+
+  set paddingTop(value) {
+    this.reset({
+      paddingTop: value,
+    });
+  }
+
+  get paddingRight() {
+    return this.get("paddingRight");
+  }
+
+  set paddingRight(value) {
+    this.reset({
+      paddingRight: value,
+    });
+  }
+
+  get paddingBottom() {
+    return this.get("paddingBottom");
+  }
+
+  set paddingBottom(value) {
+    this.reset({
+      paddingBottom: value,
+    });
+  }
+
+  get paddingLeft() {
+    return this.get("paddingLeft");
+  }
+
+  set paddingLeft(value) {
+    this.reset({
+      paddingLeft: value,
+    });
+  }
+
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs(
+  //       "rootVariable",
+  //       "variable",
+  //       "filter",
+  //       "backdropFilter",
+  //       "backgroundColor",
+  //       "backgroundImage",
+  //       "textClip",
+  //       "borderRadius",
+  //       "border",
+  //       "borderTop",
+  //       "borderLeft",
+  //       "borderRight",
+  //       "borderBottom",
+  //       "boxShadow",
+  //       "textShadow",
+  //       "clipPath",
+  //       "color",
+  //       "fontSize",
+  //       "lineHeight",
+  //       "textAlign",
+  //       "textTransform",
+  //       "textDecoration",
+  //       "letterSpacing",
+  //       "wordSpacing",
+  //       "textIndent",
+  //       "transformStyle",
+  //       "mixBlendMode",
+  //       "overflow",
+  //       "opacity",
+  //       "animation",
+  //       "transition",
+  //       "marginTop",
+  //       "marginLeft",
+  //       "marginRight",
+  //       "marginBottom",
+  //       "paddingTop",
+  //       "paddingRight",
+  //       "paddingLeft",
+  //       "paddingBottom"
+  //     ),
+
+  //     // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% backgroundImage backgroundImage:linear-gradient(to right, black, yellow 100%)',
+  //     // keyframes: json.keyframes.map(keyframe => keyframe.clone()),
+  //     selectors: this.selectors.map((selector) => selector.clone()),
+  //     svg: this.svg.map((svg) => svg.clone()),
+  //   };
+  // }
 
   editable(editablePropertyName) {
     switch (editablePropertyName) {
@@ -155,9 +643,9 @@ export class DomModel extends GroupModel {
       // case 'box-model':
       // case 'transform':
       // eslint-disable-next-line no-fallthrough
-      case "transform-origin":
+      case "transformOrigin":
       case "perspective":
-      case "perspective-origin":
+      case "perspectiveOrigin":
         return false;
     }
 
@@ -166,14 +654,14 @@ export class DomModel extends GroupModel {
 
   get changedBoxModel() {
     return this.hasChangedField(
-      "margin-top",
-      "margin-left",
-      "margin-bottom",
-      "margin-right",
-      "padding-top",
-      "padding-left",
-      "padding-right",
-      "padding-bottom"
+      "marginTop",
+      "marginLeft",
+      "marginBottom",
+      "marginRight",
+      "paddingTop",
+      "paddingLeft",
+      "paddingRight",
+      "paddingBottom"
     );
   }
 
@@ -225,7 +713,7 @@ export class DomModel extends GroupModel {
   }
 
   addSelector(selector) {
-    this.json.selectors.push(selector);
+    this.selectors.push(selector);
     return selector;
   }
 
@@ -243,7 +731,7 @@ export class DomModel extends GroupModel {
   }
 
   removeSelector(removeIndex) {
-    this.removePropertyList(this.json.selectors, removeIndex);
+    this.removePropertyList(this.selectors, removeIndex);
   }
 
   enableHasChildren() {
@@ -259,7 +747,7 @@ export class DomModel extends GroupModel {
   }
 
   updateSelector(index, data = {}) {
-    this.json.selectors[+index].reset(data);
+    this.selectors[+index].reset(data);
   }
 
   traverse(item, results, hasLayoutItem) {
@@ -290,10 +778,10 @@ export class DomModel extends GroupModel {
 
     // padding 을 동시에 설정하기
     if (json.padding) {
-      json["padding-top"] = Length.parse(json.padding);
-      json["padding-right"] = Length.parse(json.padding);
-      json["padding-bottom"] = Length.parse(json.padding);
-      json["padding-left"] = Length.parse(json.padding);
+      json["paddingTop"] = Length.parse(json.padding);
+      json["paddingRight"] = Length.parse(json.padding);
+      json["paddingBottom"] = Length.parse(json.padding);
+      json["paddingLeft"] = Length.parse(json.padding);
 
       delete json.padding;
     }
@@ -305,7 +793,7 @@ export class DomModel extends GroupModel {
     const isChanged = super.reset(obj, context);
 
     // transform 에 변경이 생기면 미리 캐슁해둔다.
-    if (this.hasChangedField("clip-path")) {
+    if (this.hasChangedField("clipPath")) {
       this.setClipPathCache();
     }
 
@@ -314,18 +802,18 @@ export class DomModel extends GroupModel {
         const d = this.cacheClipPath
           .clone()
           .scale(
-            this.json.width / this.cacheClipPathWidth,
-            this.json.height / this.cacheClipPathHeight
+            this.width / this.cacheClipPathWidth,
+            this.height / this.cacheClipPathHeight
           ).d;
-        this.json["clip-path"] = `path(${d})`;
+        this.clipPath = `path(${d})`;
 
         this.modelManager.setChanged("reset", this.id, {
-          "clip-path": this.json["clip-path"],
+          clipPath: this.clipPath,
         });
       }
     }
 
-    if (this.hasChangedField("background-image", "pattern")) {
+    if (this.hasChangedField("backgroundImage", "pattern")) {
       this.setBackgroundImageCache();
     }
 
@@ -335,7 +823,7 @@ export class DomModel extends GroupModel {
   setBackgroundImageCache() {
     let list = [];
 
-    if (this.json.pattern) {
+    if (this.pattern) {
       const patternList = this.computed("pattern", (pattern) => {
         return Pattern.parseStyle(pattern).map((it) => {
           return BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS()));
@@ -347,9 +835,9 @@ export class DomModel extends GroupModel {
       }
     }
 
-    if (this.json["background-image"]) {
+    if (this.backgroundImage) {
       const backgroundList = this.computed(
-        "background-image",
+        "backgroundImage",
         (backgroundImage) => {
           return BackgroundImage.parseStyle(STRING_TO_CSS(backgroundImage));
         }
@@ -365,7 +853,6 @@ export class DomModel extends GroupModel {
     if (list.length) {
       const project = this.top;
       this.cacheBackgroundImage = BackgroundImage.joinCSS(list);
-
       const cacheList = list
         .filter((it) => it.type === GradientType.URL)
         .map((it) => it.image.url);
@@ -386,13 +873,13 @@ export class DomModel extends GroupModel {
   }
 
   setClipPathCache() {
-    var obj = ClipPath.parseStyle(this.json["clip-path"]);
+    var obj = ClipPath.parseStyle(this.clipPath);
 
     this.cacheClipPathObject = obj;
     if (obj.type === "path") {
       this.cacheClipPath = new PathParser(obj.value.trim());
-      this.cacheClipPathWidth = this.json.width;
-      this.cacheClipPathHeight = this.json.height;
+      this.cacheClipPathWidth = this.width;
+      this.cacheClipPathHeight = this.height;
     }
   }
 
@@ -412,22 +899,22 @@ export class DomModel extends GroupModel {
       return this.cacheClipPath
         .clone()
         .scale(
-          this.json.width / this.cacheClipPathWidth,
-          this.json.height / this.cacheClipPathHeight
+          this.width / this.cacheClipPathWidth,
+          this.height / this.cacheClipPathHeight
         ).d;
     }
   }
 
   getBackgroundImage(index) {
     const backgroundImages = BackgroundImage.parseStyle(
-      STRING_TO_CSS(this.json["background-image"])
+      STRING_TO_CSS(this.backgroundImage)
     );
 
     return backgroundImages[index || 0];
   }
 
   get borderWidth() {
-    const border = Border.parseStyle(this.json.border);
+    const border = Border.parseStyle(this.border);
     const borderObject = Border.parseValue(border.border);
 
     if (borderObject?.width) {

@@ -157,8 +157,10 @@ export default class DragAreaRectView extends EditorElement {
       toRectVertiesWithoutTransformOrigin([startVertex, endVertex])
     );
 
-    this.$context.selection.selectByGroup(...selectedItems);
-    this.emit(REFRESH_SELECTION);
+    // selection 이 변경이 있을 때만 refresh_selection 을 실행한다.
+    if (this.$context.selection.selectByGroup(...selectedItems)) {
+      this.emit(REFRESH_SELECTION);
+    }
   }
 
   [SUBSCRIBE("endDragAreaView")]() {

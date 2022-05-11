@@ -35,9 +35,17 @@ export const TOGGLE_FULLSCREEN = "toggle.fullscreen";
 /**
  * selection 정보 갱신
  *
+ * 연속적으로 사용하지 않아야 한다.
  * @type {string}
  */
 export const REFRESH_SELECTION = "refreshSelection";
+
+/**
+ * selection tool 정보 갱신
+ *
+ * 크기, 이동, 회전 등의 행위에만 사용
+ */
+export const REFRESH_SELECTION_TOOL = "refreshSelectionTool";
 
 export const REFRESH_CONTENT = "refreshContent";
 

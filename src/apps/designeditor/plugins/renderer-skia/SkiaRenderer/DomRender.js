@@ -59,9 +59,7 @@ export default class DomRender extends ItemRender {
     let { CanvasKit } = renderer;
 
     const paint = new CanvasKit.Paint();
-    paint.setColor(
-      CanvasKit.parseColorString(item["background-color"] || "white")
-    );
+    paint.setColor(CanvasKit.parseColorString(item.backgroundColor || "white"));
     paint.setStyle(CanvasKit.PaintStyle.Fill);
     paint.setAntiAlias(true);
 
@@ -116,7 +114,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toBackgroundImageCSS(item) {
-    if (item["background-image"] === "" && item.pattern === "") {
+    if (item.backgroundImage === "" && item.pattern === "") {
       return ZERO_CONFIG;
     }
 
@@ -132,10 +130,10 @@ export default class DomRender extends ItemRender {
       }
     }
 
-    if (item["background-image"]) {
+    if (item.backgroundImage) {
       list.push.apply(
         list,
-        BackgroundImage.parseStyle(STRING_TO_CSS(item["background-image"]))
+        BackgroundImage.parseStyle(STRING_TO_CSS(item.backgroundImage))
       );
     }
 
@@ -169,7 +167,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toLayoutItemCSS(item) {
-    var parentLayout = item.parent["layout"];
+    var parentLayout = item.parent.layout;
     var obj = {};
     if (parentLayout === "flex") {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제
@@ -186,18 +184,6 @@ export default class DomRender extends ItemRender {
         top: "auto !important",
         width: "auto !important",
         height: "auto !important",
-      };
-    }
-
-    if (parentLayout === "flex") {
-      obj = {
-        ...obj,
-        ...STRING_TO_CSS(item["flex-layout-item"]),
-      };
-    } else if (parentLayout === "grid") {
-      obj = {
-        ...obj,
-        ...STRING_TO_CSS(item["grid-layout-item"]),
       };
     }
 
@@ -237,15 +223,15 @@ export default class DomRender extends ItemRender {
   toBoxModelCSS(item) {
     let obj = {};
 
-    if (item["margin-top"]) obj["margin-top"] = item["margin-top"];
-    if (item["margin-bottom"]) obj["margin-bottom"] = item["margin-bottom"];
-    if (item["margin-left"]) obj["margin-left"] = item["margin-left"];
-    if (item["margin-right"]) obj["margin-right"] = item["margin-right"];
+    if (item.marginTop) obj["margin-top"] = item.marginTop;
+    if (item.marginBottom) obj["margin-bottom"] = item.marginBottom;
+    if (item.marginLeft) obj["margin-left"] = item.marginLeft;
+    if (item.marginRight) obj["margin-right"] = item.marginRight;
 
-    if (item["padding-top"]) obj["padding-top"] = item["padding-top"];
-    if (item["padding-bottom"]) obj["padding-bottom"] = item["padding-bottom"];
-    if (item["padding-left"]) obj["padding-left"] = item["padding-left"];
-    if (item["padding-right"]) obj["padding-right"] = item["padding-right"];
+    if (item.paddingTop) obj["padding-top"] = item.paddingTop;
+    if (item.paddingBottom) obj["padding-bottom"] = item.paddingBottom;
+    if (item.paddingLeft) obj["padding-left"] = item.paddingLeft;
+    if (item.paddingRight) obj["padding-right"] = item.paddingRight;
 
     return obj;
   }
@@ -393,7 +379,7 @@ export default class DomRender extends ItemRender {
   toTextClipCSS(item) {
     let results = {};
 
-    if (item["text-clip"] === "text") {
+    if (item.textClip === "text") {
       results["-webkit-background-clip"] = "text";
       results["-webkit-text-fill-color"] = "transparent";
       results["color"] = "transparent";
@@ -413,7 +399,7 @@ export default class DomRender extends ItemRender {
     }
 
     const results = {
-      transform: item["transform"],
+      transform: item.transform,
     };
 
     if (results.transform === "rotateZ(0deg)") {
@@ -440,9 +426,9 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toClipPath(item) {
-    if (item["clip-path"] === "") return "";
+    if (item.clipPath === "") return "";
 
-    var obj = ClipPath.parseStyle(item["clip-path"]);
+    var obj = ClipPath.parseStyle(item.clipPath);
     var value = obj.value;
 
     switch (obj.type) {
@@ -460,7 +446,7 @@ export default class DomRender extends ItemRender {
   }
 
   toClipPathCSS(item) {
-    let str = item["clip-path"];
+    let str = item.clipPath;
 
     if (Boolean(str) === false) {
       return null;

@@ -580,10 +580,10 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     const [paddingTop, paddingRight, paddingBottom, paddingLeft] =
       this.getScaledInformation([
-        Length.px(info.current["padding-top"]),
-        Length.px(info.current["padding-right"]),
-        Length.px(info.current["padding-bottom"]),
-        Length.px(info.current["padding-left"]),
+        Length.px(info.current.paddingTop),
+        Length.px(info.current.paddingRight),
+        Length.px(info.current.paddingBottom),
+        Length.px(info.current.paddingLeft),
       ]);
     const columns = this.getScaledInformation(info.columns);
     const rows = this.getScaledInformation(info.rows);
@@ -687,15 +687,15 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
   getGridLayoutInformation() {
     const current = this.getGridTargetLayer();
-    const columns = Grid.parseStyle(current["grid-template-columns"]);
-    const rows = Grid.parseStyle(current["grid-template-rows"]);
+    const columns = Grid.parseStyle(current.gridTemplateColumns);
+    const rows = Grid.parseStyle(current.gridTemplateRows);
 
     return {
       current,
       columns,
-      columnGap: this.getParsedValue(current["grid-column-gap"]),
+      columnGap: this.getParsedValue(current.gridColumnGap),
       rows,
-      rowGap: this.getParsedValue(current["grid-row-gap"]),
+      rowGap: this.getParsedValue(current.gridRowGap),
     };
   }
 
@@ -870,18 +870,13 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   isSelectedColumn(index) {
     const current = this.$context.selection.current;
 
-    return (
-      current["grid-column-start"] <= index &&
-      index < current["grid-column-end"]
-    );
+    return current.gridColumnStart <= index && index < current.gridColumnEnd;
   }
 
   isSelectedRow(index) {
     const current = this.$context.selection.current;
 
-    return (
-      current["grid-row-start"] <= index && index < current["grid-row-end"]
-    );
+    return current.gridRowStart <= index && index < current.gridRowEnd;
   }
 
   [LOAD("$grid") + DOMDIFF]() {

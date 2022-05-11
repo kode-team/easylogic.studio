@@ -11,6 +11,22 @@ export class SampleLayer extends LayerModel {
     });
   }
 
+  get sampleText() {
+    return this.get("sampleText");
+  }
+
+  set sampleText(value) {
+    this.set("sampleText", value);
+  }
+
+  get sampleNumber() {
+    return this.get("sampleNumber");
+  }
+
+  set sampleNumber(value) {
+    this.set("sampleNumber", value);
+  }
+
   toCloneObject() {
     return {
       ...super.toCloneObject(),

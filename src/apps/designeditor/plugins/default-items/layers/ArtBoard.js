@@ -8,17 +8,10 @@ export class ArtBoard extends LayerModel {
       name: "New ArtBoard",
       width: 1000,
       height: 1000,
-      "background-color": "white",
-      "transform-style": "flat",
+      backgroundColor: "white",
+      transformStyle: "flat",
       ...obj,
     });
-  }
-
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("name"),
-    };
   }
 
   getDefaultTitle() {
@@ -32,9 +25,9 @@ export class ArtBoard extends LayerModel {
   editable(editablePropertyName) {
     switch (editablePropertyName) {
       case "border":
-      case "border-radius":
+      case "borderRadius":
         return false;
-      case "artboard-size":
+      case "artboardSize":
       case "layout":
         return true;
     }

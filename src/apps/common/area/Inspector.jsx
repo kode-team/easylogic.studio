@@ -35,7 +35,7 @@ export default class Inspector extends EditorElement {
               title={this.$i18n("inspector.tab.title.design")}
             >
               <div style="display: flex; flex-direction: column;">
-                {this.$injectManager.generate("inspector.tab.style")}
+                {this.$injectManager.generate("inspector.tab.style", true)}
                 <div class="empty" style="order: 1000000;"></div>
               </div>
             </TabPanel>
@@ -44,7 +44,7 @@ export default class Inspector extends EditorElement {
               title={this.$i18n("inspector.tab.title.transition")}
             >
               <div style="display: flex; flex-direction: column;">
-                {this.$injectManager.generate("inspector.tab.transition")}
+                {this.$injectManager.generate("inspector.tab.transition", true)}
                 <div class="empty" style="order: 1000000;"></div>
               </div>
             </TabPanel>
@@ -53,7 +53,7 @@ export default class Inspector extends EditorElement {
               title={this.$i18n("inspector.tab.title.code")}
             >
               <div style="display: flex; flex-direction: column;">
-                {this.$injectManager.generate("inspector.tab.code")}
+                {this.$injectManager.generate("inspector.tab.code", true)}
                 <div class="empty" style="order: 1000000;"></div>
               </div>
             </TabPanel>
@@ -65,7 +65,10 @@ export default class Inspector extends EditorElement {
                 <TabPanel value={value} title={title} icon={it.icon}>
                   <div style="display: flex: flex-direction: column;">
                     {loadElements.map((element) => createElement(element))}
-                    {this.$injectManager.generate("inspector.tab." + it.value)}
+                    {this.$injectManager.generate(
+                      "inspector.tab." + it.value,
+                      true
+                    )}
                     <div class="empty" style="order: 1000000;"></div>
                   </div>
                 </TabPanel>

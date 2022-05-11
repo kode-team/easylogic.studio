@@ -65,7 +65,7 @@ export default class ClippathEditorView extends ClippathEllipseEditorView {
       "height"
     );
   }
-  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkClipPath")]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkClipPath") + DEBOUNCE(10)]() {
     this.refresh();
   }
 

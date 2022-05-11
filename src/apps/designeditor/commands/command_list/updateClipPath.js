@@ -13,7 +13,7 @@ export default {
       "setAttribute",
       "change clip-path",
       editor.context.selection.packByValue({
-        "clip-path": `path(${pathObject.d})`,
+        clipPath: `path(${pathObject.d})`,
       })
     );
   },

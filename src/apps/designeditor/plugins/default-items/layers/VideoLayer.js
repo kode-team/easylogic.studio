@@ -46,12 +46,12 @@ export class VideoLayer extends LayerModel {
     return icon.video;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("src"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("src"),
+  //   };
+  // }
 
   resize() {
     this.reset({

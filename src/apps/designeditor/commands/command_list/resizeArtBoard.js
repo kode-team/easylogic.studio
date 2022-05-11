@@ -10,7 +10,7 @@ export default function resizeArtBoard(editor, size = "") {
     width = +width;
     height = +height;
 
-    current.reset({ width, height });
+    current.resize(width, height);
     editor.context.selection.select(current);
 
     _doForceRefreshSelection(editor);

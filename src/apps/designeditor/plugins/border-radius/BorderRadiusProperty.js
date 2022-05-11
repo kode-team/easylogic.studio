@@ -21,7 +21,7 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   [LOAD("$body")]() {
     var current = this.$context.selection.current || {};
-    var value = current["border-radius"] || "";
+    var value = current.borderRadius || "0px";
 
     return createComponent("BorderRadiusEditor", {
       ref: "$1",
@@ -31,11 +31,13 @@ export default class BorderRadiusProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "border-radius";
+    return "borderRadius";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
-    this.refresh();
+    if (this.$context.selection.hasChangedField("borderRadius")) {
+      this.refresh();
+    }
   }
 
   [SUBSCRIBE_SELF("changeBorderRadius")](value) {
@@ -43,7 +45,7 @@ export default class BorderRadiusProperty extends BaseProperty {
       "setAttribute",
       "change border radius",
       this.$context.selection.packByValue({
-        "border-radius": value,
+        borderRadius: value,
       })
     );
   }

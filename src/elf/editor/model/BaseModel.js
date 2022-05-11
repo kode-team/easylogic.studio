@@ -1,4 +1,4 @@
-import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "sapa";
+import { clone, isNotUndefined, isNumber, isUndefined } from "sapa";
 
 import { uuid } from "elf/core/math";
 
@@ -10,6 +10,13 @@ import { uuid } from "elf/core/math";
  * @class
  */
 export class BaseModel {
+  #modelManager = null;
+  #json = {};
+  #cachedValue = {};
+  #timestamp = 0;
+  #lastChangedField = {};
+  #collapsed = false;
+
   /**
    * 모델 생성자
    *
@@ -17,58 +24,20 @@ export class BaseModel {
    * @param {ModelManager} modelManager
    */
   constructor(json = {}, modelManager) {
-    this.modelManager = modelManager;
+    this.setModelManager(modelManager);
+    this.initializeModel(json);
+  }
 
-    const self = this;
-    this.ref = new Proxy(self, {
-      get(target, key) {
-        // target[key] 가 함수인 경우 미리 캐쉬 해둔다.
-        // 체크 하는 펑션을 외부에서 제어할 수 있도록 구조를 맞춰야 할 듯
-        // 모든 모델의 함수를 캐슁을 해야할 이유가 없을 듯 하다.
-        if (self.hasCache(key)) {
-          return self.getCache(key);
-        }
+  initializeModel(json) {
+    this.#json = this.convert(Object.assign(this.getDefaultObject(), json));
+  }
 
-        const prop = self[key];
-
-        if (isFunction(prop)) {
-          if (!self.hasCache(key)) {
-            self.addCache(key, (...args) => {
-              return prop.apply(self, args);
-            });
-          }
-
-          return self.getCache(key);
-        } else {
-          // getter or json property
-          return isNotUndefined(prop) ? prop : self.json[key];
-        }
-      },
-      set(target, key, value) {
-        const isDiff = self.json[key] != value;
-
-        if (isDiff) {
-          self.reset({ [key]: value });
-        }
-
-        return true;
-      },
-      deleteProperty(target, key) {
-        self.reset({ [key]: undefined });
-      },
-    });
-
-    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-    this.lastChangedField = {};
-    this.lastChangedFieldKeys = [];
-    this.cachedValue = {};
-    this.timestamp = 0;
-
-    return this.ref;
+  get manager() {
+    return this.#modelManager;
   }
 
   setModelManager(modelManager) {
-    this.modelManager = modelManager;
+    this.#modelManager = modelManager;
   }
 
   /***********************************
@@ -86,11 +55,12 @@ export class BaseModel {
   }
 
   isChanged(timestamp) {
+    console.log("isChanged", timestamp);
     return this.timestamp != Number(timestamp);
   }
 
   changed() {
-    this.timestamp += Date.now();
+    this.#timestamp += Date.now();
   }
 
   /***********************************
@@ -99,15 +69,39 @@ export class BaseModel {
    *
    **********************************/
 
+  get timestamp() {
+    return this.#timestamp;
+  }
+
   /**
    * title 속성
    */
   get title() {
-    return this.json.name || this.getDefaultTitle();
+    return this.name || this.getDefaultTitle();
+  }
+
+  get itemType() {
+    return this.get("itemType");
+  }
+
+  get name() {
+    return this.get("name");
+  }
+
+  get children() {
+    return this.get("children");
+  }
+
+  get collapsed() {
+    return this.#collapsed;
+  }
+
+  set collapsed(value) {
+    this.#collapsed = value;
   }
 
   renameWithCount() {
-    let arr = this.json.name.split(" ");
+    let arr = this.#json.name.split(" ");
 
     if (arr.length < 2) {
       return;
@@ -133,23 +127,7 @@ export class BaseModel {
    * @return {Item[]} 자신을 포함안 하위 모든 자식을 조회
    */
   get allLayers() {
-    return this.modelManager.getAllLayers(this.id);
-  }
-
-  /**
-   * filterCallback 으로 필터링된 layer 리스트를 가지고 온다.
-   *
-   * @returns {Item[]}
-   */
-  filteredAllLayers(filterCallback) {
-    return this.modelManager.getAllLayers(this.id, filterCallback);
-  }
-
-  /**
-   * get id
-   */
-  get id() {
-    return this.json.id;
+    return this.manager.getAllLayers(this.id);
   }
 
   /**
@@ -158,7 +136,23 @@ export class BaseModel {
    * @returns {Item[]}
    */
   get layers() {
-    return this.modelManager.getLayers(this.id, this.ref);
+    return this.manager.getLayers(this.id) || [];
+  }
+
+  /**
+   * filterCallback 으로 필터링된 layer 리스트를 가지고 온다.
+   *
+   * @returns {Item[]}
+   */
+  filteredAllLayers(filterCallback) {
+    return this.manager.getAllLayers(this.id, filterCallback);
+  }
+
+  /**
+   * get id
+   */
+  get id() {
+    return this.#json.id;
   }
 
   /**
@@ -167,7 +161,7 @@ export class BaseModel {
   get parentId() {
     // parentId 가 나와 같으면 순환 참조가 되버리기 때문에
     // 이런 경우 무조건 없는걸로 간주한다.
-    const parentId = this.json.parentId;
+    const parentId = this.#json.parentId;
     if (parentId === this.id) return undefined;
 
     return parentId;
@@ -179,13 +173,7 @@ export class BaseModel {
   get parent() {
     if (!this.parentId) return undefined;
 
-    return this.modelManager.get(this.parentId);
-  }
-
-  setParentId(parentId) {
-    this.reset({ parentId });
-
-    this.modelManager.setChanged("setParentId", this.id, { parentId });
+    return this.manager.get(this.parentId);
   }
 
   /**
@@ -194,7 +182,7 @@ export class BaseModel {
    * @returns {number}
    */
   get depth() {
-    return this.modelManager.getDepth(this.id);
+    return this.manager.getDepth(this.id);
   }
 
   /**
@@ -203,7 +191,7 @@ export class BaseModel {
    * @returns {Item}
    */
   get top() {
-    return this.modelManager.getRoot(this.id);
+    return this.manager.getRoot(this.id);
   }
 
   /**
@@ -212,7 +200,7 @@ export class BaseModel {
    * @returns {Project}
    */
   get project() {
-    return this.modelManager.getProject(this.id);
+    return this.manager.getProject(this.id);
   }
 
   /**
@@ -221,7 +209,7 @@ export class BaseModel {
    * @returns {ArtBoard}
    */
   get artboard() {
-    return this.modelManager.getArtBoard(this.id);
+    return this.manager.getArtBoard(this.id);
   }
 
   /**
@@ -230,23 +218,21 @@ export class BaseModel {
    * @returns {Item[]}
    */
   get path() {
-    return this.modelManager.getPath(this.id, this.ref);
+    return this.manager.getPath(this.id);
   }
 
   get pathIds() {
     return this.path.map((it) => it.id);
   }
 
-  // get lock() {
-  //   return this.modelManager.editor.lockManager.get(this.id);
-  // }
+  setParentId(parentId) {
+    this.reset({ parentId });
 
-  // get visible() {
-  //   return this.modelManager.editor.visibleManager.get(this.id);
-  // }
+    this.manager.setChanged("setParentId", this.id, { parentId });
+  }
 
   get childrenLength() {
-    return this.json.children.length;
+    return this.#json.children.length;
   }
 
   get index() {
@@ -266,22 +252,23 @@ export class BaseModel {
   }
 
   get last() {
-    return this.parent.layers[this.parent.childrenLength - 1];
+    const parent = this.parent;
+    return parent.layers[parent.childrenLength - 1];
   }
 
   get prev() {
     const index = this.index;
-    if (this.isFirst()) {
-      return this.ref;
+    if (this.isFirst) {
+      return this;
     }
 
     return this.parent.layers[index - 1];
   }
 
   get next() {
-    const index = this.index();
-    if (this.isLast()) {
-      return this.ref;
+    const index = this.index;
+    if (this.isLast) {
+      return this;
     }
 
     return this.parent.layers[index + 1];
@@ -301,16 +288,17 @@ export class BaseModel {
    * @returns
    */
   getInformationForHierarchy(...args) {
+    const parent = this.parent;
     const index = this.index;
     return {
       id: this.id,
       index: index,
       parentId: this.parentId,
-      prev: index === 0 ? undefined : this.parent.children[index - 1],
+      prev: index === 0 ? undefined : parent.children[index - 1],
       next:
-        index === this.parent.childrenLength - 1
+        index === parent.childrenLength - 1
           ? undefined
-          : this.parent.children[index + 1],
+          : parent.children[index + 1],
       attrs: this.attrs(...args),
     };
   }
@@ -321,11 +309,11 @@ export class BaseModel {
    * @param {string} postfix
    */
   getInnerId(postfix = "") {
-    return this.json.id + postfix;
+    return this.#json.id + postfix;
   }
 
   is(checkItemType) {
-    return this.json.itemType === checkItemType;
+    return this.#json.itemType === checkItemType;
   }
 
   isNot(checkItemType) {
@@ -339,7 +327,26 @@ export class BaseModel {
    * @returns
    */
   get(key) {
-    return this.json[key];
+    return this.#json[key];
+  }
+
+  /**
+   * 저장된 필드 값을 지움
+   *
+   * @param {string} key
+   */
+  removeField(key) {
+    delete this.#json[key];
+  }
+
+  /**
+   * key 에 대한 값을 설정한다.
+   *
+   * @param {string} key
+   * @param {any} value
+   */
+  set(key, value) {
+    this.reset({ [key]: value });
   }
 
   isSVG() {
@@ -347,15 +354,15 @@ export class BaseModel {
   }
 
   addCache(key, value) {
-    this.cachedValue[key] = value;
+    this.#cachedValue[key] = value;
   }
 
   getCache(key) {
-    return this.cachedValue[key];
+    return this.#cachedValue[key];
   }
 
   hasCache(key) {
-    return Boolean(this.cachedValue[key]);
+    return Boolean(this.#cachedValue[key]);
   }
 
   /**
@@ -370,7 +377,7 @@ export class BaseModel {
   computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`;
     const parsedKey = `${cachedKey}__parseValue`;
-    const value = this.json[key];
+    const value = this.#json[key];
 
     // 캐쉬가 있으면 그대로 리턴
     if (isForce) {
@@ -384,7 +391,7 @@ export class BaseModel {
 
     // isForce 가 true 이면 다시 캐쉬를 만든다.
     this.addCache(cachedKey, value);
-    this.addCache(parsedKey, newValueCallback(value, this.ref));
+    this.addCache(parsedKey, newValueCallback(value, this));
 
     return this.getCache(parsedKey);
   }
@@ -429,22 +436,31 @@ export class BaseModel {
     return json;
   }
 
+  /**
+   * cache hook
+   */
   setCache() {}
 
+  /**
+   * 자식 정보를 포함한 객체 clone 정보를  생성
+   *
+   * json 을 카피함
+   *
+   * @param {boolean} isDeep
+   * @returns
+   */
   toCloneObject(isDeep = true) {
-    var json = this.attrs(
-      "itemType",
-      "name",
-      "elementType",
-      "type",
-      "selected",
-      "parentId",
-      "children"
-    );
+    const json = {};
+
+    Object.keys(this.#json).forEach((field) => {
+      if (isNotUndefined(this.get(field))) {
+        json[field] = clone(this.get(field));
+      }
+    });
 
     if (isDeep) {
-      json.layers = this.json.children.map((childId) => {
-        return this.modelManager.clone(childId, isDeep);
+      json.layers = this.layers.map((layer) => {
+        return layer.clone(isDeep);
       });
     }
 
@@ -455,33 +471,8 @@ export class BaseModel {
    * clone Item
    */
   clone(isDeep = true) {
-    return this.modelManager.clone(this.id, isDeep);
+    return this.#modelManager.clone(this.id, isDeep);
   }
-
-  /**
-   * check object values
-   *
-   * 값이 같은지는 체크하기가 쉽지 않을 수도 있음.
-   *
-   * @param {KeyValue} obj
-   * @returns {boolean}
-   */
-  // isChangedValue(obj) {
-  //   return true;
-  //   // console.log(Object.keys(obj).some((key) => {
-  //   //   console.log(obj, key, this.json);
-  //   //   return obj[key] !== this.json[key]
-  //   // }));
-  //   // return Object.keys(obj).some((key) => {
-
-  //   //   if (isArray(obj[key])) {
-  //   //     return !isArrayEquals(obj[key], this.json[key]);
-  //   //   } else {
-  //   //     return obj[key] !== this.json[key]
-  //   //   }
-
-  //   // });
-  // }
 
   /**
    * set json content
@@ -493,13 +484,12 @@ export class BaseModel {
     // const isChanged = this.isChangedValue(obj);
 
     // if (isChanged) {
-    this.json = this.convert(Object.assign(this.json, obj));
+    this.#json = this.convert(Object.assign(this.#json, obj));
 
-    this.lastChangedField = obj;
-    this.lastChangedFieldKeys = Object.keys(obj);
+    this.#lastChangedField = obj;
 
     if (context.origin === "*") {
-      this.modelManager.setChanged("reset", this.id, obj);
+      this.#modelManager?.setChanged("reset", this.id, obj);
     }
 
     this.changed();
@@ -511,10 +501,11 @@ export class BaseModel {
   /**
    * 마지막 변경된 field 를 체크한다.
    *
+   * @param {string[]} [args=[]]
    * @returns {boolean}
    */
   hasChangedField(...args) {
-    return args.some((it) => this.lastChangedField[it] !== undefined);
+    return args.some((it) => this.#lastChangedField[it] !== undefined);
   }
 
   /**
@@ -533,10 +524,9 @@ export class BaseModel {
     var id = obj.id || uuid();
     return {
       id,
-      // visible: true,  // 보이기 여부 설정
-      // selected: false,  // 선택 여부 체크
+      name: "",
+      itemType: "base",
       children: [], // 하위 객체를 저장한다.
-      offsetInParent: 1, // 부모에서 자신의 위치를 숫자로 나타낸다.
       parentId: "", // 부모 객체의 id
       ...obj,
     };
@@ -559,6 +549,12 @@ export class BaseModel {
     return result;
   }
 
+  /**
+   * id를 키로 가지는 객체를 생성한다.
+   *
+   * @param  {string[]} args
+   * @returns
+   */
   attrsWithId(...args) {
     return {
       [this.id]: this.attrs(...args),
@@ -571,7 +567,7 @@ export class BaseModel {
    * @returns {boolean}
    */
   hasChildren() {
-    return this.json.children.length > 0;
+    return this.children.length > 0;
   }
 
   /**
@@ -581,11 +577,11 @@ export class BaseModel {
    */
   appendChild(layer) {
     if (layer.parentId === this.id) {
-      const hasId = this.json.children.find((it) => it === layer.id);
+      const hasId = this.children.find((it) => it === layer.id);
       if (Boolean(hasId) === false) {
         // 아이디가 없는 경우 다시 아이디 넣어주기
-        this.json.children.push(layer.id);
-        this.modelManager.setChanged("appendChild", this.id, {
+        this.children.push(layer.id);
+        this.#modelManager.setChanged("appendChild", this.id, {
           child: layer.id,
           oldParentId: layer.parentId,
         });
@@ -603,18 +599,20 @@ export class BaseModel {
 
     layer.setParentId(this.id);
 
-    this.json.children.push(layer.id);
+    this.children.push(layer.id);
 
     return layer;
   }
 
   /**
+   * matrix 재조정
    *
    * @override
    */
   resetMatrix() {}
 
   /**
+   * matrix 캐쉬 재조정
    *
    * @override
    */
@@ -635,7 +633,7 @@ export class BaseModel {
     }
 
     layer.setParentId(this.id);
-    let list = this.json.children.map((id, childIndex) => {
+    let list = this.children.map((id, childIndex) => {
       return { id, index: childIndex };
     });
 
@@ -655,8 +653,10 @@ export class BaseModel {
       return a.index - b.index;
     });
 
-    this.json.children = list.map((it) => it.id);
-    this.modelManager.setChanged("insertChild", this.id, {
+    this.reset({
+      children: list.map((it) => it.id),
+    });
+    this.#modelManager.setChanged("insertChild", this.id, {
       childId: layer.id,
       index: 0,
     });
@@ -671,7 +671,6 @@ export class BaseModel {
   insertAfter(layer) {
     this.parent.insertChild(layer, this.index + 1);
 
-    // this.project.addIndexItem(layer);
     return layer;
   }
 
@@ -682,20 +681,20 @@ export class BaseModel {
    */
   insertBefore(layer) {
     this.parent.insertChild(layer, this.index);
-    // this.project.addIndexItem(layer);
+
     return layer;
   }
 
   /**
    * toggle item's attribute
    *
-   * @param {*} field
-   * @param {*} toggleValue
+   * @param {string} field
+   * @param {undefined|boolean} toggleValue
    */
   toggle(field, toggleValue) {
     if (isUndefined(toggleValue)) {
       this.reset({
-        [field]: !this.json[field],
+        [field]: !this.get(field),
       });
     } else {
       this.reset({
@@ -719,8 +718,7 @@ export class BaseModel {
   }
 
   expectJSON(key) {
-    // if (key === 'parent') return false;
-    if (isUndefined(this.json[key])) return false;
+    if (isUndefined(this.get(key))) return false;
 
     return true;
   }
@@ -730,7 +728,7 @@ export class BaseModel {
    *
    */
   toJSON() {
-    const json = this.json;
+    const json = this.#json;
 
     let newJSON = {};
     Object.keys(json)
@@ -740,8 +738,8 @@ export class BaseModel {
       });
 
     if (this.hasChildren()) {
-      newJSON.layers = this.json.children.map((childId) => {
-        return this.modelManager.get(childId)?.toJSON();
+      newJSON.layers = this.layers.map((layer) => {
+        return layer.toJSON();
       });
     }
 
@@ -759,8 +757,14 @@ export class BaseModel {
     return this.parent.copyItem(this.id, dist);
   }
 
-  findIndex(item) {
-    return this.json.children.indexOf(item.id);
+  /**
+   * 부모 기준으로 자식의 index 를 찾음
+   *
+   * @param {BaseModel} child
+   * @returns
+   */
+  findIndex(child) {
+    return this.children.indexOf(child.id);
   }
 
   /**
@@ -770,11 +774,11 @@ export class BaseModel {
    * @returns {BaseModel}
    */
   find(id) {
-    return this.modelManager.get(id);
+    return this.#modelManager.get(id);
   }
 
   copyItem(childItemId, dist = 10) {
-    const childItem = this.modelManager.get(childItemId);
+    const childItem = this.find(childItemId);
     var child = childItem.clone();
 
     child.renameWithCount();
@@ -783,7 +787,7 @@ export class BaseModel {
     var childIndex = this.findIndex(childItem);
 
     if (childIndex > -1) {
-      this.json.children.push(child.id);
+      this.children.push(child.id);
     }
     return child;
   }
@@ -802,7 +806,7 @@ export class BaseModel {
    * @param {Item} childItem
    */
   removeChild(childItemId) {
-    return this.modelManager.removeChild(this.id, childItemId);
+    return this.#modelManager.removeChild(this.id, childItemId);
   }
 
   /**
@@ -811,7 +815,7 @@ export class BaseModel {
    * @param {string} parentId
    */
   hasParent(parentId) {
-    return this.modelManager.hasParent(this.id, parentId);
+    return this.#modelManager.hasParent(this.id, parentId);
   }
 
   /**
@@ -821,7 +825,7 @@ export class BaseModel {
    * @returns {boolean}
    */
   hasChild(childId) {
-    return this.json.children.includes(childId);
+    return this.children.includes(childId);
   }
 
   /**
@@ -837,7 +841,7 @@ export class BaseModel {
    * 계층 구조에서는 위로 보내기
    */
   sendBackward(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
 
     const result = {};
     let selectedIndex = -1;
@@ -863,7 +867,7 @@ export class BaseModel {
   }
 
   sendBack(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
 
     const result = {};
     siblings.forEach((id, index) => {
@@ -888,7 +892,7 @@ export class BaseModel {
    * 계층 구조 에서는 밑으로 보내기
    */
   bringForward(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
 
     const result = {};
     let selectedIndex = -1;
@@ -914,7 +918,7 @@ export class BaseModel {
   }
 
   bringFront(targetId) {
-    const siblings = this.json.children;
+    const siblings = this.children;
 
     const result = {};
     // let selectedIndex = -1;

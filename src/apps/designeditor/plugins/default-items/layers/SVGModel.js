@@ -11,19 +11,19 @@ import { Length } from "elf/editor/unit/Length";
 const expectedProperties = [
   "appearance",
   "border",
-  "border-radius",
-  "background-image",
-  "backdrop-filter",
-  "clip-path",
+  "borderRadius",
+  "backgroundImage",
+  "backdropFilter",
+  "clipPath",
   "pattern",
-  "box-shadow",
+  "boxShadow",
   "layout",
   "transform",
-  "transform-origin",
+  "transformOrigin",
   "perspective",
-  "perspective-origin",
-  "backdrop-filter",
-  "box-model",
+  "perspectiveOrigin",
+  "backdropFilter",
+  "boxModel",
 ];
 
 const expectedPropertiesKeys = {};
@@ -32,7 +32,7 @@ expectedProperties.forEach((key) => {
   expectedPropertiesKeys[key] = true;
 });
 
-export class SVGItem extends LayerModel {
+export class SVGModel extends LayerModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "svg",
@@ -40,14 +40,97 @@ export class SVGItem extends LayerModel {
       elementType: "svg",
       overflow: "visible",
       stroke: "black",
-      "stroke-width": 1,
+      strokeWidth: 1,
       fill: "transparent",
-      "fill-rule": "nonzero",
-      "text-anchor": "start",
-      "stroke-dasharray": [],
-      "stroke-dashoffset": 0,
+      fillOpacity: 1,
+      fillRule: "nonzero",
+      textAnchor: "start",
+      strokeLinecap: "",
+      strokeLinejoin: "",
+      strokeDasharray: [],
+      strokeDashoffset: 0,
       ...obj,
     });
+  }
+
+  get stroke() {
+    return this.get("stroke");
+  }
+
+  set stroke(value) {
+    this.set("stroke", value);
+  }
+
+  get strokeWidth() {
+    return this.get("strokeWidth");
+  }
+
+  set strokeWidth(value) {
+    this.set("strokeWidth", value);
+  }
+
+  get fill() {
+    return this.get("fill");
+  }
+
+  set fill(value) {
+    this.set("fill", value);
+  }
+
+  get fillOpacity() {
+    return this.get("fillOpacity");
+  }
+
+  set fillOpacity(value) {
+    this.set("fillOpacity", value);
+  }
+
+  get fillRule() {
+    return this.get("fillRule");
+  }
+
+  set fillRule(value) {
+    this.set("fillRule", value);
+  }
+
+  get textAnchor() {
+    return this.get("textAnchor");
+  }
+
+  set textAnchor(value) {
+    this.set("textAnchor", value);
+  }
+
+  get strokeDasharray() {
+    return this.get("strokeDasharray");
+  }
+
+  set strokeDasharray(value) {
+    this.set("strokeDasharray", value);
+  }
+
+  get strokeDashoffset() {
+    return this.get("strokeDashoffset");
+  }
+
+  set strokeDashoffset(value) {
+    this.set("strokeDashoffset", value);
+  }
+
+  get strokeLinejoin() {
+    return this.get("strokeLinejoin");
+  }
+
+  set strokeLinejoin(value) {
+    this.set("strokeLinejoin", value);
+  }
+
+  get strokeLinecap() {
+    return this.get("strokeLinecap");
+  }
+
+  set strokeLinecap(value) {
+    this.set("strokeLinecap", value);
   }
 
   /**
@@ -68,32 +151,30 @@ export class SVGItem extends LayerModel {
     }
 
     switch (editablePropertyName) {
-      case "svg-item":
+      case "svgItem":
         return true;
     }
 
     return super.editable(editablePropertyName);
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs(
-        "overflow",
-        "stroke",
-        "stroke-width",
-        "svgfilter",
-        "fill",
-        "fill-rule",
-        "fill-opacity",
-        "stroke-linecap",
-        "stroke-linejoin",
-        "stroke-dashoffset",
-        "stroke-dasharray",
-        "text-anchor"
-      ),
-    };
-  }
+  // toCloneObject(isDeep = true) {
+  //   return {
+  //     ...super.toCloneObject(isDeep),
+  //     ...this.attrs(
+  //       "stroke",
+  //       "strokeWidth",
+  //       "fill",
+  //       "fillRule",
+  //       "fillOpacity",
+  //       "strokeLinecap",
+  //       "strokeLinejoin",
+  //       "strokeDashoffset",
+  //       "strokeDasharray",
+  //       "textAnchor"
+  //     ),
+  //   };
+  // }
 
   getDefaultTitle() {
     return "SVG";
@@ -112,11 +193,9 @@ export class SVGItem extends LayerModel {
    * @returns {boolean}
    */
   hasPoint(x, y) {
-    const obj = this.attrs("fill", "stroke", "fill-opacity", "stroke-width");
-
-    const fill = obj.fill;
-    const fillOpacity = obj["fill-opacity"];
-    const strokeWidth = obj["stroke-width"];
+    const fill = this.fill;
+    const fillOpacity = this.fillOpacity;
+    const strokeWidth = this.strokeWidth;
 
     const isTransparent =
       fill === "transparent" || fillOpacity === 0 || Color.parse(fill).a === 0;
@@ -231,7 +310,7 @@ export class SVGItem extends LayerModel {
    * @param {string} field   key field name
    */
   createFragmentMatrix(field) {
-    const value = this.json[field];
+    const value = this.get(field);
 
     const image = SVGFill.parseImage(value);
 

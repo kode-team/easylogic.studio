@@ -6,6 +6,7 @@ import {
   SUBSCRIBE_SELF,
   IF,
   createComponent,
+  DOMDIFF,
 } from "sapa";
 
 import "./FilterProperty.scss";
@@ -103,7 +104,7 @@ export default class FilterProperty extends BaseProperty {
     return arr;
   }
 
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var current = this.$context.selection.current || {};
     var value = current.filter;
 

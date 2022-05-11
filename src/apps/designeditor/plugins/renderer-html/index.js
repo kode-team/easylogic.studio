@@ -3,7 +3,6 @@ import HTMLRenderer from "./HTMLRenderer";
 import ArtBoardRender from "./HTMLRenderer/ArtBoardRender";
 import BooleanPathRender from "./HTMLRenderer/BooleanPathRender";
 import CircleRender from "./HTMLRenderer/CircleRender";
-import CubeRender from "./HTMLRenderer/CubeRender";
 import ImageRender from "./HTMLRenderer/ImageRender";
 import ProjectRender from "./HTMLRenderer/ProjectRender";
 import RectRender from "./HTMLRenderer/RectRender";
@@ -40,6 +39,5 @@ export default function (editor) {
   editor.registerRenderer("html", "spline", new SplineRender());
   editor.registerRenderer("html", "svg-text", new SVGTextRender());
   editor.registerRenderer("html", "svg-textpath", new SVGTextPathRender());
-  editor.registerRenderer("html", "cube", new CubeRender());
   editor.registerRenderer("html", "template", new TemplateRender());
 }

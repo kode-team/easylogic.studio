@@ -68,10 +68,10 @@ export default class CanvasView extends EditorElement {
             <HTMLRenderView ref="$htmlRenderView" />
             <DragAreaRectView ref="$dragAreaRectView" />
 
-            {this.$injectManager.generate("canvas.view")}
+            {this.$injectManager.generate("canvas.view", true)}
           </div>
         </div>
-        ${createComponent("PageTools")}
+        ${createComponent("PageTools", { ref: "pageTools" })}
       </div>
     );
   }

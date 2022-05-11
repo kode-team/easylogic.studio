@@ -22,13 +22,13 @@ export default class BodyPanel extends EditorElement {
     return /*html*/ `
       <div class="elf--body-panel">
         <div class="submenu-area">
-          ${createComponent("PageSubEditor")}
+          ${createComponent("PageSubEditor", { ref: "subeditor" })}
         </div>
         <div class='editing-area' ref="$area">
-          ${createComponent("HorizontalRuler")}
-          ${createComponent("VerticalRuler")}
+          ${createComponent("HorizontalRuler", { ref: "hruler" })}
+          ${createComponent("VerticalRuler", { ref: "vruler" })}
           <div class="canvas-layout">
-            ${createComponent("CanvasView")}
+            ${createComponent("CanvasView", { ref: "canvas" })}
           </div>
 
         </div>

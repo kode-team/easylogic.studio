@@ -5,6 +5,7 @@ import {
   SUBSCRIBE_SELF,
   IF,
   createComponent,
+  DEBOUNCE,
 } from "sapa";
 
 import "./BackgroundImageProperty.scss";
@@ -57,41 +58,43 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   [LOAD("$property")]() {
     var current = this.$context.selection.current || {};
-    var value = current["background-image"] || "";
+    var value = current.backgroundImage || "";
 
     return createComponent("BackgroundImageEditor", {
       ref: "$backgroundImageEditor",
-      key: "background-image",
+      key: "backgroundImage",
       value,
       onchange: "changeBackgroundImage",
     });
   }
 
   get editableProperty() {
-    return "background-image";
+    return "backgroundImage";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  checkCurrentItem(item) {
+    return this.$context.selection.current === item;
+  }
+
+  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkCurrentItem") + DEBOUNCE(100)]() {
     if (this.$context.selection.current) {
-      if (this.$context.selection.hasChangedField("background-image")) {
+      if (this.$context.selection.hasChangedField("backgroundImage")) {
         this.refresh();
       }
     }
   }
 
   [SUBSCRIBE_SELF("changeBackgroundImage")](key, value) {
-    this.nextTick(() => {
-      this.$commands.executeCommand(
-        "setAttribute",
-        "change background image",
-        this.$context.selection.packByValue({
-          [key]: value,
-        })
-      );
-    }, 10);
+    this.$commands.executeCommand(
+      "setAttribute",
+      "change background image",
+      this.$context.selection.packByValue({
+        [key]: value,
+      })
+    );
   }
 }

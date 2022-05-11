@@ -15,6 +15,30 @@ export class ImageLayer extends LayerModel {
     });
   }
 
+  get src() {
+    return this.get("src");
+  }
+
+  set src(value) {
+    this.set("src", value);
+  }
+
+  get naturalWidth() {
+    return this.get("naturalWidth");
+  }
+
+  set naturalWidth(value) {
+    this.set("naturalWidth", value);
+  }
+
+  get naturalHeight() {
+    return this.get("naturalHeight");
+  }
+
+  set naturalHeight(value) {
+    this.set("naturalHeight", value);
+  }
+
   enableHasChildren() {
     return false;
   }
@@ -23,17 +47,17 @@ export class ImageLayer extends LayerModel {
     return "Image";
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("src"),
-    };
-  }
+  // toCloneObject(isDeep = true) {
+  //   return {
+  //     ...super.toCloneObject(isDeep),
+  //     ...this.attrs("src"),
+  //   };
+  // }
 
   resize() {
     this.reset({
-      width: this.json.naturalWidth.clone(),
-      height: this.json.naturalHeight.clone(),
+      width: this.naturalWidth.clone(),
+      height: this.naturalHeight.clone(),
     });
   }
 }

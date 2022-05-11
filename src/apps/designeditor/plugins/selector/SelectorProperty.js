@@ -121,8 +121,8 @@ export default class SelectorProperty extends BaseProperty {
       ? Selector.parseStyle(current)
       : current.selectors;
 
-    current.selector = "";
-    current.selectors = selectors;
+    // current.selector = "";
+    // current.selectors = selectors;
 
     return (selectors || []).map((selector, index) => {
       return this.makeSelectorTemplate(selector, index);

@@ -1,6 +1,4 @@
-// import { Editor } from "elf/editor/manager/Editor";
-import { Overflow } from "elf/editor/types/model";
-// import AppearanceProperty from "./AppearanceProperty";
+import { Overflow, BlendMode } from "elf/editor/types/model";
 import { ObjectProperty } from "elf/editor/ui/property/ObjectProperty";
 
 /**
@@ -20,22 +18,22 @@ export default function (editor) {
             size: [1, 1],
             columns: [
               {
-                key: "background-color",
+                key: "backgroundColor",
                 editor: "color-view",
                 editorOptions: {
                   compact: true,
                   format: true,
                 },
-                defaultValue: current["background-color"],
+                defaultValue: current.backgroundColor,
               },
               {
-                key: "mix-blend-mode",
+                key: "mixBlendMode",
                 editor: "blend-select",
                 editorOptions: {
                   label: "tonality",
                   compact: true,
                 },
-                defaultValue: current["mix-blend-mode"] || "normal",
+                defaultValue: current.mixBlendMode || BlendMode.NORMAL,
               },
             ],
           },
@@ -59,7 +57,7 @@ export default function (editor) {
                 };
               }),
             },
-            defaultValue: current["overflow"],
+            defaultValue: current.overflow,
           },
         ];
       },

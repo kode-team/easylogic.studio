@@ -22,6 +22,17 @@ const WEBKIT_ATTRIBUTE_FOR_CSS = [
   "background-clip",
 ];
 
+function valueFilter(obj) {
+  const result = {};
+  Object.keys(obj).forEach((key) => {
+    if (isNotUndefined(obj[key])) {
+      result[key] = obj[key];
+    }
+  });
+
+  return result;
+}
+
 export default class DomRender extends ItemRender {
   /**
    *
@@ -29,7 +40,7 @@ export default class DomRender extends ItemRender {
    * @param {string} field
    */
   toStringPropertyCSS(item, field) {
-    return STRING_TO_CSS(item[field]);
+    return STRING_TO_CSS(item.get(field));
   }
 
   /**
@@ -97,9 +108,9 @@ export default class DomRender extends ItemRender {
       obj = {
         ...obj,
         ...item.attrs(
-          "flex-basis",
+          "flexBasis",
           // 'flex-grow',
-          "flex-shrink"
+          "flexShrink"
         ),
       };
 
@@ -107,34 +118,34 @@ export default class DomRender extends ItemRender {
       // fill container 의 경우 flex-grow : 1 로 고정한다.
       // 부모의 flex-direction 에 따라 다르다.
       // 방향에 따라 flex-grow 가 정해지기 때문에 , 그에 따른 width, height 값이 auto  로 변경되어야 함
-      const parentLayoutDirection = item?.parent?.["flex-direction"];
+      const parentLayoutDirection = item?.parent?.flexDirection;
       if (
         parentLayoutDirection === FlexDirection.ROW &&
         item.resizingHorizontal === ResizingMode.FILL_CONTAINER
       ) {
         obj.width = "auto";
-        obj["flex-grow"] = item["flex-grow"] || 1;
+        obj["flex-grow"] = item.flexGrow || 1;
       } else if (
         parentLayoutDirection === FlexDirection.COLUMN &&
         item.resizingVertical === ResizingMode.FILL_CONTAINER
       ) {
         obj.height = "auto";
-        obj["flex-grow"] = item["flex-grow"] || 1;
+        obj["flex-grow"] = item.flexGrow || 1;
       }
     } else if (parentLayout === Layout.GRID) {
       obj = {
         ...obj,
         ...item.attrs(
-          "grid-column-start",
-          "grid-column-end",
-          "grid-row-start",
-          "grid-row-end"
+          "gridColumnStart",
+          "gridColumnEnd",
+          "gridRowStart",
+          "gridRowEnd"
         ),
       };
 
       // 렌더링 하는 쪽에서만 처리를 해주는게 맞을까?
-      const columns = Grid.parseStyle(item.parent["grid-template-columns"]);
-      const rows = Grid.parseStyle(item.parent["grid-template-rows"]);
+      const columns = Grid.parseStyle(item.parent.gridTemplateColumns);
+      const rows = Grid.parseStyle(item.parent.gridTemplateRows);
 
       // 부모의 grid-template-columns 의 개수가 조정이 되면
       // 자식의 grid-column-start, grid-column-end 값이 자동으로 변경된다.
@@ -277,7 +288,7 @@ export default class DomRender extends ItemRender {
       // 'border-right': Length.px(item['border-right'] || 0),
       // 'border-botom': Length.px(item['border-bottom'] || 0),
       // border: item['border']
-      ...STRING_TO_CSS(item["border"]),
+      ...STRING_TO_CSS(item.border),
     };
 
     return obj;
@@ -286,22 +297,16 @@ export default class DomRender extends ItemRender {
   toBoxModelCSS(item) {
     let obj = {};
 
-    if (item["margin-top"]) obj["margin-top"] = Length.px(item["margin-top"]);
-    if (item["margin-bottom"])
-      obj["margin-bottom"] = Length.px(item["margin-bottom"]);
-    if (item["margin-left"])
-      obj["margin-left"] = Length.px(item["margin-left"]);
-    if (item["margin-right"])
-      obj["margin-right"] = Length.px(item["margin-right"]);
+    if (item.marginTop) obj["margin-top"] = Length.px(item.marginTop);
+    if (item.marginBottom) obj["margin-bottom"] = Length.px(item.marginBottom);
+    if (item.marginLeft) obj["margin-left"] = Length.px(item.marginLeft);
+    if (item.marginRight) obj["margin-right"] = Length.px(item.marginRight);
 
-    if (item["padding-top"])
-      obj["padding-top"] = Length.px(item["padding-top"]);
-    if (item["padding-bottom"])
-      obj["padding-bottom"] = Length.px(item["padding-bottom"]);
-    if (item["padding-left"])
-      obj["padding-left"] = Length.px(item["padding-left"]);
-    if (item["padding-right"])
-      obj["padding-right"] = Length.px(item["padding-right"]);
+    if (item.paddingTop) obj["padding-top"] = Length.px(item.paddingTop);
+    if (item.paddingBottom)
+      obj["padding-bottom"] = Length.px(item.paddingBottom);
+    if (item.paddingLeft) obj["padding-left"] = Length.px(item.paddingLeft);
+    if (item.paddingRight) obj["padding-right"] = Length.px(item.paddingRight);
 
     return obj;
   }
@@ -316,8 +321,9 @@ export default class DomRender extends ItemRender {
 
     for (var i = 0; i < args.length; i++) {
       const key = args[i];
-      if (isNotUndefined(item[key])) {
-        obj[key] = item[key];
+      const value = item.get(key);
+      if (isNotUndefined(value)) {
+        obj[key] = value || item[key];
       }
     }
 
@@ -361,7 +367,7 @@ export default class DomRender extends ItemRender {
     if (item.isInFlex()) {
       // flex layout 일 때는 height 를 지정하지 않는다.
       // FIXME: 방향에 따라 지정해야할 수도 있다.
-      const direction = item.parent["flex-direction"];
+      const direction = item.parent.flexDirection;
       if (
         direction === FlexDirection.ROW ||
         direction === FlexDirection.ROW_REVERSE
@@ -419,41 +425,36 @@ export default class DomRender extends ItemRender {
     };
 
     result = Object.assign(result, obj);
-    result = Object.assign(
-      result,
-      this.toKeyListCSS(item, [
-        "position",
-        "overflow",
-        "z-index",
-        "background-color",
-        "color",
-        "opacity",
-        "mix-blend-mode",
-        "transform-origin",
-        // 'transform-style',
-        "perspective",
-        "perspective-origin",
-        "font-size",
-        "line-height",
-        "font-weight",
-        "font-family",
-        "font-style",
-        "text-align",
-        "text-transform",
-        "text-decoration",
-        "letter-spacing",
-        "word-spacing",
-        "text-indent",
-        "border-radius",
-        "filter",
-        "backdrop-filter",
-        "box-shadow",
-        "text-shadow",
-        "offset-path",
-        "animation",
-        "transition",
-      ])
-    );
+    result = Object.assign(result, {
+      "background-color": item.backgroundColor,
+      color: item.color,
+      "font-size": item.fontSize,
+      "font-weight": item.fontWeight,
+      "font-style": item.fontStyle,
+      "font-family": item.fontFamily,
+      "text-align": item.textAlign,
+      "text-decoration": item.textDecoration,
+      "text-transform": item.textTransform,
+      "letter-spacing": item.letterSpacing,
+      "word-spacing": item.wordSpacing,
+      "line-height": item.lineHeight,
+      "text-indent": item.textIndent,
+      "text-shadow": item.textShadow,
+      "text-overflow": item.textOverflow,
+      "text-wrap": item.textWrap,
+      position: item.position,
+      overflow: item.overflow,
+      "z-index": item.zIndex,
+      opacity: item.opacity,
+      "mix-blend-mode": item.mixBlendMode,
+      "transform-origin": item.transformOrigin,
+      "border-radius": item.borderRadius,
+      filter: item.filter,
+      "backdrop-filter": item.backdropFilter,
+      "box-shadow": item.boxShadow,
+      animation: item.animation,
+      transition: item.transition,
+    });
     return result;
   }
 
@@ -511,7 +512,7 @@ export default class DomRender extends ItemRender {
   toWebkitCSS(item) {
     var results = {};
     WEBKIT_ATTRIBUTE_FOR_CSS.forEach((key) => {
-      results[`-webkit-${key}`] = item[key];
+      results[`-webkit-${key}`] = item.get(key);
     });
 
     return results;
@@ -524,7 +525,7 @@ export default class DomRender extends ItemRender {
   toTextClipCSS(item) {
     let results = {};
 
-    if (item["text-clip"] === "text") {
+    if (item.textClip === "text") {
       results["-webkit-background-clip"] = "text";
       results["-webkit-text-fill-color"] = "transparent";
       results["color"] = "transparent";
@@ -539,7 +540,7 @@ export default class DomRender extends ItemRender {
    */
   toTransformCSS(item) {
     const results = {
-      transform: item["transform"],
+      transform: item.transform,
     };
 
     if (results.transform === "rotateZ(0deg)") {
@@ -569,7 +570,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toClipPath(item) {
-    if (item["clip-path"] === "") return "";
+    if (item.clipPath === "") return "";
 
     if (!item.cacheClipPathObject) {
       item.setClipPathCache();
@@ -593,7 +594,7 @@ export default class DomRender extends ItemRender {
   }
 
   toClipPathCSS(item) {
-    let str = item["clip-path"];
+    let str = item.clipPath;
 
     if (Boolean(str) === false) {
       return null;
@@ -705,20 +706,22 @@ export default class DomRender extends ItemRender {
    * @override
    */
   toCSS(item) {
-    return Object.assign(
-      {},
-      this.toVariableCSS(item),
-      this.toDefaultCSS(item),
-      this.toClipPathCSS(item),
-      this.toWebkitCSS(item),
-      this.toTextClipCSS(item),
-      this.toBoxModelCSS(item),
-      this.toBorderCSS(item),
-      this.toBackgroundImageCSS(item),
-      this.toLayoutCSS(item),
-      this.toSizeCSS(item),
-      this.toTransformCSS(item),
-      this.toLayoutItemCSS(item)
+    return valueFilter(
+      Object.assign(
+        {},
+        this.toVariableCSS(item),
+        this.toDefaultCSS(item),
+        this.toClipPathCSS(item),
+        this.toWebkitCSS(item),
+        this.toTextClipCSS(item),
+        this.toBoxModelCSS(item),
+        this.toBorderCSS(item),
+        this.toBackgroundImageCSS(item),
+        this.toLayoutCSS(item),
+        this.toSizeCSS(item),
+        this.toTransformCSS(item),
+        this.toLayoutItemCSS(item)
+      )
     );
   }
 
@@ -856,6 +859,40 @@ ${cssString}
   }
 
   /**
+   * css string 만 따로 style 태그로 렌더링 하기
+   *
+   * @param {BaseModel} item
+   */
+  updateStyle(item) {
+    // style 태그를 만들어서 캐쉬에 넣어두자.
+    if (item.hasCache("style")) {
+      const styleText = this.toStyleData(
+        item,
+        item.manager.editor.html
+      ).cssString;
+
+      if (item.hasCache("styleText")) {
+        // 기존의 styleText 와 같다면 아무것도 하지 않는다.
+        if (item.getCache("styleText") === styleText) {
+          return;
+        }
+      }
+
+      item.addCache("styleText", styleText);
+
+      item.getCache("style").text(styleText);
+    } else {
+      const style = Dom.createByHTML(
+        this.toStyleData(item, item.manager.editor.html).styleTag
+      );
+
+      item.addCache("style", style);
+
+      document.head.appendChild(style.el);
+    }
+  }
+
+  /**
    * 초기 렌더링 이후 업데이트만 할 때
    *
    * @param {Item} item
@@ -864,6 +901,8 @@ ${cssString}
    */
   update(item, currentElement) {
     if (!currentElement) return;
+
+    this.updateStyle(item);
 
     let $svg = currentElement.el.$svg;
     // let $booleanSvg = currentElement.el.$booleanSvg;

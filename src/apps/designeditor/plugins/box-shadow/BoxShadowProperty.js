@@ -42,8 +42,8 @@ export default class BoxShadowProperty extends BaseProperty {
     var current = this.$context.selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
-      key: "box-shadow",
-      value: current["box-shadow"],
+      key: "boxShadow",
+      value: current.boxShadow,
       onchange: (key, value) => {
         this.$commands.executeCommand(
           "setAttribute",
@@ -57,7 +57,7 @@ export default class BoxShadowProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "box-shadow";
+    return "boxShadow";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {

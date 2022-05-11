@@ -19,8 +19,52 @@ export class AssetModel extends BaseModel {
     });
   }
 
+  get comments() {
+    return this.get("comments");
+  }
+
+  get colors() {
+    return this.get("colors");
+  }
+
+  get gradients() {
+    return this.get("gradients");
+  }
+
+  get svgfilters() {
+    return this.get("svgfilters");
+  }
+
+  get svgimages() {
+    return this.get("svgimages");
+  }
+
+  get keyframes() {
+    return this.get("keyframes");
+  }
+
+  get videos() {
+    return this.get("videos");
+  }
+
+  get images() {
+    return this.get("images");
+  }
+
+  set images(value) {
+    this.set("images", value);
+  }
+
+  get imageKeys() {
+    return this.get("imageKeys");
+  }
+
+  get videoKeys() {
+    return this.get("videoKeys");
+  }
+
   addKeyframe(keyframe) {
-    this.json.keyframes.push(keyframe);
+    this.keyframes.push(keyframe);
     return keyframe;
   }
 
@@ -34,7 +78,7 @@ export class AssetModel extends BaseModel {
   }
 
   removeKeyframe(removeIndex) {
-    this.removePropertyList(this.json.keyframes, removeIndex);
+    this.removePropertyList(this.keyframes, removeIndex);
   }
 
   sortItem(arr, startIndex, targetIndex) {
@@ -46,18 +90,18 @@ export class AssetModel extends BaseModel {
   }
 
   sortKeyframe(startIndex, targetIndex) {
-    this.sortItem(this.json.keyframes, startIndex, targetIndex);
+    this.sortItem(this.keyframes, startIndex, targetIndex);
   }
 
   updateKeyframe(index, data = {}) {
-    this.json.keyframes[+index].reset(data);
+    this.keyframes[+index].reset(data);
   }
 
   /**
    * `@keyframes` 문자열만 따로 생성
    */
   toKeyframeString(isAnimate = false) {
-    return this.json.keyframes
+    return this.keyframes
       .map((keyframe) => keyframe.toString(isAnimate))
       .join("\n\n");
   }
@@ -67,21 +111,6 @@ export class AssetModel extends BaseModel {
     arr.splice(index, 0, copyObject);
   }
 
-  toCloneObject() {
-    // var json = this.json;
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs(
-        "colors",
-        "gradients",
-        "svgfilters",
-        "svgimages",
-        "images",
-        "keyframes"
-      ),
-    };
-  }
-
   removePropertyList(arr, removeIndex) {
     arr.splice(removeIndex, 1);
   }
@@ -89,31 +118,31 @@ export class AssetModel extends BaseModel {
   /* color assets manage */
 
   removeColor(removeIndex) {
-    this.removePropertyList(this.json.colors, removeIndex);
+    this.removePropertyList(this.colors, removeIndex);
   }
 
   copyColor(index) {
-    this.copyPropertyList(this.json.colors, index);
+    this.copyPropertyList(this.colors, index);
   }
 
   sortColor(startIndex, targetIndex) {
-    this.sortItem(this.json.colors, startIndex, targetIndex);
+    this.sortItem(this.colors, startIndex, targetIndex);
   }
 
   setColorValue(index, value = {}) {
-    this.json.colors[index] = { ...this.json.colors[index], ...value };
+    this.colors[index] = { ...this.colors[index], ...value };
   }
 
   getColorIndex(index) {
-    return this.json.colors[index];
+    return this.colors[index];
   }
 
   getColor(name) {
-    return this.json.colors.filter((item) => item.name === name)[0];
+    return this.colors.filter((item) => item.name === name)[0];
   }
 
   addColor(obj) {
-    this.json.colors.push(obj);
+    this.colors.push(obj);
     return obj;
   }
 
@@ -124,26 +153,26 @@ export class AssetModel extends BaseModel {
   /* image assets manage */
 
   removeImage(removeIndex) {
-    this.removePropertyList(this.json.images, removeIndex);
+    this.removePropertyList(this.images, removeIndex);
     this.refreshImageKeys();
   }
 
   copyImage(index) {
-    this.copyPropertyList(this.json.images, index);
+    this.copyPropertyList(this.images, index);
     this.refreshImageKeys();
   }
 
   sortImage(startIndex, targetIndex) {
-    this.sortItem(this.json.images, startIndex, targetIndex);
+    this.sortItem(this.images, startIndex, targetIndex);
   }
 
   setImageValue(index, value = {}) {
-    this.json.images[index] = { ...this.json.images[index], ...value };
+    this.images[index] = { ...this.images[index], ...value };
     this.refreshImageKeys();
   }
 
   getImageValueById(id, defaultValue = "") {
-    const image = this.json.imageKeys[id];
+    const image = this.imageKeys[id];
 
     if (!image) return id || defaultValue;
 
@@ -151,7 +180,7 @@ export class AssetModel extends BaseModel {
   }
 
   getImageDataURIById(id) {
-    const image = this.json.imageKeys[id];
+    const image = this.imageKeys[id];
     if (!image) return undefined;
 
     return image.original;
@@ -159,7 +188,7 @@ export class AssetModel extends BaseModel {
 
   refreshImageKeys() {
     let imageKeys = {};
-    this.json.images.forEach((it) => {
+    this.images.forEach((it) => {
       imageKeys[it.id] = it;
     });
 
@@ -169,7 +198,7 @@ export class AssetModel extends BaseModel {
   }
 
   addImage(obj) {
-    this.json.images.push(obj);
+    this.images.push(obj);
     this.refreshImageKeys();
     return obj;
   }
@@ -181,25 +210,25 @@ export class AssetModel extends BaseModel {
   /* video assets manage */
 
   removeVideo(removeIndex) {
-    this.removePropertyList(this.json.videos, removeIndex);
+    this.removePropertyList(this.videos, removeIndex);
     this.refreshVideoKeys();
   }
 
   copyVideo(index) {
-    this.copyPropertyList(this.json.videos, index);
+    this.copyPropertyList(this.videos, index);
     this.refreshVideoKeys();
   }
 
   sortVideo(startIndex, targetIndex) {
-    this.sortItem(this.json.videos, startIndex, targetIndex);
+    this.sortItem(this.videos, startIndex, targetIndex);
   }
 
   setVideoValue(index, value = {}) {
-    this.json.videos[index] = { ...this.json.videos[index], ...value };
+    this.videos[index] = { ...this.videos[index], ...value };
   }
 
   getVideoValueById(id) {
-    const video = this.json.videoKeys[id];
+    const video = this.videoKeys[id];
     if (!video) return undefined;
 
     return video.local;
@@ -207,7 +236,7 @@ export class AssetModel extends BaseModel {
 
   refreshVideoKeys() {
     let videoKeys = {};
-    this.json.videos.forEach((it) => {
+    this.videos.forEach((it) => {
       videoKeys[it.id] = it;
     });
 
@@ -217,7 +246,7 @@ export class AssetModel extends BaseModel {
   }
 
   addVideo(obj) {
-    this.json.videos.push(obj);
+    this.videos.push(obj);
     this.refreshVideoKeys();
     return obj;
   }
@@ -229,31 +258,31 @@ export class AssetModel extends BaseModel {
   /* gradient assets manage */
 
   removeGradient(removeIndex) {
-    this.removePropertyList(this.json.gradients, removeIndex);
+    this.removePropertyList(this.gradients, removeIndex);
   }
 
   copyGradient(index) {
-    this.copyPropertyList(this.json.gradients, index);
+    this.copyPropertyList(this.gradients, index);
   }
 
   sortGradient(startIndex, targetIndex) {
-    this.sortItem(this.json.gradients, startIndex, targetIndex);
+    this.sortItem(this.gradients, startIndex, targetIndex);
   }
 
   setGradientValue(index, value) {
-    this.json.gradients[index] = { ...this.json.gradients[index], ...value };
+    this.gradients[index] = { ...this.gradients[index], ...value };
   }
 
   getGradientIndex(index) {
-    return this.json.gradients[index];
+    return this.gradients[index];
   }
 
   getGradient(name) {
-    return this.json.gradients.filter((item) => item.name === name)[0];
+    return this.gradients.filter((item) => item.name === name)[0];
   }
 
   addGradient(obj = {}) {
-    this.json.gradients.push(obj);
+    this.gradients.push(obj);
     return obj;
   }
 
@@ -264,7 +293,7 @@ export class AssetModel extends BaseModel {
   /* svg filters  */
 
   getSVGFilterIndex(id) {
-    var filter = this.json.svgfilters
+    var filter = this.svgfilters
       .map((it, index) => {
         return { id: it.id, index };
       })
@@ -276,24 +305,24 @@ export class AssetModel extends BaseModel {
   }
 
   removeSVGFilter(removeIndex) {
-    this.removePropertyList(this.json.svgfilters, removeIndex);
+    this.removePropertyList(this.svgfilters, removeIndex);
   }
 
   copySVGFilter(index) {
-    this.copyPropertyList(this.json.svgfilters, index);
+    this.copyPropertyList(this.svgfilters, index);
   }
 
   sortSVGFilter(startIndex, targetIndex) {
-    this.sortItem(this.json.svgfilters, startIndex, targetIndex);
+    this.sortItem(this.svgfilters, startIndex, targetIndex);
   }
 
   setSVGFilterValue(index, value) {
-    this.json.svgfilters[index] = { ...this.json.svgfilters[index], ...value };
+    this.svgfilters[index] = { ...this.svgfilters[index], ...value };
   }
 
   addSVGFilter(obj = {}) {
-    this.json.svgfilters.push(obj);
-    var index = this.json.svgfilters.length - 1;
+    this.svgfilters.push(obj);
+    var index = this.svgfilters.length - 1;
     return index;
   }
 
@@ -304,7 +333,7 @@ export class AssetModel extends BaseModel {
   /* svg clip-path images   */
 
   getSVGImageIndex(id) {
-    var filter = this.json.svgimages
+    var filter = this.svgimages
       .map((it, index) => {
         return { id: it.id, index };
       })
@@ -316,24 +345,24 @@ export class AssetModel extends BaseModel {
   }
 
   removeSVGImage(removeIndex) {
-    this.removePropertyList(this.json.svgimages, removeIndex);
+    this.removePropertyList(this.svgimages, removeIndex);
   }
 
   copySVGImage(index) {
-    this.copyPropertyList(this.json.svgimages, index);
+    this.copyPropertyList(this.svgimages, index);
   }
 
   sortSVGImage(startIndex, targetIndex) {
-    this.sortItem(this.json.svgimages, startIndex, targetIndex);
+    this.sortItem(this.svgimages, startIndex, targetIndex);
   }
 
   setSVGImageValue(index, value) {
-    this.json.svgimages[index] = { ...this.json.svgimages[index], ...value };
+    this.svgimages[index] = { ...this.svgimages[index], ...value };
   }
 
   addSVGImage(obj = {}) {
-    this.json.svgimages.push(obj);
-    var index = this.json.svgimages.length - 1;
+    this.svgimages.push(obj);
+    var index = this.svgimages.length - 1;
     return index;
   }
 

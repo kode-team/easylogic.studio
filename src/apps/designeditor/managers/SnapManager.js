@@ -338,4 +338,17 @@ export class SnapManager {
 
     return newPos;
   }
+
+  getSnapTarget() {
+    const pos = vec3.round([], this.context.viewport.getWorldPosition());
+
+    const snap = this.check([pos], 3 / this.context.viewport.scale);
+
+    const newPos = vec3.add([], snap.dist, pos);
+
+    return {
+      vertex: newPos,
+      snap,
+    };
+  }
 }

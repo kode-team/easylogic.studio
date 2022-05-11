@@ -9,7 +9,7 @@ export default {
     let itemsMap = {};
     items.forEach((item) => {
       let images = BackgroundImage.parseStyle(
-        STRING_TO_CSS(item["background-image"])
+        STRING_TO_CSS(item.backgroundImage)
       );
 
       images.unshift(

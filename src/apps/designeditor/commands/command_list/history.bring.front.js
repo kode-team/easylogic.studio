@@ -14,7 +14,7 @@ export default {
     // 마지막일때
     // 다음 부모의 첫번째 자식을 선택한다.
     let currentValues = {};
-    if (currentLayer.isLast()) {
+    if (currentLayer.isLast) {
       // NOOP
       return;
     } else {

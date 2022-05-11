@@ -9,6 +9,13 @@ import {
   clone,
 } from "sapa";
 
+import {
+  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+} from "../../../../elf/editor/types/event";
 import "./SelectionView.scss";
 
 import { getRotatePointer } from "elf/core/collision";
@@ -24,12 +31,6 @@ import {
 import GridLayoutEngine from "elf/editor/layout-engine/GridLayoutEngine";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { ViewModeType } from "elf/editor/types/editor";
-import {
-  REFRESH_SELECTION,
-  UPDATE_VIEWPORT,
-  END,
-  MOVE,
-} from "elf/editor/types/event";
 import { ResizingMode } from "elf/editor/types/model";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -64,13 +65,16 @@ const SelectionToolEvent = class extends EditorElement {
    *
    * @param {*} isShow
    */
-  [SUBSCRIBE(REFRESH_SELECTION) + IF("checkViewMode")]() {
+  [SUBSCRIBE(REFRESH_SELECTION, REFRESH_SELECTION_TOOL) +
+    IF("checkViewMode")]() {
     this.initSelectionTool();
   }
 
   [SUBSCRIBE(UPDATE_VIEWPORT) + IF("checkViewMode")]() {
     if (this.$context.selection.isOne) {
       this.initSelectionTool();
+    } else {
+      this.hide();
     }
   }
 
@@ -563,7 +567,7 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   moveRightVertex(distVector) {
-    const { altKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item = this.cachedCurrentItemMatrix;
     if (item) {
       let [realDx] = this.calculateRealDist(item, 1, distVector);
@@ -574,7 +578,13 @@ export default class SelectionToolView extends SelectionToolEvent {
 
       // 변형되는 넓이 높이 구하기
       const newWidth = item.width + realDx;
-      const newHeight = item.height;
+      let newHeight = item.height;
+
+      if (metaKey) {
+        newHeight = newWidth;
+      } else if (shiftKey) {
+        newHeight = item.height * (1 + realDx / item.width);
+      }
 
       let directionNewVector = vec3.fromValues(0, newHeight / 2, 0);
 
@@ -598,7 +608,7 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   moveLeftVertex(distVector) {
-    const { altKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item = this.cachedCurrentItemMatrix;
     if (item) {
       let [realDx] = this.calculateRealDist(item, 0, distVector);
@@ -609,7 +619,13 @@ export default class SelectionToolView extends SelectionToolEvent {
 
       // 변형되는 넓이 높이 구하기
       const newWidth = item.width - realDx;
-      const newHeight = item.height;
+      let newHeight = item.height;
+
+      if (metaKey) {
+        newHeight = newWidth;
+      } else if (shiftKey) {
+        newHeight = item.height * (1 - realDx / item.width);
+      }
 
       let directionNewVector = vec3.fromValues(newWidth, newHeight / 2, 0);
 
@@ -826,7 +842,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
   initSelectionTool() {
     if (this.$el.isShow() && this.$context.selection.isOne === false) {
-      // this.hide();
+      this.hide();
     } else if (this.$el.isHide() && this.$context.selection.isOne) {
       this.show();
     }

@@ -11,7 +11,7 @@ import {
   CONFIG,
   Dom,
   isFunction,
-  createComponent,
+  // createComponent,
   CONTEXTMENU,
   PREVENT,
   OBSERVER,
@@ -19,7 +19,6 @@ import {
 } from "sapa";
 
 import "./HTMLRenderView.scss";
-import StyleView from "./StyleView";
 
 import {
   END,
@@ -29,18 +28,12 @@ import {
   REFRESH_SELECTION,
   UPDATE_CANVAS,
   OPEN_CONTEXT_MENU,
+  REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class HTMLRenderView extends EditorElement {
-  /** initialize setting */
-  components() {
-    return {
-      StyleView,
-    };
-  }
-
   initState() {
     return {
       mode: "selection",
@@ -57,7 +50,6 @@ export default class HTMLRenderView extends EditorElement {
   template() {
     return /*html*/ `
             <div class='elf--element-view' ref='$body'>
-                ${createComponent("StyleView", { ref: "$styleView" })}
                 <div class='canvas-view' 
                         data-renderer-id='${this.$editor.EDITOR_ID}' 
                         ref='$view' 
@@ -432,7 +424,6 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   calculateFirstMovedElement() {
-    // this.emit("hideSelectionToolView");
     this.emit("moveFirstGhostToolView");
   }
 
@@ -573,7 +564,7 @@ export default class HTMLRenderView extends EditorElement {
       });
     }
 
-    this.emit(REFRESH_SELECTION);
+    this.emit(REFRESH_SELECTION_TOOL);
     this.$config.set("editing.mode.itemType", "select");
   }
 
@@ -670,7 +661,7 @@ export default class HTMLRenderView extends EditorElement {
     this.refreshSelectionStyleView(item);
 
     if (this.$context.selection.check(item)) {
-      this.emit(REFRESH_SELECTION);
+      this.emit(REFRESH_SELECTION_TOOL);
     }
 
     this.emit(UPDATE_CANVAS, item);

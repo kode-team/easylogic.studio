@@ -21,7 +21,7 @@ export default {
         "change boolean operation",
         editor.context.selection.packByValue({
           // reverse children
-          "boolean-operation": parent["boolean-operation"],
+          booleanOperation: parent["boolean-operation"],
           children: parent.children.reverse(),
         })
       );

@@ -13,7 +13,7 @@ export class TransformOrigin {
    *
    * @param {string} transformOrigin
    */
-  static parseStyle(transformOrigin = "50% 50% 0%") {
+  static parseStyle(transformOrigin = "50% 50% 0px") {
     if (TransformOriginCache.has(transformOrigin)) {
       return TransformOriginCache.get(transformOrigin);
     }

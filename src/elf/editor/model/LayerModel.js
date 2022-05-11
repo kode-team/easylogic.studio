@@ -14,10 +14,10 @@ export class LayerModel extends DomModel {
     return "Layer";
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("tagName"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("tagName"),
+  //   };
+  // }
 }

@@ -64,8 +64,16 @@ export class EventMachine {
     return this.#refBindVariables;
   }
 
-  get _timestamp() {
+  get __timestamp() {
     return this.#localTimestamp++;
+  }
+
+  get timestamp() {
+    return this.#timestamp;
+  }
+
+  set timestamp(value) {
+    this.#timestamp = value;
   }
 
   /**
@@ -542,9 +550,9 @@ export class EventMachine {
     // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다.
     // 루트 element 는 변경되지 않는다.
     if (this.children[refName]) {
-      // FIXME: svelte 컴포넌트를 어떻게 재로드 할지 고민해야함
+      // console.log(this.children, refName);
       instance = this.children[refName];
-      instance.#timestamp = this.#localTimestamp;
+      instance.timestamp = this.__timestamp;
       instance._reload(props);
     } else {
       instance = this.createInstanceForComponent(
@@ -553,7 +561,7 @@ export class EventMachine {
         props
       );
 
-      instance.#timestamp = this.#localTimestamp;
+      instance.timestamp = this.__timestamp;
 
       this.children[refName || instance.id] = instance;
 
@@ -677,7 +685,7 @@ export class EventMachine {
     );
 
     keyEach(this.children, (key, child) => {
-      if (child.#timestamp !== this.#localTimestamp) {
+      if (child.timestamp !== this.__timestamp) {
         child.clean();
       }
     });
@@ -691,9 +699,10 @@ export class EventMachine {
         }
       });
 
+      console.log("clean", this.sourceName);
+
       this.destroy();
 
-      this.$el = null;
       return true;
     }
   }
@@ -713,7 +722,7 @@ export class EventMachine {
 
   async _afterLoad() {
     // timestamp 기록
-    this._timestamp;
+    this.__timestamp;
 
     this.runHandlers("initialize");
 
@@ -853,6 +862,8 @@ export class EventMachine {
    *
    */
   destroy() {
+    console.log(this.sourceName, "destroy");
+
     this.eachChildren((childComponent) => {
       childComponent.destroy();
     });

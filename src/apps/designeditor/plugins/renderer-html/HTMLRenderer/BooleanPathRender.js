@@ -7,7 +7,7 @@ import { BooleanOperation } from "elf/editor/types/model";
 export default class BooleanPathRender extends SVGItemRender {
   toFillSVG(item) {
     const layers = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
 
     switch (op) {
       case BooleanOperation.DIFFERENCE:
@@ -25,7 +25,7 @@ export default class BooleanPathRender extends SVGItemRender {
 
   toStrokeSVG(item) {
     const layers = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
 
     switch (op) {
       case BooleanOperation.DIFFERENCE:
@@ -43,7 +43,7 @@ export default class BooleanPathRender extends SVGItemRender {
 
   toFillValue(item) {
     const layers = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
 
     switch (op) {
       case BooleanOperation.DIFFERENCE:
@@ -65,7 +65,7 @@ export default class BooleanPathRender extends SVGItemRender {
 
   toStrokeValue(item) {
     const layers = item.layers;
-    const op = item["boolean-operation"];
+    const op = item.booleanOperation;
 
     switch (op) {
       case BooleanOperation.DIFFERENCE:
@@ -124,19 +124,19 @@ export default class BooleanPathRender extends SVGItemRender {
 
       if (item.hasChangedField("fill-rule")) {
         $path.setAttrNS({
-          "fill-rule": item["fill-rule"] || "nonezero",
+          "fill-rule": item.fillRule || "nonezero",
         });
       }
 
       if (item.hasChangedField("stroke-linejoin")) {
         $path.setAttrNS({
-          "stroke-linejoin": item["stroke-linejoin"],
+          "stroke-linejoin": item.strokeLinejoin,
         });
       }
 
       if (item.hasChangedField("stroke-linecap")) {
         $path.setAttrNS({
-          "stroke-linecap": item["stroke-linecap"],
+          "stroke-linecap": item.strokeLinecap,
         });
       }
     }
@@ -171,12 +171,12 @@ export default class BooleanPathRender extends SVGItemRender {
       class="svg-path-item"
       d="${item.d}"
       data-boolean-path-id="${id}" 
-      fill-rule="${item["fill-rule"]}"
+      fill-rule="${item.fillRule}"
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item["stroke-linejoin"]}"
-      stroke-linecap="${item["stroke-linecap"]}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
     />
   </svg>
 </div>

@@ -1,6 +1,6 @@
-// import { Editor } from "elf/editor/manager/Editor";
 import { iconUse } from "elf/editor/icon/icon";
 import {
+  TextAlign,
   TextClip,
   TextDecoration,
   TextTransform,
@@ -27,7 +27,7 @@ export default function (editor) {
         size: [2, 1, 1],
         columns: [
           {
-            key: "text-align",
+            key: "textAlign",
             editor: "SelectIconEditor",
             editorOptions: {
               compact: true,
@@ -39,11 +39,11 @@ export default function (editor) {
                 "align_justify",
               ],
             },
-            defaultValue: current["text-align"] || "left",
+            defaultValue: current.textAlign || TextAlign.LEFT,
           },
           "-",
           {
-            key: "text-transform",
+            key: "textTransform",
             editor: "SelectIconEditor",
             editorOptions: {
               options: [
@@ -54,6 +54,7 @@ export default function (editor) {
               compact: true,
               icons: ["horizontal_rule"],
             },
+            defaultValue: current.textTransform,
           },
         ],
       },
@@ -63,7 +64,7 @@ export default function (editor) {
         gap: 20,
         columns: [
           {
-            key: "text-decoration",
+            key: "textDecoration",
             editor: "SelectIconEditor",
             editorOptions: {
               options: [
@@ -74,21 +75,21 @@ export default function (editor) {
               icons: ["horizontal_rule", "underline", "strikethrough"],
               onchange: "changeTextValue",
             },
-            defaultValue: current["text-tranform"],
+            defaultValue: current.textDecoration,
           },
           {
-            key: "font-style",
+            key: "fontStyle",
             editor: "SelectIconEditor",
             editorOptions: {
               compact: true,
               options: ["normal", "italic"],
               icons: ["title", "italic"],
             },
-            defaultValue: current["font-style"],
+            defaultValue: current.fontStyle,
           },
 
           {
-            key: "text-clip",
+            key: "textClip",
             editor: "ToggleButton",
             editorOptions: {
               checkedValue: TextClip.TEXT,
@@ -96,7 +97,7 @@ export default function (editor) {
               toggleTitles: ["", "Text Clip"],
               toggleValues: [TextClip.NONE, TextClip.TEXT],
             },
-            defaultValue: current["text-clip"] || TextClip.NONE,
+            defaultValue: current.textClip || TextClip.NONE,
           },
         ],
       },

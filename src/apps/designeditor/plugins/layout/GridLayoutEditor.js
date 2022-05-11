@@ -29,7 +29,7 @@ export default class GridLayoutEditor extends EditorElement {
               label: "grid padding",
               key: "padding",
               ref: "$padding",
-              value: current["padding-top"],
+              value: current.paddingTop,
               min: 0,
               max: 300,
               step: 1,
@@ -40,8 +40,8 @@ export default class GridLayoutEditor extends EditorElement {
                 ${createComponent("GridGapEditor", {
                   label: this.$i18n("grid.layout.editor.column.gap"),
                   ref: "$columnGap",
-                  key: "grid-column-gap",
-                  value: current["grid-column-gap"] || "",
+                  key: "gridColumnGap",
+                  value: current.gridColumnGap || "",
                   onchange: "changeKeyValue",
                 })}
             </div>              
@@ -49,8 +49,8 @@ export default class GridLayoutEditor extends EditorElement {
                 ${createComponent("GridGapEditor", {
                   label: this.$i18n("grid.layout.editor.row.gap"),
                   ref: "$rowGap",
-                  key: "grid-row-gap",
-                  value: current["grid-row-gap"] || "",
+                  key: "gridRowGap",
+                  value: current.gridRowGap || "",
                   onchange: "changeKeyValue",
                 })}
             </div>
@@ -59,10 +59,10 @@ export default class GridLayoutEditor extends EditorElement {
 
   [SUBSCRIBE_SELF("changePadding")](key, value) {
     this.modifyData(key, {
-      "padding-top": value,
-      "padding-left": value,
-      "padding-right": value,
-      "padding-bottom": value,
+      paddingTop: value,
+      paddingLeft: value,
+      paddingRight: value,
+      paddingBottom: value,
     });
   }
 

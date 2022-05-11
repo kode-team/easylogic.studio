@@ -1,10 +1,10 @@
-import { SVGPathItem } from "./SVGPathItem";
+import { PathModel } from "./PathModel";
 
 import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
 import { BooleanOperation } from "elf/editor/types/model";
 
-export class BooleanPathItem extends SVGPathItem {
+export class BooleanPathModel extends PathModel {
   getIcon() {
     return icon.edit;
   }
@@ -13,11 +13,19 @@ export class BooleanPathItem extends SVGPathItem {
     return super.getDefaultObject({
       itemType: "boolean-path",
       name: "New Boolean Path",
-      "stroke-width": 1,
+      strokeWidth: 1,
       d: "", // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다.
-      "boolean-operation": "none",
+      booleanOperation: "none",
       ...obj,
     });
+  }
+
+  get booleanOperation() {
+    return this.get("booleanOperation");
+  }
+
+  set booleanOperation(value) {
+    this.set("booleanOperation", value);
   }
 
   enableHasChildren() {
@@ -31,27 +39,27 @@ export class BooleanPathItem extends SVGPathItem {
       this.setCache();
     }
 
-    if (this.hasChangedField("changedChildren", "boolean-operation")) {
-      if (this.json.children.length === 1) {
+    if (this.hasChangedField("changedChildren", "booleanOperation")) {
+      if (this.children.length === 1) {
         const newPath = this.layers[0].absolutePath().d;
-        this.json.d = this.invertPath(newPath).d;
+        this.d = this.invertPath(newPath).d;
         this.setCache();
 
         this.modelManager.setChanged("reset", this.id, { d: newPath });
-      } else if (this.json["boolean-operation"] !== "none") {
-        if (this.json.children?.length >= 2) {
+      } else if (this.booleanOperation !== "none") {
+        if (this.children?.length >= 2) {
           if (this.modelManager.editor.pathKitManager.has()) {
             const paths = this.layers.filter((it) => it.d);
 
             if (paths.length >= 2) {
               const newPath = this.doBooleanOperation();
 
-              this.json.d = newPath;
+              this.d = newPath;
               this.setCache();
 
               this.modelManager.setChanged("reset", this.id, { d: newPath });
             } else {
-              this.json.d = undefined;
+              this.d = undefined;
               this.removeCache();
               this.modelManager.setChanged("reset", this.id, { d: undefined });
             }
@@ -74,8 +82,8 @@ export class BooleanPathItem extends SVGPathItem {
     // if (!this.resizableWitChildren) return;
 
     this.cachedSize = {
-      width: this.json.width.clone(),
-      height: this.json.height.clone(),
+      width: this.width,
+      height: this.height,
     };
     this.cachedLayerMatrix = this.layers.map((item) => {
       item.startToCacheChildren();
@@ -94,8 +102,8 @@ export class BooleanPathItem extends SVGPathItem {
     // if (!this.resizableWitChildren) return;
 
     const obj = {
-      width: this.json.width.clone(),
-      height: this.json.height.clone(),
+      width: this.width,
+      height: this.height,
     };
 
     const scaleX = obj.width / this.cachedSize.width;
@@ -122,7 +130,7 @@ export class BooleanPathItem extends SVGPathItem {
       return layers[0][field];
     }
 
-    const op = this["boolean-operation"];
+    const op = this.booleanOperation;
 
     switch (op) {
       case BooleanOperation.DIFFERENCE:
@@ -145,9 +153,9 @@ export class BooleanPathItem extends SVGPathItem {
   setCache() {
     super.setCache();
 
-    this.cachePath = new PathParser(this.json.d);
-    this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;
+    this.cachePath = new PathParser(this.d);
+    this.cacheWidth = this.width;
+    this.cacheHeight = this.height;
   }
 
   removeCache() {
@@ -158,19 +166,12 @@ export class BooleanPathItem extends SVGPathItem {
     this.cacheHeight = undefined;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      d: this.json.d,
-    };
-  }
-
   getDefaultTitle() {
     return "Path";
   }
 
   doBooleanOperation() {
-    const op = this.json["boolean-operation"];
+    const op = this.booleanOperation;
     switch (op) {
       case BooleanOperation.INTERSECTION:
         return this.intersection();

@@ -1,11 +1,11 @@
 import { vec3 } from "gl-matrix";
 
-import { SVGItem } from "./SVGItem";
+import { SVGModel } from "./SVGModel";
 
 import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
 
-export class SVGPolygonItem extends SVGItem {
+export class PolygonModel extends SVGModel {
   getIcon() {
     return icon.edit;
   }
@@ -13,10 +13,18 @@ export class SVGPolygonItem extends SVGItem {
     return super.getDefaultObject({
       itemType: "polygon",
       name: "New Polygon",
-      "stroke-width": 1,
+      strokeWidth: 1,
       count: 3, // 기본 변의 개수는 3개 , 삼각형
       ...obj,
     });
+  }
+
+  get count() {
+    return this.get("count");
+  }
+
+  set count(value) {
+    this.set("count", value);
   }
 
   convert(json) {
@@ -37,17 +45,17 @@ export class SVGPolygonItem extends SVGItem {
   }
 
   get d() {
-    const { width, height, count } = this.json;
+    const { width, height, count } = this;
 
     return PathParser.makePolygon(width, height, count).d;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("count"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("count"),
+  //   };
+  // }
 
   getDefaultTitle() {
     return "Polygon";
@@ -62,7 +70,7 @@ export class SVGPolygonItem extends SVGItem {
 
     return this.cachePath.isPointInPath(
       { x: localPoint[0], y: localPoint[1] },
-      this.json["stroke-width"] || 0
+      this.strokeWidth || 0
     );
   }
 }

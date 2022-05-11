@@ -139,7 +139,7 @@ export default class SVGItemRender extends LayerRender {
         "text-anchor",
       ]),
       {
-        "stroke-dasharray": item["stroke-dasharray"]?.join(" "),
+        "stroke-dasharray": item.strokeDasharray?.join(" "),
       }
     );
   }

@@ -88,8 +88,8 @@ export default {
           },
         });
         editor.emit("hideSelectionToolView");
-      } else if (current["clip-path"]) {
-        var obj = ClipPath.parseStyle(current["clip-path"]);
+      } else if (current.clipPath) {
+        var obj = ClipPath.parseStyle(current.clipPath);
 
         if (obj.type === "path") {
           var d = current.absolutePath(current.clipPathString).d;
@@ -104,7 +104,7 @@ export default {
                 "setAttribute",
                 "change clip-path",
                 editor.context.selection.packByValue({
-                  "clip-path": `path(${resultPath})`,
+                  clipPath: `path(${resultPath})`,
                 })
               );
             },

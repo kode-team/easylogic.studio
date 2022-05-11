@@ -49,13 +49,13 @@ export default function (editor) {
         columns: [
           { type: "label", label: editor.$i18n("svg.item.property.fill") },
           {
-            key: "fill-rule",
+            key: "fillRule",
             editor: "ToggleCheckBox",
             editorOptions: {
               toggleLabels: [iconUse("join_full"), iconUse("join_right")],
               toggleValues: ["nonzero", "evenodd"],
             },
-            defaultValue: current["fill-rule"] || "nonzero",
+            defaultValue: current.fillRule || "nonzero",
           },
         ],
       },
@@ -69,10 +69,10 @@ export default function (editor) {
             editorOptions: {
               wide: true,
             },
-            defaultValue: current["fill"],
+            defaultValue: current.fill,
           },
           {
-            key: "fill-opacity",
+            key: "fillOpacity",
             editor: "number-input",
             editorOptions: {
               compact: true,
@@ -81,7 +81,7 @@ export default function (editor) {
               max: 1,
               step: 0.01,
             },
-            defaultValue: current["fill-opacity"],
+            defaultValue: current.fillOpacity,
           },
         ],
       },
@@ -102,16 +102,16 @@ export default function (editor) {
             editorOptions: {
               wide: true,
             },
-            defaultValue: current["stroke"],
+            defaultValue: current.stroke,
           },
           {
-            key: "stroke-width",
+            key: "strokeWidth",
             editor: "number-input",
             editorOptions: {
               compact: true,
               label: "line_weight",
             },
-            defaultValue: current["stroke-width"],
+            defaultValue: current.strokeWidth,
           },
         ],
       },
@@ -120,15 +120,15 @@ export default function (editor) {
         size: [2, 1],
         columns: [
           {
-            key: "stroke-dasharray",
+            key: "strokeDasharray",
             editor: "StrokeDashArrayEditor",
             editorOptions: {
               label: editor.$i18n("svg.item.property.dashArray"),
             },
-            defaultValue: current["stroke-dasharray"] || "",
+            defaultValue: current.strokeDasharray || "",
           },
           {
-            key: "stroke-dashoffset",
+            key: "strokeDashoffset",
             editor: "number-input",
             editorOptions: {
               compact: true,
@@ -137,13 +137,13 @@ export default function (editor) {
               max: 1000,
               step: 1,
             },
-            defaultValue: current["stroke-dashoffset"],
+            defaultValue: current.strokeDashoffset,
           },
         ],
       },
 
       {
-        key: "stroke-linecap",
+        key: "strokeLinecap",
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineCap"),
@@ -158,10 +158,10 @@ export default function (editor) {
             StrokeLineCap.SQUARE,
           ],
         },
-        defaultValue: current["stroke-linecap"] || StrokeLineCap.BUTT,
+        defaultValue: current.strokeLinecap || StrokeLineCap.BUTT,
       },
       {
-        key: "stroke-linejoin",
+        key: "strokeLinejoin",
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineJoin"),
@@ -176,15 +176,15 @@ export default function (editor) {
             StrokeLineJoin.BEVEL,
           ],
         },
-        defaultValue: current["stroke-linejoin"] || StrokeLineJoin.MITER,
+        defaultValue: current.strokeLinejoin || StrokeLineJoin.MITER,
       },
       {
-        key: "mix-blend-mode",
+        key: "mixBlendMode",
         editor: "BlendSelectEditor",
         editorOptions: {
           label: editor.$i18n("svg.item.property.blend"),
         },
-        defaultValue: current["mix-blend-mode"],
+        defaultValue: current.mixBlendMode,
       },
     ];
   });

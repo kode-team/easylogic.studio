@@ -48,7 +48,7 @@ export default function (editor) {
             "system-ui",
           ],
         },
-        defaultValue: current["font-family"] || "",
+        defaultValue: current.fontFamily || "",
       },
       {
         type: "column",
@@ -65,7 +65,7 @@ export default function (editor) {
               max: 1000,
               step: 1,
             },
-            defaultValue: Length.parse(current["font-size"]).value,
+            defaultValue: Length.parse(current.fontSize).value,
             convert: (key, value) => Length.px(value),
           },
           {
@@ -78,7 +78,7 @@ export default function (editor) {
               max: 1000,
               step: 1,
             },
-            defaultValue: Length.parse(current["padding-top"]).value,
+            defaultValue: Length.parse(current.paddingTop).value,
             convert: (key, value) => Length.px(value),
           },
         ],
@@ -94,7 +94,7 @@ export default function (editor) {
             editorOptions: {
               compact: true,
             },
-            defaultValue: current["color"] || "#000",
+            defaultValue: current.color || "#000",
           },
           {
             key: "font-weight",
@@ -106,7 +106,7 @@ export default function (editor) {
               max: 900,
               step: 100,
             },
-            defaultValue: current["font-weight"] || 400,
+            defaultValue: current.fontWeight || 400,
           },
         ],
       },
@@ -126,7 +126,7 @@ export default function (editor) {
               step: 1,
               compact: true,
             },
-            defaultValue: Length.parse(current["text-indent"]).value,
+            defaultValue: Length.parse(current.textIndent).value,
             convert: (key, value) => Length.px(value),
           },
 
@@ -140,7 +140,7 @@ export default function (editor) {
               step: 0.01,
               compact: true,
             },
-            defaultValue: current["line-height"] || 1.2,
+            defaultValue: current.lineHeight || 1.2,
           },
           {
             key: "letter-spacing",
@@ -152,7 +152,7 @@ export default function (editor) {
               step: 1,
               compact: true,
             },
-            defaultValue: Length.parse(current["letter-spacing"]).value,
+            defaultValue: Length.parse(current.letterSpacing).value,
             convert: (key, value) => Length.px(value),
           },
         ],

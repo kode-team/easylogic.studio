@@ -21,14 +21,18 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "box-model-block";
+    return "boxModel";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100) + IF("checkShow")]() {
     this.refresh();
   }
 
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  checkCurrentItem(item) {
+    return this.$context.selection.current === item;
+  }
+
+  [SUBSCRIBE(UPDATE_CANVAS) + IF("checkCurrentItem") + DEBOUNCE(100)]() {
     const current = this.$context.selection.current;
 
     if (

@@ -1,10 +1,10 @@
-import { SVGItem } from "./SVGItem";
+import { SVGModel } from "./SVGModel";
 
 import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
 import { Length } from "elf/editor/unit/Length";
 
-export class SVGTextPathItem extends SVGItem {
+export class SVGTextPathItem extends SVGModel {
   getIcon() {
     return icon.text_rotate;
   }
@@ -24,6 +24,58 @@ export class SVGTextPathItem extends SVGItem {
     });
   }
 
+  get d() {
+    if (!this.get("d")) {
+      return null;
+    }
+
+    if (!this.cachePath) {
+      this.cachePath = new PathParser(this.get("d"));
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
+    }
+
+    return this.cachePath
+      .clone()
+      .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+  }
+
+  set d(value) {
+    this.set("d", value);
+  }
+
+  get text() {
+    return this.get("text");
+  }
+
+  set text(value) {
+    this.set("text", value);
+  }
+
+  get textLength() {
+    return this.get("textLength");
+  }
+
+  set textLength(value) {
+    this.set("textLength", value);
+  }
+
+  get lengthAdjust() {
+    return this.get("lengthAdjust");
+  }
+
+  set lengthAdjust(value) {
+    this.set("lengthAdjust", value);
+  }
+
+  get startOffset() {
+    return this.get("startOffset");
+  }
+
+  set startOffset(value) {
+    this.set("startOffset", value);
+  }
+
   enableHasChildren() {
     return false;
   }
@@ -32,39 +84,17 @@ export class SVGTextPathItem extends SVGItem {
     super.refreshMatrixCache();
 
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.get("d"));
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     } else if (this.hasChangedField("width", "height")) {
-      this.json.d = this.cachePath
+      this.d = this.cachePath
         .clone()
-        .scale(
-          this.json.width / this.cacheWidth,
-          this.json.height / this.cacheHeight
-        ).d;
-      this.modelManager.setChanged("reset", this.id, { d: this.json.d });
+        .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+      this.modelManager.setChanged("reset", this.id, { d: this.d });
     }
 
     // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })
-  }
-
-  get d() {
-    if (!this.json.d) {
-      return null;
-    }
-
-    if (!this.cachePath) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
-    }
-
-    return this.cachePath
-      .clone()
-      .scale(
-        this.json.width / this.cacheWidth,
-        this.json.height / this.cacheHeight
-      ).d;
   }
 
   convert(json) {
@@ -76,19 +106,12 @@ export class SVGTextPathItem extends SVGItem {
     return json;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs(
-        "totalLength",
-        "d",
-        "text",
-        "textLength",
-        "lengthAdjust",
-        "startOffset"
-      ),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("d", "text", "textLength", "lengthAdjust", "startOffset"),
+  //   };
+  // }
 
   getDefaultTitle() {
     return "TextPath";

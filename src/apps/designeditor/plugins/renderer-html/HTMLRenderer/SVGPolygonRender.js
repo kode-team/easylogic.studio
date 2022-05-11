@@ -36,19 +36,19 @@ export default class SVGPolygonRender extends SVGItemRender {
 
       if (item.hasChangedField("fill-rule")) {
         $path.setAttrNS({
-          "fill-rule": item["fill-rule"] || "nonezero",
+          "fill-rule": item.fillRule || "nonezero",
         });
       }
 
       if (item.hasChangedField("stroke-linejoin")) {
         $path.setAttrNS({
-          "stroke-linejoin": item["stroke-linejoin"],
+          "stroke-linejoin": item.strokeLinejoin,
         });
       }
 
       if (item.hasChangedField("stroke-linecap")) {
         $path.setAttrNS({
-          "stroke-linecap": item["stroke-linecap"],
+          "stroke-linecap": item.strokeLinecap,
         });
       }
     }
@@ -66,12 +66,12 @@ export default class SVGPolygonRender extends SVGItemRender {
     <path 
       class="svg-path-item"
       d="${item.d}"
-      fill-rule="${item["fill-rule"]}"
+      fill-rule="${item.fillRule}"
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item["stroke-linejoin"]}"
-      stroke-linecap="${item["stroke-linecap"]}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
     />
   </svg>
 </div>

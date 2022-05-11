@@ -13,7 +13,7 @@ export default {
         "setAttribute",
         "change boolean operation",
         editor.context.selection.packByValue({
-          "boolean-operation": booleanOperation,
+          booleanOperation: booleanOperation,
         })
       );
 

@@ -225,7 +225,7 @@ export default class HTMLRenderer {
     const currentRenderer = this.getRendererInstance(item);
 
     if (isFunction(currentRenderer.update)) {
-      return currentRenderer.update(item, currentElement, editor);
+      return currentRenderer.update(item, currentElement, editor, this);
     }
 
     return this.getDefaultRendererInstance().update(

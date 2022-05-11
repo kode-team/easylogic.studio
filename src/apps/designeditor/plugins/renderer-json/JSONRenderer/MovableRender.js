@@ -12,7 +12,7 @@ export default class MovableRender extends GroupRender {
         "width",
         "height",
         "angle",
-        "transform-origin"
+        "transformOrigin"
       ),
     };
   }

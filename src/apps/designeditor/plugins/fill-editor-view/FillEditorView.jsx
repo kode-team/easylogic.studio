@@ -33,6 +33,7 @@ import {
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
+import { DEBOUNCE } from "../../../../sapa";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
@@ -877,7 +878,7 @@ export default class FillEditorView extends FillColorstepEditor {
     this.refresh();
   }
 
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + DEBOUNCE(100)]() {
     if (this.$context.selection.current) {
       if (
         this.$context.selection.hasChangedField(

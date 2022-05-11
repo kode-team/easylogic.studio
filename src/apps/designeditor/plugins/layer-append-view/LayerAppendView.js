@@ -410,9 +410,9 @@ export default class LayerAppendView extends EditorElement {
       y: Math.floor(y),
       width: Math.floor(width),
       height: Math.floor(height),
-      "background-color": color,
+      backgroundColor: color,
       content: content,
-      "font-size": fontSize,
+      fontSize: fontSize,
       ...patternInfo.attrs,
       ...this.state.options,
     };
@@ -421,7 +421,7 @@ export default class LayerAppendView extends EditorElement {
       case "text":
       case "svg-text":
       case "svg-textpath":
-        delete rect["background-color"];
+        delete rect.backgroundColor;
         break;
       case "svg-path":
         rect["d"] = this.state.d
@@ -450,7 +450,7 @@ export default class LayerAppendView extends EditorElement {
         if (hasArea) {
           // NOOP
           // newComponent 를 그대로 실행한다.
-          rect["font-size"] = Length.px(this.state.fontSize).floor();
+          rect.fontSize = Length.px(this.state.fontSize).floor();
         } else {
           const scaledFontSize = this.state.fontSize / this.$viewport.scale;
           const $drawItem = this.refs.$area.$(".draw-item > p");
@@ -513,7 +513,7 @@ export default class LayerAppendView extends EditorElement {
         width: true,
         height: true,
         transform: true,
-        "transform-origin": true,
+        transformOrigin: true,
       })
     );
 

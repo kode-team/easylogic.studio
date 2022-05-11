@@ -10,6 +10,7 @@ import {
   POINTERSTART,
   PREVENT,
   SUBSCRIBE,
+  DEBOUNCE,
 } from "sapa";
 
 import "./GradientEditorView.scss";
@@ -64,7 +65,7 @@ const TOOL_SIZE = 20;
 
 class GradientBaseEditor extends EditorElement {
   initializeData() {
-    const value = this.$context.selection.current["background-image"];
+    const value = this.$context.selection.current.backgroundImage;
 
     const cssValue = STRING_TO_CSS(value);
 
@@ -87,7 +88,7 @@ class GradientBaseEditor extends EditorElement {
       "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
-        "background-image": value,
+        backgroundImage: value,
       })
     );
   }
@@ -652,7 +653,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
       "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
-        "background-image": value,
+        backgroundImage: value,
       })
     );
   }
@@ -682,7 +683,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
         "setAttribute",
         "change background image",
         this.$context.selection.packByValue({
-          "background-image": value,
+          backgroundImage: value,
         })
       );
     }
@@ -706,7 +707,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
       "setAttribute",
       "change background image",
       this.$context.selection.packByValue({
-        "background-image": value,
+        backgroundImage: value,
       })
     );
     this.state.hoverColorStep = null;
@@ -1047,7 +1048,7 @@ export default class GradientEditorView extends GradientColorstepEditor {
     this.refresh();
   }
 
-  [SUBSCRIBE(UPDATE_CANVAS)]() {
+  [SUBSCRIBE(UPDATE_CANVAS) + DEBOUNCE(10)]() {
     if (this.$context.selection.current) {
       if (
         this.$context.selection.hasChangedField(
@@ -1056,9 +1057,13 @@ export default class GradientEditorView extends GradientColorstepEditor {
           "width",
           "height",
           "angle",
-          "background-image",
+          "backgroundImage",
           "border",
-          "padding"
+          "padding",
+          "paddingTop",
+          "paddingLeft",
+          "paddingRight",
+          "paddingBottom"
         )
       ) {
         this.refresh();

@@ -1,20 +1,18 @@
 // import { Editor } from "elf/editor/manager/Editor";
 import { ArtBoard } from "./layers/ArtBoard";
-import { BooleanPathItem } from "./layers/BooleanPathItem";
+import { BooleanPathModel } from "./layers/BooleanPathModel";
 import { CircleLayer } from "./layers/CircleLayer";
-// import { CubeLayer } from "./layers/CubeLayer";
-// import { CylinderLayer } from "./layers/CylinderLayer";
 import { ImageLayer } from "./layers/ImageLayer";
+import { PathModel } from "./layers/PathModel";
+import { PolygonModel } from "./layers/PolygonModel";
 import { Project } from "./layers/Project";
 import { RectLayer } from "./layers/RectLayer";
-import { SplineItem } from "./layers/SplineItem";
-import { SVGPathItem } from "./layers/SVGPathItem";
-import { SVGPolygonItem } from "./layers/SVGPolygonItem";
-import { SVGStarItem } from "./layers/SVGStarItem";
+import { SplineModel } from "./layers/SplineModel";
+import { StarModel } from "./layers/StarModel";
 import { SVGTextItem } from "./layers/SVGTextItem";
 import { SVGTextPathItem } from "./layers/SVGTextPathItem";
-import { TemplateLayer } from "./layers/TemplateLayer";
-import { TextLayer } from "./layers/TextLayer";
+import { TemplateModel } from "./layers/TemplateModel";
+import { TextModel } from "./layers/TextModel";
 // import { VideoLayer } from "./layers/VideoLayer";
 
 /**
@@ -26,17 +24,15 @@ export default function (editor) {
   editor.registerItem("artboard", ArtBoard);
   editor.registerItem("rect", RectLayer);
   editor.registerItem("circle", CircleLayer);
-  // editor.registerItem("cube", CubeLayer);
-  // editor.registerItem("cylinder", CylinderLayer);
   editor.registerItem("image", ImageLayer);
-  editor.registerItem("text", TextLayer);
-  editor.registerItem("boolean-path", BooleanPathItem);
-  editor.registerItem("svg-path", SVGPathItem);
+  editor.registerItem("text", TextModel);
+  editor.registerItem("boolean-path", BooleanPathModel);
+  editor.registerItem("svg-path", PathModel);
   editor.registerItem("svg-text", SVGTextItem);
   editor.registerItem("svg-textpath", SVGTextPathItem);
-  editor.registerItem("template", TemplateLayer);
+  editor.registerItem("template", TemplateModel);
   // editor.registerItem("video", VideoLayer);
-  editor.registerItem("polygon", SVGPolygonItem);
-  editor.registerItem("star", SVGStarItem);
-  editor.registerItem("spline", SplineItem);
+  editor.registerItem("polygon", PolygonModel);
+  editor.registerItem("star", StarModel);
+  editor.registerItem("spline", SplineModel);
 }

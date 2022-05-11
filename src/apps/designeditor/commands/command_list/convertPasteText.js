@@ -19,7 +19,7 @@ export default {
         y: center[1] - height / 2,
         width: width,
         height: height,
-        "background-color": "transparent",
+        backgroundColor: "transparent",
         url: embedUrl,
       });
     }

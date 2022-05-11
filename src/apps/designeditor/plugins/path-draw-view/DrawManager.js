@@ -22,9 +22,9 @@ export default class DrawManager extends EditorElement {
     var current = this.$context.selection.current;
 
     if (current) {
-      this.children.$stroke?.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
+      this.children.$stroke?.setValue(current.stroke || "rgba(0, 0, 0, 1)");
       this.children.$strokeWidth?.setValue(
-        current["stroke-width"] || Length.number(1)
+        current.strokeWidth || Length.number(1)
       );
     }
   }
@@ -85,8 +85,8 @@ export default class DrawManager extends EditorElement {
             )}</label>          
             ${createComponent("NumberInputEditor", {
               ref: "$strokeWidth",
-              key: "stroke-width",
-              value: this.state["stroke-width"],
+              key: "strokeWidth",
+              value: this.state["strokeWidth"],
               onchange: "changeValue",
             })}
           </div>      
@@ -98,8 +98,8 @@ export default class DrawManager extends EditorElement {
             )}">Cap</label>          
             ${createComponent("SelectEditor", {
               ref: "$strokeLineCap",
-              key: "stroke-linecap",
-              value: this.state["stroke-linecap"],
+              key: "strokeLinecap",
+              value: this.state["strokeLinecap"],
               options: ["butt", "round", "square"],
               onchange: "changeValue",
             })}
@@ -110,8 +110,8 @@ export default class DrawManager extends EditorElement {
             )}">Join</label>          
             ${createComponent("SelectEditor", {
               ref: "$strokeLineJoin",
-              key: "stroke-linejoin",
-              value: this.state["stroke-linejoin"],
+              key: "strokeLinejoin",
+              value: this.state["strokeLinejoin"],
               options: ["miter", "bevel", "round"],
               onchange: "changeValue",
             })}

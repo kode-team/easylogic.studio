@@ -403,7 +403,8 @@ export default class GuideLineView extends EditorElement {
     const expect = this.$context.selection.hasChangedField("d", "clip-path");
 
     if (!expect) {
-      this.refreshSmartGuidesForVerties(1);
+      // viewport.scale 로 나눠줘야 픽셀 자체의 크기가 커진다.
+      this.refreshSmartGuidesForVerties(1 / this.$viewport.scale);
     }
   }
 }

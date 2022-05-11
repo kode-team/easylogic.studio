@@ -19,12 +19,12 @@ export default class TextureView extends EditorElement {
             ""
           ) : (
             <TabPanel value="css" title="CSS">
-              <object refClass="CSSTextureView" />
+              <object refClass="CSSTextureView" ref="$css" />
             </TabPanel>
           )}
 
           <TabPanel value="svg" title="SVG">
-            <object refClass="SVGTextureView" />
+            <object refClass="SVGTextureView" ref="$svg" />
           </TabPanel>
         </Tabs>
       </div>

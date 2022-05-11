@@ -9,21 +9,21 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-color": "#ececec",
+      backgroundColor: "#ececec",
     },
   },
   {
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-color": "black",
+      backgroundColor: "black",
     },
   },
   {
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-color": "red",
+      backgroundColor: "red",
     },
   },
   {

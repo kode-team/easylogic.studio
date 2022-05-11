@@ -7,7 +7,6 @@ export default {
 
     command.emit("refreshLayerTreeView");
     command.emit("refreshAllCanvas");
-    command.emit("refreshStyleView");
     command.emit(UPDATE_CANVAS);
     command.emit("refreshAllElementBoundSize");
     command.emit(REFRESH_SELECTION);

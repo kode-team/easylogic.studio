@@ -4,7 +4,7 @@ export default class BooleanPathRender extends SVGItemRender {
   async toCloneObject(item, renderer) {
     return {
       ...(await super.toCloneObject(item, renderer)),
-      ...item.attrs("d", "boolean-operation"),
+      ...item.attrs("d", "booleanOperation"),
     };
   }
 }

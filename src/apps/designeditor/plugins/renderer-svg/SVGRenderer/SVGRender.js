@@ -8,29 +8,31 @@ export default class SVGRender extends DomRender {
   toDefaultCSS(item) {
     return {
       overflow: "visible",
-      ...this.toKeyListCSS(item, [
-        "font-size",
-        "line-height",
-        "font-weight",
-        "font-family",
-        "font-style",
-        "text-align",
-        "text-transform",
-        "text-decoration",
-        "letter-spacing",
-        "word-spacing",
-        "text-indent",
-        "background-color",
-        "border-radius",
-        "transform-style",
-        "filter",
-        "filter",
-        "backdrop-filter",
-        "box-shadow",
-        "text-shadow",
-        "animation",
-        "transition",
-      ]),
+
+      "font-size": item.fontSize,
+      "font-weight": item.fontWeight,
+      "font-style": item.fontStyle,
+      "font-family": item.fontFamily,
+      "text-align": item.textAlign,
+      "text-decoration": item.textDecoration,
+      "text-transform": item.textTransform,
+      "letter-spacing": item.letterSpacing,
+      "word-spacing": item.wordSpacing,
+      "line-height": item.lineHeight,
+      "text-indent": item.textIndent,
+      "text-shadow": item.textShadow,
+      "text-overflow": item.textOverflow,
+      "text-wrap": item.textWrap,
+      "z-index": item.zIndex,
+      opacity: item.opacity,
+      "mix-blend-mode": item.mixBlendMode,
+      "transform-origin": item.transformOrigin,
+      "border-radius": item.borderRadius,
+      filter: item.filter,
+      "backdrop-filter": item.backdropFilter,
+      "box-shadow": item.boxShadow,
+      animation: item.animation,
+      transition: item.transition,
     };
   }
 
@@ -71,18 +73,13 @@ export default class SVGRender extends DomRender {
   toSVGAttribute(item) {
     return {
       ...this.toDefaultCSS(item),
-      ...this.toKeyListCSS(item, [
-        "stroke-width",
-        "stroke-linecap",
-        "stroke-linejoin",
-        "stroke-dashoffset",
-        "fill-opacity",
-        "fill-rule",
-        "text-anchor",
-      ]),
-      ...{
-        "stroke-dasharray": item["stroke-dasharray"]?.join(" "),
-      },
+      strokeWidth: item.strokeWidth,
+      "fill-opacity": item.fillOpacity,
+      "fill-rule": item.fillRule,
+      "stroke-linecap": item.strokeLinecap,
+      "stroke-linejoin": item.strokeLinejoin,
+      "text-anchor": item.textAnchor,
+      "stroke-dasharray": item.strokeDasharray?.join(" "),
     };
   }
 

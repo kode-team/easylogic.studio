@@ -33,6 +33,10 @@ export class MovableModel extends BaseAssetModel {
       y: 0,
       width: 300,
       height: 300,
+      position: "absolute",
+      perspective: "",
+      perspectiveOrigin: "",
+      transformOrigin: "50% 50% 0px",
       ...obj,
     });
   }
@@ -47,7 +51,7 @@ export class MovableModel extends BaseAssetModel {
    * @returns {boolean} wheather item is absolute position
    */
   get isAbsolute() {
-    return this.json.position === "absolute";
+    return this.position === "absolute";
   }
 
   get isDragSelectable() {
@@ -65,8 +69,16 @@ export class MovableModel extends BaseAssetModel {
     return false;
   }
 
+  get perspective() {
+    return this.get("perspective");
+  }
+
+  get perspectiveOrigin() {
+    return this.get("perspectiveOrigin");
+  }
+
   get transform() {
-    return `rotateZ(${Length.deg(this.json.angle)})`;
+    return `rotateZ(${Length.deg(this.angle)})`;
   }
 
   get localMatrix() {
@@ -237,35 +249,77 @@ export class MovableModel extends BaseAssetModel {
   }
 
   get offsetX() {
-    return this.json.x;
+    return this.x;
   }
 
   get offsetY() {
-    return this.json.y;
+    return this.y;
   }
 
   get screenWidth() {
-    return this.json.width;
+    return this.width;
   }
 
   get screenHeight() {
-    return this.json.height;
+    return this.height;
   }
 
   get y() {
-    return this.json.y;
+    return this.get("y");
   }
+
+  set y(value) {
+    this.set("y", value);
+  }
+
   get x() {
-    return this.json.x;
+    return this.get("x");
   }
+
+  set x(value) {
+    this.set("x", value);
+  }
+
   get width() {
-    return this.json.width;
+    return this.get("width");
   }
+
+  set width(value) {
+    this.set("width", value);
+  }
+
   get height() {
-    return this.json.height;
+    return this.get("height");
   }
+
+  set height(value) {
+    this.set("height", value);
+  }
+
   get angle() {
-    return this.json.angle;
+    return this.get("angle");
+  }
+
+  set angle(value) {
+    this.set("angle", value);
+  }
+
+  get position() {
+    return this.get("position");
+  }
+
+  set position(value) {
+    this.set("position", value);
+  }
+
+  get transformOrigin() {
+    return this.get("transformOrigin");
+  }
+
+  set transformOrigin(value) {
+    this.reset({
+      transformOrigin: value,
+    });
   }
 
   /** translate vector */
@@ -280,13 +334,13 @@ export class MovableModel extends BaseAssetModel {
 
   /** rotate vector */
   get rotate() {
-    return [0, 0, degreeToRadian(this.json.angle)];
+    return [0, 0, degreeToRadian(this.angle)];
   }
 
   /** origin vector */
   get origin() {
     return TransformOrigin.scale(
-      this.json["transform-origin"] || "50% 50% 0px",
+      this.transformOrigin || "50% 50% 0px",
       this.screenWidth,
       this.screenHeight
     );
@@ -316,12 +370,20 @@ export class MovableModel extends BaseAssetModel {
     };
   }
 
-  toCloneObject(isDeep = true) {
-    return {
-      ...super.toCloneObject(isDeep),
-      ...this.attrs("x", "y", "right", "bottom", "width", "height", "angle"),
-    };
-  }
+  // toCloneObject(isDeep = true) {
+  //   return {
+  //     ...super.toCloneObject(isDeep),
+  //     ...this.attrs(
+  //       "x",
+  //       "y",
+  //       "width",
+  //       "height",
+  //       "angle",
+  //       "position",
+  //       "transformOrigin"
+  //     ),
+  //   };
+  // }
 
   reset(obj, context = { origin: "*" }) {
     const isChanged = super.reset(obj, context);
@@ -334,16 +396,13 @@ export class MovableModel extends BaseAssetModel {
         "y",
         "width",
         "height",
-        "box-model",
+        "boxModel",
         "angle",
-        "transform-origin",
-        "transform",
-        "perspective",
-        "perspective-origin",
+        "transformOrigin",
         "resizingVertical",
         "resizingHorizontal",
-        "contraints-vertical",
-        "contraints-horizontal"
+        "contraintsVertical",
+        "contraintsHorizontal"
       ) ||
       this.changedLayout
     ) {
@@ -362,16 +421,12 @@ export class MovableModel extends BaseAssetModel {
       "y",
       "width",
       "height",
-      "box-model",
       "angle",
-      "transform-origin",
-      "transform",
-      "perspective",
-      "perspective-origin",
+      "transformOrigin",
       "resizingVertical",
       "resizingHorizontal",
-      "contraints-vertical",
-      "contraints-horizontal"
+      "contraintsVertical",
+      "contraintsHorizontal"
     );
   }
 
@@ -500,7 +555,7 @@ export class MovableModel extends BaseAssetModel {
    */
   absoluteMove(absoluteDist = [0, 0, 0]) {
     // 기존 world 좌표
-    const oldVertex = this.verties[4]; // verties[4] 는 transform-origin 중심 좌표 , scale, rotate 에 영향을 받지 않는다.
+    const oldVertex = this.verties[4]; // verties[4] 는 transformOrigin 중심 좌표 , scale, rotate 에 영향을 받지 않는다.
 
     // 새로운 world 좌표
     const newVertex = vec3.add([], oldVertex, absoluteDist);
@@ -599,7 +654,7 @@ export class MovableModel extends BaseAssetModel {
   }
 
   getPerspectiveMatrix() {
-    const hasPerspective = this.json["perspective"];
+    const hasPerspective = this.perspective;
 
     if (!hasPerspective) {
       return undefined;
@@ -608,7 +663,7 @@ export class MovableModel extends BaseAssetModel {
     let [
       perspectiveOriginX = Length.percent(50),
       perspectiveOriginY = Length.percent(50),
-    ] = TransformOrigin.parseStyle(this.json["perspective-origin"]);
+    ] = TransformOrigin.parseStyle(this.perspectiveOrigin);
 
     const width = this.screenWidth;
     const height = this.screenHeight;
@@ -624,7 +679,7 @@ export class MovableModel extends BaseAssetModel {
 
     // 3. Multiply by the matrix that would be obtained from the perspective() transform function,
     // where the length is provided by the value of the perspective property
-    if (this.json["perspective"] && this.json["perspective"] != "none") {
+    if (this.perspective && this.perspective != "none") {
       mat4.multiply(
         view,
         view,
@@ -643,7 +698,7 @@ export class MovableModel extends BaseAssetModel {
           0,
           0,
           0,
-          -1 / Length.parse(this.json["perspective"]).value,
+          -1 / Length.parse(this.perspective).value,
           1
         )
       );
@@ -673,13 +728,13 @@ export class MovableModel extends BaseAssetModel {
    * refer to https://www.w3.org/TR/css-transforms-2/
    *
    * 1. Start with the identity matrix.
-   * 2. Translate by the computed X, Y and Z of transform-origin
+   * 2. Translate by the computed X, Y and Z of transformOrigin
    * 3. Multiply by each of the transform functions in transform property from left to right
-   * 4. Translate by the negated computed X, Y and Z values of transform-origin
+   * 4. Translate by the negated computed X, Y and Z values of transformOrigin
    */
   getLocalTransformMatrix(width, height) {
     const origin = TransformOrigin.scale(
-      this.json["transform-origin"] || "50% 50% 0px",
+      this.transformOrigin || "50% 50% 0px",
       isUndefined(width) ? this.screenWidth : width,
       isUndefined(height) ? this.screenHeight : height
     );
@@ -687,13 +742,13 @@ export class MovableModel extends BaseAssetModel {
     // start with the identity matrix
     const view = mat4.create();
 
-    // 2. Translate by the computed X, Y and Z of transform-origin
+    // 2. Translate by the computed X, Y and Z of transformOrigin
     mat4.translate(view, view, origin);
 
     // 3. Multiply by each of the transform functions in transform property from left to right
     mat4.multiply(view, view, this.itemMatrix);
 
-    // 4. Translate by the negated computed X, Y and Z values of transform-origin
+    // 4. Translate by the negated computed X, Y and Z values of transformOrigin
     mat4.translate(view, view, vec3.negate([], origin));
 
     return view;
@@ -716,7 +771,7 @@ export class MovableModel extends BaseAssetModel {
     const center = vec3.add(
       [],
       TransformOrigin.scale(
-        this.json["transform-origin"] || "50% 50% 0px",
+        this.transformOrigin || "50% 50% 0px",
         width,
         height
       ),
@@ -836,13 +891,7 @@ export class MovableModel extends BaseAssetModel {
     width = isNotUndefined(width) ? width : this.screenWidth;
     height = isNotUndefined(height) ? height : this.screenHeight;
 
-    let model = rectToVerties(
-      0,
-      0,
-      width,
-      height,
-      this.json["transform-origin"]
-    );
+    let model = rectToVerties(0, 0, width, height, this.transformOrigin);
 
     return model;
   }
@@ -861,13 +910,7 @@ export class MovableModel extends BaseAssetModel {
       y = contentBox.y;
     }
 
-    let model = rectToVerties(
-      x,
-      y,
-      width,
-      height,
-      this.json["transform-origin"]
-    );
+    let model = rectToVerties(x, y, width, height, this.transformOrigin);
 
     return vertiesMap(model, this.absoluteMatrix);
   }
@@ -876,23 +919,19 @@ export class MovableModel extends BaseAssetModel {
     width = isNotUndefined(width) ? width : this.screenWidth;
     height = isNotUndefined(height) ? height : this.screenHeight;
 
-    const center = TransformOrigin.scale(
-      this.json["transform-origin"],
-      width,
-      height
-    );
+    const center = TransformOrigin.scale(this.transformOrigin, width, height);
 
-    const paddingTop = this.json["padding-top"] || 0;
-    const paddingRight = this.json["padding-right"] || 0;
-    const paddingBottom = this.json["padding-bottom"] || 0;
-    const paddingLeft = this.json["padding-left"] || 0;
+    const paddingTop = this.get("padding-top") || 0;
+    const paddingRight = this.get("padding-right") || 0;
+    const paddingBottom = this.get("padding-bottom") || 0;
+    const paddingLeft = this.get("padding-left") || 0;
 
     const model = rectToVerties(
       0 + paddingLeft,
       0 + paddingTop,
       width - paddingLeft - paddingRight,
       height - paddingTop - paddingBottom,
-      this.json["transform-origin"]
+      this.transformOrigin
     );
     model[4] = center; // origin 은 전체 기준으로 넣어줌
 
@@ -905,8 +944,6 @@ export class MovableModel extends BaseAssetModel {
 
   getGuideVerties() {
     const verties = this.originVerties;
-
-    // console.log("this.getGuideVerties", this.ref, this.id);
 
     return [
       ...verties,
@@ -927,10 +964,10 @@ export class MovableModel extends BaseAssetModel {
 
   get nestedAngle() {
     if (this.parent) {
-      return this.parent.nestedAngle + this.json.angle;
+      return this.parent.nestedAngle + this.angle;
     }
 
-    return this.json.angle || 0;
+    return this.angle || 0;
   }
 
   get toRectVerties() {
@@ -944,8 +981,7 @@ export class MovableModel extends BaseAssetModel {
     const width = this.screenWidth;
     const height = this.screenHeight;
     const originalTransform = this.transform;
-    const originalTransformOrigin =
-      this.json["transform-origin"] || "50% 50% 0%";
+    const originalTransformOrigin = this.transformOrigin || "50% 50% 0px";
 
     const transformOriginMatrix = this.getTransformOriginMatrix();
     const transformOriginMatrixInverse = this.getTransformOriginMatrixInverse();
@@ -1131,7 +1167,7 @@ export class MovableModel extends BaseAssetModel {
     if (this.checkInArea(areaVerties)) {
       // ref 를 넘겨야 proxy 기능을 그대로 사용 할 수 있다.
       // 그렇지 않으면 일반적인 객체에 접근 하는 것 밖에 안된다. 즉, json 을 사용할 수가 없다.
-      items.push(this.ref);
+      items.push(this);
     }
 
     return items;
@@ -1160,7 +1196,7 @@ export class MovableModel extends BaseAssetModel {
     return mat4.fromTranslation(
       [],
       TransformOrigin.scale(
-        this.json["transform-origin"] || "50% 50% 0px",
+        this.transformOrigin || "50% 50% 0px",
         this.screenWidth,
         this.screenHeight
       )
@@ -1280,23 +1316,10 @@ export class MovableModel extends BaseAssetModel {
 
   /** order by  */
 
-  getIndex() {
-    var parentLayers = this.parent.layers;
-    var startIndex = -1;
-    for (var i = 0, len = parentLayers.length; i < len; i++) {
-      if (parentLayers[i] === this.ref) {
-        startIndex = i;
-        break;
-      }
-    }
-
-    return startIndex;
-  }
-
   setOrder(targetIndex) {
     var parent = this.parent;
 
-    var startIndex = this.getIndex();
+    var startIndex = this.index;
 
     if (startIndex > -1) {
       parent.children[startIndex] = parent.children[targetIndex];
@@ -1310,36 +1333,15 @@ export class MovableModel extends BaseAssetModel {
     }
   }
 
-  // get next sibiling item
-  next() {
-    if (this.isLast()) {
-      return this.ref;
-    }
-
-    const index = this.getIndex();
-
-    return this.parent.layers[index + 1];
-  }
-
-  // get prev sibiling item
-  prev() {
-    if (this.isFirst()) {
-      return this.ref;
-    }
-
-    const index = this.getIndex();
-
-    return this.parent.layers[index - 1];
-  }
-
   /**
    * 레이어를 현재의 다음으로 보낸다.
    * 즉, 화면상에 렌더링 영역에서 올라온다.
+   * @deprecated
    */
   orderNext() {
-    if (this.isLast()) {
+    if (this.isLast) {
       if (this.parent.next) {
-        let next = this.parent.next();
+        let next = this.parent.next;
 
         if (next.enableHasChildren()) {
           next.appendChild(this);
@@ -1351,27 +1353,20 @@ export class MovableModel extends BaseAssetModel {
       return;
     }
 
-    var startIndex = this.getIndex();
+    var startIndex = this.index;
     if (startIndex > -1) {
       this.setOrder(startIndex + 1);
     }
   }
 
-  isFirst() {
-    return this.getIndex() === 0;
-  }
-
-  isLast() {
-    return this.getIndex() === this.parent.children.length - 1;
-  }
-
   /**
    * 레이어를 현재의 이전으로 보낸다.
    * 즉, 화면상에 렌더링 영역에서 내려간다.
+   * @deprecated
    */
   orderPrev() {
-    if (this.isFirst()) {
-      const prev = this.parent.prev();
+    if (this.isFirst) {
+      const prev = this.parent.prev;
 
       if (prev) {
         prev.insertBefore(this);
@@ -1380,24 +1375,36 @@ export class MovableModel extends BaseAssetModel {
       return;
     }
 
-    var startIndex = this.getIndex();
+    var startIndex = this.index;
     if (startIndex > 0) {
       this.setOrder(startIndex - 1);
     }
   }
 
   // 부모의 처음으로 보내기
+  /**
+   * @deprecated
+   */
   orderFirst() {
     this.setOrder(0);
   }
 
   // 부모의 마지막으로 보내기
+  /**
+   * @deprecated
+   */
   orderLast() {
     this.setOrder(this.parent.childrenLength - 1);
   }
 
   //TODO: 전체중에 처음으로 보내기
+  /**
+   * @deprecated
+   */
   orderTop() {}
   //TODO: 전체중에 마지막으로 보내기
+  /**
+   * @deprecated
+   */
   orderBottom() {}
 }

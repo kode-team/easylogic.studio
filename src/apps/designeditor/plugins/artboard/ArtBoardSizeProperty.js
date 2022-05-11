@@ -20,7 +20,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "artboard-size";
+    return "artboardSize";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
@@ -81,7 +81,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   [CLICK("$list .device-item")](e) {
     var size = e.$dt.attr("data-size");
 
-    this.$command.emit("resizeArtBoard", size);
+    this.$commands.emit("resizeArtBoard", size);
   }
 
   makeGroup(group) {

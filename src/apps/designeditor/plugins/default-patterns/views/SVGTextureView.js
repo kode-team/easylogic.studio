@@ -15,7 +15,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "path",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       d: PathParser.makeRect(0, 0, 80, 80).d,
@@ -25,7 +25,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "line",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       d: PathParser.makeLine(0, 0, 80, 80).d,
@@ -35,7 +35,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "line 2",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -46,7 +46,7 @@ const svgPatterns = [
     itemType: "svg-path",
     name: "circle",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -59,7 +59,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 3",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -73,7 +73,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -87,7 +87,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -102,7 +102,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -117,7 +117,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -132,7 +132,7 @@ const svgPatterns = [
     itemType: "polygon",
     name: "polygon - 4",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -146,7 +146,7 @@ const svgPatterns = [
     itemType: "star",
     name: "star - 5",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",
@@ -161,7 +161,7 @@ const svgPatterns = [
     itemType: "star",
     name: "curved star - 5",
     attrs: {
-      "background-color": "transparent",
+      backgroundColor: "transparent",
       stroke: "black",
       "stroke-width": 2,
       fill: "#ececec",

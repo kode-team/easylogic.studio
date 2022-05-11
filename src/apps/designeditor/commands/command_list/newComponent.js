@@ -22,7 +22,7 @@ export default function newComponent(
   if (itemType === "svg-textpath") {
     obj = {
       ...obj,
-      "font-size": obj.height,
+      fontSize: obj.height,
       textLength: "100%",
       d: PathParser.makeLine(0, obj.height, obj.width, obj.height).d,
     };
@@ -30,7 +30,7 @@ export default function newComponent(
     itemType = "svg-path";
     obj = {
       ...obj,
-      "background-color": undefined,
+      backgroundColor: undefined,
       fill: `#C4C4C4`,
       d: PathParser.makeCircle(0, 0, obj.width, obj.height).d,
     };
@@ -38,7 +38,7 @@ export default function newComponent(
     itemType = "svg-path";
     obj = {
       ...obj,
-      "background-color": undefined,
+      backgroundColor: undefined,
       fill: `#C4C4C4`,
       d: PathParser.makeRect(0, 0, obj.width, obj.height).d,
     };
@@ -51,7 +51,7 @@ export default function newComponent(
   } else if (itemType === "artboard") {
     obj = {
       ...obj,
-      "background-color": "white",
+      backgroundColor: "white",
     };
   }
 

@@ -60,7 +60,7 @@ export default class PositionProperty extends BaseProperty {
     this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
     this.children.$width.setValue(round(current.width || DEFAULT_SIZE, 100));
     this.children.$height.setValue(round(current.height || DEFAULT_SIZE, 100));
-    this.children.$opacity.setValue(current["opacity"] || "1");
+    this.children.$opacity.setValue(current.opacity || "1");
     this.children.$rotate.setValue(Length.deg(current.angle).round(100));
   }
 
@@ -155,7 +155,7 @@ export default class PositionProperty extends BaseProperty {
       this.children.$height.setValue(
         round(current.height || DEFAULT_SIZE, 100)
       );
-      this.children.$opacity.setValue(current["opacity"] || "1");
+      this.children.$opacity.setValue(current.opacity || "1");
       this.children.$rotate.setValue(Length.deg(current.angle));
     }
   }

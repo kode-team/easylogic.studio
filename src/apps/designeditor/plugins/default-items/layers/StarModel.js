@@ -1,9 +1,9 @@
-import { SVGItem } from "./SVGItem";
+import { SVGModel } from "./SVGModel";
 
 import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
 
-export class SVGStarItem extends SVGItem {
+export class StarModel extends SVGModel {
   getIcon() {
     return icon.star;
   }
@@ -11,14 +11,41 @@ export class SVGStarItem extends SVGItem {
     return super.getDefaultObject({
       itemType: "star",
       name: "New Star",
-      "stroke-width": 1,
-      d: "", // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다.
+      strokeWidth: 1,
       isCurve: false,
       count: 5, // outer radius
       radius: 0.5, // inner radius rate
       tension: 0.5, // 각도 간격
       ...obj,
     });
+  }
+
+  get count() {
+    return this.get("count");
+  }
+
+  set count(value) {
+    this.set("count", value);
+  }
+
+  get radius() {
+    return this.get("radius");
+  }
+
+  set radius(value) {
+    this.set("radius", value);
+  }
+
+  get tension() {
+    return this.get("tension");
+  }
+
+  set tension(value) {
+    this.set("tension", value);
+  }
+
+  get isCurve() {
+    return this.get("isCurve");
   }
 
   convert(json) {
@@ -36,7 +63,7 @@ export class SVGStarItem extends SVGItem {
   }
 
   get d() {
-    const { width, height, count, radius, tension, isCurve } = this.json;
+    const { width, height, count, radius, tension, isCurve } = this;
 
     let newPath = "";
     if (isCurve) {
@@ -54,12 +81,12 @@ export class SVGStarItem extends SVGItem {
     return newPath;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs("count", "radius", "tension", "isCurve"),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("count", "radius", "tension", "isCurve"),
+  //   };
+  // }
 
   getDefaultTitle() {
     return "Star";

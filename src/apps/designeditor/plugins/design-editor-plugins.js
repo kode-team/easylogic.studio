@@ -39,8 +39,6 @@ import pathDrawView from "./path-draw-view";
 import pathEditorView from "./path-editor-view";
 import pathTool from "./path-tool";
 import patternAsset from "./pattern-asset";
-import perspective from "./perspective";
-import perspectiveOrigin from "./perspective-origin";
 import position from "./position";
 import project from "./project";
 import rendererHtml from "./renderer-html";
@@ -121,8 +119,6 @@ export default [
   image,
   // transform,
   // transformOrigin,
-  perspective,
-  perspectiveOrigin,
 
   svgFilterAsset,
 

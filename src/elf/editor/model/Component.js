@@ -37,12 +37,12 @@ export class Component extends LayerModel {
         });
       }
 
-      toCloneObject() {
-        return {
-          ...super.toCloneObject(),
-          ...this.attrs(...Object.keys(attrs)),
-        };
-      }
+      // toCloneObject() {
+      //   return {
+      //     ...super.toCloneObject(),
+      //     ...this.attrs(...Object.keys(attrs)),
+      //   };
+      // }
 
       enableHasChildren() {
         return enableHasChildren || false;

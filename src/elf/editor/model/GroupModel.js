@@ -22,36 +22,289 @@ export class GroupModel extends MovableModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       layout: Layout.DEFAULT,
-      "constraints-horizontal": Constraints.NONE,
-      "constraints-vertical": Constraints.NONE,
+      constraintsHorizontal: Constraints.NONE,
+      constraintsVertical: Constraints.NONE,
       // flex
-      "flex-direction": FlexDirection.ROW,
-      "flex-wrap": FlexWrap.NOWRAP,
-      "justify-content": JustifyContent.FLEX_START,
-      "align-items": AlignItems.FLEX_START,
-      "align-content": AlignContent.FLEX_START,
+      flexDirection: FlexDirection.ROW,
+      flexWrap: FlexWrap.NOWRAP,
+      justifyContent: JustifyContent.FLEX_START,
+      alignItems: AlignItems.FLEX_START,
+      alignContent: AlignContent.FLEX_START,
       order: 0,
-      "flex-grow": 0,
-      "flex-shrink": 0,
-      "flex-basis": "auto", // 항목의 크기를 기본 크기(원래 가지고 있는 크기)로 정함
+      flexGrow: 0,
+      flexShrink: 0,
+      flexBasis: "auto", // 항목의 크기를 기본 크기(원래 가지고 있는 크기)로 정함
       gap: 0,
       resizingHorizontal: ResizingMode.FIXED,
       resizingVertical: ResizingMode.FIXED,
       // grid
-      "grid-template-rows": "auto",
-      "grid-column-gap": "0px",
-      "grid-template-columns": "auto",
-      "grid-row-gap": "0px",
-      "grid-template-areas": "",
-      "grid-auto-rows": "auto",
-      "grid-auto-columns": "auto",
-      "grid-auto-flow": "row",
+      gridTemplateRows: "auto",
+      gridColumnGap: "0px",
+      gridTemplateColumns: "auto",
+      gridRowGap: "0px",
+      gridTemplateAreas: "",
+      gridAutoRows: "auto",
+      gridAutoColumns: "auto",
+      gridAutoFlow: "row",
       ...obj,
     });
   }
 
+  // toCloneObject(isDeep = true) {
+  //   return {
+  //     ...super.toCloneObject(isDeep),
+  //     ...this.attrs(
+  //       "layout",
+  //       "constraintsHorizontal",
+  //       "constraintsVertical",
+  //       // flex
+  //       "flexDirection",
+  //       "flexWrap",
+  //       "justifyContent",
+  //       "alignItems",
+  //       "alignContent",
+  //       "order",
+  //       "flexGrow",
+  //       "flexShrink",
+  //       "flexBasis",
+  //       "gap",
+  //       "resizingHorizontal",
+  //       "resizingVertical",
+  //       // grid
+  //       "gridTemplateRows",
+  //       "gridColumnGap",
+  //       "gridTemplateColumns",
+  //       "gridRowGap",
+  //       "gridTemplateAreas",
+  //       "gridAutoRows",
+  //       "gridAutoColumns",
+  //       "gridAutoFlow"
+  //     ),
+  //   };
+  // }
+
   get layout() {
-    return this.json.layout;
+    return this.get("layout");
+  }
+
+  get constraintsHorizontal() {
+    return this.get("constraintsHorizontal");
+  }
+
+  set constraintsHorizontal(value) {
+    this.reset({
+      constraintsHorizontal: value,
+    });
+  }
+
+  get constraintsVertical() {
+    return this.get("constraintsVertical");
+  }
+
+  set constraintsVertical(value) {
+    this.reset({
+      constraintsVertical: value,
+    });
+  }
+
+  // flex
+  get flexDirection() {
+    return this.get("flexDirection");
+  }
+  set flexDirection(value) {
+    this.reset({
+      flexDirection: value,
+    });
+  }
+
+  get flexWrap() {
+    return this.get("flexWrap");
+  }
+  set flexWrap(value) {
+    this.reset({
+      flexWrap: value,
+    });
+  }
+
+  get justifyContent() {
+    return this.get("justifyContent");
+  }
+
+  set justifyContent(value) {
+    this.reset({
+      justifyContent: value,
+    });
+  }
+
+  get alignItems() {
+    return this.get("alignItems");
+  }
+
+  set alignItems(value) {
+    this.reset({
+      alignItems: value,
+    });
+  }
+
+  get alignContent() {
+    return this.get("alignContent");
+  }
+
+  set alignContent(value) {
+    this.reset({
+      alignContent: value,
+    });
+  }
+
+  get order() {
+    return this.get("order");
+  }
+
+  set order(value) {
+    this.reset({
+      order: value,
+    });
+  }
+
+  get flexGrow() {
+    return this.get("flexGrow");
+  }
+
+  set flexGrow(value) {
+    this.reset({
+      flexGrow: value,
+    });
+  }
+
+  get flexShrink() {
+    return this.get("flexShrink");
+  }
+
+  set flexShrink(value) {
+    this.reset({
+      flexShrink: value,
+    });
+  }
+
+  get flexBasis() {
+    return this.get("flexBasis");
+  }
+
+  set flexBasis(value) {
+    this.reset({
+      flexBasis: value,
+    });
+  }
+
+  get gap() {
+    return this.get("gap");
+  }
+
+  set gap(value) {
+    this.reset({
+      gap: value,
+    });
+  }
+
+  get resizingHorizontal() {
+    return this.get("resizingHorizontal");
+  }
+
+  set resizingHorizontal(value) {
+    this.reset({
+      resizingHorizontal: value,
+    });
+  }
+
+  get resizingVertical() {
+    return this.get("resizingVertical");
+  }
+
+  set resizingVertical(value) {
+    this.reset({
+      resizingVertical: value,
+    });
+  }
+
+  // grid
+  get gridTemplateRows() {
+    return this.get("gridTemplateRows");
+  }
+
+  set gridTemplateRows(value) {
+    this.reset({
+      gridTemplateRows: value,
+    });
+  }
+
+  get gridColumnGap() {
+    return this.get("gridColumnGap");
+  }
+
+  set gridColumnGap(value) {
+    this.reset({
+      gridColumnGap: value,
+    });
+  }
+
+  get gridTemplateColumns() {
+    return this.get("gridTemplateColumns");
+  }
+
+  set gridTemplateColumns(value) {
+    this.reset({
+      gridTemplateColumns: value,
+    });
+  }
+
+  get gridRowGap() {
+    return this.get("gridRowGap");
+  }
+
+  set gridRowGap(value) {
+    this.reset({
+      gridRowGap: value,
+    });
+  }
+
+  get gridTemplateAreas() {
+    return this.get("gridTemplateAreas");
+  }
+
+  set gridTemplateAreas(value) {
+    this.reset({
+      gridTemplateAreas: value,
+    });
+  }
+
+  get gridAutoRows() {
+    return this.get("gridAutoRows");
+  }
+
+  set gridAutoRows(value) {
+    this.reset({
+      gridAutoRows: value,
+    });
+  }
+
+  get gridAutoColumns() {
+    return this.get("gridAutoColumns");
+  }
+
+  set gridAutoColumns(value) {
+    this.reset({
+      gridAutoColumns: value,
+    });
+  }
+
+  get gridAutoFlow() {
+    return this.get("gridAutoFlow");
+  }
+
+  set gridAutoFlow(value) {
+    this.reset({
+      gridAutoFlow: value,
+    });
   }
 
   isLayoutItem() {
@@ -74,7 +327,7 @@ export class GroupModel extends MovableModel {
    * @returns {boolean}
    */
   hasLayout() {
-    return !this.hasConstraints() || Boolean(this.json.layout) === false;
+    return !this.hasConstraints() || Boolean(this.layout) === false;
   }
 
   /**
@@ -84,7 +337,7 @@ export class GroupModel extends MovableModel {
    * @returns {boolean}
    */
   isLayout(layout) {
-    return this.json.layout === layout;
+    return this.layout === layout;
   }
 
   isInDefault() {
@@ -106,14 +359,8 @@ export class GroupModel extends MovableModel {
     return this.parent?.layout === layout;
   }
 
-  reset(obj) {
-    const isChanged = super.reset(obj);
-
-    return isChanged;
-  }
-
   changeConstraints(direction, value, shiftKey = false) {
-    const h = this.json[direction];
+    const h = this.get(direction);
     let newConstraints = value;
 
     if (h === Constraints.MAX) {

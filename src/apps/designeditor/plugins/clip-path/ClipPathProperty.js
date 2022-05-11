@@ -144,7 +144,7 @@ export default class ClipPathProperty extends BaseProperty {
       "setAttribute",
       "delete clip-path",
       this.$context.selection.packByValue({
-        "clip-path": "",
+        clipPath: "",
       })
     );
     this.emit("hideClipPathPopup");
@@ -155,7 +155,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   get editableProperty() {
-    return "clip-path";
+    return "clipPath";
   }
 
   [SUBSCRIBE(REFRESH_SELECTION) + IF("checkShow")]() {
@@ -165,11 +165,11 @@ export default class ClipPathProperty extends BaseProperty {
   [LOAD("$clippathList")]() {
     var current = this.$context.selection.current;
     if (!current) return "";
-    if (!current["clip-path"]) return "";
+    if (!current.clipPath) return "";
 
     return this.makeClipPathTemplate(
-      current["clip-path"].split("(")[0],
-      current["clip-path"]
+      current.clipPath.split("(")[0],
+      current.clipPath
     );
   }
 
@@ -177,20 +177,20 @@ export default class ClipPathProperty extends BaseProperty {
     var current = this.$context.selection.current;
 
     if (!current) return;
-    if (current["clip-path"]) {
+    if (current.clipPath) {
       window.alert("clip-path is already exists.");
       return;
     }
 
     if (current) {
       current.reset({
-        "clip-path": ClipPathSample[e.$dt.data("value")],
+        clipPath: ClipPathSample[e.$dt.data("value")],
       });
 
       this.$commands.executeCommand(
         "setAttribute",
-        "change clip-path",
-        this.$context.selection.pack("clip-path")
+        "change clipPath",
+        this.$context.selection.pack("clipPath")
       );
     }
 
@@ -201,7 +201,7 @@ export default class ClipPathProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current) return;
 
-    var obj = ClipPath.parseStyle(current["clip-path"]);
+    var obj = ClipPath.parseStyle(current.clipPath);
 
     switch (obj.type) {
       case "path":
@@ -213,7 +213,7 @@ export default class ClipPathProperty extends BaseProperty {
             data.d = current.invertPath(data.d).d;
 
             this.updatePathInfo({
-              "clip-path": `path(${data.d})`,
+              clipPath: `path(${data.d})`,
             });
           },
           current,
@@ -236,7 +236,7 @@ export default class ClipPathProperty extends BaseProperty {
     this.refresh();
     this.$commands.executeCommand(
       "setAttribute",
-      "change clip-path",
+      "change clipPath",
       this.$context.selection.packByValue(data)
     );
   }

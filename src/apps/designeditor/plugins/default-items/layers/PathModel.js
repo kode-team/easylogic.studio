@@ -1,9 +1,9 @@
-import { SVGItem } from "./SVGItem";
+import { SVGModel } from "./SVGModel";
 
 import { PathParser } from "elf/core/parser/PathParser";
 import icon from "elf/editor/icon/icon";
 
-export class SVGPathItem extends SVGItem {
+export class PathModel extends SVGModel {
   getIcon() {
     return icon.edit;
   }
@@ -11,7 +11,7 @@ export class SVGPathItem extends SVGItem {
     return super.getDefaultObject({
       itemType: "svg-path",
       name: "New Path",
-      "stroke-width": 1,
+      strokeWidth: 1,
       d: "", // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다.
       totalLength: 0,
       ...obj,
@@ -28,9 +28,9 @@ export class SVGPathItem extends SVGItem {
     if (this.hasChangedField("d")) {
       // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다.
       // 이때 width, height 를 같이 해둬야 한다.
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.d);
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
 
       // this.modelManager.setChanged('resetCache', this.id, { path: this.cachePath, width: this.cacheWidth, height: this.cacheHeight });
     }
@@ -42,17 +42,14 @@ export class SVGPathItem extends SVGItem {
     super.refreshMatrixCache();
 
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.d);
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     } else if (this.hasChangedField("width", "height")) {
-      this.json.d = this.cachePath
+      this.d = this.cachePath
         .clone()
-        .scale(
-          this.json.width / this.cacheWidth,
-          this.json.height / this.cacheHeight
-        ).d;
-      this.modelManager.setChanged("reset", this.id, { d: this.json.d });
+        .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+      this.modelManager.setChanged("reset", this.id, { d: this.d });
     }
 
     // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })
@@ -61,36 +58,37 @@ export class SVGPathItem extends SVGItem {
   setCache() {
     super.setCache();
 
-    this.cachePath = new PathParser(this.json.d);
-    this.cacheWidth = this.json.width;
-    this.cacheHeight = this.json.height;
+    this.cachePath = new PathParser(this.get("d"));
+    this.cacheWidth = this.width;
+    this.cacheHeight = this.height;
   }
 
   get d() {
-    if (!this.json.d) {
+    if (!this.get("d")) {
       return null;
     }
 
     if (!this.cachePath) {
-      this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width;
-      this.cacheHeight = this.json.height;
+      this.cachePath = new PathParser(this.get("d"));
+      this.cacheWidth = this.width;
+      this.cacheHeight = this.height;
     }
 
     return this.cachePath
       .clone()
-      .scale(
-        this.json.width / this.cacheWidth,
-        this.json.height / this.cacheHeight
-      ).d;
+      .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      d: this.json.d,
-    };
+  set d(value) {
+    this.set("d", value);
   }
+
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     d: this.d,
+  //   };
+  // }
 
   getDefaultTitle() {
     return "Path";

@@ -48,7 +48,7 @@ export default class SVGTextProperty extends BaseProperty {
         ${createComponent("SelectIconEditor", {
           ref: "$text-anchor",
           label: this.$i18n("svg.text.property.anchor"),
-          key: "text-anchor",
+          key: "textAnchor",
           options: ["start", "middle", "end"],
           onchange: "changeTextValue",
         })}

@@ -78,10 +78,10 @@ export default class FlexLayoutEditor extends EditorElement {
 
     if (!current) return "";
 
-    const realPaddingTop = Math.min(current["padding-top"] || 0, 50);
-    const realPaddingLeft = Math.min(current["padding-left"] || 0, 50);
-    const realPaddingRight = Math.min(current["padding-right"] || 0, 50);
-    const realPaddingBottom = Math.min(current["padding-bottom"] || 0, 50);
+    const realPaddingTop = Math.min(current.paddingTop || 0, 50);
+    const realPaddingLeft = Math.min(current.paddingLeft || 0, 50);
+    const realPaddingRight = Math.min(current.paddingRight || 0, 50);
+    const realPaddingBottom = Math.min(current.paddingBottom || 0, 50);
 
     const padding = `padding-top:${realPaddingTop}px;padding-left: ${realPaddingLeft}px;padding-right:${realPaddingRight}px;padding-bottom: ${realPaddingBottom}px;`;
 
@@ -118,7 +118,7 @@ export default class FlexLayoutEditor extends EditorElement {
                           label: iconUse("padding"),
                           key: "padding",
                           ref: "$padding",
-                          value: current["padding-top"],
+                          value: current.paddingTop,
                           min: 0,
                           max: 100,
                           step: 1,
@@ -147,16 +147,16 @@ export default class FlexLayoutEditor extends EditorElement {
                 <div>
                     <div class="flex-group-padding">            
                         <div class="padding-top" style="height: ${
-                          current["padding-top"]
+                          current.paddingTop
                         }px"></div>
                         <div class="padding-left" style="width: ${
-                          current["padding-left"]
+                          current.paddingLeft
                         }px"></div>
                         <div class="padding-right" style="width: ${
-                          current["padding-right"]
+                          current.paddingRight
                         }px"></div>
                         <div class="padding-bottom" style="height: ${
-                          current["padding-bottom"]
+                          current.paddingBottom
                         }px"></div>
                     </div>
                     <div class="flex-group" style="
@@ -284,10 +284,10 @@ export default class FlexLayoutEditor extends EditorElement {
     );
 
     this.modifyData(key, {
-      "padding-top": value,
-      "padding-left": value,
-      "padding-right": value,
-      "padding-bottom": value,
+      paddingTop: value,
+      paddingLeft: value,
+      paddingRight: value,
+      paddingBottom: value,
     });
 
     this.refresh();

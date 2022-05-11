@@ -21,7 +21,7 @@ export class PopupManager extends EditorElement {
         {createComponent("ProjectWindow")}
         {createComponent("ShortcutWindow")}
         {createComponent("NotificationView")}
-        {this.$injectManager.generate("popup")}
+        {this.$injectManager.generate("popup", true)}
       </div>
     );
   }

@@ -10,7 +10,7 @@ export class CircleLayer extends LayerModel {
     return super.getDefaultObject({
       itemType: "circle",
       name: "New Circle",
-      "border-radius": "100%",
+      borderRadius: "100%",
       ...obj,
     });
   }

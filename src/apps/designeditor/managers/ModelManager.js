@@ -82,30 +82,30 @@ export class ModelManager {
     const parent = this.getParent(id);
 
     // 오른쪽 id 가 있다면 그 전으로 위치
-    if (!obj.removedLeftSibling && obj.removedRightSibling) {
+    if (!obj.get("removedLeftSibling") && obj.get("removedRightSibling")) {
       parent.children.splice(
-        parent.children.findIndex(() => obj.removedRightSibling) - 1,
+        parent.children.findIndex(() => obj.get("removedRightSibling")) - 1,
         0,
         id
       );
     }
     // 왼쪽 id 가 있다면 그 뒤로 위치
-    else if (obj.removedLeftSibling && !obj.removedRightSibling) {
+    else if (obj.get("removedLeftSibling") && !obj.get("removedRightSibling")) {
       parent.children.splice(
-        parent.children.findIndex(() => obj.removedLeftSibling) + 1,
+        parent.children.findIndex(() => obj.get("removedLeftSibling")) + 1,
         0,
         id
       );
     }
     // 둘다 아니면 index 에 위치
     else {
-      parent.children.splice(obj.removedIndex, 0, id);
+      parent.children.splice(obj.get("removedIndex"), 0, id);
     }
 
-    delete obj.removed;
-    delete obj.removedLeftSibling;
-    delete obj.removedRightSibling;
-    delete obj.removedIndex;
+    obj.removeField("removed");
+    obj.removeField("removedLeftSibling");
+    obj.removeField("removedRightSibling");
+    obj.removeField("removedIndex");
 
     this.setChanged("recover", id);
   }
@@ -376,10 +376,10 @@ export class ModelManager {
     return results;
   }
 
-  getLayers(rootId, defaultRef = null) {
-    const obj = this.get(rootId) || defaultRef;
+  getLayers(rootId) {
+    const obj = this.get(rootId);
 
-    return obj?.children?.map((childId) => this.get(childId));
+    return obj?.children?.map((childId) => this.get(childId)) || [];
   }
 
   eachLayers(rootId, callback) {
@@ -536,18 +536,6 @@ export class ModelManager {
   reset(rootId, obj) {
     return this.get(rootId)?.reset(obj);
   }
-
-  //   appendChild(rootId, childId) {
-  //     const obj = this.get(rootId);
-  //     const child = this.get(childId);
-
-  //     // 아이디가 없는 경우 다시 아이디 넣어주기
-  //     this.json.children.push(layer.id);
-
-  //     // 다시 넣는다면 offset 도 지정을 다시 해야함
-  //     layer.offsetInParent = this.json.children[last - 1].offset + 0.1;
-  //   }
-
   /**
    * 모델을 특정 itemType 의 인스턴스로 만들어준다.
    *

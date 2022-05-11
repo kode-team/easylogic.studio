@@ -1,4 +1,4 @@
-import { clone, isNotUndefined, isUndefined, Dom } from "sapa";
+import { isNotUndefined, isUndefined, Dom } from "sapa";
 
 import { createTimingFunction } from "../interpolate/index";
 import { createInterpolateFunction } from "../interpolate/interpolate-functions";
@@ -8,6 +8,8 @@ import { uuidShort } from "elf/core/math";
 import { second, timecode, framesToTimecode } from "elf/core/time";
 
 export class TimelineModel extends AssetModel {
+  #compiledTimeline = [];
+
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       timeline: [
@@ -36,6 +38,14 @@ export class TimelineModel extends AssetModel {
     });
   }
 
+  get timeline() {
+    return this.get("timeline");
+  }
+
+  set timeline(value) {
+    this.set("timeline", value);
+  }
+
   expectJSON(key) {
     if (key === "compiledTimeline") return false;
 
@@ -56,7 +66,7 @@ export class TimelineModel extends AssetModel {
   compileAll() {
     var timeline = this.getSelectedTimeline();
 
-    this.json.compiledTimeline = {};
+    this.#compiledTimeline = {};
     if (timeline) {
       timeline.animations.forEach((animation) => {
         animation.properties.forEach((property) => {
@@ -90,7 +100,7 @@ export class TimelineModel extends AssetModel {
   }
 
   getCompiledTimingFunction(layerId, property) {
-    return this.json.compiledTimeline[`${layerId}.${property}`];
+    return this.#compiledTimeline[`${layerId}.${property}`];
   }
 
   compiledTimingFunction(layerId, property) {
@@ -99,13 +109,13 @@ export class TimelineModel extends AssetModel {
     var layer = this.modelManager.get(layerId);
     var key = `${layerId}.${property}`;
     if (p.keyframes.length === 1) {
-      this.json.compiledTimeline[key] = [];
+      this.#compiledTimeline[key] = [];
       return;
     }
 
     let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
     let editorString = p.keyframes.map((it) => it.editor)[0];
-    this.json.compiledTimeline[key] = p.keyframes
+    this.#compiledTimeline[key] = p.keyframes
       .map((offset, index) => {
         var currentOffset = offset;
         var nextOffset = p.keyframes[index + 1];
@@ -211,7 +221,7 @@ export class TimelineModel extends AssetModel {
   }
 
   getSelectedTimeline() {
-    var timeline = this.json.timeline;
+    var timeline = this.timeline;
 
     var a = timeline.filter((it) => it.selected);
 
@@ -288,7 +298,7 @@ export class TimelineModel extends AssetModel {
   }
 
   setTimelineTitle(id, text) {
-    var timeline = this.json.timeline.find((it) => {
+    var timeline = this.timeline.find((it) => {
       return it.id === id;
     });
 
@@ -299,17 +309,17 @@ export class TimelineModel extends AssetModel {
 
   selectTimeline(id) {
     if (id) {
-      this.json.timeline.forEach((it) => {
+      this.timeline.forEach((it) => {
         it.selected = it.id === id;
       });
     } else {
-      var selectedTimeline = this.json.timeline.filter((it) => it.selected);
+      var selectedTimeline = this.timeline.filter((it) => it.selected);
 
       if (selectedTimeline.length) {
         // NOOP
       } else {
-        if (this.json.timeline.length) {
-          this.json.timeline.selected = true;
+        if (this.timeline.length) {
+          this.timeline.selected = true;
         }
       }
     }
@@ -318,12 +328,12 @@ export class TimelineModel extends AssetModel {
   }
 
   removeAnimation(id) {
-    this.json.timeline = this.json.timeline.filter((it) => {
+    this.timeline = this.timeline.filter((it) => {
       return it.id !== id;
     });
 
-    if (this.json.timeline.length) {
-      this.json.timeline[0].selected = true;
+    if (this.timeline.length) {
+      this.timeline[0].selected = true;
     }
 
     this.compileAll();
@@ -337,7 +347,7 @@ export class TimelineModel extends AssetModel {
       ...this.getTimelineLayerInfo(fps, endTimecode),
       animations: [],
     };
-    this.json.timeline.push(selectedTimeline);
+    this.timeline.push(selectedTimeline);
 
     this.selectTimeline(id);
 
@@ -729,10 +739,10 @@ export class TimelineModel extends AssetModel {
     }
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      timeline: clone(this.json.timeline),
-    };
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     timeline: clone(this.timeline),
+  //   };
+  // }
 }

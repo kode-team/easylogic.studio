@@ -102,7 +102,7 @@ export function makeInterpolateOffsetPath(
   return (rate, t, timing) => {
     // apply tranform-origin in real time
 
-    var arr = (layer["transform-origin"] || "50% 50%")
+    var arr = (layer.transformOrigin || "50% 50% 0px")
       .split(" ")
       .map((it) => Length.parse(it));
     var tx = arr[0].toPx(layer.width);

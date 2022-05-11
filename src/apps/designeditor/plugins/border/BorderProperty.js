@@ -23,7 +23,7 @@ export default class BorderProperty extends BaseProperty {
 
   [LOAD("$body")]() {
     var current = this.$context.selection.current || {};
-    var value = current["border"] || "";
+    var value = current.border || "";
 
     return createComponent("BorderEditor", {
       ref: "$1",
