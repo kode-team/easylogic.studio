@@ -14,7 +14,7 @@ export class SVGTextItem extends SVGModel {
       totalLength: 0,
       fill: "rgba(0, 0, 0, 1)",
       text: "Insert a text",
-      "fontWeight": Length.number(100),
+      fontWeight: Length.number(100),
       textLength: Length.em(0),
       lengthAdjust: "spacingAndGlyphs",
       ...obj,

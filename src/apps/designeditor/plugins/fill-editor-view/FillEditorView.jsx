@@ -8,6 +8,7 @@ import {
   POINTEROUT,
   POINTERSTART,
   SUBSCRIBE,
+  DEBOUNCE,
 } from "sapa";
 
 import "./FillEditorView.scss";
@@ -33,7 +34,6 @@ import {
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 import { parseOneValue } from "elf/utils/css-function-parser";
-import { DEBOUNCE } from "../../../../sapa";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
