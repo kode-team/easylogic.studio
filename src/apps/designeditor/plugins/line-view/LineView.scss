@@ -1,0 +1,55 @@
+.elf--line-view {
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  .horizontal-line {
+    position: absolute;
+    left: -1px;
+    top: 0px;
+    bottom: 0px;
+    width: 3px;
+    // background-color: var(--elf--selected-color);
+    cursor: ew-resize;
+    pointer-events: all;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0px;
+      bottom: 0px;
+      width: 1px;
+      transform: translateX(-50%);
+      background-color: var(--elf--selected-color);
+      pointer-events: none;      
+    }    
+  }
+
+  .vertical-line {
+    position: absolute;
+    top: -1px;
+    left: 0px;
+    right: 0px;
+    height: 3px;
+    // background-color: var(--elf--selected-color);
+    cursor: ns-resize;
+    pointer-events: all;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0px;
+      right: 0px;
+      height: 1px;
+      transform: translateY(-50%);
+      background-color: var(--elf--selected-color);
+      pointer-events: none;
+    }
+  }
+}
+

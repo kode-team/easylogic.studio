@@ -1,0 +1,19 @@
+.elf--toolbar-menu-item {
+
+    height: 100%;
+    padding: 10px !important;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;    
+
+    &:hover {
+        background-color: black;
+    }
+
+    &[data-selected="true"] {
+        background-color: var(--elf--selected-color-2);
+        color: var(--elf--selected-font-color);
+    }
+}

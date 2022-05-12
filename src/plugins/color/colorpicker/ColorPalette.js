@@ -1,21 +1,20 @@
+import { POINTERSTART, BIND } from "sapa";
 
-import { POINTERSTART, BIND } from "el/sapa/Event";
-import { Length } from "el/editor/unit/Length";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { END, MOVE } from "el/editor/types/event";
+// import { Length } from "elf/editor/unit/Length";
+import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class ColorPalette extends EditorElement {
-
   initState() {
     return {
-      hueColor:'rgba(0, 0, 0, 1)',
-      s:0,
-      v:0
-    }
+      hueColor: "rgba(0, 0, 0, 1)",
+      s: 0,
+      v: 0,
+    };
   }
 
   template() {
-    return /*html*/`
+    return /*html*/ `
         <div class="color-panel">
             <div ref="$saturation" class="saturation">
                 <div ref="$value" class="value">
@@ -30,17 +29,16 @@ export default class ColorPalette extends EditorElement {
     this.rect = this.$el.rect();
   }
 
-  [BIND('$el')] () {
+  [BIND("$el")]() {
     return {
       style: {
-        'background-color': this.state.hueColor
-      }
-    }
+        "background-color": this.state.hueColor,
+      },
+    };
   }
 
-  [BIND('$drag_pointer')] () {
-
-    if (this.rect.width === 0) {
+  [BIND("$drag_pointer")]() {
+    if (!this.rect || this.rect.width === 0) {
       this.rect = this.$el.rect();
     }
 
@@ -48,40 +46,39 @@ export default class ColorPalette extends EditorElement {
     const y = this.rect.height * (1 - this.state.v);
 
     return {
-      style : {
+      style: {
         left: x,
         top: y,
-      }
-    }
+      },
+    };
   }
 
-  [POINTERSTART('$el') + MOVE('movePointer') + END('moveEndPointer')] (e) {
+  [POINTERSTART("$el") + MOVE("movePointer") + END("moveEndPointer")]() {
     this.rect = this.$el.rect();
 
     this.refreshColorUI();
   }
 
-  movePointer () {
+  movePointer() {
     this.refreshColorUI();
   }
 
-  moveEndPointer () {
-    this.parent.changeEndColor()
+  moveEndPointer() {
+    this.parent.changeEndColor();
   }
 
-  refreshColorUI () {
-
-    const e = this.$config.get('bodyEvent') 
+  refreshColorUI() {
+    const e = this.$config.get("bodyEvent");
     const minX = this.rect.left;
     const maxX = this.rect.right;
     const minY = this.rect.top;
     const maxY = this.rect.bottom;
 
-    const currentX = Math.min(maxX, Math.max(minX, e.clientX))
-    const currentY = Math.min(maxY, Math.max(minY, e.clientY))
+    const currentX = Math.min(maxX, Math.max(minX, e.clientX));
+    const currentY = Math.min(maxY, Math.max(minY, e.clientY));
 
-    const width = maxX- minX;
-    const height = maxY - minY; 
+    const width = maxX - minX;
+    const height = maxY - minY;
 
     var s = (currentX - minX) / width;
     var v = (height - (currentY - minY)) / height;
@@ -89,14 +86,15 @@ export default class ColorPalette extends EditorElement {
     this.parent.changeColor({
       type: "hsv",
       s,
-      v
+      v,
     });
-
   }
 
   setValue(s, v, hueColor) {
     this.setState({
-      s, v, hueColor
-    })
+      s,
+      v,
+      hueColor,
+    });
   }
 }

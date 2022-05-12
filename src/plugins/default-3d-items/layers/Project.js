@@ -1,13 +1,12 @@
-
 import { mat4 } from "gl-matrix";
-import { calculateMatrix } from "el/utils/math";
-import { itemsToRectVerties } from "el/utils/collision";
-import { TimelineModel } from "el/editor/model/TimelineModel";
+
+import { itemsToRectVerties } from "elf/core/collision";
+import { calculateMatrix } from "elf/core/math";
+import { TimelineModel } from "elf/editor/model/TimelineModel";
 
 const identity = mat4.create();
 
 export class Project extends TimelineModel {
-
   getDefaultTitle() {
     return "New Project";
   }
@@ -25,12 +24,15 @@ export class Project extends TimelineModel {
   }
 
   toRootVariableCSS() {
-    var obj = {}
-    this.json.rootVariable.split(';').filter(it => it.trim()).forEach(it => {
-      var [key, value] = it.split(':')
+    var obj = {};
+    this.rootVariable
+      .split(";")
+      .filter((it) => it.trim())
+      .forEach((it) => {
+        var [key, value] = it.split(":");
 
-      obj[`--${key}`] = value;
-    })
+        obj[`--${key}`] = value;
+      });
 
     return obj;
   }
@@ -38,22 +40,22 @@ export class Project extends TimelineModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "project",
-      name: 'new Project',
-      description: '',
-      rootVariable: '',
-      ...obj
+      name: "new Project",
+      description: "",
+      rootVariable: "",
+      ...obj,
     });
   }
 
-  toCloneObject() {
-    return {
-      ...super.toCloneObject(),
-      ...this.attrs('name', 'description', 'rootVariable')
-    }
-  }
+  // toCloneObject() {
+  //   return {
+  //     ...super.toCloneObject(),
+  //     ...this.attrs("name", "description", "rootVariable"),
+  //   };
+  // }
 
   get artboards() {
-    return (this.layers || []).filter(it => it.is('artboard'));
+    return (this.layers || []).filter((it) => it.is("artboard"));
   }
 
   get offsetX() {
@@ -63,7 +65,6 @@ export class Project extends TimelineModel {
   get offsetY() {
     return 0;
   }
-
 
   get screenWidth() {
     return 0;
@@ -89,23 +90,22 @@ export class Project extends TimelineModel {
     return mat4.create();
   }
   /**
-   * 부모를 기준으로 childItem 의 transform 을 맞춘다. 
-   * 
-   * [newParentInverse] * [childMatrix] * [childItemMatrixInverse] = translate; 
-   * 
-   * @param {Item} childItem 
+   * 부모를 기준으로 childItem 의 transform 을 맞춘다.
+   *
+   * [newParentInverse] * [childMatrix] * [childItemMatrixInverse] = translate;
+   *
+   * @param {Item} childItem
    */
   resetMatrix(childItem) {
-
-    const [x, y] = mat4.getTranslation([], calculateMatrix(
-      childItem.absoluteMatrix,
-      childItem.localMatrixInverse
-    ));
+    const [x, y] = mat4.getTranslation(
+      [],
+      calculateMatrix(childItem.absoluteMatrix, childItem.localMatrixInverse)
+    );
 
     childItem.reset({
       x: x,
       y: y,
-    })
+    });
   }
 
   get rectVerties() {
@@ -125,8 +125,7 @@ export class Project extends TimelineModel {
       left: 0,
       top: 0,
       width: 0,
-      height: 0
-    }
+      height: 0,
+    };
   }
-
 }

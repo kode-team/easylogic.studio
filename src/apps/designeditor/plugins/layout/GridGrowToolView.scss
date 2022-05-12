@@ -1,0 +1,268 @@
+.elf--grid-grow-tool-view {
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  --cell-size: 20px;
+  --cell-padding-size: 6px;
+  --cell-color: rgb(255, 66, 77);
+  --cell-grid-item-color: gray;
+
+
+  &[data-drag-target-item="true"] {
+    .grid-item-tool {
+      visibility: hidden;
+    }
+  }
+
+  &[data-grid-layout-own="false"] {
+    .grid-item-tool {
+      opacity: 0;
+      transition: opacity 0.2s linear;
+      &.selected,
+      &:hover {
+
+        opacity: 1;
+      }
+    }
+  }  
+
+  .layout-pointer {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      display: inline-block;
+      background-color: black;
+      color: white;
+      padding:2px 4px;
+      border-radius: 4px;
+      transform: translateX(-50%);
+  }
+
+  .layout-rect {
+    position: absolute;
+    // background-color: rgba(255, 255, 0, 0.1);
+
+    .grid-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      border: 1px dashed var(--cell-grid-item-color);
+    }
+
+    .grid-item-tool.column {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      position: relative;
+      top: calc(var(--cell-size) * -1 - var(--cell-padding-size));
+      left: 1px;
+      height: var(--cell-size);
+      overflow: hidden;
+
+      .grid-item-tool-inner {
+        > .item {
+          position: relative;
+          overflow: hidden;
+          > span {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left :0px;
+            right: 0px;
+            display: flex;
+            pointer-events: none;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+        .drag-handle {
+          height: 100%;
+          width: 14px;
+
+          &.left {
+            left: 2px;
+          }
+
+          &.right {
+            width: 40px;
+            right: 2px;
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            > * {
+              position: relative;
+              width: var(--cell-size);
+              height: var(--cell-size);
+              pointer-events: all;
+
+              &:hover {
+                filter: drop-shadow(0px 0px 1px black);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .grid-item-tool.row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      position: relative;
+      left: calc(var(--cell-size) * -1 - var(--cell-padding-size));
+      width: var(--cell-size);
+      overflow: hidden;
+      cursor: ns-resize;
+      padding-top: 1px;
+      padding-bottom: 1px;
+
+      .grid-item-tool-inner {
+        .item {
+          transform: rotate(-90deg);
+        }
+
+        .drag-handle {
+          height: 40px;
+          width: 100%;
+
+          &.top {
+            top: 0px;
+          }
+
+          &.bottom {
+            bottom: 2px;
+            cursor: pointer;
+
+            > * {
+              height: 20px;
+              position: relative;
+            }
+
+            &:hover {
+              filter: drop-shadow(0px 0px 1px black);
+            }
+          }
+        }
+      }
+    }
+
+    .grid-item-tool {
+      pointer-events: all;
+      color: var(--elf--selected-font-color);
+      cursor: ew-resize;
+      // opacity: 0;
+      // transition: opacity 0.2s linear;
+      // &:hover {
+      //   opacity: 1;
+      // }
+
+
+      svg {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 16px !important;
+        height: 16px !important;
+
+        path,
+        use {
+          fill: currentColor;
+        }
+      }
+
+      &.append {
+        position: absolute;
+        width: var(--cell-size);
+        height: var(--cell-size);
+        background-color: var(--cell-color);
+        border-radius: 2px;
+        cursor: pointer;
+
+        &.column-plus {
+          right: calc(-1 * var(--cell-size) - var(--cell-padding-size));
+          top: calc(-1 * var(--cell-size) - var(--cell-padding-size));
+        }
+
+        &.row-plus {
+          left: calc(-1 * var(--cell-size) - var(--cell-padding-size));
+          bottom: calc(-1 * var(--cell-size) - var(--cell-padding-size));
+        }
+      }
+
+      &.row {
+        .grid-item-tool-inner {
+          flex-direction: column; 
+
+          .drag-handle.bottom {
+            display: inline-block;
+            > * {
+              display: block;
+            }
+          }
+        }
+      }
+
+      .grid-item-tool-inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background-color: var(--cell-color);
+        display: flex;
+        border-radius: 2px;
+        margin-left: 1px;
+        margin-right: 1px;
+        box-sizing: border-box;
+        pointer-events: all;
+
+        .item {
+            flex: 1 1 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+              background-color: var(--elf--selected-color);
+            }
+        }
+
+        .drag-handle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .gap-tool {
+    pointer-events: all;
+    cursor: ew-resize;
+    position: absolute;
+    opacity: 0;
+
+    &.row-gap {
+        cursor: ns-resize;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+    // background-color: rgba(255, 0, 0, 0.1);
+    background-image: repeating-linear-gradient(
+      135deg,
+      #606cbc00,
+      #606cbc00 6px,
+      var(--cell-color) 6px,
+      var(--cell-color) 7px
+    );
+  }
+}

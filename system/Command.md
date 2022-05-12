@@ -7,7 +7,7 @@
 
 에디터에서 사용되는 커맨드 목록은 아래 위치를 참고하세요. 
 
-src/el/editor/commands/command_list
+src/elf/editor/commands/command_list
 
 ## 커맨드 정의 
 
@@ -17,7 +17,7 @@ src/el/editor/commands/command_list
 export default {
     command: 'zoom.in',
     execute: function (editor) {
-        editor.viewport.zoomIn(0.02);
+        editor.context.viewport.zoomIn(0.02);
 
     }
 }
@@ -31,25 +31,25 @@ export default {
 
 ```js
 export default {
-    command : 'history.setAttributeForMulti',
+    command : 'history.setAttribute',
     execute: function (editor, message, multiAttrs = {}, context = {origin: '*'}) {
 
-        editor.emit('setAttributeForMulti', multiAttrs, context)
+        editor.context.commands.emit('setAttribute', multiAttrs, context)
 
-        editor.history.add(message, this, {
+        editor.context.history.add(message, this, {
             currentValues: [multiAttrs],
-            undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
+            undoValues: editor.context.history.getUndoValues(multiAttrs)
         })
 
         editor.nextTick(() =>  {
-          editor.history.saveSelection()  
+          editor.context.history.saveSelection()  
         })        
     },
 
     redo: function (editor, {currentValues}) {
-        editor.emit('setAttributeForMulti', ...currentValues)
+        editor.context.commands.emit('setAttribute', ...currentValues)
         editor.nextTick(() => {
-            editor.selection.reselect();            
+            editor.context.selection.reselect();            
             editor.emit('refreshAll');         
         })
 
@@ -57,12 +57,12 @@ export default {
 
     undo: function (editor, { undoValues }) {
         const ids = Object.keys(undoValues)
-        const items = editor.selection.itemsByIds(ids)
+        const items = editor.context.selection.itemsByIds(ids)
 
         items.forEach(item => {
             item.reset(undoValues[item.id]);
         })
-        editor.selection.reselect();
+        editor.context.selection.reselect();
 
         editor.nextTick(() => {
             editor.emit('refreshAll');
@@ -79,11 +79,11 @@ editor 객체의 emit 메소드를 통해서 특정 커맨드를 실행합니다
 ```js
 
 // command 내에서 실행 
-editor.emit('zoom.in')
+editor.context.commands.emit('zoom.in')
 
 // UI 에서 실행 
 
-this.$editor.emit('zoom.in');
+this.$commands.emit('zoom.in');
 
 ```
 

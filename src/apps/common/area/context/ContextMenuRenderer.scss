@@ -1,0 +1,16 @@
+.elf--context-menu-renderer {
+
+    > * {
+        display: block !important;
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        height: 100%;
+    }
+
+    .elf--toolbar-menu-item:hover {
+        background-color: var(--elf--selected-color);
+        color: white !important;
+    }
+}

@@ -1,0 +1,60 @@
+.elf--horizontal-ruler {
+  position: absolute;
+  top: 0px;
+  left: var(--elf--editor-ruler-size);
+  right: 0px;
+  height: var(--elf--editor-ruler-size);
+  background-color: var(--elf--background-color);
+  z-index: 0;
+
+  .horizontal-ruler-container {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    svg.lines {
+      path {
+        fill: var(--elf--selected-hover-color);
+        stroke: transparent;
+      }
+    }
+
+    svg.horizontal-line {
+      path {
+        stroke: var(--elf--selected-color);
+      }
+    }
+
+    .cursor {
+      --elf--horizontal-cursor-position: 0px;
+      height: 100%;
+      width: 2px;
+      background-color: var(--elf--selected-color-2);
+      transform: translateX(var(--elf--horizontal-cursor-position)) translateZ(0) translateY(-1px);
+    }
+  }
+  svg {
+    transform: translateY(2px);
+    text {
+      text-anchor: middle;
+      fill: var(--elf--font-color);
+      font-size: 8px;
+    }
+
+    path {
+      stroke: var(--elf--font-color);
+
+      &[data-selected="true"] {
+        stroke: transparent;
+      }
+
+      &[data-mouse="true"] {
+        stroke: var(--elf--selected-color);
+        stroke-width: 2;
+      }
+    }
+  }
+}

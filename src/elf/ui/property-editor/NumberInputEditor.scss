@@ -1,0 +1,108 @@
+.elf--number-input-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    // grid-column-gap: 4px;
+    height: var(--elf--input-height);
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    padding: 4px 4px;
+    border-radius: 1px;
+
+    &.focused {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;        
+        box-shadow: 0 0 0 1px var(--elf--selected-color);
+    }
+
+    &.drag {
+        box-shadow: 0 0 0 1px var(--elf--selected-color-2);
+    }
+
+    &:hover:not(.focused):not(.drag) {
+        box-shadow: 0 0 0 1px var(--elf--input-border-color);
+    }
+
+
+    &.has-label {
+        grid-template-columns: 60px 1fr;
+
+        &.compact {
+            grid-template-columns: 30px 1fr;
+        }
+
+        &.mini {
+            grid-template-columns: 10px 1fr;
+        }
+
+
+        &.wide {
+            grid-template-columns: 1fr 1fr;
+
+            .range--editor-type {
+                .area {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }        
+
+
+        label {
+            text-align: left;
+            vertical-align: middle;
+            padding: 2px 4px 2px 0px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            cursor: ew-resize;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        &.block {
+            display: block;
+
+            label {
+                display: block; 
+            }
+        }
+    }
+
+    .range--editor-type {
+        vertical-align: middle;
+        height: 100%;
+        .area {
+            display: grid; 
+            grid-template-columns: 1fr;
+            grid-column-gap: 3px;
+            height: 100%;
+            
+            span {
+                padding: 1px;
+                
+                vertical-align: middle;
+            }
+
+            input {
+                width: 100%;
+                padding-left: 2px;
+                background-color: transparent;
+                border:0px;
+                appearance: none;
+                -moz-appearance: textfield;
+
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                  appearance: none;
+                  margin: 0;
+                }
+                
+            }
+        }
+    }
+}

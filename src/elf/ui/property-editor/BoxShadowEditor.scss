@@ -1,0 +1,73 @@
+@import 'style/mixins.scss';
+
+.elf--box-shadow-editor {
+  grid-template-columns: 1fr !important;
+  margin-bottom: 10px;
+  margin-left: -6px;
+
+  .label {
+    height: 20px;
+    margin-top: 2px;
+
+    &.hide {
+      display: none;
+    }
+
+    label {
+      font-size: 12px;
+      padding-left: 5px;
+      vertical-align: middle;
+   
+    }
+  }
+
+  .tools {
+      vertical-align: middle;
+      text-align: right;
+      float:right;
+
+    select {
+      width: 100px !important;
+      display: inline-block ;
+    }
+  }
+
+
+  .shadow-item {
+    display: grid;
+    grid-template-columns: 20px 1fr 30px;
+    grid-column-gap: 2px;
+    text-align: center;
+    // margin-top: 5px;
+    // font-size: 12px;
+
+    .shadow-content {
+      display: grid;
+      grid-template-columns: 60px 1fr 1fr;
+      grid-template-rows: auto;
+    }
+
+    > label {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+
+    &.desc {
+      color: var(--elf--font-color);
+      .color {
+        visibility: hidden;
+      }
+    }
+    .tools {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: var(--elf--input-inactive-color);
+      }
+    }
+  }
+}

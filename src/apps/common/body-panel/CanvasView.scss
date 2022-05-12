@@ -1,0 +1,33 @@
+.elf--page-container {
+    position: absolute;
+    top: 0px;  
+    left: 0px;  
+    right: 0px;
+    bottom: 0px;
+    pointer-events: all;
+    outline: none;
+    background-color: white; 
+    touch-action: pinch-zoom;
+    z-index: 1;
+  }
+  
+  
+  .page-view {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    background-color: var(--elf--canvas-background-color);
+  
+    .page-lock {
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      top: 0px;
+      overflow: hidden;
+    }
+  
+  }
+  
