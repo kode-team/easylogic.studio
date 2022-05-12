@@ -30578,26 +30578,20 @@ class BackgroundImagePositionPopup extends BasePopup {
     this.emit(this.state.changeEvent, opt, this.state.params);
   }
   templateForSize() {
-    return `
-      <div>
-        ${createComponent("SelectEditor", {
+    return createComponent("SelectEditor", {
       label: this.$i18n("background.image.position.popup.size"),
       ref: "$size",
       key: "size",
       value: this.state.size,
       options: ["contain", "cover", "auto"],
       onchange: "changeRangeEditor"
-    })}
-      </div>
-    `;
+    });
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
     this.updateData({ [key]: value });
   }
   templateForX() {
-    return `
-      <div>
-        ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "X",
       compact: true,
       ref: "$x",
@@ -30607,14 +30601,10 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 1e3,
       step: 1,
       onchange: "changeRangeEditor"
-    })}
-      </div>
-    `;
+    });
   }
   templateForY() {
-    return `
-      <div >
-      ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "Y",
       compact: true,
       ref: "$y",
@@ -30624,14 +30614,10 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 1e3,
       step: 1,
       onchange: "changeRangeEditor"
-    })}      
-      </div>
-    `;
+    });
   }
   templateForWidth() {
-    return `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "W",
       compact: true,
       ref: "$width",
@@ -30641,14 +30627,10 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor"
-    })}          
-    </div>
-    `;
+    });
   }
   templateForHeight() {
-    return `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "H",
       compact: true,
       ref: "$height",
@@ -30658,10 +30640,7 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor"
-    })}              
-      />
-    </div>
-    `;
+    });
   }
   templateForRepeat() {
     return `
@@ -45091,7 +45070,7 @@ class SVGTextItem extends SVGModel {
       totalLength: 0,
       fill: "rgba(0, 0, 0, 1)",
       text: "Insert a text",
-      "fontWeight": Length.number(100),
+      fontWeight: Length.number(100),
       textLength: Length.em(0),
       lengthAdjust: "spacingAndGlyphs"
     }, obj2));

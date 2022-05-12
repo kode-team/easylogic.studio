@@ -28,18 +28,14 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   }
 
   templateForSize() {
-    return /*html*/ `
-      <div>
-        ${createComponent("SelectEditor", {
-          label: this.$i18n("background.image.position.popup.size"),
-          ref: "$size",
-          key: "size",
-          value: this.state.size,
-          options: ["contain", "cover", "auto"],
-          onchange: "changeRangeEditor",
-        })}
-      </div>
-    `;
+    return createComponent("SelectEditor", {
+      label: this.$i18n("background.image.position.popup.size"),
+      ref: "$size",
+      key: "size",
+      value: this.state.size,
+      options: ["contain", "cover", "auto"],
+      onchange: "changeRangeEditor",
+    });
   }
 
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
@@ -47,45 +43,35 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   }
 
   templateForX() {
-    return /*html*/ `
-      <div>
-        ${createComponent("InputRangeEditor", {
-          label: "X",
-          compact: true,
-          ref: "$x",
-          key: "x",
-          value: this.state.x,
-          min: -1000,
-          max: 1000,
-          step: 1,
-          onchange: "changeRangeEditor",
-        })}
-      </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: "X",
+      compact: true,
+      ref: "$x",
+      key: "x",
+      value: this.state.x,
+      min: -1000,
+      max: 1000,
+      step: 1,
+      onchange: "changeRangeEditor",
+    });
   }
 
   templateForY() {
-    return /*html*/ `
-      <div >
-      ${createComponent("InputRangeEditor", {
-        label: "Y",
-        compact: true,
-        ref: "$y",
-        key: "y",
-        value: this.state.y,
-        min: -1000,
-        max: 1000,
-        step: 1,
-        onchange: "changeRangeEditor",
-      })}      
-      </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: "Y",
+      compact: true,
+      ref: "$y",
+      key: "y",
+      value: this.state.y,
+      min: -1000,
+      max: 1000,
+      step: 1,
+      onchange: "changeRangeEditor",
+    });
   }
 
   templateForWidth() {
-    return /*html*/ `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "W",
       compact: true,
       ref: "$width",
@@ -95,15 +81,11 @@ export default class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor",
-    })}          
-    </div>
-    `;
+    });
   }
 
   templateForHeight() {
-    return /*html*/ `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "H",
       compact: true,
       ref: "$height",
@@ -113,10 +95,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor",
-    })}              
-      />
-    </div>
-    `;
+    });
   }
 
   templateForRepeat() {
