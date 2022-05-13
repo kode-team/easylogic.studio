@@ -1,11 +1,11 @@
 import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF, createComponent } from "sapa";
 
+import polygon from "../../preset/clip-path/polygon";
 import "./ClipPathProperty.scss";
 
 import { vertiesToRectangle } from "elf/core/collision";
 import { PathParser } from "elf/core/parser/PathParser";
 import icon, { iconUse } from "elf/editor/icon/icon";
-import polygon from "elf/editor/preset/clip-path/polygon";
 import { ClipPath } from "elf/editor/property-parser/ClipPath";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { ClipPathType } from "elf/editor/types/model";

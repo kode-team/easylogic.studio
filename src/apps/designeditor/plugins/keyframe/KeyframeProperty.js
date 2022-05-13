@@ -3,7 +3,6 @@ import { LOAD, CLICK, PREVENT, DEBOUNCE, SUBSCRIBE } from "sapa";
 import "./KeyframeProperty.scss";
 
 import icon from "elf/editor/icon/icon";
-import { Keyframe } from "elf/editor/property-parser/Keyframe";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
@@ -145,12 +144,7 @@ export default class KeyframeProperty extends BaseProperty {
 
     if (!current) return "";
 
-    var keyframes = current.keyframe
-      ? Keyframe.parseStyle(current)
-      : current.keyframes;
-
-    current.keyframe = "";
-    current.keyframes = keyframes;
+    var keyframes = current.keyframes || [];
 
     return keyframes.map((keyframe, index) => {
       return this.makeKeyframeTemplate(keyframe, index);

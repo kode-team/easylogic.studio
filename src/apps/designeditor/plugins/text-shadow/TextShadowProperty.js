@@ -1,9 +1,9 @@
 import { LOAD, CLICK, SUBSCRIBE, IF, DEBOUNCE, createComponent } from "sapa";
 
+import textShadow from "../../preset/text-shadow";
 import "./TextShadowProperty.scss";
 
 import icon from "elf/editor/icon/icon";
-import textShadow from "elf/editor/preset/text-shadow";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 

@@ -85,174 +85,149 @@ export default class FlexLayoutEditor extends EditorElement {
 
     const padding = `padding-top:${realPaddingTop}px;padding-left: ${realPaddingLeft}px;padding-right:${realPaddingRight}px;padding-bottom: ${realPaddingBottom}px;`;
 
-    return /*html*/ `
-            <div class='flex-layout-item'>
-                <div class="grid-2">
-                    <div>
-                        ${createComponent("SelectIconEditor", {
-                          key: "flex-direction",
-                          ref: "$flexDirection",
-                          value:
-                            this.state["flex-direction"] || FlexDirection.ROW,
-                          options: this.directionOptions,
-                          icons: ["east", "south"],
-                          onchange: "changeKeyValue",
-                        })}
-                    </div>
-                    <div>
-                        ${createComponent("NumberInputEditor", {
-                          compact: true,
-                          ref: "$flex-gap",
-                          label: iconUse("space"),
-                          key: "gap",
-                          value: this.state.gap,
-                          min: 0,
-                          max: 100,
-                          step: 1,
-                          onchange: "changeKeyValue",
-                        })}
-                    </div>
-                    <div>
-                        ${createComponent("NumberInputEditor", {
-                          compact: true,
-                          label: iconUse("padding"),
-                          key: "padding",
-                          ref: "$padding",
-                          value: current.paddingTop,
-                          min: 0,
-                          max: 100,
-                          step: 1,
-                          onchange: "changePadding",
-                        })}
-                    </div>
+    return /*html*/ `<div class='flex-layout-item'><div class="grid-2"><div>${createComponent(
+      "SelectIconEditor",
+      {
+        key: "flex-direction",
+        ref: "$flexDirection",
+        value: this.state["flex-direction"] || FlexDirection.ROW,
+        options: this.directionOptions,
+        icons: ["east", "south"],
+        onchange: "changeKeyValue",
+      }
+    )}</div><div>${createComponent("NumberInputEditor", {
+      compact: true,
+      ref: "$flex-gap",
+      label: iconUse("space"),
+      key: "gap",
+      value: this.state.gap,
+      min: 0,
+      max: 100,
+      step: 1,
+      onchange: "changeKeyValue",
+    })}</div><div>${createComponent("NumberInputEditor", {
+      compact: true,
+      label: iconUse("padding"),
+      key: "padding",
+      ref: "$padding",
+      value: current.paddingTop,
+      min: 0,
+      max: 100,
+      step: 1,
+      onchange: "changePadding",
+    })}</div><div>${createComponent("ToggleButton", {
+      compact: true,
+      key: "flex-wrap",
+      ref: "$wrap",
+      checkedValue: "wrap",
+      value: this.state["flex-wrap"] || FlexWrap.NOWRAP,
+      toggleLabels: [iconUse("wrap"), iconUse("wrap")],
+      toggleValues: [FlexWrap.NOWRAP, FlexWrap.WRAP],
+      onchange: "changeKeyValue",
+    })}</div></div></div>
+  <div class="select-flex-direction">
+      <div>
+          <div class="flex-group-padding">            
+              <div class="padding-top" style="height: ${
+                current.paddingTop
+              }px"></div>
+              <div class="padding-left" style="width: ${
+                current.paddingLeft
+              }px"></div>
+              <div class="padding-right" style="width: ${
+                current.paddingRight
+              }px"></div>
+              <div class="padding-bottom" style="height: ${
+                current.paddingBottom
+              }px"></div>
+          </div>
+          <div class="flex-group" style="
+                  --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                  --flex-group-padding: ${realPaddingTop}px;
+                  ${padding};
+                  flex-direction: ${this.state["flex-direction"]};
+                  flex-wrap: ${this.state["flex-wrap"]};
+                  justify-content:${this.state["justify-content"]};
+                  align-items: ${this.state["align-items"]};
+                  align-content:${this.state["align-content"]};
+          ">
+              ${[1, 2, 3]
+                .map(() => {
+                  return /*html*/ `
+                      <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
+                          <div class="flex-direction-item" data-index="1"></div>
+                          <div class="flex-direction-item" data-index="2"></div>
+                          <div class="flex-direction-item" data-index="3"></div>
+                      </div>
+                  `;
+                })
+                .join("\n")}
+          </div>
+          <div class="flex-group-tool"  style="${padding};">
+              <div class="tool-area"  
+                  data-direction="${this.state["flex-direction"]}"  
+                  data-justify-content="${this.state["justify-content"]}"
+                  data-align-items="${this.state["align-items"]}"
+                  data-align-content="${
+                    this.state["align-content"]
+                  }"                            
+                  style="
+                      --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                      --flex-group-padding: ${realPaddingTop}px;
+                  "
+              >
+                  <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-items="flex-start"></div>
+                  <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-items="flex-start"></div>
+                  <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-items="flex-start"></div>
+                  <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-items="center"></div>
+                  <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-items="center"></div>
+                  <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-items="center"></div>
+                  <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-items="flex-end"></div>
+                  <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-items="flex-end"></div>
+                  <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-items="flex-end"></div>                            
+              </div>
+          </div>
+      </div>
+  </div>
 
-
-                    <div>
-                        ${createComponent("ToggleButton", {
-                          compact: true,
-                          key: "flex-wrap",
-                          ref: "$wrap",
-                          checkedValue: "wrap",
-                          value: this.state["flex-wrap"] || FlexWrap.NOWRAP,
-                          toggleLabels: [iconUse("wrap"), iconUse("wrap")],
-                          toggleValues: [FlexWrap.NOWRAP, FlexWrap.WRAP],
-                          onchange: "changeKeyValue",
-                        })}
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="select-flex-direction">
-                <div>
-                    <div class="flex-group-padding">            
-                        <div class="padding-top" style="height: ${
-                          current.paddingTop
-                        }px"></div>
-                        <div class="padding-left" style="width: ${
-                          current.paddingLeft
-                        }px"></div>
-                        <div class="padding-right" style="width: ${
-                          current.paddingRight
-                        }px"></div>
-                        <div class="padding-bottom" style="height: ${
-                          current.paddingBottom
-                        }px"></div>
-                    </div>
-                    <div class="flex-group" style="
-                            --flex-group-gap: ${Math.floor(
-                              this.state["gap"] / 10
-                            )}px;
-                            --flex-group-padding: ${realPaddingTop}px;
-                            ${padding};
-                            flex-direction: ${this.state["flex-direction"]};
-                            flex-wrap: ${this.state["flex-wrap"]};
-                            justify-content:${this.state["justify-content"]};
-                            align-items: ${this.state["align-items"]};
-                            align-content:${this.state["align-content"]};
-                    ">
-                        ${[1, 2, 3]
-                          .map(() => {
-                            return /*html*/ `
-                                <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
-                                    <div class="flex-direction-item" data-index="1"></div>
-                                    <div class="flex-direction-item" data-index="2"></div>
-                                    <div class="flex-direction-item" data-index="3"></div>
-                                </div>
-                            `;
-                          })
-                          .join("\n")}
-                    </div>
-                    <div class="flex-group-tool"  style="${padding};">
-                        <div class="tool-area"  
-                            data-direction="${this.state["flex-direction"]}"  
-                            data-justify-content="${
-                              this.state["justify-content"]
-                            }"
-                            data-align-items="${this.state["align-items"]}"
-                            data-align-content="${
-                              this.state["align-content"]
-                            }"                            
-                            style="
-                                --flex-group-gap: ${Math.floor(
-                                  this.state["gap"] / 10
-                                )}px;
-                                --flex-group-padding: ${realPaddingTop}px;
-                            "
-                        >
-                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-items="flex-start"></div>
-                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-items="flex-start"></div>
-                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-items="flex-start"></div>
-                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-items="center"></div>
-                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-items="center"></div>
-                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-items="center"></div>
-                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-items="flex-end"></div>
-                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-items="flex-end"></div>
-                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-items="flex-end"></div>                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n(
-                  "flex.layout.editor.justify-content"
-                )}</div>
-                ${createComponent("SelectIconEditor", {
-                  key: "justify-content",
-                  ref: "$justify",
-                  value:
-                    this.state["justify-content"] || JustifyContent.FLEX_START,
-                  options: this.justifyContentOptions,
-                  icons: [
-                    "start",
-                    "end",
-                    "horizontal_align_center",
-                    "horizontal_distribute",
-                    "justify_content_space_around",
-                  ],
-                  onchange: "changeKeyValue",
-                })}
-            </div>
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n(
-                  "flex.layout.editor.align-items"
-                )}</div>            
-                ${createComponent("SelectIconEditor", {
-                  key: "align-items",
-                  ref: "$alignItems",
-                  value: this.state["align-items"] || AlignItems.FLEX_START,
-                  options: this.alignItemsOptions,
-                  icons: [
-                    "vertical_align_top",
-                    "vertical_align_bottom",
-                    "vertical_align_center",
-                    "vertical_align_baseline",
-                    "vertical_align_stretch",
-                  ],
-                  onchange: "changeKeyValue",
-                })}
-            </div>
+  <div class='flex-layout-item'>
+      <div class="title">${this.$i18n(
+        "flex.layout.editor.justify-content"
+      )}</div>
+      ${createComponent("SelectIconEditor", {
+        key: "justify-content",
+        ref: "$justify",
+        value: this.state["justify-content"] || JustifyContent.FLEX_START,
+        options: this.justifyContentOptions,
+        icons: [
+          "start",
+          "end",
+          "horizontal_align_center",
+          "horizontal_distribute",
+          "justify_content_space_around",
+        ],
+        onchange: "changeKeyValue",
+      })}
+  </div>
+  <div class='flex-layout-item'>
+      <div class="title">${this.$i18n(
+        "flex.layout.editor.align-items"
+      )}</div>            
+      ${createComponent("SelectIconEditor", {
+        key: "align-items",
+        ref: "$alignItems",
+        value: this.state["align-items"] || AlignItems.FLEX_START,
+        options: this.alignItemsOptions,
+        icons: [
+          "vertical_align_top",
+          "vertical_align_bottom",
+          "vertical_align_center",
+          "vertical_align_baseline",
+          "vertical_align_stretch",
+        ],
+        onchange: "changeKeyValue",
+      })}
+  </div>
         `;
   }
 

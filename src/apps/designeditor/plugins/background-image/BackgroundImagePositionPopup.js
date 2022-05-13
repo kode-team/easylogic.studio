@@ -1,12 +1,23 @@
-import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
+import {
+  CLICK,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+  DOMDIFF,
+} from "sapa";
 
 import "./BackgroundImagePositionPopup.scss";
 
 import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class BackgroundImagePositionPopup extends BasePopup {
+  get localeKey() {
+    return "background.image.position.popup";
+  }
+
   getTitle() {
-    return this.$i18n("background.image.position.popup.title");
+    return this.$i18n("title");
   }
 
   initState() {
@@ -29,7 +40,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForSize() {
     return createComponent("SelectEditor", {
-      label: this.$i18n("background.image.position.popup.size"),
+      label: this.$i18n("size"),
       ref: "$size",
       key: "size",
       value: this.state.size,
@@ -101,26 +112,26 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForRepeat() {
     return /*html*/ `
     <div class='grid'>
-      <label>${this.$i18n("background.image.position.popup.repeat")}</label>
+      <label>${this.$i18n("repeat")}</label>
     </div>
     <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
         <button type="button" value='no-repeat' title="${this.$i18n(
-          "background.image.position.popup.type.no-repeat"
+          "type.no-repeat"
         )}"></button>
         <button type="button" value='repeat' title="${this.$i18n(
-          "background.image.position.popup.type.repeat"
+          "type.repeat"
         )}"></button>
         <button type="button" value='repeat-x' title="${this.$i18n(
-          "background.image.position.popup.type.repeat-x"
+          "type.repeat-x"
         )}"></button>
         <button type="button" value='repeat-y' title="${this.$i18n(
-          "background.image.position.popup.type.repeat-y"
+          "type.repeat-y"
         )}"></button>
         <button type="button" value='space' title="${this.$i18n(
-          "background.image.position.popup.type.space"
+          "type.space"
         )}"></button>
         <button type="button" value='round' title="${this.$i18n(
-          "background.image.position.popup.type.round"
+          "type.round"
         )}"></button>
     </div>
     `;
@@ -137,7 +148,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     `;
   }
 
-  [LOAD("$picker")]() {
+  [LOAD("$picker") + DOMDIFF]() {
     return /*html*/ `
       
       <div class='box'>

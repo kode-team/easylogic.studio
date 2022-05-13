@@ -1,9 +1,9 @@
 import { CLICK, DEBOUNCE, IF, LOAD, SUBSCRIBE, createComponent } from "sapa";
 
+import boxShadow from "../../preset/box-shadow";
 import "./BoxShadowProperty.scss";
 
 import icon from "elf/editor/icon/icon";
-import boxShadow from "elf/editor/preset/box-shadow";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 

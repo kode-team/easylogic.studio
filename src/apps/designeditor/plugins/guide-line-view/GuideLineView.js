@@ -45,90 +45,54 @@ const vLineByPoint = (target, source) => {
 };
 
 const rect = (rectVerties) => {
-  return /*html*/ `
-    <path 
-        class="base-rect"
-        fill="none"
-        stroke-width="1"
-        stroke="red"
-        stroke-dasharray="2 2"
-        d="${
-          PathParser.makeRect(
-            rectVerties[0][0],
-            rectVerties[0][1],
-            vec3.dist(rectVerties[0], rectVerties[1]),
-            vec3.dist(rectVerties[0], rectVerties[3])
-          ).d
-        }
-        " 
-    />
-`;
+  return /*html*/ `<path class="base-rect" fill="none" stroke-width="1" stroke="red" stroke-dasharray="2 2" d="${
+    PathParser.makeRect(
+      rectVerties[0][0],
+      rectVerties[0][1],
+      vec3.dist(rectVerties[0], rectVerties[1]),
+      vec3.dist(rectVerties[0], rectVerties[3])
+    ).d
+  }" />`;
 };
 
 const point = (target, dist = 3, direction = "left") => {
   if (direction === "left") {
-    return /*html*/ `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] + dist} ${target[1] - dist}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist} ${target[1] + dist}
-            " 
-        />
-    `;
+    return /*html*/ `<path class="arrow" d="M ${target[0] + dist} ${
+      target[1] - dist
+    } L ${target[0]} ${target[1]} L ${target[0] + dist} ${
+      target[1] + dist
+    } "/>`;
   }
 
   if (direction === "right") {
-    return /*html*/ `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist} ${target[1] - dist}
-                L ${target[0]} ${target[1]}
-                L ${target[0] - dist} ${target[1] + dist}
-            " 
-        />
-    `;
+    return /*html*/ `<path class="arrow" d=" M ${target[0] - dist} ${
+      target[1] - dist
+    } L ${target[0]} ${target[1]} L ${target[0] - dist} ${
+      target[1] + dist
+    }" />`;
   }
 
   if (direction === "up") {
-    return /*html*/ `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist} ${target[1] + dist}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist} ${target[1] + dist}
-            " 
-        />
-    `;
+    return /*html*/ `<path class="arrow" d=" M ${target[0] - dist} ${
+      target[1] + dist
+    } L ${target[0]} ${target[1]} L ${target[0] + dist} ${
+      target[1] + dist
+    }" />`;
   }
 
   if (direction === "down") {
-    return /*html*/ `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist} ${target[1] - dist}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist} ${target[1] - dist}
-            " 
-        />
-    `;
+    return /*html*/ `<path class="arrow" d=" M ${target[0] - dist} ${
+      target[1] - dist
+    } L ${target[0]} ${target[1]} L ${target[0] + dist} ${
+      target[1] - dist
+    }" />`;
   }
 
-  return /*html*/ `
-        <path 
-            stroke-width="1"
-            d="
-                M ${target[0] - dist} ${target[1] - dist}
-                L ${target[0] + dist} ${target[1] + dist}
-                M ${target[0] - dist} ${target[1] + dist}
-                L ${target[0] + dist} ${target[1] - dist}
-            " 
-        />
-    `;
+  return /*html*/ `<path stroke-width="1" d=" M ${target[0] - dist} ${
+    target[1] - dist
+  } L ${target[0] + dist} ${target[1] + dist} M ${target[0] - dist} ${
+    target[1] + dist
+  } L ${target[0] + dist} ${target[1] - dist}" />`;
 };
 
 /**
@@ -136,10 +100,7 @@ const point = (target, dist = 3, direction = "left") => {
  */
 export default class GuideLineView extends EditorElement {
   template() {
-    return /*html*/ `
-            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" >
-            </svg>
-            `;
+    return /*html*/ `<svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>`;
   }
 
   initState() {
@@ -398,7 +359,7 @@ export default class GuideLineView extends EditorElement {
   }
 
   [SUBSCRIBE(UPDATE_CANVAS)]() {
-    if (this.$context.selection.isMany) return;
+    // if (this.$context.selection.isMany) return;
 
     const expect = this.$context.selection.hasChangedField("d", "clip-path");
 

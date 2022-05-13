@@ -31,13 +31,7 @@ export default class ImageSelectPopup extends BasePopup {
   }
 
   getBody() {
-    return /*html*/ `
-      <div class="elf--image-select-popup">
-        <div class='box' ref='$imageBox'>
-          
-        </div>
-      </div>
-    `;
+    return /*html*/ `<div class="elf--image-select-popup"><div class='box' ref='$imageBox'></div></div>`;
   }
 
   [LOAD("$imageBox") + DOMDIFF]() {

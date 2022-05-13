@@ -278,20 +278,24 @@ export default class DomRender extends ItemRender {
   }
 
   /**
+   * border 정보 캐슁하기
    *
    * @param {Item} item
    */
   toBorderCSS(item) {
-    const obj = {
-      // 'border-top': Length.px(item['border-top'] || 0),
-      // 'border-left': Length.px(item['border-left'] || 0),
-      // 'border-right': Length.px(item['border-right'] || 0),
-      // 'border-botom': Length.px(item['border-bottom'] || 0),
-      // border: item['border']
-      ...STRING_TO_CSS(item.border),
-    };
+    const borderCSS = item.computed("border", (border) => {
+      const obj = {
+        // 'border-top': Length.px(item['border-top'] || 0),
+        // 'border-left': Length.px(item['border-left'] || 0),
+        // 'border-right': Length.px(item['border-right'] || 0),
+        // 'border-botom': Length.px(item['border-bottom'] || 0),
+        // border: item['border']
+        ...STRING_TO_CSS(border),
+      };
+      return obj;
+    });
 
-    return obj;
+    return borderCSS;
   }
 
   toBoxModelCSS(item) {

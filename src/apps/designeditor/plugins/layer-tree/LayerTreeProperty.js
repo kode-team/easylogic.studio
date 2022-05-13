@@ -178,41 +178,30 @@ export default class LayerTreeProperty extends BaseProperty {
       const lock = this.$lockManager.get(layer.id);
       const visible = this.$visibleManager.get(layer.id);
 
-      data[data.length] = /*html*/ `        
-        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${
+      data[
+        data.length
+      ] = /*html*/ `<div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${
         layer.layout
-      }' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
-          <div class='detail'>
-            <label data-layout-title='${title}' style='padding-left: ${Length.px(
+      }' data-layer-id='${
+        layer.id
+      }' data-is-hide="${isHide}"  draggable="true"><div class='detail'><label data-layout-title='${title}' style='padding-left: ${Length.px(
         depthPadding
-      )}' > 
-              <div class='folder ${layer.collapsed ? "collapsed" : ""}'>${
+      )}' ><div class='folder ${layer.collapsed ? "collapsed" : ""}'>${
         hasChildren ? iconUse("arrow_right") : ""
-      }</div>
-              <span class='icon' data-item-type="${
-                layer.itemType
-              }">${this.getIcon(layer)}</span> 
-              <span class='name'>${name}</span>
-            </label>
-            <div class="tools">
-              <button type="button" class="lock" data-lock="${lock}" title='Lock'>${
+      }</div><span class='icon' data-item-type="${
+        layer.itemType
+      }">${this.getIcon(
+        layer
+      )}</span><span class='name'>${name}</span></label><div class="tools"><button type="button" class="lock" data-lock="${lock}" title='Lock'>${
         lock ? iconUse("lock") : iconUse("lock_open")
-      }</button>
-              <button type="button" class="visible" data-visible="${visible}" title='Visible'>${iconUse(
+      }</button><button type="button" class="visible" data-visible="${visible}" title='Visible'>${iconUse(
         "visible"
-      )}</button>
-              <button type="button" class="remove" title='Remove'>${iconUse(
-                "remove2"
-              )}</button>                          
-            </div>
-          </div>
-        </div>
-
-        ${this.makeLayerList(layer, depth + 1)}
-      `;
+      )}</button><button type="button" class="remove" title='Remove'>${iconUse(
+        "remove2"
+      )}</button></div></div></div>${this.makeLayerList(layer, depth + 1)}`;
     }
 
-    return data.join(" ");
+    return data.join("");
   }
 
   [SUBSCRIBE("refreshContent")]() {

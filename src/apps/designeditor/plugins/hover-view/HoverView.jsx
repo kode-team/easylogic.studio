@@ -255,9 +255,8 @@ export default class HoverView extends EditorElement {
 
     pointers = pointers.filter((_, index) => index < 4);
 
-    return /*html*/ `
-        <svg overflow="visible">
-            <path class='line' d="${vertiesToPath(pointers)}" />
-        </svg>`;
+    return /*html*/ `<svg overflow="visible"><path class='line' d="${vertiesToPath(
+      pointers
+    )}" /></svg>`;
   }
 }

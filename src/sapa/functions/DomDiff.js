@@ -41,6 +41,8 @@ const updateProp = (node, name, newValue, oldValue) => {
     removeProp(node, name, oldValue);
   } else if (!oldValue || newValue !== oldValue) {
     setProp(node, name, newValue);
+  } else {
+    // console.log(node, name, newValue, oldValue, "noop");
   }
 };
 
@@ -105,6 +107,7 @@ function getProps(attributes) {
 }
 
 function updateElement(parentElement, oldEl, newEl, i, options = {}) {
+  // console.log(parentElement, oldEl, newEl, i, options);
   if (!oldEl) {
     parentElement.appendChild(newEl.cloneNode(true));
   } else if (!newEl) {
@@ -186,7 +189,16 @@ export function DomDiff(A, B, options = {}) {
   var childrenB = children(B);
 
   var len = Math.max(childrenA.length, childrenB.length);
-  for (var i = 0; i < len; i++) {
-    updateElement(A, childrenA[i], childrenB[i], i, options);
+  if (len === 0) {
+    return;
+  }
+
+  if (childrenA.length === 0 && childrenB.length > 0) {
+    // B 에서 모든 자식을 A 에 추가한다.
+    A.append(...childrenB);
+  } else {
+    for (var i = 0; i < len; i++) {
+      updateElement(A, childrenA[i], childrenB[i], i, options);
+    }
   }
 }

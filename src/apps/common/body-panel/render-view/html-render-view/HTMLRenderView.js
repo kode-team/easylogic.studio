@@ -11,6 +11,7 @@ import {
   CONFIG,
   Dom,
   isFunction,
+  isArray,
   // createComponent,
   CONTEXTMENU,
   PREVENT,
@@ -424,6 +425,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   calculateFirstMovedElement() {
+    this.emit("hideSelectionToolView");
     this.emit("moveFirstGhostToolView");
   }
 
@@ -467,6 +469,7 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y"));
+    // this.emit(REFRESH_SELECTION_TOOL);
   }
 
   /**
@@ -564,18 +567,25 @@ export default class HTMLRenderView extends EditorElement {
       });
     }
 
-    this.emit(REFRESH_SELECTION_TOOL);
+    this.emit(REFRESH_SELECTION);
     this.$config.set("editing.mode.itemType", "select");
   }
 
   refreshSelectionStyleView(obj) {
+    let target = [];
     if (obj) {
-      this.updateElement(obj);
+      if (isArray(obj)) {
+        target = obj;
+      } else {
+        target = [obj];
+      }
     } else {
-      this.$context.selection.items.forEach((current) => {
-        this.updateElement(current);
-      });
+      target = this.$context.selection.items;
     }
+
+    target.forEach((current) => {
+      this.updateElement(current);
+    });
   }
 
   updateElement(item) {

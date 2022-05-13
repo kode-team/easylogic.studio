@@ -114,12 +114,11 @@ export default class SelectIconEditor extends EditorElement {
         css["background-color"] = color;
       }
 
-      return /*html*/ `
-                <div class='select-icon-item ${selected} ${iconClass}' 
-                    style='${CSS_TO_STRING(css)}' 
-                    data-value="${value}" 
-                    data-tooltip='${title}'
-                >${label}</div>`;
+      return /*html*/ `<div class='select-icon-item ${selected} ${iconClass}' 
+          style='${CSS_TO_STRING(css)}' 
+          data-value="${value}" 
+          data-tooltip='${title}'
+      >${label}</div>`;
     });
   }
 
