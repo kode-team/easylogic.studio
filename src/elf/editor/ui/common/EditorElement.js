@@ -59,6 +59,26 @@ export class EditorElement extends UIElement {
     return this.$context.store || this.parent.$store;
   }
 
+  /**
+   * local을 심플하게 가지고 올 수 있도록 key 를 미리 지정한다.
+   */
+  get localeKey() {
+    return "";
+  }
+
+  /**
+   * localKey 를 기반으로 메세지 키를 생성한다.
+   *
+   * @param {string} key
+   * @returns
+   */
+  getMessageKey(key) {
+    if (this.localeKey) {
+      return `${this.localeKey}.${key}`;
+    }
+    return key;
+  }
+
   // editor utility
 
   /**
@@ -68,11 +88,11 @@ export class EditorElement extends UIElement {
    * @returns {string} i18n 텍스트
    */
   $i18n(key, params = {}, locale) {
-    return this.$editor.getI18nMessage(key, params, locale);
+    return this.$editor.getI18nMessage(this.getMessageKey(key), params, locale);
   }
 
   $initI18n(key) {
-    return this.$editor.initI18nMessage(key);
+    return this.$editor.initI18nMessage(this.getMessageKey(key));
   }
 
   get $config() {

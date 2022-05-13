@@ -11,16 +11,13 @@ export default class ArtBoardRender extends DomRender {
   render(item, renderer) {
     var { id } = item;
 
-    return /*html*/ `    
-      <div class="element-item artboard" data-id="${id}">
-        ${this.toDefString(item)}
-        ${item.layers
-          .map((it) => {
-            return renderer.render(it, renderer);
-          })
-          .join("\n\t")}
-      </div>
-    `;
+    return /*html*/ `<div class="element-item artboard" data-id="${id}">${this.toDefString(
+      item
+    )}${item.layers
+      .map((it) => {
+        return renderer.render(it, renderer);
+      })
+      .join("\n\t")}</div>`;
   }
 
   /**

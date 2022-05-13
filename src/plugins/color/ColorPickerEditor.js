@@ -150,6 +150,7 @@ export default class ColorPickerEditor extends EditorElement {
                 ${createComponent("ColorInformation", {
                   ref: "$information",
                 })}                
+                ${this.$context.injectManager.generate("colorpicker")}
                 ${createComponent("ColorAssetsEditor", {
                   ref: "$colorAsset",
                   key: "colorAssets",

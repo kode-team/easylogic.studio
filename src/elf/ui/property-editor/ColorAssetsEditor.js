@@ -1,8 +1,8 @@
 import { LOAD, CLICK, SUBSCRIBE, createComponent } from "sapa";
 
+import colors from "../../../apps/designeditor/preset/colors";
 import "./ColorAssetsEditor.scss";
 
-import colors from "elf/editor/preset/colors";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class ColorAssetsEditor extends EditorElement {

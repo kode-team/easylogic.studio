@@ -10,13 +10,6 @@ import {
   clone,
 } from "sapa";
 
-import {
-  REFRESH_SELECTION_TOOL,
-  REFRESH_SELECTION,
-  UPDATE_VIEWPORT,
-  END,
-  MOVE,
-} from "../../../../elf/editor/types/event";
 import "./SelectionView.scss";
 
 import { getRotatePointer, rectToVerties } from "elf/core/collision";
@@ -32,6 +25,13 @@ import {
 } from "elf/core/math";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { ViewModeType } from "elf/editor/types/editor";
+import {
+  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+} from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -854,13 +854,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
       }
     }
 
-    return /*html*/ `
-            <div 
-                class='size-pointer' 
-                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${text}
-            </div>
-        `;
+    return /*html*/ `<div class='size-pointer' style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >${text}</div>`;
   }
 
   createRenderPointers(pointers) {

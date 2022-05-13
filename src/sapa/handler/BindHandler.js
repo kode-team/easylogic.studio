@@ -132,10 +132,8 @@ export default class BindHandler extends BaseHandler {
     // this.destroy();
 
     if (!FunctionMap[this.context.sourceName]) {
-      FunctionMap[this.context.sourceName] = this.context.filterMethodes(
-        "bind",
-        true
-      );
+      FunctionMap[this.context.sourceName] =
+        this.context.filterMethodes("bind");
 
       // this._bindMethods = FunctionMap[this.context.sourceName];
     }
@@ -144,57 +142,6 @@ export default class BindHandler extends BaseHandler {
   getBindMethods() {
     return FunctionMap[this.context.sourceName] || [];
   }
-
-  /**
-   *
-   * dom element 에 지정된 bind 를 바로 실행하는 방법
-   *
-   * ```js
-   * <div ref="$list" bind="${variable(() => {
-   *    style: {
-   *      'background-color': 'red',
-   *      'color': 'white'
-   *    }
-   * })}" />
-   * ```
-   *
-   * @param {string} refName
-   */
-  // async bindLocalValue(refName) {
-  //   let target = this.context.refBindVariables;
-
-  //   if (refName && this.context.refBindVariables[refName]) {
-  //     target = {
-  //       [refName]: this.context.refBindVariables[refName],
-  //     };
-  //   }
-
-  //   await Promise.all(
-  //     Object.values(target).map(async (it) => {
-  //       const refCallback = it.callback;
-  //       let $element = this.context.refs[it.ref];
-
-  //       // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-  //       if ($element) {
-  //         const results = await refCallback.call(this.context);
-
-  //         if (!results) return;
-
-  //         const keys = Object.keys(results);
-  //         for (
-  //           var elementKeyIndex = 0, len = keys.length;
-  //           elementKeyIndex < len;
-  //           elementKeyIndex++
-  //         ) {
-  //           const key = keys[elementKeyIndex];
-  //           const value = results[key];
-
-  //           applyElementAttribute($element, key, value, this.context.isServer);
-  //         }
-  //       }
-  //     })
-  //   );
-  // }
 
   // 어떻게 실행하는게 좋을까?
   // this.runHandle('bind', ...);

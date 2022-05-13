@@ -10,10 +10,10 @@ import {
   createComponent,
 } from "sapa";
 
+import patterns from "../../preset/patterns";
 import "./PatternEditor.scss";
 
 import { iconUse } from "elf/editor/icon/icon";
-import patterns from "elf/editor/preset/patterns";
 import { Pattern } from "elf/editor/property-parser/Pattern";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 

@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _refLoadVariables, _refBindVariables, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
+var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -223,7 +223,8 @@ const updateProp = (node, name, newValue, oldValue) => {
     removeProp(node, name, oldValue);
   } else if (!oldValue || newValue !== oldValue) {
     setProp(node, name, newValue);
-  }
+  } else
+    ;
 };
 const updateProps = (node, newProps = {}, oldProps = {}) => {
   const keyList2 = [];
@@ -298,8 +299,15 @@ function DomDiff(A, B, options2 = {}) {
   var childrenA = children(A);
   var childrenB = children(B);
   var len2 = Math.max(childrenA.length, childrenB.length);
-  for (var i = 0; i < len2; i++) {
-    updateElement(A, childrenA[i], childrenB[i], i, options2);
+  if (len2 === 0) {
+    return;
+  }
+  if (childrenA.length === 0 && childrenB.length > 0) {
+    A.append(...childrenB);
+  } else {
+    for (var i = 0; i < len2; i++) {
+      updateElement(A, childrenA[i], childrenB[i], i, options2);
+    }
   }
 }
 const UUID_REG$1 = /[xy]/g;
@@ -1760,7 +1768,7 @@ const FunctionMap = {};
 class BindHandler extends BaseHandler {
   async initialize() {
     if (!FunctionMap[this.context.sourceName]) {
-      FunctionMap[this.context.sourceName] = this.context.filterMethodes("bind", true);
+      FunctionMap[this.context.sourceName] = this.context.filterMethodes("bind");
     }
   }
   getBindMethods() {
@@ -1805,11 +1813,14 @@ class BindHandler extends BaseHandler {
 }
 class CallbackHandler extends BaseHandler {
   initialize() {
+    var _a, _b;
     this.destroy();
-    if (!this._callbacks || this._callbacks.length === 0) {
+    if (!this._callbacks) {
       this._callbacks = this.context.filterMethodes("callback");
     }
-    this._callbacks.forEach((key) => this.parseCallback(key));
+    if (!((_a = this._bindings) == null ? void 0 : _a.length) && ((_b = this._callbacks) == null ? void 0 : _b.length)) {
+      this._callbacks.forEach((key) => this.parseCallback(key));
+    }
   }
   destroy() {
     if (this.context.notEventRedefine)
@@ -2308,20 +2319,18 @@ class ObserverHandler extends BaseHandler {
   }
 }
 const REFERENCE_PROPERTY = "ref";
-const BIND_PROPERTY = "bind";
-const LOAD_PROPERTY = "load";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = "refclass";
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
+const EMPTY_ARRAY = [];
 const _EventMachine = class {
   constructor(opt, props) {
+    __privateAdd(this, _refreshTimestamp);
     __privateAdd(this, _setProps);
     __privateAdd(this, _getProp);
     __privateAdd(this, _state, {});
     __privateAdd(this, _prevState, {});
-    __privateAdd(this, _refLoadVariables, {});
-    __privateAdd(this, _refBindVariables, {});
     __privateAdd(this, _localTimestamp, 0);
     __privateAdd(this, _loadMethods, void 0);
     __privateAdd(this, _timestamp, void 0);
@@ -2338,11 +2347,8 @@ const _EventMachine = class {
     this.handlers = this.initializeHandler();
     this.initComponents();
   }
-  get refBindVariables() {
-    return __privateGet(this, _refBindVariables);
-  }
   get __timestamp() {
-    return __privateWrapper(this, _localTimestamp)._++;
+    return __privateGet(this, _localTimestamp);
   }
   get timestamp() {
     return __privateGet(this, _timestamp);
@@ -2484,26 +2490,6 @@ const _EventMachine = class {
   }
   afterComponentRendering() {
   }
-  parseLocalMethod($dom, name) {
-    const loadVariable = $dom.attr(LOAD_PROPERTY);
-    const loadVariableRealFunction = getVariable(loadVariable);
-    const bindVariable = $dom.attr(BIND_PROPERTY);
-    const bindVariableRealFunction = getVariable(bindVariable);
-    if (loadVariable && isFunction(loadVariableRealFunction)) {
-      __privateGet(this, _refLoadVariables)[name] = {
-        key: loadVariable,
-        ref: name,
-        callback: loadVariableRealFunction
-      };
-    }
-    if (bindVariable && isFunction(bindVariableRealFunction)) {
-      __privateGet(this, _refBindVariables)[name] = {
-        key: bindVariable,
-        ref: name,
-        callback: bindVariableRealFunction
-      };
-    }
-  }
   parseTemplate(html, isLoad) {
     if (Array.isArray(html)) {
       html = html.join("");
@@ -2641,21 +2627,22 @@ const _EventMachine = class {
   }
   getComponentInfoList($el) {
     if (!$el)
-      return [];
-    const children2 = [];
+      return EMPTY_ARRAY;
     let targets = $el.$$(REF_CLASS_PROPERTY).filter((it) => {
       return it.path().filter((a) => {
         return a.attr(REF_CLASS);
       }).length === 1;
     });
-    targets.forEach(($dom) => {
-      children2.push(this._getComponentInfo($dom));
-    });
-    return children2;
+    if (!targets.length) {
+      return EMPTY_ARRAY;
+    }
+    return targets.map(($dom) => this._getComponentInfo($dom));
   }
   async parseComponent() {
     const $el = this.$el;
     const componentList = this.getComponentInfoList($el);
+    if (!componentList.length)
+      return;
     await Promise.all(componentList.map(async (comp) => {
       if (comp.notUsed) {
         comp.$dom.remove();
@@ -2677,7 +2664,6 @@ const _EventMachine = class {
           child.clean();
         }
       });
-      console.log("clean", this.sourceName);
       this.destroy();
       return true;
     }
@@ -2686,7 +2672,7 @@ const _EventMachine = class {
     this.load();
   }
   async _afterLoad() {
-    this.__timestamp;
+    __privateMethod(this, _refreshTimestamp, refreshTimestamp_fn).call(this);
     this.runHandlers("initialize");
     await this.bindData();
     await this.parseComponent();
@@ -2736,8 +2722,8 @@ const _EventMachine = class {
   eachChildren(callback) {
     if (!isFunction(callback))
       return;
-    keyEach(this.children, (_, Component2) => {
-      callback(Component2);
+    Object.keys(this.children).forEach((key) => {
+      callback(this.children[key]);
     });
   }
   hmr() {
@@ -2754,7 +2740,6 @@ const _EventMachine = class {
     this.render($parent);
   }
   destroy() {
-    console.log(this.sourceName, "destroy");
     this.eachChildren((childComponent) => {
       childComponent.destroy();
     });
@@ -2765,14 +2750,6 @@ const _EventMachine = class {
     this.$el = null;
     this.refs = {};
     this.children = {};
-    Object.values(__privateGet(this, _refLoadVariables)).forEach((ref) => {
-      recoverVariable(ref.key, true);
-    });
-    Object.values(__privateGet(this, _refBindVariables)).forEach((ref) => {
-      recoverVariable(ref.key, true);
-    });
-    __privateSet(this, _refLoadVariables, {});
-    __privateSet(this, _refBindVariables, {});
   }
   collectMethodes(refreshCache = false) {
     if (!__privateGet(this, _cachedMethodList) || refreshCache) {
@@ -2791,8 +2768,6 @@ const _EventMachine = class {
 let EventMachine = _EventMachine;
 _state = new WeakMap();
 _prevState = new WeakMap();
-_refLoadVariables = new WeakMap();
-_refBindVariables = new WeakMap();
 _localTimestamp = new WeakMap();
 _loadMethods = new WeakMap();
 _timestamp = new WeakMap();
@@ -2802,6 +2777,10 @@ _propsKeys = new WeakMap();
 _isServer = new WeakMap();
 _propsKeyList = new WeakMap();
 _prefLoadTemplate = new WeakMap();
+_refreshTimestamp = new WeakSet();
+refreshTimestamp_fn = function() {
+  __privateWrapper(this, _localTimestamp)._++;
+};
 _setProps = new WeakSet();
 setProps_fn = function(props) {
   __privateSet(this, _props, this.checkProps(props));
@@ -2855,8 +2834,8 @@ const _UIElement = class extends EventMachine {
     return newCallback;
   }
   initializeStoreEvent() {
-    if (!__privateGet(this, _subscribes) || __privateGet(this, _subscribes).length == 0) {
-      __privateSet(this, _subscribes, this.filterMethodes("subscribe", true));
+    if (__privateGet(this, _subscribes).length == 0) {
+      __privateSet(this, _subscribes, this.filterMethodes("subscribe"));
       __privateGet(this, _subscribes).forEach((magicMethod) => {
         var _a, _b;
         const events = magicMethod.args.join(" ");
@@ -4373,11 +4352,20 @@ class EditorElement extends UIElement {
   get $store() {
     return this.$context.store || this.parent.$store;
   }
+  get localeKey() {
+    return "";
+  }
+  getMessageKey(key) {
+    if (this.localeKey) {
+      return `${this.localeKey}.${key}`;
+    }
+    return key;
+  }
   $i18n(key, params = {}, locale) {
-    return this.$editor.getI18nMessage(key, params, locale);
+    return this.$editor.getI18nMessage(this.getMessageKey(key), params, locale);
   }
   $initI18n(key) {
-    return this.$editor.initI18nMessage(key);
+    return this.$editor.initI18nMessage(this.getMessageKey(key));
   }
   get $config() {
     return this.$context.config;
@@ -5060,12 +5048,12 @@ var __glob_0_14$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": align_vertical_center
 }, Symbol.toStringTag, { value: "Module" }));
 var align_vertical_top = _icon_template(`<path d="M22,2v2H2V2H22z M7,22h3V6H7V22z M14,16h3V6h-3V16z"/>`);
-var __glob_0_15$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": align_vertical_top
 }, Symbol.toStringTag, { value: "Module" }));
 var alternate = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
-var __glob_0_16$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": alternate
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6360,7 +6348,7 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$6, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$5, "./icon_list/alternate.js": __glob_0_16$5, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119, "./icon_list/layout_flex.js": __glob_0_120, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$6, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$4, "./icon_list/alternate.js": __glob_0_16$4, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$1, "./icon_list/control_point.js": __glob_0_53$1, "./icon_list/copy.js": __glob_0_54$1, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119, "./icon_list/layout_flex.js": __glob_0_120, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
 const obj$3 = {};
 Object.entries(modules$7).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -6401,10 +6389,7 @@ class ToolbarButtonMenuItem extends EditorElement {
     }
   }
   template() {
-    return `
-        <button type="button"  class='elf--toolbar-menu-item' >
-        </button>
-        `;
+    return `<button type="button"  class='elf--toolbar-menu-item' ></button>`;
   }
   [CLICK("$el")]() {
     if (this.props.command) {
@@ -11493,7 +11478,6 @@ class BoxShadowEditor extends EditorElement {
     this.modifyBoxShadow();
   }
 }
-var ColorAssetsEditor$1 = "";
 const colors$k = [
   "#FFF8E1",
   "#FFECB3",
@@ -11949,7 +11933,7 @@ var materialPurple = {
     return colors$5;
   }
 };
-var __glob_0_15$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialPurple
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11979,7 +11963,7 @@ var materialRed = {
     return colors$4;
   }
 };
-var __glob_0_16$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": materialRed
 }, Symbol.toStringTag, { value: "Module" }));
@@ -12298,8 +12282,9 @@ var __glob_0_20$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": random
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$5 = { "./colors_list/material-amber.js": __glob_0_0$5, "./colors_list/material-blue.js": __glob_0_1$5, "./colors_list/material-bluegray.js": __glob_0_2$4, "./colors_list/material-brown.js": __glob_0_3$4, "./colors_list/material-cyan.js": __glob_0_4$4, "./colors_list/material-deeporange.js": __glob_0_5$4, "./colors_list/material-deeppurple.js": __glob_0_6$4, "./colors_list/material-gray.js": __glob_0_7$4, "./colors_list/material-green.js": __glob_0_8$4, "./colors_list/material-indigo.js": __glob_0_9$4, "./colors_list/material-lightblue.js": __glob_0_10$4, "./colors_list/material-lightgreen.js": __glob_0_11$4, "./colors_list/material-lime.js": __glob_0_12$4, "./colors_list/material-orange.js": __glob_0_13$4, "./colors_list/material-pink.js": __glob_0_14$4, "./colors_list/material-purple.js": __glob_0_15$4, "./colors_list/material-red.js": __glob_0_16$4, "./colors_list/material-teal.js": __glob_0_17$3, "./colors_list/material-yellow.js": __glob_0_18$3, "./colors_list/opencolor-gray.js": __glob_0_19$3, "./colors_list/random.js": __glob_0_20$3 };
+const modules$5 = { "./colors_list/material-amber.js": __glob_0_0$5, "./colors_list/material-blue.js": __glob_0_1$5, "./colors_list/material-bluegray.js": __glob_0_2$4, "./colors_list/material-brown.js": __glob_0_3$4, "./colors_list/material-cyan.js": __glob_0_4$4, "./colors_list/material-deeporange.js": __glob_0_5$4, "./colors_list/material-deeppurple.js": __glob_0_6$4, "./colors_list/material-gray.js": __glob_0_7$4, "./colors_list/material-green.js": __glob_0_8$4, "./colors_list/material-indigo.js": __glob_0_9$4, "./colors_list/material-lightblue.js": __glob_0_10$4, "./colors_list/material-lightgreen.js": __glob_0_11$4, "./colors_list/material-lime.js": __glob_0_12$4, "./colors_list/material-orange.js": __glob_0_13$4, "./colors_list/material-pink.js": __glob_0_14$4, "./colors_list/material-purple.js": __glob_0_15$3, "./colors_list/material-red.js": __glob_0_16$3, "./colors_list/material-teal.js": __glob_0_17$3, "./colors_list/material-yellow.js": __glob_0_18$3, "./colors_list/opencolor-gray.js": __glob_0_19$3, "./colors_list/random.js": __glob_0_20$3 };
 var colors = Object.values(modules$5).map((it) => it.default);
+var ColorAssetsEditor$1 = "";
 class ColorAssetsEditor extends EditorElement {
   initState() {
     return {
@@ -21638,12 +21623,11 @@ class SelectIconEditor extends EditorElement {
       if (isSelected && color2) {
         css["background-color"] = color2;
       }
-      return `
-                <div class='select-icon-item ${selected} ${iconClass}' 
-                    style='${CSS_TO_STRING(css)}' 
-                    data-value="${value}" 
-                    data-tooltip='${title2}'
-                >${label}</div>`;
+      return `<div class='select-icon-item ${selected} ${iconClass}' 
+          style='${CSS_TO_STRING(css)}' 
+          data-value="${value}" 
+          data-tooltip='${title2}'
+      >${label}</div>`;
     });
   }
   [CLICK("$options .select-icon-item")](e) {
@@ -22216,45 +22200,13 @@ var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": Console$1
 }, Symbol.toStringTag, { value: "Module" }));
-var clipboard_copy$2 = {
-  command: "clipboard.copy",
-  title: "Copy",
-  description: "Copy",
-  execute: function(editor) {
-    editor.context.clipboard.push({
-      type: ClipboardActionType.COPY,
-      data: editor.context.selection.ids
-    });
-  }
-};
-var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": clipboard_copy$2
-}, Symbol.toStringTag, { value: "Module" }));
-var clipboard_paste$2 = {
-  command: "clipboard.paste",
-  execute: async function(editor) {
-    if (!editor.clipboard.isEmpty) {
-      editor.context.commands.emit("history.clipboard.paste", "paste");
-    } else {
-      var text2 = await window.navigator.clipboard.readText();
-      if (text2) {
-        editor.context.commands.emit("convertPasteText", text2);
-      }
-    }
-  }
-};
-var __glob_0_2$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": clipboard_paste$2
-}, Symbol.toStringTag, { value: "Module" }));
 var history_redo$1 = {
   command: "history.redo",
   execute: function(editor) {
     editor.context.history.redo();
   }
 };
-var __glob_0_3$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_redo$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22264,7 +22216,7 @@ var history_undo$1 = {
     editor.context.history.undo();
   }
 };
-var __glob_0_4$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_undo$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22277,7 +22229,7 @@ var keymap_keydown$1 = {
     }
   }
 };
-var __glob_0_5$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keydown$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22290,7 +22242,7 @@ var keymap_keyup = {
     }
   }
 };
-var __glob_0_6$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keyup
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22303,7 +22255,7 @@ var moveToCenter = {
     }
   }
 };
-var __glob_0_7$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveToCenter
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22313,7 +22265,7 @@ var pop_mode_view = {
     editor.context.modeViewManager.popMode(modeView);
   }
 };
-var __glob_0_8$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": pop_mode_view
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22324,7 +22276,7 @@ var push_mode_view = {
     editor.emit("updateModeView");
   }
 };
-var __glob_0_9$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": push_mode_view
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22335,7 +22287,7 @@ var recoverCursor = {
     editor.context.config.set("editor.cursor.args", []);
   }
 };
-var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": recoverCursor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22346,7 +22298,7 @@ var refreshCursor = {
     editor.context.config.set("editor.cursor.args", args2);
   }
 };
-var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_9$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshCursor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22357,7 +22309,7 @@ var setLocale = {
     editor.emit("changed.locale");
   }
 };
-var __glob_0_12$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setLocale
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22367,7 +22319,7 @@ var toggle_tool_hand = {
     editor.context.config.toggle("set.tool.hand");
   }
 };
-var __glob_0_13$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": toggle_tool_hand
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22377,7 +22329,7 @@ var zoom_default$1 = {
     editor.context.viewport.zoomDefault();
   }
 };
-var __glob_0_14$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_12$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_default$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22387,7 +22339,7 @@ var zoom_in$1 = {
     editor.context.viewport.zoomIn(0.02);
   }
 };
-var __glob_0_15$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_13$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_in$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -22397,11 +22349,11 @@ var zoom_out$1 = {
     editor.context.viewport.zoomOut(0.02);
   }
 };
-var __glob_0_16$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_out$1
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$4 = { "./command_list/Console.js": __glob_0_0$4, "./command_list/clipboard.copy.js": __glob_0_1$4, "./command_list/clipboard.paste.js": __glob_0_2$3, "./command_list/history.redo.js": __glob_0_3$3, "./command_list/history.undo.js": __glob_0_4$3, "./command_list/keymap.keydown.js": __glob_0_5$3, "./command_list/keymap.keyup.js": __glob_0_6$3, "./command_list/moveToCenter.js": __glob_0_7$3, "./command_list/pop.mode.view.js": __glob_0_8$3, "./command_list/push.mode.view.js": __glob_0_9$3, "./command_list/recoverCursor.js": __glob_0_10$3, "./command_list/refreshCursor.js": __glob_0_11$3, "./command_list/setLocale.js": __glob_0_12$3, "./command_list/toggle.tool.hand.js": __glob_0_13$3, "./command_list/zoom.default.js": __glob_0_14$3, "./command_list/zoom.in.js": __glob_0_15$3, "./command_list/zoom.out.js": __glob_0_16$3 };
+const modules$4 = { "./command_list/Console.js": __glob_0_0$4, "./command_list/history.redo.js": __glob_0_1$4, "./command_list/history.undo.js": __glob_0_2$3, "./command_list/keymap.keydown.js": __glob_0_3$3, "./command_list/keymap.keyup.js": __glob_0_4$3, "./command_list/moveToCenter.js": __glob_0_5$3, "./command_list/pop.mode.view.js": __glob_0_6$3, "./command_list/push.mode.view.js": __glob_0_7$3, "./command_list/recoverCursor.js": __glob_0_8$3, "./command_list/refreshCursor.js": __glob_0_9$3, "./command_list/setLocale.js": __glob_0_10$3, "./command_list/toggle.tool.hand.js": __glob_0_11$3, "./command_list/zoom.default.js": __glob_0_12$3, "./command_list/zoom.in.js": __glob_0_13$3, "./command_list/zoom.out.js": __glob_0_14$3 };
 const obj$2 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -25482,6 +25434,7 @@ class ColorPickerEditor extends EditorElement {
                 ${createComponent("ColorInformation", {
       ref: "$information"
     })}                
+                ${this.$context.injectManager.generate("colorpicker")}
                 ${createComponent("ColorAssetsEditor", {
       ref: "$colorAsset",
       key: "colorAssets",
@@ -28843,7 +28796,10 @@ class SnapManager {
       const points = this.getGuidesByPointPoint(sourceVerties, target.guideVerties, dist2);
       guides.push.apply(guides, points);
     });
-    return guides;
+    guides.sort((a, b) => {
+      return a[3] - b[3];
+    });
+    return guides.filter((_, index2) => index2 < 10);
   }
   findGuideOne(sourceVerties) {
     return [this.findGuide(sourceVerties)[0]];
@@ -30559,8 +30515,11 @@ class BackgroundImageEditor extends EditorElement {
 }
 var BackgroundImagePositionPopup$1 = "";
 class BackgroundImagePositionPopup extends BasePopup {
+  get localeKey() {
+    return "background.image.position.popup";
+  }
   getTitle() {
-    return this.$i18n("background.image.position.popup.title");
+    return this.$i18n("title");
   }
   initState() {
     return {
@@ -30578,26 +30537,20 @@ class BackgroundImagePositionPopup extends BasePopup {
     this.emit(this.state.changeEvent, opt, this.state.params);
   }
   templateForSize() {
-    return `
-      <div>
-        ${createComponent("SelectEditor", {
-      label: this.$i18n("background.image.position.popup.size"),
+    return createComponent("SelectEditor", {
+      label: this.$i18n("size"),
       ref: "$size",
       key: "size",
       value: this.state.size,
       options: ["contain", "cover", "auto"],
       onchange: "changeRangeEditor"
-    })}
-      </div>
-    `;
+    });
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
     this.updateData({ [key]: value });
   }
   templateForX() {
-    return `
-      <div>
-        ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "X",
       compact: true,
       ref: "$x",
@@ -30607,14 +30560,10 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 1e3,
       step: 1,
       onchange: "changeRangeEditor"
-    })}
-      </div>
-    `;
+    });
   }
   templateForY() {
-    return `
-      <div >
-      ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "Y",
       compact: true,
       ref: "$y",
@@ -30624,14 +30573,10 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 1e3,
       step: 1,
       onchange: "changeRangeEditor"
-    })}      
-      </div>
-    `;
+    });
   }
   templateForWidth() {
-    return `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "W",
       compact: true,
       ref: "$width",
@@ -30641,14 +30586,10 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor"
-    })}          
-    </div>
-    `;
+    });
   }
   templateForHeight() {
-    return `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "H",
       compact: true,
       ref: "$height",
@@ -30658,23 +30599,20 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor"
-    })}              
-      />
-    </div>
-    `;
+    });
   }
   templateForRepeat() {
     return `
     <div class='grid'>
-      <label>${this.$i18n("background.image.position.popup.repeat")}</label>
+      <label>${this.$i18n("repeat")}</label>
     </div>
     <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
-        <button type="button" value='no-repeat' title="${this.$i18n("background.image.position.popup.type.no-repeat")}"></button>
-        <button type="button" value='repeat' title="${this.$i18n("background.image.position.popup.type.repeat")}"></button>
-        <button type="button" value='repeat-x' title="${this.$i18n("background.image.position.popup.type.repeat-x")}"></button>
-        <button type="button" value='repeat-y' title="${this.$i18n("background.image.position.popup.type.repeat-y")}"></button>
-        <button type="button" value='space' title="${this.$i18n("background.image.position.popup.type.space")}"></button>
-        <button type="button" value='round' title="${this.$i18n("background.image.position.popup.type.round")}"></button>
+        <button type="button" value='no-repeat' title="${this.$i18n("type.no-repeat")}"></button>
+        <button type="button" value='repeat' title="${this.$i18n("type.repeat")}"></button>
+        <button type="button" value='repeat-x' title="${this.$i18n("type.repeat-x")}"></button>
+        <button type="button" value='repeat-y' title="${this.$i18n("type.repeat-y")}"></button>
+        <button type="button" value='space' title="${this.$i18n("type.space")}"></button>
+        <button type="button" value='round' title="${this.$i18n("type.round")}"></button>
     </div>
     `;
   }
@@ -30687,7 +30625,7 @@ class BackgroundImagePositionPopup extends BasePopup {
       <div class="elf--background-image-position-picker" ref='$picker'></div>
     `;
   }
-  [LOAD("$picker")]() {
+  [LOAD("$picker") + DOMDIFF]() {
     return `
       
       <div class='box'>
@@ -31659,7 +31597,6 @@ function boxModel(editor) {
     BoxModelProperty
   });
 }
-var BoxShadowProperty$1 = "";
 var boxShadow$1 = [
   { name: "Box", shadow: `0px 3px 3px 0px rgba(0,0,0,0.2)` },
   {
@@ -31712,6 +31649,7 @@ var boxShadow$1 = [
     `
   }
 ];
+var BoxShadowProperty$1 = "";
 class BoxShadowProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("boxshadow.property.title");
@@ -31762,7 +31700,6 @@ function boxShadow(editor) {
     BoxShadowProperty
   });
 }
-var ClipPathProperty$1 = "";
 var polygon = {
   key: "polygon",
   title: "Polygon",
@@ -31797,6 +31734,7 @@ var polygon = {
     ];
   }
 };
+var ClipPathProperty$1 = "";
 const CLIPPATH_REG = /(content-box|padding-box|border-box|margin-box|view-box|stroke-box|fill-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^)]*)\))?)/gi;
 class ClipPath extends PropertyItem {
   getDefaultObject(obj2 = {}) {
@@ -33513,7 +33451,7 @@ var __glob_0_22$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var clipboard_paste = {
   command: "clipboard.paste",
   execute: async function(editor) {
-    if (!editor.clipboard.isEmpty) {
+    if (!editor.context.clipboard.isEmpty) {
       editor.context.commands.emit("history.clipboard.paste", "paste");
     } else {
       var text2 = await window.navigator.clipboard.readText();
@@ -35478,12 +35416,11 @@ var history_clipboard_paste = {
   description: "paste in clipboard ",
   description_ko: ["\uD074\uB9BD\uBCF4\uB4DC \uB370\uC774\uD0C0\uB97C \uAE30\uC900\uC73C\uB85C paste \uB97C \uC801\uC6A9\uD55C\uB2E4. "],
   execute: async function(editor, message, clipboardData = void 0, hasHistory = true) {
-    const data = clipboardData || editor.clipboard.last;
+    const data = clipboardData || editor.context.clipboard.last;
     if (data.type == ClipboardActionType.COPY) {
       const ids = data.data;
       const items = await editor.json.renderAll(ids.map((it) => editor.get(it)));
       const newIds = [];
-      const length2 = items.length;
       const itemList = {};
       const parentList = {};
       let updateData = {};
@@ -35493,15 +35430,15 @@ var history_clipboard_paste = {
         parentList[sourceItem.parentId] = sourceItem.parent;
         const model = editor.createModel(itemJSON);
         model.renameWithCount();
-        model.absoluteMove([10, 10, 0]);
-        if (length2 === 1) {
-          sourceItem.insertBefore(model);
-        } else {
-          sourceItem.insertAfter(model);
-        }
+        model.absoluteMove([
+          10 / editor.context.viewport.scale,
+          10 / editor.context.viewport.scale,
+          0
+        ]);
+        sourceItem.insertAfter(model);
         newIds.push(model.id);
         itemList[model.id] = itemJSON;
-        updateData[model.id] = model.json;
+        updateData[model.id] = model.toCloneObject();
       });
       Object.values(parentList).forEach((parent) => {
         updateData = __spreadValues(__spreadValues({}, updateData), parent.attrsWithId("children"));
@@ -35516,6 +35453,7 @@ var history_clipboard_paste = {
           });
         }
         editor.context.history.saveSelection();
+        editor.emit(REFRESH_SELECTION);
       });
     }
   },
@@ -36419,19 +36357,26 @@ var refreshElement = {
   execute: function(editor, current, checkRefreshCanvas = true) {
     var _a;
     const maker = editor.createCommandMaker();
-    if (checkRefreshCanvas) {
-      if (current && current.hasChangedField("children", "changedChildren", "parentId")) {
+    if (isArray(current)) {
+      if (checkRefreshCanvas) {
         maker.emit("refreshAllCanvas");
       }
-    }
-    maker.emit(UPDATE_CANVAS, current);
-    if (current.hasLayout()) {
-      maker.emit("refreshElementBoundSize", current);
+      maker.emit(UPDATE_CANVAS, current);
     } else {
-      if (current && (current.isLayoutItem() || ((_a = current.parent) == null ? void 0 : _a.is("boolean-path")))) {
-        maker.emit("refreshElementBoundSize", current.parent);
-      } else {
+      if (checkRefreshCanvas) {
+        if (current && current.hasChangedField("children", "changedChildren", "parentId")) {
+          maker.emit("refreshAllCanvas");
+        }
+      }
+      maker.emit(UPDATE_CANVAS, current);
+      if (current.hasLayout()) {
         maker.emit("refreshElementBoundSize", current);
+      } else {
+        if (current && (current.isLayoutItem() || ((_a = current.parent) == null ? void 0 : _a.is("boolean-path")))) {
+          maker.emit("refreshElementBoundSize", current.parent);
+        } else {
+          maker.emit("refreshElementBoundSize", current);
+        }
       }
     }
     maker.run();
@@ -36725,6 +36670,7 @@ var setAttribute = {
       return;
     }
     let hasRefreshCanvas = false;
+    const children2 = [];
     messages.forEach((message) => {
       const item = editor.get(message.id);
       if (item) {
@@ -36740,7 +36686,7 @@ var setAttribute = {
             editor.context.commands.emit("refreshElement", child);
           });
         }
-        editor.context.commands.emit("refreshElement", item, false);
+        children2.push(item);
         if (item.hasChangedHirachy) {
           hasRefreshCanvas = true;
         }
@@ -36759,6 +36705,9 @@ var setAttribute = {
         }
       }
     });
+    if (children2.length) {
+      editor.context.commands.emit("refreshElement", children2, false);
+    }
     if (hasRefreshCanvas) {
       editor.emit("refreshAllCanvas");
     }
@@ -45091,7 +45040,7 @@ class SVGTextItem extends SVGModel {
       totalLength: 0,
       fill: "rgba(0, 0, 0, 1)",
       text: "Insert a text",
-      "fontWeight": Length.number(100),
+      fontWeight: Length.number(100),
       textLength: Length.em(0),
       lengthAdjust: "spacingAndGlyphs"
     }, obj2));
@@ -47681,7 +47630,6 @@ function gradient(editor) {
     GradientPickerPopup
   });
 }
-var GradientAssetsProperty$1 = "";
 var conic = {
   title: "Conic",
   key: "conic",
@@ -47800,6 +47748,7 @@ var gradients = [
   randomConic,
   repeatConic
 ];
+var GradientAssetsProperty$1 = "";
 const options = gradients.map((it) => {
   return { value: it.key, text: it.title };
 });
@@ -49073,85 +49022,26 @@ const vLineByPoint = (target, source2) => {
   return line(target, source2);
 };
 const rect = (rectVerties) => {
-  return `
-    <path 
-        class="base-rect"
-        fill="none"
-        stroke-width="1"
-        stroke="red"
-        stroke-dasharray="2 2"
-        d="${PathParser.makeRect(rectVerties[0][0], rectVerties[0][1], dist(rectVerties[0], rectVerties[1]), dist(rectVerties[0], rectVerties[3])).d}
-        " 
-    />
-`;
+  return `<path class="base-rect" fill="none" stroke-width="1" stroke="red" stroke-dasharray="2 2" d="${PathParser.makeRect(rectVerties[0][0], rectVerties[0][1], dist(rectVerties[0], rectVerties[1]), dist(rectVerties[0], rectVerties[3])).d}" />`;
 };
 const point = (target, dist2 = 3, direction2 = "left") => {
   if (direction2 === "left") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] + dist2} ${target[1] - dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist2} ${target[1] + dist2}
-            " 
-        />
-    `;
+    return `<path class="arrow" d="M ${target[0] + dist2} ${target[1] - dist2} L ${target[0]} ${target[1]} L ${target[0] + dist2} ${target[1] + dist2} "/>`;
   }
   if (direction2 === "right") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist2} ${target[1] - dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] - dist2} ${target[1] + dist2}
-            " 
-        />
-    `;
+    return `<path class="arrow" d=" M ${target[0] - dist2} ${target[1] - dist2} L ${target[0]} ${target[1]} L ${target[0] - dist2} ${target[1] + dist2}" />`;
   }
   if (direction2 === "up") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist2} ${target[1] + dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist2} ${target[1] + dist2}
-            " 
-        />
-    `;
+    return `<path class="arrow" d=" M ${target[0] - dist2} ${target[1] + dist2} L ${target[0]} ${target[1]} L ${target[0] + dist2} ${target[1] + dist2}" />`;
   }
   if (direction2 === "down") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist2} ${target[1] - dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist2} ${target[1] - dist2}
-            " 
-        />
-    `;
+    return `<path class="arrow" d=" M ${target[0] - dist2} ${target[1] - dist2} L ${target[0]} ${target[1]} L ${target[0] + dist2} ${target[1] - dist2}" />`;
   }
-  return `
-        <path 
-            stroke-width="1"
-            d="
-                M ${target[0] - dist2} ${target[1] - dist2}
-                L ${target[0] + dist2} ${target[1] + dist2}
-                M ${target[0] - dist2} ${target[1] + dist2}
-                L ${target[0] + dist2} ${target[1] - dist2}
-            " 
-        />
-    `;
+  return `<path stroke-width="1" d=" M ${target[0] - dist2} ${target[1] - dist2} L ${target[0] + dist2} ${target[1] + dist2} M ${target[0] - dist2} ${target[1] + dist2} L ${target[0] + dist2} ${target[1] - dist2}" />`;
 };
 class GuideLineView extends EditorElement {
   template() {
-    return `
-            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" >
-            </svg>
-            `;
+    return `<svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>`;
   }
   initState() {
     return {
@@ -49291,8 +49181,6 @@ class GuideLineView extends EditorElement {
     this.setGuideLine(guides, true);
   }
   [SUBSCRIBE(UPDATE_CANVAS)]() {
-    if (this.$context.selection.isMany)
-      return;
     const expect = this.$context.selection.hasChangedField("d", "clip-path");
     if (!expect) {
       this.refreshSmartGuidesForVerties(1 / this.$viewport.scale);
@@ -49510,10 +49398,7 @@ class HoverView extends EditorElement {
     if (pointers.length === 0)
       return "";
     pointers = pointers.filter((_, index2) => index2 < 4);
-    return `
-        <svg overflow="visible">
-            <path class='line' d="${vertiesToPath(pointers)}" />
-        </svg>`;
+    return `<svg overflow="visible"><path class='line' d="${vertiesToPath(pointers)}" /></svg>`;
   }
 }
 function hoverView(editor) {
@@ -49695,13 +49580,7 @@ class ImageSelectPopup extends BasePopup {
     });
   }
   getBody() {
-    return `
-      <div class="elf--image-select-popup">
-        <div class='box' ref='$imageBox'>
-          
-        </div>
-      </div>
-    `;
+    return `<div class="elf--image-select-popup"><div class='box' ref='$imageBox'></div></div>`;
   }
   [LOAD("$imageBox") + DOMDIFF]() {
     return "";
@@ -50068,9 +49947,7 @@ class KeyframeProperty extends BaseProperty {
     var current = this.$context.selection.currentProject;
     if (!current)
       return "";
-    var keyframes = current.keyframe ? Keyframe.parseStyle(current) : current.keyframes;
-    current.keyframe = "";
-    current.keyframes = keyframes;
+    var keyframes = current.keyframes || [];
     return keyframes.map((keyframe2, index2) => {
       return this.makeKeyframeTemplate(keyframe2, index2);
     });
@@ -50881,26 +50758,9 @@ class LayerTreeProperty extends BaseProperty {
       const hasChildren = layer.hasChildren();
       const lock2 = this.$lockManager.get(layer.id);
       const visible2 = this.$visibleManager.get(layer.id);
-      data[data.length] = `        
-        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
-          <div class='detail'>
-            <label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' > 
-              <div class='folder ${layer.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse("arrow_right") : ""}</div>
-              <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
-              <span class='name'>${name}</span>
-            </label>
-            <div class="tools">
-              <button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse("lock") : iconUse("lock_open")}</button>
-              <button type="button" class="visible" data-visible="${visible2}" title='Visible'>${iconUse("visible")}</button>
-              <button type="button" class="remove" title='Remove'>${iconUse("remove2")}</button>                          
-            </div>
-          </div>
-        </div>
-
-        ${this.makeLayerList(layer, depth + 1)}
-      `;
+      data[data.length] = `<div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true"><div class='detail'><label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' ><div class='folder ${layer.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse("arrow_right") : ""}</div><span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span><span class='name'>${name}</span></label><div class="tools"><button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse("lock") : iconUse("lock_open")}</button><button type="button" class="visible" data-visible="${visible2}" title='Visible'>${iconUse("visible")}</button><button type="button" class="remove" title='Remove'>${iconUse("remove2")}</button></div></div></div>${this.makeLayerList(layer, depth + 1)}`;
     }
-    return data.join(" ");
+    return data.join("");
   }
   [SUBSCRIBE("refreshContent")]() {
     this.refresh();
@@ -51411,21 +51271,14 @@ class FlexLayoutEditor extends EditorElement {
     const realPaddingRight = Math.min(current.paddingRight || 0, 50);
     const realPaddingBottom = Math.min(current.paddingBottom || 0, 50);
     const padding2 = `padding-top:${realPaddingTop}px;padding-left: ${realPaddingLeft}px;padding-right:${realPaddingRight}px;padding-bottom: ${realPaddingBottom}px;`;
-    return `
-            <div class='flex-layout-item'>
-                <div class="grid-2">
-                    <div>
-                        ${createComponent("SelectIconEditor", {
+    return `<div class='flex-layout-item'><div class="grid-2"><div>${createComponent("SelectIconEditor", {
       key: "flex-direction",
       ref: "$flexDirection",
       value: this.state["flex-direction"] || FlexDirection.ROW,
       options: this.directionOptions,
       icons: ["east", "south"],
       onchange: "changeKeyValue"
-    })}
-                    </div>
-                    <div>
-                        ${createComponent("NumberInputEditor", {
+    })}</div><div>${createComponent("NumberInputEditor", {
       compact: true,
       ref: "$flex-gap",
       label: iconUse("space"),
@@ -51435,10 +51288,7 @@ class FlexLayoutEditor extends EditorElement {
       max: 100,
       step: 1,
       onchange: "changeKeyValue"
-    })}
-                    </div>
-                    <div>
-                        ${createComponent("NumberInputEditor", {
+    })}</div><div>${createComponent("NumberInputEditor", {
       compact: true,
       label: iconUse("padding"),
       key: "padding",
@@ -51448,12 +51298,7 @@ class FlexLayoutEditor extends EditorElement {
       max: 100,
       step: 1,
       onchange: "changePadding"
-    })}
-                    </div>
-
-
-                    <div>
-                        ${createComponent("ToggleButton", {
+    })}</div><div>${createComponent("ToggleButton", {
       compact: true,
       key: "flex-wrap",
       ref: "$wrap",
@@ -51462,68 +51307,63 @@ class FlexLayoutEditor extends EditorElement {
       toggleLabels: [iconUse("wrap"), iconUse("wrap")],
       toggleValues: [FlexWrap.NOWRAP, FlexWrap.WRAP],
       onchange: "changeKeyValue"
-    })}
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="select-flex-direction">
-                <div>
-                    <div class="flex-group-padding">            
-                        <div class="padding-top" style="height: ${current.paddingTop}px"></div>
-                        <div class="padding-left" style="width: ${current.paddingLeft}px"></div>
-                        <div class="padding-right" style="width: ${current.paddingRight}px"></div>
-                        <div class="padding-bottom" style="height: ${current.paddingBottom}px"></div>
-                    </div>
-                    <div class="flex-group" style="
-                            --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
-                            --flex-group-padding: ${realPaddingTop}px;
-                            ${padding2};
-                            flex-direction: ${this.state["flex-direction"]};
-                            flex-wrap: ${this.state["flex-wrap"]};
-                            justify-content:${this.state["justify-content"]};
-                            align-items: ${this.state["align-items"]};
-                            align-content:${this.state["align-content"]};
-                    ">
-                        ${[1, 2, 3].map(() => {
+    })}</div></div></div>
+  <div class="select-flex-direction">
+      <div>
+          <div class="flex-group-padding">            
+              <div class="padding-top" style="height: ${current.paddingTop}px"></div>
+              <div class="padding-left" style="width: ${current.paddingLeft}px"></div>
+              <div class="padding-right" style="width: ${current.paddingRight}px"></div>
+              <div class="padding-bottom" style="height: ${current.paddingBottom}px"></div>
+          </div>
+          <div class="flex-group" style="
+                  --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                  --flex-group-padding: ${realPaddingTop}px;
+                  ${padding2};
+                  flex-direction: ${this.state["flex-direction"]};
+                  flex-wrap: ${this.state["flex-wrap"]};
+                  justify-content:${this.state["justify-content"]};
+                  align-items: ${this.state["align-items"]};
+                  align-content:${this.state["align-content"]};
+          ">
+              ${[1, 2, 3].map(() => {
       return `
-                                <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
-                                    <div class="flex-direction-item" data-index="1"></div>
-                                    <div class="flex-direction-item" data-index="2"></div>
-                                    <div class="flex-direction-item" data-index="3"></div>
-                                </div>
-                            `;
+                      <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
+                          <div class="flex-direction-item" data-index="1"></div>
+                          <div class="flex-direction-item" data-index="2"></div>
+                          <div class="flex-direction-item" data-index="3"></div>
+                      </div>
+                  `;
     }).join("\n")}
-                    </div>
-                    <div class="flex-group-tool"  style="${padding2};">
-                        <div class="tool-area"  
-                            data-direction="${this.state["flex-direction"]}"  
-                            data-justify-content="${this.state["justify-content"]}"
-                            data-align-items="${this.state["align-items"]}"
-                            data-align-content="${this.state["align-content"]}"                            
-                            style="
-                                --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
-                                --flex-group-padding: ${realPaddingTop}px;
-                            "
-                        >
-                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-items="flex-start"></div>
-                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-items="flex-start"></div>
-                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-items="flex-start"></div>
-                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-items="center"></div>
-                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-items="center"></div>
-                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-items="center"></div>
-                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-items="flex-end"></div>
-                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-items="flex-end"></div>
-                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-items="flex-end"></div>                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
+          <div class="flex-group-tool"  style="${padding2};">
+              <div class="tool-area"  
+                  data-direction="${this.state["flex-direction"]}"  
+                  data-justify-content="${this.state["justify-content"]}"
+                  data-align-items="${this.state["align-items"]}"
+                  data-align-content="${this.state["align-content"]}"                            
+                  style="
+                      --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                      --flex-group-padding: ${realPaddingTop}px;
+                  "
+              >
+                  <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-items="flex-start"></div>
+                  <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-items="flex-start"></div>
+                  <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-items="flex-start"></div>
+                  <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-items="center"></div>
+                  <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-items="center"></div>
+                  <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-items="center"></div>
+                  <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-items="flex-end"></div>
+                  <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-items="flex-end"></div>
+                  <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-items="flex-end"></div>                            
+              </div>
+          </div>
+      </div>
+  </div>
 
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n("flex.layout.editor.justify-content")}</div>
-                ${createComponent("SelectIconEditor", {
+  <div class='flex-layout-item'>
+      <div class="title">${this.$i18n("flex.layout.editor.justify-content")}</div>
+      ${createComponent("SelectIconEditor", {
       key: "justify-content",
       ref: "$justify",
       value: this.state["justify-content"] || JustifyContent.FLEX_START,
@@ -51537,10 +51377,10 @@ class FlexLayoutEditor extends EditorElement {
       ],
       onchange: "changeKeyValue"
     })}
-            </div>
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n("flex.layout.editor.align-items")}</div>            
-                ${createComponent("SelectIconEditor", {
+  </div>
+  <div class='flex-layout-item'>
+      <div class="title">${this.$i18n("flex.layout.editor.align-items")}</div>            
+      ${createComponent("SelectIconEditor", {
       key: "align-items",
       ref: "$alignItems",
       value: this.state["align-items"] || AlignItems.FLEX_START,
@@ -51554,7 +51394,7 @@ class FlexLayoutEditor extends EditorElement {
       ],
       onchange: "changeKeyValue"
     })}
-            </div>
+  </div>
         `;
   }
   template() {
@@ -55154,7 +54994,6 @@ function pathTool(editor) {
     PathToolProperty
   });
 }
-var PatternAssetsProperty$1 = "";
 var check = {
   key: "check",
   title: "Check",
@@ -55268,6 +55107,7 @@ var patterns = [
   verticalLine,
   horizontalLine
 ];
+var PatternAssetsProperty$1 = "";
 class PatternAssetsProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("pattern.asset.property.title");
@@ -57771,8 +57611,11 @@ class DomRender$1 extends ItemRender$1 {
     }, item.attrs("grid-template-columns", "grid-template-rows", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "grid-column-gap", "grid-row-gap"));
   }
   toBorderCSS(item) {
-    const obj2 = __spreadValues({}, STRING_TO_CSS(item.border));
-    return obj2;
+    const borderCSS = item.computed("border", (border2) => {
+      const obj2 = __spreadValues({}, STRING_TO_CSS(border2));
+      return obj2;
+    });
+    return borderCSS;
   }
   toBoxModelCSS(item) {
     let obj2 = {};
@@ -58146,14 +57989,9 @@ ${cssString}
 class ArtBoardRender$2 extends DomRender$1 {
   render(item, renderer) {
     var { id } = item;
-    return `    
-      <div class="element-item artboard" data-id="${id}">
-        ${this.toDefString(item)}
-        ${item.layers.map((it) => {
+    return `<div class="element-item artboard" data-id="${id}">${this.toDefString(item)}${item.layers.map((it) => {
       return renderer.render(it, renderer);
-    }).join("\n	")}
-      </div>
-    `;
+    }).join("\n	")}</div>`;
   }
   toBorderCSS() {
     return {};
@@ -60923,13 +60761,7 @@ class GroupSelectionToolView extends SelectionToolEvent$1 {
         text2 = `${rotateZ2}\xB0`;
       }
     }
-    return `
-            <div 
-                class='size-pointer' 
-                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${text2}
-            </div>
-        `;
+    return `<div class='size-pointer' style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >${text2}</div>`;
   }
   createRenderPointers(pointers) {
     const diff = subtract([], lerp$1([], pointers[0], pointers[1], 0.5), lerp$1([], pointers[0], pointers[2], 0.5));
@@ -61418,26 +61250,18 @@ class SelectionToolView extends SelectionToolEvent {
     }
   }
   createPointer(pointer, number, rotate2) {
-    return `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
-        `;
+    return `<div class='pointer' data-number="${number}" data-pointer="${pointer}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>`;
   }
   createPointerSide(pointer, number, rotate2, width2, height2) {
-    return `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width2}px; height: ${height2}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
-        `;
+    return `<div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width2}px; height: ${height2}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>`;
   }
   createRotatePointer(pointer, number) {
     if (pointer.length === 0)
       return "";
     if (number < 4) {
-      return `
-            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
-            `;
+      return `<div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>`;
     }
-    return `
-        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
-        `;
+    return `<div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>`;
   }
   createPointerRect(pointers, rotatePointer = void 0) {
     if (pointers.length === 0)
@@ -61452,18 +61276,7 @@ class SelectionToolView extends SelectionToolEvent {
                 L ${rotatePointer[0]},${rotatePointer[1]} 
             `;
     }
-    return `
-        <svg class='line' overflow="visible">
-            <path 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    ${line2}
-                    Z
-                " />
+    return `<svg class='line' overflow="visible"> <path  d=" M ${pointers[0][0]}, ${pointers[0][1]} L ${pointers[1][0]}, ${pointers[1][1]} L ${pointers[2][0]}, ${pointers[2][1]} L ${pointers[3][0]}, ${pointers[3][1]} L ${pointers[0][0]}, ${pointers[0][1]} ${line2} Z" />
         </svg>`;
   }
   createParentRect(pointers = []) {
@@ -61512,14 +61325,7 @@ class SelectionToolView extends SelectionToolEvent {
     if (this.state.isRotate) {
       text2 = `${round(this.$context.selection.current.angle, 100)}\xB0`;
     }
-    return `
-            <div 
-                data-layout="${this.$context.selection.current.layout}"
-                class='size-pointer' 
-                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${text2}
-            </div>
-        `;
+    return `<div data-layout="${this.$context.selection.current.layout}" class='size-pointer' style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >${text2}</div>`;
   }
   createVisiblePath() {
     const current = this.$context.selection.current;
@@ -64117,7 +63923,6 @@ function text(editor) {
     ];
   });
 }
-var TextShadowProperty$1 = "";
 var textShadow$1 = [
   { name: "Mystic", shadow: `20px 0px 10px rgb(0, 0, 0)` },
   { name: "Monoton", shadow: `0px -78px rgb(255, 196, 0)` },
@@ -64139,6 +63944,7 @@ var textShadow$1 = [
     `
   }
 ];
+var TextShadowProperty$1 = "";
 class TextShadowProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("text.shadow.property.title");
@@ -66529,6 +66335,7 @@ class HTMLRenderView extends EditorElement {
     this.emit("startGhostToolView");
   }
   calculateFirstMovedElement() {
+    this.emit("hideSelectionToolView");
     this.emit("moveFirstGhostToolView");
   }
   calculateMovedElement() {
@@ -66601,17 +66408,23 @@ class HTMLRenderView extends EditorElement {
         this.$commands.emit("recoverBooleanPath");
       });
     }
-    this.emit(REFRESH_SELECTION_TOOL);
+    this.emit(REFRESH_SELECTION);
     this.$config.set("editing.mode.itemType", "select");
   }
   refreshSelectionStyleView(obj2) {
+    let target = [];
     if (obj2) {
-      this.updateElement(obj2);
+      if (isArray(obj2)) {
+        target = obj2;
+      } else {
+        target = [obj2];
+      }
     } else {
-      this.$context.selection.items.forEach((current) => {
-        this.updateElement(current);
-      });
+      target = this.$context.selection.items;
     }
+    target.forEach((current) => {
+      this.updateElement(current);
+    });
   }
   updateElement(item) {
     if (item) {

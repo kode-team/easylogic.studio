@@ -1,12 +1,23 @@
-import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
+import {
+  CLICK,
+  LOAD,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+  DOMDIFF,
+} from "sapa";
 
 import "./BackgroundImagePositionPopup.scss";
 
 import BasePopup from "elf/editor/ui/popup/BasePopup";
 
 export default class BackgroundImagePositionPopup extends BasePopup {
+  get localeKey() {
+    return "background.image.position.popup";
+  }
+
   getTitle() {
-    return this.$i18n("background.image.position.popup.title");
+    return this.$i18n("title");
   }
 
   initState() {
@@ -28,18 +39,14 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   }
 
   templateForSize() {
-    return /*html*/ `
-      <div>
-        ${createComponent("SelectEditor", {
-          label: this.$i18n("background.image.position.popup.size"),
-          ref: "$size",
-          key: "size",
-          value: this.state.size,
-          options: ["contain", "cover", "auto"],
-          onchange: "changeRangeEditor",
-        })}
-      </div>
-    `;
+    return createComponent("SelectEditor", {
+      label: this.$i18n("size"),
+      ref: "$size",
+      key: "size",
+      value: this.state.size,
+      options: ["contain", "cover", "auto"],
+      onchange: "changeRangeEditor",
+    });
   }
 
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
@@ -47,45 +54,35 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   }
 
   templateForX() {
-    return /*html*/ `
-      <div>
-        ${createComponent("InputRangeEditor", {
-          label: "X",
-          compact: true,
-          ref: "$x",
-          key: "x",
-          value: this.state.x,
-          min: -1000,
-          max: 1000,
-          step: 1,
-          onchange: "changeRangeEditor",
-        })}
-      </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: "X",
+      compact: true,
+      ref: "$x",
+      key: "x",
+      value: this.state.x,
+      min: -1000,
+      max: 1000,
+      step: 1,
+      onchange: "changeRangeEditor",
+    });
   }
 
   templateForY() {
-    return /*html*/ `
-      <div >
-      ${createComponent("InputRangeEditor", {
-        label: "Y",
-        compact: true,
-        ref: "$y",
-        key: "y",
-        value: this.state.y,
-        min: -1000,
-        max: 1000,
-        step: 1,
-        onchange: "changeRangeEditor",
-      })}      
-      </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: "Y",
+      compact: true,
+      ref: "$y",
+      key: "y",
+      value: this.state.y,
+      min: -1000,
+      max: 1000,
+      step: 1,
+      onchange: "changeRangeEditor",
+    });
   }
 
   templateForWidth() {
-    return /*html*/ `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "W",
       compact: true,
       ref: "$width",
@@ -95,15 +92,11 @@ export default class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor",
-    })}          
-    </div>
-    `;
+    });
   }
 
   templateForHeight() {
-    return /*html*/ `
-    <div >
-    ${createComponent("InputRangeEditor", {
+    return createComponent("InputRangeEditor", {
       label: "H",
       compact: true,
       ref: "$height",
@@ -113,35 +106,32 @@ export default class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor",
-    })}              
-      />
-    </div>
-    `;
+    });
   }
 
   templateForRepeat() {
     return /*html*/ `
     <div class='grid'>
-      <label>${this.$i18n("background.image.position.popup.repeat")}</label>
+      <label>${this.$i18n("repeat")}</label>
     </div>
     <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
         <button type="button" value='no-repeat' title="${this.$i18n(
-          "background.image.position.popup.type.no-repeat"
+          "type.no-repeat"
         )}"></button>
         <button type="button" value='repeat' title="${this.$i18n(
-          "background.image.position.popup.type.repeat"
+          "type.repeat"
         )}"></button>
         <button type="button" value='repeat-x' title="${this.$i18n(
-          "background.image.position.popup.type.repeat-x"
+          "type.repeat-x"
         )}"></button>
         <button type="button" value='repeat-y' title="${this.$i18n(
-          "background.image.position.popup.type.repeat-y"
+          "type.repeat-y"
         )}"></button>
         <button type="button" value='space' title="${this.$i18n(
-          "background.image.position.popup.type.space"
+          "type.space"
         )}"></button>
         <button type="button" value='round' title="${this.$i18n(
-          "background.image.position.popup.type.round"
+          "type.round"
         )}"></button>
     </div>
     `;
@@ -158,7 +148,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     `;
   }
 
-  [LOAD("$picker")]() {
+  [LOAD("$picker") + DOMDIFF]() {
     return /*html*/ `
       
       <div class='box'>

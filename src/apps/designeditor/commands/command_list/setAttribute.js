@@ -28,6 +28,7 @@ export default {
     }
 
     let hasRefreshCanvas = false;
+    const children = [];
     // send message
     messages.forEach((message) => {
       const item = editor.get(message.id);
@@ -55,7 +56,7 @@ export default {
           });
         }
 
-        editor.context.commands.emit("refreshElement", item, false);
+        children.push(item);
 
         // 캔버스 갱신 여부를 지정한다.
         if (item.hasChangedHirachy) {
@@ -80,6 +81,11 @@ export default {
         }
       }
     });
+
+    // 여러 객체를 동시에 렌더링 할 수 있어야 한다.
+    if (children.length) {
+      editor.context.commands.emit("refreshElement", children, false);
+    }
 
     // canvas 를 재조정할일이 있으면 canvas 구조를 다시 그린다.
     if (hasRefreshCanvas) {

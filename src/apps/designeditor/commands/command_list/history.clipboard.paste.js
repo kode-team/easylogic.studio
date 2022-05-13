@@ -1,4 +1,5 @@
 import { ClipboardActionType } from "elf/editor/types/editor";
+import { REFRESH_SELECTION } from "elf/editor/types/event";
 
 export default {
   command: "history.clipboard.paste",
@@ -10,7 +11,7 @@ export default {
     clipboardData = undefined,
     hasHistory = true
   ) {
-    const data = clipboardData || editor.clipboard.last; // 마지막 클립보드 입력
+    const data = clipboardData || editor.context.clipboard.last; // 마지막 클립보드 입력
 
     if (data.type == ClipboardActionType.COPY) {
       // copy 일 경우 히스토리 적용방법
@@ -33,7 +34,6 @@ export default {
       );
 
       const newIds = [];
-      const length = items.length;
 
       const itemList = {};
       const parentList = {};
@@ -56,23 +56,21 @@ export default {
         model.renameWithCount();
 
         // 10, 10 기본 이동
-        model.absoluteMove([10, 10, 0]);
+        model.absoluteMove([
+          10 / editor.context.viewport.scale,
+          10 / editor.context.viewport.scale,
+          0,
+        ]);
 
-        if (length === 1) {
-          // 하나 일 때는 sourceItem 옆으로 생성하기
-          sourceItem.insertBefore(model);
-        } else {
-          sourceItem.insertAfter(model);
-          // // 원본 부모의 마지막에 생성하기
-          // sourceItem.parent.appendChild(model);
-        }
+        // 현재 source 의 다음으로 추가
+        sourceItem.insertAfter(model);
 
         // 최종 생성된 model 의 id 를 수집하기
         newIds.push(model.id);
 
         // 모든 정보를 가지고 오기
         itemList[model.id] = itemJSON;
-        updateData[model.id] = model.json;
+        updateData[model.id] = model.toCloneObject();
       });
 
       // 부모 변경 상태 저장
@@ -101,6 +99,8 @@ export default {
 
         // editor.context.selection.reselect();
         editor.context.history.saveSelection();
+
+        editor.emit(REFRESH_SELECTION);
       });
     }
   },

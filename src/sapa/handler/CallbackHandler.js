@@ -5,10 +5,13 @@ export default class CallbackHandler extends BaseHandler {
   initialize() {
     this.destroy();
 
-    if (!this._callbacks || this._callbacks.length === 0) {
+    if (!this._callbacks) {
       this._callbacks = this.context.filterMethodes("callback");
     }
-    this._callbacks.forEach((key) => this.parseCallback(key));
+
+    if (!this._bindings?.length && this._callbacks?.length) {
+      this._callbacks.forEach((key) => this.parseCallback(key));
+    }
   }
 
   destroy() {

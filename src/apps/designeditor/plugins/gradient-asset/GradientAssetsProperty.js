@@ -8,10 +8,10 @@ import {
   createComponent,
 } from "sapa";
 
+import gradients from "../../preset/gradients";
 import "./GradientAssetsProperty.scss";
 
 import { iconUse } from "elf/editor/icon/icon";
-import gradients from "elf/editor/preset/gradients";
 import { Gradient } from "elf/editor/property-parser/image-resource/Gradient";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";

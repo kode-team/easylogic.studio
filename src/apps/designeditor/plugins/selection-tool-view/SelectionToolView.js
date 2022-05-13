@@ -905,37 +905,29 @@ export default class SelectionToolView extends SelectionToolEvent {
   }
 
   createPointer(pointer, number, rotate) {
-    return /*html*/ `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="transform: translate3d( calc(${
+    return /*html*/ `<div class='pointer' data-number="${number}" data-pointer="${pointer}" style="transform: translate3d( calc(${
       pointer[0]
     }px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${
       rotate || "0deg"
-    })" ></div>
-        `;
+    })" ></div>`;
   }
 
   createPointerSide(pointer, number, rotate, width, height) {
-    return /*html*/ `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width}px; height: ${height}px;transform: translate3d( calc(${
+    return /*html*/ `<div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width}px; height: ${height}px;transform: translate3d( calc(${
       pointer[0]
     }px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${
       rotate || "0deg"
-    })" ></div>
-        `;
+    })" ></div>`;
   }
 
   createRotatePointer(pointer, number) {
     if (pointer.length === 0) return "";
 
     if (number < 4) {
-      return /*html*/ `
-            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
-            `;
+      return /*html*/ `<div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>`;
     }
 
-    return /*html*/ `
-        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
-        `;
+    return /*html*/ `<div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>`;
   }
 
   createPointerRect(pointers, rotatePointer = undefined) {
@@ -952,18 +944,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             `;
     }
 
-    return /*html*/ `
-        <svg class='line' overflow="visible">
-            <path 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    ${line}
-                    Z
-                " />
+    return /*html*/ `<svg class='line' overflow="visible"> <path  d=" M ${pointers[0][0]}, ${pointers[0][1]} L ${pointers[1][0]}, ${pointers[1][1]} L ${pointers[2][0]}, ${pointers[2][1]} L ${pointers[3][0]}, ${pointers[3][1]} L ${pointers[0][0]}, ${pointers[0][1]} ${line} Z" />
         </svg>`;
   }
 
@@ -1030,14 +1011,7 @@ export default class SelectionToolView extends SelectionToolEvent {
       text = `${round(this.$context.selection.current.angle, 100)}°`;
     }
 
-    return /*html*/ `
-            <div 
-                data-layout="${this.$context.selection.current.layout}"
-                class='size-pointer' 
-                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${text}
-            </div>
-        `;
+    return /*html*/ `<div data-layout="${this.$context.selection.current.layout}" class='size-pointer' style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >${text}</div>`;
   }
 
   createVisiblePath() {

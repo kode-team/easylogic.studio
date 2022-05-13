@@ -85,8 +85,8 @@ export class UIElement extends EventMachine {
    *
    */
   initializeStoreEvent() {
-    if (!this.#subscribes || this.#subscribes.length == 0) {
-      this.#subscribes = this.filterMethodes("subscribe", true);
+    if (this.#subscribes.length == 0) {
+      this.#subscribes = this.filterMethodes("subscribe");
 
       this.#subscribes.forEach((magicMethod) => {
         const events = magicMethod.args.join(" ");

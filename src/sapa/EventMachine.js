@@ -4,7 +4,6 @@ import { MagicMethod } from "./functions/MagicMethod";
 import {
   getVariable,
   hasVariable,
-  recoverVariable,
   retriveElement,
   spreadVariable,
 } from "./functions/registElement";
@@ -15,12 +14,11 @@ import DomEventHandler from "./handler/DomEventHandler";
 import ObserverHandler from "./handler/ObserverHandler";
 
 const REFERENCE_PROPERTY = "ref";
-const BIND_PROPERTY = "bind";
-const LOAD_PROPERTY = "load";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = "refclass";
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
+const EMPTY_ARRAY = [];
 
 export class EventMachine {
   /**
@@ -36,9 +34,6 @@ export class EventMachine {
    * @type {any}
    */
   #prevState = {};
-
-  #refLoadVariables = {};
-  #refBindVariables = {};
   #localTimestamp = 0;
   #loadMethods;
   #timestamp;
@@ -60,12 +55,12 @@ export class EventMachine {
     this.initComponents();
   }
 
-  get refBindVariables() {
-    return this.#refBindVariables;
+  #refreshTimestamp() {
+    this.#localTimestamp++;
   }
 
   get __timestamp() {
-    return this.#localTimestamp++;
+    return this.#localTimestamp;
   }
 
   get timestamp() {
@@ -370,30 +365,6 @@ export class EventMachine {
 
   afterComponentRendering() {}
 
-  parseLocalMethod($dom, name) {
-    // load 변수와 bind 변수를 저장한다.
-    const loadVariable = $dom.attr(LOAD_PROPERTY);
-    const loadVariableRealFunction = getVariable(loadVariable);
-    const bindVariable = $dom.attr(BIND_PROPERTY);
-    const bindVariableRealFunction = getVariable(bindVariable);
-
-    if (loadVariable && isFunction(loadVariableRealFunction)) {
-      this.#refLoadVariables[name] = {
-        key: loadVariable,
-        ref: name,
-        callback: loadVariableRealFunction,
-      };
-    }
-
-    if (bindVariable && isFunction(bindVariableRealFunction)) {
-      this.#refBindVariables[name] = {
-        key: bindVariable,
-        ref: name,
-        callback: bindVariableRealFunction,
-      };
-    }
-  }
-
   /**
    * template() 함수의 결과물을 파싱해서 dom element 를 생성한다.
    *
@@ -550,8 +521,9 @@ export class EventMachine {
     // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다.
     // 루트 element 는 변경되지 않는다.
     if (this.children[refName]) {
-      // console.log(this.children, refName);
       instance = this.children[refName];
+
+      // timestamp 저장
       instance.timestamp = this.__timestamp;
       instance._reload(props);
     } else {
@@ -561,6 +533,7 @@ export class EventMachine {
         props
       );
 
+      // timestamp 저장
       instance.timestamp = this.__timestamp;
 
       this.children[refName || instance.id] = instance;
@@ -647,9 +620,7 @@ export class EventMachine {
    * @return {object[]}
    */
   getComponentInfoList($el) {
-    if (!$el) return [];
-
-    const children = [];
+    if (!$el) return EMPTY_ARRAY;
 
     // 하위에 refclass 를 가진 element 중에 마지막 지점인 컴포넌트만 조회한다.
     // 부모에 refclass 를 가지고 있는 경우는 그 다음 컴포넌트로 넘겨서 생성한다.
@@ -662,16 +633,18 @@ export class EventMachine {
       );
     });
 
-    targets.forEach(($dom) => {
-      children.push(this._getComponentInfo($dom));
-    });
+    if (!targets.length) {
+      return EMPTY_ARRAY;
+    }
 
-    return children;
+    return targets.map(($dom) => this._getComponentInfo($dom));
   }
 
   async parseComponent() {
     const $el = this.$el;
     const componentList = this.getComponentInfoList($el);
+
+    if (!componentList.length) return;
 
     await Promise.all(
       componentList.map(async (comp) => {
@@ -699,8 +672,6 @@ export class EventMachine {
         }
       });
 
-      console.log("clean", this.sourceName);
-
       this.destroy();
 
       return true;
@@ -722,7 +693,7 @@ export class EventMachine {
 
   async _afterLoad() {
     // timestamp 기록
-    this.__timestamp;
+    this.#refreshTimestamp();
 
     this.runHandlers("initialize");
 
@@ -730,36 +701,6 @@ export class EventMachine {
 
     await this.parseComponent();
   }
-
-  // async loadLocalValue(refName) {
-  //   let target = this.#refLoadVariables;
-
-  //   if (refName && this.#refLoadVariables[refName]) {
-  //     target = {
-  //       [refName]: this.#refLoadVariables[refName],
-  //     };
-  //   }
-
-  //   Object.keys(target).forEach(async (key) => {
-  //     const loadObj = this.#refLoadVariables[key];
-  //     const isDomDiff = loadObj.domdiff;
-  //     var newTemplate = await loadObj.callback.call(this);
-
-  //     if (Array.isArray(newTemplate)) {
-  //       newTemplate = newTemplate.join("");
-  //     }
-
-  //     const targetRef = this.refs[loadObj.ref];
-  //     // create fragment
-  //     const fragment = this.parseTemplate(newTemplate, true);
-  //     if (isDomDiff) {
-  //       targetRef.htmlDiff(fragment);
-  //     } else {
-  //       targetRef.html(fragment);
-  //     }
-  //     this.refreshElementReference(targetRef, loadObj.ref);
-  //   });
-  // }
 
   async makeLoadAction(magicMethod) {
     const [elName, ...args] = magicMethod.args;
@@ -835,8 +776,8 @@ export class EventMachine {
   eachChildren(callback) {
     if (!isFunction(callback)) return;
 
-    keyEach(this.children, (_, Component) => {
-      callback(Component);
+    Object.keys(this.children).forEach((key) => {
+      callback(this.children[key]);
     });
   }
 
@@ -862,8 +803,6 @@ export class EventMachine {
    *
    */
   destroy() {
-    console.log(this.sourceName, "destroy");
-
     this.eachChildren((childComponent) => {
       childComponent.destroy();
     });
@@ -876,19 +815,6 @@ export class EventMachine {
     this.$el = null;
     this.refs = {};
     this.children = {};
-
-    Object.values(this.#refLoadVariables).forEach((ref) => {
-      recoverVariable(ref.key, true);
-    });
-
-    Object.values(this.#refBindVariables).forEach((ref) => {
-      recoverVariable(ref.key, true);
-    });
-
-    this.#refLoadVariables = {};
-    this.#refBindVariables = {};
-
-    // this.parent.removeChild(this);
   }
 
   /**

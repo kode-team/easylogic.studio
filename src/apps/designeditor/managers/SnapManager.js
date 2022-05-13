@@ -322,7 +322,11 @@ export class SnapManager {
       guides.push.apply(guides, points);
     });
 
-    return guides;
+    guides.sort((a, b) => {
+      return a[3] - b[3];
+    });
+
+    return guides.filter((_, index) => index < 10);
   }
 
   findGuideOne(sourceVerties) {
