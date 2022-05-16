@@ -77,8 +77,8 @@ export default class ImageProperty extends BaseProperty {
         "setAttribute",
         "resize image",
         this.$context.selection.packByValue({
-          width: (item) => item.naturalWidth.clone(),
-          height: (item) => item.naturalHeight.clone(),
+          width: (item) => item.naturalWidth,
+          height: (item) => item.naturalHeight,
         })
       );
     }

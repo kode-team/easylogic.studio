@@ -11,6 +11,7 @@ import {
   UPDATE_VIEWPORT,
   REFRESH_SELECTION,
   UPDATE_CANVAS,
+  REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -290,7 +291,7 @@ export default class GuideLineView extends EditorElement {
     return this.refreshSmartGuides(targetVertiesList);
   }
 
-  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
+  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION_TOOL)]() {
     this.refreshSmartGuidesForVerties(1);
   }
 
@@ -365,7 +366,7 @@ export default class GuideLineView extends EditorElement {
 
     if (!expect) {
       // viewport.scale 로 나눠줘야 픽셀 자체의 크기가 커진다.
-      this.refreshSmartGuidesForVerties(1 / this.$viewport.scale);
+      this.refreshSmartGuidesForVerties(0);
     }
   }
 }

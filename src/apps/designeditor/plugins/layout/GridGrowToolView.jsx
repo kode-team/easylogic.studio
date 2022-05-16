@@ -36,18 +36,15 @@ class GridGrowBaseView extends EditorElement {
     const data = {};
     current.layers.forEach((it) => {
       data[it.id] = {
-        "grid-row-start": Math.max(
-          1,
-          Math.min(newRows.length, it["grid-row-start"])
-        ),
-        "grid-row-end": Math.min(newRows.length + 1, it["grid-row-end"]),
+        gridRowStart: Math.max(1, Math.min(newRows.length, it.gridRowStart)),
+        gridRowEnd: Math.min(newRows.length + 1, it.gridRowEnd),
       };
     });
 
     this.$commands.executeCommand("setAttribute", "change grid rows", {
       ...data,
       [current.id]: {
-        "grid-template-rows": Grid.join(newRows),
+        gridTemplateRows: Grid.join(newRows),
       },
     });
   }
@@ -56,21 +53,18 @@ class GridGrowBaseView extends EditorElement {
     const data = {};
     current.layers.forEach((it) => {
       data[it.id] = {
-        "grid-column-start": Math.max(
+        gridColumnStart: Math.max(
           1,
-          Math.min(newColumns.length, it["grid-column-start"])
+          Math.min(newColumns.length, it.gridColumnStart)
         ),
-        "grid-column-end": Math.min(
-          newColumns.length + 1,
-          it["grid-column-end"]
-        ),
+        gridColumnEnd: Math.min(newColumns.length + 1, it.gridColumnEnd),
       };
     });
 
     this.$commands.executeCommand("setAttribute", "change grid columns", {
       ...data,
       [current.id]: {
-        "grid-template-columns": Grid.join(newColumns),
+        gridTemplateColumns: Grid.join(newColumns),
       },
     });
   }
@@ -78,7 +72,7 @@ class GridGrowBaseView extends EditorElement {
   updateColumnGap(current, columnGap) {
     this.$commands.executeCommand("setAttribute", "change grid column gap", {
       [current.id]: {
-        "grid-column-gap": `${columnGap}`,
+        gridColumnGap: `${columnGap}`,
       },
     });
   }
@@ -86,7 +80,7 @@ class GridGrowBaseView extends EditorElement {
   updateRowGap(current, rowGap) {
     this.$commands.executeCommand("setAttribute", "change grid row gap", {
       [current.id]: {
-        "grid-row-gap": `${rowGap}`,
+        gridRowGap: `${rowGap}`,
       },
     });
   }
@@ -235,7 +229,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
         newColumnGap = Length.percent(
           Math.max(columnGap.value + stepRate * this.getScaleDist(5), 0)
         ).round(1000);
-      } else if (columnGap.isPx()) {
+      } else if (columnGap.isPx() || columnGap.isEm()) {
         newColumnGap = Length.px(
           Math.max(columnGap.value + stepRate * this.getScaleDist(100), 0)
         ).floor();
@@ -254,7 +248,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     // gap 단위 변경
     if (realDistance < 1) {
-      if (this.lastColumnGap.isPx()) {
+      if (this.lastColumnGap.isPx() || this.lastColumnGap.isEm()) {
         this.lastColumnGap = Length.makePercent(
           this.lastColumnGap.value,
           this.current.screenWidth
@@ -291,12 +285,13 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     const stepRate = newDist[1] / this.getScaleDist(100);
     const rowGap = this.rowGap;
     let newRowGap = rowGap;
+    console.log(rowGap);
     if (rowGap instanceof Length) {
       if (rowGap.isPercent()) {
         newRowGap = Length.percent(
           Math.max(rowGap.value + stepRate * this.getScaleDist(5), 0)
         ).round(1000);
-      } else if (rowGap.isPx()) {
+      } else if (rowGap.isPx() || rowGap.isNumber()) {
         newRowGap = Length.px(
           Math.max(rowGap.value + stepRate * this.getScaleDist(100), 0)
         ).floor();
@@ -319,7 +314,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
         this.lastRowGap = Length.px(0);
       }
 
-      if (this.lastRowGap.isPx()) {
+      if (this.lastRowGap.isPx() || this.lastRowGap.isNumber()) {
         this.lastRowGap = Length.makePercent(
           this.lastRowGap.value,
           this.current.screenHeight
@@ -363,7 +358,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
         );
         this.columns[this.selectedColumnIndex] =
           Length.percent(newWidth).round(1000);
-      } else if (columnWidth.isPx()) {
+      } else if (columnWidth.isPx() || columnWidth.isNumber()) {
         var newWidth = Math.max(
           10,
           columnWidth.value + stepRate * this.getScaleDist(100)
@@ -405,7 +400,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     if (width instanceof Length) {
       if (width.isPercent()) {
         this.columns[index] = Length.fr(1);
-      } else if (width.isPx()) {
+      } else if (width.isPx() || width.isNumber()) {
         this.columns[index] = Length.makePercent(
           width.value,
           info.current.screenWidth
@@ -467,7 +462,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
         );
         this.rows[this.selectedRowIndex] =
           Length.percent(newHeight).round(1000);
-      } else if (rowHeight.isPx()) {
+      } else if (rowHeight.isPx() || rowHeight.isNumber()) {
         var newHeight = Math.max(
           10,
           rowHeight.value - stepRate * this.getScaleDist(100)
@@ -509,7 +504,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     if (height instanceof Length) {
       if (height.isPercent()) {
         this.rows[index] = Length.fr(1);
-      } else if (height.isPx()) {
+      } else if (height.isPx() || height.isNumber()) {
         this.rows[index] = Length.makePercent(
           height.value,
           info.current.screenHeight
@@ -649,7 +644,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     if (isString(it)) {
       return it;
     } else if (it instanceof Length) {
-      if (it.isPx()) {
+      if (it.isPx() || it.isNumber()) {
         return it.clone().mul(this.$viewport.scale);
       }
     }

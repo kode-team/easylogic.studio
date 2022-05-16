@@ -1,5 +1,4 @@
 import { ClipboardActionType } from "elf/editor/types/editor";
-import { REFRESH_SELECTION } from "elf/editor/types/event";
 
 export default {
   command: "history.clipboard.paste",
@@ -56,11 +55,13 @@ export default {
         model.renameWithCount();
 
         // 10, 10 기본 이동
-        model.absoluteMove([
-          10 / editor.context.viewport.scale,
-          10 / editor.context.viewport.scale,
-          0,
-        ]);
+        // TODO: scale 을 적용할지 말지 결정해야함.
+        // TODO: 피그마 같은 경우는 아예 이동하지 않고 카피만 함
+        // model.absoluteMove([
+        //   10 / editor.context.viewport.scale,
+        //   10 / editor.context.viewport.scale,
+        //   0,
+        // ]);
 
         // 현재 source 의 다음으로 추가
         sourceItem.insertAfter(model);
@@ -99,8 +100,6 @@ export default {
 
         // editor.context.selection.reselect();
         editor.context.history.saveSelection();
-
-        editor.emit(REFRESH_SELECTION);
       });
     }
   },

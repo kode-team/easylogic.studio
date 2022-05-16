@@ -337,7 +337,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
-        switch (this.targetParent["flex-direction"]) {
+        switch (this.targetParent.flexDirection) {
           case FlexDirection.ROW:
             return this.renderLayoutFlexRowArea();
           case FlexDirection.COLUMN:
@@ -361,9 +361,7 @@ export default class GhostToolView extends EditorElement {
   renderLayoutItemForFirst() {
     if (this.targetItem?.hasChildren() === false) {
       if (this.targetItem.isLayout(Layout.FLEX)) {
-        return this.renderLayoutFlexForFirstItem(
-          this.targetItem["flex-direction"]
-        );
+        return this.renderLayoutFlexForFirstItem(this.targetItem.flexDirection);
       } else if (this.targetItem.isLayout(Layout.GRID)) {
         //noop
       }
@@ -487,7 +485,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
-        switch (this.targetParent["flex-direction"]) {
+        switch (this.targetParent.flexDirection) {
           case FlexDirection.ROW:
             // left
             if (this.targetRelativeMousePoint.x < CHECK_RATE) {

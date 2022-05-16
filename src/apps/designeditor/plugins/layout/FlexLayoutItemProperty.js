@@ -58,7 +58,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
             ${createComponent({
               ref: "$grow",
               label: this.$i18n("flex.layout.item.property.grow"),
-              key: "flex-grow",
+              key: "flexGrow",
               value: current.flexGrow,
               min: 0,
               max: 1,
@@ -71,7 +71,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
             ${createComponent({
               ref: "$shrink",
               label: this.$i18n("flex.layout.item.property.shrink"),
-              key: "flex-shrink",
+              key: "flexShrink",
               value: current.flexShrink,
               min: 0,
               max: 1,
@@ -84,7 +84,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
             ${createComponent("RangeEditor", {
               ref: "$basis",
               label: this.$i18n("flex.layout.item.property.basis"),
-              key: "flex-basis",
+              key: "flexBasis",
               value: current.flexBasis,
               min: 0,
               max: 1,
@@ -116,9 +116,9 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     basis = this.getFlexItemValue(basis);
 
     return {
-      "flex-grow": grow,
-      "flex-shrink": shrink,
-      "flex-basis": basis,
+      flexGrow: grow,
+      flexShrink: shrink,
+      flexBasis: basis,
     };
   }
 

@@ -1,6 +1,23 @@
 import { isArray } from "sapa";
 
 import { UPDATE_CANVAS } from "elf/editor/types/event";
+
+function makeEmitList(maker, current) {
+  if (current.hasLayout()) {
+    maker.emit("refreshElementBoundSize", current);
+  } else {
+    // 화면 레이아웃 재정렬
+    if (
+      current &&
+      (current.isLayoutItem() || current.parent?.is("boolean-path"))
+    ) {
+      maker.emit("refreshElementBoundSize", current.parent);
+    } else {
+      maker.emit("refreshElementBoundSize", current);
+    }
+  }
+}
+
 /**
  * refresh element command
  *
@@ -28,6 +45,10 @@ export default {
       }
 
       maker.emit(UPDATE_CANVAS, current);
+
+      current.forEach((item) => {
+        makeEmitList(maker, item);
+      });
     } else {
       // 부모 관계가 바뀔 때는 refreshAllCanvas 를 실행해줘서
       // 전체 element 를 사전에 맞춰야 한다.
@@ -43,19 +64,7 @@ export default {
       // 화면 사이즈 조정
       maker.emit(UPDATE_CANVAS, current);
 
-      if (current.hasLayout()) {
-        maker.emit("refreshElementBoundSize", current);
-      } else {
-        // 화면 레이아웃 재정렬
-        if (
-          current &&
-          (current.isLayoutItem() || current.parent?.is("boolean-path"))
-        ) {
-          maker.emit("refreshElementBoundSize", current.parent);
-        } else {
-          maker.emit("refreshElementBoundSize", current);
-        }
-      }
+      makeEmitList(maker, current);
     }
 
     // maker.log();

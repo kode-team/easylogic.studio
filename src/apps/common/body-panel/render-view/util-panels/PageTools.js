@@ -139,12 +139,6 @@ export default class PageTools extends EditorElement {
     this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
   }
 
-  // [SUBSCRIBE(REFRESH_SELECTION)]() {
-  //   this.refs.$selectedCount.html(this.$context.selection.length + "");
-
-  //   this.load("$buttons");
-  // }
-
   [LOAD("$buttons") + DOMDIFF]() {
     return "";
     // if (this.$context.selection.isEmpty) return "";

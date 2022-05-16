@@ -297,7 +297,7 @@ export class Length {
     return this.isUnitType("ms");
   }
   isNumber() {
-    return this.isUnitType("number");
+    return this.isUnitType("number") || this.isUnitType("");
   }
   isString() {
     return this.isUnitType("");

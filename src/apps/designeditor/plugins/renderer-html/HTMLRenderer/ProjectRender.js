@@ -75,7 +75,7 @@ export default class ProjectRender extends DomRender {
   render(item, renderer) {
     return item.layers
       .map((it) => {
-        return renderer.render(it);
+        return renderer.render(it, renderer);
       })
       .join("");
   }

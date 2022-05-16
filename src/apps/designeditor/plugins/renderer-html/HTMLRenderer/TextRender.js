@@ -27,7 +27,7 @@ export default class TextRender extends LayerRender {
    * @param {Dom} currentElement
    */
   update(item, currentElement) {
-    const $textElement = currentElement.$(`.text-content`);
+    const $textElement = currentElement?.$(`.text-content`);
     if ($textElement) {
       var { content } = item;
       $textElement.updateDiff(content);

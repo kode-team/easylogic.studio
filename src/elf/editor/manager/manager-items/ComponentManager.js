@@ -17,8 +17,12 @@ export class ComponentManager {
     this.inspectors[name] = inspectorCallback;
   }
 
+  isComponentClass(name) {
+    return !!this.getComponentClass(name);
+  }
+
   getComponentClass(name) {
-    return this.components[name] || this.components["rect"];
+    return this.components[name];
   }
 
   getInspector(name) {
@@ -36,7 +40,8 @@ export class ComponentManager {
   createComponent(itemType, obj = {}) {
     var ComponentClass = this.getComponentClass(itemType);
     if (!ComponentClass) {
-      throw new Error(`${itemType} type is not valid.`);
+      console.warn(`${itemType} type is not valid.`);
+      return undefined;
     }
 
     return new ComponentClass(obj);

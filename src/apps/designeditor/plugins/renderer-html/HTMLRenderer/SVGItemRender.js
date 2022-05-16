@@ -126,22 +126,16 @@ export default class SVGItemRender extends LayerRender {
    * @param {Item} item
    */
   toDefaultCSS(item) {
-    return Object.assign(
-      {},
-      super.toDefaultCSS(item),
-      this.toKeyListCSS(item, [
-        "stroke-width",
-        "stroke-linecap",
-        "stroke-linejoin",
-        "stroke-dashoffset",
-        "fill-opacity",
-        "fill-rule",
-        "text-anchor",
-      ]),
-      {
-        "stroke-dasharray": item.strokeDasharray?.join(" "),
-      }
-    );
+    return Object.assign({}, super.toDefaultCSS(item), {
+      "stroke-width": item.strokeWidth,
+      "stroke-linecap": item.strokeLinecap,
+      "stroke-linejoin": item.strokeLinejoin,
+      "stroke-dashoffset": item.strokeDashoffset,
+      "fill-opacity": item.fillOpacity,
+      "fill-rule": item.fillRule,
+      "text-anchor": item.textAnchor,
+      "stroke-dasharray": item.strokeDasharray?.join(" "),
+    });
   }
 
   /**

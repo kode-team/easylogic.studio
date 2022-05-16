@@ -9,6 +9,7 @@ import {
   POINTERSTART,
   DOMDIFF,
   MOUSEOVER,
+  MOUSELEAVE,
 } from "sapa";
 
 import "./VerticalRuler.scss";
@@ -60,6 +61,10 @@ export default class VerticalRuler extends EditorElement {
 
   [MOUSEOVER()]() {
     this.$commands.emit("refreshCursor", "ew-resize");
+  }
+
+  [MOUSELEAVE()]() {
+    this.$commands.emit("recoverCursor");
   }
 
   [POINTERSTART() + MOVE() + END()]() {

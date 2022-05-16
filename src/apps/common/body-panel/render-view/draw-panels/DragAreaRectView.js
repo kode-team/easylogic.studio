@@ -8,7 +8,6 @@ import {
   toRectVerties,
   toRectVertiesWithoutTransformOrigin,
 } from "elf/core/collision";
-import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -158,9 +157,7 @@ export default class DragAreaRectView extends EditorElement {
     );
 
     // selection 이 변경이 있을 때만 refresh_selection 을 실행한다.
-    if (this.$context.selection.selectByGroup(...selectedItems)) {
-      this.emit(REFRESH_SELECTION);
-    }
+    this.$context.selection.selectByGroup(...selectedItems);
   }
 
   [SUBSCRIBE("endDragAreaView")]() {

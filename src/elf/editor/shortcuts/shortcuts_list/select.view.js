@@ -2,6 +2,6 @@ export default {
   category: "Tool",
   key: "v",
   command: "addLayerView",
-  args: "select",
+  args: ["select"],
   description: "Selection",
 };

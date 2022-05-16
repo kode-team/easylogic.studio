@@ -38,7 +38,8 @@ export class ToolbarButtonMenuItem extends EditorElement {
   }
 
   template() {
-    return /*html*/ `<button type="button"  class='elf--toolbar-menu-item' ></button>`;
+    return /*html*/ `<button type="button"  class='elf--toolbar-menu-item' ></button>
+`;
   }
 
   [CLICK("$el")]() {

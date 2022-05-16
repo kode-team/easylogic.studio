@@ -39,8 +39,9 @@ export class DropdownMenuItem extends EditorElement {
   }
 
   [CLICK("$el") + PREVENT + STOP]() {
+    console.log("click", this.props.command, this.props.args);
     if (this.props.command) {
-      this.emit(this.props.command, ...(this.props.args || []));
+      this.$commands.emit(this.props.command, ...(this.props.args || []));
     } else if (isFunction(this.props.action)) {
       this.props.action(this.$editor, this);
     } else if (isFunction(this.props.onClick)) {

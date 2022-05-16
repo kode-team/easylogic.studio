@@ -2,7 +2,7 @@ import { POINTERSTART, IF } from "sapa";
 
 import "./DragAreaView.scss";
 
-import { END, MOVE, REFRESH_SELECTION } from "elf/editor/types/event";
+import { END, MOVE } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -108,8 +108,6 @@ export default class DragAreaView extends EditorElement {
   initializeDragSelection() {
     this.$context.selection.reselect();
     this.$context.snapManager.clear();
-
-    this.emit(REFRESH_SELECTION);
   }
 
   movePointer() {

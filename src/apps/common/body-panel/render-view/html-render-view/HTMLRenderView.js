@@ -21,18 +21,20 @@ import {
 
 import "./HTMLRenderView.scss";
 
+import { round } from "elf/core/math/index";
 import {
   END,
   FIRSTMOVE,
   MOVE,
   UPDATE_VIEWPORT,
-  REFRESH_SELECTION,
   UPDATE_CANVAS,
   OPEN_CONTEXT_MENU,
   REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
+
+// const cache = {};
 
 export default class HTMLRenderView extends EditorElement {
   initState() {
@@ -306,8 +308,6 @@ export default class HTMLRenderView extends EditorElement {
 
     this.$context.selection.select(id);
 
-    this.emit(REFRESH_SELECTION);
-
     this.emit(OPEN_CONTEXT_MENU, {
       target: "context.menu.layer",
       items: [
@@ -356,7 +356,6 @@ export default class HTMLRenderView extends EditorElement {
     if ($target.hasClass("canvas-view")) {
       this.$context.selection.select();
       this.initializeDragSelection();
-      this.$commands.emit("history.refreshSelection");
 
       return false;
     }
@@ -378,12 +377,10 @@ export default class HTMLRenderView extends EditorElement {
 
       if (this.$context.selection.isEmpty === false) {
         // 선택된 모든 객체 카피하기
-        this.$context.selection.selectAfterCopy();
-        this.refreshAllCanvas();
+        this.$commands.emit("history.copyLayer", "copy");
         this.emit("refreshLayerTreeView");
 
         this.initializeDragSelection();
-        this.$commands.emit("history.refreshSelection");
       }
     } else {
       if (isInSelectedArea) {
@@ -413,7 +410,6 @@ export default class HTMLRenderView extends EditorElement {
       }
 
       this.initializeDragSelection();
-      this.$commands.emit("history.refreshSelection");
     }
   }
 
@@ -567,8 +563,9 @@ export default class HTMLRenderView extends EditorElement {
       });
     }
 
-    this.emit(REFRESH_SELECTION);
     this.$config.set("editing.mode.itemType", "select");
+    this.$commands.emit("history.refreshSelection");
+    this.emit(REFRESH_SELECTION_TOOL);
   }
 
   refreshSelectionStyleView(obj) {
@@ -627,7 +624,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   updateAllCanvas(parentLayer) {
-    parentLayer.layers.forEach((item) => {
+    parentLayer?.layers.forEach((item) => {
       this.updateElement(item, this.getElement(item.id));
       this.updateAllCanvas(item);
     });
@@ -661,6 +658,14 @@ export default class HTMLRenderView extends EditorElement {
   refreshElementRect(item) {
     var $el = this.getElement(item.id);
     let offset = $el.offsetRect();
+    let rect = $el.offsetClientRect();
+
+    // console.log("offset", offset.x, offset.y);
+
+    offset.x = round(rect.x / this.$viewport.scale, 1000);
+    offset.y = round(rect.y / this.$viewport.scale, 1000);
+
+    // console.log("client", offset.x, offset.y);
 
     if (offset.width === 0 || offset.height === 0) {
       return;
@@ -668,13 +673,11 @@ export default class HTMLRenderView extends EditorElement {
 
     item.reset(offset);
 
-    this.refreshSelectionStyleView(item);
+    // this.refreshSelectionStyleView(item);
 
-    if (this.$context.selection.check(item)) {
-      this.emit(REFRESH_SELECTION_TOOL);
-    }
-
-    this.emit(UPDATE_CANVAS, item);
+    // if (this.$context.selection.check(item)) {
+    //   this.emit(REFRESH_SELECTION_TOOL);
+    // }
   }
 
   refreshSelfElement(item) {

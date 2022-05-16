@@ -17,7 +17,7 @@ export default class ArtBoardRender extends DomRender {
       .map((it) => {
         return renderer.render(it, renderer);
       })
-      .join("\n\t")}</div>`;
+      .join("")}</div>`;
   }
 
   /**

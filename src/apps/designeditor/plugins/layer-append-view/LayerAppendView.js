@@ -460,6 +460,15 @@ export default class LayerAppendView extends EditorElement {
           $drawItem.focus();
           return;
         }
+
+        this.$commands.emit(
+          "newComponent",
+          this.state.type,
+          rect,
+          /* isSelected */ true,
+          parentArtBoard || this.$context.selection.currentProject
+        );
+
         break;
       default:
         this.$commands.emit(

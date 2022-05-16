@@ -1,1 +1,0 @@
-import{a as e}from"./index.116e5b2a.js";function r(){return["app"].map(t=>e({container:document.getElementById(t),config:{"debug.mode":!0,"editor.theme":"light","show.ruler":!1},plugins:[]}))}window.elfEditor=r();

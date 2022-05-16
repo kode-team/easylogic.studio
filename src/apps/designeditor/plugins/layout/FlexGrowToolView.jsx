@@ -33,16 +33,16 @@ export default class FlexGrowToolView extends EditorElement {
           let flexGrow = 0;
           let size = child.screenWidth || 0;
 
-          const parentLayoutDirection = parentItem?.["flex-direction"];
+          const parentLayoutDirection = parentItem?.flexDirection;
 
           if (parentLayoutDirection === FlexDirection.ROW) {
             if (child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
-              flexGrow = child["flex-grow"] || 1;
+              flexGrow = child.flexGrow || 1;
             }
             size = child.screenWidth;
           } else if (parentLayoutDirection === FlexDirection.COLUMN) {
             if (child.resizingVertical === ResizingMode.FILL_CONTAINER) {
-              flexGrow = child["flex-grow"] || 1;
+              flexGrow = child.flexGrow || 1;
             }
 
             size = child.screenHeight;
@@ -71,10 +71,13 @@ export default class FlexGrowToolView extends EditorElement {
   [POINTERSTART("$el .flex-grow-item") + MOVE() + END()](e) {
     const [id, grow] = e.$dt.attrs("data-flex-item-id", "data-flex-grow");
 
-    this.state = {
-      id,
-      grow: +grow,
-    };
+    this.setState(
+      {
+        id,
+        grow: +grow,
+      },
+      false
+    );
   }
 
   getFlexGrow(parentLayoutDirection, item, grow, dx, dy) {
@@ -106,13 +109,13 @@ export default class FlexGrowToolView extends EditorElement {
     const parentItem = item.parent;
     if (!parentItem) return;
 
-    const parentLayoutDirection = parentItem["flex-direction"];
+    const parentLayoutDirection = parentItem.flexDirection;
 
     let flexGrow = this.getFlexGrow(parentLayoutDirection, item, grow, dx, dy);
 
     this.$commands.emit("setAttribute", {
       [id]: {
-        "flex-grow": flexGrow,
+        flexGrow: flexGrow,
       },
     });
   }
@@ -126,7 +129,7 @@ export default class FlexGrowToolView extends EditorElement {
     const parentItem = item.parent;
     if (!parentItem) return;
 
-    const parentLayoutDirection = parentItem["flex-direction"];
+    const parentLayoutDirection = parentItem.flexDirection;
 
     let flexGrow = this.getFlexGrow(parentLayoutDirection, item, grow, dx, dy);
 
@@ -136,9 +139,9 @@ export default class FlexGrowToolView extends EditorElement {
         parentLayoutDirection === FlexDirection.ROW &&
         item.resizingHorizontal !== ResizingMode.FILL_CONTAINER
       ) {
-        this.commands.executeCommand("setAttribute", "change self resizing", {
+        this.$commands.executeCommand("setAttribute", "change self resizing", {
           [id]: {
-            "flex-grow": 1,
+            flexGrow: 1,
             resizingHorizontal: ResizingMode.FILL_CONTAINER,
           },
         });
@@ -146,17 +149,17 @@ export default class FlexGrowToolView extends EditorElement {
         parentLayoutDirection === FlexDirection.COLUMN &&
         item.resizingVertical !== ResizingMode.FILL_CONTAINER
       ) {
-        this.commands.executeCommand("setAttribute", "change self resizing", {
+        this.$commands.executeCommand("setAttribute", "change self resizing", {
           [id]: {
-            "flex-grow": 1,
+            flexGrow: 1,
             resizingVertical: ResizingMode.FILL_CONTAINER,
           },
         });
       }
     } else {
-      this.commands.executeCommand("setAttribute", "change self resizing", {
+      this.$commands.executeCommand("setAttribute", "change self resizing", {
         [id]: {
-          "flex-grow": flexGrow,
+          flexGrow: flexGrow,
         },
       });
     }

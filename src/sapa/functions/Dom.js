@@ -550,9 +550,21 @@ export class Dom {
   }
 
   isSVG() {
-    return this.el.tagName.toUpperCase() === "SVG";
+    if (!this.el._cachedIsSVG) {
+      this.el._cachedIsSVG = { value: this.el.tagName.toLowerCase() === "svg" };
+    }
+
+    return this.el._cachedIsSVG.value;
   }
 
+  /**
+   * offset rect 를 생성
+   *
+   * svg 나 isClientRect 가 true 인 경우 clientRect 를 기준으로 생성
+   *
+   * @param {boolean} isClientRect
+   * @returns
+   */
   offsetRect() {
     if (this.isSVG()) {
       const parentBox = this.parent().rect();
@@ -573,6 +585,29 @@ export class Dom {
       y: el.offsetTop,
       width: el.offsetWidth,
       height: el.offsetHeight,
+    };
+  }
+
+  offsetClientRect() {
+    if (this.isSVG()) {
+      const parentBox = this.parent().rect();
+      const box = this.rect();
+
+      return {
+        x: box.x - parentBox.x,
+        y: box.y - parentBox.y,
+        width: box.width,
+        height: box.height,
+      };
+    }
+
+    const parentBox = this.parent().rect();
+    const box = this.rect();
+    return {
+      x: box.x - parentBox.x,
+      y: box.y - parentBox.y,
+      width: box.width,
+      height: box.height,
     };
   }
 

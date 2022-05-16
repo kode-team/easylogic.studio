@@ -108,7 +108,7 @@ export default class ProjectProperty extends BaseProperty {
   [CLICK("$projectList .project-item .remove")](e) {
     var id = e.$dt.attr("data-id");
 
-    this.commands.executeCommand("removeProject", "remove project", id);
+    this.$commands.executeCommand("removeProject", "remove project", id);
 
     this.nextTick(() => {
       this.refresh();

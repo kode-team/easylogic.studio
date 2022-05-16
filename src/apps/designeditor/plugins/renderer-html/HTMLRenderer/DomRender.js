@@ -107,11 +107,8 @@ export default class DomRender extends ItemRender {
     if (parentLayout === Layout.FLEX) {
       obj = {
         ...obj,
-        ...item.attrs(
-          "flexBasis",
-          // 'flex-grow',
-          "flexShrink"
-        ),
+        "flex-basis": item.flexBasis,
+        "flex-shrink": item.flexShrink,
       };
 
       // 자식의 경우 fill container 를 가질 수 있고
@@ -135,12 +132,10 @@ export default class DomRender extends ItemRender {
     } else if (parentLayout === Layout.GRID) {
       obj = {
         ...obj,
-        ...item.attrs(
-          "gridColumnStart",
-          "gridColumnEnd",
-          "gridRowStart",
-          "gridRowEnd"
-        ),
+        "grid-column-start": item.gridColumnStart,
+        "grid-column-end": item.gridColumnEnd,
+        "grid-row-start": item.gridRowStart,
+        "grid-row-end": item.gridRowEnd,
       };
 
       // 렌더링 하는 쪽에서만 처리를 해주는게 맞을까?
@@ -248,13 +243,11 @@ export default class DomRender extends ItemRender {
     return {
       display: "flex",
       gap: Length.px(item.gap),
-      ...item.attrs(
-        "flex-direction",
-        "flex-wrap",
-        "justify-content",
-        "align-items",
-        "align-content"
-      ),
+      "flex-direction": item.flexDirection,
+      "flex-wrap": item.flexWrap,
+      "justify-content": item.justifyContent,
+      "align-items": item.alignItems,
+      "align-content": item.alignContent,
     };
   }
 
@@ -265,15 +258,14 @@ export default class DomRender extends ItemRender {
   toGridLayoutCSS(item) {
     return {
       display: "grid",
-      ...item.attrs(
-        "grid-template-columns",
-        "grid-template-rows",
-        "grid-auto-columns",
-        "grid-auto-rows",
-        "grid-auto-flow",
-        "grid-column-gap",
-        "grid-row-gap"
-      ),
+      "grid-template-columns": item.gridTemplateColumns,
+      "grid-template-rows": item.gridTemplateRows,
+      "grid-template-areas": item.gridTemplateAreas,
+      "grid-auto-columns": item.gridAutoColumns,
+      "grid-auto-rows": item.gridAutoRows,
+      "grid-auto-flow": item.gridAutoFlow,
+      "grid-column-gap": item.gridColumnGap,
+      "grid-row-gap": item.gridRowGap,
     };
   }
 
@@ -311,25 +303,6 @@ export default class DomRender extends ItemRender {
       obj["padding-bottom"] = Length.px(item.paddingBottom);
     if (item.paddingLeft) obj["padding-left"] = Length.px(item.paddingLeft);
     if (item.paddingRight) obj["padding-right"] = Length.px(item.paddingRight);
-
-    return obj;
-  }
-
-  /**
-   *
-   * @param {Item} item
-   * @param {string[]} parameters 표현될 속성 리스트
-   */
-  toKeyListCSS(item, args = []) {
-    let obj = {};
-
-    for (var i = 0; i < args.length; i++) {
-      const key = args[i];
-      const value = item.get(key);
-      if (isNotUndefined(value)) {
-        obj[key] = value || item[key];
-      }
-    }
 
     return obj;
   }

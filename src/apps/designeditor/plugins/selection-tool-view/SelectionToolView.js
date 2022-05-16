@@ -9,13 +9,6 @@ import {
   clone,
 } from "sapa";
 
-import {
-  REFRESH_SELECTION_TOOL,
-  REFRESH_SELECTION,
-  UPDATE_VIEWPORT,
-  END,
-  MOVE,
-} from "../../../../elf/editor/types/event";
 import "./SelectionView.scss";
 
 import { getRotatePointer } from "elf/core/collision";
@@ -31,6 +24,13 @@ import {
 import GridLayoutEngine from "elf/editor/layout-engine/GridLayoutEngine";
 import { TransformOrigin } from "elf/editor/property-parser/TransformOrigin";
 import { ViewModeType } from "elf/editor/types/editor";
+import {
+  REFRESH_SELECTION_TOOL,
+  REFRESH_SELECTION,
+  UPDATE_VIEWPORT,
+  END,
+  MOVE,
+} from "elf/editor/types/event";
 import { ResizingMode } from "elf/editor/types/model";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -882,7 +882,9 @@ export default class SelectionToolView extends SelectionToolEvent {
       return;
     }
 
-    const screenVerties = this.$viewport.applyVerties(verties);
+    const screenVerties = this.$viewport.applyVerties(verties).map((it) => {
+      return vec3.round([], it);
+    });
 
     this.state.renderPointerList = [
       screenVerties,
@@ -1041,6 +1043,27 @@ export default class SelectionToolView extends SelectionToolEvent {
     return value.replace(/NaN/g, "0");
   }
 
+  /**
+   * viewport scale 을 적용한 좌표를 연산한 이후에
+   * 그리기 영역이 안 맞을 때가 있다.
+   *
+   * scale 이 커지면 그 격차가 더 심해진다.
+   *
+   * 100% 근처에있을 때는 잘 티가 안나다가
+   * 25000% 까지 가면 상당히 큰 숫자로 차이가 난다.
+   *
+   * 이것은 전체 연산 자체가 소수점이라서 생기는 문제인데
+   * 구조를 어떻게 잡아야 할지 모르겠다.
+   *
+   * layout 의 item 일 때만 이 문제가 있다. 예를 들어 flex item 일 경우 그렇다.
+   *
+   * 일반적인 상황에서는 잘 그려주는데 왜 저 시점에서만 차이가 나는지 모르겠다.
+   *
+   *
+   * @param {vec3[]} pointers
+   * @param {vec3[]} selectionPointers
+   * @returns
+   */
   createRenderPointers(pointers, selectionPointers) {
     const current = this.$context.selection.current;
 
