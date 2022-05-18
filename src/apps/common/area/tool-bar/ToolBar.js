@@ -1,4 +1,4 @@
-import { CONFIG, LOAD, createComponent, createElement } from "sapa";
+import { CONFIG, createComponent } from "sapa";
 
 // import ToolMenu from "./ToolMenu";
 
@@ -7,7 +7,6 @@ import LayoutSelector from "../status-bar/LayoutSelector";
 import "./ToolBar.scss";
 import ToolBarRenderer from "./ToolBarRenderer";
 
-import ToolbarMenu from "elf/editor/menus/menu_list/ToolbarMenu";
 import { Language } from "elf/editor/types/editor";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import Download from "elf/editor/ui/menu-items/Download";
@@ -19,63 +18,84 @@ import ThemeChanger from "elf/editor/ui/menu-items/ThemeChanger";
 import Undo from "elf/editor/ui/menu-items/Undo";
 import { DropdownMenu } from "elf/editor/ui/view/DropdownMenu";
 
-export default class ToolBar extends EditorElement {
+export class ToolBar extends EditorElement {
   initState() {
     return {
       items: [
         {
-          title: "menu.item.fullscreen.title",
-          command: "toggle.fullscreen",
-          shortcut: "ALT+/",
-        },
-        { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
-        "-",
-        { title: "menu.item.export.title", command: "showExportView" },
-        { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
-        { title: "menu.item.download.title", command: "downloadJSON" },
-        {
-          title: "menu.item.save.title",
-          command: "saveJSON",
-          nextTick: () => {
-            this.alert("Save", "Save the content on localStorage", 2000);
+          type: "dropdown",
+          style: {
+            padding: "12px",
           },
-        },
-        {
-          title: "menu.item.language.title",
+          icon: `<div class="logo-item"><label class='logo'></label></div>`,
           items: [
             {
-              title: "English",
-              command: "setLocale",
-              args: [Language.EN],
-              checked: () => this.$editor.locale === Language.EN,
+              title: "menu.item.fullscreen.title",
+              command: "toggle.fullscreen",
+              shortcut: "ALT+/",
             },
             {
-              title: "Français",
-              command: "setLocale",
-              args: [Language.FR],
-              checked: () => this.$editor.locale === Language.FR,
+              title: "menu.item.shortcuts.title",
+              command: "showShortcutWindow",
+            },
+            "-",
+            { title: "menu.item.export.title", command: "showExportView" },
+            {
+              title: "menu.item.export.title",
+              command: "showEmbedEditorWindow",
+            },
+            { title: "menu.item.download.title", command: "downloadJSON" },
+            {
+              title: "menu.item.save.title",
+              command: "saveJSON",
+              nextTick: () => {
+                this.emit(
+                  "notify",
+                  "alert",
+                  "Save",
+                  "Save the content on localStorage",
+                  2000
+                );
+              },
             },
             {
-              title: "Korean",
-              command: "setLocale",
-              args: [Language.KO],
-              checked: () => this.$editor.locale === Language.KO,
+              title: "menu.item.language.title",
+              items: [
+                {
+                  title: "English",
+                  command: "setLocale",
+                  args: [Language.EN],
+                  checked: (editor) => editor.locale === Language.EN,
+                },
+                {
+                  title: "Français",
+                  command: "setLocale",
+                  args: [Language.FR],
+                  checked: (editor) => editor.locale === Language.FR,
+                },
+                {
+                  title: "Korean",
+                  command: "setLocale",
+                  args: [Language.KO],
+                  checked: (editor) => editor.locale === Language.KO,
+                },
+              ],
             },
-          ],
-        },
-        "-",
-        {
-          title: "EasyLogic Studio",
-          items: [
+            "-",
             {
-              type: "link",
-              title: "Github",
-              href: "https://github.com/easylogic/editor",
-            },
-            {
-              type: "link",
-              title: "Learn",
-              href: "https://www.easylogic.studio",
+              title: "EasyLogic Studio",
+              items: [
+                {
+                  type: "link",
+                  title: "Github",
+                  href: "https://github.com/easylogic/editor",
+                },
+                {
+                  type: "link",
+                  title: "Learn",
+                  href: "https://www.easylogic.studio",
+                },
+              ],
             },
           ],
         },
@@ -101,41 +121,37 @@ export default class ToolBar extends EditorElement {
   template() {
     return /*html*/ `
             <div class='elf--tool-bar'>
-                ${createComponent("ToolBarRenderer", {
-                  items: ToolbarMenu.left(this.$editor),
-                })}
-                <div class='center'>
+                <div class="logo-area">
                   ${createComponent("ToolBarRenderer", {
-                    items: this.$menu.getTargetMenu("toolbar.center"),
-                  })}       
-                  ${this.$injectManager.generate(
-                    "toolbar.center"
-                  )}                
+                    items: this.state.items,
+                  })}                
                 </div>
-                <div class='right'>
+                <div class="toolbar-area">
+                  <div class="left">
                     ${createComponent("ToolBarRenderer", {
-                      items: this.$menu.getTargetMenu("toolbar.right"),
-                    })}                                
-                    ${this.$injectManager.generate("toolbar.right")}
-                    ${createComponent("ThemeChanger")}
+                      items: this.$menu.getTargetMenu("toolbar.left"),
+                    })}
+                    ${this.$injectManager.generate(
+                      "toolbar.left"
+                    )}                
+                  </div>
+                  <div class='center'>
+                    ${createComponent("ToolBarRenderer", {
+                      items: this.$menu.getTargetMenu("toolbar.center"),
+                    })}       
+                    ${this.$injectManager.generate(
+                      "toolbar.center"
+                    )}                
+                  </div>
+                  <div class='right'>
+                      ${createComponent("ToolBarRenderer", {
+                        items: this.$menu.getTargetMenu("toolbar.right"),
+                      })}                                
+                      ${this.$injectManager.generate("toolbar.right")}
+                      ${createComponent("ThemeChanger")}
+                  </div>
                 </div>
             </div>
-        `;
-  }
-
-  [LOAD("$logo")]() {
-    return /*html*/ `
-            <div class="logo-item">           
-                ${createComponent(
-                  "DropdownMenu",
-                  {
-                    ref: "$menu",
-                    items: this.state.items,
-                    dy: 6,
-                  },
-                  [createElement("label", { class: "logo" })]
-                )}
-            </div>                                
         `;
   }
 

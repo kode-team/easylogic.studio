@@ -188,7 +188,6 @@ export class DropdownMenu extends EditorElement {
 
     // command 를 실행하고
     if (command) {
-      console.log(command);
       this.$commands.emit(command, ...args);
     } else if (action && isFunction(action)) {
       this.emit(action);

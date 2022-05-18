@@ -4117,6 +4117,64 @@ function equals$1(a, b) {
   };
 })();
 var CanvasView$2 = "";
+const Language = {
+  EN: "en_US",
+  FR: "fr_FR",
+  KO: "ko_KR"
+};
+const EditingMode = {
+  SELECT: "select",
+  APPEND: "append",
+  DRAW: "draw",
+  PATH: "path",
+  HAND: "hand"
+};
+const DesignMode = {
+  EDIT: "edit",
+  PREVIEW: "preview",
+  DESIGN: "design",
+  ITEM: "item"
+};
+const CanvasViewToolLevel = {
+  DRAG_AREA: 0,
+  RENDERING_AREA: 256,
+  SELECTION_TOOL: 512,
+  LAYOUT_TOOL: 768
+};
+const NotifyType = {
+  ERROR: "error",
+  INFO: "info",
+  SUCCESS: "success",
+  WARNING: "warning",
+  ALERT: "alert"
+};
+const IntersectEpsilonNumberType = {
+  RECT: 30
+};
+const ClipboardType = {
+  TEXT: "text",
+  IMAGE: "image",
+  SVG: "svg",
+  HTML: "html",
+  JSON: "json"
+};
+const ClipboardActionType = {
+  COPY: "copy",
+  CUT: "cut"
+};
+const MenuItemType = {
+  BUTTON: "button",
+  LINK: "link",
+  SEPARATOR: "separator",
+  CHECKBOX: "checkbox",
+  RADIO: "radio",
+  SUBMENU: "submenu",
+  DROPDOWN: "dropdown"
+};
+const ViewModeType = {
+  CanvasView: "CanvasView",
+  PathEditorView: "PathEditorView"
+};
 const ADD_BODY_FIRST_MOUSEMOVE = "add/body/first/mousemove";
 const ADD_BODY_MOUSEMOVE = "add/body/mousemove";
 const ADD_BODY_MOUSEUP = "add/body/mouseup";
@@ -4295,64 +4353,6 @@ const KeyStringMaker = (item, os2 = OSName$1) => {
     return keyAlias$1[keyString] || keyString;
   }).join(" ");
 };
-const Language = {
-  EN: "en_US",
-  FR: "fr_FR",
-  KO: "ko_KR"
-};
-const EditingMode = {
-  SELECT: "select",
-  APPEND: "append",
-  DRAW: "draw",
-  PATH: "path",
-  HAND: "hand"
-};
-const DesignMode = {
-  EDIT: "edit",
-  PREVIEW: "preview",
-  DESIGN: "design",
-  ITEM: "item"
-};
-const CanvasViewToolLevel = {
-  DRAG_AREA: 0,
-  RENDERING_AREA: 256,
-  SELECTION_TOOL: 512,
-  LAYOUT_TOOL: 768
-};
-const NotifyType = {
-  ERROR: "error",
-  INFO: "info",
-  SUCCESS: "success",
-  WARNING: "warning",
-  ALERT: "alert"
-};
-const IntersectEpsilonNumberType = {
-  RECT: 30
-};
-const ClipboardType = {
-  TEXT: "text",
-  IMAGE: "image",
-  SVG: "svg",
-  HTML: "html",
-  JSON: "json"
-};
-const ClipboardActionType = {
-  COPY: "copy",
-  CUT: "cut"
-};
-const MenuItemType = {
-  BUTTON: "button",
-  LINK: "link",
-  SEPARATOR: "separator",
-  CHECKBOX: "checkbox",
-  RADIO: "radio",
-  SUBMENU: "submenu",
-  DROPDOWN: "dropdown"
-};
-const ViewModeType = {
-  CanvasView: "CanvasView",
-  PathEditorView: "PathEditorView"
-};
 class EditorElement extends UIElement {
   get notEventRedefine() {
     return true;
@@ -4510,7 +4510,7 @@ class BlankCanvasView extends EditorElement {
     };
   }
   checkSpace() {
-    if (this.$context.config.get("set.tool.hand")) {
+    if (this.$context.config.is("editing.mode", EditingMode.HAND)) {
       return true;
     }
     return this.$context.keyboardManager.check(this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space));
@@ -4518,8 +4518,8 @@ class BlankCanvasView extends EditorElement {
   [POINTERSTART("$lock") + IF("checkSpace") + MOVE("movePan") + END("moveEndPan")]() {
     this.startMovePan();
   }
-  [CONFIG("set.tool.hand")](value) {
-    if (value) {
+  [CONFIG("editing.mode")]() {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       this.startMovePan();
       this.$commands.emit("refreshCursor", "grab");
     } else {
@@ -4536,10 +4536,10 @@ class BlankCanvasView extends EditorElement {
     this.lastDist = currentDist;
   }
   refreshCursor() {
-    if (this.$context.config.get("set.tool.hand") === false) {
-      this.$commands.emit("refreshCursor", "auto");
-    } else {
+    if (this.$context.config.is("editing.mode", EditingMode.HAND)) {
       this.$commands.emit("refreshCursor", "grab");
+    } else {
+      this.$commands.emit("refreshCursor", "auto");
     }
   }
   moveEndPan() {
@@ -4984,7 +4984,7 @@ class BlankLayerTab extends EditorElement {
   }
 }
 var BlankToolBar$1 = "";
-var ToolbarMenuItem$2 = "";
+var ToolbarMenuItem = "";
 function _icon_template(tpl, opt) {
   const defaultOpts = Object.assign({
     width: 24,
@@ -5037,7 +5037,7 @@ var __glob_0_7$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   "default": align_horizontal_center
 }, Symbol.toStringTag, { value: "Module" }));
 var align_horizontal_left = _icon_template(`<path d="M4,22H2V2h2V22z M22,7H6v3h16V7z M16,14H6v3h10V14z"/>`);
-var __glob_0_8$6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": align_horizontal_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5117,7 +5117,7 @@ var __glob_0_23$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": artboard$1
 }, Symbol.toStringTag, { value: "Module" }));
 var auto_awesome = _icon_template(`<path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>`);
-var __glob_0_24$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": auto_awesome
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5691,7 +5691,7 @@ var __glob_0_120$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.define
   "default": layout_flex
 }, Symbol.toStringTag, { value: "Module" }));
 var layout_grid = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_121$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": layout_grid
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6375,7 +6375,7 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$6, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$4, "./icon_list/alternate.js": __glob_0_16$4, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$3, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$2, "./icon_list/control_point.js": __glob_0_53$2, "./icon_list/copy.js": __glob_0_54$2, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119$1, "./icon_list/layout_flex.js": __glob_0_120$1, "./icon_list/layout_grid.js": __glob_0_121$1, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$4, "./icon_list/alternate.js": __glob_0_16$4, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$2, "./icon_list/control_point.js": __glob_0_53$2, "./icon_list/copy.js": __glob_0_54$2, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119$1, "./icon_list/layout_flex.js": __glob_0_120$1, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
 const obj$3 = {};
 Object.entries(modules$7).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -6416,7 +6416,8 @@ class ToolbarButtonMenuItem extends EditorElement {
     }
   }
   template() {
-    return `<button type="button"  class='elf--toolbar-menu-item' ></button>`;
+    return `<button type="button"  class='elf--toolbar-menu-item' ></button>
+`;
   }
   [CLICK("$el")]() {
     if (this.props.command) {
@@ -6431,10 +6432,14 @@ class ToolbarButtonMenuItem extends EditorElement {
     }
   }
   [LOAD("$el") + DOMDIFF]() {
-    return `<span class="icon">${iconUse(this.props.icon, "", {
-      width: 48,
-      height: 48
-    })}</span><span>${this.props.title || ""}</span>`;
+    let result = "";
+    if (this.props.icon) {
+      result += `<span class="icon">${iconUse(this.props.icon)}</span>`;
+    }
+    if (this.props.title) {
+      result += `<span class="title">${this.props.title}</span>`;
+    }
+    return result;
   }
   [BIND("$el")]() {
     const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false;
@@ -6444,7 +6449,7 @@ class ToolbarButtonMenuItem extends EditorElement {
     };
   }
 }
-var ToolBarRenderer$2 = "";
+var ToolBarRenderer$1 = "";
 function Divider() {
   return `<li class="dropdown-divider"></li>`;
 }
@@ -7461,7 +7466,6 @@ class DropdownMenu extends EditorElement {
     const action = menuItem.action;
     const nextTick = menuItem.nextTick;
     if (command) {
-      console.log(command);
       this.$commands.emit(command, ...args2);
     } else if (action && isFunction(action)) {
       this.emit(action);
@@ -7489,7 +7493,7 @@ class DropdownMenu extends EditorElement {
     }
   }
 }
-class ToolBarRenderer$1 extends EditorElement {
+class ToolBarRenderer extends EditorElement {
   checkProps(props = {}) {
     return props;
   }
@@ -7672,7 +7676,7 @@ class ThemeChanger extends MenuItem {
 class BlankToolBar extends EditorElement {
   components() {
     return {
-      ToolBarRenderer: ToolBarRenderer$1,
+      ToolBarRenderer,
       ThemeChanger,
       ExportView,
       DropdownMenu
@@ -7788,18 +7792,6 @@ var __glob_0_5$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": language_locale
 }, Symbol.toStringTag, { value: "Module" }));
-var set_tool_hand$2 = {
-  key: "set.tool.hand",
-  defaultValue: false,
-  title: "Hand tool",
-  description: "Hand tool is on",
-  type: "boolean",
-  storage: "none"
-};
-var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": set_tool_hand$2
-}, Symbol.toStringTag, { value: "Module" }));
 var store_key = {
   key: "store.key",
   defaultValue: "easylogic.studio",
@@ -7807,7 +7799,7 @@ var store_key = {
   description: "Set localStorage key",
   type: "string"
 };
-var __glob_0_7$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": store_key
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7818,11 +7810,11 @@ var style_canvas_background_color = {
   description: "Set canvas background color",
   type: "color"
 };
-var __glob_0_8$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": style_canvas_background_color
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.cursor.js": __glob_0_2$5, "./config_list/editor.theme.js": __glob_0_3$5, "./config_list/event.doubleclick.timing.js": __glob_0_4$5, "./config_list/language.locale.js": __glob_0_5$5, "./config_list/set.tool.hand.js": __glob_0_6$5, "./config_list/store.key.js": __glob_0_7$5, "./config_list/style.canvas.background.color.js": __glob_0_8$5 };
+const modules$6 = { "./config_list/body.move.ms.js": __glob_0_0$6, "./config_list/debug.mode.js": __glob_0_1$6, "./config_list/editor.cursor.js": __glob_0_2$5, "./config_list/editor.theme.js": __glob_0_3$5, "./config_list/event.doubleclick.timing.js": __glob_0_4$5, "./config_list/language.locale.js": __glob_0_5$5, "./config_list/store.key.js": __glob_0_6$5, "./config_list/style.canvas.background.color.js": __glob_0_7$5 };
 var configs$2 = Object.values(modules$6).map((it) => it.default);
 function defaultConfigs(editor) {
   configs$2.forEach((config) => {
@@ -22221,7 +22213,7 @@ var blankEditorPlugins = [
   baseEditor,
   propertyEditor
 ];
-var Console$1 = {
+var Console = {
   command: "Console",
   description: "do console.log()",
   execute: (editor, ...args2) => {
@@ -22230,7 +22222,7 @@ var Console$1 = {
 };
 var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": Console$1
+  "default": Console
 }, Symbol.toStringTag, { value: "Module" }));
 var history_redo$1 = {
   command: "history.redo",
@@ -22348,7 +22340,7 @@ var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var toggle_tool_hand = {
   command: "toggleToolHand",
   execute: function(editor) {
-    editor.context.config.toggle("set.tool.hand");
+    editor.context.config.toggleWith("editing.mode", EditingMode.SELECT, EditingMode.HAND);
   }
 };
 var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -22569,7 +22561,7 @@ class ComponentManager {
     return !!this.getComponentClass(name);
   }
   getComponentClass(name) {
-    return this.components[name];
+    return this.components[name] || this.components["rect"];
   }
   getInspector(name) {
     return this.inspectors[name];
@@ -22669,6 +22661,13 @@ class ConfigManager {
   }
   toggle(key) {
     this.set(key, !this.get(key));
+  }
+  toggleWith(key, firstValue, secondValue) {
+    if (this.get(key) === firstValue) {
+      this.set(key, secondValue);
+    } else {
+      this.set(key, firstValue);
+    }
   }
   true(key) {
     return this.get(key) === true;
@@ -23241,7 +23240,7 @@ var item_move_key_right = {
   args: [1, 0],
   when: "CanvasView"
 };
-var __glob_0_24$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_key_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23530,7 +23529,7 @@ var __glob_0_48$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": select_view
 }, Symbol.toStringTag, { value: "Module" }));
-var set_tool_hand$1 = {
+var set_tool_hand = {
   category: "Tools",
   key: "h",
   command: "toggleToolHand",
@@ -23539,7 +23538,7 @@ var set_tool_hand$1 = {
 };
 var __glob_0_49$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": set_tool_hand$1
+  "default": set_tool_hand
 }, Symbol.toStringTag, { value: "Module" }));
 var show_pan = {
   category: "Tool",
@@ -23597,7 +23596,7 @@ var __glob_0_54$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": zoom_out
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.artboard.pan.js": __glob_0_1$3, "./shortcuts_list/add.brush.js": __glob_0_2$2, "./shortcuts_list/add.circle.js": __glob_0_3$2, "./shortcuts_list/add.circle.l.js": __glob_0_4$2, "./shortcuts_list/add.path.js": __glob_0_5$2, "./shortcuts_list/add.rect.js": __glob_0_6$2, "./shortcuts_list/add.rect.m.js": __glob_0_7$2, "./shortcuts_list/add.rect.pan.js": __glob_0_8$2, "./shortcuts_list/add.text.js": __glob_0_9$2, "./shortcuts_list/clipboard.copy.js": __glob_0_10$2, "./shortcuts_list/clipboard.paste.js": __glob_0_11$2, "./shortcuts_list/escape.js": __glob_0_12$2, "./shortcuts_list/group.item.js": __glob_0_13$2, "./shortcuts_list/history.redo.js": __glob_0_14$2, "./shortcuts_list/history.undo.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_16$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_17$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_18$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_19$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_20$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_21$2, "./shortcuts_list/item.move.key.down.js": __glob_0_22$2, "./shortcuts_list/item.move.key.left.js": __glob_0_23$2, "./shortcuts_list/item.move.key.right.js": __glob_0_24$2, "./shortcuts_list/item.move.key.up.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_26$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_27$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_28$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_29$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_30$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_31$1, "./shortcuts_list/removeLayer.js": __glob_0_32$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_33$1, "./shortcuts_list/segment.delete.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_35$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_36$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_37$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_39$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_40$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_41$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_43$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_44$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_45$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_46$1, "./shortcuts_list/select.all.js": __glob_0_47$1, "./shortcuts_list/select.view.js": __glob_0_48$1, "./shortcuts_list/set.tool.hand.js": __glob_0_49$1, "./shortcuts_list/show.pan.js": __glob_0_50$1, "./shortcuts_list/ungroup.item.js": __glob_0_51$1, "./shortcuts_list/zoom.default.js": __glob_0_52$1, "./shortcuts_list/zoom.in.js": __glob_0_53$1, "./shortcuts_list/zoom.out.js": __glob_0_54$1 };
+const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.artboard.pan.js": __glob_0_1$3, "./shortcuts_list/add.brush.js": __glob_0_2$2, "./shortcuts_list/add.circle.js": __glob_0_3$2, "./shortcuts_list/add.circle.l.js": __glob_0_4$2, "./shortcuts_list/add.path.js": __glob_0_5$2, "./shortcuts_list/add.rect.js": __glob_0_6$2, "./shortcuts_list/add.rect.m.js": __glob_0_7$2, "./shortcuts_list/add.rect.pan.js": __glob_0_8$2, "./shortcuts_list/add.text.js": __glob_0_9$2, "./shortcuts_list/clipboard.copy.js": __glob_0_10$2, "./shortcuts_list/clipboard.paste.js": __glob_0_11$2, "./shortcuts_list/escape.js": __glob_0_12$2, "./shortcuts_list/group.item.js": __glob_0_13$2, "./shortcuts_list/history.redo.js": __glob_0_14$2, "./shortcuts_list/history.undo.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_16$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_17$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_18$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_19$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_20$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_21$2, "./shortcuts_list/item.move.key.down.js": __glob_0_22$2, "./shortcuts_list/item.move.key.left.js": __glob_0_23$2, "./shortcuts_list/item.move.key.right.js": __glob_0_24$1, "./shortcuts_list/item.move.key.up.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_26$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_27$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_28$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_29$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_30$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_31$1, "./shortcuts_list/removeLayer.js": __glob_0_32$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_33$1, "./shortcuts_list/segment.delete.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_35$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_36$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_37$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_39$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_40$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_41$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_43$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_44$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_45$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_46$1, "./shortcuts_list/select.all.js": __glob_0_47$1, "./shortcuts_list/select.view.js": __glob_0_48$1, "./shortcuts_list/set.tool.hand.js": __glob_0_49$1, "./shortcuts_list/show.pan.js": __glob_0_50$1, "./shortcuts_list/ungroup.item.js": __glob_0_51$1, "./shortcuts_list/zoom.default.js": __glob_0_52$1, "./shortcuts_list/zoom.in.js": __glob_0_53$1, "./shortcuts_list/zoom.out.js": __glob_0_54$1 };
 var shortcuts = Object.values(modules$3).map((it) => it.default);
 function joinKeys(...args2) {
   return args2.filter(Boolean).join("+");
@@ -23694,7 +23693,6 @@ class ShortCutManager {
     if (commands2) {
       const filteredCommands = commands2.filter((it) => it.eventType === eventType).filter((it) => this.checkWhen(it));
       if (filteredCommands.length) {
-        e.preventDefault();
         filteredCommands.forEach((it) => {
           this.$editor.context.commands.emit(it.command, ...it.args);
         });
@@ -24416,11 +24414,6 @@ class IconManager extends EditorElement {
 }
 const formElements = ["TEXTAREA", "INPUT", "SELECT"];
 class KeyboardManager extends EditorElement {
-  template() {
-    return `
-      <div class="keyboard-manager"></div>
-    `;
-  }
   isNotFormElement(e) {
     var tagName = e.target.tagName;
     if (formElements.includes(tagName))
@@ -32812,17 +32805,6 @@ function codeview(editor) {
     CodeViewProperty
   });
 }
-var Console = {
-  command: "Console",
-  description: "do console.log()",
-  execute: (editor, ...args2) => {
-    console.log(...args2);
-  }
-};
-var __glob_0_0$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": Console
-}, Symbol.toStringTag, { value: "Module" }));
 function _currentProject(editor, callback) {
   var project2 = editor.context.selection.currentProject;
   if (project2) {
@@ -32830,14 +32812,14 @@ function _currentProject(editor, callback) {
     callback && callback(project2, timeline);
   }
 }
-var __glob_0_1$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _currentProject
 }, Symbol.toStringTag, { value: "Module" }));
 function _doForceRefreshSelection(editor) {
   editor.emit("refreshAll");
 }
-var __glob_0_2$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _doForceRefreshSelection
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32867,7 +32849,7 @@ var addArtBoard = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_3$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_2$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32879,7 +32861,7 @@ var addBackgroundColor = {
     }, id));
   }
 };
-var __glob_0_4$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_3$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundColor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32900,7 +32882,7 @@ var addBackgroundImageAsset = {
     editor.context.commands.emit("history.setAttribute", "add background image", itemsMap);
   }
 };
-var __glob_0_5$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_4$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundImageAsset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -32921,7 +32903,7 @@ var addBackgroundImageGradient = {
     editor.context.commands.emit("history.setAttribute", "add gradient", itemsMap);
   }
 };
-var __glob_0_6$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_5$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundImageGradient
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33212,7 +33194,7 @@ var addBackgroundImagePattern = {
     editor.context.commands.emit("history.setAttribute", "add pattern", itemsMap);
   }
 };
-var __glob_0_7$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_6$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addBackgroundImagePattern
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33234,14 +33216,14 @@ function addCustomComponent(editor, obj2 = {}, center2 = null) {
   editor.context.selection.select(customComponent);
   _doForceRefreshSelection(editor);
 }
-var __glob_0_8$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_7$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addCustomComponent
 }, Symbol.toStringTag, { value: "Module" }));
 function addImage(editor, rect2 = {}, containerItem = void 0) {
   editor.context.commands.emit("newComponent", "image", rect2, true, containerItem);
 }
-var __glob_0_9$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_8$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33284,7 +33266,7 @@ var addImageAssetItem = {
     }
   }
 };
-var __glob_0_10$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_9$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33303,7 +33285,7 @@ function addLayer(editor, layer, isSelected = true, containerItem) {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_11$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_10$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33314,10 +33296,8 @@ var addLayerView = {
     await editor.emit("hideAddViewLayer");
     await editor.emit("removeGuideLine");
     editor.context.config.set("editing.mode.itemType", type);
-    console.log("a", type);
     if (type === "select") {
       editor.context.selection.empty();
-      console.log("a");
       editor.context.config.set("editing.mode", EditingMode.SELECT);
     } else if (type === "brush") {
       editor.context.config.set("editing.mode", EditingMode.DRAW);
@@ -33326,17 +33306,12 @@ var addLayerView = {
       editor.context.config.set("editing.mode", EditingMode.PATH);
       await editor.emit("showPathEditor", "path");
     } else {
-      console.log(type);
-      if (editor.isComponentClass(type)) {
-        editor.context.config.set("editing.mode", EditingMode.APPEND);
-        await editor.emit("showLayerAppendView", type, data);
-      } else {
-        throw new Error(`${type} is not component class`);
-      }
+      editor.context.config.set("editing.mode", EditingMode.APPEND);
+      await editor.emit("showLayerAppendView", type, data);
     }
   }
 };
-var __glob_0_12$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_11$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addLayerView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33347,7 +33322,7 @@ function addProject(editor, obj2 = {}) {
   editor.context.selection.selectProject(project2);
   _doForceRefreshSelection(editor);
 }
-var __glob_0_13$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_12$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33362,7 +33337,7 @@ var addSVGFilterAssetItem = {
     }
   }
 };
-var __glob_0_14$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_13$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addSVGFilterAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33374,7 +33349,7 @@ function addText(editor, rect2 = {}) {
     "font-size": 30
   }, rect2), rect2);
 }
-var __glob_0_15$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_14$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addText
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33402,7 +33377,7 @@ var addTimelineCurrentProperty = {
     });
   }
 };
-var __glob_0_16$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_15$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineCurrentProperty
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33420,7 +33395,7 @@ var addTimelineItem = {
     });
   }
 };
-var __glob_0_17$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33444,7 +33419,7 @@ var addTimelineKeyframe = {
     });
   }
 };
-var __glob_0_18$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_17$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineKeyframe
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33475,14 +33450,14 @@ var addTimelineProperty = {
     });
   }
 };
-var __glob_0_19$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_18$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
 function addVideo(editor, rect2 = {}, containerItem = void 0) {
   editor.context.commands.emit("newComponent", "video", rect2, true, containerItem);
 }
-var __glob_0_20$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_19$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33518,7 +33493,7 @@ var addVideoAssetItem = {
     }
   }
 };
-var __glob_0_21$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_20$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": addVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33533,7 +33508,7 @@ var clipboard_copy = {
     });
   }
 };
-var __glob_0_22$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_copy
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33550,7 +33525,7 @@ var clipboard_paste = {
     }
   }
 };
-var __glob_0_23$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": clipboard_paste
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33598,7 +33573,7 @@ var convert_flatten_path = {
     }
   }
 };
-var __glob_0_24$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_23$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_flatten_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33628,7 +33603,7 @@ var convert_no_transform_path = {
     }
   }
 };
-var __glob_0_25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_no_transform_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33642,7 +33617,7 @@ var convert_normalize_path = {
     editor.context.commands.executeCommand("setAttribute", "normalize path string", editor.context.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
   }
 };
-var __glob_0_26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_normalize_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33691,7 +33666,7 @@ var convert_path_operation = {
     }
   }
 };
-var __glob_0_27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_path_operation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33705,7 +33680,7 @@ var convert_polygonal_path = {
     editor.context.commands.executeCommand("setAttribute", "polygonal path string", editor.context.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)));
   }
 };
-var __glob_0_28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_polygonal_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33718,7 +33693,7 @@ var convert_simplify_path = {
     editor.context.commands.executeCommand("setAttribute", "change path string", editor.context.selection.packByValue(current.updatePath(editor.pathKitManager.simplify(current.d))));
   }
 };
-var __glob_0_29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_simplify_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33733,7 +33708,7 @@ var convert_smooth_path = {
     editor.context.commands.executeCommand("setAttribute", "smooth path string", editor.context.selection.packByValue(current.updatePath(smoothedPath)));
   }
 };
-var __glob_0_30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_smooth_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -33758,7 +33733,7 @@ var convert_stroke_to_path = {
     editor.context.commands.executeCommand("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, pathAttrs), current.updatePath(newD))), true, current.parent);
   }
 };
-var __glob_0_31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convert_stroke_to_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34879,7 +34854,7 @@ var convertPasteText = {
     }
   }
 };
-var __glob_0_32 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convertPasteText
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34905,7 +34880,7 @@ function convertPath(editor, pathString2, rect2 = null) {
     }
   }
 }
-var __glob_0_33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_32 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": convertPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34927,7 +34902,7 @@ var copy_path = {
     }
   }
 };
-var __glob_0_34 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": copy_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34967,7 +34942,7 @@ var copyLayer = {
     });
   }
 };
-var __glob_0_35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_34 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": copyLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34980,7 +34955,7 @@ var copyTimelineProperty = {
     });
   }
 };
-var __glob_0_36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": copyTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
@@ -34997,7 +34972,7 @@ var deleteTimelineKeyframe = {
     });
   }
 };
-var __glob_0_37 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": deleteTimelineKeyframe
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35028,7 +35003,7 @@ var doubleclick_item = {
     }
   }
 };
-var __glob_0_38 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_37 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": doubleclick_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35046,7 +35021,7 @@ var downloadJSON = {
     downloadFile(datauri, filename || "elf.json");
   }
 };
-var __glob_0_39 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_38 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": downloadJSON
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35106,7 +35081,7 @@ var downloadPNG = {
     }
   }
 };
-var __glob_0_40 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_39 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": downloadPNG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35122,7 +35097,7 @@ var downloadSVG = {
     }
   }
 };
-var __glob_0_41 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_40 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": downloadSVG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35146,7 +35121,7 @@ var drop_asset = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_42 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_41 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": drop_asset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35158,7 +35133,7 @@ var dropImageUrl = {
     });
   }
 };
-var __glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_42 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": dropImageUrl
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35170,7 +35145,7 @@ var editor_config_body_event$1 = {
     editor.context.config.init("onMouseMovepageContainer", $target);
   }
 };
-var __glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": editor_config_body_event$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35180,7 +35155,7 @@ var fileDropItems = {
     editor.context.commands.emit("updateResource", items);
   }
 };
-var __glob_0_45 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": fileDropItems
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35361,7 +35336,7 @@ var firstTimelineItem = {
     });
   }
 };
-var __glob_0_46 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_45 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": firstTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35394,7 +35369,7 @@ var group_item = {
     }
   }
 };
-var __glob_0_47 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_46 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": group_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35433,7 +35408,7 @@ var history_addLayer = {
     });
   }
 };
-var __glob_0_48 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_47 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_addLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35489,7 +35464,7 @@ var history_bring_forward = {
     editor.context.commands.emit("setAttribute", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
   }
 };
-var __glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_48 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_bring_forward
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35534,7 +35509,7 @@ var history_bring_front = {
     editor.context.commands.emit("setAttribute", __spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")));
   }
 };
-var __glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_bring_front
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35600,7 +35575,7 @@ var history_clipboard_paste = {
     }
   }
 };
-var __glob_0_51 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_clipboard_paste
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35664,7 +35639,7 @@ var history_copyLayer = {
     editor.context.commands.emit("setAttribute", updateData);
   }
 };
-var __glob_0_52 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_51 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_copyLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35695,7 +35670,7 @@ var history_group_item = {
   undo: function(editor, { undoValues: [ids, projectId] }) {
   }
 };
-var __glob_0_53 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_52 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_group_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35740,7 +35715,7 @@ var history_moveLayer = {
     editor.context.commands.emit("setAttribute", lastValues);
   }
 };
-var __glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_53 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_moveLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35795,7 +35770,7 @@ var history_moveLayerToTarget = {
     editor.context.commands.emit("setAttribute", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
   }
 };
-var __glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_moveLayerToTarget
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35834,7 +35809,7 @@ var history_refreshSelection = {
     this.nextAction(editor);
   }
 };
-var __glob_0_56 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_refreshSelection
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35871,7 +35846,7 @@ var history_refreshSelectionProject = {
     this.nextAction(editor);
   }
 };
-var __glob_0_57 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_56 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_refreshSelectionProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35932,7 +35907,7 @@ var history_removeLayer = {
     });
   }
 };
-var __glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_57 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_removeLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -35968,7 +35943,7 @@ var history_removeProject = {
     });
   }
 };
-var __glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_removeProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36013,7 +35988,7 @@ var history_send_back = {
     editor.context.commands.emit("setAttribute", __spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle", "parentId")), lastParent.attrsWithId("children")));
   }
 };
-var __glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_send_back
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36064,7 +36039,7 @@ var history_send_backward = {
     editor.context.commands.emit("setAttribute", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
   }
 };
-var __glob_0_61 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_send_backward
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36099,7 +36074,7 @@ var history_setAttribute = {
     });
   }
 };
-var __glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_61 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_setAttribute
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36113,7 +36088,7 @@ var item_move_depth_down = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36127,7 +36102,7 @@ var item_move_depth_first = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_first
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36141,7 +36116,7 @@ var item_move_depth_last = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_last
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36155,7 +36130,7 @@ var item_move_depth_up = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36168,7 +36143,7 @@ var keymap_keydown = {
     }
   }
 };
-var __glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keydown
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36183,7 +36158,7 @@ var lastTimelineItem = {
     });
   }
 };
-var __glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": lastTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36194,7 +36169,7 @@ var load_json = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": load_json
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36212,7 +36187,7 @@ var moveLayer = {
     });
   }
 };
-var __glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36231,7 +36206,7 @@ var moveLayerForItems = {
     });
   }
 };
-var __glob_0_71 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveLayerForItems
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36253,7 +36228,7 @@ var moveSelectionToCenter = {
     editor.context.commands.emit("moveToCenter", areaVerties, withScale);
   }
 };
-var __glob_0_72 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_71 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveSelectionToCenter
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36298,7 +36273,7 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
     }
   });
 }
-var __glob_0_73 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_72 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": newComponent
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36313,7 +36288,7 @@ var nextTimelineItem = {
     });
   }
 };
-var __glob_0_74 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_73 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": nextTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36399,7 +36374,7 @@ var open_editor = {
     }
   }
 };
-var __glob_0_75 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_74 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": open_editor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36411,7 +36386,7 @@ var pauseTimelineItem = {
     }
   }
 };
-var __glob_0_76 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_75 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": pauseTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36458,7 +36433,7 @@ var playTimelineItem = {
     });
   }
 };
-var __glob_0_77 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_76 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": playTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36473,7 +36448,7 @@ var prevTimelineItem = {
     });
   }
 };
-var __glob_0_78 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_77 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": prevTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36515,7 +36490,7 @@ var recoverBooleanPath = {
     }
   }
 };
-var __glob_0_79 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_78 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": recoverBooleanPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36531,7 +36506,7 @@ var refreshArtboard = {
     command.run();
   }
 };
-var __glob_0_80 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_79 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshArtboard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36571,14 +36546,14 @@ var refreshElement = {
     maker.run();
   }
 };
-var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_80 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshElement
 }, Symbol.toStringTag, { value: "Module" }));
 function refreshHistory(editor) {
   editor.context.commands.emit("saveJSON");
 }
-var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_81 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshHistory
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36591,7 +36566,7 @@ var refreshSelectedOffset = {
     }
   }
 };
-var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_82 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshSelectedOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36607,7 +36582,7 @@ var removeAnimationItem = {
     }
   }
 };
-var __glob_0_84 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_83 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeAnimationItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36626,7 +36601,7 @@ var removeLayer = {
     });
   }
 };
-var __glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_84 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36642,7 +36617,7 @@ var removeTimeline = {
     }
   }
 };
-var __glob_0_86 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_85 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimeline
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36658,7 +36633,7 @@ var removeTimelineProperty = {
     }
   }
 };
-var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_86 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36675,7 +36650,7 @@ function resizeArtBoard(editor, size2 = "") {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_87 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": resizeArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36688,7 +36663,7 @@ var rotateLayer = {
     }));
   }
 };
-var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_88 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": rotateLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36708,7 +36683,7 @@ var same_height = {
     }
   }
 };
-var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_height
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36725,7 +36700,7 @@ var same_width = {
     }
   }
 };
-var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_90 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_width
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36735,7 +36710,7 @@ var saveJSON = {
     editor.saveItem("model", editor.context.modelManager.toJSON());
   }
 };
-var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": saveJSON
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36756,7 +36731,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": savePNG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36766,7 +36741,7 @@ var segment_delete = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_delete
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36777,7 +36752,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36788,7 +36763,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36799,7 +36774,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36810,7 +36785,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_97 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36824,7 +36799,7 @@ var select_all = {
     }
   }
 };
-var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": select_all
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36835,7 +36810,7 @@ var select_none = {
     editor.context.commands.emit("history.refreshSelection");
   }
 };
-var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": select_none
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36850,7 +36825,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": selectTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36913,7 +36888,7 @@ var setAttribute = {
     }
   }
 };
-var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setAttribute
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36928,7 +36903,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_102 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setTimelineOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36938,7 +36913,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_103 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": showExportView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36963,7 +36938,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_104 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_bottom
 }, Symbol.toStringTag, { value: "Module" }));
@@ -36987,7 +36962,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37012,7 +36987,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37036,7 +37011,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_middle
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37061,7 +37036,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37086,7 +37061,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_top
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37113,7 +37088,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": switch_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37135,7 +37110,7 @@ var ungroup_item = {
     }
   }
 };
-var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ungroup_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37148,7 +37123,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateClipPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37170,7 +37145,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37197,7 +37172,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37503,7 +37478,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updatePathItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37532,7 +37507,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateResource
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37576,7 +37551,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateUriList
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37598,7 +37573,7 @@ var updateVideo = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37625,7 +37600,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item);
   }
 };
-var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37634,21 +37609,19 @@ var update = {
   description: "Update the model",
   execute: function(editor, id = null, attrs = {}, context = { origin: "*" }) {
     const item = editor.get(id);
-    console.log(item);
     if (item) {
       const isChanged = item.reset(attrs, context);
-      console.log(item, attrs, isChanged);
       if (isChanged) {
         editor.context.commands.emit("refreshElement", item);
       }
     }
   }
 };
-var __glob_0_121 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_120 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$2 = { "./command_list/Console.js": __glob_0_0$2, "./command_list/_currentProject.js": __glob_0_1$2, "./command_list/_doForceRefreshSelection.js": __glob_0_2$1, "./command_list/addArtBoard.js": __glob_0_3$1, "./command_list/addBackgroundColor.js": __glob_0_4$1, "./command_list/addBackgroundImageAsset.js": __glob_0_5$1, "./command_list/addBackgroundImageGradient.js": __glob_0_6$1, "./command_list/addBackgroundImagePattern.js": __glob_0_7$1, "./command_list/addCustomComponent.js": __glob_0_8$1, "./command_list/addImage.js": __glob_0_9$1, "./command_list/addImageAssetItem.js": __glob_0_10$1, "./command_list/addLayer.js": __glob_0_11$1, "./command_list/addLayerView.js": __glob_0_12$1, "./command_list/addProject.js": __glob_0_13$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$1, "./command_list/addText.js": __glob_0_15$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$1, "./command_list/addTimelineItem.js": __glob_0_17$1, "./command_list/addTimelineKeyframe.js": __glob_0_18$1, "./command_list/addTimelineProperty.js": __glob_0_19$1, "./command_list/addVideo.js": __glob_0_20$1, "./command_list/addVideoAssetItem.js": __glob_0_21$1, "./command_list/clipboard.copy.js": __glob_0_22$1, "./command_list/clipboard.paste.js": __glob_0_23$1, "./command_list/convert.flatten.path.js": __glob_0_24$1, "./command_list/convert.no.transform.path.js": __glob_0_25, "./command_list/convert.normalize.path.js": __glob_0_26, "./command_list/convert.path.operation.js": __glob_0_27, "./command_list/convert.polygonal.path.js": __glob_0_28, "./command_list/convert.simplify.path.js": __glob_0_29, "./command_list/convert.smooth.path.js": __glob_0_30, "./command_list/convert.stroke.to.path.js": __glob_0_31, "./command_list/convertPasteText.js": __glob_0_32, "./command_list/convertPath.js": __glob_0_33, "./command_list/copy.path.js": __glob_0_34, "./command_list/copyLayer.js": __glob_0_35, "./command_list/copyTimelineProperty.js": __glob_0_36, "./command_list/deleteTimelineKeyframe.js": __glob_0_37, "./command_list/doubleclick.item.js": __glob_0_38, "./command_list/downloadJSON.js": __glob_0_39, "./command_list/downloadPNG.js": __glob_0_40, "./command_list/downloadSVG.js": __glob_0_41, "./command_list/drop.asset.js": __glob_0_42, "./command_list/dropImageUrl.js": __glob_0_43, "./command_list/editor.config.body.event.js": __glob_0_44, "./command_list/fileDropItems.js": __glob_0_45, "./command_list/firstTimelineItem.js": __glob_0_46, "./command_list/group.item.js": __glob_0_47, "./command_list/history.addLayer.js": __glob_0_48, "./command_list/history.bring.forward.js": __glob_0_49, "./command_list/history.bring.front.js": __glob_0_50, "./command_list/history.clipboard.paste.js": __glob_0_51, "./command_list/history.copyLayer.js": __glob_0_52, "./command_list/history.group.item.js": __glob_0_53, "./command_list/history.moveLayer.js": __glob_0_54, "./command_list/history.moveLayerToTarget.js": __glob_0_55, "./command_list/history.refreshSelection.js": __glob_0_56, "./command_list/history.refreshSelectionProject.js": __glob_0_57, "./command_list/history.removeLayer.js": __glob_0_58, "./command_list/history.removeProject.js": __glob_0_59, "./command_list/history.send.back.js": __glob_0_60, "./command_list/history.send.backward.js": __glob_0_61, "./command_list/history.setAttribute.js": __glob_0_62, "./command_list/item.move.depth.down.js": __glob_0_63, "./command_list/item.move.depth.first.js": __glob_0_64, "./command_list/item.move.depth.last.js": __glob_0_65, "./command_list/item.move.depth.up.js": __glob_0_66, "./command_list/keymap.keydown.js": __glob_0_67, "./command_list/lastTimelineItem.js": __glob_0_68, "./command_list/load.json.js": __glob_0_69, "./command_list/moveLayer.js": __glob_0_70, "./command_list/moveLayerForItems.js": __glob_0_71, "./command_list/moveSelectionToCenter.js": __glob_0_72, "./command_list/newComponent.js": __glob_0_73, "./command_list/nextTimelineItem.js": __glob_0_74, "./command_list/open.editor.js": __glob_0_75, "./command_list/pauseTimelineItem.js": __glob_0_76, "./command_list/playTimelineItem.js": __glob_0_77, "./command_list/prevTimelineItem.js": __glob_0_78, "./command_list/recoverBooleanPath.js": __glob_0_79, "./command_list/refreshArtboard.js": __glob_0_80, "./command_list/refreshElement.js": __glob_0_81, "./command_list/refreshHistory.js": __glob_0_82, "./command_list/refreshSelectedOffset.js": __glob_0_83, "./command_list/removeAnimationItem.js": __glob_0_84, "./command_list/removeLayer.js": __glob_0_85, "./command_list/removeTimeline.js": __glob_0_86, "./command_list/removeTimelineProperty.js": __glob_0_87, "./command_list/resizeArtBoard.js": __glob_0_88, "./command_list/rotateLayer.js": __glob_0_89, "./command_list/same.height.js": __glob_0_90, "./command_list/same.width.js": __glob_0_91, "./command_list/saveJSON.js": __glob_0_92, "./command_list/savePNG.js": __glob_0_93, "./command_list/segment.delete.js": __glob_0_94, "./command_list/segment.move.down.js": __glob_0_95, "./command_list/segment.move.left.js": __glob_0_96, "./command_list/segment.move.right.js": __glob_0_97, "./command_list/segment.move.up.js": __glob_0_98, "./command_list/select.all.js": __glob_0_99, "./command_list/select.none.js": __glob_0_100, "./command_list/selectTimelineItem.js": __glob_0_101, "./command_list/setAttribute.js": __glob_0_102, "./command_list/setTimelineOffset.js": __glob_0_103, "./command_list/showExportView.js": __glob_0_104, "./command_list/sort.bottom.js": __glob_0_105, "./command_list/sort.center.js": __glob_0_106, "./command_list/sort.left.js": __glob_0_107, "./command_list/sort.middle.js": __glob_0_108, "./command_list/sort.right.js": __glob_0_109, "./command_list/sort.top.js": __glob_0_110, "./command_list/switch.path.js": __glob_0_111, "./command_list/ungroup.item.js": __glob_0_112, "./command_list/updateClipPath.js": __glob_0_113, "./command_list/updateImage.js": __glob_0_114, "./command_list/updateImageAssetItem.js": __glob_0_115, "./command_list/updatePathItem.js": __glob_0_116, "./command_list/updateResource.js": __glob_0_117, "./command_list/updateUriList.js": __glob_0_118, "./command_list/updateVideo.js": __glob_0_119, "./command_list/updateVideoAssetItem.js": __glob_0_120, "./command_list/model/update.js": __glob_0_121 };
+const modules$2 = { "./command_list/_currentProject.js": __glob_0_0$2, "./command_list/_doForceRefreshSelection.js": __glob_0_1$2, "./command_list/addArtBoard.js": __glob_0_2$1, "./command_list/addBackgroundColor.js": __glob_0_3$1, "./command_list/addBackgroundImageAsset.js": __glob_0_4$1, "./command_list/addBackgroundImageGradient.js": __glob_0_5$1, "./command_list/addBackgroundImagePattern.js": __glob_0_6$1, "./command_list/addCustomComponent.js": __glob_0_7$1, "./command_list/addImage.js": __glob_0_8$1, "./command_list/addImageAssetItem.js": __glob_0_9$1, "./command_list/addLayer.js": __glob_0_10$1, "./command_list/addLayerView.js": __glob_0_11$1, "./command_list/addProject.js": __glob_0_12$1, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$1, "./command_list/addText.js": __glob_0_14$1, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$1, "./command_list/addTimelineItem.js": __glob_0_16$1, "./command_list/addTimelineKeyframe.js": __glob_0_17$1, "./command_list/addTimelineProperty.js": __glob_0_18$1, "./command_list/addVideo.js": __glob_0_19$1, "./command_list/addVideoAssetItem.js": __glob_0_20$1, "./command_list/clipboard.copy.js": __glob_0_21$1, "./command_list/clipboard.paste.js": __glob_0_22$1, "./command_list/convert.flatten.path.js": __glob_0_23$1, "./command_list/convert.no.transform.path.js": __glob_0_24, "./command_list/convert.normalize.path.js": __glob_0_25, "./command_list/convert.path.operation.js": __glob_0_26, "./command_list/convert.polygonal.path.js": __glob_0_27, "./command_list/convert.simplify.path.js": __glob_0_28, "./command_list/convert.smooth.path.js": __glob_0_29, "./command_list/convert.stroke.to.path.js": __glob_0_30, "./command_list/convertPasteText.js": __glob_0_31, "./command_list/convertPath.js": __glob_0_32, "./command_list/copy.path.js": __glob_0_33, "./command_list/copyLayer.js": __glob_0_34, "./command_list/copyTimelineProperty.js": __glob_0_35, "./command_list/deleteTimelineKeyframe.js": __glob_0_36, "./command_list/doubleclick.item.js": __glob_0_37, "./command_list/downloadJSON.js": __glob_0_38, "./command_list/downloadPNG.js": __glob_0_39, "./command_list/downloadSVG.js": __glob_0_40, "./command_list/drop.asset.js": __glob_0_41, "./command_list/dropImageUrl.js": __glob_0_42, "./command_list/editor.config.body.event.js": __glob_0_43, "./command_list/fileDropItems.js": __glob_0_44, "./command_list/firstTimelineItem.js": __glob_0_45, "./command_list/group.item.js": __glob_0_46, "./command_list/history.addLayer.js": __glob_0_47, "./command_list/history.bring.forward.js": __glob_0_48, "./command_list/history.bring.front.js": __glob_0_49, "./command_list/history.clipboard.paste.js": __glob_0_50, "./command_list/history.copyLayer.js": __glob_0_51, "./command_list/history.group.item.js": __glob_0_52, "./command_list/history.moveLayer.js": __glob_0_53, "./command_list/history.moveLayerToTarget.js": __glob_0_54, "./command_list/history.refreshSelection.js": __glob_0_55, "./command_list/history.refreshSelectionProject.js": __glob_0_56, "./command_list/history.removeLayer.js": __glob_0_57, "./command_list/history.removeProject.js": __glob_0_58, "./command_list/history.send.back.js": __glob_0_59, "./command_list/history.send.backward.js": __glob_0_60, "./command_list/history.setAttribute.js": __glob_0_61, "./command_list/item.move.depth.down.js": __glob_0_62, "./command_list/item.move.depth.first.js": __glob_0_63, "./command_list/item.move.depth.last.js": __glob_0_64, "./command_list/item.move.depth.up.js": __glob_0_65, "./command_list/keymap.keydown.js": __glob_0_66, "./command_list/lastTimelineItem.js": __glob_0_67, "./command_list/load.json.js": __glob_0_68, "./command_list/moveLayer.js": __glob_0_69, "./command_list/moveLayerForItems.js": __glob_0_70, "./command_list/moveSelectionToCenter.js": __glob_0_71, "./command_list/newComponent.js": __glob_0_72, "./command_list/nextTimelineItem.js": __glob_0_73, "./command_list/open.editor.js": __glob_0_74, "./command_list/pauseTimelineItem.js": __glob_0_75, "./command_list/playTimelineItem.js": __glob_0_76, "./command_list/prevTimelineItem.js": __glob_0_77, "./command_list/recoverBooleanPath.js": __glob_0_78, "./command_list/refreshArtboard.js": __glob_0_79, "./command_list/refreshElement.js": __glob_0_80, "./command_list/refreshHistory.js": __glob_0_81, "./command_list/refreshSelectedOffset.js": __glob_0_82, "./command_list/removeAnimationItem.js": __glob_0_83, "./command_list/removeLayer.js": __glob_0_84, "./command_list/removeTimeline.js": __glob_0_85, "./command_list/removeTimelineProperty.js": __glob_0_86, "./command_list/resizeArtBoard.js": __glob_0_87, "./command_list/rotateLayer.js": __glob_0_88, "./command_list/same.height.js": __glob_0_89, "./command_list/same.width.js": __glob_0_90, "./command_list/saveJSON.js": __glob_0_91, "./command_list/savePNG.js": __glob_0_92, "./command_list/segment.delete.js": __glob_0_93, "./command_list/segment.move.down.js": __glob_0_94, "./command_list/segment.move.left.js": __glob_0_95, "./command_list/segment.move.right.js": __glob_0_96, "./command_list/segment.move.up.js": __glob_0_97, "./command_list/select.all.js": __glob_0_98, "./command_list/select.none.js": __glob_0_99, "./command_list/selectTimelineItem.js": __glob_0_100, "./command_list/setAttribute.js": __glob_0_101, "./command_list/setTimelineOffset.js": __glob_0_102, "./command_list/showExportView.js": __glob_0_103, "./command_list/sort.bottom.js": __glob_0_104, "./command_list/sort.center.js": __glob_0_105, "./command_list/sort.left.js": __glob_0_106, "./command_list/sort.middle.js": __glob_0_107, "./command_list/sort.right.js": __glob_0_108, "./command_list/sort.top.js": __glob_0_109, "./command_list/switch.path.js": __glob_0_110, "./command_list/ungroup.item.js": __glob_0_111, "./command_list/updateClipPath.js": __glob_0_112, "./command_list/updateImage.js": __glob_0_113, "./command_list/updateImageAssetItem.js": __glob_0_114, "./command_list/updatePathItem.js": __glob_0_115, "./command_list/updateResource.js": __glob_0_116, "./command_list/updateUriList.js": __glob_0_117, "./command_list/updateVideo.js": __glob_0_118, "./command_list/updateVideoAssetItem.js": __glob_0_119, "./command_list/model/update.js": __glob_0_120 };
 const obj$1 = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -37836,18 +37809,6 @@ var __glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": set_move_control_point
 }, Symbol.toStringTag, { value: "Module" }));
-var set_tool_hand = {
-  key: "set.tool.hand",
-  defaultValue: false,
-  title: "Hand tool",
-  description: "Hand tool is on",
-  type: "boolean",
-  storage: "none"
-};
-var __glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": set_tool_hand
-}, Symbol.toStringTag, { value: "Module" }));
 var show_left_panel = {
   key: "show.left.panel",
   defaultValue: true,
@@ -37855,7 +37816,7 @@ var show_left_panel = {
   description: "Set left panel visibility to on",
   type: "boolean"
 };
-var __glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_left_panel
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37866,7 +37827,7 @@ var show_outline = {
   description: "Set outline visibility to on",
   type: "boolean"
 };
-var __glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_outline
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37877,7 +37838,7 @@ var show_right_panel = {
   description: "Set right panel visibility to on",
   type: "boolean"
 };
-var __glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_right_panel
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37888,7 +37849,7 @@ var show_ruler = {
   description: "Set ruler visibility to on",
   type: "boolean"
 };
-var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_ruler
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37899,7 +37860,7 @@ var snap_distance = {
   description: "Set snap distance",
   type: "number"
 };
-var __glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": snap_distance
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37910,7 +37871,7 @@ var snap_grid = {
   description: "Set snap grid size",
   type: "number"
 };
-var __glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": snap_grid
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37921,7 +37882,7 @@ var vertical_line = {
   description: "vertical guide line for snap",
   type: "array"
 };
-var __glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": vertical_line
 }, Symbol.toStringTag, { value: "Module" }));
@@ -37932,11 +37893,11 @@ var vertical_line_selected_index = {
   description: "selected vertical guide line index",
   type: "number"
 };
-var __glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": vertical_line_selected_index
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/debug.mode.js": __glob_0_1$1, "./config_list/editing.css.itemType.js": __glob_0_2, "./config_list/editing.draw.itemType.js": __glob_0_3, "./config_list/editing.mode.itemType.js": __glob_0_4, "./config_list/editing.mode.js": __glob_0_5, "./config_list/editing.svg.itemType.js": __glob_0_6, "./config_list/editor.design.mode.js": __glob_0_7, "./config_list/editor.layout.mode.js": __glob_0_8, "./config_list/fixed.angle.js": __glob_0_9, "./config_list/fixed.gradient.angle.js": __glob_0_10, "./config_list/history.delay.ms.js": __glob_0_11, "./config_list/horizontal.line.js": __glob_0_12, "./config_list/horizontal.line.selected.index.js": __glob_0_13, "./config_list/set.drag.path.area.js": __glob_0_14, "./config_list/set.move.control.point.js": __glob_0_15, "./config_list/set.tool.hand.js": __glob_0_16, "./config_list/show.left.panel.js": __glob_0_17, "./config_list/show.outline.js": __glob_0_18, "./config_list/show.right.panel.js": __glob_0_19, "./config_list/show.ruler.js": __glob_0_20, "./config_list/snap.distance.js": __glob_0_21, "./config_list/snap.grid.js": __glob_0_22, "./config_list/vertical.line.js": __glob_0_23, "./config_list/vertical.line.selected.index.js": __glob_0_24 };
+const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/debug.mode.js": __glob_0_1$1, "./config_list/editing.css.itemType.js": __glob_0_2, "./config_list/editing.draw.itemType.js": __glob_0_3, "./config_list/editing.mode.itemType.js": __glob_0_4, "./config_list/editing.mode.js": __glob_0_5, "./config_list/editing.svg.itemType.js": __glob_0_6, "./config_list/editor.design.mode.js": __glob_0_7, "./config_list/editor.layout.mode.js": __glob_0_8, "./config_list/fixed.angle.js": __glob_0_9, "./config_list/fixed.gradient.angle.js": __glob_0_10, "./config_list/history.delay.ms.js": __glob_0_11, "./config_list/horizontal.line.js": __glob_0_12, "./config_list/horizontal.line.selected.index.js": __glob_0_13, "./config_list/set.drag.path.area.js": __glob_0_14, "./config_list/set.move.control.point.js": __glob_0_15, "./config_list/show.left.panel.js": __glob_0_16, "./config_list/show.outline.js": __glob_0_17, "./config_list/show.right.panel.js": __glob_0_18, "./config_list/show.ruler.js": __glob_0_19, "./config_list/snap.distance.js": __glob_0_20, "./config_list/snap.grid.js": __glob_0_21, "./config_list/vertical.line.js": __glob_0_22, "./config_list/vertical.line.selected.index.js": __glob_0_23 };
 var configs$1 = Object.values(modules$1).map((it) => it.default);
 function configs(editor) {
   configs$1.forEach((config) => {
@@ -41462,7 +41423,7 @@ class PathModel extends SVGModel {
       this.cacheHeight = this.height;
     } else if (this.hasChangedField("width", "height")) {
       this.d = this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
-      this.modelManager.setChanged("reset", this.id, { d: this.d });
+      this.manager.setChanged("reset", this.id, { d: this.d });
     }
   }
   setCache() {
@@ -49329,15 +49290,6 @@ class GuideLineView extends EditorElement {
       hasVerties
     });
   }
-  [SUBSCRIBE("removeGuideLine", REFRESH_SELECTION)]() {
-    this.removeGuideLine();
-  }
-  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
-    return this.refreshSmartGuides(targetVertiesList);
-  }
-  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION_TOOL)]() {
-    this.refreshSmartGuidesForVerties(1);
-  }
   refreshSmartGuides(targetVertiesList) {
     if (this.$context.selection.isEmpty)
       return;
@@ -49379,10 +49331,22 @@ class GuideLineView extends EditorElement {
     const guides = this.$context.snapManager.findGuide(verties, dist2);
     this.setGuideLine(guides, true);
   }
+  [SUBSCRIBE("removeGuideLine", REFRESH_SELECTION)]() {
+    this.removeGuideLine();
+  }
+  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
+    return this.refreshSmartGuides(targetVertiesList);
+  }
+  get currentDistWithScale() {
+    return 1 / this.$viewport.scale;
+  }
+  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION_TOOL)]() {
+    this.refreshSmartGuidesForVerties(this.currentDistWithScale);
+  }
   [SUBSCRIBE(UPDATE_CANVAS)]() {
     const expect = this.$context.selection.hasChangedField("d", "clip-path");
     if (!expect) {
-      this.refreshSmartGuidesForVerties(0);
+      this.refreshSmartGuidesForVerties(this.currentDistWithScale);
     }
   }
 }
@@ -53017,6 +52981,310 @@ function lineView(editor) {
     LineView
   });
 }
+var DefaultMenu$1 = [
+  {
+    type: "button",
+    icon: "navigation",
+    events: ["config:editing.mode"],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.SELECT);
+    },
+    action: (editor) => {
+      editor.context.commands.emit("addLayerView", "select");
+      editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
+    }
+  },
+  {
+    type: "button",
+    icon: "artboard",
+    events: ["config:editing.mode", "config:editing.mode.itemType"],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "artboard");
+    },
+    action: (editor) => {
+      editor.context.commands.emit("addLayerView", "artboard");
+    }
+  },
+  {
+    type: "dropdown",
+    icon: (editor, dropdown) => {
+      var _a;
+      return ((_a = dropdown.findItem(editor.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
+    },
+    items: [
+      {
+        icon: iconUse("rect"),
+        title: "Rect Layer",
+        key: "rect",
+        command: "addLayerView",
+        args: [
+          "rect",
+          {
+            backgroundColor: "#ececec"
+          }
+        ],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.css.itemType", "rect");
+        },
+        shortcut: KeyStringMaker({ key: "R" })
+      },
+      {
+        icon: iconUse("lens"),
+        title: "Circle Layer",
+        key: "circle",
+        command: "addLayerView",
+        args: ["circle"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.css.itemType", "circle");
+        },
+        shortcut: KeyStringMaker({ key: "O" })
+      },
+      {
+        icon: iconUse("image"),
+        title: "Image",
+        key: "image",
+        command: "addLayerView",
+        args: ["image"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.css.itemType", "image");
+        },
+        shortcut: KeyStringMaker({ key: "I" })
+      },
+      "-",
+      {
+        icon: iconUse("video"),
+        title: "Video",
+        key: "video",
+        command: "addLayerView",
+        args: ["video"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.css.itemType", "video");
+        },
+        shortcut: KeyStringMaker({ key: "V" })
+      },
+      {
+        icon: iconUse("iframe"),
+        title: "IFrame",
+        key: "iframe",
+        command: "addLayerView",
+        args: ["iframe"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.css.itemType", "iframe");
+        },
+        shortcut: KeyStringMaker({ key: "F" })
+      },
+      {
+        icon: iconUse("rect"),
+        title: "SampleLayer",
+        key: "sample",
+        command: "addLayerView",
+        args: ["sample"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.css.itemType", "sample");
+        }
+      }
+    ],
+    events: [
+      "config:editing.mode",
+      "config:editing.mode.itemType",
+      "config:editing.css.itemType"
+    ],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "rect") || editor.context.config.is("editing.mode.itemType", "circle") || editor.context.config.is("editing.mode.itemType", "image") || editor.context.config.is("editing.mode.itemType", "video") || editor.context.config.is("editing.mode.itemType", "iframe"));
+    },
+    selectedKey: (editor) => {
+      return editor.context.config.get("editing.css.itemType");
+    }
+  },
+  {
+    type: "dropdown",
+    icon: (editor, dropdown) => {
+      var _a;
+      return ((_a = dropdown.findItem(editor.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
+    },
+    items: [
+      {
+        icon: iconUse("pentool"),
+        title: "Pen",
+        key: "path",
+        command: "addLayerView",
+        args: ["path"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.draw.itemType", "path");
+        },
+        shortcut: KeyStringMaker({ key: "P" })
+      },
+      {
+        icon: iconUse("brush"),
+        title: "Pencil",
+        key: "brush",
+        command: "addLayerView",
+        args: ["brush"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.draw.itemType", "brush");
+        },
+        shortcut: KeyStringMaker({ key: "B" })
+      }
+    ],
+    events: [
+      "config:editing.mode",
+      "config:editing.mode.itemType",
+      "config:editing.draw.itemType"
+    ],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode.itemType", "path") || editor.context.config.is("editing.mode.itemType", "draw");
+    },
+    selectedKey: (editor) => {
+      return editor.context.config.get("editing.draw.itemType");
+    }
+  },
+  {
+    type: "dropdown",
+    icon: (editor, dropdown) => {
+      var _a;
+      return ((_a = dropdown.findItem(editor.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
+    },
+    items: [
+      {
+        icon: iconUse("outline_rect"),
+        title: "Rectangle",
+        key: "svg-rect",
+        command: "addLayerView",
+        args: ["svg-rect"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.svg.itemType", "svg-rect");
+        },
+        shortcut: KeyStringMaker({ key: "Shift+R" })
+      },
+      {
+        icon: iconUse("outline_circle"),
+        title: "Circle",
+        key: "svg-circle",
+        command: "addLayerView",
+        args: ["svg-circle"],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.svg.itemType", "svg-circle");
+        },
+        shortcut: KeyStringMaker({ key: "Shift+O" })
+      },
+      {
+        icon: iconUse("polygon"),
+        title: "Polygon",
+        key: "svg-polygon",
+        command: "addLayerView",
+        args: [
+          "polygon",
+          {
+            backgroundColor: "transparent"
+          }
+        ],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.svg.itemType", "polygon");
+        },
+        shortcut: KeyStringMaker({ key: "Shift+P" })
+      },
+      {
+        icon: iconUse("star"),
+        title: "Star",
+        key: "star",
+        command: "addLayerView",
+        args: [
+          "star",
+          {
+            backgroundColor: "transparent"
+          }
+        ],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.svg.itemType", "star");
+        },
+        shortcut: KeyStringMaker({ key: "Shift+S" })
+      },
+      "-",
+      {
+        icon: iconUse("smooth"),
+        title: "Spline",
+        key: "spline",
+        command: "addLayerView",
+        args: [
+          "spline",
+          {
+            backgroundColor: "transparent"
+          }
+        ],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.svg.itemType", "spline");
+        },
+        shortcut: KeyStringMaker({ key: "Shift+L" })
+      },
+      {
+        icon: iconUse("text_rotate"),
+        title: "TextPath",
+        key: "svg-texpath",
+        command: "addLayerView",
+        args: [
+          "svg-textpath",
+          {
+            backgroundColor: "transparent"
+          }
+        ],
+        closable: true,
+        nextTick: (editor) => {
+          editor.context.config.set("editing.svg.itemType", "svg-textpath");
+        },
+        shortcut: KeyStringMaker({ key: "Shift+T" })
+      }
+    ],
+    events: [
+      "config:editing.mode",
+      "config:editing.mode.itemType",
+      "config:editing.svg.itemType"
+    ],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "svg-rect") || editor.context.config.is("editing.mode.itemType", "svg-circle") || editor.context.config.is("editing.mode.itemType", "polygon") || editor.context.config.is("editing.mode.itemType", "star") || editor.context.config.is("editing.mode.itemType", "spline") || editor.context.config.is("editing.mode.itemType", "svg-textpath"));
+    },
+    selectedKey: (editor) => {
+      return editor.context.config.get("editing.svg.itemType");
+    }
+  },
+  {
+    type: "button",
+    icon: "title",
+    events: ["config:editing.mode", "config:editing.mode.itemType"],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "text");
+    },
+    action: (editor) => {
+      editor.context.commands.emit("addLayerView", "text");
+    }
+  },
+  {
+    type: "button",
+    icon: "pantool",
+    events: ["config:editing.mode"],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.HAND);
+    },
+    action: (editor) => {
+      editor.context.config.set("editing.mode", EditingMode.HAND);
+    }
+  }
+];
+function menus$1(editor) {
+  editor.registerMenu("toolbar.left", DefaultMenu$1);
+}
 var DrawManager$1 = "";
 class DrawManager extends EditorElement {
   initState() {
@@ -54648,8 +54916,12 @@ class PathEditorView extends PathTransformEditor {
     this.trigger("hidePathEditor");
   }
   makePathLayer() {
+    const pathString2 = this.pathGenerator.toPath().d;
+    if (!pathString2) {
+      return;
+    }
     var layer;
-    const newPath = new PathParser(this.pathGenerator.toPath().d);
+    const newPath = new PathParser(pathString2);
     newPath.transformMat4(this.$viewport.matrixInverse);
     const bbox = newPath.getBBox();
     const newWidth = distance$1(bbox[1], bbox[0]);
@@ -54691,7 +54963,6 @@ class PathEditorView extends PathTransformEditor {
       this.$config.set("editing.mode.itemType", "select");
       this.$context.selection.select(layer);
       this.trigger("hidePathEditor");
-      this.emit("refreshAll");
     }
   }
   changeMode(mode, obj2) {
@@ -58909,7 +59180,9 @@ class TextRender$2 extends LayerRender$1 {
     let css = super.toCSS(item);
     css.margin = css.margin || "0px";
     if (item.overflow !== Overflow.SCROLL) {
-      css.height = "auto";
+      if (item.content.length > 0) {
+        css.height = "auto";
+      }
     }
     return css;
   }
@@ -64959,6 +65232,7 @@ function content(editor) {
 var designEditorPlugins = [
   configs,
   commands$1,
+  menus$1,
   defaultConfigs,
   defaultIcons,
   defaultMessages,
@@ -65204,101 +65478,6 @@ class LibraryItems extends EditorElement {
   }
 }
 var ObjectItems$1 = "";
-class SingleObjectItems extends EditorElement {
-  template() {
-    return `
-        <div class="object-items single">
-          <div>
-            ${createComponent("LayerTreeProperty")}
-          </div>
-        </div>
-    `;
-  }
-}
-class ItemLayerTab extends EditorElement {
-  components() {
-    return {
-      AssetItems,
-      LibraryItems,
-      CustomAssets,
-      SingleObjectItems
-    };
-  }
-  initState() {
-    return {
-      selectedIndexValue: 2
-    };
-  }
-  afterRender() {
-    this.$el.toggle(this.$config.get("editor.design.mode") === "item");
-  }
-  [BIND("$el")]() {
-    return {
-      style: {
-        display: this.$config.get("editor.design.mode") === "item" ? "block" : "none"
-      }
-    };
-  }
-  template() {
-    return `
-      <div class='layer-tab'>
-        <div class="tab number-tab side-tab side-tab-left" data-selected-value="2" ref="$tab">
-          <div class="tab-header" ref="$header">   
-            <div class="tab-item selected" data-value="2" data-direction="right" data-tooltip="${this.$i18n("app.tab.title.layers")}">
-              <label>${iconUse("layers")}</label>
-            </div>            
-            <div class='tab-item' data-value='6' data-direction="right"  data-tooltip="${this.$i18n("app.tab.title.components")}">
-              <label>${iconUse("plugin")}</label>
-            </div>            
-
-            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it) => {
-      return it.class.designMode && it.class.designMode.includes("item");
-    }).map((it) => {
-      const { value, title: title2 } = it.class;
-      let iconString = it.class.icon;
-      if (obj$3[it.class.icon]) {
-        iconString = iconUse(it.class.icon);
-      }
-      return `
-                <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title2}">
-                  <label>${iconString || title2}</label>
-                </div>
-              `;
-    })}
-
-          </div>
-          <div class="tab-body" ref="$body">
-            <div class="tab-content selected" data-value="2">
-              ${createComponent("SingleObjectItems")}
-            </div>
-            <div class='tab-content' data-value='6'>
-              ${createComponent("CustomAssets")}
-            </div>
-            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it) => {
-      return it.class.designMode && it.class.designMode.includes("item");
-    }).map((it) => {
-      const { value } = it.class;
-      return `
-                <div class='tab-content' data-value='${value}'>
-                  ${this.$injectManager.generate(`leftbar.tab.${value}`)}
-                </div>
-              `;
-    })}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  [CLICK("$header .tab-item:not(.extra-item)")](e) {
-    var selectedIndexValue = e.$dt.attr("data-value");
-    if (this.state.selectedIndexValue === selectedIndexValue) {
-      return;
-    }
-    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach((it) => it.removeClass("selected"));
-    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach((it) => it.addClass("selected"));
-    this.setState({ selectedIndexValue }, false);
-  }
-}
 class ObjectItems extends EditorElement {
   template() {
     return `
@@ -65402,34 +65581,6 @@ class LayerTab extends EditorElement {
     this.setState({ selectedIndexValue }, false);
   }
 }
-class SingleInspector extends EditorElement {
-  afterRender() {
-    this.$el.toggle(this.$config.get("editor.design.mode") === "item");
-  }
-  [BIND("$el")]() {
-    return {
-      style: {
-        display: this.$config.get("editor.design.mode") === "item" ? "block" : "none"
-      }
-    };
-  }
-  template() {
-    return `
-      <div class="feature-control inspector">
-        <div>
-              ${createComponent("AlignmentProperty")}
-              ${createComponent("DepthProperty")}
-              ${createComponent("PathToolProperty")}
-              ${createComponent("PositionProperty")}
-              ${createComponent("AppearanceProperty")}
-
-              ${this.$injectManager.generate("inspector.tab.style")}                             
-              <div class='empty'></div>
-        </div>
-      </div>
-    `;
-  }
-}
 var SwitchLeftPanel$1 = "";
 class SwitchLeftPanel extends EditorElement {
   template() {
@@ -65505,413 +65656,6 @@ class LayoutSelector extends EditorElement {
   }
 }
 var ToolBar$1 = "";
-var DefaultMenu = [
-  {
-    type: "dropdown",
-    style: {
-      "margin-left": "12px"
-    },
-    icon: `<div class="logo-item"><label class='logo'></label></div>`,
-    items: [
-      {
-        title: "menu.item.fullscreen.title",
-        command: "toggle.fullscreen",
-        shortcut: "ALT+/"
-      },
-      { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
-      "-",
-      { title: "menu.item.export.title", command: "showExportView" },
-      { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
-      { title: "menu.item.download.title", command: "downloadJSON" },
-      {
-        title: "menu.item.save.title",
-        command: "saveJSON",
-        nextTick: () => {
-          globalThis.emit("notify", "alert", "Save", "Save the content on localStorage", 2e3);
-        }
-      },
-      {
-        title: "menu.item.language.title",
-        items: [
-          {
-            title: "English",
-            command: "setLocale",
-            args: [Language.EN],
-            checked: (editor) => editor.locale === Language.EN
-          },
-          {
-            title: "Fran\xE7ais",
-            command: "setLocale",
-            args: [Language.FR],
-            checked: (editor) => editor.locale === Language.FR
-          },
-          {
-            title: "Korean",
-            command: "setLocale",
-            args: [Language.KO],
-            checked: (editor) => editor.locale === Language.KO
-          }
-        ]
-      },
-      "-",
-      {
-        title: "EasyLogic Studio",
-        items: [
-          {
-            type: "link",
-            title: "Github",
-            href: "https://github.com/easylogic/editor"
-          },
-          {
-            type: "link",
-            title: "Learn",
-            href: "https://www.easylogic.studio"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    type: "button",
-    icon: "navigation",
-    events: ["config:editing.mode"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.SELECT);
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "select");
-      editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
-    }
-  },
-  {
-    type: "button",
-    icon: "artboard",
-    events: ["config:editing.mode", "config:editing.mode.itemType"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "artboard");
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "artboard");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
-    },
-    items: [
-      {
-        icon: iconUse("rect"),
-        title: "Rect Layer",
-        key: "rect",
-        command: "addLayerView",
-        args: [
-          "rect",
-          {
-            backgroundColor: "#ececec"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "rect");
-        },
-        shortcut: KeyStringMaker({ key: "R" })
-      },
-      {
-        icon: iconUse("lens"),
-        title: "Circle Layer",
-        key: "circle",
-        command: "addLayerView",
-        args: ["circle"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "circle");
-        },
-        shortcut: KeyStringMaker({ key: "O" })
-      },
-      {
-        icon: iconUse("image"),
-        title: "Image",
-        key: "image",
-        command: "addLayerView",
-        args: ["image"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "image");
-        },
-        shortcut: KeyStringMaker({ key: "I" })
-      },
-      "-",
-      {
-        icon: iconUse("video"),
-        title: "Video",
-        key: "video",
-        command: "addLayerView",
-        args: ["video"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "video");
-        },
-        shortcut: KeyStringMaker({ key: "V" })
-      },
-      {
-        icon: iconUse("iframe"),
-        title: "IFrame",
-        key: "iframe",
-        command: "addLayerView",
-        args: ["iframe"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "iframe");
-        },
-        shortcut: KeyStringMaker({ key: "F" })
-      },
-      {
-        icon: iconUse("rect"),
-        title: "SampleLayer",
-        key: "sample",
-        command: "addLayerView",
-        args: ["sample"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "sample");
-        }
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.css.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "rect") || editor.context.config.is("editing.mode.itemType", "circle") || editor.context.config.is("editing.mode.itemType", "image") || editor.context.config.is("editing.mode.itemType", "video") || editor.context.config.is("editing.mode.itemType", "iframe"));
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.css.itemType");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
-    },
-    items: [
-      {
-        icon: iconUse("pentool"),
-        title: "Pen",
-        key: "path",
-        command: "addLayerView",
-        args: ["path"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.draw.itemType", "path");
-        },
-        shortcut: KeyStringMaker({ key: "P" })
-      },
-      {
-        icon: iconUse("brush"),
-        title: "Pencil",
-        key: "brush",
-        command: "addLayerView",
-        args: ["brush"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.draw.itemType", "brush");
-        },
-        shortcut: KeyStringMaker({ key: "B" })
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.draw.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode.itemType", "path") || editor.context.config.is("editing.mode.itemType", "draw");
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.draw.itemType");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
-    },
-    items: [
-      {
-        icon: iconUse("outline_rect"),
-        title: "Rectangle",
-        key: "svg-rect",
-        command: "addLayerView",
-        args: ["svg-rect"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-rect");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+R" })
-      },
-      {
-        icon: iconUse("outline_circle"),
-        title: "Circle",
-        key: "svg-circle",
-        command: "addLayerView",
-        args: ["svg-circle"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-circle");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+O" })
-      },
-      {
-        icon: iconUse("polygon"),
-        title: "Polygon",
-        key: "svg-polygon",
-        command: "addLayerView",
-        args: [
-          "polygon",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "polygon");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+P" })
-      },
-      {
-        icon: iconUse("star"),
-        title: "Star",
-        key: "star",
-        command: "addLayerView",
-        args: [
-          "star",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "star");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+S" })
-      },
-      "-",
-      {
-        icon: iconUse("smooth"),
-        title: "Spline",
-        key: "spline",
-        command: "addLayerView",
-        args: [
-          "spline",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "spline");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+L" })
-      },
-      {
-        icon: iconUse("text_rotate"),
-        title: "TextPath",
-        key: "svg-texpath",
-        command: "addLayerView",
-        args: [
-          "svg-textpath",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-textpath");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+T" })
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.svg.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "svg-rect") || editor.context.config.is("editing.mode.itemType", "svg-circle") || editor.context.config.is("editing.mode.itemType", "polygon") || editor.context.config.is("editing.mode.itemType", "star") || editor.context.config.is("editing.mode.itemType", "spline") || editor.context.config.is("editing.mode.itemType", "svg-textpath"));
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.svg.itemType");
-    }
-  },
-  {
-    type: "button",
-    icon: "title",
-    events: ["config:editing.mode", "config:editing.mode.itemType"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "text");
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "text");
-    }
-  },
-  {
-    type: "button",
-    icon: "pantool",
-    events: ["config:editing.mode", "config:set.tool.hand"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.HAND);
-    },
-    action: (editor) => {
-      editor.context.config.toggle("set.tool.hand");
-      if (editor.context.config.true("set.tool.hand")) {
-        editor.context.config.set("editing.mode", EditingMode.HAND);
-      }
-    }
-  }
-];
-var RightMenu = [
-  {
-    type: "button",
-    icon: (editor) => {
-      if (editor.context.config.is("editor.theme", "dark")) {
-        return "dark";
-      } else {
-        return "light";
-      }
-    },
-    action: (editor) => {
-      if (editor.context.config.get("editor.theme") === "dark") {
-        editor.context.config.set("editor.theme", "light");
-      } else {
-        editor.context.config.set("editor.theme", "dark");
-      }
-    }
-  }
-];
-var ToolbarMenu = {
-  left: () => {
-    return DefaultMenu;
-  },
-  center: () => {
-    return [
-      {
-        type: "button",
-        icon: "navigation",
-        action: (editor) => {
-          editor.context.commands.emit("addCubeBox");
-        }
-      }
-    ];
-  },
-  right: () => {
-    return RightMenu;
-  }
-};
 class Download extends MenuItem {
   getIconString() {
     return "source";
@@ -65988,58 +65732,73 @@ class ToolBar extends EditorElement {
     return {
       items: [
         {
-          title: "menu.item.fullscreen.title",
-          command: "toggle.fullscreen",
-          shortcut: "ALT+/"
-        },
-        { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
-        "-",
-        { title: "menu.item.export.title", command: "showExportView" },
-        { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
-        { title: "menu.item.download.title", command: "downloadJSON" },
-        {
-          title: "menu.item.save.title",
-          command: "saveJSON",
-          nextTick: () => {
-            this.alert("Save", "Save the content on localStorage", 2e3);
-          }
-        },
-        {
-          title: "menu.item.language.title",
+          type: "dropdown",
+          style: {
+            padding: "12px"
+          },
+          icon: `<div class="logo-item"><label class='logo'></label></div>`,
           items: [
             {
-              title: "English",
-              command: "setLocale",
-              args: [Language.EN],
-              checked: () => this.$editor.locale === Language.EN
+              title: "menu.item.fullscreen.title",
+              command: "toggle.fullscreen",
+              shortcut: "ALT+/"
             },
             {
-              title: "Fran\xE7ais",
-              command: "setLocale",
-              args: [Language.FR],
-              checked: () => this.$editor.locale === Language.FR
+              title: "menu.item.shortcuts.title",
+              command: "showShortcutWindow"
+            },
+            "-",
+            { title: "menu.item.export.title", command: "showExportView" },
+            {
+              title: "menu.item.export.title",
+              command: "showEmbedEditorWindow"
+            },
+            { title: "menu.item.download.title", command: "downloadJSON" },
+            {
+              title: "menu.item.save.title",
+              command: "saveJSON",
+              nextTick: () => {
+                this.emit("notify", "alert", "Save", "Save the content on localStorage", 2e3);
+              }
             },
             {
-              title: "Korean",
-              command: "setLocale",
-              args: [Language.KO],
-              checked: () => this.$editor.locale === Language.KO
-            }
-          ]
-        },
-        "-",
-        {
-          title: "EasyLogic Studio",
-          items: [
-            {
-              type: "link",
-              title: "Github",
-              href: "https://github.com/easylogic/editor"
+              title: "menu.item.language.title",
+              items: [
+                {
+                  title: "English",
+                  command: "setLocale",
+                  args: [Language.EN],
+                  checked: (editor) => editor.locale === Language.EN
+                },
+                {
+                  title: "Fran\xE7ais",
+                  command: "setLocale",
+                  args: [Language.FR],
+                  checked: (editor) => editor.locale === Language.FR
+                },
+                {
+                  title: "Korean",
+                  command: "setLocale",
+                  args: [Language.KO],
+                  checked: (editor) => editor.locale === Language.KO
+                }
+              ]
             },
+            "-",
             {
-              type: "link",
-              title: "Learn",
-              href: "https://www.easylogic.studio"
+              title: "EasyLogic Studio",
+              items: [
+                {
+                  type: "link",
+                  title: "Github",
+                  href: "https://github.com/easylogic/editor"
+                },
+                {
+                  type: "link",
+                  title: "Learn",
+                  href: "https://www.easylogic.studio"
+                }
+              ]
             }
           ]
         }
@@ -66048,7 +65807,7 @@ class ToolBar extends EditorElement {
   }
   components() {
     return {
-      ToolBarRenderer: ToolBarRenderer$1,
+      ToolBarRenderer,
       LayoutSelector,
       LanguageSelector,
       ThemeChanger,
@@ -66064,34 +65823,33 @@ class ToolBar extends EditorElement {
   template() {
     return `
             <div class='elf--tool-bar'>
-                ${createComponent("ToolBarRenderer", {
-      items: ToolbarMenu.left(this.$editor)
-    })}
-                <div class='center'>
+                <div class="logo-area">
                   ${createComponent("ToolBarRenderer", {
+      items: this.state.items
+    })}                
+                </div>
+                <div class="toolbar-area">
+                  <div class="left">
+                    ${createComponent("ToolBarRenderer", {
+      items: this.$menu.getTargetMenu("toolbar.left")
+    })}
+                    ${this.$injectManager.generate("toolbar.left")}                
+                  </div>
+                  <div class='center'>
+                    ${createComponent("ToolBarRenderer", {
       items: this.$menu.getTargetMenu("toolbar.center")
     })}       
-                  ${this.$injectManager.generate("toolbar.center")}                
-                </div>
-                <div class='right'>
-                    ${createComponent("ToolBarRenderer", {
+                    ${this.$injectManager.generate("toolbar.center")}                
+                  </div>
+                  <div class='right'>
+                      ${createComponent("ToolBarRenderer", {
       items: this.$menu.getTargetMenu("toolbar.right")
     })}                                
-                    ${this.$injectManager.generate("toolbar.right")}
-                    ${createComponent("ThemeChanger")}
+                      ${this.$injectManager.generate("toolbar.right")}
+                      ${createComponent("ThemeChanger")}
+                  </div>
                 </div>
             </div>
-        `;
-  }
-  [LOAD("$logo")]() {
-    return `
-            <div class="logo-item">           
-                ${createComponent("DropdownMenu", {
-      ref: "$menu",
-      items: this.state.items,
-      dy: 6
-    }, [createElement("label", { class: "logo" })])}
-            </div>                                
         `;
   }
   [CONFIG("language.locale")]() {
@@ -66240,7 +65998,7 @@ class DragAreaView extends EditorElement {
     }
   }
   checkEditMode(e) {
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return false;
     }
     const code2 = this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space);
@@ -66382,10 +66140,12 @@ class HTMLRenderView extends EditorElement {
   [FOCUSOUT("$view .element-item.text .text-content")](e) {
     e.$dt.removeAttr("contenteditable");
     e.$dt.removeClass("focused");
+    this.$context.commands.emit("pop.mode.view", "TextEditorView");
+    this.$context.commands.emit("recoverCursor");
   }
   [KEYUP("$view .element-item.text .text-content")](e) {
     var content2 = e.$dt.html();
-    var text2 = e.$dt.text();
+    var text2 = e.$dt.text().trim();
     var id = e.$dt.parent().attr("data-id");
     var arr = [];
     this.$context.selection.items.filter((it) => it.id === id).forEach((item) => {
@@ -66394,7 +66154,12 @@ class HTMLRenderView extends EditorElement {
         text: text2
       });
       arr.push({ id: item.id, content: content2, text: text2 });
-      this.refreshElementRect(item);
+      this.$commands.emit("setAttribute", {
+        [item.id]: {
+          content: content2,
+          text: text2
+        }
+      });
     });
     this.emit("refreshContent", arr);
   }
@@ -66404,7 +66169,7 @@ class HTMLRenderView extends EditorElement {
       this.state.hasDoubleClick = true;
       return false;
     }
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return false;
     }
     const code2 = this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space);
@@ -66456,12 +66221,11 @@ class HTMLRenderView extends EditorElement {
       const item = this.$model.get(id);
       if (item.is("text")) {
         const $content = $item.$(".text-content");
-        this.nextTick(() => {
-          $content.addClass("focused");
-          $content.attr("contenteditable", "true");
-          $content.focus();
-          $content.select();
-        }, 100);
+        $content.addClass("focused");
+        $content.attr("contenteditable", "true");
+        $content.focus();
+        $content.select();
+        this.$context.commands.emit("push.mode.view", "TextEditorView");
       } else {
         this.$context.commands.emit("doubleclick.item", e, id);
       }
@@ -66696,6 +66460,10 @@ class HTMLRenderView extends EditorElement {
       return;
     }
     item.reset(offset);
+    this.refreshSelectionStyleView(item);
+    if (this.$context.selection.check(item)) {
+      this.emit(REFRESH_SELECTION_TOOL);
+    }
   }
   refreshSelfElement(item) {
     var $el = this.getElement(item.id);
@@ -66710,18 +66478,6 @@ class HTMLRenderView extends EditorElement {
         this.refreshElementBoundSize(child);
       });
     }
-  }
-  [OBSERVER("mutation") + PARAMS({
-    childList: true,
-    subtree: true
-  })](mutations) {
-    const s = new Set(mutations.map((mutation) => {
-      return Dom.create(mutation.target).attr("data-id");
-    }).filter(Boolean));
-    [...s].forEach((id) => {
-      const item = this.$editor.get(id);
-      this.refreshElementBoundSize(item);
-    });
   }
 }
 var PageTools$1 = "";
@@ -66750,12 +66506,6 @@ class PageTools extends EditorElement {
         <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${iconUse("gps_fixed")}</button>    
         <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${iconUse("straighten")}</button>    
         <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse("fullscreen")}</button>                        
-        <button type='button' ref='$pantool' class="${classnames({
-      on: this.$config.get("set.tool.hand")
-    })}" data-tooltip="Hand | H" data-direction="top">${iconUse("pantool")}</button>   
-        <!--span class="divider">|</span>
-        <button type="button" ref="$selectedCount" style="color:var(--elf--selected-color);font-weight: bold;text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1)"></button-->
-        <!--span ref="$buttons"></span-->
         ${this.$injectManager.generate("page.tools")}                             
       </div>
 
@@ -66781,9 +66531,6 @@ class PageTools extends EditorElement {
   }
   [CLICK("$center")]() {
     this.$commands.emit("moveSelectionToCenter");
-  }
-  [CLICK("$pantool")]() {
-    this.$config.toggle("set.tool.hand");
   }
   [CLICK("$ruler")]() {
     this.$config.toggle("show.ruler");
@@ -66814,12 +66561,6 @@ class PageTools extends EditorElement {
       });
     }
     this.emit("hideSelectionToolView");
-  }
-  [CONFIG("set.tool.hand")]() {
-    this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
-  }
-  [LOAD("$buttons") + DOMDIFF]() {
-    return "";
   }
 }
 class CanvasView extends EditorElement {
@@ -66871,7 +66612,7 @@ class CanvasView extends EditorElement {
     };
   }
   checkSpace() {
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return true;
     }
     return this.$context.keyboardManager.check(this.$context.shortcuts.getGeneratedKeyCode(KEY_CODE.space));
@@ -66879,8 +66620,8 @@ class CanvasView extends EditorElement {
   [POINTERSTART("$lock") + IF("checkSpace") + MOVE("movePan") + END("moveEndPan")]() {
     this.startMovePan();
   }
-  [CONFIG("set.tool.hand")](value) {
-    if (value) {
+  [CONFIG("editing.mode")]() {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       this.startMovePan();
       this.$commands.emit("refreshCursor", "grab");
     } else {
@@ -66897,10 +66638,10 @@ class CanvasView extends EditorElement {
     this.lastDist = currentDist;
   }
   refreshCursor() {
-    if (this.$config.get("set.tool.hand") === false) {
-      this.$commands.emit("refreshCursor", "auto");
-    } else {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       this.$commands.emit("refreshCursor", "grab");
+    } else {
+      this.$commands.emit("refreshCursor", "auto");
     }
   }
   moveEndPan() {
@@ -67504,10 +67245,8 @@ class DesignEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      ItemLayerTab,
       ToolBar,
       Inspector,
-      SingleInspector,
       BodyPanel,
       PopupManager,
       KeyboardManager,
@@ -67529,7 +67268,6 @@ class DesignEditor extends BaseLayout {
     };
   }
   template() {
-    const isItemMode = this.$config.is("editor.design.mode", "item");
     return `
       <div class="elf-studio designeditor">
         <div class="layout-main">
@@ -67541,10 +67279,10 @@ class DesignEditor extends BaseLayout {
               ${createComponent("BodyPanel", { ref: "$bodyPanelView" })}
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${isItemMode ? createComponent("ItemLayerTab") : createComponent("LayerTab")}
+              ${createComponent("LayerTab")}
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector")}
+              ${createComponent("Inspector")}
             </div>
             <div class='splitter' ref='$splitter'></div>            
           </div>
@@ -96584,204 +96322,6 @@ class ThreeInspector extends EditorElement {
     }))));
   }
 }
-var ThreeToolBar$1 = "";
-var ToolbarMenuItem$1 = "";
-class ToolbarMenuItem extends EditorElement {
-  initialize() {
-    super.initialize();
-    const events = this.props.events || [];
-    if (events.length) {
-      events.forEach((event) => {
-        this.on(event, () => this.refresh());
-      });
-    }
-  }
-  template() {
-    return `
-        <button type="button"  class='elf--toolbar-menu-item' >
-            <span class="icon" ref="$icon"></span>
-        </button>
-        `;
-  }
-  [CLICK("$el")]() {
-    if (this.props.command) {
-      this.emit(this.props.command, ...this.props.args);
-    } else if (this.props.action) {
-      this.props.action(this.$editor);
-    }
-  }
-  [LOAD("$icon") + DOMDIFF]() {
-    return iconUse(this.props.icon);
-  }
-  [BIND("$el")]() {
-    const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false;
-    return {
-      "data-selected": selected
-    };
-  }
-}
-class ToolBarRenderer extends EditorElement {
-  components() {
-    return {
-      DropdownMenu,
-      ToolbarMenuItem
-    };
-  }
-  template() {
-    return `<div class="toolbar-renderer"></div>`;
-  }
-  [LOAD("$el")]() {
-    return this.props.items.map((item, index2) => {
-      return this.renderMenuItem(item, index2);
-    });
-  }
-  renderMenuItem(item, index2) {
-    switch (item.type) {
-      case MenuItemType.LINK:
-        return this.renderLink(item, index2);
-      case MenuItemType.DROPDOWN:
-        return this.renderDropdown(item, index2);
-      default:
-        return this.renderButton(item, index2);
-    }
-  }
-  renderButton(item, index2) {
-    return createComponent("ToolbarMenuItem", {
-      ref: "$button-" + index2,
-      title: item.title,
-      icon: item.icon,
-      command: item.command,
-      shortcut: item.shortcut,
-      args: item.args,
-      nextTick: item.nextTick,
-      disabled: item.disabled,
-      selected: item.selected,
-      selectedKey: item.selectedKey,
-      action: item.action,
-      events: item.events
-    });
-  }
-  renderDropdown(item, index2) {
-    return createComponent("DropdownMenu", {
-      ref: "$dropdown-" + index2,
-      items: item.items,
-      icon: item.icon,
-      events: item.events,
-      selected: item.selected,
-      selectedKey: item.selectedKey,
-      action: item.action,
-      style: item.style,
-      dy: 6
-    }, [item.content]);
-  }
-}
-class ThreeToolBar extends EditorElement {
-  initState() {
-    return {
-      items: [
-        {
-          title: "menu.item.fullscreen.title",
-          command: "toggle.fullscreen",
-          shortcut: "ALT+/"
-        },
-        { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
-        "-",
-        { title: "menu.item.export.title", command: "showExportView" },
-        { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
-        { title: "menu.item.download.title", command: "downloadJSON" },
-        {
-          title: "menu.item.save.title",
-          command: "saveJSON",
-          nextTick: () => {
-            this.emit("notify", "alert", "Save", "Save the content on localStorage", 2e3);
-          }
-        },
-        {
-          title: "menu.item.language.title",
-          items: [
-            {
-              title: "English",
-              command: "setLocale",
-              args: [Language.EN],
-              checked: () => this.$editor.locale === Language.EN
-            },
-            {
-              title: "Fran\xE7ais",
-              command: "setLocale",
-              args: [Language.FR],
-              checked: () => this.$editor.locale === Language.FR
-            },
-            {
-              title: "Korean",
-              command: "setLocale",
-              args: [Language.KO],
-              checked: () => this.$editor.locale === Language.KO
-            }
-          ]
-        },
-        "-",
-        {
-          title: "EasyLogic Studio",
-          items: [
-            {
-              type: "link",
-              title: "Github",
-              href: "https://github.com/easylogic/editor"
-            },
-            {
-              type: "link",
-              title: "Learn",
-              href: "https://www.easylogic.studio"
-            }
-          ]
-        }
-      ]
-    };
-  }
-  components() {
-    return {
-      ToolBarRenderer,
-      ThemeChanger,
-      Outline,
-      ExportView,
-      Download,
-      Save,
-      Undo,
-      Redo,
-      DropdownMenu
-    };
-  }
-  template() {
-    return `
-            <div class='elf--tool-bar'>
-                ${createComponent("ToolBarRenderer", {
-      items: ToolbarMenu.left(this.$editor)
-    })}
-                ${createComponent("ToolBarRenderer", {
-      items: ToolbarMenu.center(this.$editor)
-    })}
-                <div class='right'>
-                    ${this.$injectManager.generate("toolbar.right")}
-                    ${createComponent("ThemeChanger")}
-                </div>
-            </div>
-        `;
-  }
-  [LOAD("$logo")]() {
-    return `
-            <div class="logo-item">           
-                ${createComponent("DropdownMenu", {
-      ref: "$menu",
-      items: this.state.items,
-      dy: 6
-    }, [createElement("label", { class: "logo" })])}
-            </div>                                
-        `;
-  }
-  [CONFIG("language.locale")]() {
-    this.refresh();
-  }
-}
 var layout$1 = "";
 var _DEFAULT_CAMERA = new PerspectiveCamera(3, 1, 0.01, 1e3);
 _DEFAULT_CAMERA.name = "Camera";
@@ -97110,7 +96650,7 @@ class SceneManager {
     return this.scene.getObjectByProperty("uuid", uuid2, true);
   }
 }
-const addCubeBox = {
+var addCubeBox = {
   command: "addCubeBox",
   execute: (editor) => {
     const geometry = new BoxGeometry(1, 1, 1, 1, 1, 1);
@@ -97124,7 +96664,7 @@ const addCubeBox = {
 };
 var __glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  addCubeBox
+  "default": addCubeBox
 }, Symbol.toStringTag, { value: "Module" }));
 var editor_config_body_event = {
   command: "change.bodyEvent",
@@ -97144,10 +96684,21 @@ Object.entries(modules).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
   obj[key] = value.default;
 });
-var commands = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": obj
-}, Symbol.toStringTag, { value: "Module" }));
+function commands(editor) {
+  editor.loadCommands(obj);
+}
+var DefaultMenu = [
+  {
+    type: "button",
+    icon: "cube",
+    action: (editor) => {
+      editor.context.commands.emit("addCubeBox");
+    }
+  }
+];
+function menus(editor) {
+  editor.registerMenu("toolbar.left", DefaultMenu);
+}
 function threeHelpers(editor) {
   editor.registerUI("render.view", {});
 }
@@ -97156,13 +96707,12 @@ var threeEditorPlugins = [
   defaultIcons,
   defaultMessages,
   baseEditor,
+  commands,
   propertyEditor,
   component,
   project,
   threeHelpers,
-  function(editor) {
-    editor.loadCommands(commands);
-  }
+  menus
 ];
 class ThreeEditor extends BaseLayout {
   getManagers() {
@@ -97180,7 +96730,7 @@ class ThreeEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      ThreeToolBar,
+      ToolBar,
       ThreeInspector,
       Body3DPanel,
       PopupManager,
@@ -97204,7 +96754,7 @@ class ThreeEditor extends BaseLayout {
       <div class="elf-studio three-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            ${createComponent("ThreeToolBar")}
+            ${createComponent("ToolBar")}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>

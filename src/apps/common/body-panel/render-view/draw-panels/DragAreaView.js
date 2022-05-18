@@ -2,6 +2,7 @@ import { POINTERSTART, IF } from "sapa";
 
 import "./DragAreaView.scss";
 
+import { EditingMode } from "elf/editor/types/editor";
 import { END, MOVE } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
@@ -41,7 +42,7 @@ export default class DragAreaView extends EditorElement {
    */
   checkEditMode(e) {
     // hand tool 이 on 되어 있으면 드래그 하지 않는다.
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return false;
     }
 

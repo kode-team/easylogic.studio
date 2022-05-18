@@ -49,7 +49,7 @@ export class PathModel extends SVGModel {
       this.d = this.cachePath
         .clone()
         .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
-      this.modelManager.setChanged("reset", this.id, { d: this.d });
+      this.manager.setChanged("reset", this.id, { d: this.d });
     }
 
     // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })

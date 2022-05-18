@@ -24,12 +24,10 @@ import { VisibleManager } from "./managers/VisibleManager";
 import designEditorPlugins from "./plugins/design-editor-plugins";
 
 import Inspector from "apps/common/area/Inspector";
-import ItemLayerTab from "apps/common/area/ItemLayerTab";
 import LayerTab from "apps/common/area/LayerTab";
-import SingleInspector from "apps/common/area/SingleInspector";
 import SwitchLeftPanel from "apps/common/area/status-bar/SwitchLeftPanel";
 import SwitchRightPanel from "apps/common/area/status-bar/SwitchRightPanel";
-import ToolBar from "apps/common/area/tool-bar/ToolBar";
+import { ToolBar } from "apps/common/area/tool-bar/ToolBar";
 import { BaseLayout } from "apps/common/BaseLayout";
 import BodyPanel from "apps/common/BodyPanel";
 import { ContextMenuManager } from "apps/common/ContextMenuManager";
@@ -78,10 +76,8 @@ export class DesignEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      ItemLayerTab,
       ToolBar,
       Inspector,
-      SingleInspector,
       BodyPanel,
       PopupManager,
       KeyboardManager,
@@ -111,7 +107,6 @@ export class DesignEditor extends BaseLayout {
   }
 
   template() {
-    const isItemMode = this.$config.is("editor.design.mode", "item");
     return /*html*/ `
       <div class="elf-studio designeditor">
         <div class="layout-main">
@@ -123,18 +118,10 @@ export class DesignEditor extends BaseLayout {
               ${createComponent("BodyPanel", { ref: "$bodyPanelView" })}
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${
-                isItemMode
-                  ? createComponent("ItemLayerTab")
-                  : createComponent("LayerTab")
-              }
+              ${createComponent("LayerTab")}
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${
-                isItemMode
-                  ? createComponent("SingleInspector")
-                  : createComponent("Inspector")
-              }
+              ${createComponent("Inspector")}
             </div>
             <div class='splitter' ref='$splitter'></div>            
           </div>

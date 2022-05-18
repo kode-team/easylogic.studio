@@ -1,6 +1,12 @@
 .elf--toolbar-renderer {
+    display: flex;
+    height: 100%;
 
-    .dropdown-menu {
+    > * {
         height: 100%;
+        width: 48px;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
     }
 }

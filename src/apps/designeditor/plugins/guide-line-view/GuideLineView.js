@@ -283,18 +283,6 @@ export default class GuideLineView extends EditorElement {
     });
   }
 
-  [SUBSCRIBE("removeGuideLine", REFRESH_SELECTION)]() {
-    this.removeGuideLine();
-  }
-
-  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
-    return this.refreshSmartGuides(targetVertiesList);
-  }
-
-  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION_TOOL)]() {
-    this.refreshSmartGuidesForVerties(1);
-  }
-
   refreshSmartGuides(targetVertiesList) {
     if (this.$context.selection.isEmpty) return;
 
@@ -359,6 +347,22 @@ export default class GuideLineView extends EditorElement {
     this.setGuideLine(guides, true);
   }
 
+  [SUBSCRIBE("removeGuideLine", REFRESH_SELECTION)]() {
+    this.removeGuideLine();
+  }
+
+  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
+    return this.refreshSmartGuides(targetVertiesList);
+  }
+
+  get currentDistWithScale() {
+    return 1 / this.$viewport.scale;
+  }
+
+  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION_TOOL)]() {
+    this.refreshSmartGuidesForVerties(this.currentDistWithScale);
+  }
+
   [SUBSCRIBE(UPDATE_CANVAS)]() {
     // if (this.$context.selection.isMany) return;
 
@@ -366,7 +370,7 @@ export default class GuideLineView extends EditorElement {
 
     if (!expect) {
       // viewport.scale 로 나눠줘야 픽셀 자체의 크기가 커진다.
-      this.refreshSmartGuidesForVerties(0);
+      this.refreshSmartGuidesForVerties(this.currentDistWithScale);
     }
   }
 }

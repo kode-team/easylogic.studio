@@ -15,7 +15,11 @@ export default class TextRender extends LayerRender {
     // text 는 혼자 존재할 때는 height 를 고정하고
     // 다른 것에 연결되어 있을 때는 height: auto 로 크기를 자동으로 변경한다.
     if (item.overflow !== Overflow.SCROLL) {
-      css.height = "auto";
+      if (item.content.length > 0) {
+        css.height = "auto";
+      } else {
+        // css.outline = `1px solid ${item.color}`;
+      }
     }
 
     return css;

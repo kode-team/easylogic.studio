@@ -31,13 +31,8 @@ export default {
       editor.context.config.set("editing.mode", EditingMode.PATH);
       await editor.emit("showPathEditor", "path");
     } else {
-      console.log(type);
-      if (editor.isComponentClass(type)) {
-        editor.context.config.set("editing.mode", EditingMode.APPEND);
-        await editor.emit("showLayerAppendView", type, data);
-      } else {
-        throw new Error(`${type} is not component class`);
-      }
+      editor.context.config.set("editing.mode", EditingMode.APPEND);
+      await editor.emit("showLayerAppendView", type, data);
     }
   },
 };

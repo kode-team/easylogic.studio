@@ -134,6 +134,14 @@ export class ConfigManager {
     this.set(key, !this.get(key));
   }
 
+  toggleWith(key, firstValue, secondValue) {
+    if (this.get(key) === firstValue) {
+      this.set(key, secondValue);
+    } else {
+      this.set(key, firstValue);
+    }
+  }
+
   true(key) {
     return this.get(key) === true;
   }

@@ -15,13 +15,12 @@ import {
   // createComponent,
   CONTEXTMENU,
   PREVENT,
-  OBSERVER,
-  PARAMS,
 } from "sapa";
 
 import "./HTMLRenderView.scss";
 
 import { round } from "elf/core/math/index";
+import { EditingMode } from "elf/editor/types/editor";
 import {
   END,
   FIRSTMOVE,
@@ -163,13 +162,16 @@ export default class HTMLRenderView extends EditorElement {
   [FOCUSOUT("$view .element-item.text .text-content")](e) {
     e.$dt.removeAttr("contenteditable");
     e.$dt.removeClass("focused");
+
+    this.$context.commands.emit("pop.mode.view", "TextEditorView");
+
+    this.$context.commands.emit("recoverCursor");
   }
 
   [KEYUP("$view .element-item.text .text-content")](e) {
     var content = e.$dt.html();
-    var text = e.$dt.text();
+    var text = e.$dt.text().trim();
     var id = e.$dt.parent().attr("data-id");
-    //FIXME: matrix에 기반한 좌표 연산이 필요하다.
 
     var arr = [];
     this.$context.selection.items
@@ -181,7 +183,12 @@ export default class HTMLRenderView extends EditorElement {
         });
         arr.push({ id: item.id, content, text });
 
-        this.refreshElementRect(item);
+        this.$commands.emit("setAttribute", {
+          [item.id]: {
+            content,
+            text,
+          },
+        });
       });
 
     this.emit("refreshContent", arr);
@@ -205,7 +212,7 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     // hand tool 이 on 되어 있으면 드래그 하지 않는다.
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return false;
     }
 
@@ -288,12 +295,11 @@ export default class HTMLRenderView extends EditorElement {
       if (item.is("text")) {
         const $content = $item.$(".text-content");
 
-        this.nextTick(() => {
-          $content.addClass("focused");
-          $content.attr("contenteditable", "true");
-          $content.focus();
-          $content.select();
-        }, 100);
+        $content.addClass("focused");
+        $content.attr("contenteditable", "true");
+        $content.focus();
+        $content.select();
+        this.$context.commands.emit("push.mode.view", "TextEditorView");
       } else {
         this.$context.commands.emit("doubleclick.item", e, id);
       }
@@ -660,12 +666,8 @@ export default class HTMLRenderView extends EditorElement {
     let offset = $el.offsetRect();
     let rect = $el.offsetClientRect();
 
-    // console.log("offset", offset.x, offset.y);
-
     offset.x = round(rect.x / this.$viewport.scale, 1000);
     offset.y = round(rect.y / this.$viewport.scale, 1000);
-
-    // console.log("client", offset.x, offset.y);
 
     if (offset.width === 0 || offset.height === 0) {
       return;
@@ -673,11 +675,11 @@ export default class HTMLRenderView extends EditorElement {
 
     item.reset(offset);
 
-    // this.refreshSelectionStyleView(item);
+    this.refreshSelectionStyleView(item);
 
-    // if (this.$context.selection.check(item)) {
-    //   this.emit(REFRESH_SELECTION_TOOL);
-    // }
+    if (this.$context.selection.check(item)) {
+      this.emit(REFRESH_SELECTION_TOOL);
+    }
   }
 
   refreshSelfElement(item) {
@@ -698,27 +700,33 @@ export default class HTMLRenderView extends EditorElement {
     }
   }
 
-  /**
-   * 객체의 변화를 캐치해서 offsetRect 를 다시 설정해준다.
-   *
-   * @param {Mutation} mutations
-   */
-  [OBSERVER("mutation") +
-    PARAMS({
-      childList: true,
-      subtree: true,
-    })](mutations) {
-    const s = new Set(
-      mutations
-        .map((mutation) => {
-          return Dom.create(mutation.target).attr("data-id");
-        })
-        .filter(Boolean)
-    );
+  // /**
+  //  * 객체의 변화를 캐치해서 offsetRect 를 다시 설정해준다.
+  //  *
+  //  * @param {Mutation} mutations
+  //  */
+  // [OBSERVER("mutation") +
+  //   PARAMS({
+  //     childList: true,
+  //     subtree: true,
+  //   })](mutations) {
+  //   console.log("afdsafdsfdsf", mutations);
+  //   const s = new Set(
+  //     mutations
+  //       .map((mutation) => {
+  //         return Dom.create(mutation.target).attr("data-id");
+  //       })
+  //       .filter(Boolean)
+  //   );
 
-    [...s].forEach((id) => {
-      const item = this.$editor.get(id);
-      this.refreshElementBoundSize(item);
-    });
-  }
+  //   [...s].forEach((id) => {
+  //     const item = this.$editor.get(id);
+
+  //     if (item.is("text")) {
+  //       // noop
+  //     } else {
+  //       this.refreshElementBoundSize(item);
+  //     }
+  //   });
+  // }
 }

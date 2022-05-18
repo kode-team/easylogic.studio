@@ -35,6 +35,7 @@ import layerAppendView from "./layer-append-view";
 import layerTree from "./layer-tree";
 import layout from "./layout";
 import lineView from "./line-view";
+import menus from "./menus";
 import pathDrawView from "./path-draw-view";
 import pathEditorView from "./path-editor-view";
 import pathTool from "./path-tool";
@@ -68,6 +69,7 @@ import propertyEditor from "plugins/property-editor";
 export default [
   configs,
   commands,
+  menus,
   defaultConfigs,
   defaultIcons,
   defaultMessages,

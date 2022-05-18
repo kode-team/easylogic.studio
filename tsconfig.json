@@ -1,6 +1,23 @@
 {
     "compilerOptions": {
+        "target": "esnext",
+        "lib": ["es2015", "dom", "dom.iterable"],
         "allowJs": true,
-        "types": ["vite/client"]
-    }
-  }
+        "types": ["vite/client"],
+        "moduleResolution": "node",
+        "isolatedModules": true,
+        "paths": {
+            "elf/ui": ["./src/elf/ui"],      
+            "elf/core": ["./src/elf/core"],      
+            "elf/*": ["./src/elf/*"],
+            "sapa": ["./src/sapa"],
+            "style/*": ["./src/scss/*"],
+            "export-library/*": ["./src/export-library/*"],
+            "plugins/*": ["./src/plugins/*"],
+            "apps/common": ["./src/apps/common/*"],      
+            "apps/*": ["./src/apps/*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
+}

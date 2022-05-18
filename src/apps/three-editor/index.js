@@ -12,12 +12,12 @@ import {
 
 import Body3DPanel from "./area/Body3DPanel";
 import ThreeInspector from "./area/ThreeInspector";
-import ThreeToolBar from "./area/tool-bar/ThreeToolBar";
 import "./layout.scss";
 import { SceneManager } from "./managers/SceneManager";
 import threeEditorPlugins from "./plugins/three-editor-plugins";
 
 import LayerTab from "apps/common/area/LayerTab";
+import { ToolBar } from "apps/common/area/tool-bar/ToolBar";
 import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
@@ -45,7 +45,7 @@ export class ThreeEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      ThreeToolBar,
+      ToolBar,
       ThreeInspector,
       Body3DPanel,
       PopupManager,
@@ -77,7 +77,7 @@ export class ThreeEditor extends BaseLayout {
       <div class="elf-studio three-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            ${createComponent("ThreeToolBar")}
+            ${createComponent("ToolBar")}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>

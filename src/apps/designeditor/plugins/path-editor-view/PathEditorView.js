@@ -341,8 +341,14 @@ export default class PathEditorView extends PathTransformEditor {
   // }
 
   makePathLayer() {
+    const pathString = this.pathGenerator.toPath().d;
+
+    if (!pathString) {
+      return;
+    }
+
     var layer;
-    const newPath = new PathParser(this.pathGenerator.toPath().d);
+    const newPath = new PathParser(pathString);
     newPath.transformMat4(this.$viewport.matrixInverse);
     const bbox = newPath.getBBox();
 
@@ -414,7 +420,7 @@ export default class PathEditorView extends PathTransformEditor {
       this.$config.set("editing.mode.itemType", "select");
       this.$context.selection.select(layer);
       this.trigger("hidePathEditor");
-      this.emit("refreshAll");
+      // this.emit("refreshAll");
     }
   }
 

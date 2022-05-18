@@ -22,7 +22,7 @@ export class ComponentManager {
   }
 
   getComponentClass(name) {
-    return this.components[name];
+    return this.components[name] || this.components["rect"];
   }
 
   getInspector(name) {

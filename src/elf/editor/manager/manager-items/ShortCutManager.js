@@ -166,7 +166,7 @@ export class ShortCutManager {
         .filter((it) => this.checkWhen(it));
 
       if (filteredCommands.length) {
-        e.preventDefault();
+        // e.preventDefault();
 
         filteredCommands.forEach((it) => {
           this.$editor.context.commands.emit(it.command, ...it.args);
