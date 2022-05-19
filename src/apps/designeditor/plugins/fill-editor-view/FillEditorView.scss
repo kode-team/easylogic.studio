@@ -6,8 +6,6 @@
   right: 0px;
   bottom: 0px;
 
-  background-color: rgba(0, 255, 255, 0.1);
-
   &.dragging {
     .area-line {
       pointer-events: none !important;

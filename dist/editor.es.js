@@ -5111,7 +5111,10 @@ var __glob_0_22$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": arrow_right
 }, Symbol.toStringTag, { value: "Module" }));
-var artboard$1 = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
+var artboard$1 = _icon_template(`<path d="M13.85 34.05H27.6V31.05H13.85ZM13.85 25.5H34.15V22.5H13.85ZM13.85 16.95H34.15V13.95H13.85ZM9 42Q7.8 42 6.9 41.1Q6 40.2 6 39V9Q6 7.8 6.9 6.9Q7.8 6 9 6H39Q40.2 6 41.1 6.9Q42 7.8 42 9V39Q42 40.2 41.1 41.1Q40.2 42 39 42ZM9 39H39Q39 39 39 39Q39 39 39 39V9Q39 9 39 9Q39 9 39 9H9Q9 9 9 9Q9 9 9 9V39Q9 39 9 39Q9 39 9 39ZM9 39Q9 39 9 39Q9 39 9 39V9Q9 9 9 9Q9 9 9 9Q9 9 9 9Q9 9 9 9V39Q9 39 9 39Q9 39 9 39Z"/>`, {
+  width: 48,
+  height: 48
+});
 var __glob_0_23$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": artboard$1
@@ -41249,7 +41252,7 @@ class SVGModel extends LayerModel {
       return false;
     }
     switch (editablePropertyName) {
-      case "svgItem":
+      case "svg-item":
         return true;
     }
     return super.editable(editablePropertyName);
@@ -41418,9 +41421,9 @@ class PathModel extends SVGModel {
   refreshMatrixCache() {
     super.refreshMatrixCache();
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.d);
-      this.cacheWidth = this.width;
-      this.cacheHeight = this.height;
+      this.addCache("pathString", new PathParser(this.get("d")));
+      this.addCache("pathWidth", this.width);
+      this.addCache("pathHeight", this.height);
     } else if (this.hasChangedField("width", "height")) {
       this.d = this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
       this.manager.setChanged("reset", this.id, { d: this.d });
@@ -41428,20 +41431,20 @@ class PathModel extends SVGModel {
   }
   setCache() {
     super.setCache();
-    this.cachePath = new PathParser(this.get("d"));
-    this.cacheWidth = this.width;
-    this.cacheHeight = this.height;
+    this.addCache("pathString", new PathParser(this.get("d")));
+    this.addCache("pathWidth", this.width);
+    this.addCache("pathHeight", this.height);
   }
   get d() {
     if (!this.get("d")) {
       return null;
     }
-    if (!this.cachePath) {
-      this.cachePath = new PathParser(this.get("d"));
-      this.cacheWidth = this.width;
-      this.cacheHeight = this.height;
+    if (!this.hasCache("pathString")) {
+      this.addCache("pathString", new PathParser(this.get("d")));
+      this.addCache("pathWidth", this.width);
+      this.addCache("pathHeight", this.height);
     }
-    return this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+    return this.getCache("pathString").clone().scale(this.width / this.getCache("pathWidth"), this.height / this.getCache("pathHeight")).d;
   }
   set d(value) {
     this.set("d", value);

@@ -403,6 +403,7 @@
                 fill: transparent;
                 stroke: var(--elf--selected-color);
                 stroke-width: 1;
+                filter: drop-shadow(2px 4px 6px white);
             }
         }
 

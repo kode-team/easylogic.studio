@@ -151,7 +151,7 @@ export class SVGModel extends LayerModel {
     }
 
     switch (editablePropertyName) {
-      case "svgItem":
+      case "svg-item":
         return true;
     }
 

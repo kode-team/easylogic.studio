@@ -42,9 +42,9 @@ export class PathModel extends SVGModel {
     super.refreshMatrixCache();
 
     if (this.hasChangedField("d")) {
-      this.cachePath = new PathParser(this.d);
-      this.cacheWidth = this.width;
-      this.cacheHeight = this.height;
+      this.addCache("pathString", new PathParser(this.get("d")));
+      this.addCache("pathWidth", this.width);
+      this.addCache("pathHeight", this.height);
     } else if (this.hasChangedField("width", "height")) {
       this.d = this.cachePath
         .clone()
@@ -58,9 +58,9 @@ export class PathModel extends SVGModel {
   setCache() {
     super.setCache();
 
-    this.cachePath = new PathParser(this.get("d"));
-    this.cacheWidth = this.width;
-    this.cacheHeight = this.height;
+    this.addCache("pathString", new PathParser(this.get("d")));
+    this.addCache("pathWidth", this.width);
+    this.addCache("pathHeight", this.height);
   }
 
   get d() {
@@ -68,15 +68,18 @@ export class PathModel extends SVGModel {
       return null;
     }
 
-    if (!this.cachePath) {
-      this.cachePath = new PathParser(this.get("d"));
-      this.cacheWidth = this.width;
-      this.cacheHeight = this.height;
+    if (!this.hasCache("pathString")) {
+      this.addCache("pathString", new PathParser(this.get("d")));
+      this.addCache("pathWidth", this.width);
+      this.addCache("pathHeight", this.height);
     }
 
-    return this.cachePath
+    return this.getCache("pathString")
       .clone()
-      .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+      .scale(
+        this.width / this.getCache("pathWidth"),
+        this.height / this.getCache("pathHeight")
+      ).d;
   }
 
   set d(value) {
