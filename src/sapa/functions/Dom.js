@@ -9,7 +9,11 @@ import { recoverVariable } from "./registElement";
 export class Dom {
   constructor(tag, className, attr) {
     if (typeof tag !== "string") {
-      this.el = tag;
+      if (tag instanceof Dom) {
+        this.el = tag.el;
+      } else {
+        this.el = tag;
+      }
     } else {
       var el = document.createElement(tag);
 
@@ -324,6 +328,10 @@ export class Dom {
       this,
       Dom.create(rootElement).html(`<svg>${html}</svg>`).firstChild.firstChild
     );
+  }
+
+  getById(id) {
+    return this.el.getElementById(id);
   }
 
   find(selector) {

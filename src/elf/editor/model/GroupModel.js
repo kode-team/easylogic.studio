@@ -50,38 +50,61 @@ export class GroupModel extends MovableModel {
     });
   }
 
-  // toCloneObject(isDeep = true) {
-  //   return {
-  //     ...super.toCloneObject(isDeep),
-  //     ...this.attrs(
-  //       "layout",
-  //       "constraintsHorizontal",
-  //       "constraintsVertical",
-  //       // flex
-  //       "flexDirection",
-  //       "flexWrap",
-  //       "justifyContent",
-  //       "alignItems",
-  //       "alignContent",
-  //       "order",
-  //       "flexGrow",
-  //       "flexShrink",
-  //       "flexBasis",
-  //       "gap",
-  //       "resizingHorizontal",
-  //       "resizingVertical",
-  //       // grid
-  //       "gridTemplateRows",
-  //       "gridColumnGap",
-  //       "gridTemplateColumns",
-  //       "gridRowGap",
-  //       "gridTemplateAreas",
-  //       "gridAutoRows",
-  //       "gridAutoColumns",
-  //       "gridAutoFlow"
-  //     ),
-  //   };
-  // }
+  reset(obj, context = { origin: "*" }) {
+    const isChanged = super.reset(obj, context);
+
+    if (
+      this.hasChangedField(
+        "resizingVertical",
+        "resizingHorizontal",
+        "contraintsVertical",
+        "contraintsHorizontal"
+      ) ||
+      this.changedLayout
+    ) {
+      this.refreshResizableCache();
+    }
+
+    return isChanged;
+  }
+
+  refreshResizableCache() {
+    this.addCache("resizable", this.getAutoResizable());
+  }
+
+  get autoResizable() {
+    return this.getCache("resizable");
+  }
+
+  /**
+   * 크기 변경이 가능한지 체크한다.
+   *
+   * 크기가 자동으로 바뀌는 경우에 대해서 체크한다.
+   *
+   * 1. 상위 컴포넌트가 parent 가 아닌 경우
+   * 2. 상위 컴포넌트가 layout 을 가지고 있는 경우
+   * 3. resizing mode 가 fixed 아닌 경우
+   * 4. constrains 가 none 이 아닌경우
+   */
+  getAutoResizable() {
+    if (this.parent.is("project")) {
+      return false;
+    }
+
+    if (
+      this.resizingHorizontal === ResizingMode.FIXED &&
+      this.resizingVertical === ResizingMode.FIXED
+    ) {
+      if (
+        this.constraintsHorizontal === Constraints.NONE &&
+        this.constraintsVertical === Constraints.NONE
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 
   get layout() {
     return this.get("layout");

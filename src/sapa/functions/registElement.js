@@ -2,6 +2,7 @@ import { isString } from "./func";
 import { uuidShort } from "./uuid";
 
 const map = {};
+const handlerMap = {};
 const aliasMap = {};
 const __rootInstance = new Set();
 const __tempVariables = new Map();
@@ -132,4 +133,23 @@ export function renderRootElementInstance(module) {
   getRootElementInstanceList().forEach((instance) => {
     instance.hmr();
   });
+}
+
+export function registHandler(handlers) {
+  Object.keys(handlers).forEach((key) => {
+    handlerMap[key] = handlers[key];
+  });
+}
+
+export function retriveHandler(className) {
+  return handlerMap[className];
+}
+
+export function createHandlerInstance(context) {
+  return Object.keys(handlerMap)
+    .filter((key) => Boolean(handlerMap[key]))
+    .map((key) => {
+      const HandlerClass = handlerMap[key];
+      return new HandlerClass(context);
+    });
 }

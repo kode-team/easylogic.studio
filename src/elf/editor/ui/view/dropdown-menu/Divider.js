@@ -1,3 +1,4 @@
+import { Dom } from "sapa";
 export function Divider() {
-  return /*html*/ `<li class="dropdown-divider"></li>`;
+  return Dom.createByHTML(/*html*/ `<li class="dropdown-divider"></li>`);
 }

@@ -115,7 +115,7 @@ export default class GuideLineView extends EditorElement {
     // const layerLine = this.createLayerLine();
 
     return {
-      svgDiff: /*html*/ `<g>${line}</g>`,
+      svgDiff: /*html*/ `<svg>${line}</svg>`,
     };
   }
 

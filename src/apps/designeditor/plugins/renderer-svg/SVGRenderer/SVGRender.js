@@ -8,7 +8,8 @@ export default class SVGRender extends DomRender {
   toDefaultCSS(item) {
     return {
       overflow: "visible",
-
+      "background-color": item.backgroundColor,
+      color: item.color,
       "font-size": item.fontSize,
       "font-weight": item.fontWeight,
       "font-style": item.fontStyle,

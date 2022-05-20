@@ -28,11 +28,11 @@ import LayerTab from "apps/common/area/LayerTab";
 import SwitchLeftPanel from "apps/common/area/status-bar/SwitchLeftPanel";
 import SwitchRightPanel from "apps/common/area/status-bar/SwitchRightPanel";
 import { ToolBar } from "apps/common/area/tool-bar/ToolBar";
-import { BaseLayout } from "apps/common/BaseLayout";
 import BodyPanel from "apps/common/BodyPanel";
 import { ContextMenuManager } from "apps/common/ContextMenuManager";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
+import { BaseLayout } from "apps/common/layout/BaseLayout";
 import { PopupManager } from "apps/common/PopupManager";
 import {
   END,

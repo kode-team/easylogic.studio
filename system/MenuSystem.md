@@ -81,7 +81,7 @@ items 는 유저가 동적으로 만들어서 넣는 메뉴 리스트입니다.
 
 클릭만 가능한 Button 형 메뉴 아이템입니다. 
 
-```json
+```js
 {
     type: 'button',
     title: 'my button',
@@ -97,7 +97,7 @@ items 는 유저가 동적으로 만들어서 넣는 메뉴 리스트입니다.
 
 메뉴 내에서 다시 메뉴를 확장하기 위해서 사용되어집니다. 
 
-```json
+```js
 {
     type: 'dropdown',
     title: 'my dropdown',
@@ -112,7 +112,7 @@ items 는 유저가 동적으로 만들어서 넣는 메뉴 리스트입니다.
 
 메뉴를 중간에 구분하기 위해서 사용되어 집니다. 
 
-```json
+```js
 
 '-' 
 
@@ -120,6 +120,40 @@ items 는 유저가 동적으로 만들어서 넣는 메뉴 리스트입니다.
 
 {
     type: 'divider'
+}
+
+```
+
+# 메세지 전달하기 
+
+## command 실행 
+```js
+{
+    type: 'button',
+    title: '사각형',
+    command: 'addLayerView',
+    args: ['rect', {
+        width: 100,
+        height: 100,
+        backgroundColor: 'yellow',
+    }]
+}
+
+```
+
+## action 실행 
+
+```js
+{
+    type: 'button',
+    title: '사각형',
+    action: (editor) => {
+        editor.context.commands.emit('addLayerView', 'rect', { 
+            width: 100, 
+            height: 100,
+            backgroundColor: 'yellow'
+        });
+    }
 }
 
 ```

@@ -1,9 +1,18 @@
 import { Dom } from "./functions/Dom";
-import { isFunction, keyEach, collectProps, isObject } from "./functions/func";
+import {
+  isFunction,
+  keyEach,
+  collectProps,
+  isObject,
+  isString,
+  isArray,
+} from "./functions/func";
 import { MagicMethod } from "./functions/MagicMethod";
 import {
+  createHandlerInstance,
   getVariable,
   hasVariable,
+  registHandler,
   retriveElement,
   spreadVariable,
 } from "./functions/registElement";
@@ -12,6 +21,15 @@ import BindHandler from "./handler/BindHandler";
 import CallbackHandler from "./handler/CallbackHandler";
 import DomEventHandler from "./handler/DomEventHandler";
 import ObserverHandler from "./handler/ObserverHandler";
+import StoreHandler from "./handler/StoreHandler";
+
+registHandler({
+  BindHandler,
+  CallbackHandler,
+  DomEventHandler,
+  ObserverHandler,
+  StoreHandler,
+});
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
@@ -147,12 +165,7 @@ export class EventMachine {
   }
 
   initializeHandler() {
-    return [
-      new BindHandler(this),
-      new DomEventHandler(this),
-      new CallbackHandler(this),
-      new ObserverHandler(this),
-    ];
+    return createHandlerInstance(this);
   }
 
   /**
@@ -366,22 +379,44 @@ export class EventMachine {
   afterComponentRendering() {}
 
   /**
+   * template 또는 load 함수로 정의된 text , htmlelement, dom, 여러가지를 하나의 dom 배열로 만들어준다.
+   *
+   * 즉, template 은 element 가 직접 들어가도 된다.
+   *
+   * @param {any|any[]} html
+   * @returns
+   */
+  #makeElementList(html) {
+    let list = [];
+
+    if (!isArray(html)) {
+      html = [html];
+    }
+
+    html = html.filter(Boolean);
+
+    for (let i = 0, len = html.length; i < len; i++) {
+      const item = html[i];
+      if (isString(item)) {
+        list.push(...(TEMP_DIV.html(item?.trim()).childNodes || []));
+      } else if (item) {
+        list.push(Dom.create(item));
+      } else {
+        // noop
+      }
+    }
+
+    return list;
+  }
+
+  /**
    * template() 함수의 결과물을 파싱해서 dom element 를 생성한다.
    *
    * @param {string} html
    * @param {Boolean} [isLoad=false]
    */
   parseTemplate(html, isLoad) {
-    /////////////////////////////////////////////////////////////////
-    //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자.
-    if (Array.isArray(html)) {
-      html = html.join("");
-    }
-
-    html = (html || "").trim();
-
-    const list = TEMP_DIV.html(html).childNodes || [];
-    ///////////////////////////////////////////////////////////////
+    let list = this.#makeElementList(html);
 
     for (var i = 0, len = list.length; i < len; i++) {
       const $el = list[i];

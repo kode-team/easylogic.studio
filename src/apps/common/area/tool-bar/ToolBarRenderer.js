@@ -51,6 +51,7 @@ export default class ToolBarRenderer extends EditorElement {
     return createComponent("ToolbarButtonMenuItem", {
       ref: "$button-" + index,
       title: item.title,
+      tooltip: item.tooltip,
       icon: item.icon,
       command: item.command,
       shortcut: item.shortcut,
@@ -74,6 +75,7 @@ export default class ToolBarRenderer extends EditorElement {
         items: item.items,
         icon: item.icon,
         title: item.title,
+        tooltip: item.tooltip,
         direction: item.direction,
         events: item.events || [],
         selected: item.selected,

@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _subscribes, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
+var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _makeElementList, makeElementList_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -304,6 +304,8 @@ function DomDiff(A, B, options2 = {}) {
   }
   if (childrenA.length === 0 && childrenB.length > 0) {
     A.append(...childrenB);
+  } else if (childrenA.length > 0 && childrenB.length === 0) {
+    A.textContent = "";
   } else {
     for (var i = 0; i < len2; i++) {
       updateElement(A, childrenA[i], childrenB[i], i, options2);
@@ -330,6 +332,7 @@ function uuidShort$1() {
   return uuid2;
 }
 const map = {};
+const handlerMap = {};
 const aliasMap = {};
 const __rootInstance = /* @__PURE__ */ new Set();
 const __tempVariables = /* @__PURE__ */ new Map();
@@ -410,10 +413,28 @@ function renderRootElementInstance(module) {
     instance.hmr();
   });
 }
+function registHandler(handlers) {
+  Object.keys(handlers).forEach((key) => {
+    handlerMap[key] = handlers[key];
+  });
+}
+function retriveHandler(className) {
+  return handlerMap[className];
+}
+function createHandlerInstance(context) {
+  return Object.keys(handlerMap).filter((key) => Boolean(handlerMap[key])).map((key) => {
+    const HandlerClass = handlerMap[key];
+    return new HandlerClass(context);
+  });
+}
 class Dom {
   constructor(tag, className, attr) {
     if (typeof tag !== "string") {
-      this.el = tag;
+      if (tag instanceof Dom) {
+        this.el = tag.el;
+      } else {
+        this.el = tag;
+      }
     } else {
       var el = document.createElement(tag);
       if (className) {
@@ -636,6 +657,9 @@ class Dom {
   }
   updateSVGDiff(html, rootElement = "div") {
     DomDiff(this, Dom.create(rootElement).html(`<svg>${html}</svg>`).firstChild.firstChild);
+  }
+  getById(id) {
+    return this.el.getElementById(id);
   }
   find(selector2) {
     if (this.isTextNode)
@@ -1189,11 +1213,6 @@ class BaseStore {
     this.cachedCallback = {};
     this.callbacks = {};
     this.editor = editor;
-    this.promiseProxy = new Proxy(this, {
-      get: (target, key) => {
-        return this.makePromiseEvent(key);
-      }
-    });
   }
   getCallbacks(event) {
     if (!this.callbacks[event]) {
@@ -1253,25 +1272,6 @@ class BaseStore {
   }
   getCachedCallbacks(event) {
     return this.getCallbacks(event);
-  }
-  get promise() {
-    return this.promiseProxy;
-  }
-  get p() {
-    return this.promise;
-  }
-  makePromiseEvent(event) {
-    var list2 = this.getCachedCallbacks(event);
-    const source2 = this.source;
-    return (...args2) => window.Promise.all(list2.filter((f) => {
-      return !f.enableSelfTrigger;
-    }).filter((f) => {
-      return f.enableAllTrigger || f.originalCallback.source !== source2;
-    }).map((f) => {
-      return new window.Promise((resolve) => {
-        resolve(f.callback.apply(f.context, args2));
-      });
-    }));
   }
   sendMessage(source2, event, ...args2) {
     this.sendMessageList(source2, [[event, ...args2]]);
@@ -2341,6 +2341,98 @@ class ObserverHandler extends BaseHandler {
     this.bindingObserver(it, originalCallback);
   }
 }
+class StoreHandler extends BaseHandler {
+  initialize() {
+    var _a, _b;
+    this.destroy();
+    if (!this._callbacks) {
+      this._callbacks = this.context.filterMethodes("subscribe");
+    }
+    if (!((_a = this._bindings) == null ? void 0 : _a.length) && ((_b = this._callbacks) == null ? void 0 : _b.length)) {
+      this._callbacks.forEach((key) => this.parseSubscribe(key));
+    }
+  }
+  destroy() {
+    if (this.context.notEventRedefine)
+      ;
+    else {
+      this.context.$store.offAll(this.context);
+    }
+  }
+  getCallback(field) {
+    return this.context[field];
+  }
+  getBindings() {
+    if (!this._bindings) {
+      this.initBindings();
+    }
+    return this._bindings;
+  }
+  addBinding(obj2) {
+    this.getBindings().push(obj2);
+  }
+  initBindings() {
+    this._bindings = [];
+  }
+  createLocalCallback(event, callback) {
+    var newCallback = callback.bind(this.context);
+    newCallback.displayName = `${this.context.sourceName}.${event}`;
+    newCallback.source = this.context.source;
+    return newCallback;
+  }
+  parseSubscribe(magicMethod) {
+    var _a, _b;
+    const events = magicMethod.args.join(" ");
+    const checkMethodList = [];
+    const eventList = [];
+    let debounce2 = 0;
+    let throttle2 = 0;
+    let isAllTrigger = false;
+    let isSelfTrigger = false;
+    let isFrameTrigger = false;
+    const debounceFunction = magicMethod.getFunction("debounce");
+    const throttleFunction = magicMethod.getFunction("throttle");
+    const allTriggerFunction = magicMethod.getFunction("allTrigger");
+    const selfTriggerFunction = magicMethod.getFunction("selfTrigger");
+    const frameFunction = magicMethod.getFunction("frame");
+    if (debounceFunction) {
+      debounce2 = +(((_a = debounceFunction.args) == null ? void 0 : _a[0]) || 0);
+    }
+    if (throttleFunction) {
+      throttle2 = +(((_b = throttleFunction.args) == null ? void 0 : _b[0]) || 0);
+    }
+    if (allTriggerFunction) {
+      isAllTrigger = true;
+    }
+    if (selfTriggerFunction) {
+      isSelfTrigger = true;
+    }
+    if (frameFunction) {
+      isFrameTrigger = true;
+    }
+    magicMethod.keywords.forEach((keyword) => {
+      const method = keyword;
+      if (this.context[method]) {
+        checkMethodList.push(method);
+      } else {
+        eventList.push(method);
+      }
+    });
+    const originalCallback = this.context[magicMethod.originalMethod];
+    [...eventList, events].filter(Boolean).forEach((e) => {
+      var callback = this.createLocalCallback(e, originalCallback);
+      this.context.$store.on(e, callback, this.context, debounce2, throttle2, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
+    });
+    this.addBinding(magicMethod);
+  }
+}
+registHandler({
+  BindHandler,
+  CallbackHandler,
+  DomEventHandler,
+  ObserverHandler,
+  StoreHandler
+});
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
@@ -2352,6 +2444,7 @@ const _EventMachine = class {
     __privateAdd(this, _refreshTimestamp);
     __privateAdd(this, _setProps);
     __privateAdd(this, _getProp);
+    __privateAdd(this, _makeElementList);
     __privateAdd(this, _state, {});
     __privateAdd(this, _prevState, {});
     __privateAdd(this, _localTimestamp, 0);
@@ -2414,12 +2507,7 @@ const _EventMachine = class {
     this.childComponents = this.components();
   }
   initializeHandler() {
-    return [
-      new BindHandler(this),
-      new DomEventHandler(this),
-      new CallbackHandler(this),
-      new ObserverHandler(this)
-    ];
+    return createHandlerInstance(this);
   }
   initState() {
     return {};
@@ -2514,11 +2602,7 @@ const _EventMachine = class {
   afterComponentRendering() {
   }
   parseTemplate(html, isLoad) {
-    if (Array.isArray(html)) {
-      html = html.join("");
-    }
-    html = (html || "").trim();
-    const list2 = TEMP_DIV.html(html).childNodes || [];
+    let list2 = __privateMethod(this, _makeElementList, makeElementList_fn).call(this, html);
     for (var i = 0, len2 = list2.length; i < len2; i++) {
       const $el = list2[i];
       var ref = $el.attr(REFERENCE_PROPERTY);
@@ -2817,10 +2901,27 @@ _getProp = new WeakSet();
 getProp_fn = function(key) {
   return __privateGet(this, _props)[__privateGet(this, _propsKeys)[key.toUpperCase()]];
 };
+_makeElementList = new WeakSet();
+makeElementList_fn = function(html) {
+  let list2 = [];
+  if (!isArray(html)) {
+    html = [html];
+  }
+  html = html.filter(Boolean);
+  for (let i = 0, len2 = html.length; i < len2; i++) {
+    const item = html[i];
+    if (isString(item)) {
+      list2.push(...TEMP_DIV.html(item == null ? void 0 : item.trim()).childNodes || []);
+    } else if (item) {
+      list2.push(Dom.create(item));
+    } else
+      ;
+  }
+  return list2;
+};
 const _UIElement = class extends EventMachine {
   constructor(opt, props = {}) {
     super(opt, props);
-    __privateAdd(this, _subscribes, []);
     __privateAdd(this, _storeInstance, void 0);
     if (props.store) {
       __privateSet(this, _storeInstance, props.store);
@@ -2829,11 +2930,6 @@ const _UIElement = class extends EventMachine {
     }
     this.created();
     this.initialize();
-  }
-  async render($container) {
-    await super.render($container);
-    this.initializeStoreEvent();
-    return this;
   }
   currentContext() {
     return this.contexts[this.contexts.length - 1];
@@ -2846,76 +2942,11 @@ const _UIElement = class extends EventMachine {
   }
   async created() {
   }
-  getRealEventName(e, separator) {
-    var startIndex = e.indexOf(separator);
-    return e.substr(startIndex < 0 ? 0 : startIndex + separator.length);
-  }
   createLocalCallback(event, callback) {
     var newCallback = callback.bind(this);
     newCallback.displayName = `${this.sourceName}.${event}`;
     newCallback.source = this.source;
     return newCallback;
-  }
-  initializeStoreEvent() {
-    if (__privateGet(this, _subscribes).length == 0) {
-      __privateSet(this, _subscribes, this.filterMethodes("subscribe"));
-      __privateGet(this, _subscribes).forEach((magicMethod) => {
-        var _a, _b;
-        const events = magicMethod.args.join(" ");
-        const checkMethodList = [];
-        const eventList = [];
-        let debounce2 = 0;
-        let throttle2 = 0;
-        let isAllTrigger = false;
-        let isSelfTrigger = false;
-        let isFrameTrigger = false;
-        const debounceFunction = magicMethod.getFunction("debounce");
-        const throttleFunction = magicMethod.getFunction("throttle");
-        const allTriggerFunction = magicMethod.getFunction("allTrigger");
-        const selfTriggerFunction = magicMethod.getFunction("selfTrigger");
-        const frameFunction = magicMethod.getFunction("frame");
-        if (debounceFunction) {
-          debounce2 = +(((_a = debounceFunction.args) == null ? void 0 : _a[0]) || 0);
-        }
-        if (throttleFunction) {
-          throttle2 = +(((_b = throttleFunction.args) == null ? void 0 : _b[0]) || 0);
-        }
-        if (allTriggerFunction) {
-          isAllTrigger = true;
-        }
-        if (selfTriggerFunction) {
-          isSelfTrigger = true;
-        }
-        if (frameFunction) {
-          isFrameTrigger = true;
-        }
-        magicMethod.keywords.forEach((keyword) => {
-          const method = keyword;
-          if (this[method]) {
-            checkMethodList.push(method);
-          } else {
-            eventList.push(method);
-          }
-        });
-        const originalCallback = this[magicMethod.originalMethod];
-        [...eventList, events].filter(Boolean).forEach((e) => {
-          var callback = this.createLocalCallback(e, originalCallback);
-          this.$store.on(e, callback, this, debounce2, throttle2, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
-        });
-      });
-    }
-  }
-  destoryStoreEvent() {
-    this.$store.offAll(this);
-  }
-  destroy() {
-    super.destroy();
-    this.destoryStoreEvent();
-  }
-  rerender() {
-    super.rerender();
-    this.initialize();
-    this.initializeStoreEvent();
   }
   emit(messageName, ...args2) {
     this.$store.source = this.source;
@@ -2966,7 +2997,6 @@ const _UIElement = class extends EventMachine {
   }
 };
 let UIElement = _UIElement;
-_subscribes = new WeakMap();
 _storeInstance = new WeakMap();
 const start$1 = (ElementClass, opt) => {
   const $container = Dom.create(opt.container || document.body);
@@ -4671,7 +4701,7 @@ class BaseUI extends UIElement {
       this.props.onClick(key, value, params);
     } else if (this.props.command) {
       this.$commands.emit(this.props.command, ...this.props.args || []);
-    } else if (isString(this.props.action)) {
+    } else if (isString(this.props.action) || isFunction(this.props.action)) {
       this.emit(this.props.action, key, value, params);
     } else if (isArray(this.props.action)) {
       this.emit(this.props.action.map((action) => [action, key, value, params]));
@@ -4997,12 +5027,12 @@ function _icon_template(tpl, opt) {
             height="${defaultOpts.height}" 
             viewBox="0 0 ${defaultOpts.viewBoxWidth || defaultOpts.width} ${defaultOpts.viewBoxHeight || defaultOpts.height}">${tpl}</svg>`;
 }
-var __glob_0_0$7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_0$8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": _icon_template
 }, Symbol.toStringTag, { value: "Module" }));
 var account_tree = _icon_template(`<path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z"/>`);
-var __glob_0_1$7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_1$8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": account_tree
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5336,7 +5366,7 @@ var __glob_0_54$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var create_folder = _icon_template(`
     <path d="M22 6H12l-2-2H2v16h20V6zm-3 8h-3v3h-2v-3h-3v-2h3V9h2v3h3v2z"/>
 `);
-var __glob_0_55$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_55$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": create_folder
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5889,7 +5919,7 @@ var __glob_0_157 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": palette
 }, Symbol.toStringTag, { value: "Module" }));
-var pantool = _icon_template(`<path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-7.3-7.61 2.07-1.83c.62-.55 1.53-.66 2.26-.27L8 14.34V4.79c0-1.38 1.12-2.5 2.5-2.5.17 0 .34.02.51.05.09-1.3 1.17-2.33 2.49-2.33.86 0 1.61.43 2.06 1.09.29-.12.61-.18.94-.18 1.38 0 2.5 1.12 2.5 2.5v.28c.16-.03.33-.05.5-.05 1.38 0 2.5 1.12 2.5 2.5V20c0 2.21-1.79 4-4 4zM4.14 15.28l5.86 6.1c.38.39.9.62 1.44.62H18c1.1 0 2-.9 2-2V6.15c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V3.42c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V2.51c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V4.79c0-.28-.22-.5-.5-.5s-.5.23-.5.5v12.87l-5.35-2.83-.51.45z"/>`);
+var pantool = _icon_template(`<path d="M23,5.5V20c0,2.2-1.8,4-4,4h-7.3c-1.08,0-2.1-0.43-2.85-1.19L1,14.83c0,0,1.26-1.23,1.3-1.25 c0.22-0.19,0.49-0.29,0.79-0.29c0.22,0,0.42,0.06,0.6,0.16C3.73,13.46,8,15.91,8,15.91V4c0-0.83,0.67-1.5,1.5-1.5S11,3.17,11,4v7 h1V1.5C12,0.67,12.67,0,13.5,0S15,0.67,15,1.5V11h1V2.5C16,1.67,16.67,1,17.5,1S19,1.67,19,2.5V11h1V5.5C20,4.67,20.67,4,21.5,4 S23,4.67,23,5.5z"/>`);
 var __glob_0_158 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": pantool
@@ -6378,9 +6408,9 @@ var __glob_0_250 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": wrap_text
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$7 = { "./icon_list/_icon_template.js": __glob_0_0$7, "./icon_list/account_tree.js": __glob_0_1$7, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$4, "./icon_list/alternate.js": __glob_0_16$4, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$2, "./icon_list/control_point.js": __glob_0_53$2, "./icon_list/copy.js": __glob_0_54$2, "./icon_list/create_folder.js": __glob_0_55$1, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119$1, "./icon_list/layout_flex.js": __glob_0_120$1, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
+const modules$8 = { "./icon_list/_icon_template.js": __glob_0_0$8, "./icon_list/account_tree.js": __glob_0_1$8, "./icon_list/add.js": __glob_0_2$6, "./icon_list/add_box.js": __glob_0_3$6, "./icon_list/add_circle.js": __glob_0_4$6, "./icon_list/add_note.js": __glob_0_5$6, "./icon_list/align_center.js": __glob_0_6$6, "./icon_list/align_horizontal_center.js": __glob_0_7$6, "./icon_list/align_horizontal_left.js": __glob_0_8$5, "./icon_list/align_horizontal_right.js": __glob_0_9$5, "./icon_list/align_justify.js": __glob_0_10$5, "./icon_list/align_left.js": __glob_0_11$5, "./icon_list/align_right.js": __glob_0_12$5, "./icon_list/align_vertical_bottom.js": __glob_0_13$5, "./icon_list/align_vertical_center.js": __glob_0_14$5, "./icon_list/align_vertical_top.js": __glob_0_15$4, "./icon_list/alternate.js": __glob_0_16$4, "./icon_list/alternate_reverse.js": __glob_0_17$4, "./icon_list/apps.js": __glob_0_18$4, "./icon_list/archive.js": __glob_0_19$4, "./icon_list/arrowLeft.js": __glob_0_20$4, "./icon_list/arrowRight.js": __glob_0_21$3, "./icon_list/arrow_right.js": __glob_0_22$3, "./icon_list/artboard.js": __glob_0_23$3, "./icon_list/auto_awesome.js": __glob_0_24$2, "./icon_list/autorenew.js": __glob_0_25$2, "./icon_list/ballot.js": __glob_0_26$2, "./icon_list/bar_chart.js": __glob_0_27$2, "./icon_list/blur.js": __glob_0_28$2, "./icon_list/blur_linear.js": __glob_0_29$2, "./icon_list/boolean_difference.js": __glob_0_30$2, "./icon_list/boolean_intersection.js": __glob_0_31$2, "./icon_list/boolean_union.js": __glob_0_32$2, "./icon_list/boolean_xor.js": __glob_0_33$2, "./icon_list/border_all.js": __glob_0_34$2, "./icon_list/border_inner.js": __glob_0_35$2, "./icon_list/border_style.js": __glob_0_36$2, "./icon_list/bottom.js": __glob_0_37$2, "./icon_list/broken_image.js": __glob_0_38$2, "./icon_list/brush.js": __glob_0_39$2, "./icon_list/build.js": __glob_0_40$2, "./icon_list/camera_roll.js": __glob_0_41$2, "./icon_list/cat.js": __glob_0_42$2, "./icon_list/center.js": __glob_0_43$2, "./icon_list/chart.js": __glob_0_44$2, "./icon_list/check.js": __glob_0_45$2, "./icon_list/chevron_left.js": __glob_0_46$2, "./icon_list/chevron_right.js": __glob_0_47$2, "./icon_list/circle.js": __glob_0_48$2, "./icon_list/close.js": __glob_0_49$2, "./icon_list/code.js": __glob_0_50$2, "./icon_list/color.js": __glob_0_51$2, "./icon_list/color_lens.js": __glob_0_52$2, "./icon_list/control_point.js": __glob_0_53$2, "./icon_list/copy.js": __glob_0_54$2, "./icon_list/create_folder.js": __glob_0_55$2, "./icon_list/cube.js": __glob_0_56$1, "./icon_list/cylinder.js": __glob_0_57$1, "./icon_list/dahaze.js": __glob_0_58$1, "./icon_list/dark.js": __glob_0_59$1, "./icon_list/delete_forever.js": __glob_0_60$1, "./icon_list/device_hub.js": __glob_0_61$1, "./icon_list/diffuse.js": __glob_0_62$1, "./icon_list/direction.js": __glob_0_63$1, "./icon_list/doc.js": __glob_0_64$1, "./icon_list/drag_handle.js": __glob_0_65$1, "./icon_list/drag_indicator.js": __glob_0_66$1, "./icon_list/draw.js": __glob_0_67$1, "./icon_list/east.js": __glob_0_68$1, "./icon_list/edit.js": __glob_0_69$1, "./icon_list/end.js": __glob_0_70$1, "./icon_list/exit_to_app.js": __glob_0_71$1, "./icon_list/expand.js": __glob_0_72$1, "./icon_list/expand_more.js": __glob_0_73$1, "./icon_list/export.js": __glob_0_74$1, "./icon_list/face.js": __glob_0_75$1, "./icon_list/fast_forward.js": __glob_0_76$1, "./icon_list/fast_rewind.js": __glob_0_77$1, "./icon_list/file_copy.js": __glob_0_78$1, "./icon_list/filter.js": __glob_0_79$1, "./icon_list/flag.js": __glob_0_80$1, "./icon_list/flash_on.js": __glob_0_81$1, "./icon_list/flatten.js": __glob_0_82$1, "./icon_list/flex.js": __glob_0_83$1, "./icon_list/flip.js": __glob_0_84$1, "./icon_list/flipY.js": __glob_0_85$1, "./icon_list/flip_camera.js": __glob_0_86$1, "./icon_list/folder.js": __glob_0_87$1, "./icon_list/font_download.js": __glob_0_88$1, "./icon_list/format_bold.js": __glob_0_89$1, "./icon_list/format_indent.js": __glob_0_90$1, "./icon_list/format_line_spacing.js": __glob_0_91$1, "./icon_list/format_shapes.js": __glob_0_92$1, "./icon_list/format_size.js": __glob_0_93$1, "./icon_list/fullscreen.js": __glob_0_94$1, "./icon_list/gps_fixed.js": __glob_0_95$1, "./icon_list/gradient.js": __glob_0_96$1, "./icon_list/grid.js": __glob_0_97$1, "./icon_list/grid3x3.js": __glob_0_98$1, "./icon_list/group.js": __glob_0_99$1, "./icon_list/height.js": __glob_0_100$1, "./icon_list/highlight_at.js": __glob_0_101$1, "./icon_list/horizontal_align_center.js": __glob_0_102$1, "./icon_list/horizontal_distribute.js": __glob_0_103$1, "./icon_list/horizontal_rule.js": __glob_0_104$1, "./icon_list/image.js": __glob_0_105$1, "./icon_list/input.js": __glob_0_106$1, "./icon_list/italic.js": __glob_0_107$1, "./icon_list/join_full.js": __glob_0_108$1, "./icon_list/join_right.js": __glob_0_109$1, "./icon_list/justify_content_space_around.js": __glob_0_110$1, "./icon_list/keyboard.js": __glob_0_111$1, "./icon_list/keyboard_arrow_down.js": __glob_0_112$1, "./icon_list/keyboard_arrow_left.js": __glob_0_113$1, "./icon_list/keyboard_arrow_right.js": __glob_0_114$1, "./icon_list/keyboard_arrow_up.js": __glob_0_115$1, "./icon_list/landscape.js": __glob_0_116$1, "./icon_list/launch.js": __glob_0_117$1, "./icon_list/layers.js": __glob_0_118$1, "./icon_list/layout_default.js": __glob_0_119$1, "./icon_list/layout_flex.js": __glob_0_120$1, "./icon_list/layout_grid.js": __glob_0_121, "./icon_list/left.js": __glob_0_122, "./icon_list/left_hide.js": __glob_0_123, "./icon_list/lens.js": __glob_0_124, "./icon_list/light.js": __glob_0_125, "./icon_list/line_cap_butt.js": __glob_0_126, "./icon_list/line_cap_round.js": __glob_0_127, "./icon_list/line_cap_square.js": __glob_0_128, "./icon_list/line_chart.js": __glob_0_129, "./icon_list/line_join_bevel.js": __glob_0_130, "./icon_list/line_join_miter.js": __glob_0_131, "./icon_list/line_join_round.js": __glob_0_132, "./icon_list/line_style.js": __glob_0_133, "./icon_list/line_weight.js": __glob_0_134, "./icon_list/list.js": __glob_0_135, "./icon_list/local_library.js": __glob_0_136, "./icon_list/local_movie.js": __glob_0_137, "./icon_list/lock.js": __glob_0_138, "./icon_list/lock_open.js": __glob_0_139, "./icon_list/looks.js": __glob_0_140, "./icon_list/margin.js": __glob_0_141, "./icon_list/merge.js": __glob_0_142, "./icon_list/middle.js": __glob_0_143, "./icon_list/navigation.js": __glob_0_144, "./icon_list/near_me.js": __glob_0_145, "./icon_list/north.js": __glob_0_146, "./icon_list/note.js": __glob_0_147, "./icon_list/nowrap.js": __glob_0_148, "./icon_list/opacity.js": __glob_0_149, "./icon_list/outline.js": __glob_0_150, "./icon_list/outline_circle.js": __glob_0_151, "./icon_list/outline_image.js": __glob_0_152, "./icon_list/outline_rect.js": __glob_0_153, "./icon_list/outline_shape.js": __glob_0_154, "./icon_list/padding.js": __glob_0_155, "./icon_list/paint.js": __glob_0_156, "./icon_list/palette.js": __glob_0_157, "./icon_list/pantool.js": __glob_0_158, "./icon_list/pattern_check.js": __glob_0_159, "./icon_list/pattern_cross_dot.js": __glob_0_160, "./icon_list/pattern_dot.js": __glob_0_161, "./icon_list/pattern_grid.js": __glob_0_162, "./icon_list/pattern_horizontal_line.js": __glob_0_163, "./icon_list/pause.js": __glob_0_164, "./icon_list/pentool.js": __glob_0_165, "./icon_list/photo.js": __glob_0_166, "./icon_list/play.js": __glob_0_167, "./icon_list/plugin.js": __glob_0_168, "./icon_list/polygon.js": __glob_0_169, "./icon_list/power_input.js": __glob_0_170, "./icon_list/publish.js": __glob_0_171, "./icon_list/rect.js": __glob_0_172, "./icon_list/redo.js": __glob_0_173, "./icon_list/refresh.js": __glob_0_174, "./icon_list/remove.js": __glob_0_175, "./icon_list/remove2.js": __glob_0_176, "./icon_list/repeat.js": __glob_0_177, "./icon_list/replay.js": __glob_0_178, "./icon_list/right.js": __glob_0_179, "./icon_list/right_hide.js": __glob_0_180, "./icon_list/rotate.js": __glob_0_181, "./icon_list/rotate_left.js": __glob_0_182, "./icon_list/round.js": __glob_0_183, "./icon_list/same_height.js": __glob_0_184, "./icon_list/same_width.js": __glob_0_185, "./icon_list/save.js": __glob_0_186, "./icon_list/scatter.js": __glob_0_187, "./icon_list/screen.js": __glob_0_188, "./icon_list/setting.js": __glob_0_189, "./icon_list/settings_input_component.js": __glob_0_190, "./icon_list/shadow.js": __glob_0_191, "./icon_list/shape.js": __glob_0_192, "./icon_list/shuffle.js": __glob_0_193, "./icon_list/size.js": __glob_0_194, "./icon_list/skip_next.js": __glob_0_195, "./icon_list/skip_prev.js": __glob_0_196, "./icon_list/smooth.js": __glob_0_197, "./icon_list/source.js": __glob_0_198, "./icon_list/south.js": __glob_0_199, "./icon_list/space.js": __glob_0_200, "./icon_list/specular.js": __glob_0_201, "./icon_list/speed.js": __glob_0_202, "./icon_list/star.js": __glob_0_203, "./icon_list/start.js": __glob_0_204, "./icon_list/storage.js": __glob_0_205, "./icon_list/straighten.js": __glob_0_206, "./icon_list/strikethrough.js": __glob_0_207, "./icon_list/stroke_to_path.js": __glob_0_208, "./icon_list/swap_horiz.js": __glob_0_209, "./icon_list/switch_left.js": __glob_0_210, "./icon_list/switch_right.js": __glob_0_211, "./icon_list/sync.js": __glob_0_212, "./icon_list/table_rows.js": __glob_0_213, "./icon_list/text_rotate.js": __glob_0_214, "./icon_list/texture.js": __glob_0_215, "./icon_list/timer.js": __glob_0_216, "./icon_list/title.js": __glob_0_217, "./icon_list/to_back.js": __glob_0_218, "./icon_list/to_front.js": __glob_0_219, "./icon_list/tonality.js": __glob_0_220, "./icon_list/top.js": __glob_0_221, "./icon_list/transform.js": __glob_0_222, "./icon_list/underline.js": __glob_0_223, "./icon_list/undo.js": __glob_0_224, "./icon_list/unfold.js": __glob_0_225, "./icon_list/vertical_align_baseline.js": __glob_0_226, "./icon_list/vertical_align_bottom.js": __glob_0_227, "./icon_list/vertical_align_center.js": __glob_0_228, "./icon_list/vertical_align_stretch.js": __glob_0_229, "./icon_list/vertical_align_top.js": __glob_0_230, "./icon_list/vertical_distribute.js": __glob_0_231, "./icon_list/video.js": __glob_0_232, "./icon_list/view_comfy.js": __glob_0_233, "./icon_list/view_list.js": __glob_0_234, "./icon_list/view_week.js": __glob_0_235, "./icon_list/view_week_reverse.js": __glob_0_236, "./icon_list/vignette.js": __glob_0_237, "./icon_list/vintage.js": __glob_0_238, "./icon_list/visible.js": __glob_0_239, "./icon_list/visible_off.js": __glob_0_240, "./icon_list/volume_down.js": __glob_0_241, "./icon_list/volume_off.js": __glob_0_242, "./icon_list/volume_up.js": __glob_0_243, "./icon_list/wave.js": __glob_0_244, "./icon_list/waves.js": __glob_0_245, "./icon_list/web.js": __glob_0_246, "./icon_list/west.js": __glob_0_247, "./icon_list/width.js": __glob_0_248, "./icon_list/wrap.js": __glob_0_249, "./icon_list/wrap_text.js": __glob_0_250 };
 const obj$3 = {};
-Object.entries(modules$7).forEach(([key, value]) => {
+Object.entries(modules$8).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
   obj$3[key] = value.default;
 });
@@ -6419,8 +6449,8 @@ class ToolbarButtonMenuItem extends EditorElement {
     }
   }
   template() {
-    return `<button type="button"  class='elf--toolbar-menu-item' ></button>
-`;
+    let tooltip = this.props.tooltip ? `data-tooltip="${this.props.tooltip}"` : "";
+    return `<button type="button"  class='elf--toolbar-menu-item' ${tooltip}></button>`;
   }
   [CLICK("$el")]() {
     if (this.props.command) {
@@ -6454,7 +6484,7 @@ class ToolbarButtonMenuItem extends EditorElement {
 }
 var ToolBarRenderer$1 = "";
 function Divider() {
-  return `<li class="dropdown-divider"></li>`;
+  return Dom.createByHTML(`<li class="dropdown-divider"></li>`);
 }
 class DropdownMenuItem extends EditorElement {
   initialize() {
@@ -7532,6 +7562,7 @@ class ToolBarRenderer extends EditorElement {
     return createComponent("ToolbarButtonMenuItem", {
       ref: "$button-" + index2,
       title: item.title,
+      tooltip: item.tooltip,
       icon: item.icon,
       command: item.command,
       shortcut: item.shortcut,
@@ -7552,6 +7583,7 @@ class ToolBarRenderer extends EditorElement {
       items: item.items,
       icon: item.icon,
       title: item.title,
+      tooltip: item.tooltip,
       direction: item.direction,
       events: item.events || [],
       selected: item.selected,
@@ -7717,6 +7749,35 @@ class BlankToolBar extends EditorElement {
   }
 }
 var layout$5 = "";
+var show_left_panel$1 = {
+  key: "show.left.panel",
+  defaultValue: true,
+  title: "Show left panel",
+  description: "Set left panel visibility to on",
+  type: "boolean"
+};
+var __glob_0_0$7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": show_left_panel$1
+}, Symbol.toStringTag, { value: "Module" }));
+var show_right_panel$1 = {
+  key: "show.right.panel",
+  defaultValue: true,
+  title: "Show right panel",
+  description: "Set right panel visibility to on",
+  type: "boolean"
+};
+var __glob_0_1$7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": show_right_panel$1
+}, Symbol.toStringTag, { value: "Module" }));
+const modules$7 = { "./config_list/show.left.panel.js": __glob_0_0$7, "./config_list/show.right.panel.js": __glob_0_1$7 };
+var configs$4 = Object.values(modules$7).map((it) => it.default);
+function configs$3(editor) {
+  configs$4.forEach((config) => {
+    editor.registerConfig(config);
+  });
+}
 function baseEditor(editor) {
   editor.registerElement({
     Button,
@@ -22214,8 +22275,41 @@ var blankEditorPlugins = [
   defaultIcons,
   defaultMessages,
   baseEditor,
-  propertyEditor
+  propertyEditor,
+  configs$3
 ];
+class IconManager$1 extends EditorElement {
+  template() {
+    return `
+      <svg viewBox="0 0 30 10" xmlns="http://www.w3.org/2000/svg" ref="$list" style="display:none;">
+      </svg>
+    `;
+  }
+  [LOAD("$list")]() {
+    return Object.entries(obj$3).map(([key, value]) => {
+      if (isString(value) === false)
+        return "";
+      return value.replace(/\<svg/g, `<svg id="icon-${key}"`).trim();
+    }).filter(Boolean);
+  }
+}
+const formElements = ["TEXTAREA", "INPUT", "SELECT"];
+class KeyboardManager extends EditorElement {
+  isNotFormElement(e) {
+    var tagName = e.target.tagName;
+    if (formElements.includes(tagName))
+      return false;
+    else if (Dom.create(e.target).attr("contenteditable") === "true")
+      return false;
+    return true;
+  }
+  [KEYDOWN("document") + IF("isNotFormElement")](e) {
+    this.$commands.emit("keymap.keydown", e);
+  }
+  [KEYUP("document") + IF("isNotFormElement")](e) {
+    this.$commands.emit("keymap.keyup", e);
+  }
+}
 var Console = {
   command: "Console",
   description: "do console.log()",
@@ -22343,7 +22437,12 @@ var __glob_0_10$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var toggle_tool_hand = {
   command: "toggleToolHand",
   execute: function(editor) {
-    editor.context.config.toggleWith("editing.mode", EditingMode.SELECT, EditingMode.HAND);
+    if (editor.context.config.is("editing.mode", EditingMode.HAND)) {
+      editor.context.config.set("editing.mode", EditingMode.SELECT);
+    } else {
+      editor.context.config.set("editing.mode", EditingMode.HAND);
+    }
+    editor.emit("hideLayerAppendView");
   }
 };
 var __glob_0_11$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -22748,7 +22847,7 @@ class I18nManager {
     Object.assign(this.locales[lang], messages);
   }
 }
-class IconManager$1 {
+class IconManager {
   constructor(editor) {
     this.editor = editor;
     this.iconMap = {};
@@ -23543,6 +23642,17 @@ var __glob_0_49$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": set_tool_hand
 }, Symbol.toStringTag, { value: "Module" }));
+var set_tool_hand_m = {
+  category: "Tools",
+  key: "h",
+  command: "toggleToolHand",
+  description: "set hand tool on",
+  when: "LayerAppendView"
+};
+var __glob_0_50$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": set_tool_hand_m
+}, Symbol.toStringTag, { value: "Module" }));
 var show_pan = {
   category: "Tool",
   key: "space",
@@ -23550,7 +23660,7 @@ var show_pan = {
   description: "Show panning area",
   when: "CanvasView"
 };
-var __glob_0_50$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_51$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": show_pan
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23562,7 +23672,7 @@ var ungroup_item$1 = {
   description: "Ungrouping selected group layer",
   when: "CanvasView"
 };
-var __glob_0_51$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_52$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ungroup_item$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23573,7 +23683,7 @@ var zoom_default = {
   description: "zoom by scale 1",
   when: "CanvasView"
 };
-var __glob_0_52$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_53$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_default
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23584,7 +23694,7 @@ var zoom_in = {
   description: "zoom in",
   when: "CanvasView"
 };
-var __glob_0_53$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_54$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_in
 }, Symbol.toStringTag, { value: "Module" }));
@@ -23595,11 +23705,11 @@ var zoom_out = {
   description: "zoom Out",
   when: "CanvasView"
 };
-var __glob_0_54$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_55$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_out
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.artboard.pan.js": __glob_0_1$3, "./shortcuts_list/add.brush.js": __glob_0_2$2, "./shortcuts_list/add.circle.js": __glob_0_3$2, "./shortcuts_list/add.circle.l.js": __glob_0_4$2, "./shortcuts_list/add.path.js": __glob_0_5$2, "./shortcuts_list/add.rect.js": __glob_0_6$2, "./shortcuts_list/add.rect.m.js": __glob_0_7$2, "./shortcuts_list/add.rect.pan.js": __glob_0_8$2, "./shortcuts_list/add.text.js": __glob_0_9$2, "./shortcuts_list/clipboard.copy.js": __glob_0_10$2, "./shortcuts_list/clipboard.paste.js": __glob_0_11$2, "./shortcuts_list/escape.js": __glob_0_12$2, "./shortcuts_list/group.item.js": __glob_0_13$2, "./shortcuts_list/history.redo.js": __glob_0_14$2, "./shortcuts_list/history.undo.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_16$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_17$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_18$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_19$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_20$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_21$2, "./shortcuts_list/item.move.key.down.js": __glob_0_22$2, "./shortcuts_list/item.move.key.left.js": __glob_0_23$2, "./shortcuts_list/item.move.key.right.js": __glob_0_24$1, "./shortcuts_list/item.move.key.up.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_26$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_27$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_28$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_29$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_30$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_31$1, "./shortcuts_list/removeLayer.js": __glob_0_32$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_33$1, "./shortcuts_list/segment.delete.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_35$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_36$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_37$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_39$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_40$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_41$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_43$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_44$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_45$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_46$1, "./shortcuts_list/select.all.js": __glob_0_47$1, "./shortcuts_list/select.view.js": __glob_0_48$1, "./shortcuts_list/set.tool.hand.js": __glob_0_49$1, "./shortcuts_list/show.pan.js": __glob_0_50$1, "./shortcuts_list/ungroup.item.js": __glob_0_51$1, "./shortcuts_list/zoom.default.js": __glob_0_52$1, "./shortcuts_list/zoom.in.js": __glob_0_53$1, "./shortcuts_list/zoom.out.js": __glob_0_54$1 };
+const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.artboard.pan.js": __glob_0_1$3, "./shortcuts_list/add.brush.js": __glob_0_2$2, "./shortcuts_list/add.circle.js": __glob_0_3$2, "./shortcuts_list/add.circle.l.js": __glob_0_4$2, "./shortcuts_list/add.path.js": __glob_0_5$2, "./shortcuts_list/add.rect.js": __glob_0_6$2, "./shortcuts_list/add.rect.m.js": __glob_0_7$2, "./shortcuts_list/add.rect.pan.js": __glob_0_8$2, "./shortcuts_list/add.text.js": __glob_0_9$2, "./shortcuts_list/clipboard.copy.js": __glob_0_10$2, "./shortcuts_list/clipboard.paste.js": __glob_0_11$2, "./shortcuts_list/escape.js": __glob_0_12$2, "./shortcuts_list/group.item.js": __glob_0_13$2, "./shortcuts_list/history.redo.js": __glob_0_14$2, "./shortcuts_list/history.undo.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_16$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_17$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_18$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_19$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_20$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_21$2, "./shortcuts_list/item.move.key.down.js": __glob_0_22$2, "./shortcuts_list/item.move.key.left.js": __glob_0_23$2, "./shortcuts_list/item.move.key.right.js": __glob_0_24$1, "./shortcuts_list/item.move.key.up.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_26$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_27$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_28$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_29$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_30$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_31$1, "./shortcuts_list/removeLayer.js": __glob_0_32$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_33$1, "./shortcuts_list/segment.delete.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_35$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_36$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_37$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_39$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_40$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_41$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_43$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_44$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_45$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_46$1, "./shortcuts_list/select.all.js": __glob_0_47$1, "./shortcuts_list/select.view.js": __glob_0_48$1, "./shortcuts_list/set.tool.hand.js": __glob_0_49$1, "./shortcuts_list/set.tool.hand.m.js": __glob_0_50$1, "./shortcuts_list/show.pan.js": __glob_0_51$1, "./shortcuts_list/ungroup.item.js": __glob_0_52$1, "./shortcuts_list/zoom.default.js": __glob_0_53$1, "./shortcuts_list/zoom.in.js": __glob_0_54$1, "./shortcuts_list/zoom.out.js": __glob_0_55$1 };
 var shortcuts = Object.values(modules$3).map((it) => it.default);
 function joinKeys(...args2) {
   return args2.filter(Boolean).join("+");
@@ -24041,7 +24151,7 @@ class Editor {
       pluginManager: PluginManager,
       renderers: RendererManager,
       i18n: I18nManager,
-      icon: IconManager$1,
+      icon: IconManager,
       stateManager: StateManager,
       menuManager: MenuManager
     });
@@ -24400,38 +24510,6 @@ class BaseLayout extends EditorElement {
     this.rerender();
   }
 }
-class IconManager extends EditorElement {
-  template() {
-    return `
-      <svg viewBox="0 0 30 10" xmlns="http://www.w3.org/2000/svg" ref="$list" style="display:none;">
-      </svg>
-    `;
-  }
-  [LOAD("$list")]() {
-    return Object.entries(obj$3).map(([key, value]) => {
-      if (isString(value) === false)
-        return "";
-      return value.replace(/\<svg/g, `<svg id="icon-${key}"`);
-    });
-  }
-}
-const formElements = ["TEXTAREA", "INPUT", "SELECT"];
-class KeyboardManager extends EditorElement {
-  isNotFormElement(e) {
-    var tagName = e.target.tagName;
-    if (formElements.includes(tagName))
-      return false;
-    else if (Dom.create(e.target).attr("contenteditable") === "true")
-      return false;
-    return true;
-  }
-  [KEYDOWN("document") + IF("isNotFormElement")](e) {
-    this.$commands.emit("keymap.keydown", e);
-  }
-  [KEYUP("document") + IF("isNotFormElement")](e) {
-    this.$commands.emit("keymap.keyup", e);
-  }
-}
 var PopupManager$1 = "";
 var NotificationView$1 = "";
 class NotificationView extends EditorElement {
@@ -24774,7 +24852,7 @@ class BlankEditor extends BaseLayout {
       BlankBodyPanel,
       PopupManager,
       KeyboardManager,
-      IconManager
+      IconManager: IconManager$1
     };
   }
   getPlugins() {
@@ -24782,10 +24860,7 @@ class BlankEditor extends BaseLayout {
   }
   initState() {
     return {
-      leftSize: 340,
-      rightSize: 280,
-      bottomSize: 0,
-      lastBottomSize: 150
+      leftSize: 340
     };
   }
   template() {
@@ -24796,12 +24871,12 @@ class BlankEditor extends BaseLayout {
             ${createComponent("BlankToolBar")}
           </div>
           <div class="layout-middle" ref='$middle'>      
+            <div class='layout-left' ref='$leftPanel'>
+              ${createComponent("BlankLayerTab")}
+            </div>          
             <div class="layout-body" ref='$bodyPanel'>
               ${createComponent("BlankBodyPanel")}
             </div>                           
-            <div class='layout-left' ref='$leftPanel'>
-              ${createComponent("BlankLayerTab")}
-            </div>
             <div class="layout-right" ref='$rightPanel'>
               ${createComponent("BlankInspector")}
             </div>
@@ -24814,11 +24889,6 @@ class BlankEditor extends BaseLayout {
       </div>
     `;
   }
-  [BIND("$el")]() {
-    return {
-      "data-design-mode": this.$config.get("editor.design.mode")
-    };
-  }
   [BIND("$splitter")]() {
     let left2 = this.state.leftSize;
     if (this.$config.false("show.left.panel")) {
@@ -24830,56 +24900,19 @@ class BlankEditor extends BaseLayout {
       }
     };
   }
-  [BIND("$leftArrow")]() {
-    let left2 = this.state.leftSize;
-    if (this.$config.false("show.left.panel")) {
-      left2 = 0;
-    }
+  [BIND("$leftPanel")]() {
+    let width2 = this.state.leftSize;
     return {
       style: {
-        left: left2
+        width: width2,
+        display: this.$config.true("show.left.panel") ? "block" : "none"
       }
-    };
-  }
-  [BIND("$leftPanel")]() {
-    let left2 = `0px`;
-    let width2 = this.state.leftSize;
-    let bottom2 = this.state.bottomSize;
-    if (this.$config.false("show.left.panel")) {
-      left2 = `-${this.state.leftSize}px`;
-    }
-    return {
-      style: { left: left2, width: width2, bottom: bottom2 }
     };
   }
   [BIND("$rightPanel")]() {
-    let right2 = 0;
-    let bottom2 = this.state.bottomSize;
-    if (this.$config.false("show.right.panel")) {
-      right2 = -this.state.rightSize;
-    }
     return {
       style: {
-        right: right2,
-        bottom: bottom2
-      }
-    };
-  }
-  [BIND("$bodyPanel")]() {
-    let left2 = this.state.leftSize;
-    let right2 = this.state.rightSize;
-    let bottom2 = this.state.bottomSize;
-    if (this.$config.false("show.left.panel")) {
-      left2 = 0;
-    }
-    if (this.$config.false("show.right.panel")) {
-      right2 = 0;
-    }
-    return {
-      style: {
-        left: left2,
-        right: right2,
-        bottom: bottom2
+        display: this.$config.true("show.right.panel") ? "block" : "none"
       }
     };
   }
@@ -24898,12 +24931,9 @@ class BlankEditor extends BaseLayout {
     this.refs.$splitter.removeClass("selected");
   }
   refresh() {
-    this.bindData("$el");
     this.bindData("$splitter");
-    this.bindData("$headerPanel");
     this.bindData("$leftPanel");
     this.bindData("$rightPanel");
-    this.bindData("$bodyPanel");
     this.emit("resizeEditor");
   }
   [CONFIG("show.left.panel")]() {
@@ -24918,20 +24948,8 @@ class BlankEditor extends BaseLayout {
       this.emit(RESIZE_CANVAS);
     });
   }
-  [CONFIG("editor.design.mode")]() {
-    this.bindData("$el");
-  }
-  [DRAGOVER("$middle") + PREVENT]() {
-  }
-  [DROP("$middle") + PREVENT]() {
-  }
   [SUBSCRIBE(TOGGLE_FULLSCREEN)]() {
     this.$el.toggleFullscreen();
-  }
-  [SUBSCRIBE("getLayoutElement")](callback) {
-    if (isFunction(callback)) {
-      callback(this.refs);
-    }
   }
 }
 var layout$4 = "";
@@ -25746,7 +25764,7 @@ class DataEditor extends BaseLayout {
     return {
       PopupManager,
       KeyboardManager,
-      IconManager
+      IconManager: IconManager$1
     };
   }
   getPlugins() {
@@ -39647,6 +39665,30 @@ class GroupModel extends MovableModel {
       gridAutoFlow: "row"
     }, obj2));
   }
+  reset(obj2, context = { origin: "*" }) {
+    const isChanged = super.reset(obj2, context);
+    if (this.hasChangedField("resizingVertical", "resizingHorizontal", "contraintsVertical", "contraintsHorizontal") || this.changedLayout) {
+      this.refreshResizableCache();
+    }
+    return isChanged;
+  }
+  refreshResizableCache() {
+    this.addCache("resizable", this.getAutoResizable());
+  }
+  get autoResizable() {
+    return this.getCache("resizable");
+  }
+  getAutoResizable() {
+    if (this.parent.is("project")) {
+      return false;
+    }
+    if (this.resizingHorizontal === ResizingMode.FIXED && this.resizingVertical === ResizingMode.FIXED) {
+      if (this.constraintsHorizontal === Constraints.NONE && this.constraintsVertical === Constraints.NONE) {
+        return false;
+      }
+    }
+    return true;
+  }
   get layout() {
     return this.get("layout");
   }
@@ -41425,7 +41467,7 @@ class PathModel extends SVGModel {
       this.addCache("pathWidth", this.width);
       this.addCache("pathHeight", this.height);
     } else if (this.hasChangedField("width", "height")) {
-      this.d = this.cachePath.clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
+      this.d = this.getCache("pathString").clone().scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
       this.manager.setChanged("reset", this.id, { d: this.d });
     }
   }
@@ -45500,7 +45542,7 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-image": `
+      backgroundImage: `
       background-image: linear-gradient(to right, #ececec, black 100%);
     `
     }
@@ -45509,7 +45551,7 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-image": `
+      backgroundImage: `
       background-image: linear-gradient(to right, #ececec, black 100%);
     `,
       border: `
@@ -49214,7 +49256,7 @@ class GuideLineView extends EditorElement {
   [BIND("$guide")]() {
     const line2 = this.createGuideLine(this.state.list);
     return {
-      svgDiff: `<g>${line2}</g>`
+      svgDiff: `<svg>${line2}</svg>`
     };
   }
   createLayerLine() {
@@ -50739,7 +50781,6 @@ class LayerAppendView extends EditorElement {
       this.state.isShow = false;
       this.$el.hide();
       this.$commands.emit("pop.mode.view", "LayerAppendView");
-      this.$config.set("editing.mode", EditingMode.SELECT);
     }
   }
   [SUBSCRIBE("hideAddViewLayer")]() {
@@ -51147,6 +51188,15 @@ class LayerTreeProperty extends BaseProperty {
 function layerTree(editor) {
   editor.registerElement({
     LayerTreeProperty
+  });
+}
+function layertab(editor) {
+  editor.registerUI("layertab.tab", {
+    Sample: {
+      title: "Sample",
+      icon: iconUse("add"),
+      value: "sample"
+    }
   });
 }
 var DefaultLayoutItemProperty$1 = "";
@@ -53275,6 +53325,7 @@ var DefaultMenu$1 = [
   },
   {
     type: "button",
+    tooltip: "Handle",
     icon: "pantool",
     events: ["config:editing.mode"],
     selected: (editor) => {
@@ -57946,21 +57997,20 @@ function valueFilter(obj2) {
   });
   return result;
 }
+const EMPTY_OBJECT = {};
 class DomRender$1 extends ItemRender$1 {
   toStringPropertyCSS(item, field) {
     return STRING_TO_CSS(item.get(field));
   }
   toBackgroundImageCSS(item) {
-    if (!item.cacheBackgroundImage) {
+    const cache = item.cacheBackgroundImage;
+    if (!cache) {
       item.setBackgroundImageCache();
     }
-    return {
-      "background-image": item.cacheBackgroundImage["background-image"],
-      "background-position": item.cacheBackgroundImage["background-position"],
-      "background-repeat": item.cacheBackgroundImage["background-repeat"],
-      "background-size": item.cacheBackgroundImage["background-size"],
-      "background-blend-mode": item.cacheBackgroundImage["background-blend-mode"]
-    };
+    if (!cache) {
+      return EMPTY_OBJECT;
+    }
+    return cache;
   }
   toLayoutCSS(item) {
     if (item.hasLayout()) {
@@ -58184,45 +58234,44 @@ class DomRender$1 extends ItemRender$1 {
     return obj2;
   }
   toDefaultCSS(item) {
-    let obj2 = {};
-    if (item.isAbsolute) {
-      obj2.left = Length.px(item.x);
-      obj2.top = Length.px(item.y);
+    if (!item.hasCache("toDefaultCSS")) {
+      item.addCache("toDefaultCSS", {
+        "box-sizing": "border-box"
+      });
     }
-    let result = {
-      "box-sizing": "border-box"
-    };
-    result = Object.assign(result, obj2);
-    result = Object.assign(result, {
-      "background-color": item.backgroundColor,
-      color: item.color,
-      "font-size": item.fontSize,
-      "font-weight": item.fontWeight,
-      "font-style": item.fontStyle,
-      "font-family": item.fontFamily,
-      "text-align": item.textAlign,
-      "text-decoration": item.textDecoration,
-      "text-transform": item.textTransform,
-      "letter-spacing": item.letterSpacing,
-      "word-spacing": item.wordSpacing,
-      "line-height": item.lineHeight,
-      "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
-      "text-overflow": item.textOverflow,
-      "text-wrap": item.textWrap,
-      position: item.position,
-      overflow: item.overflow,
-      "z-index": item.zIndex,
-      opacity: item.opacity,
-      "mix-blend-mode": item.mixBlendMode,
-      "transform-origin": item.transformOrigin,
-      "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
-      animation: item.animation,
-      transition: item.transition
-    });
+    let result = item.getCache("toDefaultCSS");
+    if (item.isAbsolute) {
+      result.left = Length.px(item.x);
+      result.top = Length.px(item.y);
+    }
+    result["background-color"] = item.backgroundColor;
+    result["color"] = item.color;
+    result["font-size"] = item.fontSize;
+    result["font-weight"] = item.fontWeight;
+    result["font-style"] = item.fontStyle;
+    result["font-family"] = item.fontFamily;
+    result["text-align"] = item.textAlign;
+    result["text-decoration"] = item.textDecoration;
+    result["text-transform"] = item.textTransform;
+    result["letter-spacing"] = item.letterSpacing;
+    result["word-spacing"] = item.wordSpacing;
+    result["line-height"] = item.lineHeight;
+    result["text-indent"] = item.textIndent;
+    result["text-shadow"] = item.textShadow;
+    result["text-overflow"] = item.textOverflow;
+    result["text-wrap"] = item.textWrap;
+    result["position"] = item.position;
+    result["overflow"] = item.overflow;
+    result["z-index"] = item.zIndex;
+    result["opacity"] = item.opacity;
+    result["mix-blend-mode"] = item.mixBlendMode;
+    result["transform-origin"] = item.transformOrigin;
+    result["border-radius"] = item.borderRadius;
+    result["filter"] = item.filter;
+    result["backdrop-filter"] = item.backdropFilter;
+    result["box-shadow"] = item.boxShadow;
+    result["animation"] = item.animation;
+    result["transition"] = item.transition;
     return result;
   }
   toVariableCSS(item) {
@@ -58264,15 +58313,12 @@ class DomRender$1 extends ItemRender$1 {
     return results;
   }
   toTransformCSS(item) {
-    const results = {
-      transform: item.transform
-    };
-    if (results.transform === "rotateZ(0deg)") {
-      delete results.transform;
-    }
-    return {
-      transform: results.transform
-    };
+    const transform2 = item.computed("angle", (angle) => {
+      return {
+        transform: angle === 0 ? "" : `rotateZ(${angle}deg)`
+      };
+    });
+    return transform2;
   }
   toDefInnerString(item) {
     return `
@@ -59519,6 +59565,8 @@ class SVGRender extends DomRender$1 {
   toDefaultCSS(item) {
     return {
       overflow: "visible",
+      "background-color": item.backgroundColor,
+      color: item.color,
       "font-size": item.fontSize,
       "font-weight": item.fontWeight,
       "font-style": item.fontStyle,
@@ -65236,6 +65284,7 @@ var designEditorPlugins = [
   configs,
   commands$1,
   menus$1,
+  layertab,
   defaultConfigs,
   defaultIcons,
   defaultMessages,
@@ -65737,7 +65786,7 @@ class ToolBar extends EditorElement {
         {
           type: "dropdown",
           style: {
-            padding: "12px"
+            padding: "12px 0px 12px 12px"
           },
           icon: `<div class="logo-item"><label class='logo'></label></div>`,
           items: [
@@ -66100,6 +66149,14 @@ class HTMLRenderView extends EditorElement {
   [CONFIG("show.outline")]() {
     this.refs.$view.attr("data-outline", this.$config.get("show.outline"));
   }
+  [CONFIG("bodyEvent")]() {
+    const e = this.$config.get("bodyEvent");
+    if (e.buttons === 0) {
+      if (Dom.create(e.target).hasClass("elf--drag-area-view")) {
+        this.$commands.emit("recoverCursor");
+      }
+    }
+  }
   [SUBSCRIBE("refElement")](id, callback) {
     isFunction(callback) && callback(this.getElement(id));
   }
@@ -66137,7 +66194,9 @@ class HTMLRenderView extends EditorElement {
     this.state.cachedCurrentElement[id] = void 0;
   }
   getElement(id) {
-    this.state.cachedCurrentElement[id] = this.refs.$view.$(`[data-id="${id}"]`);
+    if (!this.state.cachedCurrentElement[id]) {
+      this.state.cachedCurrentElement[id] = this.refs.$view.$(`[data-id="${id}"]`);
+    }
     return this.state.cachedCurrentElement[id];
   }
   [FOCUSOUT("$view .element-item.text .text-content")](e) {
@@ -66455,10 +66514,9 @@ class HTMLRenderView extends EditorElement {
   }
   refreshElementRect(item) {
     var $el = this.getElement(item.id);
+    if (!$el)
+      return;
     let offset = $el.offsetRect();
-    let rect2 = $el.offsetClientRect();
-    offset.x = round(rect2.x / this.$viewport.scale, 1e3);
-    offset.y = round(rect2.y / this.$viewport.scale, 1e3);
     if (offset.width === 0 || offset.height === 0) {
       return;
     }
@@ -66468,15 +66526,9 @@ class HTMLRenderView extends EditorElement {
       this.emit(REFRESH_SELECTION_TOOL);
     }
   }
-  refreshSelfElement(item) {
-    var $el = this.getElement(item.id);
-    if ($el) {
-      this.refreshElementRect(item);
-    }
-  }
   refreshElementBoundSize(it) {
     if (it) {
-      this.refreshSelfElement(it);
+      this.refreshElementRect(it);
       it.layers.forEach((child) => {
         this.refreshElementBoundSize(child);
       });
@@ -67253,7 +67305,7 @@ class DesignEditor extends BaseLayout {
       BodyPanel,
       PopupManager,
       KeyboardManager,
-      IconManager,
+      IconManager: IconManager$1,
       SwitchLeftPanel,
       SwitchRightPanel,
       ContextMenuManager
@@ -96738,7 +96790,7 @@ class ThreeEditor extends BaseLayout {
       Body3DPanel,
       PopupManager,
       KeyboardManager,
-      IconManager
+      IconManager: IconManager$1
     };
   }
   getPlugins() {
@@ -96962,7 +97014,7 @@ class WhiteBoard extends BaseLayout {
       BodyPanel,
       PopupManager,
       KeyboardManager,
-      IconManager
+      IconManager: IconManager$1
     };
   }
   getPlugins() {
@@ -97017,4 +97069,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, AssetParser, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BaseStore, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, CMYKtoRGB, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, Dom, DomDiff, END, END_GUESTURE, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FUNC_END_CHARACTER, FUNC_REGEXP, FUNC_START_CHARACTER, FlexDirection, FlexWrap, FragmentInstance, FuncType, GradientType, HSLtoHSV, HSLtoRGB, HSVtoHSL, HSVtoRGB, HUEtoRGB, IF, INPUT, IntersectEpsilonNumberType, JustifyContent, KEY, KEYDOWN, KEYMAP_KEYDOWN, KEYMAP_KEYUP, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LABtoRGB, LABtoXYZ, LEFT_BUTTON, LOAD, Language, Layout, Length, MAGIC_METHOD, MAGIC_METHOD_REG, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MagicMethod, MenuItemType, NAME_SAPARATOR, NotifyType, OBSERVER, ON, OPEN_CONTEXT_MENU, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, POP_MODE_VIEW, PREVENT, PUSH_MODE_VIEW, PathGenerator, PathParser, PathSegmentType, PathStringManager, PivotRGB, PivotXyz, Point, PolygonParser, Position, RAF, REFRESH_CONTENT, REFRESH_SELECTION, REFRESH_SELECTION_TOOL, RESIZE, RESIZE_CANVAS, RESIZE_WINDOW, RGBtoCMYK, RGBtoGray, RGBtoHSL, RGBtoHSV, RGBtoLAB, RGBtoSimpleGray, RGBtoXYZ, RGBtoYCrCb, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, ReverseRGB, ReverseXyz, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SET_LOCALE, SHIFT, SHOW_COMPONENT_POPUP, SHOW_NOTIFY, SPACE, SPLITTER, START_GUESTURE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, SegmentManager, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOGGLE_FULLSCREEN, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, UIElement, UPDATE_CANVAS, UPDATE_VIEWPORT, VARIABLE_SAPARATOR, ViewModeType, VisibilityType, WHEEL, XYZtoLAB, XYZtoRGB, YCrCbtoRGB, blend, brightness, c, checkHueColor, classnames, clone$1 as clone, collectProps, combineKeyArray, contrast, contrastColor, convertMatches, convertMatchesArray, createBlankEditor, createComponent, createComponentList, createDataEditor, createDesignEditor, createElement, createElementJsx, createHandlerInstance, createThreeEditor, createWhiteBoard, debounce, defaultValue, format, formatWithoutAlpha, get, getColorIndexString, getRef, getRootElementInstanceList, getVariable, gradient$1 as gradient, gray, hasVariable, hex, hsl, hue_color, ifCheck, initializeGroupVariables, interpolateRGB, interpolateRGBObject, isArray, isBoolean, isColor, isFunction, isNotString, isNotUndefined, isNotZero, isNumber, isObject, isString, isUndefined, isZero, keyEach, keyMap, keyMapJoin, makeEventChecker, makeRequestAnimationFrame, matches, mix, normalizeWheelEvent, parse, parseGradient, random$1 as random, randomByCount, randomNumber, randomRGBA, recoverVariable, registAlias, registElement, registHandler, registRootElementInstance, renderRootElementInstance, renderToString, replaceElement, retriveAlias, retriveElement, retriveHandler, reverseMatches, rgb, scale, scaleH, scaleHSV, scaleS, scaleV, spreadVariable, start$1 as start, throttle, trim, uuid$1 as uuid, uuidShort$1 as uuidShort, variable$4 as variable };

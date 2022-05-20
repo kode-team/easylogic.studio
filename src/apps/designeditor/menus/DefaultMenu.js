@@ -3,29 +3,6 @@ import { EditingMode } from "elf/editor/types/editor";
 import { KeyStringMaker } from "elf/editor/types/key";
 
 export default [
-  // {
-  //     type: 'button',
-  //     icon: 'undo',
-  //     action: (editor) => {
-  //         editor.context.config.toggle('history.undo');
-  //     }
-  // },
-  // {
-  //     type: 'button',
-  //     icon: 'redo',
-  //     action: (editor) => {
-  //         editor.context.config.toggle('history.redo');
-  //     }
-  // },
-  // {
-  //     type: 'button',
-  //     icon: 'outline',
-  //     selected: (editor) => editor.context.config.true('show.outline'),
-  //     events: ['config:show.outline'],
-  //     action: (editor) => {
-  //         editor.context.config.toggle('show.outline');
-  //     }
-  // },
   {
     type: "button",
     icon: "navigation",
@@ -358,6 +335,7 @@ export default [
   },
   {
     type: "button",
+    tooltip: "Handle",
     icon: "pantool",
     events: ["config:editing.mode"],
     selected: (editor) => {

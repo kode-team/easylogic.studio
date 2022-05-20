@@ -25,7 +25,7 @@ export class ToolBar extends EditorElement {
         {
           type: "dropdown",
           style: {
-            padding: "12px",
+            padding: "12px 0px 12px 12px",
           },
           icon: `<div class="logo-item"><label class='logo'></label></div>`,
           items: [

@@ -33,6 +33,8 @@ function valueFilter(obj) {
   return result;
 }
 
+const EMPTY_OBJECT = {};
+
 export default class DomRender extends ItemRender {
   /**
    *
@@ -48,19 +50,18 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toBackgroundImageCSS(item) {
-    if (!item.cacheBackgroundImage) {
+    const cache = item.cacheBackgroundImage;
+
+    if (!cache) {
       item.setBackgroundImageCache();
     }
 
+    if (!cache) {
+      return EMPTY_OBJECT;
+    }
+
     // visibility 속성은 출력하지 않는다.
-    return {
-      "background-image": item.cacheBackgroundImage["background-image"],
-      "background-position": item.cacheBackgroundImage["background-position"],
-      "background-repeat": item.cacheBackgroundImage["background-repeat"],
-      "background-size": item.cacheBackgroundImage["background-size"],
-      "background-blend-mode":
-        item.cacheBackgroundImage["background-blend-mode"],
-    };
+    return cache;
   }
 
   /**
@@ -390,48 +391,48 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toDefaultCSS(item) {
-    let obj = {};
-
-    if (item.isAbsolute) {
-      obj.left = Length.px(item.x);
-      obj.top = Length.px(item.y);
+    if (!item.hasCache("toDefaultCSS")) {
+      item.addCache("toDefaultCSS", {
+        "box-sizing": "border-box",
+      });
     }
 
-    let result = {
-      "box-sizing": "border-box",
-    };
+    let result = item.getCache("toDefaultCSS");
 
-    result = Object.assign(result, obj);
-    result = Object.assign(result, {
-      "background-color": item.backgroundColor,
-      color: item.color,
-      "font-size": item.fontSize,
-      "font-weight": item.fontWeight,
-      "font-style": item.fontStyle,
-      "font-family": item.fontFamily,
-      "text-align": item.textAlign,
-      "text-decoration": item.textDecoration,
-      "text-transform": item.textTransform,
-      "letter-spacing": item.letterSpacing,
-      "word-spacing": item.wordSpacing,
-      "line-height": item.lineHeight,
-      "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
-      "text-overflow": item.textOverflow,
-      "text-wrap": item.textWrap,
-      position: item.position,
-      overflow: item.overflow,
-      "z-index": item.zIndex,
-      opacity: item.opacity,
-      "mix-blend-mode": item.mixBlendMode,
-      "transform-origin": item.transformOrigin,
-      "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
-      animation: item.animation,
-      transition: item.transition,
-    });
+    if (item.isAbsolute) {
+      result.left = Length.px(item.x);
+      result.top = Length.px(item.y);
+    }
+
+    result["background-color"] = item.backgroundColor;
+    result["color"] = item.color;
+    result["font-size"] = item.fontSize;
+    result["font-weight"] = item.fontWeight;
+    result["font-style"] = item.fontStyle;
+    result["font-family"] = item.fontFamily;
+    result["text-align"] = item.textAlign;
+    result["text-decoration"] = item.textDecoration;
+    result["text-transform"] = item.textTransform;
+    result["letter-spacing"] = item.letterSpacing;
+    result["word-spacing"] = item.wordSpacing;
+    result["line-height"] = item.lineHeight;
+    result["text-indent"] = item.textIndent;
+    result["text-shadow"] = item.textShadow;
+    result["text-overflow"] = item.textOverflow;
+    result["text-wrap"] = item.textWrap;
+    result["position"] = item.position;
+    result["overflow"] = item.overflow;
+    result["z-index"] = item.zIndex;
+    result["opacity"] = item.opacity;
+    result["mix-blend-mode"] = item.mixBlendMode;
+    result["transform-origin"] = item.transformOrigin;
+    result["border-radius"] = item.borderRadius;
+    result["filter"] = item.filter;
+    result["backdrop-filter"] = item.backdropFilter;
+    result["box-shadow"] = item.boxShadow;
+    result["animation"] = item.animation;
+    result["transition"] = item.transition;
+
     return result;
   }
 
@@ -516,17 +517,13 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toTransformCSS(item) {
-    const results = {
-      transform: item.transform,
-    };
+    const transform = item.computed("angle", (angle) => {
+      return {
+        transform: angle === 0 ? "" : `rotateZ(${angle}deg)`,
+      };
+    });
 
-    if (results.transform === "rotateZ(0deg)") {
-      delete results.transform;
-    }
-
-    return {
-      transform: results.transform,
-    };
+    return transform;
   }
 
   /**

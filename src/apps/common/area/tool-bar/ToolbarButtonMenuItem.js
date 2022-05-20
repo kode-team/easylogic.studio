@@ -38,8 +38,11 @@ export class ToolbarButtonMenuItem extends EditorElement {
   }
 
   template() {
-    return /*html*/ `<button type="button"  class='elf--toolbar-menu-item' ></button>
-`;
+    let tooltip = this.props.tooltip
+      ? `data-tooltip="${this.props.tooltip}"`
+      : "";
+
+    return /*html*/ `<button type="button"  class='elf--toolbar-menu-item' ${tooltip}></button>`;
   }
 
   [CLICK("$el")]() {

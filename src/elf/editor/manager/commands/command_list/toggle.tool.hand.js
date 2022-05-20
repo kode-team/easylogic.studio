@@ -7,10 +7,12 @@ import { EditingMode } from "elf/editor/types/editor";
 export default {
   command: "toggleToolHand",
   execute: function (editor) {
-    editor.context.config.toggleWith(
-      "editing.mode",
-      EditingMode.SELECT,
-      EditingMode.HAND
-    );
+    if (editor.context.config.is("editing.mode", EditingMode.HAND)) {
+      editor.context.config.set("editing.mode", EditingMode.SELECT);
+    } else {
+      editor.context.config.set("editing.mode", EditingMode.HAND);
+    }
+
+    editor.emit("hideLayerAppendView");
   },
 };

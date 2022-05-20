@@ -46,7 +46,7 @@ export class PathModel extends SVGModel {
       this.addCache("pathWidth", this.width);
       this.addCache("pathHeight", this.height);
     } else if (this.hasChangedField("width", "height")) {
-      this.d = this.cachePath
+      this.d = this.getCache("pathString")
         .clone()
         .scale(this.width / this.cacheWidth, this.height / this.cacheHeight).d;
       this.manager.setChanged("reset", this.id, { d: this.d });

@@ -370,21 +370,6 @@ export class MovableModel extends BaseAssetModel {
     };
   }
 
-  // toCloneObject(isDeep = true) {
-  //   return {
-  //     ...super.toCloneObject(isDeep),
-  //     ...this.attrs(
-  //       "x",
-  //       "y",
-  //       "width",
-  //       "height",
-  //       "angle",
-  //       "position",
-  //       "transformOrigin"
-  //     ),
-  //   };
-  // }
-
   reset(obj, context = { origin: "*" }) {
     const isChanged = super.reset(obj, context);
 

@@ -1,14 +1,4 @@
-import {
-  DRAGOVER,
-  DROP,
-  PREVENT,
-  POINTERSTART,
-  BIND,
-  SUBSCRIBE,
-  CONFIG,
-  isFunction,
-  createComponent,
-} from "sapa";
+import { POINTERSTART, BIND, SUBSCRIBE, CONFIG, createComponent } from "sapa";
 
 import BlankBodyPanel from "./area/BlankBodyPanel";
 import BlankInspector from "./area/BlankInspector";
@@ -17,9 +7,9 @@ import BlankToolBar from "./area/tool-bar/BlankToolBar";
 import "./layout.scss";
 import blankEditorPlugins from "./plugins/blank-editor-plugins";
 
-import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
+import { BaseLayout } from "apps/common/layout/BaseLayout";
 import { PopupManager } from "apps/common/PopupManager";
 import {
   END,
@@ -63,9 +53,6 @@ export class BlankEditor extends BaseLayout {
   initState() {
     return {
       leftSize: 340,
-      rightSize: 280,
-      bottomSize: 0,
-      lastBottomSize: 150,
     };
   }
 
@@ -77,12 +64,12 @@ export class BlankEditor extends BaseLayout {
             ${createComponent("BlankToolBar")}
           </div>
           <div class="layout-middle" ref='$middle'>      
+            <div class='layout-left' ref='$leftPanel'>
+              ${createComponent("BlankLayerTab")}
+            </div>          
             <div class="layout-body" ref='$bodyPanel'>
               ${createComponent("BlankBodyPanel")}
             </div>                           
-            <div class='layout-left' ref='$leftPanel'>
-              ${createComponent("BlankLayerTab")}
-            </div>
             <div class="layout-right" ref='$rightPanel'>
               ${createComponent("BlankInspector")}
             </div>
@@ -94,12 +81,6 @@ export class BlankEditor extends BaseLayout {
         ${createComponent("IconManager")}
       </div>
     `;
-  }
-
-  [BIND("$el")]() {
-    return {
-      "data-design-mode": this.$config.get("editor.design.mode"),
-    };
   }
 
   [BIND("$splitter")]() {
@@ -115,65 +96,21 @@ export class BlankEditor extends BaseLayout {
     };
   }
 
-  [BIND("$leftArrow")]() {
-    let left = this.state.leftSize;
-    if (this.$config.false("show.left.panel")) {
-      left = 0;
-    }
+  [BIND("$leftPanel")]() {
+    let width = this.state.leftSize;
 
     return {
       style: {
-        left: left,
+        width,
+        display: this.$config.true("show.left.panel") ? "block" : "none",
       },
-    };
-  }
-
-  [BIND("$leftPanel")]() {
-    let left = `0px`;
-    let width = this.state.leftSize;
-    let bottom = this.state.bottomSize;
-    if (this.$config.false("show.left.panel")) {
-      left = `-${this.state.leftSize}px`;
-    }
-
-    return {
-      style: { left, width, bottom },
     };
   }
 
   [BIND("$rightPanel")]() {
-    let right = 0;
-    let bottom = this.state.bottomSize;
-    if (this.$config.false("show.right.panel")) {
-      right = -this.state.rightSize;
-    }
-
     return {
       style: {
-        right: right,
-        bottom,
-      },
-    };
-  }
-
-  [BIND("$bodyPanel")]() {
-    let left = this.state.leftSize;
-    let right = this.state.rightSize;
-    let bottom = this.state.bottomSize;
-
-    if (this.$config.false("show.left.panel")) {
-      left = 0;
-    }
-
-    if (this.$config.false("show.right.panel")) {
-      right = 0;
-    }
-
-    return {
-      style: {
-        left: left,
-        right: right,
-        bottom: bottom,
+        display: this.$config.true("show.right.panel") ? "block" : "none",
       },
     };
   }
@@ -201,12 +138,9 @@ export class BlankEditor extends BaseLayout {
   }
 
   refresh() {
-    this.bindData("$el");
     this.bindData("$splitter");
-    this.bindData("$headerPanel");
     this.bindData("$leftPanel");
     this.bindData("$rightPanel");
-    this.bindData("$bodyPanel");
 
     this.emit("resizeEditor");
   }
@@ -225,22 +159,7 @@ export class BlankEditor extends BaseLayout {
     });
   }
 
-  [CONFIG("editor.design.mode")]() {
-    this.bindData("$el");
-  }
-
-  /** 드랍존 설정을 위해서 남겨놔야함 */
-  [DRAGOVER("$middle") + PREVENT]() {}
-  [DROP("$middle") + PREVENT]() {}
-  /** 드랍존 설정을 위해서 남겨놔야함 */
-
   [SUBSCRIBE(TOGGLE_FULLSCREEN)]() {
     this.$el.toggleFullscreen();
-  }
-
-  [SUBSCRIBE("getLayoutElement")](callback) {
-    if (isFunction(callback)) {
-      callback(this.refs);
-    }
   }
 }

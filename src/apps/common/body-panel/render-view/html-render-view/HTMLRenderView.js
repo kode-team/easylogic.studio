@@ -19,7 +19,6 @@ import {
 
 import "./HTMLRenderView.scss";
 
-import { round } from "elf/core/math/index";
 import { EditingMode } from "elf/editor/types/editor";
 import {
   END,
@@ -83,6 +82,16 @@ export default class HTMLRenderView extends EditorElement {
    */
   [CONFIG("show.outline")]() {
     this.refs.$view.attr("data-outline", this.$config.get("show.outline"));
+  }
+
+  [CONFIG("bodyEvent")]() {
+    const e = this.$config.get("bodyEvent");
+
+    if (e.buttons === 0) {
+      if (Dom.create(e.target).hasClass("elf--drag-area-view")) {
+        this.$commands.emit("recoverCursor");
+      }
+    }
   }
 
   [SUBSCRIBE("refElement")](id, callback) {
@@ -150,11 +159,11 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   getElement(id) {
-    // if (!this.state.cachedCurrentElement[id]) {
-    this.state.cachedCurrentElement[id] = this.refs.$view.$(
-      `[data-id="${id}"]`
-    );
-    // }
+    if (!this.state.cachedCurrentElement[id]) {
+      this.state.cachedCurrentElement[id] = this.refs.$view.$(
+        `[data-id="${id}"]`
+      );
+    }
 
     return this.state.cachedCurrentElement[id];
   }
@@ -661,13 +670,27 @@ export default class HTMLRenderView extends EditorElement {
     }
   }
 
+  /**
+   *
+   * FIXME: 확대를 크게 했을 때는 offset 의 x, y 가 정상적으로 나오지 않는다.
+   * FIXME: offset 의 x, y 가 rounding number 가 되기 때문에  소수점으로 나오지 않는다.
+   * FIXME: 이런 문제를 해결하기 위해서는 getClientBoundingRect() 를 사용해야하는데
+   * FIXME: getClientBoundingRect() 는 회전 상태에서 x, y 를 정상적으로 구할 수 없다.
+   *
+   * ```
+   * let rect = $el.offsetClientRect();
+   *
+   * offset.x = round(rect.x / this.$viewport.scale, 1000);
+   * offset.y = round(rect.y / this.$viewport.scale, 1000);
+   * ```
+   *
+   * @param {BaseModel} item
+   */
   refreshElementRect(item) {
     var $el = this.getElement(item.id);
-    let offset = $el.offsetRect();
-    let rect = $el.offsetClientRect();
 
-    offset.x = round(rect.x / this.$viewport.scale, 1000);
-    offset.y = round(rect.y / this.$viewport.scale, 1000);
+    if (!$el) return;
+    let offset = $el.offsetRect();
 
     if (offset.width === 0 || offset.height === 0) {
       return;
@@ -682,51 +705,13 @@ export default class HTMLRenderView extends EditorElement {
     }
   }
 
-  refreshSelfElement(item) {
-    var $el = this.getElement(item.id);
-
-    if ($el) {
-      this.refreshElementRect(item);
-    }
-  }
-
   refreshElementBoundSize(it) {
     if (it) {
-      this.refreshSelfElement(it);
+      this.refreshElementRect(it);
 
       it.layers.forEach((child) => {
         this.refreshElementBoundSize(child);
       });
     }
   }
-
-  // /**
-  //  * 객체의 변화를 캐치해서 offsetRect 를 다시 설정해준다.
-  //  *
-  //  * @param {Mutation} mutations
-  //  */
-  // [OBSERVER("mutation") +
-  //   PARAMS({
-  //     childList: true,
-  //     subtree: true,
-  //   })](mutations) {
-  //   console.log("afdsafdsfdsf", mutations);
-  //   const s = new Set(
-  //     mutations
-  //       .map((mutation) => {
-  //         return Dom.create(mutation.target).attr("data-id");
-  //       })
-  //       .filter(Boolean)
-  //   );
-
-  //   [...s].forEach((id) => {
-  //     const item = this.$editor.get(id);
-
-  //     if (item.is("text")) {
-  //       // noop
-  //     } else {
-  //       this.refreshElementBoundSize(item);
-  //     }
-  //   });
-  // }
 }

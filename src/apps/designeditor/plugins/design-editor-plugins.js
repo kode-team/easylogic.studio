@@ -33,6 +33,7 @@ import imageAsset from "./image-asset";
 import keyframe from "./keyframe";
 import layerAppendView from "./layer-append-view";
 import layerTree from "./layer-tree";
+import layertab from "./layertab";
 import layout from "./layout";
 import lineView from "./line-view";
 import menus from "./menus";
@@ -70,6 +71,7 @@ export default [
   configs,
   commands,
   menus,
+  layertab,
   defaultConfigs,
   defaultIcons,
   defaultMessages,

@@ -5,14 +5,10 @@ import { uuidShort } from "./functions/uuid";
 /**
  * UI 를 만드는 기본 단위
  *
- * dom handler,
- * bind handler,
- * store handler 를 가진다.
  *
  * @property {Editor} $editor
  */
 export class UIElement extends EventMachine {
-  #subscribes = [];
   #storeInstance;
 
   constructor(opt, props = {}) {
@@ -28,16 +24,6 @@ export class UIElement extends EventMachine {
     this.created();
 
     this.initialize();
-
-    // this.initializeStoreEvent();
-  }
-
-  async render($container) {
-    await super.render($container);
-
-    this.initializeStoreEvent();
-
-    return this;
   }
 
   currentContext() {
@@ -63,123 +49,12 @@ export class UIElement extends EventMachine {
    */
   async created() {}
 
-  getRealEventName(e, separator) {
-    var startIndex = e.indexOf(separator);
-    return e.substr(startIndex < 0 ? 0 : startIndex + separator.length);
-  }
-
   createLocalCallback(event, callback) {
     var newCallback = callback.bind(this);
     newCallback.displayName = `${this.sourceName}.${event}`;
     newCallback.source = this.source;
 
     return newCallback;
-  }
-
-  /**
-   * initialize store event
-   *
-   * you can define '@xxx' method(event) in UIElement
-   *
-   * Store Event 를 초기화 한다.
-   *
-   */
-  initializeStoreEvent() {
-    if (this.#subscribes.length == 0) {
-      this.#subscribes = this.filterMethodes("subscribe");
-
-      this.#subscribes.forEach((magicMethod) => {
-        const events = magicMethod.args.join(" ");
-
-        const checkMethodList = [];
-        const eventList = [];
-
-        let debounce = 0;
-        let throttle = 0;
-        let isAllTrigger = false;
-        let isSelfTrigger = false;
-        let isFrameTrigger = false;
-
-        // 함수 체크
-        const debounceFunction = magicMethod.getFunction("debounce");
-        const throttleFunction = magicMethod.getFunction("throttle");
-        const allTriggerFunction = magicMethod.getFunction("allTrigger");
-        const selfTriggerFunction = magicMethod.getFunction("selfTrigger");
-        const frameFunction = magicMethod.getFunction("frame");
-
-        if (debounceFunction) {
-          debounce = +(debounceFunction.args?.[0] || 0);
-        }
-
-        if (throttleFunction) {
-          throttle = +(throttleFunction.args?.[0] || 0);
-        }
-
-        if (allTriggerFunction) {
-          isAllTrigger = true;
-        }
-
-        if (selfTriggerFunction) {
-          isSelfTrigger = true;
-        }
-
-        if (frameFunction) {
-          isFrameTrigger = true;
-        }
-
-        /** 키워드 체크  */
-        magicMethod.keywords.forEach((keyword) => {
-          const method = keyword;
-          if (this[method]) {
-            checkMethodList.push(method);
-          } else {
-            eventList.push(method);
-          }
-        });
-
-        const originalCallback = this[magicMethod.originalMethod];
-        [...eventList, events].filter(Boolean).forEach((e) => {
-          var callback = this.createLocalCallback(e, originalCallback);
-          this.$store.on(
-            e,
-            callback,
-            this,
-            debounce,
-            throttle,
-            isAllTrigger,
-            isSelfTrigger,
-            checkMethodList,
-            isFrameTrigger
-          );
-        });
-      });
-    }
-  }
-
-  /**
-   * 현재 UIElement 와 연결된 모든 메세지를 해제한다.
-   */
-  destoryStoreEvent() {
-    this.$store.offAll(this);
-  }
-
-  destroy() {
-    super.destroy();
-
-    this.destoryStoreEvent();
-  }
-
-  /**
-   * UIElement 를 다시 그린다.
-   *
-   * template 정의 부터  메세지 이벤트 정의까지 모두 다시 한다.
-   */
-  rerender() {
-    super.rerender();
-
-    this.initialize();
-
-    this.initializeStoreEvent();
   }
 
   /**

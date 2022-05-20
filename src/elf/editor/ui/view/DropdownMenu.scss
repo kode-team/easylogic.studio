@@ -3,6 +3,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0px 4px;
+  box-sizing: border-box;
+
   // padding: 10px;
   --elf--dropdown-menu-width: 240px;
   --elf--dropdown-menu-dy: 0px;
@@ -64,7 +67,7 @@
   &:hover,
   &.opened {
     &:not([data-selected="true"]) {
-      // background-color: black;
+      background-color: black;
 
       .dropdown-arrow {
         svg {
@@ -268,7 +271,7 @@
 
   li {
     &:hover {
-      &:not([disabled]) {
+      &:not([disabled]):not(.dropdown-divider) {
         background-color: var(--elf--selected-color);
         color: var(--elf--selected-font-color);
         & > span,

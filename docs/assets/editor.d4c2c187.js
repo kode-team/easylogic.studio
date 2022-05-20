@@ -1,1 +1,0 @@
-import{c as n}from"./index.140d9bb9.js";function e(){return["app"].map(t=>n({container:document.getElementById(t),config:{"editor.theme":"light"},plugins:[function(i){i.on("changed",()=>{})}]}))}window.elfEditor=e();

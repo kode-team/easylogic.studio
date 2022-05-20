@@ -194,8 +194,13 @@ export function DomDiff(A, B, options = {}) {
   }
 
   if (childrenA.length === 0 && childrenB.length > 0) {
+    // children B 만 존재할 때는 b 에 있는 것을 모두 A 로 추가한다.
     // B 에서 모든 자식을 A 에 추가한다.
     A.append(...childrenB);
+  } else if (childrenA.length > 0 && childrenB.length === 0) {
+    // children A 만 존재할 때는 A에 있는 것을 모두 삭제한다.
+    // noop
+    A.textContent = "";
   } else {
     for (var i = 0; i < len; i++) {
       updateElement(A, childrenA[i], childrenB[i], i, options);

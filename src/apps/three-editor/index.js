@@ -18,9 +18,9 @@ import threeEditorPlugins from "./plugins/three-editor-plugins";
 
 import LayerTab from "apps/common/area/LayerTab";
 import { ToolBar } from "apps/common/area/tool-bar/ToolBar";
-import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
+import { BaseLayout } from "apps/common/layout/BaseLayout";
 import { PopupManager } from "apps/common/PopupManager";
 import { END, MOVE, RESIZE_CANVAS } from "elf/editor/types/event";
 import { Length } from "elf/editor/unit/Length";

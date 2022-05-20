@@ -30,7 +30,7 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-image": `
+      backgroundImage: `
       background-image: linear-gradient(to right, #ececec, black 100%);
     `,
     },
@@ -39,7 +39,7 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-image": `
+      backgroundImage: `
       background-image: linear-gradient(to right, #ececec, black 100%);
     `,
       border: `
