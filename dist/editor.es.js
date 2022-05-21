@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _prefLoadTemplate, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _makeElementList, makeElementList_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
+var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -256,6 +256,9 @@ function getProps(attributes) {
   }
   return results;
 }
+function checkAllHTML(newEl, oldEl) {
+  return newEl.outerHTML == oldEl.outerHTML;
+}
 function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
   if (!oldEl) {
     parentElement.appendChild(newEl.cloneNode(true));
@@ -263,7 +266,9 @@ function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
     parentElement.removeChild(oldEl);
   } else if (hasPassed(oldEl) || hasPassed(newEl))
     ;
-  else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
+  else if (checkAllHTML(newEl, oldEl)) {
+    return;
+  } else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
     parentElement.replaceChild(newEl.cloneNode(true), oldEl);
   } else if (newEl.nodeType !== window.Node.TEXT_NODE && newEl.nodeType !== window.Node.COMMENT_NODE && newEl.toString() !== "[object HTMLUnknownElement]") {
     if (options2.checkPassed && options2.checkPassed(oldEl, newEl))
@@ -451,6 +456,24 @@ class Dom {
   static createByHTML(htmlString) {
     var div2 = Dom.create("div");
     return div2.html(htmlString).firstChild;
+  }
+  static makeElementList(html) {
+    const TEMP_DIV2 = Dom.create("div");
+    let list2 = [];
+    if (!isArray(html)) {
+      html = [html];
+    }
+    html = html.filter(Boolean);
+    for (let i = 0, len2 = html.length; i < len2; i++) {
+      const item = html[i];
+      if (isString(item)) {
+        list2.push(...TEMP_DIV2.html(item == null ? void 0 : item.trim()).childNodes || []);
+      } else if (item) {
+        list2.push(Dom.create(item));
+      } else
+        ;
+    }
+    return list2;
   }
   static getScrollTop() {
     return Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
@@ -685,7 +708,9 @@ class Dom {
     return this;
   }
   append(el) {
-    if (typeof el === "string") {
+    if (isArray(el)) {
+      this.el.append(...el.map((it) => it.el || it));
+    } else if (typeof el === "string") {
       this.el.appendChild(document.createTextNode(el));
     } else {
       this.el.appendChild(el.el || el);
@@ -2444,7 +2469,6 @@ const _EventMachine = class {
     __privateAdd(this, _refreshTimestamp);
     __privateAdd(this, _setProps);
     __privateAdd(this, _getProp);
-    __privateAdd(this, _makeElementList);
     __privateAdd(this, _state, {});
     __privateAdd(this, _prevState, {});
     __privateAdd(this, _localTimestamp, 0);
@@ -2455,7 +2479,6 @@ const _EventMachine = class {
     __privateAdd(this, _propsKeys, {});
     __privateAdd(this, _isServer, false);
     __privateAdd(this, _propsKeyList, []);
-    __privateAdd(this, _prefLoadTemplate, {});
     this.refs = {};
     this.children = {};
     this.id = uuid$1();
@@ -2576,7 +2599,7 @@ const _EventMachine = class {
   afterRender() {
   }
   components() {
-    return {};
+    return __spreadValues({}, this.parent.childComponents);
   }
   getRef(...args2) {
     const key = args2.join("");
@@ -2602,7 +2625,7 @@ const _EventMachine = class {
   afterComponentRendering() {
   }
   parseTemplate(html, isLoad) {
-    let list2 = __privateMethod(this, _makeElementList, makeElementList_fn).call(this, html);
+    let list2 = Dom.makeElementList(html);
     for (var i = 0, len2 = list2.length; i < len2; i++) {
       const $el = list2[i];
       var ref = $el.attr(REFERENCE_PROPERTY);
@@ -2629,6 +2652,7 @@ const _EventMachine = class {
     if (!isLoad) {
       return list2[0];
     }
+    TEMP_DIV.append(list2);
     return TEMP_DIV.createChildrenFragment();
   }
   parsePropertyInfo($dom) {
@@ -2789,18 +2813,12 @@ const _EventMachine = class {
     let isDomDiff = magicMethod.hasKeyword("domdiff");
     const refTarget = this.refs[elName];
     if (refTarget) {
-      var newTemplate = await magicMethod.execute(...args2);
-      if (Array.isArray(newTemplate)) {
-        newTemplate = newTemplate.join("");
-      }
-      if (__privateGet(this, _prefLoadTemplate)[elName] != newTemplate) {
-        __privateGet(this, _prefLoadTemplate)[elName] = newTemplate;
-        const fragment2 = this.parseTemplate(newTemplate, true);
-        if (isDomDiff) {
-          refTarget.htmlDiff(fragment2);
-        } else {
-          refTarget.html(fragment2);
-        }
+      const newTemplate = await magicMethod.execute(...args2);
+      const fragment2 = this.parseTemplate(newTemplate, true);
+      if (isDomDiff) {
+        refTarget.htmlDiff(fragment2);
+      } else {
+        refTarget.html(fragment2);
       }
       this.refreshElementReference(refTarget, elName);
     }
@@ -2871,6 +2889,13 @@ const _EventMachine = class {
       return it.method === methodKey;
     });
   }
+  findChildren(BaseComponent) {
+    return this.props.contentChildren.filter((it) => it.component === BaseComponent);
+  }
+  getChildContent(filterCallback, defaultValue2 = "") {
+    var _a;
+    return ((_a = this.props.contentChildren.find(filterCallback)) == null ? void 0 : _a.props.content) || defaultValue2;
+  }
 };
 let EventMachine = _EventMachine;
 _state = new WeakMap();
@@ -2883,7 +2908,6 @@ _props = new WeakMap();
 _propsKeys = new WeakMap();
 _isServer = new WeakMap();
 _propsKeyList = new WeakMap();
-_prefLoadTemplate = new WeakMap();
 _refreshTimestamp = new WeakSet();
 refreshTimestamp_fn = function() {
   __privateWrapper(this, _localTimestamp)._++;
@@ -2900,24 +2924,6 @@ setProps_fn = function(props) {
 _getProp = new WeakSet();
 getProp_fn = function(key) {
   return __privateGet(this, _props)[__privateGet(this, _propsKeys)[key.toUpperCase()]];
-};
-_makeElementList = new WeakSet();
-makeElementList_fn = function(html) {
-  let list2 = [];
-  if (!isArray(html)) {
-    html = [html];
-  }
-  html = html.filter(Boolean);
-  for (let i = 0, len2 = html.length; i < len2; i++) {
-    const item = html[i];
-    if (isString(item)) {
-      list2.push(...TEMP_DIV.html(item == null ? void 0 : item.trim()).childNodes || []);
-    } else if (item) {
-      list2.push(Dom.create(item));
-    } else
-      ;
-  }
-  return list2;
 };
 const _UIElement = class extends EventMachine {
   constructor(opt, props = {}) {
@@ -9428,47 +9434,7 @@ class SelectEditor extends EditorElement {
       tabIndex
     };
   }
-  template() {
-    var { label, title: title2, tabIndex, value = BlendMode.NORMAL } = this.state;
-    var hasLabel = label ? "has-label" : "";
-    var hasTabIndex = tabIndex ? 'tabIndex="1"' : "";
-    var compact = this.props.compact ? "compact" : "";
-    if (obj$3[label]) {
-      label = iconUse(label);
-    }
-    return `
-            <div class='elf--select-editor ${hasLabel} ${compact}'>
-                ${label ? `<label title="${title2}">${label}</label>` : ""}
-                <div class="editor-view">
-                    <select ref='$options' ${hasTabIndex}></select>
-                    <div class='selected-value'>
-                        <span class='value' ref="$selectedValue">${value}</span>
-                        <span class='expand' ref='$expand'>${iconUse("expand_more")}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-  }
-  getValue() {
-    return this.refs.$options.value;
-  }
-  setValue(value) {
-    this.state.value = value + "";
-    this.refs.$options.val(this.state.value);
-    this.refresh();
-  }
-  [BIND("$options")]() {
-    return {
-      "data-count": this.state.options.length.toString()
-    };
-  }
-  [BIND("$selectedValue")]() {
-    var _a;
-    return {
-      text: (_a = this.state.options.find((it) => it.value === this.state.value)) == null ? void 0 : _a.text
-    };
-  }
-  [LOAD("$options") + DOMDIFF]() {
+  getOptionString() {
     var arr = this.state.options.map((it) => {
       var value = it.value;
       var label = it.text || it.value;
@@ -9482,7 +9448,50 @@ class SelectEditor extends EditorElement {
       const disabled = it.disabled ? "disabled" : "";
       return `<option ${selected} value="${value}" ${disabled}>${label}</option>`;
     });
-    return arr;
+    return arr.join("");
+  }
+  template() {
+    var { label, title: title2, tabIndex, value = BlendMode.NORMAL } = this.state;
+    var hasLabel = label ? "has-label" : "";
+    var hasTabIndex = tabIndex ? 'tabIndex="1"' : "";
+    var compact = this.props.compact ? "compact" : "";
+    if (obj$3[label]) {
+      label = iconUse(label);
+    }
+    return `
+            <div class='elf--select-editor ${hasLabel} ${compact}'>
+                ${label ? `<label title="${title2}">${label}</label>` : ""}
+                <div class="editor-view">
+                    <select ref='$options' ${hasTabIndex}>
+                        ${this.getOptionString()}
+                    </select>
+                    <div class='selected-value'>
+                        <span class='value' ref="$selectedValue">${value}</span>
+                        <span class='expand' ref='$expand'>${iconUse("expand_more")}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+  }
+  getValue() {
+    return this.refs.$options.value;
+  }
+  setValue(value) {
+    this.refs.$options.val(this.state.value);
+    this.setState({
+      value: value + ""
+    });
+  }
+  [BIND("$options")]() {
+    return {
+      "data-count": this.state.options.length.toString()
+    };
+  }
+  [BIND("$selectedValue")]() {
+    var _a;
+    return {
+      text: (_a = this.state.options.find((it) => it.value === this.state.value)) == null ? void 0 : _a.text
+    };
   }
   [CHANGE("$options")]() {
     this.updateData({
@@ -12420,13 +12429,7 @@ class ColorAssetsEditor extends EditorElement {
       return "";
     }
     var results = preset.execute().map((item, index2) => {
-      return `
-        <div class='color-item' data-index="${index2}" data-color="${item.color}">
-          <div class='preview' title="${item.color}" data-index="${index2}">
-            <div class='color-view' style='background-color: ${item.color};'></div>
-          </div>
-        </div>
-      `;
+      return `<div class='color-item' data-index="${index2}" data-color="${item.color}"><div class='preview' title="${item.color}" data-index="${index2}"><div class='color-view' style='background-color: ${item.color};'></div></div></div>`;
     });
     return results;
   }
@@ -23905,7 +23908,9 @@ class ViewportManager {
     this.mouse = create$3();
     this.scaleMax = 1e5;
     this.scale = 1;
-    this.translate = create$3(), this.transformOrigin = create$3(), this.maxScale = 250;
+    this.translate = create$3();
+    this.transformOrigin = create$3();
+    this.maxScale = 25;
     this.minScale = 0.02;
     this.zoomFactor = 1;
     this.resetWorldMatrix();
@@ -24510,6 +24515,140 @@ class BaseLayout extends EditorElement {
     this.rerender();
   }
 }
+var DefaultLayout$1 = "";
+const DefaultLayoutDirection = {
+  LEFT: "left",
+  RIGHT: "right",
+  TOP: "top",
+  BOTTOM: "bottom",
+  BODY: "body",
+  INNER: "inner",
+  OUTER: "outer"
+};
+class DefaultLayoutItem extends EditorElement {
+}
+class DefaultLayout extends EditorElement {
+  afterRender() {
+    super.afterRender();
+    this.$config.init("editor.layout.elements", this.refs);
+  }
+  initState() {
+    console.log(this);
+    return {
+      showLeftPanel: isNotUndefined(this.props.showLeftPanel) ? Boolean(this.props.showLeftPanel) : true,
+      showRightPanel: isNotUndefined(this.props.showRightPanel) ? Boolean(this.props.showRightPanel) : true,
+      leftSize: this.props.leftSize || 340,
+      rightSize: this.props.rightSize || 280,
+      bottomSize: this.props.bottomSize || 0,
+      lastBottomSize: this.props.lastBottomSize || 150,
+      minSize: isNotUndefined(this.props.minSize) ? Boolean(this.props.minSize) : 200,
+      maxSize: isNotUndefined(this.props.maxSize) ? Boolean(this.props.maxSize) : 500
+    };
+  }
+  getDirection(direction2) {
+    return this.getChildContent((it) => it.props.type === direction2);
+  }
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--default-layout-container"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: `elf--default-layout`
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "layout-top",
+      ref: "$top"
+    }, this.getDirection(DefaultLayoutDirection.TOP)), /* @__PURE__ */ createElementJsx("div", {
+      class: "layout-middle",
+      ref: "$middle"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "layout-body",
+      ref: "$bodyPanel"
+    }, this.getDirection(DefaultLayoutDirection.BODY)), /* @__PURE__ */ createElementJsx("div", {
+      class: "layout-left",
+      ref: "$leftPanel"
+    }, this.getDirection(DefaultLayoutDirection.LEFT)), /* @__PURE__ */ createElementJsx("div", {
+      class: "layout-right",
+      ref: "$rightPanel"
+    }, this.getDirection(DefaultLayoutDirection.RIGHT)), /* @__PURE__ */ createElementJsx("div", {
+      class: "splitter",
+      ref: "$splitter"
+    })), this.getDirection(DefaultLayoutDirection.INNER)), this.getDirection(DefaultLayoutDirection.OUTER));
+  }
+  [BIND("$splitter")]() {
+    let left2 = this.state.leftSize;
+    if (!this.state.showLeftPanel) {
+      left2 = 0;
+    }
+    return {
+      style: {
+        left: Length.px(left2)
+      }
+    };
+  }
+  [BIND("$leftPanel")]() {
+    let left2 = `0px`;
+    let width2 = this.state.leftSize;
+    let bottom2 = this.state.bottomSize;
+    if (!this.state.showLeftPanel) {
+      left2 = `-${this.state.leftSize}px`;
+    }
+    return {
+      style: { left: left2, width: width2, bottom: bottom2 }
+    };
+  }
+  [BIND("$rightPanel")]() {
+    let right2 = 0;
+    let bottom2 = this.state.bottomSize;
+    if (!this.state.showRightPanel) {
+      right2 = `-${this.state.rightSize}px`;
+    }
+    return {
+      style: {
+        right: right2,
+        bottom: bottom2
+      }
+    };
+  }
+  [BIND("$bodyPanel")]() {
+    let left2 = this.state.leftSize;
+    let right2 = this.state.rightSize;
+    let bottom2 = this.state.bottomSize;
+    if (!this.state.showLeftPanel) {
+      left2 = 0;
+    }
+    if (!this.state.showRightPanel) {
+      right2 = 0;
+    }
+    return {
+      style: {
+        left: Length.px(left2),
+        right: Length.px(right2),
+        bottom: Length.px(bottom2)
+      }
+    };
+  }
+  setOptions(obj2 = {}) {
+    this.setState(obj2);
+  }
+  [POINTERSTART("$splitter") + MOVE("moveSplitter") + END("moveEndSplitter")]() {
+    this.leftSize = this.state.leftSize;
+    this.refs.$splitter.addClass("selected");
+  }
+  moveSplitter(dx) {
+    this.setState({
+      leftSize: Math.max(Math.min(this.leftSize + dx, this.state.maxSize), this.state.minSize)
+    });
+  }
+  moveEndSplitter() {
+    this.refs.$splitter.removeClass("selected");
+  }
+  refresh() {
+    this.bindData("$splitter");
+    this.bindData("$headerPanel");
+    this.bindData("$leftPanel");
+    this.bindData("$rightPanel");
+    this.bindData("$bodyPanel");
+  }
+}
 var PopupManager$1 = "";
 var NotificationView$1 = "";
 class NotificationView extends EditorElement {
@@ -24844,17 +24983,6 @@ class BlankEditor extends BaseLayout {
     super.afterRender();
     this.$config.init("editor.layout.elements", this.refs);
   }
-  components() {
-    return {
-      BlankLayerTab,
-      BlankToolBar,
-      BlankInspector,
-      BlankBodyPanel,
-      PopupManager,
-      KeyboardManager,
-      IconManager: IconManager$1
-    };
-  }
   getPlugins() {
     return blankEditorPlugins;
   }
@@ -24864,30 +24992,28 @@ class BlankEditor extends BaseLayout {
     };
   }
   template() {
-    return `
-      <div class="elf-studio blank-editor">
-        <div class="layout-main">
-          <div class='layout-top' ref='$top'>
-            ${createComponent("BlankToolBar")}
-          </div>
-          <div class="layout-middle" ref='$middle'>      
-            <div class='layout-left' ref='$leftPanel'>
-              ${createComponent("BlankLayerTab")}
-            </div>          
-            <div class="layout-body" ref='$bodyPanel'>
-              ${createComponent("BlankBodyPanel")}
-            </div>                           
-            <div class="layout-right" ref='$rightPanel'>
-              ${createComponent("BlankInspector")}
-            </div>
-            <div class='splitter' ref='$splitter'></div>            
-          </div>
-          ${createComponent("KeyboardManager")}
-        </div>
-        ${createComponent("PopupManager")}
-        ${createComponent("IconManager")}
-      </div>
-    `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf-studio blank-editor"
+    }, /* @__PURE__ */ createElementJsx(DefaultLayout, {
+      showLeftPanel: this.$config.get("show.left.panel"),
+      showRightPanel: this.$config.get("show.right.panel"),
+      leftSize: 340,
+      rightSize: 280,
+      ref: "$layout"
+    }, /* @__PURE__ */ createElementJsx(DefaultLayoutItem, {
+      type: "top"
+    }, /* @__PURE__ */ createElementJsx(BlankToolBar, null)), /* @__PURE__ */ createElementJsx(DefaultLayoutItem, {
+      type: "left",
+      resizable: "true"
+    }, /* @__PURE__ */ createElementJsx(BlankLayerTab, null)), /* @__PURE__ */ createElementJsx(DefaultLayoutItem, {
+      type: "right"
+    }, /* @__PURE__ */ createElementJsx(BlankInspector, null)), /* @__PURE__ */ createElementJsx(DefaultLayoutItem, {
+      type: "body"
+    }, /* @__PURE__ */ createElementJsx(BlankBodyPanel, null)), /* @__PURE__ */ createElementJsx(DefaultLayoutItem, {
+      type: "inner"
+    }, /* @__PURE__ */ createElementJsx(KeyboardManager, null)), /* @__PURE__ */ createElementJsx(DefaultLayoutItem, {
+      type: "outer"
+    }, /* @__PURE__ */ createElementJsx(IconManager$1, null), /* @__PURE__ */ createElementJsx(PopupManager, null))));
   }
   [BIND("$splitter")]() {
     let left2 = this.state.leftSize;
@@ -24937,13 +25063,17 @@ class BlankEditor extends BaseLayout {
     this.emit("resizeEditor");
   }
   [CONFIG("show.left.panel")]() {
-    this.refresh();
+    this.children.$layout.setOptions({
+      showLeftPanel: this.$config.get("show.left.panel")
+    });
     this.nextTick(() => {
       this.emit(RESIZE_CANVAS);
     });
   }
   [CONFIG("show.right.panel")]() {
-    this.refresh();
+    this.children.$layout.setOptions({
+      showLeftPanel: this.$config.get("show.right.panel")
+    });
     this.nextTick(() => {
       this.emit(RESIZE_CANVAS);
     });
@@ -35816,7 +35946,6 @@ var history_refreshSelection = {
   nextAction(editor) {
     editor.nextTick(() => {
       editor.context.history.saveSelection();
-      editor.emit(REFRESH_SELECTION);
     });
   },
   redo: function(editor, { currentValues: [ids, projectId] }) {
@@ -45573,11 +45702,7 @@ class CSSTextureView extends EditorElement {
         width: 70,
         height: 70
       }, it.attrs), false));
-      return `
-        <div class="pattern-item" data-index="${index2}">
-          <div class="preview">${svg}</div>
-        </div>
-      `;
+      return `<div class="pattern-item" data-index="${index2}"><div class="preview">${svg}</div></div>`;
     });
   }
   [CLICK("$css-list .pattern-item")](e) {
@@ -45773,11 +45898,7 @@ class SVGTextureView extends EditorElement {
       }, it.attrs), {
         d
       }), false));
-      return `
-        <div class="pattern-item" data-index="${index2}">
-          <div class="preview">${svg}</div>
-        </div>
-      `;
+      return `<div class="pattern-item" data-index="${index2}"><div class="preview">${svg}</div></div>`;
     });
   }
   [CLICK("$svg-list .pattern-item")](e) {
@@ -48008,13 +48129,11 @@ class GradientAssetsProperty extends BaseProperty {
       return "";
     }
     var results = preset.execute().map((item, index2) => {
-      return `
-        <div class='gradient-item' data-index="${index2}" data-gradient='${item.gradient}' data-custom="${item.custom}">
+      return `<div class='gradient-item' data-index="${index2}" data-gradient='${item.gradient}' data-custom="${item.custom}">
           <div class='preview' title="${item.gradient}" draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
-        </div>
-      `;
+        </div>`;
     });
     if (preset.edit) {
       results.push(`<div class='add-gradient-item'><butto type="button">${iconUse("add")}</button></div>`);
@@ -55684,13 +55803,11 @@ class PatternAssetsProperty extends BaseProperty {
     }
     var results = preset.execute().map((item, index2) => {
       const cssText = CSS_TO_STRING(Pattern.toCSS(item.pattern));
-      return `
-        <div class='pattern-item' data-index="${index2}" data-pattern="${item.pattern}">
+      return `<div class='pattern-item' data-index="${index2}" data-pattern="${item.pattern}">
           <div class='preview' title="${item.title}" draggable="true">
             <div class='pattern-view' style='${cssText}'></div>
           </div>
-        </div>
-      `;
+        </div>`;
     });
     return results;
   }
@@ -60657,9 +60774,7 @@ class GhostToolView extends EditorElement {
     }
     return /* @__PURE__ */ createElementJsx("path", {
       class: "insert-area",
-      d: `
-
-        `
+      d: ``
     });
   }
   renderLayoutItemForFirst() {
@@ -60672,9 +60787,7 @@ class GhostToolView extends EditorElement {
     }
     return /* @__PURE__ */ createElementJsx("path", {
       class: "insert-area",
-      d: `
-
-        `
+      d: ``
     });
   }
   [LOAD("$view") + DOMDIFF]() {
@@ -60684,7 +60797,7 @@ class GhostToolView extends EditorElement {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
     const hasTargetView = ((_a = this.targetItem) == null ? void 0 : _a.id) !== current.id;
-    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPathForVerties(this.targetParentPosition, "target-parent"), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target", ""), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target-rect", ""), hasTargetView && this.renderLayoutItemInsertArea(), hasTargetView && this.renderLayoutItemForFirst(), this.isLayoutItem && this.renderPathForVerties(this.ghostScreenVerties.filter((_, index2) => index2 < 4), "ghost"));
+    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPathForVerties(this.targetParentPosition, "target-parent"), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target", ""), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target-rect", ""), hasTargetView ? this.renderLayoutItemInsertArea() : "", hasTargetView ? this.renderLayoutItemForFirst() : "", this.isLayoutItem && this.renderPathForVerties(this.ghostScreenVerties.filter((_, index2) => index2 < 4), "ghost"));
   }
   initializeGhostView() {
     this.isLayoutItem = false;
@@ -61458,7 +61571,7 @@ class SelectionToolView extends SelectionToolEvent {
   calculateDistance(vertex2, distVector, reverseMatrix) {
     const currentVertex = clone(vertex2);
     const moveVertex = add$1([], currentVertex, distVector);
-    const snap = this.$context.snapManager.check([moveVertex], 3 / this.$viewport.scale);
+    const snap = this.$context.snapManager.check([moveVertex], 5 / this.$viewport.scale);
     const nextVertex = add$1([], moveVertex, snap.dist);
     const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
     const realDist = subtract([], nextResult, currentResult);
@@ -61484,6 +61597,8 @@ class SelectionToolView extends SelectionToolEvent {
         ;
       else {
         data = objectFloor(data);
+        data.width = Math.max(data.width, 1);
+        data.height = Math.max(data.height, 1);
       }
       instance.reset(__spreadValues(__spreadValues({}, data), options2));
     }
@@ -66867,7 +66982,7 @@ class HorizontalRuler extends EditorElement {
     this.makeLine(pathString$1, 50, minX, maxX, realWidth, width2, 10, 20, 100);
     this.makeLine(pathString$1, 10, minX, maxX, realWidth, width2, 10, 18, 50);
     this.makeLine(pathString$1, 5, minX, maxX, realWidth, width2, 10, 15, 10);
-    this.makeLine(pathString$1, 1, minX, maxX, realWidth, width2, 10, 13, 5);
+    this.makeLine(pathString$1, 1, minX, maxX, realWidth, width2, 10, 13, 10);
     return pathString$1.join("");
   }
   makeRulerText() {
@@ -66889,12 +67004,7 @@ class HorizontalRuler extends EditorElement {
   }
   [LOAD("$ruler") + DOMDIFF]() {
     this.initializeRect();
-    return `
-            <svg width="100%" width="100%" overflow="hidden">
-                <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, 0)" />
-                ${this.makeRulerText()}                
-            </svg>
-        `;
+    return `<svg width="100%" width="100%" overflow="hidden"><path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, -3)" />${this.makeRulerText()}</svg>`;
   }
   [LOAD("$lines") + DOMDIFF]() {
     this.initializeRect();
@@ -66902,9 +67012,7 @@ class HorizontalRuler extends EditorElement {
       const pos = this.$viewport.applyVertex([it, 0, 0]);
       return `<path d="M ${pos[0]} 0 L ${pos[0]} 30"  transform="translate(0.5, 0)" />`;
     }).join("");
-    return `
-            <svg width="100%" height="100%" class="horizontal-line" overflow="hidden">${lines}</svg>
-        `;
+    return `<svg width="100%" height="100%" class="horizontal-line" overflow="hidden">${lines}</svg>`;
   }
   [BIND("$rulerLines")]() {
     return {
@@ -67145,12 +67253,7 @@ class VerticalRuler extends EditorElement {
     if (!this.state.rect || this.state.rect.width == 0) {
       this.state.rect = this.$el.rect();
     }
-    return `
-            <svg width="100%" height="100%" overflow="hidden">
-                <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0, 0.5)" />
-                ${this.makeRulerText()}
-            </svg>
-        `;
+    return `<svg width="100%" height="100%" overflow="hidden"><path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0, 0.5)" />${this.makeRulerText()}</svg>`;
   }
   [LOAD("$lines") + DOMDIFF]() {
     this.initializeRect();

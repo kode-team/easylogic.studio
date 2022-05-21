@@ -63,13 +63,7 @@ export default class ColorAssetsEditor extends EditorElement {
     }
 
     var results = preset.execute().map((item, index) => {
-      return /*html*/ `
-        <div class='color-item' data-index="${index}" data-color="${item.color}">
-          <div class='preview' title="${item.color}" data-index="${index}">
-            <div class='color-view' style='background-color: ${item.color};'></div>
-          </div>
-        </div>
-      `;
+      return /*html*/ `<div class='color-item' data-index="${index}" data-color="${item.color}"><div class='preview' title="${item.color}" data-index="${index}"><div class='color-view' style='background-color: ${item.color};'></div></div></div>`;
     });
 
     return results;

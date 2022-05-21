@@ -106,8 +106,12 @@ function getProps(attributes) {
   return results;
 }
 
+function checkAllHTML(newEl, oldEl) {
+  // console.log(newEl.outerHTML, oldEl.outerHTML);
+  return newEl.outerHTML == oldEl.outerHTML;
+}
+
 function updateElement(parentElement, oldEl, newEl, i, options = {}) {
-  // console.log(parentElement, oldEl, newEl, i, options);
   if (!oldEl) {
     parentElement.appendChild(newEl.cloneNode(true));
   } else if (!newEl) {
@@ -115,6 +119,11 @@ function updateElement(parentElement, oldEl, newEl, i, options = {}) {
   } else if (hasPassed(oldEl) || hasPassed(newEl)) {
     // NOOP
     // data-domdiff-pass="true" 일 때는 아무것도 비교하지 않고 끝낸다.
+  } else if (checkAllHTML(newEl, oldEl)) {
+    // outerHTML 이 동일하면 그냥 변경하지 않는다.
+    // 자식 비교도 멈춘다.
+    // console.log("outerHTML 동일하면 그냥 변경하지 않는다.", newEl, oldEl);
+    return;
   } else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
     // node 가 같지 않으면 바꾸고, refClass 속성이 있으면 바꾸고
     parentElement.replaceChild(newEl.cloneNode(true), oldEl);

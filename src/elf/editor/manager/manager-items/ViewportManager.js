@@ -29,9 +29,9 @@ export class ViewportManager {
     this.mouse = vec3.create();
     this.scaleMax = 100000;
     this.scale = 1;
-    (this.translate = vec3.create()),
-      (this.transformOrigin = vec3.create()),
-      (this.maxScale = 250);
+    this.translate = vec3.create();
+    this.transformOrigin = vec3.create();
+    this.maxScale = 25;
     this.minScale = 0.02;
     this.zoomFactor = 1;
 

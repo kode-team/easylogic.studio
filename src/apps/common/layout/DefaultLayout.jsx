@@ -1,21 +1,24 @@
-import {
-  DRAGOVER,
-  DROP,
-  PREVENT,
-  POINTERSTART,
-  BIND,
-  isNotUndefined,
-  classnames,
-  createComponent,
-} from "sapa";
+import { POINTERSTART, BIND, isNotUndefined } from "sapa";
 
-import { BaseLayout } from "./BaseLayout";
 import "./DefaultLayout.scss";
 
 import { END, MOVE } from "elf/editor/types/event";
+import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
-export class DefaultLayout extends BaseLayout {
+const DefaultLayoutDirection = {
+  LEFT: "left",
+  RIGHT: "right",
+  TOP: "top",
+  BOTTOM: "bottom",
+  BODY: "body",
+  INNER: "inner",
+  OUTER: "outer",
+};
+
+export class DefaultLayoutItem extends EditorElement {}
+
+export class DefaultLayout extends EditorElement {
   afterRender() {
     super.afterRender();
 
@@ -23,6 +26,7 @@ export class DefaultLayout extends BaseLayout {
   }
 
   initState() {
+    console.log(this);
     return {
       showLeftPanel: isNotUndefined(this.props.showLeftPanel)
         ? Boolean(this.props.showLeftPanel)
@@ -43,38 +47,39 @@ export class DefaultLayout extends BaseLayout {
     };
   }
 
+  getDirection(direction) {
+    return this.getChildContent((it) => it.props.type === direction);
+  }
+
   template() {
     return (
-      <div class={`elf-studio ${classnames(this.state.class)}`}>
-        <div class={`default-layout`}>
+      <div class="elf--default-layout-container">
+        <div class={`elf--default-layout`}>
           <div class="layout-top" ref="$top">
-            {this.$injectManager.generate("layout.top", true)}
+            {this.getDirection(DefaultLayoutDirection.TOP)}
           </div>
           <div class="layout-middle" ref="$middle">
             <div class="layout-body" ref="$bodyPanel">
-              {this.$injectManager.generate("layout.body", true)}
+              {this.getDirection(DefaultLayoutDirection.BODY)}
             </div>
             <div class="layout-left" ref="$leftPanel">
-              {this.$injectManager.generate("layout.left", true)}
+              {this.getDirection(DefaultLayoutDirection.LEFT)}
             </div>
             <div class="layout-right" ref="$rightPanel">
-              {this.$injectManager.generate("layout.right", true)}
+              {this.getDirection(DefaultLayoutDirection.RIGHT)}
             </div>
             <div class="splitter" ref="$splitter"></div>
           </div>
-          {createComponent("KeyboardManager")}
-          {this.$injectManager.generate("layout.inner", true)}
+          {this.getDirection(DefaultLayoutDirection.INNER)}
         </div>
-        {createComponent("PopupManager")}
-        {createComponent("IconManager")}
-        {this.$injectManager.generate("layout.outer", true)}
+        {this.getDirection(DefaultLayoutDirection.OUTER)}
       </div>
     );
   }
 
   [BIND("$splitter")]() {
     let left = this.state.leftSize;
-    if (this.state.showLeftPanel) {
+    if (!this.state.showLeftPanel) {
       left = 0;
     }
 
@@ -89,7 +94,7 @@ export class DefaultLayout extends BaseLayout {
     let left = `0px`;
     let width = this.state.leftSize;
     let bottom = this.state.bottomSize;
-    if (this.state.showLeftPanel) {
+    if (!this.state.showLeftPanel) {
       left = `-${this.state.leftSize}px`;
     }
 
@@ -101,7 +106,7 @@ export class DefaultLayout extends BaseLayout {
   [BIND("$rightPanel")]() {
     let right = 0;
     let bottom = this.state.bottomSize;
-    if (this.state.showRightPanel) {
+    if (!this.state.showRightPanel) {
       right = `-${this.state.rightSize}px`;
     }
 
@@ -118,11 +123,11 @@ export class DefaultLayout extends BaseLayout {
     let right = this.state.rightSize;
     let bottom = this.state.bottomSize;
 
-    if (this.state.showLeftPanel) {
+    if (!this.state.showLeftPanel) {
       left = 0;
     }
 
-    if (this.state.showRightPanel) {
+    if (!this.state.showRightPanel) {
       right = 0;
     }
 
@@ -133,6 +138,10 @@ export class DefaultLayout extends BaseLayout {
         bottom: Length.px(bottom),
       },
     };
+  }
+
+  setOptions(obj = {}) {
+    this.setState(obj);
   }
 
   [POINTERSTART("$splitter") +
@@ -162,9 +171,4 @@ export class DefaultLayout extends BaseLayout {
     this.bindData("$rightPanel");
     this.bindData("$bodyPanel");
   }
-
-  /** 드랍존 설정을 위해서 남겨놔야함 */
-  [DRAGOVER("$middle") + PREVENT]() {}
-  [DROP("$middle") + PREVENT]() {}
-  /** 드랍존 설정을 위해서 남겨놔야함 */
 }

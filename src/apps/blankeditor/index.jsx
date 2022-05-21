@@ -1,4 +1,4 @@
-import { POINTERSTART, BIND, SUBSCRIBE, CONFIG, createComponent } from "sapa";
+import { POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "sapa";
 
 import BlankBodyPanel from "./area/BlankBodyPanel";
 import BlankInspector from "./area/BlankInspector";
@@ -10,6 +10,10 @@ import blankEditorPlugins from "./plugins/blank-editor-plugins";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { BaseLayout } from "apps/common/layout/BaseLayout";
+import {
+  DefaultLayout,
+  DefaultLayoutItem,
+} from "apps/common/layout/DefaultLayout";
 import { PopupManager } from "apps/common/PopupManager";
 import {
   END,
@@ -29,17 +33,17 @@ export class BlankEditor extends BaseLayout {
     // this.loadDataFromJSON();
   }
 
-  components() {
-    return {
-      BlankLayerTab,
-      BlankToolBar,
-      BlankInspector,
-      BlankBodyPanel,
-      PopupManager,
-      KeyboardManager,
-      IconManager,
-    };
-  }
+  // components() {
+  //   return {
+  //     BlankLayerTab,
+  //     BlankToolBar,
+  //     BlankInspector,
+  //     BlankBodyPanel,
+  //     PopupManager,
+  //     KeyboardManager,
+  //     IconManager,
+  //   };
+  // }
 
   /**
    *
@@ -57,30 +61,61 @@ export class BlankEditor extends BaseLayout {
   }
 
   template() {
-    return /*html*/ `
+    return (
       <div class="elf-studio blank-editor">
-        <div class="layout-main">
-          <div class='layout-top' ref='$top'>
-            ${createComponent("BlankToolBar")}
-          </div>
-          <div class="layout-middle" ref='$middle'>      
-            <div class='layout-left' ref='$leftPanel'>
-              ${createComponent("BlankLayerTab")}
-            </div>          
-            <div class="layout-body" ref='$bodyPanel'>
-              ${createComponent("BlankBodyPanel")}
-            </div>                           
-            <div class="layout-right" ref='$rightPanel'>
-              ${createComponent("BlankInspector")}
-            </div>
-            <div class='splitter' ref='$splitter'></div>            
-          </div>
-          ${createComponent("KeyboardManager")}
-        </div>
-        ${createComponent("PopupManager")}
-        ${createComponent("IconManager")}
+        <DefaultLayout
+          showLeftPanel={this.$config.get("show.left.panel")}
+          showRightPanel={this.$config.get("show.right.panel")}
+          leftSize={340}
+          rightSize={280}
+          ref="$layout"
+        >
+          <DefaultLayoutItem type="top">
+            <BlankToolBar />
+          </DefaultLayoutItem>
+          <DefaultLayoutItem type="left" resizable="true">
+            <BlankLayerTab />
+          </DefaultLayoutItem>
+          <DefaultLayoutItem type="right">
+            <BlankInspector />
+          </DefaultLayoutItem>
+          <DefaultLayoutItem type="body">
+            <BlankBodyPanel />
+          </DefaultLayoutItem>
+          <DefaultLayoutItem type="inner">
+            <KeyboardManager />
+          </DefaultLayoutItem>
+          <DefaultLayoutItem type="outer">
+            <IconManager />
+            <PopupManager />
+          </DefaultLayoutItem>
+        </DefaultLayout>
       </div>
-    `;
+    );
+    // return (
+    //   <div class="elf-studio blank-editor">
+    //     <div class="layout-main">
+    //       <div class="layout-top" ref="$top">
+    //         {createComponent("BlankToolBar")}
+    //       </div>
+    //       <div class="layout-middle" ref="$middle">
+    //         <div class="layout-left" ref="$leftPanel">
+    //           {createComponent("BlankLayerTab")}
+    //         </div>
+    //         <div class="layout-body" ref="$bodyPanel">
+    //           {createComponent("BlankBodyPanel")}
+    //         </div>
+    //         <div class="layout-right" ref="$rightPanel">
+    //           {createComponent("BlankInspector")}
+    //         </div>
+    //         <div class="splitter" ref="$splitter"></div>
+    //       </div>
+    //       {createComponent("KeyboardManager")}
+    //     </div>
+    //     {createComponent("PopupManager")}
+    //     {createComponent("IconManager")}
+    //   </div>
+    // );
   }
 
   [BIND("$splitter")]() {
@@ -146,14 +181,20 @@ export class BlankEditor extends BaseLayout {
   }
 
   [CONFIG("show.left.panel")]() {
-    this.refresh();
+    this.children.$layout.setOptions({
+      showLeftPanel: this.$config.get("show.left.panel"),
+    });
+
     this.nextTick(() => {
       this.emit(RESIZE_CANVAS);
     });
   }
 
   [CONFIG("show.right.panel")]() {
-    this.refresh();
+    this.children.$layout.setOptions({
+      showLeftPanel: this.$config.get("show.right.panel"),
+    });
+
     this.nextTick(() => {
       this.emit(RESIZE_CANVAS);
     });

@@ -82,13 +82,11 @@ export default class GradientAssetsProperty extends BaseProperty {
     }
 
     var results = preset.execute().map((item, index) => {
-      return /*html*/ `
-        <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}' data-custom="${item.custom}">
+      return /*html*/ `<div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}' data-custom="${item.custom}">
           <div class='preview' title="${item.gradient}" draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
-        </div>
-      `;
+        </div>`;
     });
 
     if (preset.edit) {

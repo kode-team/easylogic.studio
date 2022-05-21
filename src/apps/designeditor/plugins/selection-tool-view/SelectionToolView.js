@@ -252,7 +252,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다
     const snap = this.$context.snapManager.check(
       [moveVertex],
-      3 / this.$viewport.scale
+      5 / this.$viewport.scale
     );
 
     const nextVertex = vec3.add([], moveVertex, snap.dist);
@@ -299,6 +299,9 @@ export default class SelectionToolView extends SelectionToolEvent {
         // noop
       } else {
         data = objectFloor(data);
+
+        data.width = Math.max(data.width, 1);
+        data.height = Math.max(data.height, 1);
       }
 
       instance.reset({

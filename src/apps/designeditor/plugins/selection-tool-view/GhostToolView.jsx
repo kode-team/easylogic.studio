@@ -348,14 +348,7 @@ export default class GhostToolView extends EditorElement {
       }
     }
 
-    return (
-      <path
-        class="insert-area"
-        d={`
-
-        `}
-      />
-    );
+    return <path class="insert-area" d={``} />;
   }
 
   renderLayoutItemForFirst() {
@@ -367,14 +360,7 @@ export default class GhostToolView extends EditorElement {
       }
     }
 
-    return (
-      <path
-        class="insert-area"
-        d={`
-
-        `}
-      />
-    );
+    return <path class="insert-area" d={``} />;
   }
 
   [LOAD("$view") + DOMDIFF]() {
@@ -398,9 +384,8 @@ export default class GhostToolView extends EditorElement {
             "target-rect",
             ""
           )}
-        {hasTargetView && this.renderLayoutItemInsertArea()}
-        {hasTargetView && this.renderLayoutItemForFirst()}
-
+        {hasTargetView ? this.renderLayoutItemInsertArea() : ""}
+        {hasTargetView ? this.renderLayoutItemForFirst() : ""}
         {this.isLayoutItem &&
           this.renderPathForVerties(
             this.ghostScreenVerties.filter((_, index) => index < 4),

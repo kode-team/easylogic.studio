@@ -1,5 +1,5 @@
 import { DomDiff } from "./DomDiff";
-import { isFunction } from "./func";
+import { isArray, isFunction, isString } from "./func";
 import { recoverVariable } from "./registElement";
 
 /**
@@ -36,6 +36,36 @@ export class Dom {
   static createByHTML(htmlString) {
     var div = Dom.create("div");
     return div.html(htmlString).firstChild;
+  }
+
+  /**
+   * 항상 element 의 list 를 만들어준다.
+   *
+   * @param {string|string[]|HTMLElement|HTMLElement[]} html
+   * @returns
+   */
+  static makeElementList(html) {
+    const TEMP_DIV = Dom.create("div");
+    let list = [];
+
+    if (!isArray(html)) {
+      html = [html];
+    }
+
+    html = html.filter(Boolean);
+
+    for (let i = 0, len = html.length; i < len; i++) {
+      const item = html[i];
+      if (isString(item)) {
+        list.push(...(TEMP_DIV.html(item?.trim()).childNodes || []));
+      } else if (item) {
+        list.push(Dom.create(item));
+      } else {
+        // noop
+      }
+    }
+
+    return list;
   }
 
   static getScrollTop() {
@@ -360,7 +390,9 @@ export class Dom {
   }
 
   append(el) {
-    if (typeof el === "string") {
+    if (isArray(el)) {
+      this.el.append(...el.map((it) => it.el || it));
+    } else if (typeof el === "string") {
       this.el.appendChild(document.createTextNode(el));
     } else {
       this.el.appendChild(el.el || el);

@@ -87,13 +87,11 @@ export default class PatternAssetsProperty extends BaseProperty {
     var results = preset.execute().map((item, index) => {
       const cssText = CSS_TO_STRING(Pattern.toCSS(item.pattern));
 
-      return /*html*/ `
-        <div class='pattern-item' data-index="${index}" data-pattern="${item.pattern}">
+      return /*html*/ `<div class='pattern-item' data-index="${index}" data-pattern="${item.pattern}">
           <div class='preview' title="${item.title}" draggable="true">
             <div class='pattern-view' style='${cssText}'></div>
           </div>
-        </div>
-      `;
+        </div>`;
     });
 
     return results;

@@ -1,12 +1,5 @@
 import { Dom } from "./functions/Dom";
-import {
-  isFunction,
-  keyEach,
-  collectProps,
-  isObject,
-  isString,
-  isArray,
-} from "./functions/func";
+import { isFunction, keyEach, collectProps, isObject } from "./functions/func";
 import { MagicMethod } from "./functions/MagicMethod";
 import {
   createHandlerInstance,
@@ -60,7 +53,7 @@ export class EventMachine {
   #propsKeys = {};
   #isServer = false;
   #propsKeyList = [];
-  #prefLoadTemplate = {};
+  // #prefLoadTemplate = {};
 
   constructor(opt, props) {
     this.refs = {};
@@ -321,7 +314,9 @@ export class EventMachine {
    * @returns {Object}
    */
   components() {
-    return {};
+    return {
+      ...this.parent.childComponents,
+    };
   }
 
   /**
@@ -379,44 +374,13 @@ export class EventMachine {
   afterComponentRendering() {}
 
   /**
-   * template 또는 load 함수로 정의된 text , htmlelement, dom, 여러가지를 하나의 dom 배열로 만들어준다.
-   *
-   * 즉, template 은 element 가 직접 들어가도 된다.
-   *
-   * @param {any|any[]} html
-   * @returns
-   */
-  #makeElementList(html) {
-    let list = [];
-
-    if (!isArray(html)) {
-      html = [html];
-    }
-
-    html = html.filter(Boolean);
-
-    for (let i = 0, len = html.length; i < len; i++) {
-      const item = html[i];
-      if (isString(item)) {
-        list.push(...(TEMP_DIV.html(item?.trim()).childNodes || []));
-      } else if (item) {
-        list.push(Dom.create(item));
-      } else {
-        // noop
-      }
-    }
-
-    return list;
-  }
-
-  /**
    * template() 함수의 결과물을 파싱해서 dom element 를 생성한다.
    *
    * @param {string} html
    * @param {Boolean} [isLoad=false]
    */
   parseTemplate(html, isLoad) {
-    let list = this.#makeElementList(html);
+    let list = Dom.makeElementList(html);
 
     for (var i = 0, len = list.length; i < len; i++) {
       const $el = list[i];
@@ -459,6 +423,8 @@ export class EventMachine {
       return list[0];
     }
 
+    // list 를 fragment 로 전환하기
+    TEMP_DIV.append(list);
     return TEMP_DIV.createChildrenFragment();
   }
 
@@ -745,23 +711,16 @@ export class EventMachine {
     const refTarget = this.refs[elName];
 
     if (refTarget) {
-      var newTemplate = await magicMethod.execute(...args);
+      const newTemplate = await magicMethod.execute(...args);
 
-      if (Array.isArray(newTemplate)) {
-        newTemplate = newTemplate.join("");
-      }
+      // console.log(newTemplate);
 
-      if (this.#prefLoadTemplate[elName] != newTemplate) {
-        this.#prefLoadTemplate[elName] = newTemplate;
-        // create fragment
-        const fragment = this.parseTemplate(newTemplate, true);
-        if (isDomDiff) {
-          refTarget.htmlDiff(fragment);
-        } else {
-          refTarget.html(fragment);
-        }
+      // create fragment
+      const fragment = this.parseTemplate(newTemplate, true);
+      if (isDomDiff) {
+        refTarget.htmlDiff(fragment);
       } else {
-        // console.log("newTemplate", newTemplate);
+        refTarget.html(fragment);
       }
 
       this.refreshElementReference(refTarget, elName);
@@ -874,5 +833,31 @@ export class EventMachine {
     return this.collectMethodes(refreshCache).filter((it) => {
       return it.method === methodKey;
     });
+  }
+
+  /**
+   * 자식 컴포넌트를 찾는다.
+   *
+   * @param {EventMachine} BaseComponent
+   * @returns
+   */
+  findChildren(BaseComponent) {
+    return this.props.contentChildren.filter(
+      (it) => it.component === BaseComponent
+    );
+  }
+
+  /**
+   * 자식 객체의 content 를 확인
+   *
+   * @param {function} filterCallback
+   * @param {any} defaultValue
+   * @returns
+   */
+  getChildContent(filterCallback, defaultValue = "") {
+    return (
+      this.props.contentChildren.find(filterCallback)?.props.content ||
+      defaultValue
+    );
   }
 }
