@@ -17,6 +17,11 @@ export default {
     let nextParentLayer = null;
     if (currentLayer.isLast) {
       nextParentLayer = oldParentLayer.next;
+
+      if (!nextParentLayer) {
+        return;
+      }
+
       if (nextParentLayer.enableHasChildren()) {
         nextParentLayer.appendChild(currentLayer);
 

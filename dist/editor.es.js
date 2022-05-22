@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline;
+var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline, _id2, _renderers;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -23291,7 +23291,7 @@ var __glob_0_19$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 }, Symbol.toStringTag, { value: "Module" }));
 var item_move_depth_down$1 = {
   category: "Layer",
-  key: "ctrl+[",
+  key: "[",
   command: "history.send.backward",
   description: "move layer to below",
   args: ["send backward"],
@@ -23303,7 +23303,7 @@ var __glob_0_20$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 }, Symbol.toStringTag, { value: "Module" }));
 var item_move_depth_up$1 = {
   category: "Layer",
-  key: "ctrl+]",
+  key: "]",
   command: "history.bring.forward",
   description: "move layer to above",
   args: ["bring forward"],
@@ -24329,12 +24329,6 @@ class Editor {
   renderer(rendererType) {
     return this.context.renderers.getRenderer(rendererType);
   }
-  get html() {
-    return this.renderer("html");
-  }
-  get svg() {
-    return this.renderer("svg");
-  }
   get json() {
     return this.renderer("json");
   }
@@ -24805,8 +24799,8 @@ ${this.makeStyle(project2)}
 ${project2.layers.map((item) => this.makeStyle(item)).join("\n")}
 `;
     var html = `
-${this.$editor.html.renderSVG(project2)}
-${this.$editor.html.render(project2)}
+${this.$editor.renderer("html").renderSVG(project2)}
+${this.$editor.renderer("html").render(project2)}
         `;
     var svgData = project2.layers.map((item) => {
       return this.$editor.svg.render(item);
@@ -24830,10 +24824,10 @@ ${this.$editor.html.render(project2)}
     }
   }
   makeStyle(item) {
-    return this.$editor.html.toExportStyle(item, null);
+    return this.$editor.renderer("html").toExportStyle(item, null);
   }
   makeHTML(item) {
-    return this.$editor.html.render(item);
+    return this.$editor.renderer("html").render(item);
   }
   [CLICK("$header .tab-item")](e) {
     var selectedIndex = +e.$dt.attr("data-value");
@@ -26194,13 +26188,6 @@ class ModelManager {
     });
     this.setChanged("removeChild", rootId, { childId });
   }
-  hasParent(rootId, parentId) {
-    const obj2 = this.get(rootId);
-    const isParent = obj2.parentId === parentId;
-    if (!isParent && obj2.parent.is("project") === false)
-      return this.hasParent(obj2.parentId, parentId);
-    return isParent;
-  }
   get components() {
     return this.context.components;
   }
@@ -26213,12 +26200,6 @@ class ModelManager {
   }
   searchItemsById(ids) {
     return ids.map((id) => this.get(id));
-  }
-  hasPathOf(targetItems, searchItem) {
-    const path = this.getPath(searchItem.id, searchItem);
-    return targetItems.filter((it) => it.id !== searchItem.id).some((target) => {
-      return path.find((it) => it.id === target.id);
-    });
   }
   findGroupItem(rootId) {
     const obj2 = this.get(rootId);
@@ -26344,20 +26325,6 @@ class ModelManager {
       return 1;
     return this.getDepth(parent.id) + 1;
   }
-  getRoot(rootId) {
-    const obj2 = this.get(rootId);
-    const parent = this.getParent(rootId);
-    if (!parent)
-      return obj2;
-    let localParent = parent;
-    do {
-      const nextParent = this.getParent(localParent.id);
-      if (!nextParent) {
-        return localParent;
-      }
-      localParent = nextParent;
-    } while (localParent);
-  }
   getPath(rootId, defaultRef = null) {
     const obj2 = this.get(rootId) || defaultRef;
     const parent = this.getParent(rootId);
@@ -26367,57 +26334,12 @@ class ModelManager {
     list2.push(obj2);
     return list2;
   }
-  getModelTypeInPath(rootId, itemType) {
-    return this.getPath(rootId).find((it) => it && it.is(itemType));
-  }
-  getItemInPath(rootId, targetId) {
-    return this.getPath(rootId).find((it) => it && it.id === targetId);
-  }
-  getProject(rootId) {
-    return this.getModelTypeInPath(rootId, "project");
-  }
-  getArtBoard(rootId) {
-    return this.getModelTypeInPath(rootId, "artboard");
-  }
-  is(rootId, checkItemType) {
-    const obj2 = this.get(rootId);
-    return checkItemType === obj2.itemType;
-  }
-  isNot(rootId, checkItemType) {
-    return this.is(rootId, checkItemType) === false;
-  }
-  attrs(rootId, ...args2) {
-    const obj2 = this.get(rootId);
-    const result = {};
-    args2.forEach((field) => {
-      result[field] = clone$1(obj2[field]);
-    });
-    return result;
-  }
-  hasChildren(rootId) {
-    var _a;
-    return ((_a = this.get(rootId)) == null ? void 0 : _a.children.length) > 0;
-  }
   clone(rootId, isDeep = true) {
     const obj2 = this.get(rootId);
     const json = obj2.toCloneObject(isDeep);
     const item = this.createModel(json);
     item.setParentId(obj2.parentId);
     return item;
-  }
-  reset(rootId, obj2) {
-    var _a;
-    return (_a = this.get(rootId)) == null ? void 0 : _a.reset(obj2);
-  }
-  replaceByType(rootId, itemType) {
-    const item = this.get(rootId);
-    if (item) {
-      const json = item.toCloneObject(false);
-      delete json.itemType;
-      const newInstance = this.components.createComponent(itemType, json);
-      newInstance.setModelManager(this);
-      this.set(rootId, newInstance);
-    }
   }
 }
 var pathkit = { exports: {} };
@@ -28521,7 +28443,7 @@ class SelectionManager {
     return !!this.itemKeys[item.id];
   }
   hasPathOf(item) {
-    return this.modelManager.hasPathOf(this.items.filter((it) => it.isNot("artboard")), item);
+    return item.hasPathOf(this.items.filter((it) => it.isNot("artboard")));
   }
   hasParent(parentId) {
     return this.items.some((it) => it.hasParent(parentId));
@@ -32945,10 +32867,14 @@ class CodeViewProperty extends BaseProperty {
     `;
   }
   [LOAD("$code") + DOMDIFF]() {
-    return [this.$editor.html.codeview(this.$context.selection.current)];
+    return [
+      this.$editor.renderer("html").codeview(this.$context.selection.current)
+    ];
   }
   [LOAD("$svg") + DOMDIFF]() {
-    return [this.$editor.svg.codeview(this.$context.selection.current)];
+    return [
+      this.$editor.renderer("svg").codeview(this.$context.selection.current)
+    ];
   }
 }
 function codeview(editor) {
@@ -35574,6 +35500,9 @@ var history_bring_forward = {
     let nextParentLayer = null;
     if (currentLayer.isLast) {
       nextParentLayer = oldParentLayer.next;
+      if (!nextParentLayer) {
+        return;
+      }
       if (nextParentLayer.enableHasChildren()) {
         nextParentLayer.appendChild(currentLayer);
         currentValues = currentLayer.hierarchy;
@@ -36151,8 +36080,11 @@ var history_send_backward = {
     const oldParentLayer = currentLayer.parent;
     let currentValues = {};
     let prevParentLayer = null;
-    if (currentLayer.isFirst()) {
+    if (currentLayer.isFirst) {
       prevParentLayer = oldParentLayer.prev;
+      if (!prevParentLayer) {
+        return;
+      }
       prevParentLayer.insertBefore(currentLayer);
       currentValues = currentLayer.hierarchy;
     } else {
@@ -38567,19 +38499,24 @@ class BaseModel {
     return this.manager.get(this.parentId);
   }
   get depth() {
-    return this.manager.getDepth(this.id);
+    return this.path.length;
   }
   get top() {
-    return this.manager.getRoot(this.id);
+    return this.path.filter((it) => it.isNot("project")).shift();
   }
   get project() {
-    return this.manager.getProject(this.id);
+    return this.path.find((it) => it.is("project"));
   }
   get artboard() {
-    return this.manager.getArtBoard(this.id);
+    return this.path.find((it) => it.is("artboard"));
   }
   get path() {
-    return this.manager.getPath(this.id);
+    const path = [this];
+    let parent;
+    while (parent = path[0].parent) {
+      path.unshift(parent);
+    }
+    return path;
   }
   get pathIds() {
     return this.path.map((it) => it.id);
@@ -38592,7 +38529,8 @@ class BaseModel {
     return __privateGet(this, _json).children.length;
   }
   get index() {
-    return this.parent.findIndex(this);
+    var _a;
+    return (_a = this.parent) == null ? void 0 : _a.findIndex(this);
   }
   get isFirst() {
     return this.index === 0;
@@ -38608,18 +38546,20 @@ class BaseModel {
     return parent.layers[parent.childrenLength - 1];
   }
   get prev() {
+    var _a;
     const index2 = this.index;
     if (this.isFirst) {
       return this;
     }
-    return this.parent.layers[index2 - 1];
+    return (_a = this.parent) == null ? void 0 : _a.layers[index2 - 1];
   }
   get next() {
+    var _a;
     const index2 = this.index;
     if (this.isLast) {
       return this;
     }
-    return this.parent.layers[index2 + 1];
+    return (_a = this.parent) == null ? void 0 : _a.layers[index2 + 1];
   }
   get hierarchy() {
     return this.getInformationForHierarchy("x", "y", "angle");
@@ -38889,8 +38829,14 @@ class BaseModel {
   removeChild(childItemId) {
     return __privateGet(this, _modelManager).removeChild(this.id, childItemId);
   }
-  hasParent(parentId) {
-    return __privateGet(this, _modelManager).hasParent(this.id, parentId);
+  hasParent(findParentId) {
+    return this.parentId === findParentId;
+  }
+  hasPathOf(targetItems = []) {
+    const path = this.path;
+    return targetItems.filter((it) => it.id !== this.id).some((target) => {
+      return path.find((it) => it.id === target.id);
+    });
   }
   hasChild(childId) {
     return this.children.includes(childId);
@@ -45697,7 +45643,7 @@ class CSSTextureView extends EditorElement {
   }
   [LOAD("$css-list")]() {
     return cssPatterns.map((it, index2) => {
-      const svg = this.$editor.svg.render(this.$model.createModel(__spreadValues({
+      const svg = this.$editor.renderer("svg").render(this.$model.createModel(__spreadValues({
         itemType: it.itemType,
         width: 70,
         height: 70
@@ -45891,7 +45837,7 @@ class SVGTextureView extends EditorElement {
         }
         d = path.d;
       }
-      const svg = this.$editor.svg.render(this.$model.createModel(__spreadProps(__spreadValues({
+      const svg = this.$editor.renderer("svg").render(this.$model.createModel(__spreadProps(__spreadValues({
         itemType: it.itemType,
         width: 80,
         height: 80
@@ -50881,7 +50827,7 @@ class LayerAppendView extends EditorElement {
     const model = this.$model.createModel(__spreadValues({
       itemType: type
     }, options2), false);
-    this.state.inlineStyle = CSS_TO_STRING(this.$editor.html.toCSS(model, {
+    this.state.inlineStyle = CSS_TO_STRING(this.$editor.renderer("html").toCSS(model, {
       top: true,
       left: true,
       width: true,
@@ -56561,178 +56507,239 @@ function project(editor) {
     ProjectProperty
   });
 }
-const char_list = [/\(/gi, /\)/gi];
-const function_list = "grayscale,matrix,rotateZ,blur,sepia,linear-gradient,radial-gradient,conic-gradient,circle,inset,polygon,rgb".split(",").map((it) => {
-  return new RegExp(it, "gi");
-});
-const keyword_list = "butt,miter,start,at,black,repeat,lighten,multiply,solid,border-box,visible,absolute,relative,auto".split(",").map((it) => {
-  return new RegExp(it, "gi");
-});
-function replaceKeyword(str) {
-  keyword_list.forEach((ke) => {
-    str = str.replace(ke, (str2) => {
-      return `<span class="keyword">${str2}</span>`;
-    });
-  });
-  function_list.forEach((ke) => {
-    str = str.replace(ke, (str2) => {
-      return `<span class="function">${str2}</span>`;
-    });
-  });
-  char_list.forEach((ke) => {
-    str = str.replace(ke, (str2) => {
-      return `<span class="char">${str2}</span>`;
-    });
-  });
-  return str;
-}
-function filterKeyName(str) {
-  return str.split(";").filter((it) => it.trim()).map((it) => {
-    it = it.trim();
-    var [key, value] = it.split(":").map((it2) => it2.trim());
-    if (value === "") {
-      return "";
-    }
-    return `<div class="block"><strong>${key}</strong><span>:&nbsp;</span><span class="value">${replaceKeyword(value)}</span><span>;</span></div>`;
-  }).join("").trim();
-}
-function modifyNewLine(str) {
-  return str.replace(/;/gi, ";\n").trim();
-}
-class HTMLRenderer {
+class JSONRenderer {
   constructor(editor) {
     this.editor = editor;
   }
-  get id() {
-    return this.editor.EDITOR_ID;
-  }
   getDefaultRendererInstance() {
-    return this.editor.getRendererInstance("html", "rect");
+    return this.editor.getRendererInstance("json", "rect");
   }
   getRendererInstance(item) {
-    return this.editor.getRendererInstance("html", item.itemType) || this.getDefaultRendererInstance() || item;
+    return this.editor.getRendererInstance("json", item.itemType) || this.getDefaultRendererInstance() || item;
   }
-  render(item, renderer) {
+  async render(item, renderer) {
     if (!item)
       return;
     const currentRenderer = this.getRendererInstance(item);
     if (currentRenderer) {
-      return currentRenderer.render(item, renderer || this);
+      return await currentRenderer.render(item, renderer || this);
     }
   }
-  renderSVG(item, renderer) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (isFunction(currentRenderer.renderSVG)) {
-      return currentRenderer.renderSVG(item, renderer || this);
-    }
-    return this.getDefaultRendererInstance().renderSVG(item, renderer || this);
+  async renderAll(items, renderer) {
+    return await Promise.all(items.map(async (it) => {
+      return await this.render(it, renderer);
+    }));
   }
-  to(type, item) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (isFunction(currentRenderer[type])) {
-      return currentRenderer[type].call(currentRenderer, item);
-    }
-    const defaultInstance = this.getDefaultRendererInstance();
-    if (isFunction(defaultInstance[type])) {
-      return defaultInstance[type].call(defaultInstance, item);
-    }
-  }
-  toCSS(item, omit = {}) {
-    const css = this.to("toCSS", item);
-    Object.keys(omit).forEach((key) => {
-      delete css[key];
-    });
-    return css;
-  }
-  toNestedCSS(item) {
-    return this.to("toNestedCSS", item);
-  }
-  toTransformCSS(item) {
-    return this.to("toTransformCSS", item);
-  }
-  toGridLayoutCSS(item) {
-    return this.to("toGridLayoutCSS", item);
-  }
-  toLayoutItemCSS(item) {
-    return this.to("toLayoutItemCSS", item);
-  }
-  toLayoutBaseModelCSS(item) {
-    return this.to("toLayoutBaseModelCSS", item);
-  }
-  toStyle(item, renderer) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (isFunction(currentRenderer.toStyle)) {
-      return currentRenderer.toStyle(item, renderer || this);
-    }
-    return this.getDefaultRendererInstance().toStyle(item, renderer || this);
-  }
-  toStyleData(item, renderer) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (isFunction(currentRenderer.toStyleData)) {
-      return currentRenderer.toStyleData(item, renderer || this);
-    }
-    return this.getDefaultRendererInstance().toStyleData(item, renderer || this);
-  }
-  toExportStyle(item, renderer) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (isFunction(currentRenderer.toExportStyle)) {
-      return currentRenderer.toExportStyle(item, renderer || this);
-    }
-    return this.getDefaultRendererInstance().toExportStyle(item, renderer || this);
-  }
-  update(item, currentElement, editor) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (isFunction(currentRenderer.update)) {
-      return currentRenderer.update(item, currentElement, editor, this);
-    }
-    return this.getDefaultRendererInstance().update(item, currentElement, editor);
-  }
-  codeview(item) {
-    if (!item) {
-      return "";
-    }
-    const currentProject = item.top;
-    let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ""));
-    let rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : "";
-    const current = item;
-    const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING(this.toCSS(current))) : "");
-    const nestedCssCode = current ? this.toNestedCSS(current).map((it) => {
-      var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css);
-      return `${it.selector} { 
-    ${filterKeyName(TAG_TO_STRING(cssText))}
-    }`;
-    }) : [];
-    const selectorCode = current ? current.selectors : [];
-    return `
-<div >
-
-${cssCode && `<div><pre title='CSS'>${cssCode}</pre></div>`}
-
-${nestedCssCode.map((it) => {
-      return `<div><pre title='CSS'>${it}</pre></div>`;
-    }).join("")}
-
-${(selectorCode || []).length ? `<div>
-    ${selectorCode.map((selector2) => {
-      return `<pre title='${selector2.selector}'>${selector2.toPropertyString()}</pre>`;
-    }).join("")}
-    
-    </div>` : ""}
-
-${keyframeCode && `<div><pre title='Keyframe'>${keyframeCode}</pre></div>`}
-
-${rootVariable ? `<div>
-    <label>:root</label>
-    <pre>${rootVariable}</pre>
-    </div>` : ""}
-
-</div>
-        `;
+  async getResourceDataURI() {
   }
 }
 class ItemRender$1 {
+  async render(item, renderer) {
+    return await this.toCloneObject(item, renderer);
+  }
+  async toCloneObject(item, renderer) {
+    var json = item.attrs("itemType", "name", "elementType", "type", "visible", "lock", "selected");
+    if (item.parent && item.parent.isNot("project")) {
+      json.parentId = item.parentId;
+    }
+    json.referenceId = item.id;
+    json.newTargetId = uuid();
+    let layers2 = [];
+    for (var i = 0, len2 = item.layers.length; i < len2; i++) {
+      layers2.push(await renderer.render(item.layers[i], renderer));
+    }
+    json.layers = layers2;
+    return json;
+  }
+}
+class BaseAssetRender extends ItemRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("svgfilters", "keyframes"));
+  }
+}
+class GroupRender extends BaseAssetRender {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("layout", "constraintsHorizontal", "constraintsVertical", "resizingMode", "flexDirection", "flexWrap", "flexFlow", "justifyContent", "alignItems", "alignContent", "order", "flexBasis", "flexGrow", "flexShrink", "gap", "gridTemplateRows", "gridTemplateColumns", "gridTemplateAreas", "gridAutoRows", "gridAutoColumns", "gridAutoFlow", "gridColumnStart", "gridColumnEnd", "gridRowStart", "gridRowEnd", "gridColumnGap", "gridRowGap", "animation", "transition", "paddingTop", "paddingRight", "paddingLeft", "paddingBottom"));
+  }
+}
+class MovableRender extends GroupRender {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("x", "y", "right", "bottom", "width", "height", "angle", "transformOrigin"));
+  }
+}
+class DomRender$1 extends MovableRender {
+  async toCloneObject(item, renderer) {
+    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("position", "rootVariable", "variable", "filter", "backdropFilter", "backgroundColor", "backgroundImage", "textClip", "borderRadius", "border", "boxShadow", "textShadow", "clipPath", "color", "fontSize", "lineHeight", "textAlign", "textTransform", "textDecoration", "letterSpacing", "wordSpacing", "textIndent", "perspectiveOrigin", "transformStyle", "perspective", "mixBlendMode", "overflow", "opacity", "animation", "transition")), {
+      selectors: item.selectors.map((selector2) => selector2.clone()),
+      svg: item.svg.map((svg) => svg.clone())
+    });
+  }
+}
+class ArtBoardRender$2 extends DomRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("name"));
+  }
+}
+class LayerRender$1 extends DomRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("tagName"));
+  }
+}
+class SVGItemRender$2 extends LayerRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("overflow", "stroke", "stroke-width", "svgfilter", "fill", "fill-rule", "fill-opacity", "stroke-linecap", "stroke-linejoin", "stroke-dashoffset", "stroke-dasharray", "text-anchor"));
+  }
+}
+class BooleanPathRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("d", "booleanOperation"));
+  }
+}
+class CircleRender$2 extends LayerRender$1 {
+}
+class IFrameRender$1 extends LayerRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("src"));
+  }
+}
+class ImageRender$2 extends LayerRender$1 {
+  async toCloneObject(item, renderer) {
+    const project2 = item.project;
+    const image2 = project2.imageKeys[item.src];
+    const src = image2.original;
+    return __spreadProps(__spreadValues({}, await super.toCloneObject(item, renderer)), {
+      src
+    });
+  }
+}
+class AssetRender extends ItemRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("colors", "gradients", "svgfilters", "svgimages", "images", "keyframes"));
+  }
+}
+class TimelineRender extends AssetRender {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("timeline"));
+  }
+}
+class ProjectRender$2 extends TimelineRender {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("name", "description", "rootVariable"));
+  }
+}
+class RectRender$2 extends LayerRender$1 {
+}
+class SplineRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("points", "boundary"));
+  }
+}
+class SVGPathRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("d"));
+  }
+}
+class SVGPolygonRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("count"));
+  }
+}
+class SVGStarRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("count", "radius"));
+  }
+}
+class SVGTextPathRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("totalLength", "d", "text", "textLength", "lengthAdjust", "startOffset"));
+  }
+}
+class SVGTextRender$2 extends SVGItemRender$2 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("totalLength", "text", "textLength", "lengthAdjust", "shape-inside"));
+  }
+}
+class TemplateRender$2 extends LayerRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("engine", "template", "params"));
+  }
+}
+class TextRender$2 extends LayerRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("content"));
+  }
+}
+class VideoRender$2 extends LayerRender$1 {
+  async toCloneObject(item, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("src"));
+  }
+}
+function rendererJson(editor) {
+  editor.registerRendererType("json", new JSONRenderer(editor));
+  editor.registerRenderer("json", "project", new ProjectRender$2());
+  editor.registerRenderer("json", "artboard", new ArtBoardRender$2());
+  editor.registerRenderer("json", "rect", new RectRender$2());
+  editor.registerRenderer("json", "circle", new CircleRender$2());
+  editor.registerRenderer("json", "image", new ImageRender$2());
+  editor.registerRenderer("json", "template", new TemplateRender$2());
+  editor.registerRenderer("json", "iframe", new IFrameRender$1());
+  editor.registerRenderer("json", "text", new TextRender$2());
+  editor.registerRenderer("json", "video", new VideoRender$2());
+  editor.registerRenderer("json", "svg-path", new SVGPathRender$2());
+  editor.registerRenderer("json", "boolean-path", new BooleanPathRender$2());
+  editor.registerRenderer("json", "polygon", new SVGPolygonRender$2());
+  editor.registerRenderer("json", "star", new SVGStarRender$2());
+  editor.registerRenderer("json", "spline", new SplineRender$2());
+  editor.registerRenderer("json", "svg-text", new SVGTextRender$2());
+  editor.registerRenderer("json", "svg-textpath", new SVGTextPathRender$2());
+}
+class SampleLayer extends LayerModel {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "sample",
+      name: "New Sample Layer",
+      sampleText: "Sample Text 1",
+      sampleNumber: 1
+    }, obj2));
+  }
+  get sampleText() {
+    return this.get("sampleText");
+  }
+  set sampleText(value) {
+    this.set("sampleText", value);
+  }
+  get sampleNumber() {
+    return this.get("sampleNumber");
+  }
+  set sampleNumber(value) {
+    this.set("sampleNumber", value);
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("sampleText", "sampleNumber"));
+  }
+  editable(editablePropertyName) {
+    switch (editablePropertyName) {
+      case "sample":
+        return true;
+    }
+    return super.editable(editablePropertyName);
+  }
+  getDefaultTitle() {
+    return "Sample Layer";
+  }
+}
+class ItemRender {
+  constructor(renderer) {
+    this.renderer = renderer;
+  }
+  setRenderer(renderer) {
+    this.renderer = renderer;
+  }
   getInnerId(item, postfix = "") {
     return item.id + postfix;
+  }
+  uniqueId(item) {
+    return this.renderer.id + "-" + item.id;
   }
 }
 const Primitive = "SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint".split(",");
@@ -58115,7 +58122,7 @@ function valueFilter(obj2) {
   return result;
 }
 const EMPTY_OBJECT = {};
-class DomRender$1 extends ItemRender$1 {
+class DomRender extends ItemRender {
   toStringPropertyCSS(item, field) {
     return STRING_TO_CSS(item.get(field));
   }
@@ -58523,42 +58530,42 @@ class DomRender$1 extends ItemRender$1 {
   toCSS(item) {
     return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
   }
-  toStyleCode(item, renderer) {
-    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`);
+  toStyleCode(item) {
+    const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);
     return cssString;
   }
-  toStyle(item, renderer) {
-    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`);
+  toStyle(item) {
+    const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);
     return `
 <style type='text/css' data-renderer-type="html" data-id='${item.id}'>
 ${cssString}
 </style>
     ` + item.layers.map((it) => {
-      return renderer.toStyle(it, renderer);
+      return this.renderer.toStyle(it);
     }).join("");
   }
-  toStyleData(item, renderer) {
-    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`);
+  toStyleData(item) {
+    const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);
     return {
       styleTag: `<style type='text/css' data-renderer-type="html" data-id='${item.id}'>${cssString}</style>`,
       cssString
     };
   }
-  toExportStyle(item, renderer) {
+  toExportStyle(item) {
     const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`);
     return `
 <style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>
 ${cssString}
 </style>
     ` + item.layers.map((it) => {
-      return renderer.toExportStyle(it, renderer);
+      return this.renderer.toExportStyle(it);
     }).join("");
   }
-  render(item, renderer) {
+  render(item) {
     var { elementType, id, name, itemType, isBooleanItem } = item;
     const tagName = elementType || "div";
-    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(item)}${item.layers.map((it) => {
-      return renderer.render(it, renderer);
+    return `<${tagName} id="${this.uniqueId(item)}" class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(item)}${item.layers.map((it) => {
+      return this.renderer.render(it);
     }).join("")}</${tagName}>`;
   }
   toSVGFilter(item) {
@@ -58586,7 +58593,7 @@ ${cssString}
   }
   updateStyle(item) {
     if (item.hasCache("style")) {
-      const styleText = this.toStyleData(item, item.manager.editor.html).cssString;
+      const styleText = this.toStyleData(item).cssString;
       if (item.hasCache("styleText")) {
         if (item.getCache("styleText") === styleText) {
           return;
@@ -58595,8 +58602,10 @@ ${cssString}
       item.addCache("styleText", styleText);
       item.getCache("style").text(styleText);
     } else {
-      const style = Dom.createByHTML(this.toStyleData(item, item.manager.editor.html).styleTag);
+      const styleData = this.toStyleData(item);
+      const style = Dom.createByHTML(styleData.styleTag);
       item.addCache("style", style);
+      item.addCache("styleText", styleData.cssString);
       document.head.appendChild(style.el);
     }
   }
@@ -58630,1725 +58639,9 @@ ${cssString}
     }
   }
 }
-class ArtBoardRender$2 extends DomRender$1 {
-  render(item, renderer) {
-    var { id } = item;
-    return `<div class="element-item artboard" data-id="${id}">${this.toDefString(item)}${item.layers.map((it) => {
-      return renderer.render(it, renderer);
-    }).join("")}</div>`;
-  }
-  toBorderCSS() {
-    return {};
-  }
-}
-class LayerRender$1 extends DomRender$1 {
-}
-class SVGItemRender$2 extends LayerRender$1 {
-  update(item, currentElement) {
-    this.updateElementCache(item, currentElement);
-    super.update(item, currentElement);
-  }
-  updateElementCache(item, currentElement) {
-    if (item.getCache("element") !== currentElement) {
-      item.addCache("element", currentElement);
-      const $path = currentElement.$("path");
-      item.addCache("svgElement", $path.parent().el);
-      item.addCache("pathElement", $path.el);
-    }
-  }
-  updateDefString(item, currentElement) {
-    var $defs = currentElement.$("defs");
-    if ($defs) {
-      $defs.updateSVGDiff(`<defs>${this.toDefInnerString(item)}</defs>`);
-    } else {
-      var str = this.toDefString(item).trim();
-      currentElement.prepend(Dom.createByHTML(str));
-    }
-  }
-  toDefInnerString(item) {
-    return `
-            ${this.toFillSVG(item)}
-            ${this.toStrokeSVG(item)}
-        `;
-  }
-  fillId(item) {
-    return this.getInnerId(item, "fill");
-  }
-  strokeId(item) {
-    return this.getInnerId(item, "stroke");
-  }
-  cachedStroke(item) {
-    return item.computed("stroke", (value) => {
-      if (item.isBooleanItem) {
-        return SVGFill.parseImage("transparent");
-      } else {
-        return SVGFill.parseImage(value || "black");
-      }
-    });
-  }
-  cachedFill(item) {
-    return item.computed("fill", (value) => {
-      if (item.isBooleanItem) {
-        return SVGFill.parseImage("transparent");
-      } else {
-        return SVGFill.parseImage(value || "black");
-      }
-    });
-  }
-  toFillSVG(item) {
-    var _a;
-    const fillValue = this.cachedFill(item);
-    return (_a = fillValue == null ? void 0 : fillValue.toSVGString) == null ? void 0 : _a.call(fillValue, this.fillId(item), item.contentBox);
-  }
-  toStrokeSVG(item) {
-    var _a;
-    const strokeValue = this.cachedStroke(item);
-    return (_a = strokeValue == null ? void 0 : strokeValue.toSVGString) == null ? void 0 : _a.call(strokeValue, this.strokeId(item), item.contentBox);
-  }
-  toFillValue(item) {
-    var _a;
-    const fillValue = this.cachedFill(item);
-    return (_a = fillValue == null ? void 0 : fillValue.toFillValue) == null ? void 0 : _a.call(fillValue, this.fillId(item));
-  }
-  toFillOpacityValue(item) {
-    return parse(item.fill || "transparent").a;
-  }
-  toStrokeValue(item) {
-    var _a;
-    const strokeValue = this.cachedStroke(item);
-    return (_a = strokeValue == null ? void 0 : strokeValue.toFillValue) == null ? void 0 : _a.call(strokeValue, this.strokeId(item));
-  }
-  toFilterValue(item) {
-    if (!item.svgfilter) {
-      return "";
-    }
-    return `url(#${item.svgfilter})`;
-  }
-  toLayoutCSS() {
-    return {};
-  }
-  toDefaultCSS(item) {
-    var _a;
-    return Object.assign({}, super.toDefaultCSS(item), {
-      "stroke-width": item.strokeWidth,
-      "stroke-linecap": item.strokeLinecap,
-      "stroke-linejoin": item.strokeLinejoin,
-      "stroke-dashoffset": item.strokeDashoffset,
-      "fill-opacity": item.fillOpacity,
-      "fill-rule": item.fillRule,
-      "text-anchor": item.textAnchor,
-      "stroke-dasharray": (_a = item.strokeDasharray) == null ? void 0 : _a.join(" ")
-    });
-  }
-  toSVGAttribute(item) {
-    return this.toDefaultCSS(item);
-  }
-}
-class BooleanPathRender$2 extends SVGItemRender$2 {
-  toFillSVG(item) {
-    const layers2 = item.layers;
-    const op = item.booleanOperation;
-    switch (op) {
-      case BooleanOperation.DIFFERENCE:
-        return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item));
-    }
-    return SVGFill.parseImage(layers2[0].fill || "transparent").toSVGString(this.fillId(item));
-  }
-  toStrokeSVG(item) {
-    const layers2 = item.layers;
-    const op = item.booleanOperation;
-    switch (op) {
-      case BooleanOperation.DIFFERENCE:
-        return SVGFill.parseImage(layers2[1].stroke || "transparent").toSVGString(this.strokeId(item));
-    }
-    return SVGFill.parseImage(layers2[0].stroke || "black").toSVGString(this.strokeId(item));
-  }
-  toFillValue(item) {
-    var _a, _b;
-    const layers2 = item.layers;
-    const op = item.booleanOperation;
-    switch (op) {
-      case BooleanOperation.DIFFERENCE:
-        return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item));
-    }
-    return (_b = (_a = SVGFill.parseImage(layers2[0].fill || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.fillId(item));
-  }
-  toFillOpacityValue(item) {
-    return parse(item.fill || "transparent").a;
-  }
-  toStrokeValue(item) {
-    var _a, _b, _c, _d;
-    const layers2 = item.layers;
-    const op = item.booleanOperation;
-    switch (op) {
-      case BooleanOperation.DIFFERENCE:
-        return (_b = (_a = SVGFill.parseImage(layers2[1].stroke || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.strokeId(item));
-    }
-    return (_d = (_c = SVGFill.parseImage(layers2[0].stroke || "black")).toFillValue) == null ? void 0 : _d.call(_c, this.strokeId(item));
-  }
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    const $path = currentElement.$(`[data-boolean-path-id="${item.id}"]`);
-    if ($path) {
-      if (item.hasChangedField("changedChildren", "d", "boolean-operation", "width", "height")) {
-        $path.setAttrNS({
-          d: item.d
-        });
-      }
-      if (item.hasChangedField("fill")) {
-        $path.setAttrNS({
-          fill: this.toFillValue(item)
-        });
-      }
-      if (item.hasChangedField("stroke")) {
-        $path.setAttrNS({
-          stroke: this.toStrokeValue(item)
-        });
-      }
-      if (item.hasChangedField("filter")) {
-        $path.setAttrNS({
-          filter: this.toFilterValue(item)
-        });
-      }
-      if (item.hasChangedField("fill-rule")) {
-        $path.setAttrNS({
-          "fill-rule": item.fillRule || "nonezero"
-        });
-      }
-      if (item.hasChangedField("stroke-linejoin")) {
-        $path.setAttrNS({
-          "stroke-linejoin": item.strokeLinejoin
-        });
-      }
-      if (item.hasChangedField("stroke-linecap")) {
-        $path.setAttrNS({
-          "stroke-linecap": item.strokeLinecap
-        });
-      }
-    }
-    super.update(item, currentElement);
-  }
-  updateElementCache(item, currentElement) {
-    if (item.getCache("element") !== currentElement) {
-      item.addCache("element", currentElement);
-      const $path = currentElement.$(`[data-boolean-path-id="${item.id}"]`);
-      item.addCache("svgElement", $path.parent().el);
-      item.addCache("pathElement", $path.el);
-    }
-  }
-  render(item, renderer) {
-    var { id, name, itemType } = item;
-    return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
-  ${this.toDefString(item)}
-  ${item.layers.map((it) => {
-      return renderer.render(it, renderer);
-    }).join("")}
-  <svg xmlns="http://www.w3.org/2000/svg" class="boolean-path-item" width="100%" height="100%" overflow="visible">
-    <path 
-      class="svg-path-item"
-      d="${item.d}"
-      data-boolean-path-id="${id}" 
-      fill-rule="${item.fillRule}"
-      filter="${this.toFilterValue(item)}"
-      fill="${this.toFillValue(item)}"
-      stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item.strokeLinejoin}"
-      stroke-linecap="${item.strokeLinecap}"
-    />
-  </svg>
-</div>
-    `;
-  }
-}
-class CircleRender$2 extends LayerRender$1 {
-}
-class ImageRender$2 extends LayerRender$1 {
-  toNestedCSS() {
-    return [
-      {
-        selector: "img",
-        cssText: `
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                `.trim()
-      }
-    ];
-  }
-  getUrl(item) {
-    var { src } = item;
-    var project2 = item.project;
-    return project2.getImageValueById(src) || src;
-  }
-  render(item) {
-    var { id } = item;
-    return `
-          <div class='element-item image' data-id="${id}">
-            ${this.toDefString(item)}
-            <img src='${this.getUrl(item)}' />
-          </div>`;
-  }
-  update(item, currentElement) {
-    const $image = currentElement == null ? void 0 : currentElement.$("img");
-    if ($image) {
-      $image.attr("src", this.getUrl(item));
-    }
-    super.update(item, currentElement);
-  }
-}
-class ProjectRender$2 extends DomRender$1 {
-  toRootVariableCSS(item) {
-    let obj2 = {};
-    item.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
-      var [key, value] = it.split(":");
-      obj2[`--${key}`] = value;
-    });
-    return obj2;
-  }
-  toCSS(item) {
-    return Object.assign({}, this.toRootVariableCSS(item));
-  }
-  toStyle(item) {
-    const keyframeString = item.toKeyframeString();
-    const rootVariable = this.toRootVariableCSS(item);
-    return `
-<style type='text/css' data-renderer-type="html" data-id='${item.id}'>
-    :root {
-        ${CSS_TO_STRING(rootVariable)}
-    }
-    /* keyframe */
-    ${keyframeString}
-</style>
-        `;
-  }
-  toExportStyle(item) {
-    const keyframeString = item.toKeyframeString();
-    const rootVariable = this.toRootVariableCSS(item);
-    return `
-<style type='text/css' data-renderer-type="html" data-id='${item.id}'>
-    :root {
-        ${CSS_TO_STRING(rootVariable)}
-    }
-    /* keyframe */
-    ${keyframeString}
-</style>
-        `;
-  }
-  render(item, renderer) {
-    return item.layers.map((it) => {
-      return renderer.render(it, renderer);
-    }).join("");
-  }
-  renderSVG() {
-    return "";
-  }
-}
-class RectRender$2 extends LayerRender$1 {
-}
-class SVGPathRender$2 extends SVGItemRender$2 {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    const $path = currentElement.$("path");
-    if ($path) {
-      if (item.hasChangedField("width", "height", "d")) {
-        $path.setAttrNS({
-          d: item.d
-        });
-      }
-      if (item.hasChangedField("fill")) {
-        $path.setAttrNS({
-          fill: this.toFillValue(item)
-        });
-      }
-      if (item.hasChangedField("stroke")) {
-        $path.setAttrNS({
-          stroke: this.toStrokeValue(item)
-        });
-      }
-      if (item.hasChangedField("filter")) {
-        $path.setAttrNS({
-          filter: this.toFilterValue(item)
-        });
-      }
-      if (item.hasChangedField("fill-rule")) {
-        $path.setAttrNS({
-          "fill-rule": item.fillRule || "nonezero"
-        });
-      }
-      if (item.hasChangedField("stroke-linejoin")) {
-        $path.setAttrNS({
-          "stroke-linejoin": item.strokeLinejoin
-        });
-      }
-      if (item.hasChangedField("stroke-linecap")) {
-        $path.setAttrNS({
-          "stroke-linecap": item.strokeLinecap
-        });
-      }
-      if (item.hasChangedField("stroke-dasharray")) {
-        $path.setAttrNS({
-          "stroke-dasharray": item.strokeDasharray.join(" ")
-        });
-      }
-    }
-    super.update(item, currentElement);
-  }
-  render(item) {
-    var { id, name, itemType } = item;
-    return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
-  ${this.toDefString(item)}
-  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
-    <path 
-      class="svg-path-item"
-      d="${item.d}"
-      fill-rule="${item.fillRule}"
-      filter="${this.toFilterValue(item)}"
-      fill="${this.toFillValue(item)}"
-      stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item.strokeLinejoin}"
-      stroke-linecap="${item.strokeLinecap}"
-      stroke-dasharray="${item.strokeDasharray.join(" ")}"
-    />
-  </svg>
-</div>
-    `;
-  }
-}
-class SplineRender$2 extends SVGPathRender$2 {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      if (item.hasChangedField("points", "boundary")) {
-        $path.setAttrNS({
-          d: item.d
-        });
-      }
-    }
-    super.update(item, currentElement);
-  }
-}
-class SVGPolygonRender$2 extends SVGItemRender$2 {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      if (item.hasChangedField("width", "height", "count")) {
-        $path.setAttrNS({
-          d: item.d
-        });
-      }
-      if (item.hasChangedField("fill")) {
-        $path.setAttrNS({
-          fill: this.toFillValue(item)
-        });
-      }
-      if (item.hasChangedField("stroke")) {
-        $path.setAttrNS({
-          stroke: this.toStrokeValue(item)
-        });
-      }
-      if (item.hasChangedField("filter")) {
-        $path.setAttrNS({
-          filter: this.toFilterValue(item)
-        });
-      }
-      if (item.hasChangedField("fill-rule")) {
-        $path.setAttrNS({
-          "fill-rule": item.fillRule || "nonezero"
-        });
-      }
-      if (item.hasChangedField("stroke-linejoin")) {
-        $path.setAttrNS({
-          "stroke-linejoin": item.strokeLinejoin
-        });
-      }
-      if (item.hasChangedField("stroke-linecap")) {
-        $path.setAttrNS({
-          "stroke-linecap": item.strokeLinecap
-        });
-      }
-    }
-    super.update(item, currentElement);
-  }
-  render(item) {
-    var { id, name, itemType } = item;
-    return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
-  ${this.toDefString(item)}
-  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
-    <path 
-      class="svg-path-item"
-      d="${item.d}"
-      fill-rule="${item.fillRule}"
-      filter="${this.toFilterValue(item)}"
-      fill="${this.toFillValue(item)}"
-      stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item.strokeLinejoin}"
-      stroke-linecap="${item.strokeLinecap}"
-    />
-  </svg>
-</div>
-    `;
-  }
-}
-class SVGStarRender$2 extends SVGItemRender$2 {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      if (item.hasChangedField("width", "height", "count", "radius", "isCurve", "tension")) {
-        $path.setAttrNS({
-          d: item.d
-        });
-      }
-      if (item.hasChangedField("fill")) {
-        $path.setAttrNS({
-          fill: this.toFillValue(item)
-        });
-      }
-      if (item.hasChangedField("stroke")) {
-        $path.setAttrNS({
-          stroke: this.toStrokeValue(item)
-        });
-      }
-      if (item.hasChangedField("filter")) {
-        $path.setAttrNS({
-          filter: this.toFilterValue(item)
-        });
-      }
-      if (item.hasChangedField("fill-rule")) {
-        $path.setAttrNS({
-          "fill-rule": item.fillRule || "nonezero"
-        });
-      }
-      if (item.hasChangedField("stroke-linejoin")) {
-        $path.setAttrNS({
-          "stroke-linejoin": item.strokeLinejoin
-        });
-      }
-      if (item.hasChangedField("stroke-linecap")) {
-        $path.setAttrNS({
-          "stroke-linecap": item.strokeLinecap
-        });
-      }
-    }
-    super.update(item, currentElement);
-  }
-  render(item) {
-    var { id, name, itemType } = item;
-    return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
-  ${this.toDefString(item)}
-  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
-    <path 
-      class="svg-path-item"
-      d="${item.d}"
-      fill-rule="${item.fillRule}"
-      filter="${this.toFilterValue(item)}"
-      fill="${this.toFillValue(item)}"
-      stroke="${this.toStrokeValue(item)}"
-      stroke-linejoin="${item.strokeLinejoin}"
-      stroke-linecap="${item.strokeLinecap}"
-    />
-  </svg>
-</div>
-    `;
-  }
-}
-class SVGTextPathRender$2 extends SVGItemRender$2 {
-  update(item, currentElement) {
-    var $path = currentElement.$("path.svg-path-item");
-    if ($path) {
-      if (item.hasChangedField("width", "height", "d")) {
-        $path.attr("d", item.d);
-      }
-    }
-    var $guidePath = currentElement.$("path.guide");
-    if ($guidePath) {
-      if (item.hasChangedField("width", "height", "d")) {
-        $guidePath.attr("d", item.d);
-      }
-    }
-    var $textPath = currentElement.$("textPath");
-    if ($textPath) {
-      if (item.hasChangedField("text")) {
-        $textPath.text(item.text);
-      }
-      if (item.hasChangedField("textLength", "lengthAdjust", "startOffset")) {
-        $textPath.setAttrNS({
-          textLength: item.textLength,
-          lengthAdjust: item.lengthAdjust,
-          startOffset: item.startOffset
-        });
-      }
-      if (item.hasChangedField("fill")) {
-        $textPath.setAttrNS({
-          fill: this.toFillValue(item)
-        });
-      }
-      if (item.hasChangedField("stroke")) {
-        $textPath.setAttrNS({
-          stroke: this.toStrokeValue(item)
-        });
-      }
-      if (item.hasChangedField("filter")) {
-        $textPath.setAttrNS({
-          filter: this.toFilterValue(item)
-        });
-      }
-    }
-    super.update(item, currentElement);
-    item.totalLength = $path.totalLength;
-  }
-  toDefInnerString(item) {
-    return `
-        ${this.toPathSVG(item)}
-        ${this.toFillSVG(item)}
-        ${this.toStrokeSVG(item)}
-    `;
-  }
-  toPathId(item) {
-    return this.getInnerId(item, "path");
-  }
-  toPathSVG(item) {
-    return `
-    <path class="svg-path-item" id="${this.toPathId(item)}" d="${item.d}" fill="none" />
-    `;
-  }
-  render(item) {
-    var { id, textLength, lengthAdjust, startOffset } = item;
-    const pathId = `#${this.toPathId(item)}`;
-    return `
-      <svg class='element-item textpath' data-id="${id}">
-        ${this.toDefString(item)}
-        <text class="svg-textpath-item">
-          <textPath 
-            xlink:href="${pathId}"
-            textLength="${textLength}"
-            lengthAdjust="${lengthAdjust}"
-            startOffset="${startOffset}"
-          >${item.text}</textPath>
-          <use href="${pathId}" stroke-width="1" stroke="black" />
-        </text>
-        <path class="guide" d="${item.d}" stroke="rgba(0, 0, 0, 0.5)" fill="none"/>
-      </svg>
-    `;
-  }
-}
-class SVGTextRender$2 extends SVGItemRender$2 {
-  update(item, currentElement) {
-    var $text = currentElement.$("text");
-    if ($text) {
-      if (item.hasChangedField("text")) {
-        $text.text(item.text);
-      }
-      if (item.hasChangedField("textLength", "lengthAdjust", "startOffset")) {
-        $text.setAttrNS({
-          textLength: item.textLength,
-          lengthAdjust: item.lengthAdjust,
-          startOffset: item.startOffset
-        });
-      }
-      if (item.hasChangedField("fill")) {
-        $text.setAttrNS({
-          fill: this.toFillValue(item)
-        });
-      }
-      if (item.hasChangedField("stroke")) {
-        $text.setAttrNS({
-          stroke: this.toStrokeValue(item)
-        });
-      }
-      if (item.hasChangedField("filter")) {
-        $text.setAttrNS({
-          filter: this.toFilterValue(item)
-        });
-      }
-    }
-    super.update(item, currentElement);
-  }
-  shapeInsideId(item) {
-    return this.getInnerId(item, "shape-inside");
-  }
-  render(item) {
-    var { id, textLength, lengthAdjust } = item;
-    return `
-  <svg class='element-item textpath' data-id="${id}">
-    ${this.toDefString(item)}
-      <text class="svg-text-item" textLength="${textLength}" lengthAdjust="${lengthAdjust}">${item.text}</text>
-  </svg>`;
-  }
-}
-class DomTemplateEngine {
-  static compile(template, params = []) {
-    return template;
-  }
-}
-const EngineList = {
-  dom: DomTemplateEngine
-};
-class TemplateEngine {
-  static compile(engine, template, params = []) {
-    const currentEngine = EngineList[engine] || EngineList["dom"];
-    return currentEngine.compile(template, params);
-  }
-}
-class TemplateRender$2 extends LayerRender$1 {
-  update(item, currentElement) {
-    if (item.hasChangedField("x", "y", "width", "height") === false) {
-      const compiledTemplate = this.compile(item);
-      let $innerHTML = currentElement.$(".inner-html");
-      if ($innerHTML) {
-        $innerHTML.updateDiff(compiledTemplate);
-      }
-    }
-    super.update(item, currentElement);
-  }
-  compile(item) {
-    return TemplateEngine.compile("dom", item.template, item.params);
-  }
-  render(item) {
-    var { id } = item;
-    const compiledTemplate = this.compile(item);
-    return `
-      <div class='element-item template' data-id="${id}">
-        ${this.toDefString(item)}
-        <style id="style-${id}">
-          [data-id="${id}"] .inner-html {
-            width: 100%; 
-            height: 100%;
-            position:relative;
-            display:block;
-            pointer-events: none; 
-          }
-
-          [data-id="${id}"] .inner-html > * {
-            width: 100%; 
-            height: 100%;
-          }          
-        </style>
-        <div class="inner-html" data-domdiff-pass="true">
-          ${compiledTemplate}
-        </div>
-      </div>`;
-  }
-}
-class TextRender$2 extends LayerRender$1 {
-  toCSS(item) {
-    let css = super.toCSS(item);
-    css.margin = css.margin || "0px";
-    if (item.overflow !== Overflow.SCROLL) {
-      if (item.content.length > 0) {
-        css.height = "auto";
-      }
-    }
-    return css;
-  }
-  update(item, currentElement) {
-    const $textElement = currentElement == null ? void 0 : currentElement.$(`.text-content`);
-    if ($textElement) {
-      var { content: content2 } = item;
-      $textElement.updateDiff(content2);
-    }
-    super.update(item, currentElement);
-  }
-  render(item) {
-    var { id, content: content2 } = item;
-    return `
-            <div class='element-item text' data-id="${id}">
-                ${this.toDefString(item)}
-                <div class="text-content" tabIndex="-1" data-id="${id}">${content2}</div>
-            </div>
-        `;
-  }
-}
-class VideoRender$2 extends LayerRender$1 {
-  toNestedCSS() {
-    return [
-      {
-        selector: "video",
-        cssText: `
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                `.trim()
-      }
-    ];
-  }
-  getUrl(item) {
-    var { src } = item;
-    var project2 = item.project;
-    return project2.getVideoValueById(src);
-  }
-  render(item) {
-    var { id, controls, muted, poster, loop, crossorigin, autoplay } = item;
-    return `
-        <div class='element-item video' data-id="${id}">
-            ${this.toDefString(item)}
-            <video 
-                controls="${controls}"
-                src="${this.getUrl(item)}
-                muted="${muted}"
-                poster="${poster}"
-                loop="${loop}"
-                crossorigin="${crossorigin}"
-                autoplay="${autoplay}"
-            >
-                Sorry, your browser doesn't support embedded videos.
-            </video>
-        </div>`;
-  }
-  update(item, currentElement) {
-    const { currentTime, playbackRate, volume } = item;
-    const $video = currentElement.$("video");
-    if ($video) {
-      $video.setProp({
-        currentTime,
-        playbackRate,
-        volume
-      });
-    }
-    super.update(item, currentElement);
-  }
-}
-function rendererHtml(editor) {
-  editor.registerRendererType("html", new HTMLRenderer(editor));
-  editor.registerRenderer("html", "project", new ProjectRender$2());
-  editor.registerRenderer("html", "artboard", new ArtBoardRender$2());
-  editor.registerRenderer("html", "rect", new RectRender$2());
-  editor.registerRenderer("html", "circle", new CircleRender$2());
-  editor.registerRenderer("html", "image", new ImageRender$2());
-  editor.registerRenderer("html", "text", new TextRender$2());
-  editor.registerRenderer("html", "video", new VideoRender$2());
-  editor.registerRenderer("html", "boolean-path", new BooleanPathRender$2());
-  editor.registerRenderer("html", "svg-path", new SVGPathRender$2());
-  editor.registerRenderer("html", "polygon", new SVGPolygonRender$2());
-  editor.registerRenderer("html", "star", new SVGStarRender$2());
-  editor.registerRenderer("html", "spline", new SplineRender$2());
-  editor.registerRenderer("html", "svg-text", new SVGTextRender$2());
-  editor.registerRenderer("html", "svg-textpath", new SVGTextPathRender$2());
-  editor.registerRenderer("html", "template", new TemplateRender$2());
-}
-class JSONRenderer {
-  constructor(editor) {
-    this.editor = editor;
-  }
-  getDefaultRendererInstance() {
-    return this.editor.getRendererInstance("json", "rect");
-  }
-  getRendererInstance(item) {
-    return this.editor.getRendererInstance("json", item.itemType) || this.getDefaultRendererInstance() || item;
-  }
-  async render(item, renderer) {
-    if (!item)
-      return;
-    const currentRenderer = this.getRendererInstance(item);
-    if (currentRenderer) {
-      return await currentRenderer.render(item, renderer || this);
-    }
-  }
-  async renderAll(items, renderer) {
-    return await Promise.all(items.map(async (it) => {
-      return await this.render(it, renderer);
-    }));
-  }
-  async getResourceDataURI() {
-  }
-}
-class ItemRender {
-  async render(item, renderer) {
-    return await this.toCloneObject(item, renderer);
-  }
-  async toCloneObject(item, renderer) {
-    var json = item.attrs("itemType", "name", "elementType", "type", "visible", "lock", "selected");
-    if (item.parent && item.parent.isNot("project")) {
-      json.parentId = item.parentId;
-    }
-    json.referenceId = item.id;
-    json.newTargetId = uuid();
-    let layers2 = [];
-    for (var i = 0, len2 = item.layers.length; i < len2; i++) {
-      layers2.push(await renderer.render(item.layers[i], renderer));
-    }
-    json.layers = layers2;
-    return json;
-  }
-}
-class BaseAssetRender extends ItemRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("svgfilters", "keyframes"));
-  }
-}
-class GroupRender extends BaseAssetRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("layout", "constraintsHorizontal", "constraintsVertical", "resizingMode", "flexDirection", "flexWrap", "flexFlow", "justifyContent", "alignItems", "alignContent", "order", "flexBasis", "flexGrow", "flexShrink", "gap", "gridTemplateRows", "gridTemplateColumns", "gridTemplateAreas", "gridAutoRows", "gridAutoColumns", "gridAutoFlow", "gridColumnStart", "gridColumnEnd", "gridRowStart", "gridRowEnd", "gridColumnGap", "gridRowGap", "animation", "transition", "paddingTop", "paddingRight", "paddingLeft", "paddingBottom"));
-  }
-}
-class MovableRender extends GroupRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("x", "y", "right", "bottom", "width", "height", "angle", "transformOrigin"));
-  }
-}
-class DomRender extends MovableRender {
-  async toCloneObject(item, renderer) {
-    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("position", "rootVariable", "variable", "filter", "backdropFilter", "backgroundColor", "backgroundImage", "textClip", "borderRadius", "border", "boxShadow", "textShadow", "clipPath", "color", "fontSize", "lineHeight", "textAlign", "textTransform", "textDecoration", "letterSpacing", "wordSpacing", "textIndent", "perspectiveOrigin", "transformStyle", "perspective", "mixBlendMode", "overflow", "opacity", "animation", "transition")), {
-      selectors: item.selectors.map((selector2) => selector2.clone()),
-      svg: item.svg.map((svg) => svg.clone())
-    });
-  }
-}
-class ArtBoardRender$1 extends DomRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("name"));
-  }
-}
 class LayerRender extends DomRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("tagName"));
-  }
 }
-class SVGItemRender$1 extends LayerRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("overflow", "stroke", "stroke-width", "svgfilter", "fill", "fill-rule", "fill-opacity", "stroke-linecap", "stroke-linejoin", "stroke-dashoffset", "stroke-dasharray", "text-anchor"));
-  }
-}
-class BooleanPathRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("d", "booleanOperation"));
-  }
-}
-class CircleRender$1 extends LayerRender {
-}
-class IFrameRender$1 extends LayerRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("src"));
-  }
-}
-class ImageRender$1 extends LayerRender {
-  async toCloneObject(item, renderer) {
-    const project2 = item.project;
-    const image2 = project2.imageKeys[item.src];
-    const src = image2.original;
-    return __spreadProps(__spreadValues({}, await super.toCloneObject(item, renderer)), {
-      src
-    });
-  }
-}
-class AssetRender extends ItemRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("colors", "gradients", "svgfilters", "svgimages", "images", "keyframes"));
-  }
-}
-class TimelineRender extends AssetRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("timeline"));
-  }
-}
-class ProjectRender$1 extends TimelineRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("name", "description", "rootVariable"));
-  }
-}
-class RectRender$1 extends LayerRender {
-}
-class SplineRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("points", "boundary"));
-  }
-}
-class SVGPathRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("d"));
-  }
-}
-class SVGPolygonRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("count"));
-  }
-}
-class SVGStarRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("count", "radius"));
-  }
-}
-class SVGTextPathRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("totalLength", "d", "text", "textLength", "lengthAdjust", "startOffset"));
-  }
-}
-class SVGTextRender$1 extends SVGItemRender$1 {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("totalLength", "text", "textLength", "lengthAdjust", "shape-inside"));
-  }
-}
-class TemplateRender$1 extends LayerRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("engine", "template", "params"));
-  }
-}
-class TextRender$1 extends LayerRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("content"));
-  }
-}
-class VideoRender$1 extends LayerRender {
-  async toCloneObject(item, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item, renderer)), item.attrs("src"));
-  }
-}
-function rendererJson(editor) {
-  editor.registerRendererType("json", new JSONRenderer(editor));
-  editor.registerRenderer("json", "project", new ProjectRender$1());
-  editor.registerRenderer("json", "artboard", new ArtBoardRender$1());
-  editor.registerRenderer("json", "rect", new RectRender$1());
-  editor.registerRenderer("json", "circle", new CircleRender$1());
-  editor.registerRenderer("json", "image", new ImageRender$1());
-  editor.registerRenderer("json", "template", new TemplateRender$1());
-  editor.registerRenderer("json", "iframe", new IFrameRender$1());
-  editor.registerRenderer("json", "text", new TextRender$1());
-  editor.registerRenderer("json", "video", new VideoRender$1());
-  editor.registerRenderer("json", "svg-path", new SVGPathRender$1());
-  editor.registerRenderer("json", "boolean-path", new BooleanPathRender$1());
-  editor.registerRenderer("json", "polygon", new SVGPolygonRender$1());
-  editor.registerRenderer("json", "star", new SVGStarRender$1());
-  editor.registerRenderer("json", "spline", new SplineRender$1());
-  editor.registerRenderer("json", "svg-text", new SVGTextRender$1());
-  editor.registerRenderer("json", "svg-textpath", new SVGTextPathRender$1());
-}
-class SVGRenderer {
-  constructor(editor) {
-    this.editor = editor;
-  }
-  getDefaultRendererInstance() {
-    return this.editor.getRendererInstance("svg", "rect");
-  }
-  getRendererInstance(item) {
-    return this.editor.getRendererInstance("svg", item.itemType) || this.getDefaultRendererInstance() || item;
-  }
-  render(item, renderer) {
-    if (!item)
-      return "";
-    const currentRenderer = this.getRendererInstance(item);
-    if (currentRenderer) {
-      return currentRenderer.render(item, renderer || this);
-    }
-  }
-  toCSS(item) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (currentRenderer) {
-      return currentRenderer.toCSS(item);
-    }
-  }
-  toTransformCSS(item) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (currentRenderer) {
-      return currentRenderer.toTransformCSS(item);
-    }
-  }
-  toStyle(item, renderer) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (currentRenderer) {
-      return currentRenderer.toStyle(item, renderer || this);
-    }
-  }
-  update(item, currentElement) {
-    const currentRenderer = this.getRendererInstance(item);
-    if (currentRenderer) {
-      return currentRenderer.update(item, currentElement);
-    }
-  }
-  codeview(item) {
-    if (!item) {
-      return "";
-    }
-    let svgCode = this.render(item);
-    svgCode = svgCode.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return `
-<div class='svg-code'>
-${svgCode && `<div><pre title='SVG'>${svgCode}</pre></div>`}
-</div>
-        `;
-  }
-}
-class SVGRender extends DomRender$1 {
-  toDefaultCSS(item) {
-    return {
-      overflow: "visible",
-      "background-color": item.backgroundColor,
-      color: item.color,
-      "font-size": item.fontSize,
-      "font-weight": item.fontWeight,
-      "font-style": item.fontStyle,
-      "font-family": item.fontFamily,
-      "text-align": item.textAlign,
-      "text-decoration": item.textDecoration,
-      "text-transform": item.textTransform,
-      "letter-spacing": item.letterSpacing,
-      "word-spacing": item.wordSpacing,
-      "line-height": item.lineHeight,
-      "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
-      "text-overflow": item.textOverflow,
-      "text-wrap": item.textWrap,
-      "z-index": item.zIndex,
-      opacity: item.opacity,
-      "mix-blend-mode": item.mixBlendMode,
-      "transform-origin": item.transformOrigin,
-      "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
-      animation: item.animation,
-      transition: item.transition
-    };
-  }
-  toCSS(item) {
-    const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item));
-    delete css.left;
-    delete css.top;
-    delete css.width;
-    delete css.height;
-    delete css.position;
-    return css;
-  }
-  toSVGAttribute(item) {
-    var _a;
-    return __spreadProps(__spreadValues({}, this.toDefaultCSS(item)), {
-      strokeWidth: item.strokeWidth,
-      "fill-opacity": item.fillOpacity,
-      "fill-rule": item.fillRule,
-      "stroke-linecap": item.strokeLinecap,
-      "stroke-linejoin": item.strokeLinejoin,
-      "text-anchor": item.textAnchor,
-      "stroke-dasharray": (_a = item.strokeDasharray) == null ? void 0 : _a.join(" ")
-    });
-  }
-  wrappedRender(item, callback) {
-    const { id, x, y, width: width2, height: height2, itemType } = item;
-    return `
-
-<svg class='svg-element-item ${itemType}'
-    xmlns="http://www.w3.org/2000/svg"
-    data-id="${id}"
-    x="${x}"
-    y="${y}"
-    width="${width2}"
-    height="${height2}"
-    viewBox="0 0 ${width2} ${height2}"
-    overflow="visible"
->
-    ${this.toDefString(item)}
-    ${isFunction(callback) && callback()}
-</svg>
-        `;
-  }
-  render(item, renderer) {
-    const { width: width2, height: height2, elementType } = item;
-    const tagName = elementType || "div";
-    let css = this.toCSS(item);
-    return this.wrappedRender(item, () => {
-      return `
-<foreignObject 
-    width="${width2}"
-    height="${height2}"
-    overflow="visible"
->
-    <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>
-</foreignObject>    
-${item.layers.map((it) => {
-        return renderer.render(it, renderer);
-      }).join("")}
-            `;
-    });
-  }
-}
-class ArtBoardRender extends SVGRender {
-  toCSS(item) {
-    const css = Object.assign({}, this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBackgroundImageCSS(item));
-    delete css.left;
-    delete css.top;
-    delete css.width;
-    delete css.height;
-    delete css.position;
-    return css;
-  }
-  render(item, renderer, encoding = true) {
-    const { width: width2, height: height2 } = item;
-    let css = this.toCSS(item);
-    return `
-${encoding ? `<?xml version="1.0"?>` : ""}
-<svg 
-    xmlns="http://www.w3.org/2000/svg"
-    width="${width2}"
-    height="${height2}"
-    viewBox="0 0 ${width2} ${height2}"
-    style="${CSS_TO_STRING(css)}"
->
-    ${this.toDefString(item)}
-    ${item.layers.map((it) => {
-      return renderer.render(it, renderer);
-    }).join("")}
-</svg>      
-        `;
-  }
-}
-class SVGLayerRender extends SVGRender {
-}
-class SVGItemRender extends SVGLayerRender {
-  updateDefString(item, currentElement) {
-    var $defs = currentElement.$("defs");
-    if ($defs) {
-      $defs.html(this.toDefInnerString(item));
-    } else {
-      var str = this.toDefString(item).trim();
-      currentElement.prepend(Dom.createByHTML(str));
-    }
-  }
-  toDefInnerString(item) {
-    return `
-            ${this.toFillSVG(item)}
-            ${this.toStrokeSVG(item)}
-        `;
-  }
-  toDefString(item) {
-    const str = this.toDefInnerString(item).trim();
-    return `
-            <defs>
-            ${str}
-            </defs>
-        `;
-  }
-  fillId(item) {
-    return this.getInnerId(item, "fill");
-  }
-  strokeId(item) {
-    return this.getInnerId(item, "stroke");
-  }
-  toFillSVG(item) {
-    return SVGFill.parseImage(item.fill || "transparent").toSVGString(this.fillId(item));
-  }
-  toStrokeSVG(item) {
-    return SVGFill.parseImage(item.stroke || "black").toSVGString(this.strokeId(item));
-  }
-  toFillValue(item) {
-    return SVGFill.parseImage(item.fill || "transparent").toFillValue(this.fillId(item));
-  }
-  toFillOpacityValue(item) {
-    return parse(item.fill || "transparent").a;
-  }
-  toStrokeValue(item) {
-    return SVGFill.parseImage(item.stroke || "black").toFillValue(this.strokeId(item));
-  }
-  toFilterValue(item) {
-    if (!item.svgfilter) {
-      return "";
-    }
-    return `url(#${item.svgfilter})`;
-  }
-  toLayoutCSS() {
-    return {};
-  }
-}
-class BooleanPathRender extends SVGItemRender {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    const $path = currentElement.$(`[data-boolean-path-id="${item.id}"]`);
-    if ($path) {
-      $path.setAttr({
-        d: item.d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      });
-      item.totalLength = $path.totalLength;
-    }
-    this.updateDefString(item, currentElement);
-  }
-  render(item) {
-    var { d } = item;
-    return this.wrappedRender(item, () => {
-      return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        class: "boolean-path-item",
-        "data-boolean-path-id": item.id,
-        d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} />
-    `;
-    });
-  }
-}
-class CircleRender extends SVGLayerRender {
-}
-class IFrameRender extends SVGLayerRender {
-  update(item, currentElement) {
-    let $iframe = currentElement.$("iframe");
-    if ($iframe) {
-      $iframe.attr("src", item.url || "about:blank");
-    }
-    super.update(item, currentElement);
-  }
-  render(item) {
-    const { width: width2, height: height2, url = "about:blank" } = item;
-    let css = this.toCSS(item);
-    return this.wrappedRender(item, () => {
-      return `
-  <foreignObject
-      width="${width2}"
-      height="${height2}"
-  >
-      <iframe 
-          xmlns="http://www.w3.org/1999/xhtml"
-          width="100%" 
-          height="100%" 
-          style="border:0px;width:100%;height:100%;pointer-events:none; ${CSS_TO_STRING(css)}" 
-          src="${url}"
-      ></iframe>
-  </foreignObject>              
-          `;
-    });
-  }
-}
-class ImageRender extends SVGLayerRender {
-  getUrl(item) {
-    var { src } = item;
-    var project2 = item.project;
-    return project2.getImageValueById(src);
-  }
-  render(item) {
-    const { width: width2, height: height2 } = item;
-    let css = this.toCSS(item);
-    return this.wrappedRender(item, () => {
-      return `
-            <foreignObject
-                width="${width2}"
-                height="${height2}"
-            >
-                <div xmlns="http://www.w3.org/1999/xhtml">
-                    <img src='${this.getUrl(item)}' style="width:100%;height:100%; ${CSS_TO_STRING(css)}"  />
-                </div>
-            </foreignObject>              
-          `;
-    });
-  }
-  update(item, currentElement) {
-    const $image = currentElement.$("img");
-    if ($image) {
-      $image.attr("src", this.getUrl(item));
-    }
-    super.update(item, currentElement);
-  }
-}
-class ProjectRender extends SVGRender {
-  render(item, renderer) {
-    return item.artboards.map((it) => {
-      return renderer.render(it, renderer);
-    });
-  }
-}
-class RectRender extends SVGLayerRender {
-}
-class SplineRender extends SVGItemRender {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      $path.setAttr({
-        d: item.d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      });
-    }
-    this.updateDefString(item, currentElement);
-  }
-  render(item) {
-    var { d } = item;
-    return this.wrappedRender(item, () => {
-      return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        class: "spline-item",
-        d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} />
-    `;
-    });
-  }
-}
-class SVGPathRender extends SVGItemRender {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      $path.setAttr({
-        d: item.d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      });
-      item.totalLength = $path.totalLength;
-    }
-    this.updateDefString(item, currentElement);
-  }
-  render(item) {
-    var { d } = item;
-    return this.wrappedRender(item, () => {
-      return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        class: "svg-path-item",
-        d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} />
-    `;
-    });
-  }
-}
-class SVGPolygonRender extends SVGItemRender {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      $path.setAttr({
-        d: item.d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      });
-    }
-    this.updateDefString(item, currentElement);
-  }
-  render(item) {
-    var { d } = item;
-    return this.wrappedRender(item, () => {
-      return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        class: "polygon-item",
-        d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} />
-    `;
-    });
-  }
-}
-class SVGStarRender extends SVGItemRender {
-  update(item, currentElement) {
-    if (!currentElement)
-      return;
-    var $path = currentElement.$("path");
-    if ($path) {
-      $path.setAttr({
-        d: item.d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      });
-    }
-    this.updateDefString(item, currentElement);
-  }
-  render(item) {
-    var { d } = item;
-    return this.wrappedRender(item, () => {
-      return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        class: "star-item",
-        d,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} />
-    `;
-    });
-  }
-}
-class SVGTextPathRender extends SVGItemRender {
-  update(item, currentElement) {
-    var $path = currentElement.$("path");
-    if ($path) {
-      $path.attr("d", item.d);
-    }
-    var $textPath = currentElement.$("textPath");
-    if ($textPath) {
-      $textPath.text(item.text);
-      $textPath.setAttr({
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item),
-        textLength: item.textLength,
-        lengthAdjust: item.lengthAdjust,
-        startOffset: item.startOffset
-      });
-    }
-    this.updateDefString(item, currentElement);
-    item.totalLength = $path.totalLength;
-  }
-  toDefInnerString(item) {
-    return `
-      ${this.toPathSVG(item)}
-      ${this.toFillSVG(item)}
-      ${this.toStrokeSVG(item)}
-    `;
-  }
-  toPathId(item) {
-    return this.getInnerId(item, "path");
-  }
-  toPathSVG(item) {
-    return `
-      <path 
-        class="svg-path-item"
-        id="${this.toPathId(item)}"
-        d="${item.d}"
-        fill="none"
-      />
-    `;
-  }
-  render(item) {
-    return this.wrappedRender(item, () => {
-      const { textLength, lengthAdjust, startOffset } = item;
-      return `
-        <textPath ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        "xlink:href": `#${this.toPathId(item)}`,
-        textLength,
-        lengthAdjust,
-        startOffset,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} >${item.text}</textPath>
-      `;
-    });
-  }
-}
-class SVGTextRender extends SVGItemRender {
-  update(item, currentElement) {
-    var $text = currentElement.$("text");
-    if ($text) {
-      $text.text(item.text);
-      $text.setAttr({
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item),
-        textLength: item.textLength,
-        lengthAdjust: item.lengthAdjust
-      });
-    }
-    this.updateDefString(item, currentElement);
-  }
-  shapeInsideId(item) {
-    return this.getInnerId(item, "shape-inside");
-  }
-  render(item) {
-    var { textLength, lengthAdjust } = item;
-    return this.wrappedRender(item, () => {
-      return `
-        <text ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
-        class: "svg-text-item",
-        textLength,
-        lengthAdjust,
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item)
-      }, this.toSVGAttribute(item)), {
-        style: CSS_TO_STRING(this.toCSS(item))
-      }))} >${item.text}</text>
-      `;
-    });
-  }
-}
-class TemplateRender extends SVGLayerRender {
-  update(item, currentElement) {
-    const compiledTemplate = this.compile(item);
-    let $innerHTML = currentElement.$(".inner-html");
-    if ($innerHTML) {
-      $innerHTML.updateDiff(compiledTemplate);
-    }
-    super.update(item, currentElement);
-  }
-  compile(item) {
-    return TemplateEngine.compile("dom", item.template, item.params);
-  }
-  render(item) {
-    const { id, width: width2, height: height2 } = item;
-    const compiledTemplate = this.compile(item);
-    return this.wrappedRender(item, () => {
-      return `
-            <foreignObject
-                width="${width2}"
-                height="${height2}"
-            >
-                <div  xmlns="http://www.w3.org/1999/xhtml" style="width: 100%;height:100%;">
-                    <style id="style-${id}">
-                    [data-id="${id}"] .inner-html {
-                        width: 100%; 
-                        height: 100%;
-                        position:relative;
-                        display:block;
-                        pointer-events: none; 
-                    }
-
-                    [data-id="${id}"] .inner-html > * {
-                        width: 100%; 
-                        height: 100%;
-                    }          
-                    </style>
-                    <div class="inner-html">
-                    ${compiledTemplate}
-                    </div>
-                </div>
-            </foreignObject>              
-          `;
-    });
-  }
-}
-class TextRender extends SVGLayerRender {
-  toCSS(item) {
-    let css = super.toCSS(item);
-    css.margin = css.margin || "0px";
-    css.height = "auto";
-    return css;
-  }
-  render(item) {
-    const { content: content2, width: width2, height: height2 } = item;
-    let css = this.toCSS(item);
-    return this.wrappedRender(item, () => {
-      return `
-            <foreignObject width="${width2}" height="${height2}">
-                <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)}">${content2}</p>
-            </foreignObject>              
-          `;
-    });
-  }
-  update(item, currentElement) {
-    var { content: content2 } = item;
-    currentElement.updateDiff(content2);
-  }
-}
-class VideoRender extends SVGLayerRender {
-  getUrl(item) {
-    var { src } = item;
-    var project2 = item.project;
-    return project2.getVideoValueById(src);
-  }
-  render(item) {
-    var {
-      width: width2,
-      height: height2,
-      controls,
-      muted,
-      poster,
-      loop,
-      crossorigin,
-      autoplay
-    } = item;
-    let css = this.toCSS(item);
-    return this.wrappedRender(item, () => {
-      return `
-            <foreignObject 
-                width="${width2}"
-                height="${height2}"
-                overflow="visible"
-            >
-                <video 
-                    xmlns="http://www.w3.org/1999/xhtml"
-                    controls="${controls}"
-                    src="${this.getUrl(item)}"
-                    muted="${muted}"
-                    poster="${poster}"
-                    loop="${loop}"
-                    crossorigin="${crossorigin}"
-                    autoplay="${autoplay}"
-                    style="${CSS_TO_STRING(css)};width:100%;height:100%;"></video>
-            </foreignObject>    
-            `;
-    });
-  }
-}
-function rendererSvg(editor) {
-  editor.registerRendererType("svg", new SVGRenderer(editor));
-  editor.registerRenderer("svg", "project", new ProjectRender());
-  editor.registerRenderer("svg", "artboard", new ArtBoardRender());
-  editor.registerRenderer("svg", "rect", new RectRender());
-  editor.registerRenderer("svg", "circle", new CircleRender());
-  editor.registerRenderer("svg", "image", new ImageRender());
-  editor.registerRenderer("svg", "template", new TemplateRender());
-  editor.registerRenderer("svg", "iframe", new IFrameRender());
-  editor.registerRenderer("svg", "video", new VideoRender());
-  editor.registerRenderer("svg", "text", new TextRender());
-  editor.registerRenderer("svg", "boolean-path", new BooleanPathRender());
-  editor.registerRenderer("svg", "svg-path", new SVGPathRender());
-  editor.registerRenderer("svg", "polygon", new SVGPolygonRender());
-  editor.registerRenderer("svg", "star", new SVGStarRender());
-  editor.registerRenderer("svg", "spline", new SplineRender());
-  editor.registerRenderer("svg", "svg-text", new SVGTextRender());
-  editor.registerRenderer("svg", "svg-textpath", new SVGTextPathRender());
-}
-class SampleLayer extends LayerModel {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      itemType: "sample",
-      name: "New Sample Layer",
-      sampleText: "Sample Text 1",
-      sampleNumber: 1
-    }, obj2));
-  }
-  get sampleText() {
-    return this.get("sampleText");
-  }
-  set sampleText(value) {
-    this.set("sampleText", value);
-  }
-  get sampleNumber() {
-    return this.get("sampleNumber");
-  }
-  set sampleNumber(value) {
-    this.set("sampleNumber", value);
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("sampleText", "sampleNumber"));
-  }
-  editable(editablePropertyName) {
-    switch (editablePropertyName) {
-      case "sample":
-        return true;
-    }
-    return super.editable(editablePropertyName);
-  }
-  getDefaultTitle() {
-    return "Sample Layer";
-  }
-}
-class SampleRender extends LayerRender$1 {
+class SampleRender extends LayerRender {
   update(item, currentElement) {
     const $sampleText = currentElement.$(".sample-text");
     if ($sampleText) {
@@ -65405,9 +63698,7 @@ var designEditorPlugins = [
   defaultMessages,
   defaultItems,
   defaultPatterns,
-  rendererHtml,
   rendererJson,
-  rendererSvg,
   baseEditor,
   propertyEditor,
   color,
@@ -66225,8 +64516,1773 @@ class DragAreaView extends EditorElement {
     this.$config.init("set.move.mode", false);
   }
 }
+var PageTools$1 = "";
+class PageTools extends EditorElement {
+  template() {
+    return `     
+      <div class='elf--page-tools'>
+        <button type='button' ref='$minus'>${iconUse("remove2")}</button>
+        <div class='select'>
+          ${createComponent("NumberInputEditor", {
+      ref: "$scaleInput",
+      min: 10,
+      max: 240,
+      step: 1,
+      key: "scale",
+      value: this.$viewport.scale * 100,
+      onchange: this.subscribe((key, scale2) => {
+        this.$viewport.setScale(scale2 / 100);
+        this.emit(UPDATE_VIEWPORT);
+        this.trigger(UPDATE_VIEWPORT);
+      }, 1e3)
+    })}
+        </div>
+        <label>%</label>
+        <button type='button' ref='$plus'>${iconUse("add")}</button>        
+        <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${iconUse("gps_fixed")}</button>    
+        <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${iconUse("straighten")}</button>    
+        <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse("fullscreen")}</button>                        
+        ${this.$injectManager.generate("page.tools")}                             
+      </div>
+
+    `;
+  }
+  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
+    const scale2 = Math.floor(this.$viewport.scale * 100);
+    if (this.children.$scaleInput) {
+      this.children.$scaleInput.setValue(scale2);
+    }
+  }
+  [CLICK("$plus")]() {
+    const oldScale = this.$viewport.scale;
+    this.$viewport.setScale(oldScale + 0.01);
+    this.emit(UPDATE_VIEWPORT);
+    this.trigger(UPDATE_VIEWPORT);
+  }
+  [CLICK("$minus")]() {
+    const oldScale = this.$viewport.scale;
+    this.$viewport.setScale(oldScale - 0.01);
+    this.emit(UPDATE_VIEWPORT);
+    this.trigger(UPDATE_VIEWPORT);
+  }
+  [CLICK("$center")]() {
+    this.$commands.emit("moveSelectionToCenter");
+  }
+  [CLICK("$ruler")]() {
+    this.$config.toggle("show.ruler");
+  }
+  [CLICK("$fullscreen")]() {
+    this.emit("bodypanel.toggle.fullscreen");
+  }
+  [CLICK("$buttons button")](e) {
+    const itemId = e.$dt.data("item-id");
+    const pathIndex = e.$dt.data("path-index");
+    const current = this.$editor.get(itemId);
+    if (current.editablePath) {
+      this.$commands.emit("open.editor", current);
+    } else {
+      const pathList = PathParser.fromSVGString(current.absolutePath().d).toPathList();
+      this.emit("showPathEditor", "modify", {
+        box: "canvas",
+        current,
+        matrix: current.matrix,
+        d: pathList[pathIndex].d,
+        changeEvent: (data) => {
+          pathList[pathIndex].reset(data.d);
+          const newPathD = current.invertPath(PathParser.joinPathList(pathList).d).d;
+          this.$commands.executeCommand("setAttribute", "modify sub path", {
+            [itemId]: current.updatePath(newPathD)
+          });
+        }
+      });
+    }
+    this.emit("hideSelectionToolView");
+  }
+}
+const char_list = [/\(/gi, /\)/gi];
+const function_list = "grayscale,matrix,rotateZ,blur,sepia,linear-gradient,radial-gradient,conic-gradient,circle,inset,polygon,rgb".split(",").map((it) => {
+  return new RegExp(it, "gi");
+});
+const keyword_list = "butt,miter,start,at,black,repeat,lighten,multiply,solid,border-box,visible,absolute,relative,auto".split(",").map((it) => {
+  return new RegExp(it, "gi");
+});
+function replaceKeyword(str) {
+  keyword_list.forEach((ke) => {
+    str = str.replace(ke, (str2) => {
+      return `<span class="keyword">${str2}</span>`;
+    });
+  });
+  function_list.forEach((ke) => {
+    str = str.replace(ke, (str2) => {
+      return `<span class="function">${str2}</span>`;
+    });
+  });
+  char_list.forEach((ke) => {
+    str = str.replace(ke, (str2) => {
+      return `<span class="char">${str2}</span>`;
+    });
+  });
+  return str;
+}
+function filterKeyName(str) {
+  return str.split(";").filter((it) => it.trim()).map((it) => {
+    it = it.trim();
+    var [key, value] = it.split(":").map((it2) => it2.trim());
+    if (value === "") {
+      return "";
+    }
+    return `<div class="block"><strong>${key}</strong><span>:&nbsp;</span><span class="value">${replaceKeyword(value)}</span><span>;</span></div>`;
+  }).join("").trim();
+}
+function modifyNewLine(str) {
+  return str.replace(/;/gi, ";\n").trim();
+}
+class HTMLRenderer {
+  constructor(editor) {
+    __privateAdd(this, _id2, void 0);
+    __privateAdd(this, _renderers, {});
+    this.editor = editor;
+    __privateSet(this, _id2, uuid());
+  }
+  setRendererType(itemType, renderInstance) {
+    renderInstance.setRenderer(this);
+    __privateGet(this, _renderers)[itemType] = renderInstance;
+  }
+  get id() {
+    return __privateGet(this, _id2);
+  }
+  getDefaultRendererInstance() {
+    return __privateGet(this, _renderers)["rect"];
+  }
+  getRendererInstance(item) {
+    const currentRenderer = __privateGet(this, _renderers)[item.itemType] || this.editor.getRendererInstance("html", item.itemType) || this.getDefaultRendererInstance() || item;
+    currentRenderer.setRenderer(this);
+    return currentRenderer;
+  }
+  render(item) {
+    if (!item)
+      return;
+    const currentRenderer = this.getRendererInstance(item);
+    if (currentRenderer) {
+      return currentRenderer.render(item);
+    }
+  }
+  renderSVG(item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (isFunction(currentRenderer.renderSVG)) {
+      return currentRenderer.renderSVG(item);
+    }
+    return this.getDefaultRendererInstance().renderSVG(item);
+  }
+  to(type, item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (isFunction(currentRenderer[type])) {
+      return currentRenderer[type].call(currentRenderer, item);
+    }
+    const defaultInstance = this.getDefaultRendererInstance();
+    if (isFunction(defaultInstance[type])) {
+      return defaultInstance[type].call(defaultInstance, item);
+    }
+  }
+  toCSS(item, omit = {}) {
+    const css = this.to("toCSS", item);
+    Object.keys(omit).forEach((key) => {
+      delete css[key];
+    });
+    return css;
+  }
+  toNestedCSS(item) {
+    return this.to("toNestedCSS", item);
+  }
+  toTransformCSS(item) {
+    return this.to("toTransformCSS", item);
+  }
+  toGridLayoutCSS(item) {
+    return this.to("toGridLayoutCSS", item);
+  }
+  toLayoutItemCSS(item) {
+    return this.to("toLayoutItemCSS", item);
+  }
+  toLayoutBaseModelCSS(item) {
+    return this.to("toLayoutBaseModelCSS", item);
+  }
+  toStyle(item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (isFunction(currentRenderer.toStyle)) {
+      return currentRenderer.toStyle(item);
+    }
+    return this.getDefaultRendererInstance().toStyle(item);
+  }
+  toStyleData(item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (isFunction(currentRenderer.toStyleData)) {
+      return currentRenderer.toStyleData(item);
+    }
+    return this.getDefaultRendererInstance().toStyleData(item);
+  }
+  toExportStyle(item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (isFunction(currentRenderer.toExportStyle)) {
+      return currentRenderer.toExportStyle(item);
+    }
+    return this.getDefaultRendererInstance().toExportStyle(item);
+  }
+  update(item, currentElement, editor) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (isFunction(currentRenderer.update)) {
+      return currentRenderer.update(item, currentElement, editor);
+    }
+    return this.getDefaultRendererInstance().update(item, currentElement, editor);
+  }
+  codeview(item) {
+    if (!item) {
+      return "";
+    }
+    const currentProject = item.project;
+    let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ""));
+    let rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : "";
+    const current = item;
+    const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING(this.toCSS(current))) : "");
+    const nestedCssCode = current ? this.toNestedCSS(current).map((it) => {
+      var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css);
+      return `${it.selector} { 
+    ${filterKeyName(TAG_TO_STRING(cssText))}
+    }`;
+    }) : [];
+    const selectorCode = current ? current.selectors : [];
+    return `
+<div >
+
+${cssCode && `<div><pre title='CSS'>${cssCode}</pre></div>`}
+
+${nestedCssCode.map((it) => {
+      return `<div><pre title='CSS'>${it}</pre></div>`;
+    }).join("")}
+
+${(selectorCode || []).length ? `<div>
+    ${selectorCode.map((selector2) => {
+      return `<pre title='${selector2.selector}'>${selector2.toPropertyString()}</pre>`;
+    }).join("")}
+    
+    </div>` : ""}
+
+${keyframeCode && `<div><pre title='Keyframe'>${keyframeCode}</pre></div>`}
+
+${rootVariable ? `<div>
+    <label>:root</label>
+    <pre>${rootVariable}</pre>
+    </div>` : ""}
+
+</div>
+        `;
+  }
+}
+_id2 = new WeakMap();
+_renderers = new WeakMap();
+class ArtBoardRender$1 extends DomRender {
+  render(item) {
+    var { id } = item;
+    return `<div class="element-item artboard" data-id="${id}">${this.toDefString(item)}${item.layers.map((it) => {
+      return this.renderer.render(it);
+    }).join("")}</div>`;
+  }
+  toBorderCSS() {
+    return {};
+  }
+}
+class SVGItemRender$1 extends LayerRender {
+  update(item, currentElement) {
+    this.updateElementCache(item, currentElement);
+    super.update(item, currentElement);
+  }
+  updateElementCache(item, currentElement) {
+    if (item.getCache("element") !== currentElement) {
+      item.addCache("element", currentElement);
+      const $path = currentElement.$("path");
+      item.addCache("svgElement", $path.parent().el);
+      item.addCache("pathElement", $path.el);
+    }
+  }
+  updateDefString(item, currentElement) {
+    var $defs = currentElement.$("defs");
+    if ($defs) {
+      $defs.updateSVGDiff(`<defs>${this.toDefInnerString(item)}</defs>`);
+    } else {
+      var str = this.toDefString(item).trim();
+      currentElement.prepend(Dom.createByHTML(str));
+    }
+  }
+  toDefInnerString(item) {
+    return `
+            ${this.toFillSVG(item)}
+            ${this.toStrokeSVG(item)}
+        `;
+  }
+  fillId(item) {
+    return this.getInnerId(item, "fill");
+  }
+  strokeId(item) {
+    return this.getInnerId(item, "stroke");
+  }
+  cachedStroke(item) {
+    return item.computed("stroke", (value) => {
+      if (item.isBooleanItem) {
+        return SVGFill.parseImage("transparent");
+      } else {
+        return SVGFill.parseImage(value || "black");
+      }
+    });
+  }
+  cachedFill(item) {
+    return item.computed("fill", (value) => {
+      if (item.isBooleanItem) {
+        return SVGFill.parseImage("transparent");
+      } else {
+        return SVGFill.parseImage(value || "black");
+      }
+    });
+  }
+  toFillSVG(item) {
+    var _a;
+    const fillValue = this.cachedFill(item);
+    return (_a = fillValue == null ? void 0 : fillValue.toSVGString) == null ? void 0 : _a.call(fillValue, this.fillId(item), item.contentBox);
+  }
+  toStrokeSVG(item) {
+    var _a;
+    const strokeValue = this.cachedStroke(item);
+    return (_a = strokeValue == null ? void 0 : strokeValue.toSVGString) == null ? void 0 : _a.call(strokeValue, this.strokeId(item), item.contentBox);
+  }
+  toFillValue(item) {
+    var _a;
+    const fillValue = this.cachedFill(item);
+    return (_a = fillValue == null ? void 0 : fillValue.toFillValue) == null ? void 0 : _a.call(fillValue, this.fillId(item));
+  }
+  toFillOpacityValue(item) {
+    return parse(item.fill || "transparent").a;
+  }
+  toStrokeValue(item) {
+    var _a;
+    const strokeValue = this.cachedStroke(item);
+    return (_a = strokeValue == null ? void 0 : strokeValue.toFillValue) == null ? void 0 : _a.call(strokeValue, this.strokeId(item));
+  }
+  toFilterValue(item) {
+    if (!item.svgfilter) {
+      return "";
+    }
+    return `url(#${item.svgfilter})`;
+  }
+  toLayoutCSS() {
+    return {};
+  }
+  toDefaultCSS(item) {
+    var _a;
+    return Object.assign({}, super.toDefaultCSS(item), {
+      "stroke-width": item.strokeWidth,
+      "stroke-linecap": item.strokeLinecap,
+      "stroke-linejoin": item.strokeLinejoin,
+      "stroke-dashoffset": item.strokeDashoffset,
+      "fill-opacity": item.fillOpacity,
+      "fill-rule": item.fillRule,
+      "text-anchor": item.textAnchor,
+      "stroke-dasharray": (_a = item.strokeDasharray) == null ? void 0 : _a.join(" ")
+    });
+  }
+  toSVGAttribute(item) {
+    return this.toDefaultCSS(item);
+  }
+}
+class BooleanPathRender$1 extends SVGItemRender$1 {
+  toFillSVG(item) {
+    const layers2 = item.layers;
+    const op = item.booleanOperation;
+    switch (op) {
+      case BooleanOperation.DIFFERENCE:
+        return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item));
+    }
+    return SVGFill.parseImage(layers2[0].fill || "transparent").toSVGString(this.fillId(item));
+  }
+  toStrokeSVG(item) {
+    const layers2 = item.layers;
+    const op = item.booleanOperation;
+    switch (op) {
+      case BooleanOperation.DIFFERENCE:
+        return SVGFill.parseImage(layers2[1].stroke || "transparent").toSVGString(this.strokeId(item));
+    }
+    return SVGFill.parseImage(layers2[0].stroke || "black").toSVGString(this.strokeId(item));
+  }
+  toFillValue(item) {
+    var _a, _b;
+    const layers2 = item.layers;
+    const op = item.booleanOperation;
+    switch (op) {
+      case BooleanOperation.DIFFERENCE:
+        return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item));
+    }
+    return (_b = (_a = SVGFill.parseImage(layers2[0].fill || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.fillId(item));
+  }
+  toFillOpacityValue(item) {
+    return parse(item.fill || "transparent").a;
+  }
+  toStrokeValue(item) {
+    var _a, _b, _c, _d;
+    const layers2 = item.layers;
+    const op = item.booleanOperation;
+    switch (op) {
+      case BooleanOperation.DIFFERENCE:
+        return (_b = (_a = SVGFill.parseImage(layers2[1].stroke || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.strokeId(item));
+    }
+    return (_d = (_c = SVGFill.parseImage(layers2[0].stroke || "black")).toFillValue) == null ? void 0 : _d.call(_c, this.strokeId(item));
+  }
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    const $path = currentElement.$(`[data-boolean-path-id="${item.id}"]`);
+    if ($path) {
+      if (item.hasChangedField("changedChildren", "d", "boolean-operation", "width", "height")) {
+        $path.setAttrNS({
+          d: item.d
+        });
+      }
+      if (item.hasChangedField("fill")) {
+        $path.setAttrNS({
+          fill: this.toFillValue(item)
+        });
+      }
+      if (item.hasChangedField("stroke")) {
+        $path.setAttrNS({
+          stroke: this.toStrokeValue(item)
+        });
+      }
+      if (item.hasChangedField("filter")) {
+        $path.setAttrNS({
+          filter: this.toFilterValue(item)
+        });
+      }
+      if (item.hasChangedField("fill-rule")) {
+        $path.setAttrNS({
+          "fill-rule": item.fillRule || "nonezero"
+        });
+      }
+      if (item.hasChangedField("stroke-linejoin")) {
+        $path.setAttrNS({
+          "stroke-linejoin": item.strokeLinejoin
+        });
+      }
+      if (item.hasChangedField("stroke-linecap")) {
+        $path.setAttrNS({
+          "stroke-linecap": item.strokeLinecap
+        });
+      }
+    }
+    super.update(item, currentElement);
+  }
+  updateElementCache(item, currentElement) {
+    if (item.getCache("element") !== currentElement) {
+      item.addCache("element", currentElement);
+      const $path = currentElement.$(`[data-boolean-path-id="${item.id}"]`);
+      item.addCache("svgElement", $path.parent().el);
+      item.addCache("pathElement", $path.el);
+    }
+  }
+  render(item) {
+    var { id, name, itemType } = item;
+    return `    
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+  ${this.toDefString(item)}
+  ${item.layers.map((it) => {
+      return this.renderer.render(it);
+    }).join("")}
+  <svg xmlns="http://www.w3.org/2000/svg" class="boolean-path-item" width="100%" height="100%" overflow="visible">
+    <path 
+      class="svg-path-item"
+      d="${item.d}"
+      data-boolean-path-id="${id}" 
+      fill-rule="${item.fillRule}"
+      filter="${this.toFilterValue(item)}"
+      fill="${this.toFillValue(item)}"
+      stroke="${this.toStrokeValue(item)}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
+    />
+  </svg>
+</div>
+    `;
+  }
+}
+class CircleRender$1 extends LayerRender {
+}
+class ImageRender$1 extends LayerRender {
+  toNestedCSS() {
+    return [
+      {
+        selector: "img",
+        cssText: `
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                `.trim()
+      }
+    ];
+  }
+  getUrl(item) {
+    var { src } = item;
+    var project2 = item.project;
+    return project2.getImageValueById(src) || src;
+  }
+  render(item) {
+    var { id } = item;
+    return `
+          <div class='element-item image' data-id="${id}">
+            ${this.toDefString(item)}
+            <img src='${this.getUrl(item)}' />
+          </div>`;
+  }
+  update(item, currentElement) {
+    const $image = currentElement == null ? void 0 : currentElement.$("img");
+    if ($image) {
+      $image.attr("src", this.getUrl(item));
+    }
+    super.update(item, currentElement);
+  }
+}
+class ProjectRender$1 extends DomRender {
+  toRootVariableCSS(item) {
+    let obj2 = {};
+    item.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+      var [key, value] = it.split(":");
+      obj2[`--${key}`] = value;
+    });
+    return obj2;
+  }
+  toCSS(item) {
+    return Object.assign({}, this.toRootVariableCSS(item));
+  }
+  toStyle(item) {
+    const keyframeString = item.toKeyframeString();
+    const rootVariable = this.toRootVariableCSS(item);
+    return `
+<style type='text/css' data-renderer-type="html" data-id='${item.id}'>
+    :root {
+        ${CSS_TO_STRING(rootVariable)}
+    }
+    /* keyframe */
+    ${keyframeString}
+</style>
+        `;
+  }
+  toExportStyle(item) {
+    const keyframeString = item.toKeyframeString();
+    const rootVariable = this.toRootVariableCSS(item);
+    return `
+<style type='text/css' data-renderer-type="html" data-id='${item.id}'>
+    :root {
+        ${CSS_TO_STRING(rootVariable)}
+    }
+    /* keyframe */
+    ${keyframeString}
+</style>
+        `;
+  }
+  render(item) {
+    return item.layers.map((it) => {
+      return this.renderer.render(it);
+    }).join("");
+  }
+  renderSVG() {
+    return "";
+  }
+}
+class RectRender$1 extends LayerRender {
+}
+class SVGPathRender$1 extends SVGItemRender$1 {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    const $path = currentElement.$("path");
+    if ($path) {
+      if (item.hasChangedField("width", "height", "d")) {
+        $path.setAttrNS({
+          d: item.d
+        });
+      }
+      if (item.hasChangedField("fill")) {
+        $path.setAttrNS({
+          fill: this.toFillValue(item)
+        });
+      }
+      if (item.hasChangedField("stroke")) {
+        $path.setAttrNS({
+          stroke: this.toStrokeValue(item)
+        });
+      }
+      if (item.hasChangedField("filter")) {
+        $path.setAttrNS({
+          filter: this.toFilterValue(item)
+        });
+      }
+      if (item.hasChangedField("fill-rule")) {
+        $path.setAttrNS({
+          "fill-rule": item.fillRule || "nonezero"
+        });
+      }
+      if (item.hasChangedField("stroke-linejoin")) {
+        $path.setAttrNS({
+          "stroke-linejoin": item.strokeLinejoin
+        });
+      }
+      if (item.hasChangedField("stroke-linecap")) {
+        $path.setAttrNS({
+          "stroke-linecap": item.strokeLinecap
+        });
+      }
+      if (item.hasChangedField("stroke-dasharray")) {
+        $path.setAttrNS({
+          "stroke-dasharray": item.strokeDasharray.join(" ")
+        });
+      }
+    }
+    super.update(item, currentElement);
+  }
+  render(item) {
+    var { id, name, itemType } = item;
+    return `    
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+  ${this.toDefString(item)}
+  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
+    <path 
+      class="svg-path-item"
+      d="${item.d}"
+      fill-rule="${item.fillRule}"
+      filter="${this.toFilterValue(item)}"
+      fill="${this.toFillValue(item)}"
+      stroke="${this.toStrokeValue(item)}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
+      stroke-dasharray="${item.strokeDasharray.join(" ")}"
+    />
+  </svg>
+</div>
+    `;
+  }
+}
+class SplineRender$1 extends SVGPathRender$1 {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      if (item.hasChangedField("points", "boundary")) {
+        $path.setAttrNS({
+          d: item.d
+        });
+      }
+    }
+    super.update(item, currentElement);
+  }
+}
+class SVGPolygonRender$1 extends SVGItemRender$1 {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      if (item.hasChangedField("width", "height", "count")) {
+        $path.setAttrNS({
+          d: item.d
+        });
+      }
+      if (item.hasChangedField("fill")) {
+        $path.setAttrNS({
+          fill: this.toFillValue(item)
+        });
+      }
+      if (item.hasChangedField("stroke")) {
+        $path.setAttrNS({
+          stroke: this.toStrokeValue(item)
+        });
+      }
+      if (item.hasChangedField("filter")) {
+        $path.setAttrNS({
+          filter: this.toFilterValue(item)
+        });
+      }
+      if (item.hasChangedField("fill-rule")) {
+        $path.setAttrNS({
+          "fill-rule": item.fillRule || "nonezero"
+        });
+      }
+      if (item.hasChangedField("stroke-linejoin")) {
+        $path.setAttrNS({
+          "stroke-linejoin": item.strokeLinejoin
+        });
+      }
+      if (item.hasChangedField("stroke-linecap")) {
+        $path.setAttrNS({
+          "stroke-linecap": item.strokeLinecap
+        });
+      }
+    }
+    super.update(item, currentElement);
+  }
+  render(item) {
+    var { id, name, itemType } = item;
+    return `    
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+  ${this.toDefString(item)}
+  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
+    <path 
+      class="svg-path-item"
+      d="${item.d}"
+      fill-rule="${item.fillRule}"
+      filter="${this.toFilterValue(item)}"
+      fill="${this.toFillValue(item)}"
+      stroke="${this.toStrokeValue(item)}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
+    />
+  </svg>
+</div>
+    `;
+  }
+}
+class SVGStarRender$1 extends SVGItemRender$1 {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      if (item.hasChangedField("width", "height", "count", "radius", "isCurve", "tension")) {
+        $path.setAttrNS({
+          d: item.d
+        });
+      }
+      if (item.hasChangedField("fill")) {
+        $path.setAttrNS({
+          fill: this.toFillValue(item)
+        });
+      }
+      if (item.hasChangedField("stroke")) {
+        $path.setAttrNS({
+          stroke: this.toStrokeValue(item)
+        });
+      }
+      if (item.hasChangedField("filter")) {
+        $path.setAttrNS({
+          filter: this.toFilterValue(item)
+        });
+      }
+      if (item.hasChangedField("fill-rule")) {
+        $path.setAttrNS({
+          "fill-rule": item.fillRule || "nonezero"
+        });
+      }
+      if (item.hasChangedField("stroke-linejoin")) {
+        $path.setAttrNS({
+          "stroke-linejoin": item.strokeLinejoin
+        });
+      }
+      if (item.hasChangedField("stroke-linecap")) {
+        $path.setAttrNS({
+          "stroke-linecap": item.strokeLinecap
+        });
+      }
+    }
+    super.update(item, currentElement);
+  }
+  render(item) {
+    var { id, name, itemType } = item;
+    return `    
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+  ${this.toDefString(item)}
+  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
+    <path 
+      class="svg-path-item"
+      d="${item.d}"
+      fill-rule="${item.fillRule}"
+      filter="${this.toFilterValue(item)}"
+      fill="${this.toFillValue(item)}"
+      stroke="${this.toStrokeValue(item)}"
+      stroke-linejoin="${item.strokeLinejoin}"
+      stroke-linecap="${item.strokeLinecap}"
+    />
+  </svg>
+</div>
+    `;
+  }
+}
+class SVGTextPathRender$1 extends SVGItemRender$1 {
+  update(item, currentElement) {
+    var $path = currentElement.$("path.svg-path-item");
+    if ($path) {
+      if (item.hasChangedField("width", "height", "d")) {
+        $path.attr("d", item.d);
+      }
+    }
+    var $guidePath = currentElement.$("path.guide");
+    if ($guidePath) {
+      if (item.hasChangedField("width", "height", "d")) {
+        $guidePath.attr("d", item.d);
+      }
+    }
+    var $textPath = currentElement.$("textPath");
+    if ($textPath) {
+      if (item.hasChangedField("text")) {
+        $textPath.text(item.text);
+      }
+      if (item.hasChangedField("textLength", "lengthAdjust", "startOffset")) {
+        $textPath.setAttrNS({
+          textLength: item.textLength,
+          lengthAdjust: item.lengthAdjust,
+          startOffset: item.startOffset
+        });
+      }
+      if (item.hasChangedField("fill")) {
+        $textPath.setAttrNS({
+          fill: this.toFillValue(item)
+        });
+      }
+      if (item.hasChangedField("stroke")) {
+        $textPath.setAttrNS({
+          stroke: this.toStrokeValue(item)
+        });
+      }
+      if (item.hasChangedField("filter")) {
+        $textPath.setAttrNS({
+          filter: this.toFilterValue(item)
+        });
+      }
+    }
+    super.update(item, currentElement);
+    item.totalLength = $path.totalLength;
+  }
+  toDefInnerString(item) {
+    return `
+        ${this.toPathSVG(item)}
+        ${this.toFillSVG(item)}
+        ${this.toStrokeSVG(item)}
+    `;
+  }
+  toPathId(item) {
+    return this.getInnerId(item, "path");
+  }
+  toPathSVG(item) {
+    return `
+    <path class="svg-path-item" id="${this.toPathId(item)}" d="${item.d}" fill="none" />
+    `;
+  }
+  render(item) {
+    var { id, textLength, lengthAdjust, startOffset } = item;
+    const pathId = `#${this.toPathId(item)}`;
+    return `
+      <svg class='element-item textpath' data-id="${id}">
+        ${this.toDefString(item)}
+        <text class="svg-textpath-item">
+          <textPath 
+            xlink:href="${pathId}"
+            textLength="${textLength}"
+            lengthAdjust="${lengthAdjust}"
+            startOffset="${startOffset}"
+          >${item.text}</textPath>
+          <use href="${pathId}" stroke-width="1" stroke="black" />
+        </text>
+        <path class="guide" d="${item.d}" stroke="rgba(0, 0, 0, 0.5)" fill="none"/>
+      </svg>
+    `;
+  }
+}
+class SVGTextRender$1 extends SVGItemRender$1 {
+  update(item, currentElement) {
+    var $text = currentElement.$("text");
+    if ($text) {
+      if (item.hasChangedField("text")) {
+        $text.text(item.text);
+      }
+      if (item.hasChangedField("textLength", "lengthAdjust", "startOffset")) {
+        $text.setAttrNS({
+          textLength: item.textLength,
+          lengthAdjust: item.lengthAdjust,
+          startOffset: item.startOffset
+        });
+      }
+      if (item.hasChangedField("fill")) {
+        $text.setAttrNS({
+          fill: this.toFillValue(item)
+        });
+      }
+      if (item.hasChangedField("stroke")) {
+        $text.setAttrNS({
+          stroke: this.toStrokeValue(item)
+        });
+      }
+      if (item.hasChangedField("filter")) {
+        $text.setAttrNS({
+          filter: this.toFilterValue(item)
+        });
+      }
+    }
+    super.update(item, currentElement);
+  }
+  shapeInsideId(item) {
+    return this.getInnerId(item, "shape-inside");
+  }
+  render(item) {
+    var { id, textLength, lengthAdjust } = item;
+    return `
+  <svg class='element-item textpath' data-id="${id}">
+    ${this.toDefString(item)}
+      <text class="svg-text-item" textLength="${textLength}" lengthAdjust="${lengthAdjust}">${item.text}</text>
+  </svg>`;
+  }
+}
+class DomTemplateEngine {
+  static compile(template, params = []) {
+    return template;
+  }
+}
+const EngineList = {
+  dom: DomTemplateEngine
+};
+class TemplateEngine {
+  static compile(engine, template, params = []) {
+    const currentEngine = EngineList[engine] || EngineList["dom"];
+    return currentEngine.compile(template, params);
+  }
+}
+class TemplateRender$1 extends LayerRender {
+  update(item, currentElement) {
+    if (item.hasChangedField("x", "y", "width", "height") === false) {
+      const compiledTemplate = this.compile(item);
+      let $innerHTML = currentElement.$(".inner-html");
+      if ($innerHTML) {
+        $innerHTML.updateDiff(compiledTemplate);
+      }
+    }
+    super.update(item, currentElement);
+  }
+  compile(item) {
+    return TemplateEngine.compile("dom", item.template, item.params);
+  }
+  render(item) {
+    var { id } = item;
+    const compiledTemplate = this.compile(item);
+    return `
+      <div class='element-item template' data-id="${id}">
+        ${this.toDefString(item)}
+        <style id="style-${id}">
+          [data-id="${id}"] .inner-html {
+            width: 100%; 
+            height: 100%;
+            position:relative;
+            display:block;
+            pointer-events: none; 
+          }
+
+          [data-id="${id}"] .inner-html > * {
+            width: 100%; 
+            height: 100%;
+          }          
+        </style>
+        <div class="inner-html" data-domdiff-pass="true">
+          ${compiledTemplate}
+        </div>
+      </div>`;
+  }
+}
+class TextRender$1 extends LayerRender {
+  toCSS(item) {
+    let css = super.toCSS(item);
+    css.margin = css.margin || "0px";
+    if (item.overflow !== Overflow.SCROLL) {
+      if (item.content.length > 0) {
+        css.height = "auto";
+      }
+    }
+    return css;
+  }
+  update(item, currentElement) {
+    const $textElement = currentElement == null ? void 0 : currentElement.$(`.text-content`);
+    if ($textElement) {
+      var { content: content2 } = item;
+      $textElement.updateDiff(content2);
+    }
+    super.update(item, currentElement);
+  }
+  render(item) {
+    var { id, content: content2 } = item;
+    return `
+            <div class='element-item text' data-id="${id}">
+                ${this.toDefString(item)}
+                <div class="text-content" tabIndex="-1" data-id="${id}">${content2}</div>
+            </div>
+        `;
+  }
+}
+class VideoRender$1 extends LayerRender {
+  toNestedCSS() {
+    return [
+      {
+        selector: "video",
+        cssText: `
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                `.trim()
+      }
+    ];
+  }
+  getUrl(item) {
+    var { src } = item;
+    var project2 = item.project;
+    return project2.getVideoValueById(src);
+  }
+  render(item) {
+    var { id, controls, muted, poster, loop, crossorigin, autoplay } = item;
+    return `
+        <div class='element-item video' data-id="${id}">
+            ${this.toDefString(item)}
+            <video 
+                controls="${controls}"
+                src="${this.getUrl(item)}
+                muted="${muted}"
+                poster="${poster}"
+                loop="${loop}"
+                crossorigin="${crossorigin}"
+                autoplay="${autoplay}"
+            >
+                Sorry, your browser doesn't support embedded videos.
+            </video>
+        </div>`;
+  }
+  update(item, currentElement) {
+    const { currentTime, playbackRate, volume } = item;
+    const $video = currentElement.$("video");
+    if ($video) {
+      $video.setProp({
+        currentTime,
+        playbackRate,
+        volume
+      });
+    }
+    super.update(item, currentElement);
+  }
+}
+function rendererHtml(editor) {
+  const renderer = new HTMLRenderer(editor);
+  renderer.setRendererType("project", new ProjectRender$1());
+  renderer.setRendererType("artboard", new ArtBoardRender$1());
+  renderer.setRendererType("rect", new RectRender$1());
+  renderer.setRendererType("circle", new CircleRender$1());
+  renderer.setRendererType("image", new ImageRender$1());
+  renderer.setRendererType("text", new TextRender$1());
+  renderer.setRendererType("video", new VideoRender$1());
+  renderer.setRendererType("boolean-path", new BooleanPathRender$1());
+  renderer.setRendererType("svg-path", new SVGPathRender$1());
+  renderer.setRendererType("polygon", new SVGPolygonRender$1());
+  renderer.setRendererType("star", new SVGStarRender$1());
+  renderer.setRendererType("spline", new SplineRender$1());
+  renderer.setRendererType("svg-text", new SVGTextRender$1());
+  renderer.setRendererType("svg-textpath", new SVGTextPathRender$1());
+  renderer.setRendererType("template", new TemplateRender$1());
+  editor.registerRendererType("html", renderer);
+}
+class SVGRenderer {
+  constructor(editor) {
+    this.editor = editor;
+  }
+  getDefaultRendererInstance() {
+    return this.editor.getRendererInstance("svg", "rect");
+  }
+  getRendererInstance(item) {
+    return this.editor.getRendererInstance("svg", item.itemType) || this.getDefaultRendererInstance() || item;
+  }
+  render(item, renderer) {
+    if (!item)
+      return "";
+    const currentRenderer = this.getRendererInstance(item);
+    if (currentRenderer) {
+      return currentRenderer.render(item, renderer || this);
+    }
+  }
+  toCSS(item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (currentRenderer) {
+      return currentRenderer.toCSS(item);
+    }
+  }
+  toTransformCSS(item) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (currentRenderer) {
+      return currentRenderer.toTransformCSS(item);
+    }
+  }
+  toStyle(item, renderer) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (currentRenderer) {
+      return currentRenderer.toStyle(item, renderer || this);
+    }
+  }
+  update(item, currentElement) {
+    const currentRenderer = this.getRendererInstance(item);
+    if (currentRenderer) {
+      return currentRenderer.update(item, currentElement);
+    }
+  }
+  codeview(item) {
+    if (!item) {
+      return "";
+    }
+    let svgCode = this.render(item);
+    svgCode = svgCode.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return `
+<div class='svg-code'>
+${svgCode && `<div><pre title='SVG'>${svgCode}</pre></div>`}
+</div>
+        `;
+  }
+}
+class SVGRender extends DomRender {
+  toDefaultCSS(item) {
+    return {
+      overflow: "visible",
+      "background-color": item.backgroundColor,
+      color: item.color,
+      "font-size": item.fontSize,
+      "font-weight": item.fontWeight,
+      "font-style": item.fontStyle,
+      "font-family": item.fontFamily,
+      "text-align": item.textAlign,
+      "text-decoration": item.textDecoration,
+      "text-transform": item.textTransform,
+      "letter-spacing": item.letterSpacing,
+      "word-spacing": item.wordSpacing,
+      "line-height": item.lineHeight,
+      "text-indent": item.textIndent,
+      "text-shadow": item.textShadow,
+      "text-overflow": item.textOverflow,
+      "text-wrap": item.textWrap,
+      "z-index": item.zIndex,
+      opacity: item.opacity,
+      "mix-blend-mode": item.mixBlendMode,
+      "transform-origin": item.transformOrigin,
+      "border-radius": item.borderRadius,
+      filter: item.filter,
+      "backdrop-filter": item.backdropFilter,
+      "box-shadow": item.boxShadow,
+      animation: item.animation,
+      transition: item.transition
+    };
+  }
+  toCSS(item) {
+    const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item));
+    delete css.left;
+    delete css.top;
+    delete css.width;
+    delete css.height;
+    delete css.position;
+    return css;
+  }
+  toSVGAttribute(item) {
+    var _a;
+    return __spreadProps(__spreadValues({}, this.toDefaultCSS(item)), {
+      strokeWidth: item.strokeWidth,
+      "fill-opacity": item.fillOpacity,
+      "fill-rule": item.fillRule,
+      "stroke-linecap": item.strokeLinecap,
+      "stroke-linejoin": item.strokeLinejoin,
+      "text-anchor": item.textAnchor,
+      "stroke-dasharray": (_a = item.strokeDasharray) == null ? void 0 : _a.join(" ")
+    });
+  }
+  wrappedRender(item, callback) {
+    const { id, x, y, width: width2, height: height2, itemType } = item;
+    return `
+
+<svg class='svg-element-item ${itemType}'
+    xmlns="http://www.w3.org/2000/svg"
+    data-id="${id}"
+    x="${x}"
+    y="${y}"
+    width="${width2}"
+    height="${height2}"
+    viewBox="0 0 ${width2} ${height2}"
+    overflow="visible"
+>
+    ${this.toDefString(item)}
+    ${isFunction(callback) && callback()}
+</svg>
+        `;
+  }
+  render(item, renderer) {
+    const { width: width2, height: height2, elementType } = item;
+    const tagName = elementType || "div";
+    let css = this.toCSS(item);
+    return this.wrappedRender(item, () => {
+      return `
+<foreignObject 
+    width="${width2}"
+    height="${height2}"
+    overflow="visible"
+>
+    <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>
+</foreignObject>    
+${item.layers.map((it) => {
+        return renderer.render(it, renderer);
+      }).join("")}
+            `;
+    });
+  }
+}
+class ArtBoardRender extends SVGRender {
+  toCSS(item) {
+    const css = Object.assign({}, this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBackgroundImageCSS(item));
+    delete css.left;
+    delete css.top;
+    delete css.width;
+    delete css.height;
+    delete css.position;
+    return css;
+  }
+  render(item, renderer, encoding = true) {
+    const { width: width2, height: height2 } = item;
+    let css = this.toCSS(item);
+    return `
+${encoding ? `<?xml version="1.0"?>` : ""}
+<svg 
+    xmlns="http://www.w3.org/2000/svg"
+    width="${width2}"
+    height="${height2}"
+    viewBox="0 0 ${width2} ${height2}"
+    style="${CSS_TO_STRING(css)}"
+>
+    ${this.toDefString(item)}
+    ${item.layers.map((it) => {
+      return renderer.render(it, renderer);
+    }).join("")}
+</svg>      
+        `;
+  }
+}
+class SVGLayerRender extends SVGRender {
+}
+class SVGItemRender extends SVGLayerRender {
+  updateDefString(item, currentElement) {
+    var $defs = currentElement.$("defs");
+    if ($defs) {
+      $defs.html(this.toDefInnerString(item));
+    } else {
+      var str = this.toDefString(item).trim();
+      currentElement.prepend(Dom.createByHTML(str));
+    }
+  }
+  toDefInnerString(item) {
+    return `
+            ${this.toFillSVG(item)}
+            ${this.toStrokeSVG(item)}
+        `;
+  }
+  toDefString(item) {
+    const str = this.toDefInnerString(item).trim();
+    return `
+            <defs>
+            ${str}
+            </defs>
+        `;
+  }
+  fillId(item) {
+    return this.getInnerId(item, "fill");
+  }
+  strokeId(item) {
+    return this.getInnerId(item, "stroke");
+  }
+  toFillSVG(item) {
+    return SVGFill.parseImage(item.fill || "transparent").toSVGString(this.fillId(item));
+  }
+  toStrokeSVG(item) {
+    return SVGFill.parseImage(item.stroke || "black").toSVGString(this.strokeId(item));
+  }
+  toFillValue(item) {
+    return SVGFill.parseImage(item.fill || "transparent").toFillValue(this.fillId(item));
+  }
+  toFillOpacityValue(item) {
+    return parse(item.fill || "transparent").a;
+  }
+  toStrokeValue(item) {
+    return SVGFill.parseImage(item.stroke || "black").toFillValue(this.strokeId(item));
+  }
+  toFilterValue(item) {
+    if (!item.svgfilter) {
+      return "";
+    }
+    return `url(#${item.svgfilter})`;
+  }
+  toLayoutCSS() {
+    return {};
+  }
+}
+class BooleanPathRender extends SVGItemRender {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    const $path = currentElement.$(`[data-boolean-path-id="${item.id}"]`);
+    if ($path) {
+      $path.setAttr({
+        d: item.d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      });
+      item.totalLength = $path.totalLength;
+    }
+    this.updateDefString(item, currentElement);
+  }
+  render(item) {
+    var { d } = item;
+    return this.wrappedRender(item, () => {
+      return `
+<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        class: "boolean-path-item",
+        "data-boolean-path-id": item.id,
+        d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} />
+    `;
+    });
+  }
+}
+class CircleRender extends SVGLayerRender {
+}
+class IFrameRender extends SVGLayerRender {
+  update(item, currentElement) {
+    let $iframe = currentElement.$("iframe");
+    if ($iframe) {
+      $iframe.attr("src", item.url || "about:blank");
+    }
+    super.update(item, currentElement);
+  }
+  render(item) {
+    const { width: width2, height: height2, url = "about:blank" } = item;
+    let css = this.toCSS(item);
+    return this.wrappedRender(item, () => {
+      return `
+  <foreignObject
+      width="${width2}"
+      height="${height2}"
+  >
+      <iframe 
+          xmlns="http://www.w3.org/1999/xhtml"
+          width="100%" 
+          height="100%" 
+          style="border:0px;width:100%;height:100%;pointer-events:none; ${CSS_TO_STRING(css)}" 
+          src="${url}"
+      ></iframe>
+  </foreignObject>              
+          `;
+    });
+  }
+}
+class ImageRender extends SVGLayerRender {
+  getUrl(item) {
+    var { src } = item;
+    var project2 = item.project;
+    return project2.getImageValueById(src);
+  }
+  render(item) {
+    const { width: width2, height: height2 } = item;
+    let css = this.toCSS(item);
+    return this.wrappedRender(item, () => {
+      return `
+            <foreignObject
+                width="${width2}"
+                height="${height2}"
+            >
+                <div xmlns="http://www.w3.org/1999/xhtml">
+                    <img src='${this.getUrl(item)}' style="width:100%;height:100%; ${CSS_TO_STRING(css)}"  />
+                </div>
+            </foreignObject>              
+          `;
+    });
+  }
+  update(item, currentElement) {
+    const $image = currentElement.$("img");
+    if ($image) {
+      $image.attr("src", this.getUrl(item));
+    }
+    super.update(item, currentElement);
+  }
+}
+class ProjectRender extends SVGRender {
+  render(item, renderer) {
+    return item.artboards.map((it) => {
+      return renderer.render(it, renderer);
+    });
+  }
+}
+class RectRender extends SVGLayerRender {
+}
+class SplineRender extends SVGItemRender {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      $path.setAttr({
+        d: item.d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      });
+    }
+    this.updateDefString(item, currentElement);
+  }
+  render(item) {
+    var { d } = item;
+    return this.wrappedRender(item, () => {
+      return `
+<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        class: "spline-item",
+        d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} />
+    `;
+    });
+  }
+}
+class SVGPathRender extends SVGItemRender {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      $path.setAttr({
+        d: item.d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      });
+      item.totalLength = $path.totalLength;
+    }
+    this.updateDefString(item, currentElement);
+  }
+  render(item) {
+    var { d } = item;
+    return this.wrappedRender(item, () => {
+      return `
+<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        class: "svg-path-item",
+        d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} />
+    `;
+    });
+  }
+}
+class SVGPolygonRender extends SVGItemRender {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      $path.setAttr({
+        d: item.d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      });
+    }
+    this.updateDefString(item, currentElement);
+  }
+  render(item) {
+    var { d } = item;
+    return this.wrappedRender(item, () => {
+      return `
+<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        class: "polygon-item",
+        d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} />
+    `;
+    });
+  }
+}
+class SVGStarRender extends SVGItemRender {
+  update(item, currentElement) {
+    if (!currentElement)
+      return;
+    var $path = currentElement.$("path");
+    if ($path) {
+      $path.setAttr({
+        d: item.d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      });
+    }
+    this.updateDefString(item, currentElement);
+  }
+  render(item) {
+    var { d } = item;
+    return this.wrappedRender(item, () => {
+      return `
+<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        class: "star-item",
+        d,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} />
+    `;
+    });
+  }
+}
+class SVGTextPathRender extends SVGItemRender {
+  update(item, currentElement) {
+    var $path = currentElement.$("path");
+    if ($path) {
+      $path.attr("d", item.d);
+    }
+    var $textPath = currentElement.$("textPath");
+    if ($textPath) {
+      $textPath.text(item.text);
+      $textPath.setAttr({
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item),
+        textLength: item.textLength,
+        lengthAdjust: item.lengthAdjust,
+        startOffset: item.startOffset
+      });
+    }
+    this.updateDefString(item, currentElement);
+    item.totalLength = $path.totalLength;
+  }
+  toDefInnerString(item) {
+    return `
+      ${this.toPathSVG(item)}
+      ${this.toFillSVG(item)}
+      ${this.toStrokeSVG(item)}
+    `;
+  }
+  toPathId(item) {
+    return this.getInnerId(item, "path");
+  }
+  toPathSVG(item) {
+    return `
+      <path 
+        class="svg-path-item"
+        id="${this.toPathId(item)}"
+        d="${item.d}"
+        fill="none"
+      />
+    `;
+  }
+  render(item) {
+    return this.wrappedRender(item, () => {
+      const { textLength, lengthAdjust, startOffset } = item;
+      return `
+        <textPath ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        "xlink:href": `#${this.toPathId(item)}`,
+        textLength,
+        lengthAdjust,
+        startOffset,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} >${item.text}</textPath>
+      `;
+    });
+  }
+}
+class SVGTextRender extends SVGItemRender {
+  update(item, currentElement) {
+    var $text = currentElement.$("text");
+    if ($text) {
+      $text.text(item.text);
+      $text.setAttr({
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item),
+        textLength: item.textLength,
+        lengthAdjust: item.lengthAdjust
+      });
+    }
+    this.updateDefString(item, currentElement);
+  }
+  shapeInsideId(item) {
+    return this.getInnerId(item, "shape-inside");
+  }
+  render(item) {
+    var { textLength, lengthAdjust } = item;
+    return this.wrappedRender(item, () => {
+      return `
+        <text ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        class: "svg-text-item",
+        textLength,
+        lengthAdjust,
+        filter: this.toFilterValue(item),
+        fill: this.toFillValue(item),
+        stroke: this.toStrokeValue(item)
+      }, this.toSVGAttribute(item)), {
+        style: CSS_TO_STRING(this.toCSS(item))
+      }))} >${item.text}</text>
+      `;
+    });
+  }
+}
+class TemplateRender extends SVGLayerRender {
+  update(item, currentElement) {
+    const compiledTemplate = this.compile(item);
+    let $innerHTML = currentElement.$(".inner-html");
+    if ($innerHTML) {
+      $innerHTML.updateDiff(compiledTemplate);
+    }
+    super.update(item, currentElement);
+  }
+  compile(item) {
+    return TemplateEngine.compile("dom", item.template, item.params);
+  }
+  render(item) {
+    const { id, width: width2, height: height2 } = item;
+    const compiledTemplate = this.compile(item);
+    return this.wrappedRender(item, () => {
+      return `
+            <foreignObject
+                width="${width2}"
+                height="${height2}"
+            >
+                <div  xmlns="http://www.w3.org/1999/xhtml" style="width: 100%;height:100%;">
+                    <style id="style-${id}">
+                    [data-id="${id}"] .inner-html {
+                        width: 100%; 
+                        height: 100%;
+                        position:relative;
+                        display:block;
+                        pointer-events: none; 
+                    }
+
+                    [data-id="${id}"] .inner-html > * {
+                        width: 100%; 
+                        height: 100%;
+                    }          
+                    </style>
+                    <div class="inner-html">
+                    ${compiledTemplate}
+                    </div>
+                </div>
+            </foreignObject>              
+          `;
+    });
+  }
+}
+class TextRender extends SVGLayerRender {
+  toCSS(item) {
+    let css = super.toCSS(item);
+    css.margin = css.margin || "0px";
+    css.height = "auto";
+    return css;
+  }
+  render(item) {
+    const { content: content2, width: width2, height: height2 } = item;
+    let css = this.toCSS(item);
+    return this.wrappedRender(item, () => {
+      return `
+            <foreignObject width="${width2}" height="${height2}">
+                <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)}">${content2}</p>
+            </foreignObject>              
+          `;
+    });
+  }
+  update(item, currentElement) {
+    var { content: content2 } = item;
+    currentElement.updateDiff(content2);
+  }
+}
+class VideoRender extends SVGLayerRender {
+  getUrl(item) {
+    var { src } = item;
+    var project2 = item.project;
+    return project2.getVideoValueById(src);
+  }
+  render(item) {
+    var {
+      width: width2,
+      height: height2,
+      controls,
+      muted,
+      poster,
+      loop,
+      crossorigin,
+      autoplay
+    } = item;
+    let css = this.toCSS(item);
+    return this.wrappedRender(item, () => {
+      return `
+            <foreignObject 
+                width="${width2}"
+                height="${height2}"
+                overflow="visible"
+            >
+                <video 
+                    xmlns="http://www.w3.org/1999/xhtml"
+                    controls="${controls}"
+                    src="${this.getUrl(item)}"
+                    muted="${muted}"
+                    poster="${poster}"
+                    loop="${loop}"
+                    crossorigin="${crossorigin}"
+                    autoplay="${autoplay}"
+                    style="${CSS_TO_STRING(css)};width:100%;height:100%;"></video>
+            </foreignObject>    
+            `;
+    });
+  }
+}
+function rendererSvg(editor) {
+  editor.registerRendererType("svg", new SVGRenderer(editor));
+  editor.registerRenderer("svg", "project", new ProjectRender());
+  editor.registerRenderer("svg", "artboard", new ArtBoardRender());
+  editor.registerRenderer("svg", "rect", new RectRender());
+  editor.registerRenderer("svg", "circle", new CircleRender());
+  editor.registerRenderer("svg", "image", new ImageRender());
+  editor.registerRenderer("svg", "template", new TemplateRender());
+  editor.registerRenderer("svg", "iframe", new IFrameRender());
+  editor.registerRenderer("svg", "video", new VideoRender());
+  editor.registerRenderer("svg", "text", new TextRender());
+  editor.registerRenderer("svg", "boolean-path", new BooleanPathRender());
+  editor.registerRenderer("svg", "svg-path", new SVGPathRender());
+  editor.registerRenderer("svg", "polygon", new SVGPolygonRender());
+  editor.registerRenderer("svg", "star", new SVGStarRender());
+  editor.registerRenderer("svg", "spline", new SplineRender());
+  editor.registerRenderer("svg", "svg-text", new SVGTextRender());
+  editor.registerRenderer("svg", "svg-textpath", new SVGTextPathRender());
+}
 var HTMLRenderView$1 = "";
 class HTMLRenderView extends EditorElement {
+  initialize() {
+    super.initialize();
+    rendererHtml(this.$editor);
+    rendererSvg(this.$editor);
+    this.renderer = this.$editor.renderer("html");
+  }
   initState() {
     return {
       mode: "selection",
@@ -66239,16 +66295,14 @@ class HTMLRenderView extends EditorElement {
     };
   }
   template() {
-    return `
-            <div class='elf--element-view' ref='$body'>
-                <div class='canvas-view' 
-                        data-renderer-id='${this.$editor.EDITOR_ID}' 
-                        ref='$view' 
-                        data-outline="${this.$config.get("show.outline")}"
-                ></div>
-                ${this.$injectManager.generate("render.view")}
-            </div>
-        `;
+    return `<div class='elf--element-view' ref='$body'>
+      <div class='canvas-view' 
+        data-renderer-id='${this.renderer.id}' 
+        ref='$view' 
+        data-outline="${this.$config.get("show.outline")}"
+      ></div>
+      ${this.$injectManager.generate("render.view")}
+    </div>`;
   }
   [BIND("$view")]() {
     const { translate: translate2, transformOrigin: origin, scale: scale2 } = this.$viewport;
@@ -66583,18 +66637,18 @@ class HTMLRenderView extends EditorElement {
   }
   updateElement(item) {
     if (item) {
-      this.$editor.html.update(item, this.getElement(item.id), this.$editor);
+      this.renderer.update(item, this.getElement(item.id), this.$editor);
     }
   }
   updateTimelineElement(item) {
     if (item) {
-      this.$editor.html.update(item, this.getElement(item.id), this.$editor);
+      this.renderer.update(item, this.getElement(item.id), this.$editor);
     }
   }
   refreshAllCanvas() {
     this.clearElementAll();
     const project2 = this.$context.selection.currentProject;
-    const html = this.$editor.html.render(project2, null, this.$editor) || "";
+    const html = this.renderer.render(project2, null, this.$editor) || "";
     this.refs.$view.updateDiff(html, void 0, {
       checkPassed: (oldEl, newEl) => {
         const isPassed = oldEl.getAttribute("data-id") === newEl.getAttribute("data-id");
@@ -66648,89 +66702,6 @@ class HTMLRenderView extends EditorElement {
         this.refreshElementBoundSize(child);
       });
     }
-  }
-}
-var PageTools$1 = "";
-class PageTools extends EditorElement {
-  template() {
-    return `     
-      <div class='elf--page-tools'>
-        <button type='button' ref='$minus'>${iconUse("remove2")}</button>
-        <div class='select'>
-          ${createComponent("NumberInputEditor", {
-      ref: "$scaleInput",
-      min: 10,
-      max: 240,
-      step: 1,
-      key: "scale",
-      value: this.$viewport.scale * 100,
-      onchange: this.subscribe((key, scale2) => {
-        this.$viewport.setScale(scale2 / 100);
-        this.emit(UPDATE_VIEWPORT);
-        this.trigger(UPDATE_VIEWPORT);
-      }, 1e3)
-    })}
-        </div>
-        <label>%</label>
-        <button type='button' ref='$plus'>${iconUse("add")}</button>        
-        <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${iconUse("gps_fixed")}</button>    
-        <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${iconUse("straighten")}</button>    
-        <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse("fullscreen")}</button>                        
-        ${this.$injectManager.generate("page.tools")}                             
-      </div>
-
-    `;
-  }
-  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
-    const scale2 = Math.floor(this.$viewport.scale * 100);
-    if (this.children.$scaleInput) {
-      this.children.$scaleInput.setValue(scale2);
-    }
-  }
-  [CLICK("$plus")]() {
-    const oldScale = this.$viewport.scale;
-    this.$viewport.setScale(oldScale + 0.01);
-    this.emit(UPDATE_VIEWPORT);
-    this.trigger(UPDATE_VIEWPORT);
-  }
-  [CLICK("$minus")]() {
-    const oldScale = this.$viewport.scale;
-    this.$viewport.setScale(oldScale - 0.01);
-    this.emit(UPDATE_VIEWPORT);
-    this.trigger(UPDATE_VIEWPORT);
-  }
-  [CLICK("$center")]() {
-    this.$commands.emit("moveSelectionToCenter");
-  }
-  [CLICK("$ruler")]() {
-    this.$config.toggle("show.ruler");
-  }
-  [CLICK("$fullscreen")]() {
-    this.emit("bodypanel.toggle.fullscreen");
-  }
-  [CLICK("$buttons button")](e) {
-    const itemId = e.$dt.data("item-id");
-    const pathIndex = e.$dt.data("path-index");
-    const current = this.$editor.get(itemId);
-    if (current.editablePath) {
-      this.$commands.emit("open.editor", current);
-    } else {
-      const pathList = PathParser.fromSVGString(current.absolutePath().d).toPathList();
-      this.emit("showPathEditor", "modify", {
-        box: "canvas",
-        current,
-        matrix: current.matrix,
-        d: pathList[pathIndex].d,
-        changeEvent: (data) => {
-          pathList[pathIndex].reset(data.d);
-          const newPathD = current.invertPath(PathParser.joinPathList(pathList).d).d;
-          this.$commands.executeCommand("setAttribute", "modify sub path", {
-            [itemId]: current.updatePath(newPathD)
-          });
-        }
-      });
-    }
-    this.emit("hideSelectionToolView");
   }
 }
 class CanvasView extends EditorElement {
@@ -97076,13 +97047,12 @@ var whiteboardPlugins = [
   defaultIcons,
   defaultMessages,
   defaultItems,
-  rendererHtml,
   rendererJson,
-  rendererSvg,
   baseEditor,
   propertyEditor,
   color,
   gradient,
+  sample,
   history,
   selectionInfoView,
   selectionToolView,
@@ -97094,6 +97064,60 @@ var whiteboardPlugins = [
   gradientEditorView,
   fillEditorView
 ];
+var PreviewBodyPanel$1 = "";
+class PreviewBodyPanel extends EditorElement {
+  components() {
+    return {
+      CanvasView,
+      VerticalRuler,
+      HorizontalRuler,
+      PageSubEditor
+    };
+  }
+  template() {
+    return `
+      <div class="elf--body-panel">
+        <div class="submenu-area">
+          ${createComponent("PageSubEditor", { ref: "subeditor" })}
+        </div>
+        <div class='editing-area' ref="$area">
+          <div class="canvas-layout">
+            ${createComponent("CanvasView", { ref: "canvas" })}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  [BIND("$el")]() {
+    return {
+      class: `elf--body-panel`
+    };
+  }
+  [CONFIG("show.ruler")]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
+    this.refs.$el.toggleFullscreen();
+  }
+  [CONFIG("editor.cursor")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$container");
+  }
+  [CONFIG("editor.cursor.args")]() {
+    this.state.cursor = this.$config.get("editor.cursor");
+    this.state.cursorArgs = this.$config.get("editor.cursor.args");
+    this.bindData("$area");
+  }
+  async [BIND("$area")]() {
+    const cursor = await this.$context.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
+    return {
+      style: {
+        cursor
+      }
+    };
+  }
+}
 class WhiteBoard extends BaseLayout {
   initialize() {
     super.initialize();
@@ -97114,7 +97138,7 @@ class WhiteBoard extends BaseLayout {
   }
   components() {
     return {
-      BodyPanel,
+      PreviewBodyPanel,
       PopupManager,
       KeyboardManager,
       IconManager: IconManager$1
@@ -97129,7 +97153,7 @@ class WhiteBoard extends BaseLayout {
         <div class="layout-main">
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body">
-              ${createComponent("BodyPanel")}
+              ${createComponent("PreviewBodyPanel")}
             </div>                           
           </div>
           ${createComponent("KeyboardManager")}

@@ -182,7 +182,7 @@ export class BaseModel {
    * @returns {number}
    */
   get depth() {
-    return this.manager.getDepth(this.id);
+    return this.path.length;
   }
 
   /**
@@ -191,7 +191,7 @@ export class BaseModel {
    * @returns {Item}
    */
   get top() {
-    return this.manager.getRoot(this.id);
+    return this.path.filter((it) => it.isNot("project")).shift();
   }
 
   /**
@@ -200,7 +200,7 @@ export class BaseModel {
    * @returns {Project}
    */
   get project() {
-    return this.manager.getProject(this.id);
+    return this.path.find((it) => it.is("project"));
   }
 
   /**
@@ -209,7 +209,7 @@ export class BaseModel {
    * @returns {ArtBoard}
    */
   get artboard() {
-    return this.manager.getArtBoard(this.id);
+    return this.path.find((it) => it.is("artboard"));
   }
 
   /**
@@ -218,7 +218,14 @@ export class BaseModel {
    * @returns {Item[]}
    */
   get path() {
-    return this.manager.getPath(this.id);
+    const path = [this];
+    let parent;
+
+    while ((parent = path[0].parent)) {
+      path.unshift(parent);
+    }
+
+    return path;
   }
 
   get pathIds() {
@@ -236,7 +243,7 @@ export class BaseModel {
   }
 
   get index() {
-    return this.parent.findIndex(this);
+    return this.parent?.findIndex(this);
   }
 
   get isFirst() {
@@ -262,7 +269,7 @@ export class BaseModel {
       return this;
     }
 
-    return this.parent.layers[index - 1];
+    return this.parent?.layers[index - 1];
   }
 
   get next() {
@@ -271,7 +278,7 @@ export class BaseModel {
       return this;
     }
 
-    return this.parent.layers[index + 1];
+    return this.parent?.layers[index + 1];
   }
 
   /**
@@ -812,10 +819,25 @@ export class BaseModel {
   /**
    * 부모 아이디를 가지고 있는지 체크 한다.
    *
-   * @param {string} parentId
+   * @param {string} findParentId
    */
-  hasParent(parentId) {
-    return this.#modelManager.hasParent(this.id, parentId);
+  hasParent(findParentId) {
+    return this.parentId === findParentId;
+  }
+
+  /**
+   * path 에  targetItems 가 존재하는지 찾는다.
+   *
+   * @param {BaseModel[]} targetItems
+   */
+  hasPathOf(targetItems = []) {
+    const path = this.path;
+
+    return targetItems
+      .filter((it) => it.id !== this.id)
+      .some((target) => {
+        return path.find((it) => it.id === target.id);
+      });
   }
 
   /**

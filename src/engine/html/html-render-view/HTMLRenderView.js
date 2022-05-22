@@ -17,6 +17,8 @@ import {
   PREVENT,
 } from "sapa";
 
+import rendererHtml from "../renderer/renderer-html";
+import rendererSvg from "../renderer/renderer-svg";
 import "./HTMLRenderView.scss";
 
 import { EditingMode } from "elf/editor/types/editor";
@@ -35,6 +37,15 @@ import { EditorElement } from "elf/editor/ui/common/EditorElement";
 // const cache = {};
 
 export default class HTMLRenderView extends EditorElement {
+  initialize() {
+    super.initialize();
+
+    rendererHtml(this.$editor);
+    rendererSvg(this.$editor);
+
+    this.renderer = this.$editor.renderer("html");
+  }
+
   initState() {
     return {
       mode: "selection",
@@ -49,16 +60,14 @@ export default class HTMLRenderView extends EditorElement {
 
   /** template */
   template() {
-    return /*html*/ `
-            <div class='elf--element-view' ref='$body'>
-                <div class='canvas-view' 
-                        data-renderer-id='${this.$editor.EDITOR_ID}' 
-                        ref='$view' 
-                        data-outline="${this.$config.get("show.outline")}"
-                ></div>
-                ${this.$injectManager.generate("render.view")}
-            </div>
-        `;
+    return /*html*/ `<div class='elf--element-view' ref='$body'>
+      <div class='canvas-view' 
+        data-renderer-id='${this.renderer.id}' 
+        ref='$view' 
+        data-outline="${this.$config.get("show.outline")}"
+      ></div>
+      ${this.$injectManager.generate("render.view")}
+    </div>`;
   }
 
   [BIND("$view")]() {
@@ -602,14 +611,14 @@ export default class HTMLRenderView extends EditorElement {
 
   updateElement(item) {
     if (item) {
-      this.$editor.html.update(item, this.getElement(item.id), this.$editor);
+      this.renderer.update(item, this.getElement(item.id), this.$editor);
     }
   }
 
   // 타임라인에서 객체를 업데이트 할 때 발생함.
   updateTimelineElement(item) {
     if (item) {
-      this.$editor.html.update(item, this.getElement(item.id), this.$editor);
+      this.renderer.update(item, this.getElement(item.id), this.$editor);
     }
   }
 
@@ -618,7 +627,7 @@ export default class HTMLRenderView extends EditorElement {
 
     const project = this.$context.selection.currentProject;
 
-    const html = this.$editor.html.render(project, null, this.$editor) || "";
+    const html = this.renderer.render(project, null, this.$editor) || "";
 
     this.refs.$view.updateDiff(html, undefined, {
       checkPassed: (oldEl, newEl) => {

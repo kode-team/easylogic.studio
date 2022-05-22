@@ -19,11 +19,11 @@ import { VisibleManager } from "../designeditor/managers/VisibleManager";
 import "./layout.scss";
 import whiteboardPlugins from "./plugins/whiteboard-plugins";
 
-import BodyPanel from "apps/common/BodyPanel";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
 import { BaseLayout } from "apps/common/layout/BaseLayout";
 import { PopupManager } from "apps/common/PopupManager";
+import PreviewBodyPanel from "apps/common/PreviewBodyPanel";
 
 /**
  * whiteboard system
@@ -57,7 +57,7 @@ export class WhiteBoard extends BaseLayout {
 
   components() {
     return {
-      BodyPanel,
+      PreviewBodyPanel,
       PopupManager,
       KeyboardManager,
       IconManager,
@@ -79,7 +79,7 @@ export class WhiteBoard extends BaseLayout {
         <div class="layout-main">
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body">
-              ${createComponent("BodyPanel")}
+              ${createComponent("PreviewBodyPanel")}
             </div>                           
           </div>
           ${createComponent("KeyboardManager")}

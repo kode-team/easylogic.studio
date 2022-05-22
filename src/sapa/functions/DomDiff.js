@@ -179,6 +179,10 @@ const children = (el) => {
 
 /**
  *
+ *  DomDiff 를 수행한다.
+ *
+ *  TODO: id 기반으로 reconcile 을 할 수 있도록 맞춰야 한다.
+ *
  * @param {*} A
  * @param {*} B
  * @param {object} options

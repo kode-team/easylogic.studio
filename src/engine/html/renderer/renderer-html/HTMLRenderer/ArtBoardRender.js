@@ -5,17 +5,16 @@ export default class ArtBoardRender extends DomRender {
    * Artboard 템플릿 설정
    *
    * @param {Item} item
-   * @param {Renderer} renderer
    * @override
    */
-  render(item, renderer) {
+  render(item) {
     var { id } = item;
 
     return /*html*/ `<div class="element-item artboard" data-id="${id}">${this.toDefString(
       item
     )}${item.layers
       .map((it) => {
-        return renderer.render(it, renderer);
+        return this.renderer.render(it);
       })
       .join("")}</div>`;
   }

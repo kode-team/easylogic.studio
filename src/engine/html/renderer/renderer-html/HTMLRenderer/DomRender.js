@@ -699,10 +699,10 @@ export default class DomRender extends ItemRender {
     );
   }
 
-  toStyleCode(item, renderer) {
+  toStyleCode(item) {
     const cssString = this.generateView(
       item,
-      `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`
+      `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`
     );
 
     return cssString;
@@ -713,10 +713,10 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    * @param {HtmlRenderer} renderer
    */
-  toStyle(item, renderer) {
+  toStyle(item) {
     const cssString = this.generateView(
       item,
-      `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`
+      `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`
     );
     return (
       /*html*/ `
@@ -726,16 +726,16 @@ ${cssString}
     ` +
       item.layers
         .map((it) => {
-          return renderer.toStyle(it, renderer);
+          return this.renderer.toStyle(it);
         })
         .join("")
     );
   }
 
-  toStyleData(item, renderer) {
+  toStyleData(item) {
     const cssString = this.generateView(
       item,
-      `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`
+      `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`
     );
 
     return {
@@ -747,9 +747,8 @@ ${cssString}
   /**
    *
    * @param {Item} item
-   * @param {HtmlRenderer} renderer
    */
-  toExportStyle(item, renderer) {
+  toExportStyle(item) {
     const cssString = this.generateView(
       item,
       `.element-item[data-id='${item.id}']`
@@ -762,7 +761,7 @@ ${cssString}
     ` +
       item.layers
         .map((it) => {
-          return renderer.toExportStyle(it, renderer);
+          return this.renderer.toExportStyle(it);
         })
         .join("")
     );
@@ -772,19 +771,20 @@ ${cssString}
    * 처음 렌더링 할 때
    *
    * @param {Item} item
-   * @param {Renderer} renderer
    * @override
    */
-  render(item, renderer) {
+  render(item) {
     var { elementType, id, name, itemType, isBooleanItem } = item;
 
     const tagName = elementType || "div";
 
-    return /*html*/ `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(
+    return /*html*/ `<${tagName} id="${this.uniqueId(
+      item
+    )}" class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(
       item
     )}${item.layers
       .map((it) => {
-        return renderer.render(it, renderer);
+        return this.renderer.render(it);
       })
       .join("")}</${tagName}>`;
   }
@@ -840,10 +840,7 @@ ${cssString}
   updateStyle(item) {
     // style 태그를 만들어서 캐쉬에 넣어두자.
     if (item.hasCache("style")) {
-      const styleText = this.toStyleData(
-        item,
-        item.manager.editor.html
-      ).cssString;
+      const styleText = this.toStyleData(item).cssString;
 
       if (item.hasCache("styleText")) {
         // 기존의 styleText 와 같다면 아무것도 하지 않는다.
@@ -856,11 +853,11 @@ ${cssString}
 
       item.getCache("style").text(styleText);
     } else {
-      const style = Dom.createByHTML(
-        this.toStyleData(item, item.manager.editor.html).styleTag
-      );
+      const styleData = this.toStyleData(item);
+      const style = Dom.createByHTML(styleData.styleTag);
 
       item.addCache("style", style);
+      item.addCache("styleText", styleData.cssString);
 
       document.head.appendChild(style.el);
     }

@@ -18,7 +18,6 @@ import {
 import "./CanvasView.scss";
 import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
 import DragAreaView from "./render-view/draw-panels/DragAreaView";
-import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
 import PageTools from "./render-view/util-panels/PageTools";
 
 import { EditingMode } from "elf/editor/types/editor";
@@ -31,6 +30,7 @@ import {
 } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
+import HTMLRenderView from "engine/html/html-render-view/HTMLRenderView";
 
 export default class CanvasView extends EditorElement {
   components() {

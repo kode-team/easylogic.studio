@@ -1,5 +1,6 @@
-import commands from "../../designeditor/plugins/commands";
+// import configs from "./configs";
 
+import commands from "apps/designeditor/plugins/commands";
 import defaultItems from "apps/designeditor/plugins/default-items";
 import fillEditorView from "apps/designeditor/plugins/fill-editor-view";
 import gradient from "apps/designeditor/plugins/gradient";
@@ -10,9 +11,8 @@ import hoverView from "apps/designeditor/plugins/hover-view";
 import layerAppendView from "apps/designeditor/plugins/layer-append-view";
 import pathDrawView from "apps/designeditor/plugins/path-draw-view";
 import pathEditorView from "apps/designeditor/plugins/path-editor-view";
-import rendererHtml from "apps/designeditor/plugins/renderer-html";
 import rendererJson from "apps/designeditor/plugins/renderer-json";
-import rendererSvg from "apps/designeditor/plugins/renderer-svg";
+import sample from "apps/designeditor/plugins/sample";
 import selectionInfoView from "apps/designeditor/plugins/selection-info-view";
 import selectionToolView from "apps/designeditor/plugins/selection-tool-view";
 import baseEditor from "plugins/base-editor";
@@ -29,9 +29,9 @@ export default [
   defaultMessages,
   defaultItems,
 
-  rendererHtml,
+  // configs,
+
   rendererJson,
-  rendererSvg,
 
   // common editor
 
@@ -40,7 +40,7 @@ export default [
 
   color,
   gradient,
-
+  sample,
   // inspector.tab.style
 
   // depth,

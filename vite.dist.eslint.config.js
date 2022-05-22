@@ -18,6 +18,7 @@ export default defineConfig({
       "elf/core": path.resolve(__dirname, "./src/elf/core"),      
       elf: path.resolve(__dirname, "./src/elf"),
       sapa: path.resolve(__dirname, "./src/sapa"),
+      engine: path.resolve(__dirname, "./src/engine"),
       style: path.resolve(__dirname, "./src/scss"),
       plugins: path.resolve(__dirname, "./src/plugins"),
       "export-library": path.resolve(__dirname, "./src/export-library"),

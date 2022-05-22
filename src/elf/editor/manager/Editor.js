@@ -352,14 +352,6 @@ export class Editor {
     return this.context.renderers.getRenderer(rendererType);
   }
 
-  get html() {
-    return this.renderer("html");
-  }
-
-  get svg() {
-    return this.renderer("svg");
-  }
-
   /**
    *
    * @returns {JSONRenderer}

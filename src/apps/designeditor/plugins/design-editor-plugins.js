@@ -43,9 +43,9 @@ import pathTool from "./path-tool";
 import patternAsset from "./pattern-asset";
 import position from "./position";
 import project from "./project";
-import rendererHtml from "./renderer-html";
+// import rendererHtml from "../../../engine/html/renderer/renderer-html";
 import rendererJson from "./renderer-json";
-import rendererSvg from "./renderer-svg";
+// import rendererSvg from "../../../engine/html/renderer/renderer-svg";
 import sample from "./sample";
 import selectionInfoView from "./selection-info-view";
 import selectionToolView from "./selection-tool-view";
@@ -78,9 +78,9 @@ export default [
   defaultItems,
   defaultPatterns,
 
-  rendererHtml,
+  // rendererHtml,
   rendererJson,
-  rendererSvg,
+  // rendererSvg,
 
   // common editor
 

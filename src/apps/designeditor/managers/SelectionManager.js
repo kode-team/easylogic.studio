@@ -284,10 +284,7 @@ export class SelectionManager {
   }
 
   hasPathOf(item) {
-    return this.modelManager.hasPathOf(
-      this.items.filter((it) => it.isNot("artboard")),
-      item
-    );
+    return item.hasPathOf(this.items.filter((it) => it.isNot("artboard")));
   }
 
   hasParent(parentId) {

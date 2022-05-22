@@ -155,7 +155,7 @@ export default class BooleanPathRender extends SVGItemRender {
     }
   }
 
-  render(item, renderer) {
+  render(item) {
     var { id, name, itemType } = item;
 
     return /*html*/ `    
@@ -163,7 +163,7 @@ export default class BooleanPathRender extends SVGItemRender {
   ${this.toDefString(item)}
   ${item.layers
     .map((it) => {
-      return renderer.render(it, renderer);
+      return this.renderer.render(it);
     })
     .join("")}
   <svg xmlns="http://www.w3.org/2000/svg" class="boolean-path-item" width="100%" height="100%" overflow="visible">

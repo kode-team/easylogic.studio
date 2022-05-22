@@ -1,4 +1,4 @@
-import { isFunction, clone } from "sapa";
+import { isFunction } from "sapa";
 
 const identity = () => true;
 
@@ -149,21 +149,21 @@ export class ModelManager {
     this.setChanged("removeChild", rootId, { childId });
   }
 
-  /**
-   * 부모 아이디를 가지고 있는지 체크 한다.
-   *
-   * @param {string} parentId
-   */
-  hasParent(rootId, parentId) {
-    const obj = this.get(rootId);
+  // /**
+  //  * 부모 아이디를 가지고 있는지 체크 한다.
+  //  *
+  //  * @param {string} parentId
+  //  */
+  // hasParent(rootId, parentId) {
+  //   const obj = this.get(rootId);
 
-    const isParent = obj.parentId === parentId;
+  //   const isParent = obj.parentId === parentId;
 
-    if (!isParent && obj.parent.is("project") === false)
-      return this.hasParent(obj.parentId, parentId);
+  //   if (!isParent && obj.parent.is("project") === false)
+  //     return this.hasParent(obj.parentId, parentId);
 
-    return isParent;
-  }
+  //   return isParent;
+  // }
 
   /**
    * @returns {ComponentManager}
@@ -191,21 +191,21 @@ export class ModelManager {
     return ids.map((id) => this.get(id));
   }
 
-  /**
-   * searchItem 의 path 에  targetItems 가 존재하는지 찾는다.
-   *
-   * @param {BaseModel[]} targetItems
-   * @param {BaseModel} searchItem
-   */
-  hasPathOf(targetItems, searchItem) {
-    const path = this.getPath(searchItem.id, searchItem);
+  // /**
+  //  * searchItem 의 path 에  targetItems 가 존재하는지 찾는다.
+  //  *
+  //  * @param {BaseModel[]} targetItems
+  //  * @param {BaseModel} searchItem
+  //  */
+  // hasPathOf(targetItems, searchItem) {
+  //   const path = this.getPath(searchItem.id, searchItem);
 
-    return targetItems
-      .filter((it) => it.id !== searchItem.id)
-      .some((target) => {
-        return path.find((it) => it.id === target.id);
-      });
-  }
+  //   return targetItems
+  //     .filter((it) => it.id !== searchItem.id)
+  //     .some((target) => {
+  //       return path.find((it) => it.id === target.id);
+  //     });
+  // }
 
   /**
    * 해당 id 를 가진 item 의 group 을 찾는다.
@@ -419,26 +419,26 @@ export class ModelManager {
     return this.getDepth(parent.id) + 1;
   }
 
-  /**
-   * 최상위 부모 찾기
-   *
-   */
-  getRoot(rootId) {
-    const obj = this.get(rootId);
-    const parent = this.getParent(rootId);
-    if (!parent) return obj;
+  // /**
+  //  * 최상위 부모 찾기
+  //  *
+  //  */
+  // getRoot(rootId) {
+  //   const obj = this.get(rootId);
+  //   const parent = this.getParent(rootId);
+  //   if (!parent) return obj;
 
-    let localParent = parent;
-    do {
-      const nextParent = this.getParent(localParent.id);
+  //   let localParent = parent;
+  //   do {
+  //     const nextParent = this.getParent(localParent.id);
 
-      if (!nextParent) {
-        return localParent;
-      }
+  //     if (!nextParent) {
+  //       return localParent;
+  //     }
 
-      localParent = nextParent;
-    } while (localParent);
-  }
+  //     localParent = nextParent;
+  //   } while (localParent);
+  // }
 
   /**
    * 상속 구조 안에서 instance 리스트
@@ -458,67 +458,67 @@ export class ModelManager {
     return list;
   }
 
-  /**
-   * path 안에서 itemType 에 맞는  item 을 찾는다.
-   *
-   * @param {string} rootId
-   * @param {string} itemType
-   * @returns {BaseModel}
-   */
-  getModelTypeInPath(rootId, itemType) {
-    return this.getPath(rootId).find((it) => it && it.is(itemType));
-  }
+  // /**
+  //  * path 안에서 itemType 에 맞는  item 을 찾는다.
+  //  *
+  //  * @param {string} rootId
+  //  * @param {string} itemType
+  //  * @returns {BaseModel}
+  //  */
+  // getModelTypeInPath(rootId, itemType) {
+  //   return this.getPath(rootId).find((it) => it && it.is(itemType));
+  // }
 
-  /**
-   * rootId 기준으로 path 를 구하고
-   * path 에 targetId 가 존재하는지 체크하고
-   * item 을 리턴한다.
-   *
-   * @param {string} rootId
-   * @param {string} targetId
-   * @returns {BaseModel}
-   */
-  getItemInPath(rootId, targetId) {
-    return this.getPath(rootId).find((it) => it && it.id === targetId);
-  }
+  // /**
+  //  * rootId 기준으로 path 를 구하고
+  //  * path 에 targetId 가 존재하는지 체크하고
+  //  * item 을 리턴한다.
+  //  *
+  //  * @param {string} rootId
+  //  * @param {string} targetId
+  //  * @returns {BaseModel}
+  //  */
+  // getItemInPath(rootId, targetId) {
+  //   return this.getPath(rootId).find((it) => it && it.id === targetId);
+  // }
 
-  getProject(rootId) {
-    return this.getModelTypeInPath(rootId, "project");
-  }
+  // getProject(rootId) {
+  //   return this.getModelTypeInPath(rootId, "project");
+  // }
 
-  getArtBoard(rootId) {
-    return this.getModelTypeInPath(rootId, "artboard");
-  }
+  // getArtBoard(rootId) {
+  //   return this.getModelTypeInPath(rootId, "artboard");
+  // }
 
-  is(rootId, checkItemType) {
-    const obj = this.get(rootId);
-    return checkItemType === obj.itemType;
-  }
+  // is(rootId, checkItemType) {
+  //   const obj = this.get(rootId);
+  //   return checkItemType === obj.itemType;
+  // }
 
-  isNot(rootId, checkItemType) {
-    return this.is(rootId, checkItemType) === false;
-  }
+  // isNot(rootId, checkItemType) {
+  //   return this.is(rootId, checkItemType) === false;
+  // }
 
-  /**
-   * 지정된 필드의 값을 object 형태로 리턴한다.
-   *
-   * @param {string} rootId
-   * @param  {...string} args 필드 리스트
-   */
-  attrs(rootId, ...args) {
-    const obj = this.get(rootId);
-    const result = {};
+  // /**
+  //  * 지정된 필드의 값을 object 형태로 리턴한다.
+  //  *
+  //  * @param {string} rootId
+  //  * @param  {...string} args 필드 리스트
+  //  */
+  // attrs(rootId, ...args) {
+  //   const obj = this.get(rootId);
+  //   const result = {};
 
-    args.forEach((field) => {
-      result[field] = clone(obj[field]);
-    });
+  //   args.forEach((field) => {
+  //     result[field] = clone(obj[field]);
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 
-  hasChildren(rootId) {
-    return this.get(rootId)?.children.length > 0;
-  }
+  // hasChildren(rootId) {
+  //   return this.get(rootId)?.children.length > 0;
+  // }
 
   /**
    * clone Item
@@ -533,28 +533,7 @@ export class ModelManager {
     return item;
   }
 
-  reset(rootId, obj) {
-    return this.get(rootId)?.reset(obj);
-  }
-  /**
-   * 모델을 특정 itemType 의 인스턴스로 만들어준다.
-   *
-   * @param {string} rootId
-   * @param {string} itemType
-   */
-  replaceByType(rootId, itemType) {
-    const item = this.get(rootId);
-
-    if (item) {
-      const json = item.toCloneObject(false);
-
-      // itemType 을 삭제
-      delete json.itemType;
-
-      const newInstance = this.components.createComponent(itemType, json);
-      newInstance.setModelManager(this);
-
-      this.set(rootId, newInstance);
-    }
-  }
+  // reset(rootId, obj) {
+  //   return this.get(rootId)?.reset(obj);
+  // }
 }

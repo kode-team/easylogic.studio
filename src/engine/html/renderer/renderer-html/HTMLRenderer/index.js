@@ -1,6 +1,7 @@
 import { isFunction } from "sapa";
 
 import { CSS_TO_STRING, TAG_TO_STRING } from "elf/core/func";
+import { uuid } from "elf/core/math";
 
 const char_list = [/\(/gi, /\)/gi];
 
@@ -64,51 +65,63 @@ function modifyNewLine(str) {
 }
 
 export default class HTMLRenderer {
+  #id;
+  #renderers = {};
   /**
    *
    * @param {Editor} editor
    */
   constructor(editor) {
     this.editor = editor;
+    this.#id = uuid();
+  }
+
+  setRendererType(itemType, renderInstance) {
+    renderInstance.setRenderer(this);
+    this.#renderers[itemType] = renderInstance;
   }
 
   get id() {
-    return this.editor.EDITOR_ID;
+    return this.#id;
   }
 
   getDefaultRendererInstance() {
-    return this.editor.getRendererInstance("html", "rect");
+    return this.#renderers["rect"];
   }
 
   getRendererInstance(item) {
-    return (
+    const currentRenderer =
+      this.#renderers[item.itemType] ||
       this.editor.getRendererInstance("html", item.itemType) ||
       this.getDefaultRendererInstance() ||
-      item
-    );
+      item;
+
+    currentRenderer.setRenderer(this);
+
+    return currentRenderer;
   }
 
   /**
    *
    * @param {BaseModel} item
    */
-  render(item, renderer) {
+  render(item) {
     if (!item) return;
     const currentRenderer = this.getRendererInstance(item);
 
     if (currentRenderer) {
-      return currentRenderer.render(item, renderer || this);
+      return currentRenderer.render(item);
     }
   }
 
-  renderSVG(item, renderer) {
+  renderSVG(item) {
     const currentRenderer = this.getRendererInstance(item);
 
     if (isFunction(currentRenderer.renderSVG)) {
-      return currentRenderer.renderSVG(item, renderer || this);
+      return currentRenderer.renderSVG(item);
     }
 
-    return this.getDefaultRendererInstance().renderSVG(item, renderer || this);
+    return this.getDefaultRendererInstance().renderSVG(item);
   }
 
   to(type, item) {
@@ -174,27 +187,24 @@ export default class HTMLRenderer {
    *
    * @param {BaseModel} item
    */
-  toStyle(item, renderer) {
+  toStyle(item) {
     const currentRenderer = this.getRendererInstance(item);
 
     if (isFunction(currentRenderer.toStyle)) {
-      return currentRenderer.toStyle(item, renderer || this);
+      return currentRenderer.toStyle(item);
     }
 
-    return this.getDefaultRendererInstance().toStyle(item, renderer || this);
+    return this.getDefaultRendererInstance().toStyle(item);
   }
 
-  toStyleData(item, renderer) {
+  toStyleData(item) {
     const currentRenderer = this.getRendererInstance(item);
 
     if (isFunction(currentRenderer.toStyleData)) {
-      return currentRenderer.toStyleData(item, renderer || this);
+      return currentRenderer.toStyleData(item);
     }
 
-    return this.getDefaultRendererInstance().toStyleData(
-      item,
-      renderer || this
-    );
+    return this.getDefaultRendererInstance().toStyleData(item);
   }
 
   /**
@@ -203,17 +213,14 @@ export default class HTMLRenderer {
    *
    * @param {BaseModel} item
    */
-  toExportStyle(item, renderer) {
+  toExportStyle(item) {
     const currentRenderer = this.getRendererInstance(item);
 
     if (isFunction(currentRenderer.toExportStyle)) {
-      return currentRenderer.toExportStyle(item, renderer || this);
+      return currentRenderer.toExportStyle(item);
     }
 
-    return this.getDefaultRendererInstance().toExportStyle(
-      item,
-      renderer || this
-    );
+    return this.getDefaultRendererInstance().toExportStyle(item);
   }
 
   /**
@@ -225,7 +232,7 @@ export default class HTMLRenderer {
     const currentRenderer = this.getRendererInstance(item);
 
     if (isFunction(currentRenderer.update)) {
-      return currentRenderer.update(item, currentElement, editor, this);
+      return currentRenderer.update(item, currentElement, editor);
     }
 
     return this.getDefaultRendererInstance().update(
@@ -244,7 +251,7 @@ export default class HTMLRenderer {
       return "";
     }
 
-    const currentProject = item.top;
+    const currentProject = item.project;
     let keyframeCode = modifyNewLine(
       filterKeyName(currentProject ? currentProject.toKeyframeString() : "")
     );

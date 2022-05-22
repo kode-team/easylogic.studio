@@ -58,7 +58,7 @@ export default class CSSTextureView extends EditorElement {
 
   [LOAD("$css-list")]() {
     return cssPatterns.map((it, index) => {
-      const svg = this.$editor.svg.render(
+      const svg = this.$editor.renderer("svg").render(
         this.$model.createModel(
           {
             itemType: it.itemType,
