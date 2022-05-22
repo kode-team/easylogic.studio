@@ -27,10 +27,11 @@ export class ViewportManager {
     this.canvasSize = null;
     this.cachedViewport = rectToVerties(0, 0, 0, 0);
     this.mouse = vec3.create();
+    this.scaleMax = 100000;
     this.scale = 1;
-    (this.translate = vec3.create()),
-      (this.transformOrigin = vec3.create()),
-      (this.maxScale = 250);
+    this.translate = vec3.create();
+    this.transformOrigin = vec3.create();
+    this.maxScale = 25;
     this.minScale = 0.02;
     this.zoomFactor = 1;
 
@@ -67,6 +68,7 @@ export class ViewportManager {
    */
   setScale(scale) {
     this.scale = Math.min(Math.max(this.minScale, scale), this.maxScale);
+    this.scaleMax = this.scale * 100000;
     this.resetWorldMatrix();
   }
 

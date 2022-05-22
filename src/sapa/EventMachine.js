@@ -2,8 +2,10 @@ import { Dom } from "./functions/Dom";
 import { isFunction, keyEach, collectProps, isObject } from "./functions/func";
 import { MagicMethod } from "./functions/MagicMethod";
 import {
+  createHandlerInstance,
   getVariable,
   hasVariable,
+  registHandler,
   retriveElement,
   spreadVariable,
 } from "./functions/registElement";
@@ -12,6 +14,15 @@ import BindHandler from "./handler/BindHandler";
 import CallbackHandler from "./handler/CallbackHandler";
 import DomEventHandler from "./handler/DomEventHandler";
 import ObserverHandler from "./handler/ObserverHandler";
+import StoreHandler from "./handler/StoreHandler";
+
+registHandler({
+  BindHandler,
+  CallbackHandler,
+  DomEventHandler,
+  ObserverHandler,
+  StoreHandler,
+});
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
@@ -42,7 +53,7 @@ export class EventMachine {
   #propsKeys = {};
   #isServer = false;
   #propsKeyList = [];
-  #prefLoadTemplate = {};
+  // #prefLoadTemplate = {};
 
   constructor(opt, props) {
     this.refs = {};
@@ -147,12 +158,7 @@ export class EventMachine {
   }
 
   initializeHandler() {
-    return [
-      new BindHandler(this),
-      new DomEventHandler(this),
-      new CallbackHandler(this),
-      new ObserverHandler(this),
-    ];
+    return createHandlerInstance(this);
   }
 
   /**
@@ -308,7 +314,9 @@ export class EventMachine {
    * @returns {Object}
    */
   components() {
-    return {};
+    return {
+      ...this.parent.childComponents,
+    };
   }
 
   /**
@@ -372,16 +380,7 @@ export class EventMachine {
    * @param {Boolean} [isLoad=false]
    */
   parseTemplate(html, isLoad) {
-    /////////////////////////////////////////////////////////////////
-    //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자.
-    if (Array.isArray(html)) {
-      html = html.join("");
-    }
-
-    html = (html || "").trim();
-
-    const list = TEMP_DIV.html(html).childNodes || [];
-    ///////////////////////////////////////////////////////////////
+    let list = Dom.makeElementList(html);
 
     for (var i = 0, len = list.length; i < len; i++) {
       const $el = list[i];
@@ -424,6 +423,8 @@ export class EventMachine {
       return list[0];
     }
 
+    // list 를 fragment 로 전환하기
+    TEMP_DIV.append(list);
     return TEMP_DIV.createChildrenFragment();
   }
 
@@ -710,23 +711,16 @@ export class EventMachine {
     const refTarget = this.refs[elName];
 
     if (refTarget) {
-      var newTemplate = await magicMethod.execute(...args);
+      const newTemplate = await magicMethod.execute(...args);
 
-      if (Array.isArray(newTemplate)) {
-        newTemplate = newTemplate.join("");
-      }
+      // console.log(newTemplate);
 
-      if (this.#prefLoadTemplate[elName] != newTemplate) {
-        this.#prefLoadTemplate[elName] = newTemplate;
-        // create fragment
-        const fragment = this.parseTemplate(newTemplate, true);
-        if (isDomDiff) {
-          refTarget.htmlDiff(fragment);
-        } else {
-          refTarget.html(fragment);
-        }
+      // create fragment
+      const fragment = this.parseTemplate(newTemplate, true);
+      if (isDomDiff) {
+        refTarget.htmlDiff(fragment);
       } else {
-        // console.log("newTemplate", newTemplate);
+        refTarget.html(fragment);
       }
 
       this.refreshElementReference(refTarget, elName);
@@ -839,5 +833,31 @@ export class EventMachine {
     return this.collectMethodes(refreshCache).filter((it) => {
       return it.method === methodKey;
     });
+  }
+
+  /**
+   * 자식 컴포넌트를 찾는다.
+   *
+   * @param {EventMachine} BaseComponent
+   * @returns
+   */
+  findChildren(BaseComponent) {
+    return this.props.contentChildren.filter(
+      (it) => it.component === BaseComponent
+    );
+  }
+
+  /**
+   * 자식 객체의 content 를 확인
+   *
+   * @param {function} filterCallback
+   * @param {any} defaultValue
+   * @returns
+   */
+  getChildContent(filterCallback, defaultValue = "") {
+    return (
+      this.props.contentChildren.find(filterCallback)?.props.content ||
+      defaultValue
+    );
   }
 }

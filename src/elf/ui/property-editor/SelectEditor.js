@@ -1,4 +1,4 @@
-import { LOAD, CHANGE, BIND, DOMDIFF } from "sapa";
+import { CHANGE, BIND } from "sapa";
 
 import "./SelectEditor.scss";
 
@@ -39,6 +39,25 @@ export default class SelectEditor extends EditorElement {
     };
   }
 
+  getOptionString() {
+    var arr = this.state.options.map((it) => {
+      var value = it.value;
+      var label = it.text || it.value;
+
+      if (label === "") {
+        label = this.props["none-value"] ? this.props["none-value"] : "";
+      } else if (label === "-") {
+        label = "----------";
+        value = "";
+      }
+      var selected = value === this.state.value ? "selected" : "";
+      const disabled = it.disabled ? "disabled" : "";
+      return `<option ${selected} value="${value}" ${disabled}>${label}</option>`;
+    });
+
+    return arr.join("");
+  }
+
   template() {
     var { label, title, tabIndex, value = BlendMode.NORMAL } = this.state;
     var hasLabel = label ? "has-label" : "";
@@ -53,7 +72,9 @@ export default class SelectEditor extends EditorElement {
             <div class='elf--select-editor ${hasLabel} ${compact}'>
                 ${label ? `<label title="${title}">${label}</label>` : ""}
                 <div class="editor-view">
-                    <select ref='$options' ${hasTabIndex}></select>
+                    <select ref='$options' ${hasTabIndex}>
+                        ${this.getOptionString()}
+                    </select>
                     <div class='selected-value'>
                         <span class='value' ref="$selectedValue">${value}</span>
                         <span class='expand' ref='$expand'>${iconUse(
@@ -70,9 +91,10 @@ export default class SelectEditor extends EditorElement {
   }
 
   setValue(value) {
-    this.state.value = value + "";
     this.refs.$options.val(this.state.value);
-    this.refresh();
+    this.setState({
+      value: value + "",
+    });
   }
 
   [BIND("$options")]() {
@@ -88,24 +110,24 @@ export default class SelectEditor extends EditorElement {
     };
   }
 
-  [LOAD("$options") + DOMDIFF]() {
-    var arr = this.state.options.map((it) => {
-      var value = it.value;
-      var label = it.text || it.value;
+  // [LOAD("$options") + DOMDIFF]() {
+  //   var arr = this.state.options.map((it) => {
+  //     var value = it.value;
+  //     var label = it.text || it.value;
 
-      if (label === "") {
-        label = this.props["none-value"] ? this.props["none-value"] : "";
-      } else if (label === "-") {
-        label = "----------";
-        value = "";
-      }
-      var selected = value === this.state.value ? "selected" : "";
-      const disabled = it.disabled ? "disabled" : "";
-      return `<option ${selected} value="${value}" ${disabled}>${label}</option>`;
-    });
+  //     if (label === "") {
+  //       label = this.props["none-value"] ? this.props["none-value"] : "";
+  //     } else if (label === "-") {
+  //       label = "----------";
+  //       value = "";
+  //     }
+  //     var selected = value === this.state.value ? "selected" : "";
+  //     const disabled = it.disabled ? "disabled" : "";
+  //     return `<option ${selected} value="${value}" ${disabled}>${label}</option>`;
+  //   });
 
-    return arr;
-  }
+  //   return arr;
+  // }
 
   [CHANGE("$options")]() {
     this.updateData({

@@ -11,6 +11,7 @@ import {
   UPDATE_VIEWPORT,
   REFRESH_SELECTION,
   UPDATE_CANVAS,
+  REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -114,7 +115,7 @@ export default class GuideLineView extends EditorElement {
     // const layerLine = this.createLayerLine();
 
     return {
-      svgDiff: /*html*/ `<g>${line}</g>`,
+      svgDiff: /*html*/ `<svg>${line}</svg>`,
     };
   }
 
@@ -282,18 +283,6 @@ export default class GuideLineView extends EditorElement {
     });
   }
 
-  [SUBSCRIBE("removeGuideLine", REFRESH_SELECTION)]() {
-    this.removeGuideLine();
-  }
-
-  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
-    return this.refreshSmartGuides(targetVertiesList);
-  }
-
-  [SUBSCRIBE(UPDATE_VIEWPORT)]() {
-    this.refreshSmartGuidesForVerties(1);
-  }
-
   refreshSmartGuides(targetVertiesList) {
     if (this.$context.selection.isEmpty) return;
 
@@ -358,6 +347,22 @@ export default class GuideLineView extends EditorElement {
     this.setGuideLine(guides, true);
   }
 
+  [SUBSCRIBE("removeGuideLine", REFRESH_SELECTION)]() {
+    this.removeGuideLine();
+  }
+
+  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
+    return this.refreshSmartGuides(targetVertiesList);
+  }
+
+  get currentDistWithScale() {
+    return 1 / this.$viewport.scale;
+  }
+
+  [SUBSCRIBE(UPDATE_VIEWPORT, REFRESH_SELECTION_TOOL)]() {
+    this.refreshSmartGuidesForVerties(this.currentDistWithScale);
+  }
+
   [SUBSCRIBE(UPDATE_CANVAS)]() {
     // if (this.$context.selection.isMany) return;
 
@@ -365,7 +370,7 @@ export default class GuideLineView extends EditorElement {
 
     if (!expect) {
       // viewport.scale 로 나눠줘야 픽셀 자체의 크기가 커진다.
-      this.refreshSmartGuidesForVerties(1 / this.$viewport.scale);
+      this.refreshSmartGuidesForVerties(this.currentDistWithScale);
     }
   }
 }

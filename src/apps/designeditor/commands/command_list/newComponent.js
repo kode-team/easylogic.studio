@@ -1,5 +1,4 @@
 import { PathParser } from "elf/core/parser/PathParser";
-import { REFRESH_SELECTION } from "elf/editor/types/event";
 
 /**
  * 새로운 객체 생성
@@ -71,7 +70,6 @@ export default function newComponent(
 
     if (isSelected) {
       editor.context.selection.select(item);
-      editor.emit(REFRESH_SELECTION);
     }
   });
 }

@@ -50,7 +50,7 @@ export default class ImageRender extends LayerRender {
    * @param {Dom} currentElement
    */
   update(item, currentElement) {
-    const $image = currentElement.$("img");
+    const $image = currentElement?.$("img");
     if ($image) {
       $image.attr("src", this.getUrl(item));
     }

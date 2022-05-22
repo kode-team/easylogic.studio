@@ -1,0 +1,129 @@
+$top-size: 48px;
+$tool-size: 0px;
+$left-size: 340px;
+$left-layer-panel: 70px;
+$left-page-size: 70px;
+$toggle-left-size: 80px;
+$right-size: 280px;
+$timeline-animation-size: 200px;
+$timeline-property-size: 270px;
+$timeline-header-size: 40px;
+$timeline-size: 300px;
+$show-timeline-animation: all 0.05s linear;
+$footer-height: 0px;
+$status-bar-height: 0px;
+
+
+.elf--default-layout-container {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+  .elf--default-layout {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    .layout-top {
+      height: $top-size;
+      // border-bottom: 1px solid var(--elf--border-color);
+      box-sizing: border-box;
+      z-index: 10000;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      // background-color: var(--elf--background-color);
+    }
+
+    .layout-middle {
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      top: $top-size;
+      bottom: $status-bar-height;
+      box-sizing: border-box;
+      overflow: hidden;
+      // background-color: var(--elf--background-color);
+      // background-image: linear-gradient(45deg, rgb(0, 29, 72) 0%, var(--elf--background-color) 100%);
+
+      .layout-header {
+        display: none;
+        top: 0px;
+        left: $left-size;
+        right: $right-size;
+        height: $tool-size;
+        position: absolute;
+        background-color: var(--elf--header-background-color);
+        color: var(--elf--selected-font-color);
+        box-sizing: border-box;
+        // border-bottom: 1px solid var(--elf--border-color);
+      }
+
+      > .splitter {
+        position: absolute;
+        left: $left-size;
+        width: 4px;
+        top: 0px;
+        bottom: 0px;
+        cursor: ew-resize;
+        z-index: 1;
+        transition: background-color 0.05s linear;
+
+        &:hover,
+        &.selected {
+          background-color: var(--elf--selected-color);
+        }
+      }
+
+      > .toggleLeft {
+        left: $left-size;
+      }
+
+      > .toggleRight {
+        right: $right-size;
+      }
+
+      .layout-left {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        bottom: $footer-height;
+        width: $left-size;
+        display: inline-block;
+
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--elf--layout-border-color);
+        box-sizing: border-box;
+      }
+
+      .layout-right {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        bottom: $footer-height;
+        width: $right-size;
+        display: inline-block;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+        // transition: bottom 0.05s linear;
+        border-left: 1px solid var(--elf--layout-border-color);
+      }
+
+      .layout-body {
+        top: $tool-size;
+        left: $left-size;
+        right: $right-size;
+        bottom: $footer-height;
+        position: absolute;
+      }
+    }
+  }

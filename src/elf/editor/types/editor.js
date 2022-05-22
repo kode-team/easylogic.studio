@@ -9,6 +9,7 @@ export const EditingMode = {
   APPEND: "append",
   DRAW: "draw",
   PATH: "path",
+  HAND: "hand",
 };
 
 export const DesignMode = {

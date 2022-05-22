@@ -1,12 +1,4 @@
-import {
-  CLICK,
-  SUBSCRIBE,
-  CONFIG,
-  LOAD,
-  DOMDIFF,
-  createComponent,
-  classnames,
-} from "sapa";
+import { CLICK, SUBSCRIBE, createComponent } from "sapa";
 
 import "./PageTools.scss";
 
@@ -46,14 +38,6 @@ export default class PageTools extends EditorElement {
         <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse(
           "fullscreen"
         )}</button>                        
-        <button type='button' ref='$pantool' class="${classnames({
-          on: this.$config.get("set.tool.hand"),
-        })}" data-tooltip="Hand | H" data-direction="top">${iconUse(
-      "pantool"
-    )}</button>   
-        <!--span class="divider">|</span>
-        <button type="button" ref="$selectedCount" style="color:var(--elf--selected-color);font-weight: bold;text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1)"></button-->
-        <!--span ref="$buttons"></span-->
         ${this.$injectManager.generate(
           "page.tools"
         )}                             
@@ -86,10 +70,6 @@ export default class PageTools extends EditorElement {
 
   [CLICK("$center")]() {
     this.$commands.emit("moveSelectionToCenter");
-  }
-
-  [CLICK("$pantool")]() {
-    this.$config.toggle("set.tool.hand");
   }
 
   [CLICK("$ruler")]() {
@@ -133,55 +113,5 @@ export default class PageTools extends EditorElement {
     }
 
     this.emit("hideSelectionToolView");
-  }
-
-  [CONFIG("set.tool.hand")]() {
-    this.refs.$pantool.toggleClass("on", this.$config.get("set.tool.hand"));
-  }
-
-  // [SUBSCRIBE(REFRESH_SELECTION)]() {
-  //   this.refs.$selectedCount.html(this.$context.selection.length + "");
-
-  //   this.load("$buttons");
-  // }
-
-  [LOAD("$buttons") + DOMDIFF]() {
-    return "";
-    // if (this.$context.selection.isEmpty) return "";
-
-    // const buttons = [];
-
-    // this.$context.selection.items.forEach((selectedItem) => {
-    //   selectedItem.allLayers.forEach((item) => {
-    //     if (item.isNot("boolean-path")) {
-    //       const list = PathParser.fromSVGString(
-    //         item.absolutePath().d
-    //       ).toPathList();
-
-    //       list.forEach((path, index) => {
-    //         buttons.push({
-    //           item,
-    //           index,
-    //           path,
-    //         });
-    //       });
-    //     }
-    //   });
-    // });
-
-    // return buttons.map((it) => {
-    //   const { item, index, path } = it;
-    //   return /*html*/ `
-    //     <button type="button" data-item-id="${
-    //       item.id
-    //     }" data-path-index="${index}">
-    //       <svg width="16" height="16" overflow="visible">
-    //         <path d="${path.scaleWith(16, 16).d}" style="fill:${
-    //     item.fill
-    //   };stroke:currentColor" stroke-width="1" />
-    //       </svg>
-    //     </button>
-    //   `;
-    // });
   }
 }

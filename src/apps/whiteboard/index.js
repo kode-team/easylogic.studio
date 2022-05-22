@@ -19,10 +19,10 @@ import { VisibleManager } from "../designeditor/managers/VisibleManager";
 import "./layout.scss";
 import whiteboardPlugins from "./plugins/whiteboard-plugins";
 
-import { BaseLayout } from "apps/common/BaseLayout";
 import BodyPanel from "apps/common/BodyPanel";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
+import { BaseLayout } from "apps/common/layout/BaseLayout";
 import { PopupManager } from "apps/common/PopupManager";
 
 /**

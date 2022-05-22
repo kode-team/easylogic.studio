@@ -12,10 +12,12 @@ export class IconManager extends EditorElement {
   }
 
   [LOAD("$list")]() {
-    return Object.entries(icon).map(([key, value]) => {
-      if (isString(value) === false) return "";
-      // eslint-disable-next-line no-useless-escape
-      return value.replace(/\<svg/g, `<svg id="icon-${key}"`);
-    });
+    return Object.entries(icon)
+      .map(([key, value]) => {
+        if (isString(value) === false) return "";
+        // eslint-disable-next-line no-useless-escape
+        return value.replace(/\<svg/g, `<svg id="icon-${key}"`).trim();
+      })
+      .filter(Boolean);
   }
 }

@@ -1,4 +1,3 @@
-// import { LOAD, CLICK } from "sapa";
 import { isFunction, isArray, isString, UIElement } from "sapa";
 
 export class BaseUI extends UIElement {
@@ -25,7 +24,7 @@ export class BaseUI extends UIElement {
       this.$commands.emit(this.props.command, ...(this.props.args || []));
     }
     // action 이 있으면 emit 을  실행
-    else if (isString(this.props.action)) {
+    else if (isString(this.props.action) || isFunction(this.props.action)) {
       this.emit(this.props.action, key, value, params);
     }
     // action 이 array 일 때 emit 을 실행

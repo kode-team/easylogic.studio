@@ -7,6 +7,20 @@
     align-items: center;
     justify-content: center;
     text-align: left;    
+    // padding: 10px;
+
+    > .icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+
+        svg {
+            width: 24px;
+            height: 24px;
+
+            stroke: var(--elf--selected-font-color);
+        }
+    }
 
     &:hover {
         background-color: black;

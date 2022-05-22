@@ -667,34 +667,34 @@ export class DomModel extends GroupModel {
 
   get changedFlexLayout() {
     return this.hasChangedField(
-      "flex-direction",
-      "flex-wrap",
-      "justify-content",
-      "align-items",
-      "align-content",
+      "flexDirection",
+      "flexWrap",
+      "justifyContent",
+      "alignItems",
+      "alignContent",
       "order",
-      "flex-basis",
-      "flex-grow",
-      "flex-shrink",
-      "flex-flow"
+      "flexBasis",
+      "flexGrow",
+      "flexShrink",
+      "flexFlow"
     );
   }
 
   get changedGridLayout() {
     return this.hasChangedField(
-      "grid-template-rows",
-      "grid-template-columns",
-      "grid-template-areas",
-      "grid-auto-rows",
-      "grid-auto-columns",
-      "grid-auto-flow",
-      "grid-row-gap",
-      "grid-column-gap",
-      "grid-row-start",
-      "grid-row-end",
-      "grid-column-start",
-      "grid-column-end",
-      "grid-area"
+      "gridTemplateRows",
+      "gridTemplateColumns",
+      "gridTemplateAreas",
+      "gridAutoRows",
+      "gridAutoColumns",
+      "gridAutoFlow",
+      "gridRowGap",
+      "gridColumnGap",
+      "gridRowStart",
+      "gridRowEnd",
+      "gridColumnStart",
+      "gridColumnEnd",
+      "gridArea"
     );
   }
 

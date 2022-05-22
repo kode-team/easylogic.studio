@@ -11,9 +11,9 @@ import {
 import "./layout.scss";
 import dataEditorPlugins from "./plugins/data-editor-plugins";
 
-import { BaseLayout } from "apps/common/BaseLayout";
 import { IconManager } from "apps/common/IconManager";
 import { KeyboardManager } from "apps/common/KeyboardManager";
+import { BaseLayout } from "apps/common/layout/BaseLayout";
 import { PopupManager } from "apps/common/PopupManager";
 import { Editor } from "elf/editor/manager/Editor";
 

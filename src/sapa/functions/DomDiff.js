@@ -106,8 +106,12 @@ function getProps(attributes) {
   return results;
 }
 
+function checkAllHTML(newEl, oldEl) {
+  // console.log(newEl.outerHTML, oldEl.outerHTML);
+  return newEl.outerHTML == oldEl.outerHTML;
+}
+
 function updateElement(parentElement, oldEl, newEl, i, options = {}) {
-  // console.log(parentElement, oldEl, newEl, i, options);
   if (!oldEl) {
     parentElement.appendChild(newEl.cloneNode(true));
   } else if (!newEl) {
@@ -115,6 +119,11 @@ function updateElement(parentElement, oldEl, newEl, i, options = {}) {
   } else if (hasPassed(oldEl) || hasPassed(newEl)) {
     // NOOP
     // data-domdiff-pass="true" 일 때는 아무것도 비교하지 않고 끝낸다.
+  } else if (checkAllHTML(newEl, oldEl)) {
+    // outerHTML 이 동일하면 그냥 변경하지 않는다.
+    // 자식 비교도 멈춘다.
+    // console.log("outerHTML 동일하면 그냥 변경하지 않는다.", newEl, oldEl);
+    return;
   } else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
     // node 가 같지 않으면 바꾸고, refClass 속성이 있으면 바꾸고
     parentElement.replaceChild(newEl.cloneNode(true), oldEl);
@@ -194,8 +203,13 @@ export function DomDiff(A, B, options = {}) {
   }
 
   if (childrenA.length === 0 && childrenB.length > 0) {
+    // children B 만 존재할 때는 b 에 있는 것을 모두 A 로 추가한다.
     // B 에서 모든 자식을 A 에 추가한다.
     A.append(...childrenB);
+  } else if (childrenA.length > 0 && childrenB.length === 0) {
+    // children A 만 존재할 때는 A에 있는 것을 모두 삭제한다.
+    // noop
+    A.textContent = "";
   } else {
     for (var i = 0; i < len; i++) {
       updateElement(A, childrenA[i], childrenB[i], i, options);

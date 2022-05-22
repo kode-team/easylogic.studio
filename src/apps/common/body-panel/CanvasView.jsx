@@ -21,6 +21,7 @@ import DragAreaView from "./render-view/draw-panels/DragAreaView";
 import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
 import PageTools from "./render-view/util-panels/PageTools";
 
+import { EditingMode } from "elf/editor/types/editor";
 import {
   UPDATE_VIEWPORT,
   END,
@@ -89,7 +90,7 @@ export default class CanvasView extends EditorElement {
   // space 키가 눌러져 있을 때만 실행한다.
   checkSpace() {
     // hand 툴이 on 되어 있으면 항상 드래그 모드가 된다.
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return true;
     }
 
@@ -105,8 +106,8 @@ export default class CanvasView extends EditorElement {
     this.startMovePan();
   }
 
-  [CONFIG("set.tool.hand")](value) {
-    if (value) {
+  [CONFIG("editing.mode")]() {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       this.startMovePan();
 
       this.$commands.emit("refreshCursor", "grab");
@@ -133,10 +134,10 @@ export default class CanvasView extends EditorElement {
   }
 
   refreshCursor() {
-    if (this.$config.get("set.tool.hand") === false) {
-      this.$commands.emit("refreshCursor", "auto");
-    } else {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       this.$commands.emit("refreshCursor", "grab");
+    } else {
+      this.$commands.emit("refreshCursor", "auto");
     }
   }
 

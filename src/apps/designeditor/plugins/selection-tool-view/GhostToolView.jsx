@@ -337,7 +337,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
-        switch (this.targetParent["flex-direction"]) {
+        switch (this.targetParent.flexDirection) {
           case FlexDirection.ROW:
             return this.renderLayoutFlexRowArea();
           case FlexDirection.COLUMN:
@@ -348,35 +348,19 @@ export default class GhostToolView extends EditorElement {
       }
     }
 
-    return (
-      <path
-        class="insert-area"
-        d={`
-
-        `}
-      />
-    );
+    return <path class="insert-area" d={``} />;
   }
 
   renderLayoutItemForFirst() {
     if (this.targetItem?.hasChildren() === false) {
       if (this.targetItem.isLayout(Layout.FLEX)) {
-        return this.renderLayoutFlexForFirstItem(
-          this.targetItem["flex-direction"]
-        );
+        return this.renderLayoutFlexForFirstItem(this.targetItem.flexDirection);
       } else if (this.targetItem.isLayout(Layout.GRID)) {
         //noop
       }
     }
 
-    return (
-      <path
-        class="insert-area"
-        d={`
-
-        `}
-      />
-    );
+    return <path class="insert-area" d={``} />;
   }
 
   [LOAD("$view") + DOMDIFF]() {
@@ -400,9 +384,8 @@ export default class GhostToolView extends EditorElement {
             "target-rect",
             ""
           )}
-        {hasTargetView && this.renderLayoutItemInsertArea()}
-        {hasTargetView && this.renderLayoutItemForFirst()}
-
+        {hasTargetView ? this.renderLayoutItemInsertArea() : ""}
+        {hasTargetView ? this.renderLayoutItemForFirst() : ""}
         {this.isLayoutItem &&
           this.renderPathForVerties(
             this.ghostScreenVerties.filter((_, index) => index < 4),
@@ -487,7 +470,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
-        switch (this.targetParent["flex-direction"]) {
+        switch (this.targetParent.flexDirection) {
           case FlexDirection.ROW:
             // left
             if (this.targetRelativeMousePoint.x < CHECK_RATE) {

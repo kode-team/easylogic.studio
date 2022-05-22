@@ -141,7 +141,7 @@ export default class ResizingItemProperty extends BaseProperty {
       "apply self resizing",
       this.$context.selection.packByValue({
         [key]: value,
-        "flex-grow": 1,
+        flexGrow: 1,
       })
     );
 

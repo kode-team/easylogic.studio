@@ -9,6 +9,7 @@ import {
   POINTERSTART,
   DOMDIFF,
   MOUSEOVER,
+  MOUSELEAVE,
 } from "sapa";
 
 import "./VerticalRuler.scss";
@@ -60,6 +61,10 @@ export default class VerticalRuler extends EditorElement {
 
   [MOUSEOVER()]() {
     this.$commands.emit("refreshCursor", "ew-resize");
+  }
+
+  [MOUSELEAVE()]() {
+    this.$commands.emit("recoverCursor");
   }
 
   [POINTERSTART() + MOVE() + END()]() {
@@ -278,12 +283,7 @@ export default class VerticalRuler extends EditorElement {
       this.state.rect = this.$el.rect();
     }
 
-    return /*html*/ `
-            <svg width="100%" height="100%" overflow="hidden">
-                <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0, 0.5)" />
-                ${this.makeRulerText()}
-            </svg>
-        `;
+    return /*html*/ `<svg width="100%" height="100%" overflow="hidden"><path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0, 0.5)" />${this.makeRulerText()}</svg>`;
   }
 
   [LOAD("$lines") + DOMDIFF]() {

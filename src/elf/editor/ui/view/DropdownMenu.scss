@@ -3,7 +3,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 0px 4px;
+  box-sizing: border-box;
+
+  // padding: 10px;
   --elf--dropdown-menu-width: 240px;
   --elf--dropdown-menu-dy: 0px;
 
@@ -23,14 +26,15 @@
     justify-content: center;
     padding: 0px 4px;
     padding-left: 8px;
+    cursor: pointer;
 
     &:empty {
       display: none;
     }
 
     svg {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       pointer-events: none;
 
       path {
@@ -63,7 +67,7 @@
   &:hover,
   &.opened {
     &:not([data-selected="true"]) {
-      // background-color: black;
+      background-color: black;
 
       .dropdown-arrow {
         svg {
@@ -267,7 +271,7 @@
 
   li {
     &:hover {
-      &:not([disabled]) {
+      &:not([disabled]):not(.dropdown-divider) {
         background-color: var(--elf--selected-color);
         color: var(--elf--selected-font-color);
         & > span,

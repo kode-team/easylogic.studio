@@ -384,7 +384,6 @@ export class BaseModel {
       // NOOP
       // isForce 가 true 일 때는 캐쉬를 적용하지 않는다.
     } else {
-      // cache hit
       if (this.getCache(cachedKey) === value && this.getCache(parsedKey)) {
         return this.getCache(parsedKey);
       }

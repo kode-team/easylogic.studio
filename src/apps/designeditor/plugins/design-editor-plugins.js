@@ -33,8 +33,10 @@ import imageAsset from "./image-asset";
 import keyframe from "./keyframe";
 import layerAppendView from "./layer-append-view";
 import layerTree from "./layer-tree";
+import layertab from "./layertab";
 import layout from "./layout";
 import lineView from "./line-view";
+import menus from "./menus";
 import pathDrawView from "./path-draw-view";
 import pathEditorView from "./path-editor-view";
 import pathTool from "./path-tool";
@@ -68,6 +70,8 @@ import propertyEditor from "plugins/property-editor";
 export default [
   configs,
   commands,
+  menus,
+  layertab,
   defaultConfigs,
   defaultIcons,
   defaultMessages,

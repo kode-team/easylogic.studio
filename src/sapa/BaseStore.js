@@ -20,11 +20,6 @@ export class BaseStore {
     this.cachedCallback = {};
     this.callbacks = {};
     this.editor = editor;
-    this.promiseProxy = new Proxy(this, {
-      get: (target, key) => {
-        return this.makePromiseEvent(key);
-      },
-    });
   }
 
   getCallbacks(event) {
@@ -135,63 +130,6 @@ export class BaseStore {
 
   getCachedCallbacks(event) {
     return this.getCallbacks(event);
-  }
-
-  /**
-   * 메세지를 promise 형태로 쓸 수 있도록 proxy 객체를 리턴한다.
-   *
-   * @returns {Proxy}
-   */
-  get promise() {
-    return this.promiseProxy;
-  }
-
-  get p() {
-    return this.promise;
-  }
-
-  /**
-   * 등록된 메세지를 Promise 로 만들어준다.
-   *
-   * this.emit("message", 1, 2, 3);
-   *
-   * 형태로 사용하던 것을
-   *
-   * this.promise.message(1, 2, 3).then(() => { })
-   *
-   * 또는
-   *
-   * var a = await this.promise.message(1, 2, 3);
-   *
-   * 형태로 사용할 수 있다.
-   *
-   * 몇가지 상황에서 유용하다.
-   *
-   * 1. message 가 리턴 값을 가지고 있을 때
-   * 2. message 가 동작 완료 후 다른 동작을 하고 싶을 때
-   *
-   * @param {string} event
-   * @returns {Promise}
-   */
-  makePromiseEvent(event) {
-    var list = this.getCachedCallbacks(event);
-    const source = this.source;
-
-    return (...args) =>
-      window.Promise.all(
-        list
-          .filter((f) => {
-            return !f.enableSelfTrigger;
-          })
-          .filter((f) => {
-            return f.enableAllTrigger || f.originalCallback.source !== source;
-          })
-          .map((f) => {
-            return new window.Promise((resolve) => {
-              resolve(f.callback.apply(f.context, args));
-            });
-          })
-      );
   }
 
   sendMessage(source, event, ...args) {

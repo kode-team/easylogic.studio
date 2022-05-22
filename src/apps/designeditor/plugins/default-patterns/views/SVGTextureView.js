@@ -224,11 +224,7 @@ export default class SVGTextureView extends EditorElement {
           false
         )
       );
-      return /*html*/ `
-        <div class="pattern-item" data-index="${index}">
-          <div class="preview">${svg}</div>
-        </div>
-      `;
+      return /*html*/ `<div class="pattern-item" data-index="${index}"><div class="preview">${svg}</div></div>`;
     });
   }
 

@@ -22,7 +22,6 @@ import { rectToVerties, vertiesToRectangle } from "elf/core/collision";
 import { CSS_TO_STRING } from "elf/core/func";
 import { PathParser } from "elf/core/parser/PathParser";
 import { PathStringManager } from "elf/core/parser/PathStringManager";
-import { EditingMode } from "elf/editor/types/editor";
 import { UPDATE_VIEWPORT, END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -460,6 +459,15 @@ export default class LayerAppendView extends EditorElement {
           $drawItem.focus();
           return;
         }
+
+        this.$commands.emit(
+          "newComponent",
+          this.state.type,
+          rect,
+          /* isSelected */ true,
+          parentArtBoard || this.$context.selection.currentProject
+        );
+
         break;
       default:
         this.$commands.emit(
@@ -531,7 +539,7 @@ export default class LayerAppendView extends EditorElement {
       // this.refs.$area.empty()
       this.$el.hide();
       this.$commands.emit("pop.mode.view", "LayerAppendView");
-      this.$config.set("editing.mode", EditingMode.SELECT);
+      // this.$config.set("editing.mode", EditingMode.SELECT);
     }
   }
 

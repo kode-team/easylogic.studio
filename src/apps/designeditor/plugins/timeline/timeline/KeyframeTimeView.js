@@ -260,7 +260,6 @@ export default class KeyframeTimeView extends EditorElement {
     this.width = this.originalRect.width - PADDING;
     this.emit("hideSelectionToolView");
     this.$context.selection.empty();
-    this.emit(REFRESH_SELECTION);
   }
 
   move() {

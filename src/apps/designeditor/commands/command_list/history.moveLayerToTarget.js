@@ -21,7 +21,8 @@ export default {
   ) {
     const currentLayer = editor.get(layer) || layer;
     const currentParentLayer = currentLayer.parent;
-    const currentTarget = editor.get(target);
+    const currentTarget =
+      editor.get(target) || editor.context.selection.currentProject;
 
     const lastValues = currentLayer.hierachy;
 

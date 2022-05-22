@@ -58,8 +58,8 @@ export class StorageManager {
       const assetList = await this.getCustomAssetList();
       const json = await this.editor.json.render(current);
 
-      json.x = "0px";
-      json.y = "0px";
+      json.x = 0;
+      json.y = 0;
       await this.setCustomAssetList([
         ...assetList,
         {

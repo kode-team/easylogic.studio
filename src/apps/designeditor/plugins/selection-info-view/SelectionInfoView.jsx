@@ -1,6 +1,6 @@
 import { vec3 } from "gl-matrix";
 
-import { DOMDIFF, LEFT_BUTTON, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
+import { DOMDIFF, LOAD, POINTERSTART, SUBSCRIBE } from "sapa";
 
 import "./SelectionInfoView.scss";
 
@@ -10,8 +10,9 @@ import {
   END,
   MOVE,
   UPDATE_VIEWPORT,
-  REFRESH_SELECTION,
   UPDATE_CANVAS,
+  FIRSTMOVE,
+  REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -28,7 +29,7 @@ export default class SelectionInfoView extends EditorElement {
    * @param {PointerEvent} e
    */
   [POINTERSTART("$el [data-artboard-title-id]") +
-    LEFT_BUTTON +
+    FIRSTMOVE("calculateFirstMovedElement") +
     MOVE("calculateMovedElement") +
     END("calculateEndedElement")](e) {
     this.startXY = e.xy;
@@ -39,21 +40,18 @@ export default class SelectionInfoView extends EditorElement {
     // alt(option) + pointerstart 시점에 Layer 카피하기
     if (e.altKey) {
       // 선택된 모든 객체 카피하기
-      this.$context.selection.selectAfterCopy();
-      this.emit("refreshAllCanvas");
-      this.emit("refreshLayerTreeView");
+      this.$commands.emit("history.copyLayer", "copy");
+      // this.$context.selection.selectAfterCopy();
+      // this.emit("refreshAllCanvas");
+      // this.emit("refreshLayerTreeView");
     }
 
     this.initializeDragSelection();
-    this.$commands.emit("history.refreshSelection");
-    this.$config.set("set.move.control.point", true);
   }
 
   initializeDragSelection() {
     this.$context.selection.reselect();
     this.$context.snapManager.clear();
-
-    this.emit(REFRESH_SELECTION);
   }
 
   moveTo(dist) {
@@ -92,6 +90,11 @@ export default class SelectionInfoView extends EditorElement {
     this.$context.selection.reset(result);
   }
 
+  calculateFirstMovedElement() {
+    this.$config.set("set.move.control.point", true);
+    this.emit(REFRESH_SELECTION_TOOL);
+  }
+
   calculateMovedElement() {
     const targetMousePoint = this.$viewport.getWorldPosition();
 
@@ -103,7 +106,7 @@ export default class SelectionInfoView extends EditorElement {
     this.moveTo(newDist);
 
     this.$commands.emit("setAttribute", this.$context.selection.pack("x", "y"));
-    this.emit(UPDATE_CANVAS);
+    // this.emit(UPDATE_CANVAS);
     this.refresh();
   }
 
@@ -126,6 +129,8 @@ export default class SelectionInfoView extends EditorElement {
       this.$context.selection.pack("x", "y")
     );
     this.$config.set("set.move.control.point", false);
+    this.emit(REFRESH_SELECTION_TOOL);
+    this.$commands.emit("history.refreshSelection");
   }
 
   [SUBSCRIBE(UPDATE_VIEWPORT)]() {
@@ -171,7 +176,7 @@ export default class SelectionInfoView extends EditorElement {
       if (item.isLayout("flex")) {
         return iconUse(
           "layout_flex",
-          item["flex-direction"] === "column" ? "rotate(90 12 12)" : ""
+          item.flexDirection === "column" ? "rotate(90 12 12)" : ""
         );
       } else if (item.isLayout("grid")) {
         return iconUse("layout_grid");

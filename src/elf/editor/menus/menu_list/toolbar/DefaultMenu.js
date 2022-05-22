@@ -105,7 +105,7 @@ export default [
       return editor.context.config.is("editing.mode", EditingMode.SELECT);
     },
     action: (editor) => {
-      editor.emit("addLayerView", "select");
+      editor.context.commands.emit("addLayerView", "select");
       editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
     },
   },
@@ -120,7 +120,7 @@ export default [
       );
     },
     action: (editor) => {
-      editor.emit("addLayerView", "artboard");
+      editor.context.commands.emit("addLayerView", "artboard");
     },
   },
   {
@@ -161,18 +161,18 @@ export default [
         },
         shortcut: KeyStringMaker({ key: "O" }),
       },
-      {
-        icon: iconUse("title"),
-        title: "Text",
-        key: "text",
-        command: "addLayerView",
-        args: ["text"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "text");
-        },
-        shortcut: KeyStringMaker({ key: "T" }),
-      },
+      // {
+      //   icon: iconUse("title"),
+      //   title: "Text",
+      //   key: "text",
+      //   command: "addLayerView",
+      //   args: ["text"],
+      //   closable: true,
+      //   nextTick: (editor) => {
+      //     editor.context.config.set("editing.css.itemType", "text");
+      //   },
+      //   shortcut: KeyStringMaker({ key: "T" }),
+      // },
       {
         icon: iconUse("image"),
         title: "Image",
@@ -232,7 +232,6 @@ export default [
         editor.context.config.is("editing.mode", EditingMode.APPEND) &&
         (editor.context.config.is("editing.mode.itemType", "rect") ||
           editor.context.config.is("editing.mode.itemType", "circle") ||
-          editor.context.config.is("editing.mode.itemType", "text") ||
           editor.context.config.is("editing.mode.itemType", "image") ||
           editor.context.config.is("editing.mode.itemType", "video") ||
           editor.context.config.is("editing.mode.itemType", "iframe"))
@@ -412,6 +411,31 @@ export default [
     },
     selectedKey: (editor) => {
       return editor.context.config.get("editing.svg.itemType");
+    },
+  },
+  {
+    type: "button",
+    icon: "title",
+    events: ["config:editing.mode", "config:editing.mode.itemType"],
+    selected: (editor) => {
+      return (
+        editor.context.config.is("editing.mode", EditingMode.APPEND) &&
+        editor.context.config.is("editing.mode.itemType", "text")
+      );
+    },
+    action: (editor) => {
+      editor.context.commands.emit("addLayerView", "text");
+    },
+  },
+  {
+    type: "button",
+    icon: "pantool",
+    events: ["config:editing.mode"],
+    selected: (editor) => {
+      return editor.context.config.is("editing.mode", EditingMode.HAND);
+    },
+    action: (editor) => {
+      editor.context.config.set("editing.mode", EditingMode.HAND);
     },
   },
 ];

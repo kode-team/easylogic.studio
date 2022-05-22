@@ -88,9 +88,9 @@ export default class FlexLayoutEditor extends EditorElement {
     return /*html*/ `<div class='flex-layout-item'><div class="grid-2"><div>${createComponent(
       "SelectIconEditor",
       {
-        key: "flex-direction",
+        key: "flexDirection",
         ref: "$flexDirection",
-        value: this.state["flex-direction"] || FlexDirection.ROW,
+        value: this.state.flexDirection || FlexDirection.ROW,
         options: this.directionOptions,
         icons: ["east", "south"],
         onchange: "changeKeyValue",
@@ -117,10 +117,10 @@ export default class FlexLayoutEditor extends EditorElement {
       onchange: "changePadding",
     })}</div><div>${createComponent("ToggleButton", {
       compact: true,
-      key: "flex-wrap",
+      key: "flexWrap",
       ref: "$wrap",
       checkedValue: "wrap",
-      value: this.state["flex-wrap"] || FlexWrap.NOWRAP,
+      value: this.state.flexWrap || FlexWrap.NOWRAP,
       toggleLabels: [iconUse("wrap"), iconUse("wrap")],
       toggleValues: [FlexWrap.NOWRAP, FlexWrap.WRAP],
       onchange: "changeKeyValue",
@@ -142,19 +142,19 @@ export default class FlexLayoutEditor extends EditorElement {
               }px"></div>
           </div>
           <div class="flex-group" style="
-                  --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                  --flex-group-gap: ${Math.floor(this.state.gap / 10)}px;
                   --flex-group-padding: ${realPaddingTop}px;
                   ${padding};
-                  flex-direction: ${this.state["flex-direction"]};
-                  flex-wrap: ${this.state["flex-wrap"]};
-                  justify-content:${this.state["justify-content"]};
-                  align-items: ${this.state["align-items"]};
-                  align-content:${this.state["align-content"]};
+                  flex-direction: ${this.state.flexDirection};
+                  flex-wrap: ${this.state.flexWrap};
+                  justify-content:${this.state.justifyContent};
+                  align-items: ${this.state.alignItems};
+                  align-content:${this.state.alignContent};
           ">
               ${[1, 2, 3]
                 .map(() => {
                   return /*html*/ `
-                      <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
+                      <div class="flex-direction" data-value="${this.state.flexDirection}" style="flex-direction: ${this.state.flexDirection};align-items: ${this.state.alignItem};">
                           <div class="flex-direction-item" data-index="1"></div>
                           <div class="flex-direction-item" data-index="2"></div>
                           <div class="flex-direction-item" data-index="3"></div>
@@ -165,11 +165,11 @@ export default class FlexLayoutEditor extends EditorElement {
           </div>
           <div class="flex-group-tool"  style="${padding};">
               <div class="tool-area"  
-                  data-direction="${this.state["flex-direction"]}"  
-                  data-justify-content="${this.state["justify-content"]}"
-                  data-align-items="${this.state["align-items"]}"
+                  data-direction="${this.state.flexDirection}"  
+                  data-justify-content="${this.state.justifyContent}"
+                  data-align-items="${this.state.alignItems}"
                   data-align-content="${
-                    this.state["align-content"]
+                    this.state.alignContent
                   }"                            
                   style="
                       --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
@@ -195,9 +195,9 @@ export default class FlexLayoutEditor extends EditorElement {
         "flex.layout.editor.justify-content"
       )}</div>
       ${createComponent("SelectIconEditor", {
-        key: "justify-content",
+        key: "justifyContent",
         ref: "$justify",
-        value: this.state["justify-content"] || JustifyContent.FLEX_START,
+        value: this.state.justifyContent || JustifyContent.FLEX_START,
         options: this.justifyContentOptions,
         icons: [
           "start",
@@ -214,9 +214,9 @@ export default class FlexLayoutEditor extends EditorElement {
         "flex.layout.editor.align-items"
       )}</div>            
       ${createComponent("SelectIconEditor", {
-        key: "align-items",
+        key: "alignItems",
         ref: "$alignItems",
-        value: this.state["align-items"] || AlignItems.FLEX_START,
+        value: this.state.alignItems || AlignItems.FLEX_START,
         options: this.alignItemsOptions,
         icons: [
           "vertical_align_top",
@@ -276,23 +276,23 @@ export default class FlexLayoutEditor extends EditorElement {
       "data-align-content"
     );
 
-    if (this.state["justify-content"] === JustifyContent.SPACE_BETWEEN) {
+    if (this.state.justifyContent === JustifyContent.SPACE_BETWEEN) {
       // space 관련된게 있으면 align-content 만 변경한다.
 
       this.setState(
         {
-          "align-items": alignItems,
+          alignItems,
         },
         false
       );
 
-      this.modifyData("align-item", alignItems);
-    } else if (this.state["justify-content"] === JustifyContent.SPACE_AROUND) {
+      this.modifyData("alignItems", alignItems);
+    } else if (this.state.justifyContent === JustifyContent.SPACE_AROUND) {
       // space 관련된게 있으면 align-content 만 변경한다.
 
       this.setState(
         {
-          "align-items": alignItems,
+          alignItems,
         },
         false
       );
@@ -301,14 +301,14 @@ export default class FlexLayoutEditor extends EditorElement {
     } else {
       this.setState(
         {
-          "justify-content": justifyContent,
-          "align-items": alignItems,
+          justifyContent: justifyContent,
+          alignItems: alignItems,
         },
         false
       );
 
-      this.modifyData("justify-content", justifyContent);
-      this.modifyData("align-items", alignItems);
+      this.modifyData("justifyContent", justifyContent);
+      this.modifyData("alignItems", alignItems);
     }
 
     this.refresh();

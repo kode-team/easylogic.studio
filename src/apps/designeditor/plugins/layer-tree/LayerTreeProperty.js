@@ -361,7 +361,6 @@ export default class LayerTreeProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit(REFRESH_SELECTION);
   }
 
   addLayer(layer) {
@@ -387,7 +386,7 @@ export default class LayerTreeProperty extends BaseProperty {
     var id = $item.attr("data-layer-id");
     this.$context.selection.select(id);
 
-    this.$commands.executeCommand(REFRESH_SELECTION);
+    this.$commands.emit("history.refreshSelection");
   }
 
   [CLICK("$layerList .layer-item label .folder")](e) {
@@ -436,7 +435,6 @@ export default class LayerTreeProperty extends BaseProperty {
     // 클릭한게 lock 이고, selection 에 포함 되어 있으면 selection 영역에서 제외한다.
     if (lastLock) {
       this.$context.selection.removeById(id);
-      this.emit(REFRESH_SELECTION);
     }
   }
 
@@ -487,9 +485,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [SUBSCRIBE(REFRESH_SELECTION, "refreshAllCanvas")]() {
-    if (this.$config.false("set.move.control.point")) {
-      this.refresh();
-    }
+    this.refresh();
   }
 
   [SUBSCRIBE("refreshLayerTreeView") + THROTTLE(100)]() {

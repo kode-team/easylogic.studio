@@ -33,6 +33,8 @@ function valueFilter(obj) {
   return result;
 }
 
+const EMPTY_OBJECT = {};
+
 export default class DomRender extends ItemRender {
   /**
    *
@@ -48,19 +50,18 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toBackgroundImageCSS(item) {
-    if (!item.cacheBackgroundImage) {
+    const cache = item.cacheBackgroundImage;
+
+    if (!cache) {
       item.setBackgroundImageCache();
     }
 
+    if (!cache) {
+      return EMPTY_OBJECT;
+    }
+
     // visibility 속성은 출력하지 않는다.
-    return {
-      "background-image": item.cacheBackgroundImage["background-image"],
-      "background-position": item.cacheBackgroundImage["background-position"],
-      "background-repeat": item.cacheBackgroundImage["background-repeat"],
-      "background-size": item.cacheBackgroundImage["background-size"],
-      "background-blend-mode":
-        item.cacheBackgroundImage["background-blend-mode"],
-    };
+    return cache;
   }
 
   /**
@@ -107,11 +108,8 @@ export default class DomRender extends ItemRender {
     if (parentLayout === Layout.FLEX) {
       obj = {
         ...obj,
-        ...item.attrs(
-          "flexBasis",
-          // 'flex-grow',
-          "flexShrink"
-        ),
+        "flex-basis": item.flexBasis,
+        "flex-shrink": item.flexShrink,
       };
 
       // 자식의 경우 fill container 를 가질 수 있고
@@ -135,12 +133,10 @@ export default class DomRender extends ItemRender {
     } else if (parentLayout === Layout.GRID) {
       obj = {
         ...obj,
-        ...item.attrs(
-          "gridColumnStart",
-          "gridColumnEnd",
-          "gridRowStart",
-          "gridRowEnd"
-        ),
+        "grid-column-start": item.gridColumnStart,
+        "grid-column-end": item.gridColumnEnd,
+        "grid-row-start": item.gridRowStart,
+        "grid-row-end": item.gridRowEnd,
       };
 
       // 렌더링 하는 쪽에서만 처리를 해주는게 맞을까?
@@ -248,13 +244,11 @@ export default class DomRender extends ItemRender {
     return {
       display: "flex",
       gap: Length.px(item.gap),
-      ...item.attrs(
-        "flex-direction",
-        "flex-wrap",
-        "justify-content",
-        "align-items",
-        "align-content"
-      ),
+      "flex-direction": item.flexDirection,
+      "flex-wrap": item.flexWrap,
+      "justify-content": item.justifyContent,
+      "align-items": item.alignItems,
+      "align-content": item.alignContent,
     };
   }
 
@@ -265,15 +259,14 @@ export default class DomRender extends ItemRender {
   toGridLayoutCSS(item) {
     return {
       display: "grid",
-      ...item.attrs(
-        "grid-template-columns",
-        "grid-template-rows",
-        "grid-auto-columns",
-        "grid-auto-rows",
-        "grid-auto-flow",
-        "grid-column-gap",
-        "grid-row-gap"
-      ),
+      "grid-template-columns": item.gridTemplateColumns,
+      "grid-template-rows": item.gridTemplateRows,
+      "grid-template-areas": item.gridTemplateAreas,
+      "grid-auto-columns": item.gridAutoColumns,
+      "grid-auto-rows": item.gridAutoRows,
+      "grid-auto-flow": item.gridAutoFlow,
+      "grid-column-gap": item.gridColumnGap,
+      "grid-row-gap": item.gridRowGap,
     };
   }
 
@@ -311,25 +304,6 @@ export default class DomRender extends ItemRender {
       obj["padding-bottom"] = Length.px(item.paddingBottom);
     if (item.paddingLeft) obj["padding-left"] = Length.px(item.paddingLeft);
     if (item.paddingRight) obj["padding-right"] = Length.px(item.paddingRight);
-
-    return obj;
-  }
-
-  /**
-   *
-   * @param {Item} item
-   * @param {string[]} parameters 표현될 속성 리스트
-   */
-  toKeyListCSS(item, args = []) {
-    let obj = {};
-
-    for (var i = 0; i < args.length; i++) {
-      const key = args[i];
-      const value = item.get(key);
-      if (isNotUndefined(value)) {
-        obj[key] = value || item[key];
-      }
-    }
 
     return obj;
   }
@@ -417,48 +391,48 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toDefaultCSS(item) {
-    let obj = {};
-
-    if (item.isAbsolute) {
-      obj.left = Length.px(item.x);
-      obj.top = Length.px(item.y);
+    if (!item.hasCache("toDefaultCSS")) {
+      item.addCache("toDefaultCSS", {
+        "box-sizing": "border-box",
+      });
     }
 
-    let result = {
-      "box-sizing": "border-box",
-    };
+    let result = item.getCache("toDefaultCSS");
 
-    result = Object.assign(result, obj);
-    result = Object.assign(result, {
-      "background-color": item.backgroundColor,
-      color: item.color,
-      "font-size": item.fontSize,
-      "font-weight": item.fontWeight,
-      "font-style": item.fontStyle,
-      "font-family": item.fontFamily,
-      "text-align": item.textAlign,
-      "text-decoration": item.textDecoration,
-      "text-transform": item.textTransform,
-      "letter-spacing": item.letterSpacing,
-      "word-spacing": item.wordSpacing,
-      "line-height": item.lineHeight,
-      "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
-      "text-overflow": item.textOverflow,
-      "text-wrap": item.textWrap,
-      position: item.position,
-      overflow: item.overflow,
-      "z-index": item.zIndex,
-      opacity: item.opacity,
-      "mix-blend-mode": item.mixBlendMode,
-      "transform-origin": item.transformOrigin,
-      "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
-      animation: item.animation,
-      transition: item.transition,
-    });
+    if (item.isAbsolute) {
+      result.left = Length.px(item.x);
+      result.top = Length.px(item.y);
+    }
+
+    result["background-color"] = item.backgroundColor;
+    result["color"] = item.color;
+    result["font-size"] = item.fontSize;
+    result["font-weight"] = item.fontWeight;
+    result["font-style"] = item.fontStyle;
+    result["font-family"] = item.fontFamily;
+    result["text-align"] = item.textAlign;
+    result["text-decoration"] = item.textDecoration;
+    result["text-transform"] = item.textTransform;
+    result["letter-spacing"] = item.letterSpacing;
+    result["word-spacing"] = item.wordSpacing;
+    result["line-height"] = item.lineHeight;
+    result["text-indent"] = item.textIndent;
+    result["text-shadow"] = item.textShadow;
+    result["text-overflow"] = item.textOverflow;
+    result["text-wrap"] = item.textWrap;
+    result["position"] = item.position;
+    result["overflow"] = item.overflow;
+    result["z-index"] = item.zIndex;
+    result["opacity"] = item.opacity;
+    result["mix-blend-mode"] = item.mixBlendMode;
+    result["transform-origin"] = item.transformOrigin;
+    result["border-radius"] = item.borderRadius;
+    result["filter"] = item.filter;
+    result["backdrop-filter"] = item.backdropFilter;
+    result["box-shadow"] = item.boxShadow;
+    result["animation"] = item.animation;
+    result["transition"] = item.transition;
+
     return result;
   }
 
@@ -543,17 +517,13 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toTransformCSS(item) {
-    const results = {
-      transform: item.transform,
-    };
+    const transform = item.computed("angle", (angle) => {
+      return {
+        transform: angle === 0 ? "" : `rotateZ(${angle}deg)`,
+      };
+    });
 
-    if (results.transform === "rotateZ(0deg)") {
-      delete results.transform;
-    }
-
-    return {
-      transform: results.transform,
-    };
+    return transform;
   }
 
   /**

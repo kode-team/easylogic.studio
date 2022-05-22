@@ -30,7 +30,7 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-image": `
+      backgroundImage: `
       background-image: linear-gradient(to right, #ececec, black 100%);
     `,
     },
@@ -39,7 +39,7 @@ const cssPatterns = [
     itemType: "circle",
     name: "base",
     attrs: {
-      "background-image": `
+      backgroundImage: `
       background-image: linear-gradient(to right, #ececec, black 100%);
     `,
       border: `
@@ -69,11 +69,7 @@ export default class CSSTextureView extends EditorElement {
           false
         )
       );
-      return /*html*/ `
-        <div class="pattern-item" data-index="${index}">
-          <div class="preview">${svg}</div>
-        </div>
-      `;
+      return /*html*/ `<div class="pattern-item" data-index="${index}"><div class="preview">${svg}</div></div>`;
     });
   }
 

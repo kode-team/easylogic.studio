@@ -15,24 +15,24 @@ import {
   // createComponent,
   CONTEXTMENU,
   PREVENT,
-  OBSERVER,
-  PARAMS,
 } from "sapa";
 
 import "./HTMLRenderView.scss";
 
+import { EditingMode } from "elf/editor/types/editor";
 import {
   END,
   FIRSTMOVE,
   MOVE,
   UPDATE_VIEWPORT,
-  REFRESH_SELECTION,
   UPDATE_CANVAS,
   OPEN_CONTEXT_MENU,
   REFRESH_SELECTION_TOOL,
 } from "elf/editor/types/event";
 import { KEY_CODE } from "elf/editor/types/key";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
+
+// const cache = {};
 
 export default class HTMLRenderView extends EditorElement {
   initState() {
@@ -82,6 +82,16 @@ export default class HTMLRenderView extends EditorElement {
    */
   [CONFIG("show.outline")]() {
     this.refs.$view.attr("data-outline", this.$config.get("show.outline"));
+  }
+
+  [CONFIG("bodyEvent")]() {
+    const e = this.$config.get("bodyEvent");
+
+    if (e.buttons === 0) {
+      if (Dom.create(e.target).hasClass("elf--drag-area-view")) {
+        this.$commands.emit("recoverCursor");
+      }
+    }
   }
 
   [SUBSCRIBE("refElement")](id, callback) {
@@ -149,11 +159,11 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   getElement(id) {
-    // if (!this.state.cachedCurrentElement[id]) {
-    this.state.cachedCurrentElement[id] = this.refs.$view.$(
-      `[data-id="${id}"]`
-    );
-    // }
+    if (!this.state.cachedCurrentElement[id]) {
+      this.state.cachedCurrentElement[id] = this.refs.$view.$(
+        `[data-id="${id}"]`
+      );
+    }
 
     return this.state.cachedCurrentElement[id];
   }
@@ -161,13 +171,16 @@ export default class HTMLRenderView extends EditorElement {
   [FOCUSOUT("$view .element-item.text .text-content")](e) {
     e.$dt.removeAttr("contenteditable");
     e.$dt.removeClass("focused");
+
+    this.$context.commands.emit("pop.mode.view", "TextEditorView");
+
+    this.$context.commands.emit("recoverCursor");
   }
 
   [KEYUP("$view .element-item.text .text-content")](e) {
     var content = e.$dt.html();
-    var text = e.$dt.text();
+    var text = e.$dt.text().trim();
     var id = e.$dt.parent().attr("data-id");
-    //FIXME: matrix에 기반한 좌표 연산이 필요하다.
 
     var arr = [];
     this.$context.selection.items
@@ -179,7 +192,12 @@ export default class HTMLRenderView extends EditorElement {
         });
         arr.push({ id: item.id, content, text });
 
-        this.refreshElementRect(item);
+        this.$commands.emit("setAttribute", {
+          [item.id]: {
+            content,
+            text,
+          },
+        });
       });
 
     this.emit("refreshContent", arr);
@@ -203,7 +221,7 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     // hand tool 이 on 되어 있으면 드래그 하지 않는다.
-    if (this.$config.get("set.tool.hand")) {
+    if (this.$config.is("editing.mode", EditingMode.HAND)) {
       return false;
     }
 
@@ -286,12 +304,11 @@ export default class HTMLRenderView extends EditorElement {
       if (item.is("text")) {
         const $content = $item.$(".text-content");
 
-        this.nextTick(() => {
-          $content.addClass("focused");
-          $content.attr("contenteditable", "true");
-          $content.focus();
-          $content.select();
-        }, 100);
+        $content.addClass("focused");
+        $content.attr("contenteditable", "true");
+        $content.focus();
+        $content.select();
+        this.$context.commands.emit("push.mode.view", "TextEditorView");
       } else {
         this.$context.commands.emit("doubleclick.item", e, id);
       }
@@ -305,8 +322,6 @@ export default class HTMLRenderView extends EditorElement {
     var id = $element && $element.attr("data-id");
 
     this.$context.selection.select(id);
-
-    this.emit(REFRESH_SELECTION);
 
     this.emit(OPEN_CONTEXT_MENU, {
       target: "context.menu.layer",
@@ -356,7 +371,6 @@ export default class HTMLRenderView extends EditorElement {
     if ($target.hasClass("canvas-view")) {
       this.$context.selection.select();
       this.initializeDragSelection();
-      this.$commands.emit("history.refreshSelection");
 
       return false;
     }
@@ -378,12 +392,10 @@ export default class HTMLRenderView extends EditorElement {
 
       if (this.$context.selection.isEmpty === false) {
         // 선택된 모든 객체 카피하기
-        this.$context.selection.selectAfterCopy();
-        this.refreshAllCanvas();
+        this.$commands.emit("history.copyLayer", "copy");
         this.emit("refreshLayerTreeView");
 
         this.initializeDragSelection();
-        this.$commands.emit("history.refreshSelection");
       }
     } else {
       if (isInSelectedArea) {
@@ -413,7 +425,6 @@ export default class HTMLRenderView extends EditorElement {
       }
 
       this.initializeDragSelection();
-      this.$commands.emit("history.refreshSelection");
     }
   }
 
@@ -567,8 +578,9 @@ export default class HTMLRenderView extends EditorElement {
       });
     }
 
-    this.emit(REFRESH_SELECTION);
     this.$config.set("editing.mode.itemType", "select");
+    this.$commands.emit("history.refreshSelection");
+    this.emit(REFRESH_SELECTION_TOOL);
   }
 
   refreshSelectionStyleView(obj) {
@@ -627,7 +639,7 @@ export default class HTMLRenderView extends EditorElement {
   }
 
   updateAllCanvas(parentLayer) {
-    parentLayer.layers.forEach((item) => {
+    parentLayer?.layers.forEach((item) => {
       this.updateElement(item, this.getElement(item.id));
       this.updateAllCanvas(item);
     });
@@ -658,8 +670,26 @@ export default class HTMLRenderView extends EditorElement {
     }
   }
 
+  /**
+   *
+   * FIXME: 확대를 크게 했을 때는 offset 의 x, y 가 정상적으로 나오지 않는다.
+   * FIXME: offset 의 x, y 가 rounding number 가 되기 때문에  소수점으로 나오지 않는다.
+   * FIXME: 이런 문제를 해결하기 위해서는 getClientBoundingRect() 를 사용해야하는데
+   * FIXME: getClientBoundingRect() 는 회전 상태에서 x, y 를 정상적으로 구할 수 없다.
+   *
+   * ```
+   * let rect = $el.offsetClientRect();
+   *
+   * offset.x = round(rect.x / this.$viewport.scale, 1000);
+   * offset.y = round(rect.y / this.$viewport.scale, 1000);
+   * ```
+   *
+   * @param {BaseModel} item
+   */
   refreshElementRect(item) {
     var $el = this.getElement(item.id);
+
+    if (!$el) return;
     let offset = $el.offsetRect();
 
     if (offset.width === 0 || offset.height === 0) {
@@ -673,49 +703,15 @@ export default class HTMLRenderView extends EditorElement {
     if (this.$context.selection.check(item)) {
       this.emit(REFRESH_SELECTION_TOOL);
     }
-
-    this.emit(UPDATE_CANVAS, item);
-  }
-
-  refreshSelfElement(item) {
-    var $el = this.getElement(item.id);
-
-    if ($el) {
-      this.refreshElementRect(item);
-    }
   }
 
   refreshElementBoundSize(it) {
     if (it) {
-      this.refreshSelfElement(it);
+      this.refreshElementRect(it);
 
       it.layers.forEach((child) => {
         this.refreshElementBoundSize(child);
       });
     }
-  }
-
-  /**
-   * 객체의 변화를 캐치해서 offsetRect 를 다시 설정해준다.
-   *
-   * @param {Mutation} mutations
-   */
-  [OBSERVER("mutation") +
-    PARAMS({
-      childList: true,
-      subtree: true,
-    })](mutations) {
-    const s = new Set(
-      mutations
-        .map((mutation) => {
-          return Dom.create(mutation.target).attr("data-id");
-        })
-        .filter(Boolean)
-    );
-
-    [...s].forEach((id) => {
-      const item = this.$editor.get(id);
-      this.refreshElementBoundSize(item);
-    });
   }
 }

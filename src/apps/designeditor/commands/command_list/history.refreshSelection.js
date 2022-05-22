@@ -1,5 +1,5 @@
 import { isArrayEquals } from "elf/core/func";
-import { REFRESH_SELECTION } from "elf/editor/types/event";
+// import { REFRESH_SELECTION } from "elf/editor/types/event";
 
 export default {
   command: "history.refreshSelection",
@@ -26,7 +26,7 @@ export default {
   nextAction(editor) {
     editor.nextTick(() => {
       editor.context.history.saveSelection();
-      editor.emit(REFRESH_SELECTION);
+      // editor.emit(REFRESH_SELECTION);
     });
   },
 

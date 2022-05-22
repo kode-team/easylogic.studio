@@ -370,21 +370,6 @@ export class MovableModel extends BaseAssetModel {
     };
   }
 
-  // toCloneObject(isDeep = true) {
-  //   return {
-  //     ...super.toCloneObject(isDeep),
-  //     ...this.attrs(
-  //       "x",
-  //       "y",
-  //       "width",
-  //       "height",
-  //       "angle",
-  //       "position",
-  //       "transformOrigin"
-  //     ),
-  //   };
-  // }
-
   reset(obj, context = { origin: "*" }) {
     const isChanged = super.reset(obj, context);
 
@@ -1308,7 +1293,7 @@ export class MovableModel extends BaseAssetModel {
 
     childItem.reset({ x, y, angle });
 
-    this.modelManager.setChanged("resetMatrix", this.id, {
+    this.manager.setChanged("resetMatrix", this.id, {
       end: true,
       childItemId: childItem?.id,
     });
@@ -1325,7 +1310,7 @@ export class MovableModel extends BaseAssetModel {
       parent.children[startIndex] = parent.children[targetIndex];
       parent.children[targetIndex] = this.id;
 
-      this.modelManager.setChanged("setOrder", this.id, {
+      this.manager.setChanged("setOrder", this.id, {
         targetIndex,
         startIndex,
         parentId: parent.id,

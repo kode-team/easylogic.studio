@@ -10,6 +10,7 @@ import {
   toRectVerties,
 } from "elf/core/collision";
 import { area } from "elf/core/math";
+import { REFRESH_SELECTION } from "elf/editor/types/event";
 
 export class SelectionManager {
   constructor(editor) {
@@ -264,6 +265,8 @@ export class SelectionManager {
     this.ids = newSelectedIds;
 
     this.setRectCache();
+
+    this.$editor.emit(REFRESH_SELECTION);
 
     return true;
   }

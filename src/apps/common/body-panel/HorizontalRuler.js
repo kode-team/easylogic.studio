@@ -186,7 +186,7 @@ export default class HorizontalRuler extends EditorElement {
     this.makeLine(pathString, 50, minX, maxX, realWidth, width, 10, 20, 100);
     this.makeLine(pathString, 10, minX, maxX, realWidth, width, 10, 18, 50);
     this.makeLine(pathString, 5, minX, maxX, realWidth, width, 10, 15, 10);
-    this.makeLine(pathString, 1, minX, maxX, realWidth, width, 10, 13, 5);
+    this.makeLine(pathString, 1, minX, maxX, realWidth, width, 10, 13, 10);
 
     return pathString.join("");
   }
@@ -234,12 +234,7 @@ export default class HorizontalRuler extends EditorElement {
   [LOAD("$ruler") + DOMDIFF]() {
     this.initializeRect();
 
-    return /*html*/ `
-            <svg width="100%" width="100%" overflow="hidden">
-                <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, 0)" />
-                ${this.makeRulerText()}                
-            </svg>
-        `;
+    return /*html*/ `<svg width="100%" width="100%" overflow="hidden"><path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, -3)" />${this.makeRulerText()}</svg>`;
   }
 
   [LOAD("$lines") + DOMDIFF]() {
@@ -254,9 +249,7 @@ export default class HorizontalRuler extends EditorElement {
       })
       .join("");
 
-    return /*html*/ `
-            <svg width="100%" height="100%" class="horizontal-line" overflow="hidden">${lines}</svg>
-        `;
+    return /*html*/ `<svg width="100%" height="100%" class="horizontal-line" overflow="hidden">${lines}</svg>`;
   }
 
   [BIND("$rulerLines")]() {

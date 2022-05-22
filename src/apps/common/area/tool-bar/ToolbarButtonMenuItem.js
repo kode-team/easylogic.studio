@@ -38,7 +38,11 @@ export class ToolbarButtonMenuItem extends EditorElement {
   }
 
   template() {
-    return /*html*/ `<button type="button"  class='elf--toolbar-menu-item' ></button>`;
+    let tooltip = this.props.tooltip
+      ? `data-tooltip="${this.props.tooltip}"`
+      : "";
+
+    return /*html*/ `<button type="button"  class='elf--toolbar-menu-item' ${tooltip}></button>`;
   }
 
   [CLICK("$el")]() {
@@ -56,9 +60,17 @@ export class ToolbarButtonMenuItem extends EditorElement {
   }
 
   [LOAD("$el") + DOMDIFF]() {
-    return `<span class="icon">${iconUse(this.props.icon)}</span><span>${
-      this.props.title || ""
-    }</span>`;
+    let result = "";
+
+    if (this.props.icon) {
+      result += `<span class="icon">${iconUse(this.props.icon)}</span>`;
+    }
+
+    if (this.props.title) {
+      result += `<span class="title">${this.props.title}</span>`;
+    }
+
+    return result;
   }
 
   [BIND("$el")]() {

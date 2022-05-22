@@ -1,5 +1,5 @@
 import { DomDiff } from "./DomDiff";
-import { isFunction } from "./func";
+import { isArray, isFunction, isString } from "./func";
 import { recoverVariable } from "./registElement";
 
 /**
@@ -9,7 +9,11 @@ import { recoverVariable } from "./registElement";
 export class Dom {
   constructor(tag, className, attr) {
     if (typeof tag !== "string") {
-      this.el = tag;
+      if (tag instanceof Dom) {
+        this.el = tag.el;
+      } else {
+        this.el = tag;
+      }
     } else {
       var el = document.createElement(tag);
 
@@ -32,6 +36,36 @@ export class Dom {
   static createByHTML(htmlString) {
     var div = Dom.create("div");
     return div.html(htmlString).firstChild;
+  }
+
+  /**
+   * 항상 element 의 list 를 만들어준다.
+   *
+   * @param {string|string[]|HTMLElement|HTMLElement[]} html
+   * @returns
+   */
+  static makeElementList(html) {
+    const TEMP_DIV = Dom.create("div");
+    let list = [];
+
+    if (!isArray(html)) {
+      html = [html];
+    }
+
+    html = html.filter(Boolean);
+
+    for (let i = 0, len = html.length; i < len; i++) {
+      const item = html[i];
+      if (isString(item)) {
+        list.push(...(TEMP_DIV.html(item?.trim()).childNodes || []));
+      } else if (item) {
+        list.push(Dom.create(item));
+      } else {
+        // noop
+      }
+    }
+
+    return list;
   }
 
   static getScrollTop() {
@@ -326,6 +360,10 @@ export class Dom {
     );
   }
 
+  getById(id) {
+    return this.el.getElementById(id);
+  }
+
   find(selector) {
     if (this.isTextNode) return undefined;
     return this.el.querySelector(selector);
@@ -352,7 +390,9 @@ export class Dom {
   }
 
   append(el) {
-    if (typeof el === "string") {
+    if (isArray(el)) {
+      this.el.append(...el.map((it) => it.el || it));
+    } else if (typeof el === "string") {
       this.el.appendChild(document.createTextNode(el));
     } else {
       this.el.appendChild(el.el || el);
@@ -550,9 +590,21 @@ export class Dom {
   }
 
   isSVG() {
-    return this.el.tagName.toUpperCase() === "SVG";
+    if (!this.el._cachedIsSVG) {
+      this.el._cachedIsSVG = { value: this.el.tagName.toLowerCase() === "svg" };
+    }
+
+    return this.el._cachedIsSVG.value;
   }
 
+  /**
+   * offset rect 를 생성
+   *
+   * svg 나 isClientRect 가 true 인 경우 clientRect 를 기준으로 생성
+   *
+   * @param {boolean} isClientRect
+   * @returns
+   */
   offsetRect() {
     if (this.isSVG()) {
       const parentBox = this.parent().rect();
@@ -573,6 +625,29 @@ export class Dom {
       y: el.offsetTop,
       width: el.offsetWidth,
       height: el.offsetHeight,
+    };
+  }
+
+  offsetClientRect() {
+    if (this.isSVG()) {
+      const parentBox = this.parent().rect();
+      const box = this.rect();
+
+      return {
+        x: box.x - parentBox.x,
+        y: box.y - parentBox.y,
+        width: box.width,
+        height: box.height,
+      };
+    }
+
+    const parentBox = this.parent().rect();
+    const box = this.rect();
+    return {
+      x: box.x - parentBox.x,
+      y: box.y - parentBox.y,
+      width: box.width,
+      height: box.height,
     };
   }
 

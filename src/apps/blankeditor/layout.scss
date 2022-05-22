@@ -37,44 +37,31 @@ $range-thumb-border-radius: 20px;
     top: 0px;
     right: 0px;
     bottom: 0px;
+    display: flex;
     background-color: var(--elf--header-background-color);
+    flex-direction: column;
 
     .layout-top {
       height: $top-size;
       // border-bottom: 1px solid var(--elf--border-color);
       box-sizing: border-box;
       z-index: 10000;
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      background-color: var(--elf--background-color);
+      // background-color: var(--elf--background-color);
+      flex: none;
+      position: relative;
+      // padding: 0px 12px;
     }
 
     .layout-middle {
-      position: absolute;
-      left: 0px;
-      right: 0px;
-      top: $top-size;
-      bottom: $status-bar-height;
+      position: relative;
+      flex : 1 1 auto;
       box-sizing: border-box;
       overflow: hidden;
       background-color: var(--elf--background-color);
       // background-image: linear-gradient(45deg, rgb(0, 29, 72) 0%, var(--elf--background-color) 100%);
-
-      .layout-header {
-        display: none;
-        top: 0px;
-        left: $left-size;
-        right: $right-size;
-        height: $tool-size;
-        position: absolute;
-        background-color: var(--elf--header-background-color);
-        color: var(--elf--selected-font-color);
-        box-sizing: border-box;
-        // border-bottom: 1px solid var(--elf--border-color);
-      }
-
+      display: flex;
+      flex-direction: row;
+      
       > .splitter {
         position: absolute;
         left: $left-size;
@@ -83,63 +70,11 @@ $range-thumb-border-radius: 20px;
         bottom: 0px;
         cursor: ew-resize;
         transition: background-color 0.05s linear;
+        z-index: 1;
 
         &:hover,
         &.selected {
           background-color: var(--elf--selected-color);
-        }
-      }
-
-      > .left-arrow {
-        position: absolute;
-        left: $left-size;
-        width: 8px;
-        top: 0px;
-        bottom: 0px;
-        cursor: ew-resize;
-        transition: background-color 0.05s linear;
-        display: flex;
-        justify-items: center;
-        align-items: center;
-        pointer-events: none;
-
-        button {
-          pointer-events: all;
-          color: var(--elf--font-color);
-        }
-      }
-
-      > .right-arrow {
-        position: absolute;
-        right: $right-size;
-        width: 8px;
-        top: 0px;
-        bottom: 0px;
-        cursor: ew-resize;
-        transition: background-color 0.05s linear;
-        display: flex;
-        justify-items: center;
-        align-items: center;
-        pointer-events: none;
-
-        button {
-          pointer-events: all;
-          color: var(--elf--font-color);
-        }
-      }
-
-      > button {
-        position: absolute;
-        width: 12px;
-        height: 12px;
-        top: 50%;
-        transform: translateY(-50%) translateX(-25%);
-        cursor: pointer;
-        color: var(--elf--font-color);
-        z-index: 1000;
-
-        svg {
-          transform: scale(1.5);
         }
       }
 
@@ -151,56 +86,39 @@ $range-thumb-border-radius: 20px;
         right: $right-size;
       }
 
-      .layout-footer {
-        position: absolute;
-        left: 0px;
-        height: $footer-height;
-        bottom: 0px;
-        right: 0px;
-        overflow: hidden;
-        background-color: var(--elf--background-color);
-        z-index: 10000;
-
-        .footer-splitter {
-          display: none;
-        }
-      }
-
       .layout-left {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        bottom: $footer-height;
         width: $left-size;
-        display: inline-block;
+        display: block;
+        order: 1;
+        flex: none;
 
         display: flex;
         flex-direction: column;
         border-right: 1px solid var(--elf--layout-border-color);
         box-sizing: border-box;
+        position: relative;
       }
 
       .layout-right {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        bottom: $footer-height;
         width: $right-size;
-        display: inline-block;
+        display: block;
         z-index: 100;
+        order: 3; 
+        flex: none;
         display: flex;
         flex-direction: column;
         overflow: auto;
         // transition: bottom 0.05s linear;
         border-left: 1px solid var(--elf--layout-border-color);
+        position: relative;
       }
 
       .layout-body {
-        top: $tool-size;
-        left: $left-size;
-        right: $right-size;
-        bottom: $footer-height;
-        position: absolute;
+        order: 2;
+        height: 100%;
+        position: relative;
+        display: block;
+        flex: 1 1 auto;
         // transition: bottom 0.05s linear
         // border: 1px solid var(--elf--border-color);
         // border-radius: 4px;

@@ -1,4 +1,3 @@
-import { REFRESH_SELECTION } from "elf/editor/types/event";
 export default {
   command: "doubleclick.item",
   execute: function (editor, evt, id) {
@@ -7,7 +6,6 @@ export default {
     if (editor.context.selection.isOne && item) {
       if (editor.context.selection.checkChildren(item.id)) {
         editor.context.selection.select(item);
-        editor.emit(REFRESH_SELECTION);
       } else {
         if (editor.context.selection.check(item)) {
           editor.context.commands.emit("open.editor");
@@ -29,7 +27,6 @@ export default {
     ) {
       editor.context.selection.select(item);
       editor.snapManager.clear();
-      editor.context.commands.emit("history.refreshSelection");
     }
   },
 };

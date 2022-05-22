@@ -1,3 +1,5 @@
+import configs from "./configs";
+
 import baseEditor from "plugins/base-editor";
 import defaultConfigs from "plugins/default-configs";
 import defaultIcons from "plugins/default-icons";
@@ -10,4 +12,6 @@ export default [
   defaultMessages,
   baseEditor,
   propertyEditor,
+
+  configs,
 ];

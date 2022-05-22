@@ -313,6 +313,10 @@ export class Editor {
     this.registerElement(obj);
   }
 
+  isComponentClass(name) {
+    return this.context.components.isComponentClass(name);
+  }
+
   registerComponent(name, component) {
     this.context.components.registerComponent(name, component);
   }

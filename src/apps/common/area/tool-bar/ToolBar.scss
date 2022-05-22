@@ -1,14 +1,42 @@
 .elf--tool-bar {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    // justify-content: space-between;
     height: 100%;
     background-color: var(--elf--header-background-color);
     color: var(--elf--selected-font-color);
 
-    > * {
-        display: flex;
+
+    > .logo-area {
+        flex: none;
+        width: 60px;
+        // background-color: yellow;
+        // padding: 10px;
+        height: 100%;
+
         > * {
+            height: 100%;
+        }
+    }
+
+    > .toolbar-area {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: row;
+        > * {
+            flex: 1 1 auto;
+
+            &.left {
+                flex-direction: row;
+                justify-content: flex-start;
+            }
+
+            &.right {
+                flex-direction: row;
+                justify-content: flex-end;
+                padding-right: 20px;
+            }
+
             // display: inline-block;
             min-height: 48px !important;
             min-width: 48px !important;

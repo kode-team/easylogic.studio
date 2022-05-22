@@ -47,6 +47,11 @@
             "position": "before"
           },
           {
+            "pattern": "types",
+            "group": "builtin",
+            "position": "before"
+          },          
+          {
             "pattern": "**/*.scss",
             // "patternOptions": { "matchBase": true },
             "group": "index",

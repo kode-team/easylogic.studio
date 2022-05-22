@@ -1,4 +1,5 @@
-import * as commands from "../commands";
+import commands from "./commands";
+import menus from "./menus";
 import threeHelpers from "./three-helpers";
 
 // import layerTree from "apps/designeditor/plugins/layer-tree";
@@ -15,13 +16,11 @@ export default [
   defaultIcons,
   defaultMessages,
   baseEditor,
+  commands,
   propertyEditor,
   component,
   // layerTree,
   project,
   threeHelpers,
-
-  function (editor) {
-    editor.loadCommands(commands);
-  },
+  menus,
 ];
