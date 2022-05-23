@@ -202,13 +202,15 @@ export class SnapManager {
     const guideXList = this.context.config.get("horizontal.line");
     const guideYList = this.context.config.get("vertical.line");
 
-    const x = this.checkX(guideXList, sourceXList, dist)[0];
-    const y = this.checkY(guideYList, sourceYList, dist)[0];
+    if (guideXList && guideYList) {
+      const x = this.checkX(guideXList, sourceXList, dist)[0];
+      const y = this.checkY(guideYList, sourceYList, dist)[0];
 
-    const distVector = vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+      const distVector = vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
 
-    if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
-      snaps.push({ target: null, dist: distVector });
+      if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+        snaps.push({ target: null, dist: distVector });
+      }
     }
 
     // grid 간격 체크 하기

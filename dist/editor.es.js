@@ -28876,18 +28876,20 @@ class SnapManager {
     const sourceYList = sourceVerties.map((it) => it[1]);
     const guideXList = this.context.config.get("horizontal.line");
     const guideYList = this.context.config.get("vertical.line");
-    const x = this.checkX(guideXList, sourceXList, dist2)[0];
-    const y = this.checkY(guideYList, sourceYList, dist2)[0];
-    const distVector = fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
-    if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
-      snaps.push({ target: null, dist: distVector });
+    if (guideXList && guideYList) {
+      const x = this.checkX(guideXList, sourceXList, dist2)[0];
+      const y = this.checkY(guideYList, sourceYList, dist2)[0];
+      const distVector = fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+      if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+        snaps.push({ target: null, dist: distVector });
+      }
     }
     this.snapTargetLayers.forEach((target) => {
-      const x2 = this.checkX(target.xList, sourceXList, dist2)[0];
-      const y2 = this.checkY(target.yList, sourceYList, dist2)[0];
-      const distVector2 = fromValues(x2 ? x2.dx : 0, y2 ? y2.dy : 0, 0);
-      if (isNotZero(distVector2[0]) || isNotZero(distVector2[1])) {
-        snaps.push({ target, dist: distVector2 });
+      const x = this.checkX(target.xList, sourceXList, dist2)[0];
+      const y = this.checkY(target.yList, sourceYList, dist2)[0];
+      const distVector = fromValues(x ? x.dx : 0, y ? y.dy : 0, 0);
+      if (isNotZero(distVector[0]) || isNotZero(distVector[1])) {
+        snaps.push({ target, dist: distVector });
       }
     });
     return snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR;
