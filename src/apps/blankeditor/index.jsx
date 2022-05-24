@@ -33,18 +33,6 @@ export class BlankEditor extends BaseLayout {
     // this.loadDataFromJSON();
   }
 
-  // components() {
-  //   return {
-  //     BlankLayerTab,
-  //     BlankToolBar,
-  //     BlankInspector,
-  //     BlankBodyPanel,
-  //     PopupManager,
-  //     KeyboardManager,
-  //     IconManager,
-  //   };
-  // }
-
   /**
    *
    * @protected

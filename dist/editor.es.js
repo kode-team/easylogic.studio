@@ -178,7 +178,9 @@ function combineKeyArray(obj2) {
 function classnames(...args2) {
   const result = [];
   args2.filter(Boolean).forEach((it) => {
-    if (isObject(it)) {
+    if (isArray(it)) {
+      result.push(classnames(...it));
+    } else if (isObject(it)) {
       Object.keys(it).filter((k) => Boolean(it[k])).forEach((key) => {
         result.push(key);
       });
@@ -624,6 +626,10 @@ class Dom {
   }
   removeClass(...args2) {
     this.el.classList.remove(...args2);
+    return this;
+  }
+  updateClass(className) {
+    this.el.className = className;
     return this;
   }
   replaceClass(oldClass, newClass) {
@@ -1082,6 +1088,9 @@ class Dom {
   }
   get firstChild() {
     return Dom.create(this.el.firstElementChild);
+  }
+  get first() {
+    return Dom.create(this.el.firstChild);
   }
   children() {
     var element = this.el.firstElementChild;
@@ -1774,16 +1783,9 @@ const applyElementAttribute = ($element, key, value, hasStyleAttribute = false) 
     return;
   } else if (key === "class") {
     if (Array.isArray(value)) {
-      $element.addClass(...value.filter(Boolean));
-    } else if (isObject(value)) {
-      const keys2 = Object.keys(value);
-      for (var i = 0, len2 = keys2.length; i < len2; i++) {
-        const className = keys2[i];
-        const hasClass = value[className];
-        $element.toggleClass(className, hasClass);
-      }
+      $element.updateClass(classnames(...value));
     } else {
-      $element.el.className = value;
+      $element.updateClass(classnames(value));
     }
     return;
   } else if (key === "callback") {
@@ -24522,20 +24524,23 @@ const DefaultLayoutDirection = {
 class DefaultLayoutItem extends EditorElement {
 }
 class DefaultLayout extends EditorElement {
+  checkProps(props) {
+    return props;
+  }
   afterRender() {
     super.afterRender();
     this.$config.init("editor.layout.elements", this.refs);
   }
   initState() {
-    console.log(this);
     return {
       showLeftPanel: isNotUndefined(this.props.showLeftPanel) ? Boolean(this.props.showLeftPanel) : true,
       showRightPanel: isNotUndefined(this.props.showRightPanel) ? Boolean(this.props.showRightPanel) : true,
-      leftSize: this.props.leftSize || 340,
-      rightSize: this.props.rightSize || 280,
+      topSize: isNotUndefined(this.props.topSize) ? Number(this.props.topSize) : 48,
+      leftSize: isNotUndefined(this.props.leftSize) ? Number(this.props.leftSize) : 340,
+      rightSize: isNotUndefined(this.props.rightSize) ? Number(this.props.rightSize) : 280,
       bottomSize: this.props.bottomSize || 0,
       lastBottomSize: this.props.lastBottomSize || 150,
-      minSize: isNotUndefined(this.props.minSize) ? Boolean(this.props.minSize) : 200,
+      minSize: isNotUndefined(this.props.minSize) ? Boolean(this.props.minSize) : 240,
       maxSize: isNotUndefined(this.props.maxSize) ? Boolean(this.props.maxSize) : 500
     };
   }
@@ -24543,29 +24548,35 @@ class DefaultLayout extends EditorElement {
     return this.getChildContent((it) => it.props.type === direction2);
   }
   template() {
+    const top2 = this.getDirection(DefaultLayoutDirection.TOP);
+    const left2 = this.getDirection(DefaultLayoutDirection.LEFT);
+    const right2 = this.getDirection(DefaultLayoutDirection.RIGHT);
+    const body = this.getDirection(DefaultLayoutDirection.BODY);
+    const inner = this.getDirection(DefaultLayoutDirection.INNER);
+    const outer = this.getDirection(DefaultLayoutDirection.OUTER);
     return /* @__PURE__ */ createElementJsx("div", {
       class: "elf--default-layout-container"
     }, /* @__PURE__ */ createElementJsx("div", {
       class: `elf--default-layout`
-    }, /* @__PURE__ */ createElementJsx("div", {
+    }, top2 ? /* @__PURE__ */ createElementJsx("div", {
       class: "layout-top",
-      ref: "$top"
-    }, this.getDirection(DefaultLayoutDirection.TOP)), /* @__PURE__ */ createElementJsx("div", {
+      ref: "$topPanel"
+    }, top2) : "", /* @__PURE__ */ createElementJsx("div", {
       class: "layout-middle",
       ref: "$middle"
-    }, /* @__PURE__ */ createElementJsx("div", {
-      class: "layout-body",
-      ref: "$bodyPanel"
-    }, this.getDirection(DefaultLayoutDirection.BODY)), /* @__PURE__ */ createElementJsx("div", {
+    }, left2 ? /* @__PURE__ */ createElementJsx("div", {
       class: "layout-left",
       ref: "$leftPanel"
-    }, this.getDirection(DefaultLayoutDirection.LEFT)), /* @__PURE__ */ createElementJsx("div", {
+    }, left2) : "", /* @__PURE__ */ createElementJsx("div", {
+      class: "layout-body",
+      ref: "$bodyPanel"
+    }, body), right2 ? /* @__PURE__ */ createElementJsx("div", {
       class: "layout-right",
       ref: "$rightPanel"
-    }, this.getDirection(DefaultLayoutDirection.RIGHT)), /* @__PURE__ */ createElementJsx("div", {
+    }, right2) : "", /* @__PURE__ */ createElementJsx("div", {
       class: "splitter",
       ref: "$splitter"
-    })), this.getDirection(DefaultLayoutDirection.INNER)), this.getDirection(DefaultLayoutDirection.OUTER));
+    })), inner), outer);
   }
   [BIND("$splitter")]() {
     let left2 = this.state.leftSize;
@@ -24579,45 +24590,22 @@ class DefaultLayout extends EditorElement {
     };
   }
   [BIND("$leftPanel")]() {
-    let left2 = `0px`;
     let width2 = this.state.leftSize;
-    let bottom2 = this.state.bottomSize;
     if (!this.state.showLeftPanel) {
-      left2 = `-${this.state.leftSize}px`;
+      width2 = 0;
     }
     return {
-      style: { left: left2, width: width2, bottom: bottom2 }
+      style: { width: width2 }
     };
   }
   [BIND("$rightPanel")]() {
-    let right2 = 0;
-    let bottom2 = this.state.bottomSize;
+    let width2 = this.state.rightSize;
     if (!this.state.showRightPanel) {
-      right2 = `-${this.state.rightSize}px`;
+      width2 = 0;
     }
     return {
-      style: {
-        right: right2,
-        bottom: bottom2
-      }
-    };
-  }
-  [BIND("$bodyPanel")]() {
-    let left2 = this.state.leftSize;
-    let right2 = this.state.rightSize;
-    let bottom2 = this.state.bottomSize;
-    if (!this.state.showLeftPanel) {
-      left2 = 0;
-    }
-    if (!this.state.showRightPanel) {
-      right2 = 0;
-    }
-    return {
-      style: {
-        left: Length.px(left2),
-        right: Length.px(right2),
-        bottom: Length.px(bottom2)
-      }
+      class: classnames("layout-right", { closed: !this.state.showRightPanel }),
+      style: { width: width2 }
     };
   }
   setOptions(obj2 = {}) {
@@ -24637,10 +24625,7 @@ class DefaultLayout extends EditorElement {
   }
   refresh() {
     this.bindData("$splitter");
-    this.bindData("$headerPanel");
     this.bindData("$leftPanel");
-    this.bindData("$rightPanel");
-    this.bindData("$bodyPanel");
   }
 }
 var PopupManager$1 = "";

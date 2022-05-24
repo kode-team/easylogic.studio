@@ -1,4 +1,4 @@
-import { POINTERSTART, BIND, isNotUndefined } from "sapa";
+import { POINTERSTART, BIND, isNotUndefined, classnames } from "sapa";
 
 import "./DefaultLayout.scss";
 
@@ -19,6 +19,10 @@ const DefaultLayoutDirection = {
 export class DefaultLayoutItem extends EditorElement {}
 
 export class DefaultLayout extends EditorElement {
+  checkProps(props) {
+    return props;
+  }
+
   afterRender() {
     super.afterRender();
 
@@ -26,7 +30,6 @@ export class DefaultLayout extends EditorElement {
   }
 
   initState() {
-    console.log(this);
     return {
       showLeftPanel: isNotUndefined(this.props.showLeftPanel)
         ? Boolean(this.props.showLeftPanel)
@@ -34,13 +37,20 @@ export class DefaultLayout extends EditorElement {
       showRightPanel: isNotUndefined(this.props.showRightPanel)
         ? Boolean(this.props.showRightPanel)
         : true,
-      leftSize: this.props.leftSize || 340,
-      rightSize: this.props.rightSize || 280,
+      topSize: isNotUndefined(this.props.topSize)
+        ? Number(this.props.topSize)
+        : 48,
+      leftSize: isNotUndefined(this.props.leftSize)
+        ? Number(this.props.leftSize)
+        : 340,
+      rightSize: isNotUndefined(this.props.rightSize)
+        ? Number(this.props.rightSize)
+        : 280,
       bottomSize: this.props.bottomSize || 0,
       lastBottomSize: this.props.lastBottomSize || 150,
       minSize: isNotUndefined(this.props.minSize)
         ? Boolean(this.props.minSize)
-        : 200,
+        : 240,
       maxSize: isNotUndefined(this.props.maxSize)
         ? Boolean(this.props.maxSize)
         : 500,
@@ -52,27 +62,48 @@ export class DefaultLayout extends EditorElement {
   }
 
   template() {
+    const top = this.getDirection(DefaultLayoutDirection.TOP);
+    const left = this.getDirection(DefaultLayoutDirection.LEFT);
+    const right = this.getDirection(DefaultLayoutDirection.RIGHT);
+    // const bottom = this.getDirection(DefaultLayoutDirection.BOTTOM);
+    const body = this.getDirection(DefaultLayoutDirection.BODY);
+    const inner = this.getDirection(DefaultLayoutDirection.INNER);
+    const outer = this.getDirection(DefaultLayoutDirection.OUTER);
+
     return (
       <div class="elf--default-layout-container">
         <div class={`elf--default-layout`}>
-          <div class="layout-top" ref="$top">
-            {this.getDirection(DefaultLayoutDirection.TOP)}
-          </div>
+          {top ? (
+            <div class="layout-top" ref="$topPanel">
+              {top}
+            </div>
+          ) : (
+            ""
+          )}
+
           <div class="layout-middle" ref="$middle">
+            {left ? (
+              <div class="layout-left" ref="$leftPanel">
+                {left}
+              </div>
+            ) : (
+              ""
+            )}
             <div class="layout-body" ref="$bodyPanel">
-              {this.getDirection(DefaultLayoutDirection.BODY)}
+              {body}
             </div>
-            <div class="layout-left" ref="$leftPanel">
-              {this.getDirection(DefaultLayoutDirection.LEFT)}
-            </div>
-            <div class="layout-right" ref="$rightPanel">
-              {this.getDirection(DefaultLayoutDirection.RIGHT)}
-            </div>
+            {right ? (
+              <div class="layout-right" ref="$rightPanel">
+                {right}
+              </div>
+            ) : (
+              ""
+            )}
             <div class="splitter" ref="$splitter"></div>
           </div>
-          {this.getDirection(DefaultLayoutDirection.INNER)}
+          {inner}
         </div>
-        {this.getDirection(DefaultLayoutDirection.OUTER)}
+        {outer}
       </div>
     );
   }
@@ -91,54 +122,51 @@ export class DefaultLayout extends EditorElement {
   }
 
   [BIND("$leftPanel")]() {
-    let left = `0px`;
     let width = this.state.leftSize;
-    let bottom = this.state.bottomSize;
+
     if (!this.state.showLeftPanel) {
-      left = `-${this.state.leftSize}px`;
+      width = 0;
     }
 
     return {
-      style: { left, width, bottom },
+      style: { width },
     };
   }
 
   [BIND("$rightPanel")]() {
-    let right = 0;
-    let bottom = this.state.bottomSize;
+    let width = this.state.rightSize;
+
     if (!this.state.showRightPanel) {
-      right = `-${this.state.rightSize}px`;
+      width = 0;
     }
 
     return {
-      style: {
-        right,
-        bottom,
-      },
+      class: classnames("layout-right", { closed: !this.state.showRightPanel }),
+      style: { width },
     };
   }
 
-  [BIND("$bodyPanel")]() {
-    let left = this.state.leftSize;
-    let right = this.state.rightSize;
-    let bottom = this.state.bottomSize;
+  // [BIND("$bodyPanel")]() {
+  //   let left = this.state.leftSize;
+  //   let right = this.state.rightSize;
+  //   let bottom = this.state.bottomSize;
 
-    if (!this.state.showLeftPanel) {
-      left = 0;
-    }
+  //   if (!this.state.showLeftPanel) {
+  //     left = 0;
+  //   }
 
-    if (!this.state.showRightPanel) {
-      right = 0;
-    }
+  //   if (!this.state.showRightPanel) {
+  //     right = 0;
+  //   }
 
-    return {
-      style: {
-        left: Length.px(left),
-        right: Length.px(right),
-        bottom: Length.px(bottom),
-      },
-    };
-  }
+  //   return {
+  //     style: {
+  //       left: Length.px(left),
+  //       right: Length.px(right),
+  //       bottom: Length.px(bottom),
+  //     },
+  //   };
+  // }
 
   setOptions(obj = {}) {
     this.setState(obj);
@@ -166,9 +194,9 @@ export class DefaultLayout extends EditorElement {
 
   refresh() {
     this.bindData("$splitter");
-    this.bindData("$headerPanel");
+    // this.bindData("$headerPanel");
     this.bindData("$leftPanel");
-    this.bindData("$rightPanel");
-    this.bindData("$bodyPanel");
+    // this.bindData("$rightPanel");
+    // this.bindData("$bodyPanel");
   }
 }

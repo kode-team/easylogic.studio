@@ -177,6 +177,74 @@ const children = (el) => {
   return results;
 };
 
+// // reconcile children
+// // instance 를 그대로 유지하는게 관건이다.
+// export function reconcile(childrenA = [], childrenB = []) {
+//   const lenA = childrenA.length;
+//   const lenB = childrenB.length;
+//   const newA = new Array(lenA);
+//   const newB = new Array(lenB);
+
+//   const AObj = {};
+//   const BObj = {};
+
+//   for (let i = 0; i < lenA; i++) {
+//     AObj[childrenA[i].getAttribute("key")] = { index: i, el: childrenA[i] };
+//   }
+
+//   for (let i = 0; i < lenB; i++) {
+//     newB[i] = {
+//       el: childrenB[i],
+
+//       // 같은 키로 sourceEl 이 존재하면 그걸 그대로 사용
+//       // 같은 키로 sourceEl 이 존재하지 않으면 그냥 새로 생성한다.
+//       sourceEl: AObj[childrenB[i].getAttribute("key")],
+//     };
+//     BObj[childrenB[i].getAttribute("key")] = { index: i, el: childrenB[i] };
+//   }
+
+//   for (let i = 0; i < lenA; i++) {
+//     const key = childrenA[i].getAttribute("key");
+//     newA[i] = {
+//       el: childrenA[i],
+//       sourceEl: BObj[key],
+//     };
+//   }
+
+//   const max = Math.max(lenA, lenB);
+//   const lastB = [];
+//   for (let i = 0; i < max; i++) {
+//     const newAEl = newA[i].el;
+//     const newBEl = newB[i].el;
+//     const newAKey = newAEl.getAttribute("key");
+//     const newBKey = newBEl.getAttribute("key");
+
+//     // newA[i] 의 sourceEl 이 존재하지 않으면 삭제한다.
+//     if (!newA[i].sourceEl) {
+//       lastB.push(null);
+//     }
+
+//     // newB[i] 의 sourceEl 이 존재하지 않으면 추가한다.
+//     if (!newB[i].sourceEl) {
+//       lastB.push(newB[i].el);
+//     }
+
+//     if (newAKey === newBKey) {
+//     } else if (newAKey) {
+//       // A 에만 있는 것은 삭제
+//       newA[i].el.remove();
+//     } else if (newBKey) {
+//       // B 에만 있는 것은 추가
+//       newB[i].el.remove();
+//     } else {
+//       // 없는 것은 추가
+//       newB[i].el.remove();
+//     }
+//   }
+
+//   return [newA, newB];
+// }
+
 /**
  *
  *  DomDiff 를 수행한다.
@@ -200,6 +268,8 @@ export function DomDiff(A, B, options = {}) {
 
   var childrenA = children(A);
   var childrenB = children(B);
+
+  // reconcile(childrenA, childrenB);
 
   var len = Math.max(childrenA.length, childrenB.length);
   if (len === 0) {

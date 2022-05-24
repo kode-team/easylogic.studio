@@ -19,8 +19,8 @@ function startEditor() {
       config: {
         "editor.theme": "light",
         // 'editor.layout.mode': 'svg',
-        // "show.left.panel": false,
-        // "show.right.panel": true,
+        "show.left.panel": true,
+        "show.right.panel": true,
         // 'show.ruler': false,
       },
       plugins: [
