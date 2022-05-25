@@ -1,6 +1,6 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "description": "Fantastic Web Design Tool ",
   "types": "./index.d.ts",
   "files": [
