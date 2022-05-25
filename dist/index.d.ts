@@ -1014,7 +1014,7 @@ declare module "@easylogic/editor" {
      */
     registerConfig(config: KeyValue): void;
   }
-    export class EditorElement extends UIElement {
+  export class EditorElement extends UIElement {
     get $editor(): EditorInstance;
     get $store(): BaseStore;
 
@@ -1025,14 +1025,6 @@ declare module "@easylogic/editor" {
      * @returns {string} i18n 텍스트
      */
     $i18n(key: string): string;
-
-    get $config(): ConfigManager;
-
-    get $shortcuts(): any;
-    get $keyboardManager(): any;
-    get $storageManager(): any;
-
-    command(command: string, description: string, ...args: any[]): any;
 
     $theme(key: string): any;
   }
@@ -1299,8 +1291,8 @@ declare module "@easylogic/editor" {
 
   export function createComponent(
     ComponentName: string,
-    props: KeyValue,
-    children: any[]
+    props?: KeyValue,
+    children?: any[]
   ): string;
 
   export function createComponentList(...args: any[]): string;

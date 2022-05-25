@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "sapa";
+import { SUBSCRIBE, CONFIG } from "sapa";
 
 import BlankBodyPanel from "./area/BlankBodyPanel";
 import BlankInspector from "./area/BlankInspector";
@@ -110,6 +110,18 @@ export class BlankEditor extends BaseLayout {
         </DefaultLayout>
       </div>
     );
+  }
+
+  [CONFIG("show.left.panel")]() {
+    this.children.$layout.setOptions({
+      showLeftPanel: this.$config.get("show.left.panel"),
+    });
+  }
+
+  [CONFIG("show.right.panel")]() {
+    this.children.$layout.setOptions({
+      showRightPanel: this.$config.get("show.right.panel"),
+    });
   }
 
   refresh() {

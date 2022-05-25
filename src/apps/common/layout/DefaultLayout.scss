@@ -74,14 +74,6 @@ $status-bar-height: 0px;
         }
       }
 
-      > .toggleLeft {
-        left: $left-size;
-      }
-
-      > .toggleRight {
-        right: $right-size;
-      }
-
       .layout-left {
         flex: none;        
         position: relative;
@@ -91,6 +83,7 @@ $status-bar-height: 0px;
         border-right: 1px solid var(--elf--layout-border-color);
         box-sizing: border-box;
         transition: width 0.05s linear;
+        overflow: hidden;
       }
 
       .layout-right {
@@ -104,7 +97,7 @@ $status-bar-height: 0px;
         // transition: bottom 0.05s linear;
         border-left: 1px solid var(--elf--layout-border-color);
         transition: width 0.05s linear;      
-        
+        overflow: hidden;
         
         &.closed {
           width: 10px !important;

@@ -4215,7 +4215,8 @@ const MenuItemType = {
   CHECKBOX: "checkbox",
   RADIO: "radio",
   SUBMENU: "submenu",
-  DROPDOWN: "dropdown"
+  DROPDOWN: "dropdown",
+  CUSTOM: "custom"
 };
 const ViewModeType = {
   CanvasView: "CanvasView",
@@ -25035,6 +25036,16 @@ class BlankEditor extends BaseLayout {
       rightSize: 280,
       ref: "$layout"
     }, this.getTopPanel(), this.getLeftPanel(), this.getRightPanel(), this.getBodyPanel(), this.getInnerPanel(), this.getOuterPanel()));
+  }
+  [CONFIG("show.left.panel")]() {
+    this.children.$layout.setOptions({
+      showLeftPanel: this.$config.get("show.left.panel")
+    });
+  }
+  [CONFIG("show.right.panel")]() {
+    this.children.$layout.setOptions({
+      showRightPanel: this.$config.get("show.right.panel")
+    });
   }
   refresh() {
     super.refresh();
