@@ -93,7 +93,7 @@ export class BlankEditor extends BaseLayout {
 
   template() {
     return (
-      <div class="elf-studio blank-editor">
+      <div class="elf-editor">
         <DefaultLayout
           showLeftPanel={this.$config.get("show.left.panel")}
           showRightPanel={this.$config.get("show.right.panel")}

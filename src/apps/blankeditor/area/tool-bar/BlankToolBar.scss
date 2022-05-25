@@ -29,23 +29,23 @@
             min-width: 48px !important;
             vertical-align: middle;
             padding: 0px;
-            display: inline-flex;
+            display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        > .dropdown-menu > button {
+        .dropdown-menu > button {
             height: 48px !important;
             width: 48px !important;
         }
 
 
-        > button, > .dropdown-menu > button {
+        button, .dropdown-menu > button {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-
+            min-width: 40px;
             stroke: var(--elf--selected-font-color);
             fill: transparent !important;
             stroke-width: 1 !important;
@@ -74,7 +74,7 @@
             }
         }
 
-        > .elf--logo-area {
+        .elf--logo-area {
             &:hover {
                 background-color: black;
             }

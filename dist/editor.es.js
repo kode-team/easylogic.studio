@@ -6483,9 +6483,11 @@ class ToolbarButtonMenuItem extends EditorElement {
   }
   [BIND("$el")]() {
     const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false;
+    const disabled = isFunction(this.props.disabled) ? this.props.disabled(this.$editor) : this.props.disabled;
     return {
       style: __spreadValues({}, this.props.style),
-      "data-selected": selected
+      "data-selected": selected,
+      disabled
     };
   }
 }
@@ -25025,7 +25027,7 @@ class BlankEditor extends BaseLayout {
   }
   template() {
     return /* @__PURE__ */ createElementJsx("div", {
-      class: "elf-studio blank-editor"
+      class: "elf-editor"
     }, /* @__PURE__ */ createElementJsx(DefaultLayout, {
       showLeftPanel: this.$config.get("show.left.panel"),
       showRightPanel: this.$config.get("show.right.panel"),

@@ -23,12 +23,21 @@
         }
     }
 
-    &:hover {
+    &:hover:not([disabled="true"]) {
         background-color: black;
     }
 
     &[data-selected="true"] {
         background-color: var(--elf--selected-color-2);
         color: var(--elf--selected-font-color);
+    }
+
+    &[disabled="true"] {
+        cursor: not-allowed;
+        filter: invert(50%);
+
+        > * {
+            pointer-events: none;
+        }
     }
 }

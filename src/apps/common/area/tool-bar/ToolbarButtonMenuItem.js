@@ -78,11 +78,16 @@ export class ToolbarButtonMenuItem extends EditorElement {
       ? this.props.selected(this.$editor)
       : false;
 
+    const disabled = isFunction(this.props.disabled)
+      ? this.props.disabled(this.$editor)
+      : this.props.disabled;
+
     return {
       style: {
         ...this.props.style,
       },
       "data-selected": selected,
+      disabled: disabled,
     };
   }
 }
