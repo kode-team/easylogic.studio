@@ -288,6 +288,12 @@ export class Dom {
     return this;
   }
 
+  updateClass(className) {
+    this.el.className = className;
+
+    return this;
+  }
+
   replaceClass(oldClass, newClass) {
     this.el.classList.replace(oldClass, newClass);
     return this;
@@ -390,6 +396,8 @@ export class Dom {
   }
 
   append(el) {
+    if (!el) return this;
+
     if (isArray(el)) {
       this.el.append(...el.map((it) => it.el || it));
     } else if (typeof el === "string") {
@@ -900,6 +908,10 @@ export class Dom {
 
   get firstChild() {
     return Dom.create(this.el.firstElementChild);
+  }
+
+  get first() {
+    return Dom.create(this.el.firstChild);
   }
 
   children() {

@@ -2,8 +2,19 @@
 .elf--border-radius-editor {
 
     .border-radius-item {
-      display: grid; 
-      grid-template-columns: 1fr 1fr 30px;
+      display: flex; 
+      // grid-template-columns: 1fr 1fr 30px;
+      align-items: center;
+
+      > * {
+        flex: 1 1 auto;
+      }
+
+      > .button {
+        width: 24px;
+        height: 24px;
+        flex: none;
+      }
     }
 
     .radius-selector {

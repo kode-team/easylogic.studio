@@ -1,6 +1,6 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.12.2",
+  "version": "0.13.4",
   "description": "Fantastic Web Design Tool ",
   "types": "./index.d.ts",
   "files": [
@@ -28,7 +28,6 @@
     "open-color": "^1.9.1",
     "pathkit-wasm": "^0.7.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
-    "three": "^0.139.2",
     "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {

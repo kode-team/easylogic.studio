@@ -145,10 +145,10 @@ declare module "@easylogic/editor" {
   // before method
 
   // after method
-  type MoveMethod = (method: string = "move") => string;
+  type MoveMethod = (method: string) => string;
   export const MOVE: MoveMethod;
 
-  type MoveEndMethod = (method: string = "end") => string;
+  type MoveEndMethod = (method: string) => string;
   export const END: MoveEndMethod;
 
   export const PREVENT: string;
@@ -402,12 +402,12 @@ declare module "@easylogic/editor" {
      */
     checkField(key: string, value: any): boolean;
 
-    toCloneObject(isDeep: boolean = true): KeyValue;
+    toCloneObject(isDeep: boolean): KeyValue;
 
     /**
      * clone Item
      */
-    clone(isDeep: boolean = true): Item;
+    clone(isDeep: boolean): Item;
 
     /**
      * set json content
@@ -510,10 +510,10 @@ declare module "@easylogic/editor" {
      *
      * @param {number} dist
      */
-    copy(dist: number = 0): Item;
+    copy(dist: number): Item;
     findIndex(item: Item): number;
 
-    copyItem(childItem: Item, dist: number = 10): Item;
+    copyItem(childItem: Item, dist: number): Item;
 
     /**
      * 부모 객체에서 나를 지운다.
@@ -583,7 +583,7 @@ declare module "@easylogic/editor" {
   export class MovableItem extends Item {
     get isAbsolute(): boolean;
 
-    toCloneObject(isDeep: boolean = true): KeyValue;
+    toCloneObject(isDeep: boolean): KeyValue;
 
     convert(json: KeyValue): KeyValue;
 
@@ -608,8 +608,8 @@ declare module "@easylogic/editor" {
      *
      * @param {vec3} distVector
      */
-    move(distVector: vec3 = [0, 0, 0]): void;
-    moveByCenter(newCenter: vec3 = [0, 0, 0]): void;
+    move(distVector: vec3): void;
+    moveByCenter(newCenter: vec3): void;
 
     /**
      * 충돌 체크
@@ -693,18 +693,18 @@ declare module "@easylogic/editor" {
      *
      * @returns {PathParser}
      */
-    absolutePath(pathString: string = ""): PathParser;
+    absolutePath(pathString: string): PathParser;
 
     // 전체 캔버스에 그려진 path 의 개별 verties 를
     // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.
-    invertPath(pathString: string = ""): PathParser;
+    invertPath(pathString: string): PathParser;
 
     /**
      * pathString 의 좌표를 기준 좌표로 돌린다.
      *
      * @param {string} pathString   svg path string
      */
-    invertPathString(pathString: string = ""): string;
+    invertPathString(pathString: string): string;
 
     /**
      * 나를 포함한 모든 layer 에 대해서 체크한다.
@@ -804,18 +804,18 @@ declare module "@easylogic/editor" {
     static createComponent: (params: IComponentParams) => Component;
   }
 
-  class EventMachine {
-    protected opt: KeyValue = {};
+  export class EventMachine {
+    protected opt: KeyValue;
     protected parent: any;
-    protected props: KeyValue = {};
-    protected state: KeyValue = {};
+    protected props: KeyValue;
+    protected state: KeyValue;
     public source: string;
     public sourceName: string;
 
     /**
      * UIElement instance 에 필요한 기본 속성 설정
      */
-    protected initializeProperty(opt: KeyValue, props: any = {}): void;
+    protected initializeProperty(opt: KeyValue, props: KeyValue): void;
 
     protected initComponents(): void;
 
@@ -835,7 +835,7 @@ declare module "@easylogic/editor" {
      * @param {Object} state  새로운 state
      * @param {Boolean} isLoad  다시 로드 할 것인지 체크 , true 면 state 변경후 다시 로드
      */
-    setState(state: KeyValue = {}, isLoad: boolean = true): void;
+    setState(state: KeyValue, isLoad: boolean): void;
 
     /**
      * state 에 있는 key 필드의 값을 토글한다.
@@ -844,7 +844,7 @@ declare module "@easylogic/editor" {
      * @param {string} key
      * @param {Boolean} isLoad
      */
-    toggleState(key: string, isLoad: boolean = true): void;
+    toggleState(key: string, isLoad: boolean): void;
 
     /**
      * 객체를 다시 그릴 때 사용한다.
@@ -859,7 +859,7 @@ declare module "@easylogic/editor" {
      *
      * @param {Dom|undefined} $container  컴포넌트가 그려질 대상
      */
-    async render($container: Dom | undefined): void;
+    render($container: Dom | undefined): Promise<void>;
 
     protected initialize(): void;
 
@@ -892,12 +892,12 @@ declare module "@easylogic/editor" {
      */
     public refresh(): void;
 
-    async load(...args: any[]): void;
+    protected load(...args: any[]): Promise<any>;
 
     public bindData(...args: string[]): void;
 
     // 기본 템플릿 지정
-    template(): string;
+    protected template(): string|string[]|HTMLElement|HTMLElement[]|null|undefined;
 
     //
     protected eachChildren(callback: Function): void;
@@ -989,7 +989,7 @@ declare module "@easylogic/editor" {
 
   interface ConfigManager {
     get(key: string): any;
-    set(key: string, value: any, isSave: boolean = true): void;
+    set(key: string, value: any, isSave: boolean): void;
     setAll(obj: KeyValue): void;
 
     getType(key: string): string;
@@ -1014,7 +1014,7 @@ declare module "@easylogic/editor" {
      */
     registerConfig(config: KeyValue): void;
   }
-    export class EditorElement extends UIElement {
+  export class EditorElement extends UIElement {
     get $editor(): EditorInstance;
     get $store(): BaseStore;
 
@@ -1025,14 +1025,6 @@ declare module "@easylogic/editor" {
      * @returns {string} i18n 텍스트
      */
     $i18n(key: string): string;
-
-    get $config(): ConfigManager;
-
-    get $shortcuts(): any;
-    get $keyboardManager(): any;
-    get $storageManager(): any;
-
-    command(command: string, description: string, ...args: any[]): any;
 
     $theme(key: string): any;
   }
@@ -1067,9 +1059,9 @@ declare module "@easylogic/editor" {
     show(): void;
 
     onShowTitle(isShow: boolean): void;
-    refreshShowIsNot(type: string = "", isRefresh: boolean = true): void;
+    refreshShowIsNot(type: string, isRefresh: boolean): void;
 
-    refreshShow(type: string, isRefresh: boolean = true): void;
+    refreshShow(type: string, isRefresh: boolean): void;
   }
 
   export interface ObjectPropertyProps {
@@ -1082,15 +1074,15 @@ declare module "@easylogic/editor" {
     static create(json: ObjectPropertyProps): BaseProperty;
   }
 
-  interface ICommandObject {}
+  export interface ICommandObject {}
 
-  interface ShortcutObject {}
+  export interface ShortcutObject {}
 
-  interface MenuItemCallback<T> {
+  export interface MenuItemCallback<T> {
     (editor: EditorInstance, ...args: any[]): T;
   }
 
-  interface DropdownMenuItem {
+  export interface DropdownMenuItem {
     type: "dropdown";
     items?: MenuItem[];
     direction?: "left" | "right";
@@ -1104,9 +1096,9 @@ declare module "@easylogic/editor" {
     dy?: number;
   }
 
-  type EventCommandType = string;
+  export type EventCommandType = string;
 
-  interface CustomMenuItem {
+  export interface CustomMenuItem {
     type: "custom";
     title?: string;
     icon?: string;
@@ -1118,7 +1110,7 @@ declare module "@easylogic/editor" {
     events?: EventCommandType[];
   }
 
-  interface ButtonMenuItem {
+  export interface ButtonMenuItem {
     type: "button";
     title?: string;
     icon?: string;
@@ -1135,7 +1127,7 @@ declare module "@easylogic/editor" {
     style?: KeyValue;
   }
 
-  interface CheckboxMenuItem {
+  export interface CheckboxMenuItem {
     type: "checkbox";
     checked?: boolean | (() => boolean);
     value?: string;
@@ -1152,7 +1144,7 @@ declare module "@easylogic/editor" {
     style?: KeyValue;
   }
 
-  type MenuItem =
+  export type MenuItem =
     | string
     | DropdownMenuItem
     | ButtonMenuItem
@@ -1168,7 +1160,7 @@ declare module "@easylogic/editor" {
     registerRenderer(
       rendererType: string,
       name: string,
-      rendererInstance: IRender
+      rendererInstance: any
     );
     registerCommand(commandObject: Function | ICommandObject): void;
     registerShortCut(shortcut: ShortcutObject): void;
@@ -1185,7 +1177,7 @@ declare module "@easylogic/editor" {
      * @param {PluginInterface} createPluginFunction
      */
     registerPlugin(createPluginFunction: PluginInterface): void;
-    registerPluginList(plugins: PluginInterface[] = []): void;
+    registerPluginList(plugins: PluginInterface[]): void;
 
     /**
      * locale 에 맞는 i18n 메세지 등록
@@ -1295,29 +1287,20 @@ declare module "@easylogic/editor" {
     options: KeyValue
   ): Promise<string>;
   export function createDesignEditor(opts: EditorOptions): UIElement;
-  export function createThreeEditor(opts: EditorOptions): UIElement;
   export function createBlankEditor(opts: EditorOptions): UIElement;
-  export function createDataEditor(opts: EditorOptions): UIElement;
-
-  // createPageBuilder (opts = {}) {
-  //   return App.start(PageBuilder as any, opts)
-  // },
-  export function createWhiteBoard(opts) {
-    return start(WhiteBoard, opts);
-  }
 
   export function createComponent(
     ComponentName: string,
-    props: KeyValue = {},
-    children: any[] = []
+    props?: KeyValue,
+    children?: any[]
   ): string;
 
   export function createComponentList(...args: any[]): string;
 
   export function createElement(
     Component: string,
-    props: KeyValue = {},
-    children: any[] = []
+    props: KeyValue,
+    children: any[]
   ): string;
 
   type FragmentInstanceType = any;
@@ -1329,7 +1312,7 @@ declare module "@easylogic/editor" {
 
   export function createElementJsx(
     Component: ElementType | string | FragmentInstanceType,
-    props: KeyValue = {},
+    props: KeyValue,
     ...children: any[]
   ): string;
 

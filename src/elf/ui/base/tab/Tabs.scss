@@ -44,7 +44,7 @@ $tab-horizontal-header-right-width: 60px;
           // padding: 10px;
           box-sizing: border-box;
           overflow: visible;
-          background-color: var(--elf--header-background-color);
+          background-color: var(--elf--toolbar-background-color);
           text-align: center;
 
           > .tab-item {
@@ -55,7 +55,7 @@ $tab-horizontal-header-right-width: 60px;
             width: 100%;
             height: 50px;
             position: relative;
-            background-color: var(--elf--header-background-color) !important;
+            background-color: var(--elf--toolbar-background-color) !important;
             border-bottom: 0px !important;
             border:0px;
             justify-content: center;

@@ -90,7 +90,9 @@
     "Symbol": true,
     "__dirname": true,
     "Map": true,
-    "Set": true
+    "Set": true,
+    "WeakMap": true,
+    "WeakSet": true
   },
   "overrides": [
     {

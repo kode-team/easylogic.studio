@@ -1,6 +1,6 @@
 export default {
   category: "Layer",
-  key: "ctrl+]",
+  key: "]",
   command: "history.bring.forward",
   description: "move layer to above",
   args: ["bring forward"],

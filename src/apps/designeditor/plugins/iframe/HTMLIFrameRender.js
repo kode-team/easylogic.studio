@@ -1,4 +1,4 @@
-import LayerRender from "../renderer-html/HTMLRenderer/LayerRender";
+import LayerRender from "../../../../engine/html/renderer/renderer-html/HTMLRenderer/LayerRender";
 
 export default class IFrameRender extends LayerRender {
   update(item, currentElement) {

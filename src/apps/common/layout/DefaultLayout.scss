@@ -1,4 +1,5 @@
 $top-size: 48px;
+$bottom-size: 20px;
 $tool-size: 0px;
 $left-size: 340px;
 $left-layer-panel: 70px;
@@ -23,47 +24,39 @@ $status-bar-height: 0px;
 }
 
   .elf--default-layout {
+
     position: absolute;
     left: 0px;
     top: 0px;
     right: 0px;
     bottom: 0px;
+    display: flex;
+    flex-direction: column;    
 
     .layout-top {
       height: $top-size;
-      // border-bottom: 1px solid var(--elf--border-color);
       box-sizing: border-box;
       z-index: 10000;
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      // background-color: var(--elf--background-color);
+      flex: none;
+      position: relative;
+    }
+
+    .layout-bottom {
+      height: $bottom-size;
+      box-sizing: border-box;
+      z-index: 10000;
+      flex: none;
+      position: relative;
+      display: flex;
     }
 
     .layout-middle {
-      position: absolute;
-      left: 0px;
-      right: 0px;
-      top: $top-size;
-      bottom: $status-bar-height;
+      flex: 1 1 auto;
+      position: relative;
       box-sizing: border-box;
       overflow: hidden;
-      // background-color: var(--elf--background-color);
-      // background-image: linear-gradient(45deg, rgb(0, 29, 72) 0%, var(--elf--background-color) 100%);
-
-      .layout-header {
-        display: none;
-        top: 0px;
-        left: $left-size;
-        right: $right-size;
-        height: $tool-size;
-        position: absolute;
-        background-color: var(--elf--header-background-color);
-        color: var(--elf--selected-font-color);
-        box-sizing: border-box;
-        // border-bottom: 1px solid var(--elf--border-color);
-      }
+      display: flex;
+      flex-direction: row;
 
       > .splitter {
         position: absolute;
@@ -73,7 +66,7 @@ $status-bar-height: 0px;
         bottom: 0px;
         cursor: ew-resize;
         z-index: 1;
-        transition: background-color 0.05s linear;
+        transition: all 0.05s linear;
 
         &:hover,
         &.selected {
@@ -81,49 +74,39 @@ $status-bar-height: 0px;
         }
       }
 
-      > .toggleLeft {
-        left: $left-size;
-      }
-
-      > .toggleRight {
-        right: $right-size;
-      }
-
       .layout-left {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        bottom: $footer-height;
+        flex: none;        
+        position: relative;
         width: $left-size;
-        display: inline-block;
-
         display: flex;
         flex-direction: column;
         border-right: 1px solid var(--elf--layout-border-color);
         box-sizing: border-box;
+        transition: width 0.05s linear;
+        overflow: hidden;
       }
 
       .layout-right {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        bottom: $footer-height;
+        flex: none;
+        position: relative;
         width: $right-size;
-        display: inline-block;
         z-index: 100;
         display: flex;
         flex-direction: column;
         overflow: auto;
         // transition: bottom 0.05s linear;
         border-left: 1px solid var(--elf--layout-border-color);
+        transition: width 0.05s linear;      
+        overflow: hidden;
+        
+        &.closed {
+          width: 10px !important;
+        }
       }
 
       .layout-body {
-        top: $tool-size;
-        left: $left-size;
-        right: $right-size;
-        bottom: $footer-height;
-        position: absolute;
+        flex: 1 1 auto;
+        position: relative;
       }
     }
   }

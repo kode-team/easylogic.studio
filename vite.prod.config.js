@@ -15,6 +15,7 @@ export default defineConfig({
       "elf/core": path.resolve(__dirname, "./src/elf/core"),      
       elf: path.resolve(__dirname, "./src/elf"),
       sapa: path.resolve(__dirname, "./src/sapa"),
+      engine: path.resolve(__dirname, "./src/engine"),
       style: path.resolve(__dirname, "./src/scss"),
       plugins: path.resolve(__dirname, "./src/plugins"),
       "export-library": path.resolve(__dirname, "./src/export-library"),
@@ -27,10 +28,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         editor: path.resolve(__dirname, "index.html"),
-        whiteboard: path.resolve(__dirname, "whiteboard.html"),
-        dataeditor: path.resolve(__dirname, "dataeditor.html"),
-        threeeditor: path.resolve(__dirname, "3d.html"),
-        blankeditor: path.resolve(__dirname, "blank.html"),
       },
     },
   },

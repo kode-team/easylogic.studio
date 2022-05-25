@@ -15,8 +15,14 @@ export default {
     // 다음 부모의 첫번째 자식을 선택한다.
     let currentValues = {};
     let prevParentLayer = null;
-    if (currentLayer.isFirst()) {
+    if (currentLayer.isFirst) {
       prevParentLayer = oldParentLayer.prev;
+
+      if (!prevParentLayer) {
+        // 첫번째 요소가 있고, parent 가 존재하지 않는다면  첫번째 요소를 선택한다.
+        return;
+      }
+
       prevParentLayer.insertBefore(currentLayer);
 
       currentValues = currentLayer.hierarchy;

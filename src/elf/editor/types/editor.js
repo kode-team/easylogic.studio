@@ -59,6 +59,7 @@ export const MenuItemType = {
   RADIO: "radio",
   SUBMENU: "submenu",
   DROPDOWN: "dropdown",
+  CUSTOM: "custom",
 };
 
 export const ViewModeType = {

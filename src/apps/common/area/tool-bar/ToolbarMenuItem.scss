@@ -1,8 +1,9 @@
 .elf--toolbar-menu-item {
 
     height: 100%;
-    padding: 10px !important;
+    padding: 0px 10px !important;
     width: auto;
+    // min-width: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,19 +16,28 @@
         display: inline-block;
 
         svg {
-            width: 24px;
-            height: 24px;
+            width: 100%;
+            height: 100%;
 
             stroke: var(--elf--selected-font-color);
         }
     }
 
-    &:hover {
+    &:hover:not([disabled="true"]) {
         background-color: black;
     }
 
     &[data-selected="true"] {
         background-color: var(--elf--selected-color-2);
         color: var(--elf--selected-font-color);
+    }
+
+    &[disabled="true"] {
+        cursor: not-allowed;
+        filter: invert(50%);
+
+        > * {
+            pointer-events: none;
+        }
     }
 }

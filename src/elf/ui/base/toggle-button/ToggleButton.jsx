@@ -18,6 +18,7 @@ export class ToggleButton extends BaseUI {
     return {
       checkedValue: this.props.checkedValue || this.props.value,
       checked: this.props.value || "false",
+      size: this.props.size,
       toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
       toggleTitles: this.props.toggleTitles || [],
       toggleValues: this.props.toggleValues || ["true", "false"],

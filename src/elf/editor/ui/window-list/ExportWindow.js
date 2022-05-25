@@ -60,8 +60,8 @@ ${project.layers.map((item) => this.makeStyle(item)).join("\n")}
 
     // html code
     var html = `
-${this.$editor.html.renderSVG(project)}
-${this.$editor.html.render(project)}
+${this.$editor.renderer("html").renderSVG(project)}
+${this.$editor.renderer("html").render(project)}
         `;
 
     // export svg image
@@ -102,11 +102,11 @@ ${this.$editor.html.render(project)}
   }
 
   makeStyle(item) {
-    return this.$editor.html.toExportStyle(item, null);
+    return this.$editor.renderer("html").toExportStyle(item, null);
   }
 
   makeHTML(item) {
-    return this.$editor.html.render(item);
+    return this.$editor.renderer("html").render(item);
   }
 
   [CLICK("$header .tab-item")](e) {

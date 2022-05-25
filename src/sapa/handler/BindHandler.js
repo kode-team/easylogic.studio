@@ -1,5 +1,7 @@
+import { classnames } from "sapa";
+
 import { BIND_CHECK_FUNCTION, BIND_CHECK_DEFAULT_FUNCTION } from "../Event";
-import { isNumber, isObject } from "../functions/func";
+import { isNumber } from "../functions/func";
 import BaseHandler from "./BaseHandler";
 
 const convertToPx = (key, value) => {
@@ -66,17 +68,9 @@ const applyElementAttribute = (
     //  "class" : 'string-class'
 
     if (Array.isArray(value)) {
-      $element.addClass(...value.filter(Boolean));
-    } else if (isObject(value)) {
-      const keys = Object.keys(value);
-      for (var i = 0, len = keys.length; i < len; i++) {
-        const className = keys[i];
-        const hasClass = value[className];
-
-        $element.toggleClass(className, hasClass);
-      }
+      $element.updateClass(classnames(...value));
     } else {
-      $element.el.className = value;
+      $element.updateClass(classnames(value));
     }
 
     return;

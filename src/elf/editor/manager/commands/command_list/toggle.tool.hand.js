@@ -5,7 +5,7 @@ import { EditingMode } from "elf/editor/types/editor";
  * @param {Editor} editor
  */
 export default {
-  command: "toggleToolHand",
+  command: "toggleHandTool",
   execute: function (editor) {
     if (editor.context.config.is("editing.mode", EditingMode.HAND)) {
       editor.context.config.set("editing.mode", EditingMode.SELECT);

@@ -515,7 +515,7 @@ export default class LayerAppendView extends EditorElement {
     );
 
     this.state.inlineStyle = CSS_TO_STRING(
-      this.$editor.html.toCSS(model, {
+      this.$editor.renderer("html").toCSS(model, {
         top: true,
         left: true,
         width: true,

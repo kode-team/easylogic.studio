@@ -23,13 +23,13 @@ import fillEditorView from "./fill-editor-view";
 import filter from "./filter";
 import font from "./font";
 import gradient from "./gradient";
-import gradientAsset from "./gradient-asset";
 import gradientEditorView from "./gradient-editor-view";
 import guideLineView from "./guide-line-view";
 import history from "./history";
 import hoverView from "./hover-view";
 import image from "./image";
 import imageAsset from "./image-asset";
+import inspector from "./inspector";
 import keyframe from "./keyframe";
 import layerAppendView from "./layer-append-view";
 import layerTree from "./layer-tree";
@@ -43,9 +43,9 @@ import pathTool from "./path-tool";
 import patternAsset from "./pattern-asset";
 import position from "./position";
 import project from "./project";
-import rendererHtml from "./renderer-html";
+// import rendererHtml from "../../../engine/html/renderer/renderer-html";
 import rendererJson from "./renderer-json";
-import rendererSvg from "./renderer-svg";
+// import rendererSvg from "../../../engine/html/renderer/renderer-svg";
 import sample from "./sample";
 import selectionInfoView from "./selection-info-view";
 import selectionToolView from "./selection-tool-view";
@@ -71,16 +71,15 @@ export default [
   configs,
   commands,
   menus,
-  layertab,
   defaultConfigs,
   defaultIcons,
   defaultMessages,
   defaultItems,
   defaultPatterns,
 
-  rendererHtml,
+  // rendererHtml,
   rendererJson,
-  rendererSvg,
+  // rendererSvg,
 
   // common editor
 
@@ -91,6 +90,8 @@ export default [
   gradient,
 
   // inspector.tab.style
+  layertab,
+  inspector,
 
   // depth,
   alignment,
@@ -135,7 +136,6 @@ export default [
   backdropFilter,
   boxShadow,
   clipPath,
-  gradientAsset,
 
   exportResource,
 

@@ -181,6 +181,7 @@ export function combineKeyArray(obj) {
  * classnames('a', {'b': true}) => 'a b'
  * classnames('a', {'b': true, 'c': false}) => 'a b'
  * classnames('a', {'b': true, 'c': true}) => 'a b c'
+ * classnames('a', ['10', 'value', { yellow: true }],{'b': true, 'c': true, 'd': 'foo'}) => 'a 10 value yellow b c d'
  *
  * @param  {...(string|object)} args
  * @returns
@@ -189,7 +190,9 @@ export function classnames(...args) {
   const result = [];
 
   args.filter(Boolean).forEach((it) => {
-    if (isObject(it)) {
+    if (isArray(it)) {
+      result.push(classnames(...it));
+    } else if (isObject(it)) {
       Object.keys(it)
         .filter((k) => Boolean(it[k]))
         .forEach((key) => {

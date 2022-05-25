@@ -11,6 +11,7 @@
             "elf/core": ["./src/elf/core"],      
             "elf/*": ["./src/elf/*"],
             "sapa": ["./src/sapa"],
+            "engine/*": ["./src/engine/*"],            
             "style/*": ["./src/scss/*"],
             "export-library/*": ["./src/export-library/*"],
             "plugins/*": ["./src/plugins/*"],

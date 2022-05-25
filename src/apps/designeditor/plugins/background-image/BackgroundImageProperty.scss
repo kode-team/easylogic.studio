@@ -3,10 +3,11 @@
 }
 
 .fill {
-    display: inline-block;
-    vertical-align: middle;
-    width: 30px !important;
-    height: 30px !important;
+    display: flex;
+    width: 24px !important;
+    height: 24px !important;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
         background-color: var(--elf--input-inactive-color);

@@ -212,7 +212,7 @@ export default class SVGTextureView extends EditorElement {
         d = path.d;
       }
 
-      const svg = this.$editor.svg.render(
+      const svg = this.$editor.renderer("svg").render(
         this.$model.createModel(
           {
             itemType: it.itemType,
