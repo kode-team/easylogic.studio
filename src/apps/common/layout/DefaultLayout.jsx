@@ -16,17 +16,15 @@ const DefaultLayoutDirection = {
   OUTER: "outer",
 };
 
-export class DefaultLayoutItem extends EditorElement {}
+export class DefaultLayoutItem extends EditorElement {
+  get size() {
+    return this.props.size;
+  }
+}
 
 export class DefaultLayout extends EditorElement {
-  checkProps(props) {
-    return props;
-  }
-
-  afterRender() {
-    super.afterRender();
-
-    this.$config.init("editor.layout.elements", this.refs);
+  getLayoutElements() {
+    return this.refs;
   }
 
   initState() {
@@ -46,7 +44,7 @@ export class DefaultLayout extends EditorElement {
       rightSize: isNotUndefined(this.props.rightSize)
         ? Number(this.props.rightSize)
         : 280,
-      bottomSize: this.props.bottomSize || 0,
+      bottomSize: this.props.bottomSize || 20,
       lastBottomSize: this.props.lastBottomSize || 150,
       minSize: isNotUndefined(this.props.minSize)
         ? Boolean(this.props.minSize)
@@ -65,7 +63,7 @@ export class DefaultLayout extends EditorElement {
     const top = this.getDirection(DefaultLayoutDirection.TOP);
     const left = this.getDirection(DefaultLayoutDirection.LEFT);
     const right = this.getDirection(DefaultLayoutDirection.RIGHT);
-    // const bottom = this.getDirection(DefaultLayoutDirection.BOTTOM);
+    const bottom = this.getDirection(DefaultLayoutDirection.BOTTOM);
     const body = this.getDirection(DefaultLayoutDirection.BODY);
     const inner = this.getDirection(DefaultLayoutDirection.INNER);
     const outer = this.getDirection(DefaultLayoutDirection.OUTER);
@@ -101,6 +99,13 @@ export class DefaultLayout extends EditorElement {
             )}
             <div class="splitter" ref="$splitter"></div>
           </div>
+          {bottom ? (
+            <div class="layout-bottom" ref="$bottomPanel">
+              {bottom}
+            </div>
+          ) : (
+            ""
+          )}
           {inner}
         </div>
         {outer}
@@ -146,28 +151,6 @@ export class DefaultLayout extends EditorElement {
     };
   }
 
-  // [BIND("$bodyPanel")]() {
-  //   let left = this.state.leftSize;
-  //   let right = this.state.rightSize;
-  //   let bottom = this.state.bottomSize;
-
-  //   if (!this.state.showLeftPanel) {
-  //     left = 0;
-  //   }
-
-  //   if (!this.state.showRightPanel) {
-  //     right = 0;
-  //   }
-
-  //   return {
-  //     style: {
-  //       left: Length.px(left),
-  //       right: Length.px(right),
-  //       bottom: Length.px(bottom),
-  //     },
-  //   };
-  // }
-
   setOptions(obj = {}) {
     this.setState(obj);
   }
@@ -190,13 +173,5 @@ export class DefaultLayout extends EditorElement {
 
   moveEndSplitter() {
     this.refs.$splitter.removeClass("selected");
-  }
-
-  refresh() {
-    this.bindData("$splitter");
-    // this.bindData("$headerPanel");
-    this.bindData("$leftPanel");
-    // this.bindData("$rightPanel");
-    // this.bindData("$bodyPanel");
   }
 }

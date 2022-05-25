@@ -35,7 +35,7 @@ export default class BorderRadiusEditor extends EditorElement {
   }
 
   template() {
-    return `<div class='elf--border-radius-editor' ref='$body'></div>`;
+    return /*html*/ `<div class='elf--border-radius-editor' ref='$body'></div>`;
   }
 
   [SUBSCRIBE_SELF("changeBorderRadius")](key, value) {
@@ -66,17 +66,16 @@ export default class BorderRadiusEditor extends EditorElement {
           })}
         </div>
         <div></div>
-
-          ${createComponent("ToggleButton", {
-            compact: true,
-            ref: "$toggle",
-            key: "border-all",
-            checkedValue: BorderGroup.PARTITIAL,
-            value: BorderGroup.ALL,
-            toggleLabels: [iconUse("border_inner"), iconUse("border_inner")],
-            toggleValues: [BorderGroup.ALL, BorderGroup.PARTITIAL],
-            onchange: "changeKeyValue",
-          })}
+        ${createComponent("ToggleButton", {
+          compact: true,
+          ref: "$toggle",
+          key: "border-all",
+          checkedValue: BorderGroup.PARTITIAL,
+          value: BorderGroup.ALL,
+          toggleLabels: [iconUse("border_inner"), iconUse("border_inner")],
+          toggleValues: [BorderGroup.ALL, BorderGroup.PARTITIAL],
+          onchange: "changeKeyValue",
+        })}
       </div>
       <div
         class="full border-radius-item"

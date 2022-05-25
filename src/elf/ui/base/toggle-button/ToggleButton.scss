@@ -1,6 +1,6 @@
 .elf--toggle-button {
-    width: var(--elf--input-height);
-    height: var(--elf--input-height);
+    width: 24px;
+    height: 24px;
 
     &.has-label {
         grid-template-columns: 70px 1fr;
@@ -44,9 +44,9 @@
         button {
             color: var(--elf--input-font-color);
             box-sizing: border-box;
-            padding: 2px 4px;
-            text-align: center;
-            vertical-align: middle;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: 100%;
             z-index: 1;

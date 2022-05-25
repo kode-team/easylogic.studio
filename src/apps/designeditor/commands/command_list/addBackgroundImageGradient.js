@@ -19,7 +19,7 @@ export default {
       );
 
       itemsMap[item.id] = {
-        "background-image": BackgroundImage.join(images),
+        backgroundImage: BackgroundImage.join(images),
       };
     });
 

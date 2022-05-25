@@ -246,6 +246,10 @@ export class EventMachine {
     return this.#state;
   }
 
+  get propKeys() {
+    return this.#propsKeys;
+  }
+
   /**
    * render 를 할 수 있는지 체크한다.
    *
@@ -855,9 +859,10 @@ export class EventMachine {
    * @returns
    */
   getChildContent(filterCallback, defaultValue = "") {
-    return (
-      this.props.contentChildren.find(filterCallback)?.props.content ||
-      defaultValue
-    );
+    return this.getChild(filterCallback)?.props.content || defaultValue;
+  }
+
+  getChild(filterCallback) {
+    return this.props.contentChildren.find(filterCallback);
   }
 }

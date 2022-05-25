@@ -3,11 +3,26 @@
     flex-direction: row;
     justify-content: space-between;
     height: 100%;
-    background-color: var(--elf--header-background-color);
+    background-color: var(--elf--toolbar-background-color);
     color: var(--elf--selected-font-color);
 
-    > * {
+    > .logo-area {
+        flex: none;
+        width: 60px;
+        // background-color: yellow;
+        // padding: 10px;
+        height: 100%;
+
+        > * {
+            height: 100%;
+        }
+    }
+
+    > .toolbar-area {
+        flex: 1 1 auto;
         display: flex;
+        flex-direction: row;
+        justify-content: space-between;
         > * {
             // display: inline-block;
             min-height: 48px !important;

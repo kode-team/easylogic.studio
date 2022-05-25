@@ -50,7 +50,6 @@
     }
   
     > .property-title {
-      padding: 0px 10px;
       cursor: pointer;
       position: relative;
       display: flex;
@@ -58,7 +57,13 @@
       align-items: center;
       cursor: pointer;
       color: var(--elf--font-color);
-      height: 30px;
+      height: 32px;
+      margin-top: 8px;
+      margin-left: 8px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      padding: 8px;
+      box-sizing: border-box;
   
       &.filter {
         grid-template-columns: 1fr 110px;
@@ -107,18 +112,22 @@
     }
   
     > .property-body {
+
       display: none;
-      padding: 0px 10px;
-      padding-top: 0px;
+      margin-top: 0px;
+      margin-left: 8px;
+      margin-right: 8px;
+      margin-bottom: 0px;
       position: relative;
-      // background-color: var(--elf--property-background-color);
-  
-      &.no-padding {
-        padding: 0px !important;
+      box-sizing: border-box;
+      padding: 0px 8px 8px 8px;
+
+      &:empty {
+        display: none;
       }
   
       .property-item {
-        padding:4px 0px;
+        // padding:4px 0px;
   
         &:first-child {
           padding-top: 0px;

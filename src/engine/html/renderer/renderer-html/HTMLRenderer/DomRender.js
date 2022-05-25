@@ -33,8 +33,6 @@ function valueFilter(obj) {
   return result;
 }
 
-const EMPTY_OBJECT = {};
-
 export default class DomRender extends ItemRender {
   /**
    *
@@ -50,18 +48,12 @@ export default class DomRender extends ItemRender {
    * @param {Item} item
    */
   toBackgroundImageCSS(item) {
-    const cache = item.cacheBackgroundImage;
-
-    if (!cache) {
+    if (!item.cacheBackgroundImage) {
       item.setBackgroundImageCache();
     }
 
-    if (!cache) {
-      return EMPTY_OBJECT;
-    }
-
     // visibility 속성은 출력하지 않는다.
-    return cache;
+    return item.cacheBackgroundImage;
   }
 
   /**

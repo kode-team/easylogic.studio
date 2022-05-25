@@ -23,13 +23,13 @@ import fillEditorView from "./fill-editor-view";
 import filter from "./filter";
 import font from "./font";
 import gradient from "./gradient";
-import gradientAsset from "./gradient-asset";
 import gradientEditorView from "./gradient-editor-view";
 import guideLineView from "./guide-line-view";
 import history from "./history";
 import hoverView from "./hover-view";
 import image from "./image";
 import imageAsset from "./image-asset";
+import inspector from "./inspector";
 import keyframe from "./keyframe";
 import layerAppendView from "./layer-append-view";
 import layerTree from "./layer-tree";
@@ -71,7 +71,6 @@ export default [
   configs,
   commands,
   menus,
-  layertab,
   defaultConfigs,
   defaultIcons,
   defaultMessages,
@@ -91,6 +90,8 @@ export default [
   gradient,
 
   // inspector.tab.style
+  layertab,
+  inspector,
 
   // depth,
   alignment,
@@ -135,7 +136,6 @@ export default [
   backdropFilter,
   boxShadow,
   clipPath,
-  gradientAsset,
 
   exportResource,
 

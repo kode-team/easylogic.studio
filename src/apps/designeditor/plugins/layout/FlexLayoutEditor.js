@@ -119,6 +119,7 @@ export default class FlexLayoutEditor extends EditorElement {
       compact: true,
       key: "flexWrap",
       ref: "$wrap",
+      size: 30,
       checkedValue: "wrap",
       value: this.state.flexWrap || FlexWrap.NOWRAP,
       toggleLabels: [iconUse("wrap"), iconUse("wrap")],

@@ -82,7 +82,7 @@ $range-thumb-border-radius: 20px;
         --elf--selected-border-color: #{$selected-border-color};
         --elf--layout-border-color: #{$layout-border-color};
         --elf--background-color: #{$background-color};      
-        --elf--header-background-color: #{$header-background-color};  
+        --elf--toolbar-background-color: #{$toolbar-background-color};  
         --elf--selected-background-color: #{$selected-background-color};
         --elf--font-color: #{$font-color};
         --elf--disabled-font-color: #{$disabled-font-color};
@@ -117,7 +117,7 @@ $range-thumb-border-radius: 20px;
         --elf--rotate-y-border-color: #{$rotate-y-border-color}; 
         --elf--tooltip-background-color: #{$tooltip-background-color};
         --elf--tooltip-font-color: #{$tooltip-font-color};     
-        --elf--tab-header-background-color: #{$tab-header-background-color};      
+        --elf--tab-toolbar-background-color: #{$tab-toolbar-background-color};      
         --elf--tab-font-color: #{$tab-font-color};            
     }    
 
@@ -141,7 +141,7 @@ $range-thumb-border-radius: 20px;
         --elf--selected-hover-color: #{$selected-hover-color};    
         --elf--selected-border-color: #{$selected-border-color};
         --elf--background-color: #{$background-color};      
-        --elf--header-background-color: #{$header-background-color};  
+        --elf--toolbar-background-color: #{$toolbar-background-color};  
         --elf--selected-background-color: #{$selected-background-color};
         --elf--font-color: #{$font-color};
         --elf--disabled-font-color: #{$disabled-font-color};        
@@ -176,7 +176,7 @@ $range-thumb-border-radius: 20px;
         --elf--rotate-y-border-color: #{$rotate-y-border-color};
         --elf--tooltip-background-color: #{$tooltip-background-color};
         --elf--tooltip-font-color: #{$tooltip-font-color};      
-        --elf--tab-header-background-color: #{$tab-header-background-color};
+        --elf--tab-toolbar-background-color: #{$tab-toolbar-background-color};
         --elf--tab-font-color: #{$tab-font-color};                    
     }    
 }

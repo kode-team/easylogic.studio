@@ -342,7 +342,7 @@ export default [
       return editor.context.config.is("editing.mode", EditingMode.HAND);
     },
     action: (editor) => {
-      editor.context.config.set("editing.mode", EditingMode.HAND);
+      editor.context.commands.emit("toggleHandTool");
     },
   },
 ];

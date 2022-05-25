@@ -1,4 +1,5 @@
 $top-size: 48px;
+$bottom-size: 20px;
 $tool-size: 0px;
 $left-size: 340px;
 $left-layer-panel: 70px;
@@ -40,6 +41,15 @@ $status-bar-height: 0px;
       position: relative;
     }
 
+    .layout-bottom {
+      height: $bottom-size;
+      box-sizing: border-box;
+      z-index: 10000;
+      flex: none;
+      position: relative;
+      display: flex;
+    }
+
     .layout-middle {
       flex: 1 1 auto;
       position: relative;
@@ -56,7 +66,7 @@ $status-bar-height: 0px;
         bottom: 0px;
         cursor: ew-resize;
         z-index: 1;
-        transition: background-color 0.05s linear;
+        transition: all 0.05s linear;
 
         &:hover,
         &.selected {

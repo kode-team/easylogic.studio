@@ -25,6 +25,10 @@
         row-gap: 4px;
         flex-wrap: wrap;
         padding-bottom: 10px;
+
+        &:empty {
+          display: none;
+        }
       
         .pattern-item {
           // margin-top: 5px;

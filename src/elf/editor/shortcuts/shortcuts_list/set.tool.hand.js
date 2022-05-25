@@ -1,7 +1,7 @@
 export default {
   category: "Tools",
   key: "h",
-  command: "toggleToolHand",
+  command: "toggleHandTool",
   description: "set hand tool on",
   when: "CanvasView",
 };

@@ -74,7 +74,7 @@ export default class PositionProperty extends BaseProperty {
 
   getBody() {
     return /*html*/ `
-      <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
+      <div class="position-item" ref="$positionItem">
         <div class="grid-layout">
           ${createComponent("NumberInputEditor", {
             ref: "$x",

@@ -1,5 +1,5 @@
 // import { Editor } from "elf/editor/manager/Editor";
-import PatternAssetsProperty from "./PatternAssetsProperty";
+import PatternAssetsProperty from "../layertab/object-list/asset/PatternAssetsProperty";
 import PatternEditor from "./PatternEditor";
 import PatternInfoPopup from "./PatternInfoPopup";
 import PatternProperty from "./PatternProperty";
