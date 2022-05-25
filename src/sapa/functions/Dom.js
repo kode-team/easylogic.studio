@@ -396,6 +396,8 @@ export class Dom {
   }
 
   append(el) {
+    if (!el) return this;
+
     if (isArray(el)) {
       this.el.append(...el.map((it) => it.el || it));
     } else if (typeof el === "string") {

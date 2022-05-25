@@ -18,10 +18,13 @@
     .popup-title {
       font-size: 12px;
       font-weight: bold;
-      padding: 10px ;
-      padding-right: 0px;
+      padding: 8px ;
       display: flex;
       pointer-events: all;
+      height: 32px;
+      margin-top: 8px;
+      margin-right: 8px;
+      margin-left: 8px;
       // border-bottom: 1px solid var(--elf--border-color);
   
       > * {

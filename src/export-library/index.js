@@ -11,3 +11,5 @@ export * from "elf/editor/types/editor";
 export * from "elf/editor/types/event";
 export * from "elf/editor/types/model";
 export * from "elf/editor/types/key";
+export * from "apps/designeditor/index";
+export * from "apps/blankeditor/index";

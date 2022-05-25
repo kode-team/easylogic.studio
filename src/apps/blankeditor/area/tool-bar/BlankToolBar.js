@@ -20,6 +20,12 @@ export default class BlankToolBar extends EditorElement {
   template() {
     return /*html*/ `
             <div class='elf--blank-tool-bar'>
+              <div class="logo-area">
+                ${createComponent("ToolBarRenderer", {
+                  items: this.$menu.getTargetMenu("toolbar.logo"),
+                })}
+              </div>            
+              <div class="toolbar-area">
                 <div class='left'>
                     ${createComponent("ToolBarRenderer", {
                       items: this.$menu.getTargetMenu("toolbar.left"),
@@ -45,6 +51,7 @@ export default class BlankToolBar extends EditorElement {
                     )}                    
                     ${createComponent("ThemeChanger")}
                 </div>
+              </div>
             </div>
         `;
   }

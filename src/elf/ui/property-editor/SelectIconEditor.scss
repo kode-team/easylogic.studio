@@ -1,6 +1,6 @@
 .elf--select-icon-editor {
     border: 1px solid transparent;
-    height: var(--elf--input-height);
+    height: 24px;
     display: grid;
 
     &:hover {
@@ -30,7 +30,7 @@
         outline: none;
         line-height: 1;
         background-color: transparent;
-        height: var(--elf--input-height);
+        height: 100%;
         // border: 1px solid var(--elf--border-color);
         box-sizing: border-box;
         // padding: 2px;
@@ -40,10 +40,9 @@
         display:flex;
 
         > .select-icon-item {
-            flex: 1 1 10%; 
-            text-align: center;
-            vertical-align: middle;
-            padding: 6px 2px;
+            flex: none; 
+            width: 24px;
+            height: 24px;
             border-right: 0px;
             white-space: pre-wrap;
             word-break: break-all;
@@ -55,8 +54,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: calc(100% - 2px);
-            min-width: var(--elf--input-height);
             box-sizing: border-box;
 
             &:last-child {
@@ -68,9 +65,8 @@
             }
 
             svg {
-                width: 20px;
-                height: 20px;
-                vertical-align: middle;
+                width: 24px;
+                height: 24px;
             }
 
             &.selected {

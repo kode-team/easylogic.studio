@@ -100,6 +100,14 @@ export class BaseModel {
     this.#collapsed = value;
   }
 
+  get visibility() {
+    return this.get("visibility");
+  }
+
+  set visibility(value) {
+    this.set("visibility", value);
+  }
+
   renameWithCount() {
     let arr = this.#json.name.split(" ");
 
@@ -535,6 +543,7 @@ export class BaseModel {
       itemType: "base",
       children: [], // 하위 객체를 저장한다.
       parentId: "", // 부모 객체의 id
+      visibility: "visible",
       ...obj,
     };
   }

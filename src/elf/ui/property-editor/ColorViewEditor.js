@@ -94,13 +94,10 @@ export default class ColorViewEditor extends EditorElement {
   }
 
   template() {
-    var { label, compact, mini } = this.state;
-    var hasLabel = label ? "has-label" : "";
-    var hasCompact = compact ? "compact" : "";
-    var hasMini = mini ? "mini" : "";
+    var { label } = this.state;
 
     return /*html*/ `
-            <div class='elf--color-view-editor ${hasLabel} ${hasCompact} ${hasMini}'>
+            <div class='elf--color-view-editor'>
                 ${label ? `<label>${label}</label>` : ""}            
                 <div class='color-code' ref="$container">
                     <div class='preview' ref='$preview'>
@@ -125,10 +122,19 @@ export default class ColorViewEditor extends EditorElement {
   }
 
   [BIND("$el")]() {
+    var { label, compact, mini, colorFocus, opacityFocus } = this.state;
     return {
-      class: {
-        focused: this.state.colorFocus || this.state.opacityFocus,
-      },
+      class: [
+        "elf--color-view-editor",
+        {
+          "has-label": label,
+          compact: compact,
+          mini: mini,
+        },
+        {
+          focused: colorFocus || opacityFocus,
+        },
+      ],
     };
   }
 
