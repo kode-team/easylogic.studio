@@ -21,7 +21,7 @@ export default class SVGRender extends DomRender {
       "word-spacing": item.wordSpacing,
       "line-height": item.lineHeight,
       "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
+      // "text-shadow": item.textShadow,
       "text-overflow": item.textOverflow,
       "text-wrap": item.textWrap,
       "z-index": item.zIndex,
@@ -29,9 +29,9 @@ export default class SVGRender extends DomRender {
       "mix-blend-mode": item.mixBlendMode,
       "transform-origin": item.transformOrigin,
       "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
+      // filter: item.filter,
+      // "backdrop-filter": item.backdropFilter,
+      // "box-shadow": item.boxShadow,
       animation: item.animation,
       transition: item.transition,
     };
@@ -54,6 +54,10 @@ export default class SVGRender extends DomRender {
       this.toLayoutItemCSS(item),
       this.toBorderCSS(item),
       this.toBackgroundImageCSS(item),
+      this.toTextShadowCSS(item),
+      this.toBoxShadowCSS(item),
+      this.toFilterCSS(item),
+      this.toBackdropFilterCSS(item),
       this.toLayoutCSS(item)
     );
 

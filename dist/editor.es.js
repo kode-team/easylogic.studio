@@ -63457,7 +63457,6 @@ class SVGRender extends DomRender {
       "word-spacing": item.wordSpacing,
       "line-height": item.lineHeight,
       "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
       "text-overflow": item.textOverflow,
       "text-wrap": item.textWrap,
       "z-index": item.zIndex,
@@ -63465,15 +63464,12 @@ class SVGRender extends DomRender {
       "mix-blend-mode": item.mixBlendMode,
       "transform-origin": item.transformOrigin,
       "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
       animation: item.animation,
       transition: item.transition
     };
   }
   toCSS(item) {
-    const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item));
+    const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toTextShadowCSS(item), this.toBoxShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toLayoutCSS(item));
     delete css.left;
     delete css.top;
     delete css.width;
