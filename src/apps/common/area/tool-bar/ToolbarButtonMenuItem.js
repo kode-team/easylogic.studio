@@ -63,7 +63,11 @@ export class ToolbarButtonMenuItem extends EditorElement {
     let result = "";
 
     if (this.props.icon) {
-      result += `<span class="icon">${iconUse(this.props.icon)}</span>`;
+      const iconName = isFunction(this.props.icon)
+        ? this.props.icon(this.$editor)
+        : this.props.icon;
+
+      result += `<span class="icon">${iconUse(iconName)}</span>`;
     }
 
     if (this.props.title) {

@@ -4,17 +4,11 @@ import "./BlankToolBar.scss";
 
 import ToolBarRenderer from "apps/common/area/tool-bar/ToolBarRenderer";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
-import ExportView from "elf/editor/ui/menu-items/ExportView";
-import ThemeChanger from "elf/editor/ui/menu-items/ThemeChanger";
-import { DropdownMenu } from "elf/editor/ui/view/DropdownMenu";
 
 export default class BlankToolBar extends EditorElement {
   components() {
     return {
       ToolBarRenderer,
-      ThemeChanger,
-      ExportView,
-      DropdownMenu,
     };
   }
   template() {
@@ -44,12 +38,11 @@ export default class BlankToolBar extends EditorElement {
                 </div>
                 <div class='right'>
                     ${createComponent("ToolBarRenderer", {
-                      items: this.$menu.getTargetMenu("toolbar.right"),
+                      items: this.$menu.getTargetMenu("toolbar.right", "desc"),
                     })}                
                     ${this.$injectManager.generate(
                       "toolbar.right"
                     )}                    
-                    ${createComponent("ThemeChanger")}
                 </div>
               </div>
             </div>

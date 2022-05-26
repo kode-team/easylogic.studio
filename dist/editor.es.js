@@ -2574,6 +2574,9 @@ const _EventMachine = class {
   get propKeys() {
     return __privateGet(this, _propsKeys);
   }
+  get ref() {
+    return this.props.ref;
+  }
   get isPreLoaded() {
     return true;
   }
@@ -2898,6 +2901,36 @@ const _EventMachine = class {
   }
   findChildren(BaseComponent) {
     return this.props.contentChildren.filter((it) => it.component === BaseComponent);
+  }
+  findChildByRef(ref) {
+    const result = [];
+    Object.keys(this.children).forEach((key) => {
+      const child = this.children[key];
+      if (child.ref === ref) {
+        result.push(child);
+      }
+      if (Object.keys(child.children).length) {
+        result.push(...child.findChildByRef(ref));
+      }
+    });
+    return result;
+  }
+  findRef(callback) {
+    const result = [];
+    Object.keys(this.children).forEach((key) => {
+      const child = this.children[key];
+      if (callback(child)) {
+        result.push(child);
+      }
+      if (result.length)
+        return result;
+      if (child.children) {
+        result.push(...child.findNestedChildren(callback));
+      }
+      if (result.length)
+        return result;
+    });
+    return result;
   }
   getChildContent(filterCallback, defaultValue2 = "") {
     var _a;
@@ -6240,12 +6273,12 @@ var __glob_0_217 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": title
 }, Symbol.toStringTag, { value: "Module" }));
-var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
+var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" class="target" /><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
 var __glob_0_218 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": to_back
 }, Symbol.toStringTag, { value: "Module" }));
-var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
+var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path class="target" d="M 7 7L 22 7L 22 22L 7 22L 7 7Z"/>`, { width: 30, height: 30 });
 var __glob_0_219 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": to_front
@@ -6475,7 +6508,8 @@ class ToolbarButtonMenuItem extends EditorElement {
   [LOAD("$el") + DOMDIFF]() {
     let result = "";
     if (this.props.icon) {
-      result += `<span class="icon">${iconUse(this.props.icon)}</span>`;
+      const iconName = isFunction(this.props.icon) ? this.props.icon(this.$editor) : this.props.icon;
+      result += `<span class="icon">${iconUse(iconName)}</span>`;
     }
     if (this.props.title) {
       result += `<span class="title">${this.props.title}</span>`;
@@ -7604,127 +7638,10 @@ class ToolBarRenderer extends EditorElement {
     }), [item.content]);
   }
 }
-const DEFAULT_TITLE = "";
-const DEFAULT_ICON = "";
-const DEFAULT_CHECKED = false;
-class MenuItem extends EditorElement {
-  template() {
-    return `
-        <button 
-            type="button" 
-            class='elf--menu-item ${this.getClassName()}' 
-            data-no-title="${this.isHideTitle()}" 
-            ${this.isHideTitle() && this.isHideTooltip() === false ? `data-tooltip="${this.getTitle()}"` : ""} 
-            checked="${this.getChecked() ? "checked" : ""}"
-            ${this.isDisabled() ? "disabled" : ""}
-            data-direction="${this.getDirection()}"
-        >
-            <div class="icon ${this.getIcon()}" ref="$icon">${obj$2[this.getIconString()] || this.getIconString() || ""}</div>
-            ${this.isHideTitle() ? "" : `<div class="title">${this.getTitle()}</div>`}
-            
-        </button>
-        `;
-  }
-  getClassName() {
-    return "";
-  }
-  clickButton() {
-  }
-  getChecked() {
-    return DEFAULT_CHECKED;
-  }
-  isDisabled() {
-    return false;
-  }
-  setSelected(isSelected) {
-    this.$el.toggleClass("selected", isSelected);
-  }
-  getTitle() {
-    return DEFAULT_TITLE;
-  }
-  getIcon() {
-    return DEFAULT_ICON;
-  }
-  setIcon(iconString) {
-    this.refs.$icon.html(obj$2[iconString] || iconString || "");
-  }
-  getIconString() {
-    return DEFAULT_ICON;
-  }
-  isHideTitle() {
-    return false;
-  }
-  isHideTooltip() {
-    return true;
-  }
-  [CLICK()](e) {
-    this.clickButton(e);
-  }
-  getDirection() {
-    return this.props.direction || "";
-  }
-  static createMenuItem(opt = {}) {
-    return class extends MenuItem {
-      getIconString() {
-        return opt.iconString || "add_box";
-      }
-      getTitle() {
-        return opt.title || "New Item";
-      }
-      isHideTitle() {
-        return opt.isHideTitle || true;
-      }
-      clickButton(e) {
-        opt.clickButton(e);
-      }
-      getDirection() {
-        return opt.direction;
-      }
-    };
-  }
-}
-class ExportView extends MenuItem {
-  getIconString() {
-    return "launch";
-  }
-  getTitle() {
-    return this.$i18n("menu.item.export.title");
-  }
-  clickButton() {
-    this.emit("showExportView");
-  }
-}
-class ThemeChanger extends MenuItem {
-  getIconString() {
-    if (this.$config.is("editor.theme", "dark")) {
-      return "dark";
-    } else {
-      return "light";
-    }
-  }
-  getTitle() {
-    return "Theme";
-  }
-  isHideTitle() {
-    return true;
-  }
-  clickButton() {
-    if (this.$config.get("editor.theme") === "dark") {
-      this.$config.set("editor.theme", "light");
-      this.setIcon("light");
-    } else {
-      this.$config.set("editor.theme", "dark");
-      this.setIcon("dark");
-    }
-  }
-}
 class BlankToolBar extends EditorElement {
   components() {
     return {
-      ToolBarRenderer,
-      ThemeChanger,
-      ExportView,
-      DropdownMenu
+      ToolBarRenderer
     };
   }
   template() {
@@ -7750,10 +7667,9 @@ class BlankToolBar extends EditorElement {
                 </div>
                 <div class='right'>
                     ${createComponent("ToolBarRenderer", {
-      items: this.$menu.getTargetMenu("toolbar.right")
+      items: this.$menu.getTargetMenu("toolbar.right", "desc")
     })}                
                     ${this.$injectManager.generate("toolbar.right")}                    
-                    ${createComponent("ThemeChanger")}
                 </div>
               </div>
             </div>
@@ -22998,7 +22914,10 @@ class MenuManager {
     });
     this.editor.emit("updateMenu", target);
   }
-  getTargetMenu(target) {
+  getTargetMenu(target, sort = "asc") {
+    if (sort === "desc") {
+      return this.menus[target].reverse();
+    }
     return this.menus[target] || [];
   }
 }
@@ -28321,6 +28240,85 @@ class ContextMenuView extends EditorElement {
   }
 }
 var AlignmentProperty$1 = "";
+const DEFAULT_TITLE = "";
+const DEFAULT_ICON = "";
+const DEFAULT_CHECKED = false;
+class MenuItem extends EditorElement {
+  template() {
+    return `
+        <button 
+            type="button" 
+            class='elf--menu-item ${this.getClassName()}' 
+            data-no-title="${this.isHideTitle()}" 
+            ${this.isHideTitle() && this.isHideTooltip() === false ? `data-tooltip="${this.getTitle()}"` : ""} 
+            checked="${this.getChecked() ? "checked" : ""}"
+            ${this.isDisabled() ? "disabled" : ""}
+            data-direction="${this.getDirection()}"
+        >
+            <div class="icon ${this.getIcon()}" ref="$icon">${obj$2[this.getIconString()] || this.getIconString() || ""}</div>
+            ${this.isHideTitle() ? "" : `<div class="title">${this.getTitle()}</div>`}
+            
+        </button>
+        `;
+  }
+  getClassName() {
+    return "";
+  }
+  clickButton() {
+  }
+  getChecked() {
+    return DEFAULT_CHECKED;
+  }
+  isDisabled() {
+    return false;
+  }
+  setSelected(isSelected) {
+    this.$el.toggleClass("selected", isSelected);
+  }
+  getTitle() {
+    return DEFAULT_TITLE;
+  }
+  getIcon() {
+    return DEFAULT_ICON;
+  }
+  setIcon(iconString) {
+    this.refs.$icon.html(obj$2[iconString] || iconString || "");
+  }
+  getIconString() {
+    return DEFAULT_ICON;
+  }
+  isHideTitle() {
+    return false;
+  }
+  isHideTooltip() {
+    return true;
+  }
+  [CLICK()](e) {
+    this.clickButton(e);
+  }
+  getDirection() {
+    return this.props.direction || "";
+  }
+  static createMenuItem(opt = {}) {
+    return class extends MenuItem {
+      getIconString() {
+        return opt.iconString || "add_box";
+      }
+      getTitle() {
+        return opt.title || "New Item";
+      }
+      isHideTitle() {
+        return opt.isHideTitle || true;
+      }
+      clickButton(e) {
+        opt.clickButton(e);
+      }
+      getDirection() {
+        return opt.direction;
+      }
+    };
+  }
+}
 class BottomAlign extends MenuItem {
   getIconString() {
     return "align_vertical_bottom";
@@ -45100,6 +45098,82 @@ function defaultPatterns(editor) {
     TextureView
   });
 }
+var DepthProperty$1 = "";
+class OrderDown extends MenuItem {
+  getIconString() {
+    return "to_back";
+  }
+  getTitle() {
+    return "To Back";
+  }
+  clickButton() {
+    this.commands.executeCommand("send.backward", "send backward", this.$context.selection.current);
+  }
+}
+class OrderFirst extends MenuItem {
+  getIconString() {
+    return "to_front";
+  }
+  getTitle() {
+    return "To First";
+  }
+  clickButton() {
+    this.$commands.executeCommand("send.back", "send back", this.$context.selection.current);
+  }
+}
+class OrderLast extends MenuItem {
+  getIconString() {
+    return "to_back";
+  }
+  getTitle() {
+    return "To Last";
+  }
+  clickButton() {
+    this.$commands.executeCommand("bring.front", "bring front", this.$context.selection.current);
+  }
+}
+class OrderTop extends MenuItem {
+  getIconString() {
+    return "to_front";
+  }
+  getTitle() {
+    return "To Front";
+  }
+  clickButton() {
+    this.commands.executeCommand("bring.forward", "bring forward", this.$context.selection.current);
+  }
+}
+class DepthProperty extends BaseProperty {
+  components() {
+    return {
+      OrderTop,
+      OrderDown,
+      OrderFirst,
+      OrderLast
+    };
+  }
+  getTitle() {
+    return this.$i18n("alignment.property.title");
+  }
+  isHideHeader() {
+    return true;
+  }
+  getBody() {
+    return `
+      <div class="elf--depth-item">
+        ${createComponent("OrderTop")}
+        ${createComponent("OrderDown")}
+        ${createComponent("OrderFirst")}
+        ${createComponent("OrderLast")}
+      </div>
+    `;
+  }
+}
+function depth(editor) {
+  editor.registerUI("inspector.tab.style", {
+    DepthProperty
+  });
+}
 var ExportProperty$1 = "";
 class ExportProperty extends BaseProperty {
   getTitle() {
@@ -49911,7 +49985,7 @@ class LayerTreeProperty extends BaseProperty {
     }
     return this.$icon.get(item.itemType, item);
   }
-  makeLayerList(parentObject, depth = 0) {
+  makeLayerList(parentObject, depth2 = 0) {
     if (!parentObject.layers)
       return "";
     const layers2 = parentObject.layers;
@@ -49930,11 +50004,11 @@ class LayerTreeProperty extends BaseProperty {
         title2 = this.$i18n("layer.tree.property.layout.title." + layer.layout);
       }
       const isHide = layer.isTreeItemHide();
-      const depthPadding = depth * 20;
+      const depthPadding = depth2 * 20;
       const hasChildren = layer.hasChildren();
       const lock2 = this.$lockManager.get(layer.id);
       const visible2 = this.$visibleManager.get(layer.id);
-      data[data.length] = `<div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true"><div class='detail'><label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' ><div class='folder ${layer.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse("arrow_right") : ""}</div><span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span><span class='name'>${name}</span></label><div class="tools"><button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse("lock") : iconUse("lock_open")}</button><button type="button" class="visible" data-visible="${visible2}" title='Visible'>${iconUse("visible")}</button><button type="button" class="remove" title='Remove'>${iconUse("remove2")}</button></div></div></div>${this.makeLayerList(layer, depth + 1)}`;
+      data[data.length] = `<div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth2}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true"><div class='detail'><label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' ><div class='folder ${layer.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse("arrow_right") : ""}</div><span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span><span class='name'>${name}</span></label><div class="tools"><button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse("lock") : iconUse("lock_open")}</button><button type="button" class="visible" data-visible="${visible2}" title='Visible'>${iconUse("visible")}</button><button type="button" class="remove" title='Remove'>${iconUse("remove2")}</button></div></div></div>${this.makeLayerList(layer, depth2 + 1)}`;
     }
     return data.join("");
   }
@@ -52722,308 +52796,6 @@ function lineView(editor) {
     LineView
   });
 }
-var DefaultMenu = [
-  {
-    type: "button",
-    icon: "navigation",
-    events: ["config:editing.mode"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.SELECT);
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "select");
-      editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
-    }
-  },
-  {
-    type: "button",
-    icon: "artboard",
-    events: ["config:editing.mode", "config:editing.mode.itemType"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "artboard");
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "artboard");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
-    },
-    items: [
-      {
-        icon: iconUse("rect"),
-        title: "Rect Layer",
-        key: "rect",
-        command: "addLayerView",
-        args: [
-          "rect",
-          {
-            backgroundColor: "#ececec"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "rect");
-        },
-        shortcut: KeyStringMaker({ key: "R" })
-      },
-      {
-        icon: iconUse("lens"),
-        title: "Circle Layer",
-        key: "circle",
-        command: "addLayerView",
-        args: ["circle"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "circle");
-        },
-        shortcut: KeyStringMaker({ key: "O" })
-      },
-      {
-        icon: iconUse("image"),
-        title: "Image",
-        key: "image",
-        command: "addLayerView",
-        args: ["image"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "image");
-        },
-        shortcut: KeyStringMaker({ key: "I" })
-      },
-      "-",
-      {
-        icon: iconUse("video"),
-        title: "Video",
-        key: "video",
-        command: "addLayerView",
-        args: ["video"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "video");
-        },
-        shortcut: KeyStringMaker({ key: "V" })
-      },
-      {
-        icon: iconUse("iframe"),
-        title: "IFrame",
-        key: "iframe",
-        command: "addLayerView",
-        args: ["iframe"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "iframe");
-        },
-        shortcut: KeyStringMaker({ key: "F" })
-      },
-      {
-        icon: iconUse("rect"),
-        title: "SampleLayer",
-        key: "sample",
-        command: "addLayerView",
-        args: ["sample"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "sample");
-        }
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.css.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "rect") || editor.context.config.is("editing.mode.itemType", "circle") || editor.context.config.is("editing.mode.itemType", "image") || editor.context.config.is("editing.mode.itemType", "video") || editor.context.config.is("editing.mode.itemType", "iframe"));
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.css.itemType");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
-    },
-    items: [
-      {
-        icon: iconUse("pentool"),
-        title: "Pen",
-        key: "path",
-        command: "addLayerView",
-        args: ["path"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.draw.itemType", "path");
-        },
-        shortcut: KeyStringMaker({ key: "P" })
-      },
-      {
-        icon: iconUse("brush"),
-        title: "Pencil",
-        key: "brush",
-        command: "addLayerView",
-        args: ["brush"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.draw.itemType", "brush");
-        },
-        shortcut: KeyStringMaker({ key: "B" })
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.draw.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode.itemType", "path") || editor.context.config.is("editing.mode.itemType", "draw");
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.draw.itemType");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
-    },
-    items: [
-      {
-        icon: iconUse("outline_rect"),
-        title: "Rectangle",
-        key: "svg-rect",
-        command: "addLayerView",
-        args: ["svg-rect"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-rect");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+R" })
-      },
-      {
-        icon: iconUse("outline_circle"),
-        title: "Circle",
-        key: "svg-circle",
-        command: "addLayerView",
-        args: ["svg-circle"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-circle");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+O" })
-      },
-      {
-        icon: iconUse("polygon"),
-        title: "Polygon",
-        key: "svg-polygon",
-        command: "addLayerView",
-        args: [
-          "polygon",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "polygon");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+P" })
-      },
-      {
-        icon: iconUse("star"),
-        title: "Star",
-        key: "star",
-        command: "addLayerView",
-        args: [
-          "star",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "star");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+S" })
-      },
-      "-",
-      {
-        icon: iconUse("smooth"),
-        title: "Spline",
-        key: "spline",
-        command: "addLayerView",
-        args: [
-          "spline",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "spline");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+L" })
-      },
-      {
-        icon: iconUse("text_rotate"),
-        title: "TextPath",
-        key: "svg-texpath",
-        command: "addLayerView",
-        args: [
-          "svg-textpath",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-textpath");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+T" })
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.svg.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "svg-rect") || editor.context.config.is("editing.mode.itemType", "svg-circle") || editor.context.config.is("editing.mode.itemType", "polygon") || editor.context.config.is("editing.mode.itemType", "star") || editor.context.config.is("editing.mode.itemType", "spline") || editor.context.config.is("editing.mode.itemType", "svg-textpath"));
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.svg.itemType");
-    }
-  },
-  {
-    type: "button",
-    icon: "title",
-    events: ["config:editing.mode", "config:editing.mode.itemType"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "text");
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "text");
-    }
-  },
-  {
-    type: "button",
-    tooltip: "Handle",
-    icon: "pantool",
-    events: ["config:editing.mode"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.HAND);
-    },
-    action: (editor) => {
-      editor.context.commands.emit("toggleHandTool");
-    }
-  }
-];
 function menus(editor) {
   editor.registerMenu("toolbar.logo", [
     {
@@ -53098,7 +52870,324 @@ function menus(editor) {
       ]
     }
   ]);
-  editor.registerMenu("toolbar.left", DefaultMenu);
+  editor.registerMenu("toolbar.left", [
+    {
+      type: "button",
+      icon: "navigation",
+      events: ["config:editing.mode"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.SELECT);
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("addLayerView", "select");
+        editor2.context.config.is("editing.mode.itemType", EditingMode.SELECT);
+      }
+    },
+    {
+      type: "button",
+      icon: "artboard",
+      events: ["config:editing.mode", "config:editing.mode.itemType"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && editor2.context.config.is("editing.mode.itemType", "artboard");
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("addLayerView", "artboard");
+      }
+    },
+    {
+      type: "dropdown",
+      icon: (editor2, dropdown) => {
+        var _a;
+        return ((_a = dropdown.findItem(editor2.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
+      },
+      items: [
+        {
+          icon: iconUse("rect"),
+          title: "Rect Layer",
+          key: "rect",
+          command: "addLayerView",
+          args: [
+            "rect",
+            {
+              backgroundColor: "#ececec"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "rect");
+          },
+          shortcut: KeyStringMaker({ key: "R" })
+        },
+        {
+          icon: iconUse("lens"),
+          title: "Circle Layer",
+          key: "circle",
+          command: "addLayerView",
+          args: ["circle"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "circle");
+          },
+          shortcut: KeyStringMaker({ key: "O" })
+        },
+        {
+          icon: iconUse("image"),
+          title: "Image",
+          key: "image",
+          command: "addLayerView",
+          args: ["image"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "image");
+          },
+          shortcut: KeyStringMaker({ key: "I" })
+        },
+        "-",
+        {
+          icon: iconUse("video"),
+          title: "Video",
+          key: "video",
+          command: "addLayerView",
+          args: ["video"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "video");
+          },
+          shortcut: KeyStringMaker({ key: "V" })
+        },
+        {
+          icon: iconUse("iframe"),
+          title: "IFrame",
+          key: "iframe",
+          command: "addLayerView",
+          args: ["iframe"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "iframe");
+          },
+          shortcut: KeyStringMaker({ key: "F" })
+        },
+        {
+          icon: iconUse("rect"),
+          title: "SampleLayer",
+          key: "sample",
+          command: "addLayerView",
+          args: ["sample"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "sample");
+          }
+        }
+      ],
+      events: [
+        "config:editing.mode",
+        "config:editing.mode.itemType",
+        "config:editing.css.itemType"
+      ],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && (editor2.context.config.is("editing.mode.itemType", "rect") || editor2.context.config.is("editing.mode.itemType", "circle") || editor2.context.config.is("editing.mode.itemType", "image") || editor2.context.config.is("editing.mode.itemType", "video") || editor2.context.config.is("editing.mode.itemType", "iframe"));
+      },
+      selectedKey: (editor2) => {
+        return editor2.context.config.get("editing.css.itemType");
+      }
+    },
+    {
+      type: "dropdown",
+      icon: (editor2, dropdown) => {
+        var _a;
+        return ((_a = dropdown.findItem(editor2.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
+      },
+      items: [
+        {
+          icon: iconUse("pentool"),
+          title: "Pen",
+          key: "path",
+          command: "addLayerView",
+          args: ["path"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.draw.itemType", "path");
+          },
+          shortcut: KeyStringMaker({ key: "P" })
+        },
+        {
+          icon: iconUse("brush"),
+          title: "Pencil",
+          key: "brush",
+          command: "addLayerView",
+          args: ["brush"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.draw.itemType", "brush");
+          },
+          shortcut: KeyStringMaker({ key: "B" })
+        }
+      ],
+      events: [
+        "config:editing.mode",
+        "config:editing.mode.itemType",
+        "config:editing.draw.itemType"
+      ],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode.itemType", "path") || editor2.context.config.is("editing.mode.itemType", "draw");
+      },
+      selectedKey: (editor2) => {
+        return editor2.context.config.get("editing.draw.itemType");
+      }
+    },
+    {
+      type: "dropdown",
+      icon: (editor2, dropdown) => {
+        var _a;
+        return ((_a = dropdown.findItem(editor2.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
+      },
+      items: [
+        {
+          icon: iconUse("outline_rect"),
+          title: "Rectangle",
+          key: "svg-rect",
+          command: "addLayerView",
+          args: ["svg-rect"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "svg-rect");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+R" })
+        },
+        {
+          icon: iconUse("outline_circle"),
+          title: "Circle",
+          key: "svg-circle",
+          command: "addLayerView",
+          args: ["svg-circle"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "svg-circle");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+O" })
+        },
+        {
+          icon: iconUse("polygon"),
+          title: "Polygon",
+          key: "svg-polygon",
+          command: "addLayerView",
+          args: [
+            "polygon",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "polygon");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+P" })
+        },
+        {
+          icon: iconUse("star"),
+          title: "Star",
+          key: "star",
+          command: "addLayerView",
+          args: [
+            "star",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "star");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+S" })
+        },
+        "-",
+        {
+          icon: iconUse("smooth"),
+          title: "Spline",
+          key: "spline",
+          command: "addLayerView",
+          args: [
+            "spline",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "spline");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+L" })
+        },
+        {
+          icon: iconUse("text_rotate"),
+          title: "TextPath",
+          key: "svg-texpath",
+          command: "addLayerView",
+          args: [
+            "svg-textpath",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "svg-textpath");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+T" })
+        }
+      ],
+      events: [
+        "config:editing.mode",
+        "config:editing.mode.itemType",
+        "config:editing.svg.itemType"
+      ],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && (editor2.context.config.is("editing.mode.itemType", "svg-rect") || editor2.context.config.is("editing.mode.itemType", "svg-circle") || editor2.context.config.is("editing.mode.itemType", "polygon") || editor2.context.config.is("editing.mode.itemType", "star") || editor2.context.config.is("editing.mode.itemType", "spline") || editor2.context.config.is("editing.mode.itemType", "svg-textpath"));
+      },
+      selectedKey: (editor2) => {
+        return editor2.context.config.get("editing.svg.itemType");
+      }
+    },
+    {
+      type: "button",
+      icon: "title",
+      events: ["config:editing.mode", "config:editing.mode.itemType"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && editor2.context.config.is("editing.mode.itemType", "text");
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("addLayerView", "text");
+      }
+    },
+    {
+      type: "button",
+      tooltip: "Handle",
+      icon: "pantool",
+      events: ["config:editing.mode"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.HAND);
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("toggleHandTool");
+      }
+    }
+  ]);
+  editor.registerMenu("toolbar.right", [
+    {
+      type: "button",
+      icon: (editor2) => {
+        if (editor2.context.config.is("editor.theme", "dark")) {
+          return "dark";
+        } else {
+          return "light";
+        }
+      },
+      events: ["config:editor.theme"],
+      action: (editor2) => {
+        editor2.context.config.toggleWith("editor.theme", "light", "dark");
+      }
+    }
+  ]);
 }
 var DrawManager$1 = "";
 class DrawManager extends EditorElement {
@@ -63907,6 +63996,7 @@ var designEditorPlugins = [
   gradient,
   layertab,
   inspector,
+  depth,
   alignment,
   position,
   layout,

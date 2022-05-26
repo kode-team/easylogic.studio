@@ -987,9 +987,9 @@ declare module "@easylogic/editor" {
     off(message: string, callback: Function): void;
   }
 
-  interface ConfigManager {
+  export interface ConfigManager {
     get(key: string): any;
-    set(key: string, value: any, isSave: boolean): void;
+    set(key: string, value: any, isSave?: boolean): void;
     setAll(obj: KeyValue): void;
 
     getType(key: string): string;
@@ -1014,6 +1014,11 @@ declare module "@easylogic/editor" {
      */
     registerConfig(config: KeyValue): void;
   }
+
+  export interface CommandManager {
+    emit(commandString: string, ...args: any[]): void;
+  }
+
   export class EditorElement extends UIElement {
     get $editor(): EditorInstance;
     get $store(): BaseStore;
@@ -1212,7 +1217,10 @@ declare module "@easylogic/editor" {
     json: JSONRenderer;
 
     config: ConfigManager;
-    context: KeyValue;
+    context: {
+      config: ConfigManager;
+      commands: CommandManager;
+    };
   }
 
   export interface PluginInterface {

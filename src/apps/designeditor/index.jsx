@@ -67,7 +67,7 @@ export class DesignEditor extends BlankEditor {
   getBodyPanel() {
     return (
       <DefaultLayoutItem type="body">
-        <BodyPanel ref="$bodyPanelView" />
+        <BodyPanel ref={"$bodyPanelView"} />
       </DefaultLayoutItem>
     );
   }

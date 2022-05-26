@@ -31,7 +31,11 @@ export class MenuManager {
     this.editor.emit("updateMenu", target);
   }
 
-  getTargetMenu(target) {
+  getTargetMenu(target, sort = "asc") {
+    if (sort === "desc") {
+      return this.menus[target].reverse();
+    }
+
     return this.menus[target] || [];
   }
 }
