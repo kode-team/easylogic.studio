@@ -69,6 +69,8 @@ export class DomModel extends GroupModel {
       pattern: "",
       selectors: [],
       svg: [],
+      filter: [],
+      backdropFilter: [],
       gridColumnStart: "",
       gridColumnEnd: "",
       gridRowStart: "",

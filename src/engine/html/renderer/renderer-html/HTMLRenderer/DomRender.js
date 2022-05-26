@@ -262,6 +262,108 @@ export default class DomRender extends ItemRender {
     };
   }
 
+  toBoxShadowCSS(item) {
+    const boxShadow = item.computed("boxShadow", (boxShadow = []) => {
+      return (
+        boxShadow
+          .map((shadow) => {
+            const { inset, color, offsetX, offsetY, blurRadius, spreadRadius } =
+              shadow;
+
+            return ` ${inset === "inset" ? "inset" : ""} ${Length.px(
+              offsetX
+            )} ${Length.px(offsetY)} ${Length.px(blurRadius)} ${Length.px(
+              spreadRadius
+            )} ${color}`;
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      "box-shadow": boxShadow,
+    };
+  }
+
+  toTextShadowCSS(item) {
+    const textShadow = item.computed("textShadow", (textShadow = []) => {
+      return (
+        textShadow
+          .map((shadow) => {
+            const { color, offsetX, offsetY, blurRadius } = shadow;
+
+            return ` ${Length.px(offsetX)} ${Length.px(offsetY)} ${Length.px(
+              blurRadius
+            )}  ${color}`;
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      "text-shadow": textShadow,
+    };
+  }
+
+  toFilterCSS(item) {
+    const filter = item.computed("filter", (filter = []) => {
+      return (
+        filter
+          .map((f) => {
+            switch (f.type) {
+              case "blur":
+              case "grayscale":
+              case "sepia":
+              case "invert":
+              case "opacity":
+              case "saturate":
+              case "hue-rotate":
+              case "brightness":
+              case "contrast":
+                return `${f.type}(${f.value})`;
+              case "drop-shadow":
+                return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+            }
+          })
+          .join(" ") || undefined
+      );
+    });
+
+    return {
+      filter,
+    };
+  }
+
+  toBackdropFilterCSS(item) {
+    const backdropFilter = item.computed("backdropFilter", (filter = []) => {
+      filter = filter || [];
+      return (
+        filter
+          .map((f) => {
+            switch (f.type) {
+              case "blur":
+              case "grayscale":
+              case "sepia":
+              case "invert":
+              case "opacity":
+              case "saturate":
+              case "hue-rotate":
+              case "brightness":
+              case "contrast":
+                return `${f.type}(${f.value})`;
+              case "drop-shadow":
+                return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+            }
+          })
+          .join(" ") || undefined
+      );
+    });
+
+    return {
+      "backdrop-filter": backdropFilter,
+    };
+  }
+
   /**
    * border 정보 캐슁하기
    *
@@ -409,7 +511,7 @@ export default class DomRender extends ItemRender {
     result["word-spacing"] = item.wordSpacing;
     result["line-height"] = item.lineHeight;
     result["text-indent"] = item.textIndent;
-    result["text-shadow"] = item.textShadow;
+    // result["text-shadow"] = item.textShadow;
     result["text-overflow"] = item.textOverflow;
     result["text-wrap"] = item.textWrap;
     result["position"] = item.position;
@@ -420,8 +522,8 @@ export default class DomRender extends ItemRender {
     result["transform-origin"] = item.transformOrigin;
     result["border-radius"] = item.borderRadius;
     result["filter"] = item.filter;
-    result["backdrop-filter"] = item.backdropFilter;
-    result["box-shadow"] = item.boxShadow;
+    // result["backdrop-filter"] = item.backdropFilter;
+    // result["box-shadow"] = item.boxShadow;
     result["animation"] = item.animation;
     result["transition"] = item.transition;
 
@@ -683,6 +785,10 @@ export default class DomRender extends ItemRender {
         this.toBoxModelCSS(item),
         this.toBorderCSS(item),
         this.toBackgroundImageCSS(item),
+        this.toBoxShadowCSS(item),
+        this.toTextShadowCSS(item),
+        this.toFilterCSS(item),
+        this.toBackdropFilterCSS(item),
         this.toLayoutCSS(item),
         this.toSizeCSS(item),
         this.toTransformCSS(item),

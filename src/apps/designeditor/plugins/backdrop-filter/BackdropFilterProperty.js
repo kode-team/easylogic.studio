@@ -5,6 +5,7 @@ import {
   SUBSCRIBE_SELF,
   IF,
   DEBOUNCE,
+  clone,
   createComponent,
 } from "sapa";
 
@@ -94,7 +95,7 @@ export default class BackdropFilterProperty extends BaseProperty {
         ${createComponent("FilterEditor", {
           ref: "$filterEditor",
           key: "backdropFilter",
-          value,
+          value: clone(value),
           hideLabel: true,
           onchange: "changeFilterEditor",
         })}
@@ -107,7 +108,7 @@ export default class BackdropFilterProperty extends BaseProperty {
       "setAttribute",
       "change backdrop filter",
       this.$context.selection.packByValue({
-        [key]: filter,
+        [key]: clone(filter),
       })
     );
   }

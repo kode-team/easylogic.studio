@@ -1,9 +1,9 @@
 import { makeInterpolateBackgroundImage } from "./makeInterpolateBackgroundImage";
 import { makeInterpolateBorderRadius } from "./makeInterpolateBorderRadius";
-import { makeInterpolateBoxShadow } from "./makeInterpolateBoxShadow";
+// import { makeInterpolateBoxShadow } from "./makeInterpolateBoxShadow";
 import { makeInterpolateClipPath } from "./makeInterpolateClipPath";
 import { makeInterpolateColor } from "./makeInterpolateColor";
-import { makeInterpolateFilter } from "./makeInterpolateFilter";
+// import { makeInterpolateFilter } from "./makeInterpolateFilter";
 import { makeInterpolateLength } from "./makeInterpolateLength";
 import { makeInterpolateNumber } from "./makeInterpolateNumber";
 import { makeInterpolateOffsetPath } from "./makeInterpolateOffsetPath";
@@ -13,7 +13,7 @@ import { makeInterpolateRotate } from "./makeInterpolateRotate";
 import { makeInterpolateString } from "./makeInterpolateString";
 import { makeInterpolateStrokeDashArrray } from "./makeInterpolateStrokeDashArray";
 import { makeInterpolateText } from "./makeInterpolateText";
-import { makeInterpolateTextShadow } from "./makeInterpolateTextShadow";
+// import { makeInterpolateTextShadow } from "./makeInterpolateTextShadow";
 import { makeInterpolateTransform } from "./makeInterpolateTransform";
 import { makeInterpolateTransformOrigin } from "./makeInterpolateTransformOrigin";
 import { makeInterpolatePath } from "./svg/makeInterpolatePath";
@@ -27,16 +27,16 @@ function makeInterpolateCustom(property) {
       return makeInterpolateBorderRadius;
     // case "border":
     //   return makeInterpolateBorder;
-    case "box-shadow":
-      return makeInterpolateBoxShadow;
-    case "text-shadow":
-      return makeInterpolateTextShadow;
+    // case "box-shadow":
+    //   return makeInterpolateBoxShadow;
+    // case "text-shadow":
+    //   return makeInterpolateTextShadow;
     case "background-image":
     case "BackgroundImageEditor":
       return makeInterpolateBackgroundImage;
-    case "filter":
-    case "backdrop-filter":
-      return makeInterpolateFilter;
+    // case "filter":
+    // case "backdrop-filter":
+    //   return makeInterpolateFilter;
     case "clip-path":
       return makeInterpolateClipPath;
     case "transform":

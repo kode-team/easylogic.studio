@@ -49,10 +49,13 @@ export default class Opacity extends EditorElement {
       style: {
         left: Length.percent(opacity),
       },
-      class: {
-        first: opacity <= this.state.minValue,
-        last: opacity >= this.state.maxValue,
-      },
+      class: [
+        "drag-bar2",
+        {
+          first: opacity <= this.state.minValue,
+          last: opacity >= this.state.maxValue,
+        },
+      ],
     };
   }
 

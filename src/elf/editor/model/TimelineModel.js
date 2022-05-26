@@ -1,7 +1,7 @@
 import { isNotUndefined, isUndefined, Dom } from "sapa";
 
 import { createTimingFunction } from "../interpolate/index";
-import { createInterpolateFunction } from "../interpolate/interpolate-functions";
+// import { createInterpolateFunction } from "../interpolate/interpolate-functions";
 import { AssetModel } from "./AssetModel";
 
 import { uuidShort } from "elf/core/math";
@@ -104,7 +104,7 @@ export class TimelineModel extends AssetModel {
   }
 
   compiledTimingFunction(layerId, property) {
-    var artboard = this;
+    // var artboard = this;
     var p = this.getTimelineProperty(layerId, property);
     var layer = this.modelManager.get(layerId);
     var key = `${layerId}.${property}`;
@@ -136,15 +136,15 @@ export class TimelineModel extends AssetModel {
           startValue: offset.value,
           endValue: nextOffset.value,
           timing: offset.timing,
-          interpolateFunction: createInterpolateFunction(
-            layer,
-            p.property,
-            offset.value,
-            nextOffset.value,
-            offset.editor,
-            artboard,
-            layerElement
-          ),
+          // interpolateFunction: createInterpolateFunction(
+          //   layer,
+          //   p.property,
+          //   offset.value,
+          //   nextOffset.value,
+          //   offset.editor,
+          //   artboard,
+          //   layerElement
+          // ),
           timingFunction: createTimingFunction(offset.timing),
         };
 

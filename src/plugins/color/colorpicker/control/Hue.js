@@ -30,10 +30,13 @@ export default class Hue extends EditorElement {
       style: {
         left: Length.makePercent(hue, 360),
       },
-      class: {
-        first: hue <= this.state.minValue,
-        last: hue >= this.state.maxValue,
-      },
+      class: [
+        "drag-bar",
+        {
+          first: hue <= this.state.minValue,
+          last: hue >= this.state.maxValue,
+        },
+      ],
     };
   }
 

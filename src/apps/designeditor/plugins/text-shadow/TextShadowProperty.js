@@ -1,4 +1,12 @@
-import { LOAD, CLICK, SUBSCRIBE, IF, DEBOUNCE, createComponent } from "sapa";
+import {
+  clone,
+  LOAD,
+  CLICK,
+  SUBSCRIBE,
+  IF,
+  DEBOUNCE,
+  createComponent,
+} from "sapa";
 
 import textShadow from "../../preset/text-shadow";
 import "./TextShadowProperty.scss";
@@ -35,7 +43,7 @@ export default class TextShadowProperty extends BaseProperty {
 
   [CLICK("$add")]() {
     const index = +this.refs.$select.value;
-    this.children.$textshadow.trigger("add", textShadow[index].shadow);
+    this.children.$textshadow.trigger("add", textShadow[index].shadows);
   }
 
   [LOAD("$shadowList")]() {
@@ -43,13 +51,13 @@ export default class TextShadowProperty extends BaseProperty {
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
       key: "textShadow",
-      value: current.textShadow,
+      value: clone(current.textShadow),
       onchange: (key, value) => {
         this.$commands.executeCommand(
           "setAttribute",
           "change text shadow",
           this.$context.selection.packByValue({
-            [key]: value,
+            [key]: clone(value),
           })
         );
       },

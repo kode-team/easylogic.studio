@@ -70,6 +70,13 @@ export class Filter extends PropertyItem {
   static join(list) {
     return list.map((it) => Filter.parse(it)).join(" ");
   }
+
+  toJSON() {
+    return {
+      type: this.json.type,
+      value: this.json.value,
+    };
+  }
 }
 
 export class BlurFilter extends Filter {
@@ -297,6 +304,16 @@ export class DropshadowFilter extends Filter {
   toString() {
     var json = this.json;
     return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color})`;
+  }
+
+  toJSON() {
+    return {
+      type: this.json.type,
+      offsetX: this.json.offsetX,
+      offsetY: this.json.offsetY,
+      blurRadius: this.json.blurRadius,
+      color: this.json.color,
+    };
   }
 }
 

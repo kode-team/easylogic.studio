@@ -1,4 +1,5 @@
 import {
+  clone,
   LOAD,
   CLICK,
   DEBOUNCE,
@@ -111,7 +112,7 @@ export default class FilterProperty extends BaseProperty {
     return createComponent("FilterEditor", {
       ref: "$filterEditor",
       key: "filter",
-      value,
+      value: clone(value),
       onchange: "changeFilterEditor",
     });
   }
@@ -121,7 +122,7 @@ export default class FilterProperty extends BaseProperty {
       "setAttribute",
       "change filter",
       this.$context.selection.packByValue({
-        [key]: filter,
+        [key]: clone(filter),
       })
     );
   }

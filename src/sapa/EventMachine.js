@@ -855,6 +855,12 @@ export class EventMachine {
     );
   }
 
+  /**
+   * unique ref 를 통해서 자식 컴포넌트를 찾는다.
+   *
+   * @param {string} ref
+   * @returns
+   */
   findChildByRef(ref) {
     const result = [];
 

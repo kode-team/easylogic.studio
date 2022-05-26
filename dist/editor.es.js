@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline, _id, _renderers;
+var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _id, _renderers;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -9462,1914 +9462,10 @@ class BlendSelectEditor extends SelectEditor {
   }
 }
 var BoxShadowEditor$1 = "";
-const color_names = {
-  aliceblue: "rgb(240, 248, 255)",
-  antiquewhite: "rgb(250, 235, 215)",
-  aqua: "rgb(0, 255, 255)",
-  aquamarine: "rgb(127, 255, 212)",
-  azure: "rgb(240, 255, 255)",
-  beige: "rgb(245, 245, 220)",
-  bisque: "rgb(255, 228, 196)",
-  black: "rgb(0, 0, 0)",
-  blanchedalmond: "rgb(255, 235, 205)",
-  blue: "rgb(0, 0, 255)",
-  blueviolet: "rgb(138, 43, 226)",
-  brown: "rgb(165, 42, 42)",
-  burlywood: "rgb(222, 184, 135)",
-  cadetblue: "rgb(95, 158, 160)",
-  chartreuse: "rgb(127, 255, 0)",
-  chocolate: "rgb(210, 105, 30)",
-  coral: "rgb(255, 127, 80)",
-  cornflowerblue: "rgb(100, 149, 237)",
-  cornsilk: "rgb(255, 248, 220)",
-  crimson: "rgb(237, 20, 61)",
-  cyan: "rgb(0, 255, 255)",
-  darkblue: "rgb(0, 0, 139)",
-  darkcyan: "rgb(0, 139, 139)",
-  darkgoldenrod: "rgb(184, 134, 11)",
-  darkgray: "rgb(169, 169, 169)",
-  darkgrey: "rgb(169, 169, 169)",
-  darkgreen: "rgb(0, 100, 0)",
-  darkkhaki: "rgb(189, 183, 107)",
-  darkmagenta: "rgb(139, 0, 139)",
-  darkolivegreen: "rgb(85, 107, 47)",
-  darkorange: "rgb(255, 140, 0)",
-  darkorchid: "rgb(153, 50, 204)",
-  darkred: "rgb(139, 0, 0)",
-  darksalmon: "rgb(233, 150, 122)",
-  darkseagreen: "rgb(143, 188, 143)",
-  darkslateblue: "rgb(72, 61, 139)",
-  darkslategray: "rgb(47, 79, 79)",
-  darkslategrey: "rgb(47, 79, 79)",
-  darkturquoise: "rgb(0, 206, 209)",
-  darkviolet: "rgb(148, 0, 211)",
-  deeppink: "rgb(255, 20, 147)",
-  deepskyblue: "rgb(0, 191, 255)",
-  dimgray: "rgb(105, 105, 105)",
-  dimgrey: "rgb(105, 105, 105)",
-  dodgerblue: "rgb(30, 144, 255)",
-  firebrick: "rgb(178, 34, 34)",
-  floralwhite: "rgb(255, 250, 240)",
-  forestgreen: "rgb(34, 139, 34)",
-  fuchsia: "rgb(255, 0, 255)",
-  gainsboro: "rgb(220, 220, 220)",
-  ghostwhite: "rgb(248, 248, 255)",
-  gold: "rgb(255, 215, 0)",
-  goldenrod: "rgb(218, 165, 32)",
-  gray: "rgb(128, 128, 128)",
-  grey: "rgb(128, 128, 128)",
-  green: "rgb(0, 128, 0)",
-  greenyellow: "rgb(173, 255, 47)",
-  honeydew: "rgb(240, 255, 240)",
-  hotpink: "rgb(255, 105, 180)",
-  indianred: "rgb(205, 92, 92)",
-  indigo: "rgb(75, 0, 130)",
-  ivory: "rgb(255, 255, 240)",
-  khaki: "rgb(240, 230, 140)",
-  lavender: "rgb(230, 230, 250)",
-  lavenderblush: "rgb(255, 240, 245)",
-  lawngreen: "rgb(124, 252, 0)",
-  lemonchiffon: "rgb(255, 250, 205)",
-  lightblue: "rgb(173, 216, 230)",
-  lightcoral: "rgb(240, 128, 128)",
-  lightcyan: "rgb(224, 255, 255)",
-  lightgoldenrodyellow: "rgb(250, 250, 210)",
-  lightgreen: "rgb(144, 238, 144)",
-  lightgray: "rgb(211, 211, 211)",
-  lightgrey: "rgb(211, 211, 211)",
-  lightpink: "rgb(255, 182, 193)",
-  lightsalmon: "rgb(255, 160, 122)",
-  lightseagreen: "rgb(32, 178, 170)",
-  lightskyblue: "rgb(135, 206, 250)",
-  lightslategray: "rgb(119, 136, 153)",
-  lightslategrey: "rgb(119, 136, 153)",
-  lightsteelblue: "rgb(176, 196, 222)",
-  lightyellow: "rgb(255, 255, 224)",
-  lime: "rgb(0, 255, 0)",
-  limegreen: "rgb(50, 205, 50)",
-  linen: "rgb(250, 240, 230)",
-  magenta: "rgb(255, 0, 255)",
-  maroon: "rgb(128, 0, 0)",
-  mediumaquamarine: "rgb(102, 205, 170)",
-  mediumblue: "rgb(0, 0, 205)",
-  mediumorchid: "rgb(186, 85, 211)",
-  mediumpurple: "rgb(147, 112, 219)",
-  mediumseagreen: "rgb(60, 179, 113)",
-  mediumslateblue: "rgb(123, 104, 238)",
-  mediumspringgreen: "rgb(0, 250, 154)",
-  mediumturquoise: "rgb(72, 209, 204)",
-  mediumvioletred: "rgb(199, 21, 133)",
-  midnightblue: "rgb(25, 25, 112)",
-  mintcream: "rgb(245, 255, 250)",
-  mistyrose: "rgb(255, 228, 225)",
-  moccasin: "rgb(255, 228, 181)",
-  navajowhite: "rgb(255, 222, 173)",
-  navy: "rgb(0, 0, 128)",
-  oldlace: "rgb(253, 245, 230)",
-  olive: "rgb(128, 128, 0)",
-  olivedrab: "rgb(107, 142, 35)",
-  orange: "rgb(255, 165, 0)",
-  orangered: "rgb(255, 69, 0)",
-  orchid: "rgb(218, 112, 214)",
-  palegoldenrod: "rgb(238, 232, 170)",
-  palegreen: "rgb(152, 251, 152)",
-  paleturquoise: "rgb(175, 238, 238)",
-  palevioletred: "rgb(219, 112, 147)",
-  papayawhip: "rgb(255, 239, 213)",
-  peachpuff: "rgb(255, 218, 185)",
-  peru: "rgb(205, 133, 63)",
-  pink: "rgb(255, 192, 203)",
-  plum: "rgb(221, 160, 221)",
-  powderblue: "rgb(176, 224, 230)",
-  purple: "rgb(128, 0, 128)",
-  rebeccapurple: "rgb(102, 51, 153)",
-  red: "rgb(255, 0, 0)",
-  rosybrown: "rgb(188, 143, 143)",
-  royalblue: "rgb(65, 105, 225)",
-  saddlebrown: "rgb(139, 69, 19)",
-  salmon: "rgb(250, 128, 114)",
-  sandybrown: "rgb(244, 164, 96)",
-  seagreen: "rgb(46, 139, 87)",
-  seashell: "rgb(255, 245, 238)",
-  sienna: "rgb(160, 82, 45)",
-  silver: "rgb(192, 192, 192)",
-  skyblue: "rgb(135, 206, 235)",
-  slateblue: "rgb(106, 90, 205)",
-  slategray: "rgb(112, 128, 144)",
-  slategrey: "rgb(112, 128, 144)",
-  snow: "rgb(255, 250, 250)",
-  springgreen: "rgb(0, 255, 127)",
-  steelblue: "rgb(70, 130, 180)",
-  tan: "rgb(210, 180, 140)",
-  teal: "rgb(0, 128, 128)",
-  thistle: "rgb(216, 191, 216)",
-  tomato: "rgb(255, 99, 71)",
-  turquoise: "rgb(64, 224, 208)",
-  violet: "rgb(238, 130, 238)",
-  wheat: "rgb(245, 222, 179)",
-  white: "rgb(255, 255, 255)",
-  whitesmoke: "rgb(245, 245, 245)",
-  yellow: "rgb(255, 255, 0)",
-  yellowgreen: "rgb(154, 205, 50)",
-  transparent: "rgba(0, 0, 0, 0)",
-  currentColor: "currentColor"
-};
-function isColorName(name) {
-  return !!color_names[name];
-}
-function getColorByName(name) {
-  return color_names[name];
-}
-var ColorNames = {
-  isColorName,
-  getColorByName
-};
-function ReverseXyz(n) {
-  return Math.pow(n, 3) > 8856e-6 ? Math.pow(n, 3) : (n - 16 / 116) / 7.787;
-}
-function ReverseRGB(n) {
-  return n > 31308e-7 ? 1.055 * Math.pow(n, 1 / 2.4) - 0.055 : 12.92 * n;
-}
-function XYZtoRGB(x, y, z) {
-  if (arguments.length == 1) {
-    var { x, y, z } = arguments[0];
-  }
-  let X = x / 100;
-  let Y = y / 100;
-  let Z = z / 100;
-  let R = X * 3.2406 + Y * -1.5372 + Z * -0.4986;
-  let G = X * -0.9689 + Y * 1.8758 + Z * 0.0415;
-  let B = X * 0.0557 + Y * -0.204 + Z * 1.057;
-  R = ReverseRGB(R);
-  G = ReverseRGB(G);
-  B = ReverseRGB(B);
-  const r = round(R * 255);
-  const g = round(G * 255);
-  const b = round(B * 255);
-  return { r, g, b };
-}
-function LABtoXYZ(l, a, b) {
-  if (arguments.length == 1) {
-    var { l, a, b } = arguments[0];
-  }
-  let Y = (l + 16) / 116;
-  let X = a / 500 + Y;
-  let Z = Y - b / 200;
-  Y = ReverseXyz(Y);
-  X = ReverseXyz(X);
-  Z = ReverseXyz(Z);
-  const x = X * 95.047;
-  const y = Y * 100;
-  const z = Z * 108.883;
-  return { x, y, z };
-}
-function PivotXyz(n) {
-  return n > 8856e-6 ? Math.pow(n, 1 / 3) : (7.787 * n + 16) / 116;
-}
-function XYZtoLAB(x, y, z) {
-  if (arguments.length == 1) {
-    var { x, y, z } = arguments[0];
-  }
-  let X = x / 95.047;
-  let Y = y / 100;
-  let Z = z / 108.883;
-  X = PivotXyz(X);
-  Y = PivotXyz(Y);
-  Z = PivotXyz(Z);
-  const l = 116 * Y - 16;
-  const a = 500 * (X - Y);
-  const b = 200 * (Y - Z);
-  return { l, a, b };
-}
-function LABtoRGB(l, a, b) {
-  if (arguments.length == 1) {
-    var { l, a, b } = arguments[0];
-  }
-  return XYZtoRGB(LABtoXYZ(l, a, b));
-}
-function RGBtoHSV(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  const R1 = r / 255;
-  const G1 = g / 255;
-  const B1 = b / 255;
-  const MaxC = Math.max(R1, G1, B1);
-  const MinC = Math.min(R1, G1, B1);
-  const DeltaC = MaxC - MinC;
-  var H = 0;
-  if (DeltaC == 0) {
-    H = 0;
-  } else if (MaxC == R1) {
-    H = 60 * ((G1 - B1) / DeltaC % 6);
-  } else if (MaxC == G1) {
-    H = 60 * ((B1 - R1) / DeltaC + 2);
-  } else if (MaxC == B1) {
-    H = 60 * ((R1 - G1) / DeltaC + 4);
-  }
-  if (H < 0) {
-    H = 360 + H;
-  }
-  var S = 0;
-  if (MaxC == 0)
-    S = 0;
-  else
-    S = DeltaC / MaxC;
-  var V = MaxC;
-  return { h: H, s: S, v: V };
-}
-function RGBtoCMYK(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  const R1 = r / 255;
-  const G1 = g / 255;
-  const B1 = b / 255;
-  const K = 1 - Math.max(R1, G1, B1);
-  const C = (1 - R1 - K) / (1 - K);
-  const M = (1 - G1 - K) / (1 - K);
-  const Y = (1 - B1 - K) / (1 - K);
-  return { c: C, m: M, y: Y, k: K };
-}
-function RGBtoHSL(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  r /= 255, g /= 255, b /= 255;
-  var max = Math.max(r, g, b), min = Math.min(r, g, b);
-  var h, s, l = (max + min) / 2;
-  if (max == min) {
-    h = s = 0;
-  } else {
-    var d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      case b:
-        h = (r - g) / d + 4;
-        break;
-    }
-    h /= 6;
-  }
-  return { h: round(h * 360), s: round(s * 100), l: round(l * 100) };
-}
-function c(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  return gray((r + g + b) / 3 > 90 ? 0 : 255);
-}
-function gray(gray2) {
-  return { r: gray2, g: gray2, b: gray2 };
-}
-function RGBtoSimpleGray(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  return gray(Math.ceil((r + g + b) / 3));
-}
-function RGBtoGray(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  return gray(RGBtoYCrCb(r, g, b).y);
-}
-function brightness(r, g, b) {
-  return Math.ceil(r * 0.2126 + g * 0.7152 + b * 0.0722);
-}
-function RGBtoYCrCb(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  const Y = brightness(r, g, b);
-  const Cb = 0.564 * (b - Y);
-  const Cr = 0.713 * (r - Y);
-  return { y: Y, cr: Cr, cb: Cb };
-}
-function PivotRGB(n) {
-  return (n > 0.04045 ? Math.pow((n + 0.055) / 1.055, 2.4) : n / 12.92) * 100;
-}
-function RGBtoXYZ(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  let R = r / 255;
-  let G = g / 255;
-  let B = b / 255;
-  R = PivotRGB(R);
-  G = PivotRGB(G);
-  B = PivotRGB(B);
-  const x = R * 0.4124 + G * 0.3576 + B * 0.1805;
-  const y = R * 0.2126 + G * 0.7152 + B * 0.0722;
-  const z = R * 0.0193 + G * 0.1192 + B * 0.9505;
-  return { x, y, z };
-}
-function RGBtoLAB(r, g, b) {
-  if (arguments.length == 1) {
-    var { r, g, b } = arguments[0];
-  }
-  return XYZtoLAB(RGBtoXYZ(r, g, b));
-}
-function HUEtoRGB(p, q, t) {
-  if (t < 0)
-    t += 1;
-  if (t > 1)
-    t -= 1;
-  if (t < 1 / 6)
-    return p + (q - p) * 6 * t;
-  if (t < 1 / 2)
-    return q;
-  if (t < 2 / 3)
-    return p + (q - p) * (2 / 3 - t) * 6;
-  return p;
-}
-function HSLtoHSV(h, s, l) {
-  if (arguments.length == 1) {
-    var { h, s, l } = arguments[0];
-  }
-  const rgb2 = HSLtoRGB(h, s, l);
-  return RGBtoHSV(rgb2.r, rgb2.g, rgb2.b);
-}
-function HSLtoRGB(h, s, l) {
-  if (arguments.length == 1) {
-    var { h, s, l } = arguments[0];
-  }
-  var r, g, b;
-  h /= 360;
-  s /= 100;
-  l /= 100;
-  if (s == 0) {
-    r = g = b = l;
-  } else {
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
-    r = HUEtoRGB(p, q, h + 1 / 3);
-    g = HUEtoRGB(p, q, h);
-    b = HUEtoRGB(p, q, h - 1 / 3);
-  }
-  return { r: round(r * 255), g: round(g * 255), b: round(b * 255) };
-}
-const color_regexp = /(#(?:[\da-f]{3}){1,2}|#(?:[\da-f]{8})|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_-]+))/gi;
-function getColorIndexString(it, prefix = "@") {
-  return `${prefix}${it.startIndex}`.padEnd(10, "0");
-}
-function isColor(str) {
-  const results = matches(str);
-  return !!results.length;
-}
-function matches(str) {
-  const matches2 = str.match(color_regexp);
-  let result = [];
-  if (!matches2) {
-    return result;
-  }
-  for (var i = 0, len2 = matches2.length; i < len2; i++) {
-    if (matches2[i].indexOf("#") > -1 || matches2[i].indexOf("rgb") > -1 || matches2[i].indexOf("hsl") > -1) {
-      result.push({ color: matches2[i] });
-    } else {
-      var nameColor = ColorNames.getColorByName(matches2[i]);
-      if (nameColor) {
-        result.push({ color: matches2[i], nameColor });
-      }
-    }
-  }
-  var pos = { next: 0 };
-  result.forEach((item) => {
-    const startIndex = str.indexOf(item.color, pos.next);
-    item.startIndex = startIndex;
-    item.endIndex = startIndex + item.color.length;
-    pos.next = item.endIndex;
-  });
-  return result;
-}
-function convertMatches(str, prefix = "@") {
-  const m = matches(str);
-  m.forEach((it) => {
-    str = str.replace(it.color, getColorIndexString(it, prefix));
-  });
-  return { str, matches: m };
-}
-function convertMatchesArray(str, splitStr = ",") {
-  const ret = convertMatches(str);
-  return ret.str.split(splitStr).map((it, index2) => {
-    it = trim(it);
-    if (ret.matches[index2]) {
-      it = it.replace(getColorIndexString(ret.matches[index2]), ret.matches[index2].color);
-    }
-    return it;
-  });
-}
-function reverseMatches(str, matches2) {
-  matches2.forEach((it) => {
-    str = str.replace(getColorIndexString(it), it.color);
-  });
-  return str;
-}
-const REG_TRIM = /^\s+|\s+$/g;
-function trim(str) {
-  return str.replace(REG_TRIM, "");
-}
-function parse(str) {
-  if (isString(str)) {
-    if (ColorNames.isColorName(str)) {
-      str = ColorNames.getColorByName(str);
-    }
-    if (str.indexOf("rgb(") > -1) {
-      var arr = str.replace("rgb(", "").replace(")", "").split(",");
-      for (var i = 0, len2 = arr.length; i < len2; i++) {
-        arr[i] = parseInt(trim(arr[i]), 10);
-      }
-      var obj2 = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: 1 };
-      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
-      return obj2;
-    } else if (str.indexOf("rgba(") > -1) {
-      var arr = str.replace("rgba(", "").replace(")", "").split(",");
-      for (var i = 0, len2 = arr.length; i < len2; i++) {
-        if (len2 - 1 == i) {
-          arr[i] = parseFloat(trim(arr[i]));
-        } else {
-          arr[i] = parseInt(trim(arr[i]), 10);
-        }
-      }
-      var obj2 = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: arr[3] };
-      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
-      return obj2;
-    } else if (str.indexOf("hsl(") > -1) {
-      var arr = str.replace("hsl(", "").replace(")", "").split(",");
-      for (var i = 0, len2 = arr.length; i < len2; i++) {
-        arr[i] = parseFloat(trim(arr[i]));
-      }
-      var obj2 = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: 1 };
-      obj2 = __spreadValues(__spreadValues({}, obj2), HSLtoRGB(obj2));
-      return obj2;
-    } else if (str.indexOf("hsla(") > -1) {
-      var arr = str.replace("hsla(", "").replace(")", "").split(",");
-      for (var i = 0, len2 = arr.length; i < len2; i++) {
-        if (len2 - 1 == i) {
-          arr[i] = parseFloat(trim(arr[i]));
-        } else {
-          arr[i] = parseInt(trim(arr[i]), 10);
-        }
-      }
-      var obj2 = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: arr[3] };
-      obj2 = __spreadValues(__spreadValues({}, obj2), HSLtoRGB(obj2));
-      return obj2;
-    } else if (str.indexOf("#") == 0) {
-      str = str.replace("#", "");
-      var arr = [];
-      var a = 1;
-      if (str.length == 3) {
-        for (var i = 0, len2 = str.length; i < len2; i++) {
-          var char = str.substr(i, 1);
-          arr.push(parseInt(char + char, 16));
-        }
-      } else if (str.length === 8) {
-        for (var i = 0, len2 = str.length; i < len2; i += 2) {
-          arr.push(parseInt(str.substr(i, 2), 16));
-        }
-        a = arr.pop() / 255;
-      } else {
-        for (var i = 0, len2 = str.length; i < len2; i += 2) {
-          arr.push(parseInt(str.substr(i, 2), 16));
-        }
-      }
-      var obj2 = { type: "hex", r: arr[0], g: arr[1], b: arr[2], a };
-      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
-      return obj2;
-    }
-  } else if (isNumber(str)) {
-    if (0 <= str && str <= 16777215) {
-      const r = (str & 16711680) >> 16;
-      const g = (str & 65280) >> 8;
-      const b = (str & 255) >> 0;
-      var obj2 = { type: "hex", r, g, b, a: 1 };
-      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
-      return obj2;
-    } else if (0 <= str && str <= 4294967295) {
-      const r = (str & 4278190080) >> 24;
-      const g = (str & 16711680) >> 16;
-      const b = (str & 65280) >> 8;
-      const a2 = (str & 255) / 255;
-      var obj2 = { type: "hex", r, g, b, a: a2 };
-      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
-      return obj2;
-    }
-  }
-  return str;
-}
-function parseGradient(colors2) {
-  if (isString(colors2)) {
-    colors2 = convertMatchesArray(colors2);
-  }
-  colors2 = colors2.map((it) => {
-    if (isString(it)) {
-      const ret = convertMatches(it);
-      let arr = trim(ret.str).split(" ");
-      if (arr[1]) {
-        if (arr[1].indexOf("%") > -1) {
-          arr[1] = parseFloat(arr[1].replace(/%/, "")) / 100;
-        } else {
-          arr[1] = parseFloat(arr[1]);
-        }
-      } else {
-        arr[1] = "*";
-      }
-      arr[0] = reverseMatches(arr[0], ret.matches);
-      return arr;
-    } else if (Array.isArray(it)) {
-      if (!it[1]) {
-        it[1] = "*";
-      } else if (isString(it[1])) {
-        if (it[1].indexOf("%") > -1) {
-          it[1] = parseFloat(it[1].replace(/%/, "")) / 100;
-        } else {
-          it[1] = +it[1];
-        }
-      }
-      return [...it];
-    }
-  });
-  const count = colors2.filter((it) => {
-    return it[1] === "*";
-  }).length;
-  if (count > 0) {
-    const sum = colors2.filter((it) => {
-      return it[1] != "*" && it[1] != 1;
-    }).map((it) => it[1]).reduce((total, cur) => {
-      return total + cur;
-    }, 0);
-    const dist2 = (1 - sum) / count;
-    colors2.forEach((it, index2) => {
-      if (it[1] == "*" && index2 > 0) {
-        if (colors2.length - 1 == index2)
-          ;
-        else {
-          it[1] = dist2;
-        }
-      }
-    });
-  }
-  return colors2;
-}
-const identity$2 = () => true;
-function _traverse(obj2, filterCallback = identity$2) {
-  var results = [];
-  let len2 = obj2.layers.length;
-  for (let start2 = len2; start2--; ) {
-    let it = obj2.layers[start2];
-    results.push(..._traverse(it.ref, filterCallback));
-  }
-  if (filterCallback(obj2)) {
-    results.push(obj2);
-  }
-  return results;
-}
-class Item {
-  constructor(json = {}) {
-    this.ref = new Proxy(this, {
-      get: (target, key) => {
-        var originMethod = target[key];
-        if (isFunction(originMethod)) {
-          return (...args2) => {
-            return originMethod.apply(target, args2);
-          };
-        } else {
-          return originMethod || target.json[key];
-        }
-      },
-      set: (target, key, value) => {
-        const isDiff = target.json[key] != value;
-        if (isDiff) {
-          target.json[key] = value;
-          this.changed();
-        }
-        return true;
-      }
-    });
-    if (json instanceof Item) {
-      json = json.toJSON();
-    }
-    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-    this.lastChangedField = {};
-    this.lastChangedFieldKeys = [];
-    this.cachedValue = {};
-    return this.ref;
-  }
-  getDefaultTitle() {
-    return "Item";
-  }
-  getIcon() {
-    return "";
-  }
-  isAttribute() {
-    return false;
-  }
-  isChanged(timestamp) {
-    return this.json.timestamp != Number(timestamp);
-  }
-  changed() {
-    this.json.timestamp = this.json._timestamp + window.performance.now();
-  }
-  get title() {
-    return this.json.name || this.getDefaultTitle();
-  }
-  renameWithCount() {
-    let arr = this.json.name.split(" ");
-    if (arr.length < 2) {
-      return;
-    }
-    let last = arr.pop();
-    let lastNumber = +last;
-    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
-      lastNumber++;
-    } else {
-      lastNumber = last;
-    }
-    const nextName = [...arr, lastNumber].join(" ");
-    this.reset({
-      name: nextName
-    });
-  }
-  get allLayers() {
-    return _traverse(this.ref);
-  }
-  filteredAllLayers(filterCallback) {
-    return _traverse(this.ref, filterCallback);
-  }
-  get id() {
-    return this.json.id;
-  }
-  get layers() {
-    return this.json.layers;
-  }
-  get parent() {
-    return this.json.parent;
-  }
-  setParent(otherParent) {
-    this.json.parent = otherParent;
-  }
-  get depth() {
-    if (!this.parent)
-      return 1;
-    return this.parent.depth + 1;
-  }
-  get top() {
-    if (!this.parent)
-      return this.ref;
-    let localParent = this.parent;
-    do {
-      if (!localParent.parent) {
-        return localParent;
-      }
-      localParent = localParent.parent;
-    } while (localParent);
-  }
-  get project() {
-    return this.path.find((it) => it.is("project"));
-  }
-  get artboard() {
-    return this.path.find((it) => it.is("artboard"));
-  }
-  get path() {
-    if (!this.parent)
-      return [this.ref];
-    const list2 = this.parent.path;
-    list2.push(this.ref);
-    return list2;
-  }
-  getInnerId(postfix = "") {
-    return this.json.id + postfix;
-  }
-  is(checkItemType) {
-    if (!this.json)
-      return false;
-    return checkItemType === this.json.itemType;
-  }
-  isNot(checkItemType) {
-    return this.is(checkItemType) === false;
-  }
-  isSVG() {
-    return false;
-  }
-  addCache(key, value) {
-    this.cachedValue[key] = value;
-  }
-  getCache(key) {
-    return this.cachedValue[key];
-  }
-  computed(key, newValueCallback) {
-    const cachedKey = `__cachedKey_${key}`;
-    const parsedKey = `${cachedKey}__parseValue`;
-    const value = this.json[key];
-    if (this.getCache(key) === value && this.getCache(parsedKey)) {
-      return this.getCache(parsedKey);
-    }
-    this.addCache(key, value);
-    this.addCache(parsedKey, newValueCallback(value, this.ref));
-    return this.getCache(parsedKey);
-  }
-  editable() {
-    return true;
-  }
-  generateListNumber() {
-    this.layers.forEach((it, index2) => {
-      it.no = index2;
-      it.generateListNumber();
-    });
-  }
-  convert(json) {
-    if (json.layers) {
-      json.layers.forEach((layer) => {
-        layer.parent = this.ref;
-      });
-    }
-    return json;
-  }
-  setCache() {
-  }
-  toCloneObject(isDeep = true) {
-    var json = this.attrs("itemType", "name", "elementType", "type", "visible", "lock", "selected");
-    if (isDeep) {
-      json.layers = this.json.layers.map((layer) => layer.clone(isDeep));
-    }
-    return json;
-  }
-  clone(isDeep = true) {
-    var ItemClass = this.constructor;
-    var item = new ItemClass(this.toCloneObject(isDeep));
-    item.setParent(this.json.parent);
-    return item;
-  }
-  reset(obj2) {
-    if (!obj2.__changedId)
-      obj2.__changedId = uuid();
-    if (this.lastChangedField.__changedId !== obj2.__changedId) {
-      this.json = this.convert(Object.assign(this.json, obj2));
-      this.lastChangedField = obj2;
-      this.lastChangedFieldKeys = Object.keys(obj2);
-      this.changed();
-    }
-    return true;
-  }
-  hasChangedField(...args2) {
-    return args2.some((it) => this.lastChangedFieldKeys.includes(it));
-  }
-  getDefaultObject(obj2 = {}) {
-    var id = uuidShort();
-    return __spreadValues({
-      id,
-      _timestamp: Date.now(),
-      _time: window.performance.now(),
-      visible: true,
-      lock: false,
-      selected: false,
-      layers: []
-    }, obj2);
-  }
-  attrs(...args2) {
-    const result = {};
-    args2.forEach((field) => {
-      result[field] = clone$1(this.json[field]);
-    });
-    return result;
-  }
-  hasChildren() {
-    return this.layers.length > 0;
-  }
-  appendChild(layer) {
-    if (layer.parent === this.ref) {
-      return layer;
-    }
-    this.resetMatrix(layer);
-    if (layer.parent) {
-      layer.remove();
-    }
-    layer.setParent(this.ref);
-    this.json.layers.push(layer);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  prependChildItem(layer) {
-    this.resetMatrix(layer);
-    if (layer.parent) {
-      layer.remove();
-    }
-    layer.setParent(this.ref);
-    this.json.layers.unshift(layer);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  resetMatrix() {
-  }
-  refreshMatrixCache() {
-  }
-  insertChild(layer, index2 = 0) {
-    this.resetMatrix(layer);
-    if (layer.parent) {
-      layer.remove();
-    }
-    layer.setParent(this.ref);
-    this.json.layers.splice(index2, 0, layer);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  insertAfter(layer) {
-    const index2 = this.parent.findIndex(this);
-    this.parent.insertChild(layer, index2);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  insertBefore(layer) {
-    const index2 = this.parent.findIndex(this);
-    this.parent.insertChild(layer, index2 - 1);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  setPositionInPlace(position2, item) {
-    this.layers.splice(position2, 0, item);
-  }
-  toggle(field, toggleValue) {
-    if (isUndefined(toggleValue)) {
-      this.json[field] = !this.json[field];
-    } else {
-      this.json[field] = !!toggleValue;
-    }
-  }
-  isTreeItemHide() {
-    let currentParent = this.parent;
-    let collapsedList = [];
-    do {
-      if (currentParent.is("project"))
-        break;
-      collapsedList.push(Boolean(currentParent.collapsed));
-      currentParent = currentParent.parent;
-    } while (currentParent);
-    return Boolean(collapsedList.filter(Boolean).length);
-  }
-  expectJSON(key) {
-    if (key === "parent")
-      return false;
-    if (isUndefined(this.json[key]))
-      return false;
-    return true;
-  }
-  toJSON() {
-    const json = this.json;
-    let newJSON = {};
-    Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
-      newJSON[key] = json[key];
-    });
-    return newJSON;
-  }
-  resize() {
-  }
-  copy(dist2 = 0) {
-    return this.json.parent.copyItem(this.ref, dist2);
-  }
-  findIndex(item) {
-    return this.json.layers.indexOf(item.ref);
-  }
-  copyItem(childItem, dist2 = 10) {
-    var child = childItem.clone();
-    child.renameWithCount();
-    child.move([dist2, dist2, 0]);
-    var childIndex = this.findIndex(childItem);
-    if (childIndex > -1) {
-      this.json.layers.push(child);
-      this.project.addIndexItem(child);
-    }
-    return child;
-  }
-  remove() {
-    this.json.parent.removeChild(this.ref);
-    this.project.removeIndexItem(this.ref);
-  }
-  removeChild(childItem) {
-    const index2 = this.findIndex(childItem);
-    if (index2 > -1) {
-      this.json.layers.splice(index2, 1);
-    }
-  }
-  hasParent(parentId) {
-    var isParent = this.json.parent.id === parentId;
-    if (!isParent && this.json.parent.is("project") === false)
-      return this.json.parent.hasParent(parentId);
-    return isParent;
-  }
-}
-const MAX_CACHE_COUNT$2 = 1e3;
-const cachedTransformOriginMap = /* @__PURE__ */ new Map();
-class TransformOriginCache {
-  static has(key) {
-    return cachedTransformOriginMap.has(key);
-  }
-  static get(key) {
-    return cachedTransformOriginMap.get(key);
-  }
-  static set(key, parsedValue) {
-    if (cachedTransformOriginMap.size > MAX_CACHE_COUNT$2) {
-      cachedTransformOriginMap.clear();
-    }
-    cachedTransformOriginMap.set(key, parsedValue);
-  }
-}
-class TransformOrigin {
-  static parseStyle(transformOrigin = "50% 50% 0px") {
-    if (TransformOriginCache.has(transformOrigin)) {
-      return TransformOriginCache.get(transformOrigin);
-    }
-    const origins = transformOrigin.trim().split(" ").filter((it) => it.trim());
-    let parsedTransformOrigin = null;
-    if (origins.length === 1) {
-      parsedTransformOrigin = [origins[0], origins[0]].map((it) => Length.parse(it));
-    } else {
-      parsedTransformOrigin = origins.map((it) => Length.parse(it));
-    }
-    TransformOriginCache.set(transformOrigin, parsedTransformOrigin);
-    return parsedTransformOrigin;
-  }
-  static scale(transformOrigin, width2, height2) {
-    let parsedTransformOrigin = TransformOrigin.parseStyle(transformOrigin);
-    if (width2 === 0 && height2 === 0) {
-      return [0, 0, 0];
-    }
-    const originX = parsedTransformOrigin[0].toPx(width2).value;
-    const originY = parsedTransformOrigin[1].toPx(height2).value;
-    const originZ = parsedTransformOrigin[2].value;
-    return [originX, originY, originZ];
-  }
-  static toPx(transformOrigin, width2, height2, distance2 = 0) {
-    let [transformOriginX, transformOriginY, transformOriginZ] = TransformOrigin.parseStyle(transformOrigin);
-    transformOriginX = transformOriginX.toPx(width2);
-    transformOriginY = transformOriginY.toPx(height2);
-    transformOriginZ = transformOriginZ.toPx(distance2);
-    return `${transformOriginX} ${transformOriginY} ${transformOriginZ}`;
-  }
-}
-function rectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
-  return rx1 + rw1 >= rx2 && rx1 <= rx2 + rw2 && ry1 + rh1 >= ry2 && ry1 <= ry2 + rh2;
-}
-class Rect {
-  constructor(x, y, width2, height2) {
-    this.x = x;
-    this.y = y;
-    this.width = width2;
-    this.height = height2;
-  }
-  get left() {
-    return this.x;
-  }
-  get right() {
-    return this.x + this.width;
-  }
-  get top() {
-    return this.y;
-  }
-  get bottom() {
-    return this.y + this.height;
-  }
-  get centerX() {
-    return this.x + this.width / 2;
-  }
-  get centerY() {
-    return this.y + this.height / 2;
-  }
-  get center() {
-    return [this.centerX, this.centerY];
-  }
-  get topLeft() {
-    return [this.left, this.top];
-  }
-  get topRight() {
-    return [this.right, this.top];
-  }
-  get bottomLeft() {
-    return [this.left, this.bottom];
-  }
-  get bottomRight() {
-    return [this.right, this.bottom];
-  }
-  get vertices() {
-    return [this.topLeft, this.topRight, this.bottomLeft, this.bottomRight];
-  }
-  intersect(rect2) {
-    return intersectRectRect(this, rect2);
-  }
-}
-function intersectRectRect(rect1, rect2) {
-  const minRectX = Math.min(rect1.x, rect2.x);
-  const minRectY = Math.min(rect1.y, rect2.y);
-  const rect1Verties = rectToVerties(rect1.x - minRectX, rect1.y - minRectY, rect1.width, rect1.height);
-  const rect2Verties = rectToVerties(rect2.x - minRectX, rect2.y - minRectY, rect2.width, rect2.height);
-  const startPoint = [
-    Math.max(rect1Verties[0][0], rect2Verties[0][0]),
-    Math.max(rect1Verties[0][1], rect2Verties[0][1]),
-    Math.max(rect1Verties[0][2], rect2Verties[0][2])
-  ];
-  const endPoint = [
-    Math.min(rect1Verties[2][0], rect2Verties[2][0]),
-    Math.min(rect1Verties[2][1], rect2Verties[2][1]),
-    Math.min(rect1Verties[2][2], rect2Verties[2][2])
-  ];
-  const minX = Math.min(startPoint[0], endPoint[0]);
-  const minY = Math.min(startPoint[1], endPoint[1]);
-  const maxX = Math.max(startPoint[0], endPoint[0]);
-  const maxY = Math.max(startPoint[1], endPoint[1]);
-  return new Rect(minX + minRectX, minY + minRectY, maxX - minX, maxY - minY);
-}
-function linePoint(x1, y1, x2, y2, px, py, buffer = 0.1) {
-  const dist1 = Math.hypot(px - x1, py - y1);
-  const dist2 = Math.hypot(px - x2, py - y2);
-  const lineLength = Math.hypot(x1 - x2, y1 - y2);
-  const calcDist = dist1 + dist2;
-  return calcDist >= lineLength - buffer && calcDist <= lineLength + buffer;
-}
-function lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4) {
-  let A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  let B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
-}
-function lineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
-  if (linePoint(x1, y1, x2, y2, x3, y3))
-    return true;
-  else if (linePoint(x1, y1, x2, y2, x4, y4))
-    return true;
-  else if (linePoint(x3, y3, x4, y4, x1, y1))
-    return [x1, y1];
-  else if (linePoint(x3, y3, x4, y4, x2, y2))
-    return [x2, y2];
-  return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-}
-function polyPoint(verties = [], px, py, withoutPoint = false) {
-  let isCollision = false;
-  const len2 = verties.length;
-  if (withoutPoint === false) {
-    for (let i = 0; i < len2; i++) {
-      const v1 = verties[i];
-      const v2 = verties[(i + 1) % len2];
-      if (linePoint(v1[0], v1[1], v2[0], v2[1], px, py)) {
-        isCollision = true;
-        break;
-      }
-    }
-  }
-  if (isCollision)
-    return true;
-  verties.forEach((vector, index2) => {
-    const [cx, cy] = vector;
-    const [nx, ny] = verties[(index2 + 1) % len2];
-    if ((cy >= py && ny < py || cy < py && ny >= py) && px < (nx - cx) * (py - cy) / (ny - cy) + cx) {
-      isCollision = !isCollision;
-    }
-  });
-  return isCollision;
-}
-function polyLine(verties = [], x1, y1, x2, y2, withoutPoint = false) {
-  const len2 = verties.length;
-  return verties.some((vector, index2) => {
-    const [x3, y3] = vector;
-    const [x4, y4] = verties[(index2 + 1) % len2];
-    if (withoutPoint) {
-      return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4);
-    } else {
-      return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
-    }
-  });
-}
-function polyPoly(verties = [], targetVerties = [], withoutPoint = false) {
-  const len2 = verties.length;
-  return verties.some((vector, index2) => {
-    const [x1, y1] = vector;
-    const [x2, y2] = verties[(index2 + 1) % len2];
-    let collision = polyLine(targetVerties, x1, y1, x2, y2, withoutPoint);
-    if (collision)
-      return true;
-    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1], withoutPoint);
-    if (collision)
-      return true;
-    return false;
-  });
-}
-function rectToVerties(x, y, width2, height2, origin = "50% 50% 0px") {
-  const center2 = TransformOrigin.scale(origin, width2, height2);
-  return [
-    [x, y, 0],
-    [x + width2, y, 0],
-    [x + width2, y + height2, 0],
-    [x, y + height2, 0],
-    [x + center2[0], y + center2[1], 0]
-  ];
-}
-function getRotatePointer(verties, dist2 = 0) {
-  const topPointer = lerp([], verties[0], verties[1], 0.5);
-  const bottomPointer = lerp([], verties[2], verties[3], 0.5);
-  const rotatePointer = getPointBetweenVerties(bottomPointer, topPointer, dist2);
-  return rotatePointer;
-}
-function rectToVertiesForArea(x, y, width2, height2) {
-  return rectToVerties(x, y, width2, height2);
-}
-function itemsToRectVerties(items = []) {
-  let minX = Number.MAX_SAFE_INTEGER;
-  let minY = Number.MAX_SAFE_INTEGER;
-  let maxX = Number.MIN_SAFE_INTEGER;
-  let maxY = Number.MIN_SAFE_INTEGER;
-  const xList = [];
-  const yList = [];
-  items.forEach((item) => {
-    item.originVerties.forEach((vector) => {
-      xList.push(vector[0]);
-      yList.push(vector[1]);
-    });
-  });
-  minX = Math.min.apply(Math, xList);
-  maxX = Math.max.apply(Math, xList);
-  minY = Math.min.apply(Math, yList);
-  maxY = Math.max.apply(Math, yList);
-  if (minX === Number.MAX_SAFE_INTEGER)
-    minX = 0;
-  if (minY === Number.MAX_SAFE_INTEGER)
-    minY = 0;
-  if (maxX === Number.MIN_SAFE_INTEGER)
-    maxX = 0;
-  if (maxY === Number.MIN_SAFE_INTEGER)
-    maxY = 0;
-  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
-}
-function targetItemsToRectVerties(items = []) {
-  let minX = Number.MAX_SAFE_INTEGER;
-  let minY = Number.MAX_SAFE_INTEGER;
-  let maxX = Number.MIN_SAFE_INTEGER;
-  let maxY = Number.MIN_SAFE_INTEGER;
-  const xList = [];
-  const yList = [];
-  items.forEach((item) => {
-    item.targetVerties.forEach((vector) => {
-      xList.push(vector[0]);
-      yList.push(vector[1]);
-    });
-  });
-  minX = Math.min.apply(Math, xList);
-  maxX = Math.max.apply(Math, xList);
-  minY = Math.min.apply(Math, yList);
-  maxY = Math.max.apply(Math, yList);
-  if (minX === Number.MAX_SAFE_INTEGER)
-    minX = 0;
-  if (minY === Number.MAX_SAFE_INTEGER)
-    minY = 0;
-  if (maxX === Number.MIN_SAFE_INTEGER)
-    maxX = 0;
-  if (maxY === Number.MIN_SAFE_INTEGER)
-    maxY = 0;
-  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
-}
-function vertiesToRectangle(verties) {
-  const x = verties[0][0];
-  const y = verties[0][1];
-  const width2 = dist(verties[0], verties[1]);
-  const height2 = dist(verties[0], verties[3]);
-  return new Rect(x, y, width2, height2);
-}
-function vertiesToPath(verties = []) {
-  const results = [];
-  for (var i = 0; i < verties.length; i++) {
-    if (i === 0) {
-      results.push(`M ${verties[i][0]} ${verties[i][1]}`);
-    } else {
-      results.push(`L ${verties[i][0]} ${verties[i][1]}`);
-    }
-  }
-  if (results.length) {
-    results.push("Z");
-  }
-  return results.join(" ");
-}
-function toRectVertiesWithoutTransformOrigin(verties) {
-  return toRectVerties(verties).filter((it, index2) => {
-    return index2 < 4;
-  });
-}
-function toRectVerties(verties) {
-  let minX = Number.MAX_SAFE_INTEGER;
-  let minY = Number.MAX_SAFE_INTEGER;
-  let maxX = Number.MIN_SAFE_INTEGER;
-  let maxY = Number.MIN_SAFE_INTEGER;
-  const xList = [];
-  const yList = [];
-  verties.forEach((vector) => {
-    xList.push(vector[0]);
-    yList.push(vector[1]);
-  });
-  minX = Math.min.apply(Math, xList);
-  maxX = Math.max.apply(Math, xList);
-  minY = Math.min.apply(Math, yList);
-  maxY = Math.max.apply(Math, yList);
-  if (minX === Number.MAX_SAFE_INTEGER)
-    minX = 0;
-  if (minY === Number.MAX_SAFE_INTEGER)
-    minY = 0;
-  if (maxX === Number.MIN_SAFE_INTEGER)
-    maxX = 0;
-  if (maxY === Number.MIN_SAFE_INTEGER)
-    maxY = 0;
-  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
-}
-const predefinedBezier = {
-  linear: true,
-  ease: true,
-  "ease-in": true,
-  "ease-out": true,
-  "ease-in-out": true
-};
-const bezierObj = {
-  ease: "cubic-bezier(0.25, 0.1, 0.25, 1)",
-  "ease-in": "cubic-bezier(0.42, 0, 1, 1)",
-  "ease-out": "cubic-bezier(0, 0, 0.58, 1)"
-};
-const bezierList = [
-  [0, 0, 1, 1, "linear", true],
-  [0.25, 0.1, 0.25, 1, "ease", true],
-  [0.42, 0, 1, 1, "ease-in", true],
-  [0, 0, 0.58, 1, "ease-out", true],
-  [0.47, 0, 0.745, 0.715, "ease-in-sine"],
-  [0.39, 0.575, 0.565, 1, "ease-out-sine"],
-  [0.445, 0.05, 0.55, 0.95, "ease-in-out-sine"],
-  [0.55, 0.085, 0.68, 0.53, "ease-in-quad"],
-  [0.25, 0.46, 0.45, 0.94, "ease-out-quad"],
-  [0.455, 0.03, 0.515, 0.955, "ease-in-out-quad"],
-  [0.55, 0.055, 0.675, 0.19, "ease-in-cubic"],
-  [0.215, 0.61, 0.355, 1, "ease-out-cubic"],
-  [0.645, 0.045, 0.355, 1, "ease-in-out-cubic"],
-  [0.895, 0.03, 0.685, 0.22, "ease-in-quart"],
-  [0.165, 0.84, 0.44, 1, "ease-out-quart"],
-  [0.77, 0, 0.175, 1, "ease-in-out-quart"],
-  [0.6, 0.04, 0.98, 0.335, "ease-in-circ"],
-  [0.075, 0.82, 0.165, 1, "ease-out-circ"],
-  [0.785, 0.135, 0.15, 0.86, "ease-in-out-circ"],
-  [0.95, 0.05, 0.795, 0.035, "ease-in-expo"],
-  [0.19, 1, 0.22, 1, "ease-out-expo"],
-  [1, 0, 0, 1, "ease-in-out-expo"],
-  [0.755, 0.05, 0.855, 0.06, "ease-in-quint"],
-  [0.23, 1, 0.32, 1, "ease-out-quint"],
-  [0.86, 0, 0.07, 1, "ease-in-out-quint"],
-  [0.6, -0.28, 0.735, 0.045, "ease-in-back"],
-  [0.175, 0.885, 0.32, 1.275, "ease-out-back"],
-  [0.68, -0.55, 0.265, 1.55, "ease-in-out-back"]
-];
-const getPredefinedCubicBezier = (str) => {
-  return [...parseCubicBezier(bezierObj[str] || str)];
-};
-const formatCubicBezier = (arr) => {
-  arr = arr.map((it) => Math.floor(it * 100) / 100);
-  for (var i = 0, len2 = bezierList.length; i < len2; i++) {
-    var bezier = bezierList[i];
-    if (bezier[0] == arr[0] && bezier[1] == arr[1] && bezier[2] == arr[2] && bezier[3] == arr[3] && bezier[5]) {
-      return bezier[4];
-    }
-  }
-  return `cubic-bezier( ${arr.filter((_, index2) => index2 < 4).join(",")} )`;
-};
-function parseCubicBezier(str) {
-  if (typeof str == "string") {
-    if (predefinedBezier[str]) {
-      return bezierList.filter((it) => it[4] === str)[0];
-    } else {
-      var arr = str.replace("cubic-bezier", "").replace("(", "").replace(")", "").split(",");
-      arr = arr.map((it) => parseFloat(it.trim()));
-      return arr;
-    }
-  }
-  return str;
-}
-const createBezier = (C1, C2, C3, C4) => {
-  var points = [C1, C2, C3, C4];
-  return function(t) {
-    return getBezierPointOne(points, t);
-  };
-};
-const createBezierQuard = (C1, C2, C3) => {
-  var points = [C1, C2, C3];
-  return function(t) {
-    return getBezierPointOneQuard(points, t);
-  };
-};
-const createBezierLine = (C1, C2) => {
-  var points = [C1, C2];
-  return function(t) {
-    return getBezierPointOneLine(points, t);
-  };
-};
-const checkDist = (obj2, curve, t, x, y) => {
-  var p = curve(t);
-  var dist2 = getDist(x, y, p.x, p.y);
-  if (dist2 < obj2.minDist) {
-    obj2.minDist = dist2;
-    obj2.minT = t;
-  }
-};
-const getPolygonalDist = (points = []) => {
-  let total = 0;
-  points.forEach((point2, index2) => {
-    var next = points[index2 + 1];
-    if (!next) {
-      return;
-    }
-    var dist$1 = dist(fromValues(point2.x, point2.y, 0), fromValues(next.x, next.y, 0));
-    total += dist$1;
-  });
-  return total;
-};
-const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1e3) => {
-  var curve = createBezier({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: cx2, y: cy2 }, { x: ex, y: ey });
-  var total = 0;
-  var startPoint = curve(0);
-  for (var i = 0; i <= count; i++) {
-    var t = i / count;
-    var xy2 = curve(t);
-    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
-    startPoint = xy2;
-  }
-  return total;
-};
-const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1e3) => {
-  var curve = createBezierQuard({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: ex, y: ey });
-  var total = 0;
-  var startPoint = curve(0);
-  for (var i = 0; i <= count; i++) {
-    var t = i / count;
-    var xy2 = curve(t);
-    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
-    startPoint = xy2;
-  }
-  return total;
-};
-const makeCurveFunction = (curve, count = 10) => {
-  var obj2 = {
-    minDist: Infinity,
-    minT: 0
-  };
-  return function(x, y) {
-    for (var i = 0; i <= count; i++) {
-      checkDist(obj2, curve, i / count, x, y);
-    }
-    var step2 = 1 / (count * 2);
-    var t = obj2.minT;
-    for (var i = 0; i < count; i++) {
-      checkDist(obj2, curve, Math.max(0, t - step2), x, y);
-      checkDist(obj2, curve, Math.min(1, t + step2), x, y);
-      step2 /= 2;
-    }
-    return obj2.minT;
-  };
-};
-const recoverBezier = (C1, C2, C3, C4, count = 20) => {
-  return makeCurveFunction(createBezier(C1, C2, C3, C4), count);
-};
-const recoverBezierQuard = (C1, C2, C3, count = 20) => {
-  return makeCurveFunction(createBezierQuard(C1, C2, C3), count);
-};
-const recoverBezierLine = (C1, C2, count = 20) => {
-  return makeCurveFunction(createBezierLine(C1, C2), count);
-};
-const createBezierForPattern = (bezierString) => {
-  if (bezierString === "linear") {
-    var C1 = { x: 0, y: 0 };
-    var C2 = { x: 1, y: 1 };
-    return createBezierLine(C1, C2);
-  }
-  var bezierList2 = parseCubicBezier(bezierString);
-  var C1 = { x: 0, y: 0 };
-  var C2 = { x: bezierList2[0], y: bezierList2[1] };
-  var C3 = { x: bezierList2[2], y: bezierList2[3] };
-  var C4 = { x: 1, y: 1 };
-  return createBezier(C1, C2, C3, C4);
-};
-const interpolate = (p1, p2, t) => {
-  return {
-    x: p1.x + (p2.x - p1.x) * t,
-    y: p1.y + (p2.y - p1.y) * t
-  };
-};
-const getBezierPointOne = (points, t) => {
-  var p0 = interpolate(points[0], points[1], t);
-  var p1 = interpolate(points[1], points[2], t);
-  var p2 = interpolate(points[2], points[3], t);
-  var p3 = interpolate(p0, p1, t);
-  var p4 = interpolate(p1, p2, t);
-  return interpolate(p3, p4, t);
-};
-const getBezierPointOneQuard = (points, t) => {
-  var p0 = interpolate(points[0], points[1], t);
-  var p1 = interpolate(points[1], points[2], t);
-  return interpolate(p0, p1, t);
-};
-const getBezierPointOneLine = (points, t) => {
-  return interpolate(points[0], points[1], t);
-};
-const getBezierPoints = (points, t) => {
-  var p0 = interpolate(points[0], points[1], t);
-  var p1 = interpolate(points[1], points[2], t);
-  var p2 = interpolate(points[2], points[3], t);
-  var p3 = interpolate(p0, p1, t);
-  var p4 = interpolate(p1, p2, t);
-  var p5 = interpolate(p3, p4, t);
-  return {
-    first: [points[0], p0, p3, p5],
-    second: [p5, p4, p2, points[3]]
-  };
-};
-const getBezierPointsQuard = (points, t) => {
-  var p0 = interpolate(points[0], points[1], t);
-  var p1 = interpolate(points[1], points[2], t);
-  var p2 = interpolate(p0, p1, t);
-  return {
-    first: [points[0], p0, p2],
-    second: [p2, p1, points[2]]
-  };
-};
-const splitBezierPointsByCount = (points, count = 1) => {
-  var result = [];
-  while (count > 0) {
-    const curve = getBezierPoints(points, 1 / count);
-    result.push(curve.first);
-    points = curve.second;
-    count--;
-  }
-  return result;
-};
-const splitBezierPointsQuardByCount = (points, count = 1) => {
-  var result = [];
-  while (count > 0) {
-    const curve = getBezierPointsQuard(points, 1 / count);
-    result.push(curve.first);
-    points = curve.second;
-    count--;
-  }
-  return result;
-};
-const splitBezierPointsLineByCount = (points, count = 1) => {
-  var result = [];
-  const unit = 1 / count;
-  while (count > 0) {
-    const curve = getBezierPointsLine(points, unit);
-    result.push(curve.first);
-    points = curve.second;
-    count--;
-  }
-  return result;
-};
-const getBezierPointsLine = (points, t) => {
-  var p0 = interpolate(points[0], points[1], t);
-  return {
-    first: [points[0], p0],
-    second: [p0, points[1]]
-  };
-};
-const normalizeCurveForLine = (points) => {
-  return [
-    clone(points[0]),
-    [
-      points[0][0] + (points[1][0] - points[0][0]) * 0.33,
-      points[0][1] + (points[1][1] - points[0][1]) * 0.33,
-      0
-    ],
-    [
-      points[0][0] + (points[1][0] - points[0][0]) * 0.66,
-      points[0][1] + (points[1][1] - points[0][1]) * 0.66,
-      0
-    ],
-    clone(points[1])
-  ];
-};
-const normalizeCurveForQuard = (points) => {
-  const twoOfThree = 2 / 3;
-  return [
-    clone(points[0]),
-    fromValues(points[0][0] + twoOfThree * (points[1][0] - points[0][0]), points[0][1] + twoOfThree * (points[1][1] - points[0][1]), 0),
-    fromValues(points[2][0] + twoOfThree * (points[1][0] - points[2][0]), points[2][1] + twoOfThree * (points[1][1] - points[2][1]), 0),
-    clone(points[2])
-  ];
-};
-const polygonalForCurve = (c1, c2, c3, c4, count = 1e3) => {
-  const totalLength = getCurveDist(c1[0], c1[1], c2[0], c2[1], c3[0], c3[1], c4[0], c4[1], count);
-  let samplingCount = 10;
-  let samplingStep = totalLength / samplingCount;
-  let lastLength = 0;
-  let points = [];
-  const bezierPoints = [c1, c2, c3, c4].map((point2) => ({
-    x: point2[0],
-    y: point2[1]
-  }));
-  do {
-    points = [];
-    let currentLength = 0;
-    for (let i = 0; i <= samplingCount; i++) {
-      const nextPoint = getBezierPointOne(bezierPoints, currentLength / totalLength);
-      points.push(nextPoint);
-      currentLength += samplingStep;
-    }
-    lastLength = getPolygonalDist(points);
-    samplingCount += samplingCount * (totalLength - lastLength) / totalLength;
-    samplingStep = totalLength / samplingCount;
-  } while (totalLength - lastLength > 0.25);
-  return points.map((point2) => fromValues(point2.x, point2.y, 0));
-};
-const calculateA = (points) => {
-  const a1 = negate([], points[0]);
-  const a2 = multiply([], [3, 3, 3], points[1]);
-  const a3 = multiply([], [-3, -3, -3], points[2]);
-  const a4 = points[3];
-  const newP = add$1([], add$1([], a1, a2), add$1([], a3, a4));
-  return multiply([], [3, 3, 3], newP);
-};
-const calculateB = (points) => {
-  const b1 = points[0];
-  const b2 = multiply([], [-2, -2, -2], points[1]);
-  const b3 = points[2];
-  const newP = add$1([], add$1([], b1, b2), b3);
-  return multiply([], [6, 6, 6], newP);
-};
-const calculateC = (points) => {
-  const newP = add$1([], points[1], negate([], points[0]));
-  return multiply([], [3, 3, 3], newP);
-};
-const findRootForCurve = (points) => {
-  const a = calculateA(points);
-  const b = calculateB(points);
-  const c2 = calculateC(points);
-  const roots = [];
-  const distX = b[0] * b[0] - 4 * a[0] * c2[0];
-  if (distX < 0)
-    ;
-  else if (distX === 0) {
-    let rootX = -b[0] / (2 * a[0]);
-    if (isNaN(rootX))
-      rootX = 0;
-    if (0 <= rootX && rootX <= 1) {
-      roots.push(rootX);
-    }
-  } else if (distX > 0) {
-    const rootX1 = (-b[0] + Math.sqrt(distX)) / (2 * a[0]);
-    const rootX2 = (-b[0] - Math.sqrt(distX)) / (2 * a[0]);
-    if (0 <= rootX1 && rootX1 <= 1) {
-      roots.push(rootX1);
-    }
-    if (0 <= rootX2 && rootX2 <= 1) {
-      roots.push(rootX2);
-    }
-  }
-  const distY = b[1] * b[1] - 4 * a[1] * c2[1];
-  if (distY < 0)
-    ;
-  else if (distY === 0) {
-    let rootY = -b[1] / (2 * a[1]);
-    if (isNaN(rootY))
-      rootY = 0;
-    if (0 <= rootY && rootY <= 1) {
-      roots.push(rootY);
-    }
-  } else if (distY > 0) {
-    const rootY1 = (-b[1] + Math.sqrt(distY)) / (2 * a[1]);
-    const rootY2 = (-b[1] - Math.sqrt(distY)) / (2 * a[1]);
-    if (0 <= rootY1 && rootY1 <= 1) {
-      roots.push(rootY1);
-    }
-    if (0 <= rootY2 && rootY2 <= 1) {
-      roots.push(rootY2);
-    }
-  }
-  return roots;
-};
-const getCurveBBox = (points) => {
-  const roots = findRootForCurve(points);
-  const xyPoints = points.map((p) => {
-    return { x: p[0], y: p[1] };
-  });
-  roots.push(0, 1);
-  return roots.map((t) => {
-    const { x, y } = getBezierPointOne(xyPoints, t);
-    return [x, y, 0];
-  });
-};
-function format(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  if (type == "hex") {
-    return hex(obj2);
-  } else if (type == "rgb") {
-    return rgb(obj2, defaultColor);
-  } else if (type == "hsl") {
-    return hsl(obj2);
-  }
-  return obj2;
-}
-function formatWithoutAlpha(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
-  const newColorObj = clone$1(obj2);
-  newColorObj.a = 1;
-  return format(newColorObj, type, defaultColor);
-}
-function hex(obj2) {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  var r = obj2.r.toString(16);
-  if (obj2.r < 16)
-    r = "0" + r;
-  var g = obj2.g.toString(16);
-  if (obj2.g < 16)
-    g = "0" + g;
-  var b = obj2.b.toString(16);
-  if (obj2.b < 16)
-    b = "0" + b;
-  if (obj2.a == 1 || typeof obj2.a === "undefined") {
-    return `#${r}${g}${b}`;
-  } else {
-    const alpha2 = Math.ceil(obj2.a * 255);
-    var a = alpha2.toString(16);
-    if (alpha2 < 16)
-      a = "0" + a;
-    return `#${r}${g}${b}${a}`;
-  }
-}
-function rgb(obj2, defaultColor = "rgba(0, 0, 0, 0)") {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  if (typeof obj2 === "undefined") {
-    return void 0;
-  }
-  if (obj2.a == 1 || typeof obj2.a === "undefined") {
-    if (isNaN(obj2.r)) {
-      return defaultColor;
-    }
-    return `rgb(${obj2.r},${obj2.g},${obj2.b})`;
-  } else {
-    return `rgba(${obj2.r},${obj2.g},${obj2.b},${obj2.a})`;
-  }
-}
-function hsl(obj2) {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  if (obj2.a == 1 || typeof obj2.a === "undefined") {
-    return `hsl(${obj2.h},${obj2.s}%,${obj2.l}%)`;
-  } else {
-    return `hsla(${obj2.h},${obj2.s}%,${obj2.l}%,${obj2.a})`;
-  }
-}
-function randomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function randomByCount(count = 1) {
-  let arr = [];
-  for (var i = 0; i < count; i++) {
-    arr[arr.length] = random$1();
-  }
-  return arr;
-}
-function random$1() {
-  return rgb({
-    r: randomNumber(0, 255),
-    g: randomNumber(0, 255),
-    b: randomNumber(0, 255)
-  });
-}
-function randomRGBA() {
-  return rgb({
-    r: randomNumber(0, 255),
-    g: randomNumber(0, 255),
-    b: randomNumber(0, 255),
-    a: randomNumber(0, 1e3) / 1e3
-  });
-}
-function randomItem(...args2) {
-  return args2[randomNumber(0, args2.length - 1)];
-}
-function repeat(count) {
-  return [...Array(count)];
-}
-function CSS_TO_STRING(style, postfix = "") {
-  var newStyle = style || {};
-  return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
-}
-function STRING_TO_CSS(str = "", splitChar = ";", keySplitChar = ":") {
-  str = str + "";
-  var style = {};
-  if (str === "")
-    return style;
-  str.split(splitChar).forEach((it) => {
-    var [key, ...value] = it.split(keySplitChar).map((it2) => it2.trim());
-    if (key != "") {
-      style[key] = value.join(keySplitChar);
-    }
-  });
-  return style;
-}
-function OBJECT_TO_PROPERTY(obj2) {
-  const target = obj2 || {};
-  return Object.keys(target).map((key) => {
-    if (key === "class") {
-      if (isObject(obj2[key])) {
-        return `${key}="${classnames(obj2[key])}"`;
-      }
-    }
-    if (key === "style") {
-      if (isObject(obj2[key])) {
-        return `${key}="${CSS_TO_STRING(obj2[key])}"`;
-      }
-    }
-    if (isBoolean(obj2[key]) || isUndefined(obj2[key]) || obj2[key] === "undefined") {
-      if (obj2[key]) {
-        return key;
-      } else {
-        return "";
-      }
-    }
-    return `${key}="${obj2[key]}"`;
-  }).join(" ");
-}
-function TAG_TO_STRING(str) {
-  return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-function mapjoin(arr, callback, joinString = "") {
-  return arr.map(callback).join(joinString);
-}
-function isArrayEquals(A, B) {
-  const s = /* @__PURE__ */ new Set([...A, ...B]);
-  return s.size === A.length && s.size === B.length;
-}
-const curveToPath = (timingFunction, width2 = 30, height2 = 30) => {
-  const currentBezier = getPredefinedCubicBezier(timingFunction);
-  return `
-        M0 ${width2} 
-        C 
-        ${currentBezier[0] * width2} ${currentBezier[1] == 0 ? height2 : (1 - currentBezier[1]) * height2},
-        ${currentBezier[2] * width2} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height2},
-        ${width2} 0
-    `;
-};
-const curveToPointLine = (timingFunction, width2 = 30, height2 = 30) => {
-  const currentBezier = getPredefinedCubicBezier(timingFunction);
-  return `
-        M 0 ${width2} 
-        L ${currentBezier[0] * width2} ${currentBezier[1] == 0 ? height2 : (1 - currentBezier[1]) * height2}
-        M ${width2} 0
-        L ${currentBezier[2] * width2} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height2}
-    `;
-};
-const valueFunctionIdentity = (v) => v;
-const valueMap = (obj2, valueFunction = valueFunctionIdentity) => {
-  const newObj = clone$1(obj2);
-  Object.keys(newObj).forEach((key) => {
-    newObj[key] = valueFunction(newObj[key]);
-  });
-  return newObj;
-};
-const objectFloor = (obj2) => valueMap(obj2, Math.floor);
-class PropertyItem extends Item {
-  getDefaultObject(obj2 = {}) {
-    return __spreadValues({
-      selected: false,
-      layers: []
-    }, obj2);
-  }
-  isAttribute() {
-    return true;
-  }
-  toCSS() {
-    return {};
-  }
-  toString() {
-    return CSS_TO_STRING(this.toCSS());
-  }
-}
-class BoxShadow extends PropertyItem {
-  static parse(obj2) {
-    return new BoxShadow(obj2);
-  }
-  static parseStyle(str) {
-    var boxShadows = [];
-    str = str.trim();
-    if (!str)
-      return boxShadows;
-    var results = convertMatches(str);
-    boxShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.trim().split(" ");
-      var insets = values.filter((it) => it === BoxShadowStyle.INSET);
-      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
-        return reverseMatches(it, results.matches);
-      });
-      var numbers = values.filter((it) => {
-        return it !== BoxShadowStyle.INSET && !it.includes("@");
-      });
-      return BoxShadow.parse({
-        inset: insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
-        color: colors2[0] || "rgba(0, 0, 0, 1)",
-        offsetX: Length.parse(numbers[0] || "0px"),
-        offsetY: Length.parse(numbers[1] || "0px"),
-        blurRadius: Length.parse(numbers[2] || "0px"),
-        spreadRadius: Length.parse(numbers[3] || "0px")
-      });
-    });
-    return boxShadows;
-  }
-  static join(list2) {
-    return list2.map((it) => BoxShadow.parse(it)).join(", ");
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "box-shadow",
-      inset: false,
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0,
-      spreadRadius: 0,
-      color: "rgba(0, 0, 0, 1)"
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("inset", "offsetX", "offsetY", "blurRadius", "spreadRadius", "color"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (isNumber(json.offsetX))
-      json.offsetX = Length.px(json.offsetX);
-    else if (json.offsetX)
-      json.offsetX = Length.parse(json.offsetX);
-    if (isNumber(json.offsetY))
-      json.offsetY = Length.px(json.offsetY);
-    else if (json.offsetY)
-      json.offsetY = Length.parse(json.offsetY);
-    if (isNumber(json.blurRadius))
-      json.blurRadius = Length.px(json.blurRadius);
-    else if (json.blurRadius)
-      json.blurRadius = Length.parse(json.blurRadius);
-    if (isNumber(json.spreadRadius))
-      json.spreadRadius = Length.px(json.spreadRadius);
-    else if (json.spreadRadius)
-      json.spreadRadius = Length.parse(json.spreadRadius);
-    return json;
-  }
-  toCSS() {
-    return {
-      "box-shadow": this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return `${json.inset === BoxShadowStyle.INSET ? "inset " : ""}${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
-  }
-}
 class BoxShadowEditor extends EditorElement {
   initState() {
     return {
-      boxShadows: BoxShadow.parseStyle(this.props.value || "")
+      boxShadows: this.props.value || []
     };
   }
   template() {
@@ -11448,21 +9544,21 @@ class BoxShadowEditor extends EditorElement {
     return arr.join("");
   }
   modifyBoxShadow() {
-    var value = this.state.boxShadows.join(", ");
+    var value = this.state.boxShadows;
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
-  [SUBSCRIBE("add")](shadow2 = "") {
-    if (shadow2) {
-      this.state.boxShadows = BoxShadow.parseStyle(shadow2);
+  [SUBSCRIBE("add")](shadows = void 0) {
+    if (isArray(shadows)) {
+      this.state.boxShadows.push(...shadows);
     } else {
-      const shadowObj = new BoxShadow({
+      const shadowObj = {
         color: "black",
         inset: BoxShadowStyle.OUTSET,
         offsetX: 2,
         offsetY: 2,
         blurRadius: 3,
         spreadRadius: 1
-      });
+      };
       this.state.boxShadows.push(shadowObj);
     }
     this.refresh();
@@ -11496,9 +9592,7 @@ class BoxShadowEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value, index2) {
     var shadow2 = this.state.boxShadows[index2];
-    shadow2.reset({
-      [key]: value
-    });
+    this.state.boxShadows[index2] = __spreadProps(__spreadValues({}, shadow2), { [key]: value });
     this.modifyBoxShadow();
   }
 }
@@ -12076,6 +10170,98 @@ var __glob_0_19$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": opencolorGray
 }, Symbol.toStringTag, { value: "Module" }));
+function format(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  if (type == "hex") {
+    return hex(obj2);
+  } else if (type == "rgb") {
+    return rgb(obj2, defaultColor);
+  } else if (type == "hsl") {
+    return hsl(obj2);
+  }
+  return obj2;
+}
+function formatWithoutAlpha(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
+  const newColorObj = clone$1(obj2);
+  newColorObj.a = 1;
+  return format(newColorObj, type, defaultColor);
+}
+function hex(obj2) {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  var r = obj2.r.toString(16);
+  if (obj2.r < 16)
+    r = "0" + r;
+  var g = obj2.g.toString(16);
+  if (obj2.g < 16)
+    g = "0" + g;
+  var b = obj2.b.toString(16);
+  if (obj2.b < 16)
+    b = "0" + b;
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    return `#${r}${g}${b}`;
+  } else {
+    const alpha2 = Math.ceil(obj2.a * 255);
+    var a = alpha2.toString(16);
+    if (alpha2 < 16)
+      a = "0" + a;
+    return `#${r}${g}${b}${a}`;
+  }
+}
+function rgb(obj2, defaultColor = "rgba(0, 0, 0, 0)") {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  if (typeof obj2 === "undefined") {
+    return void 0;
+  }
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    if (isNaN(obj2.r)) {
+      return defaultColor;
+    }
+    return `rgb(${obj2.r},${obj2.g},${obj2.b})`;
+  } else {
+    return `rgba(${obj2.r},${obj2.g},${obj2.b},${obj2.a})`;
+  }
+}
+function hsl(obj2) {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    return `hsl(${obj2.h},${obj2.s}%,${obj2.l}%)`;
+  } else {
+    return `hsla(${obj2.h},${obj2.s}%,${obj2.l}%,${obj2.a})`;
+  }
+}
+function randomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randomByCount(count = 1) {
+  let arr = [];
+  for (var i = 0; i < count; i++) {
+    arr[arr.length] = random$1();
+  }
+  return arr;
+}
+function random$1() {
+  return rgb({
+    r: randomNumber(0, 255),
+    g: randomNumber(0, 255),
+    b: randomNumber(0, 255)
+  });
+}
+function randomRGBA() {
+  return rgb({
+    r: randomNumber(0, 255),
+    g: randomNumber(0, 255),
+    b: randomNumber(0, 255),
+    a: randomNumber(0, 1e3) / 1e3
+  });
+}
 function CMYKtoRGB(c2, m, y, k) {
   if (arguments.length == 1) {
     var { c: c2, m, y, k } = arguments[0];
@@ -12084,6 +10270,236 @@ function CMYKtoRGB(c2, m, y, k) {
   const G = 255 * (1 - m) * (1 - k);
   const B = 255 * (1 - y) * (1 - k);
   return { r: R, g: G, b: B };
+}
+function ReverseXyz(n) {
+  return Math.pow(n, 3) > 8856e-6 ? Math.pow(n, 3) : (n - 16 / 116) / 7.787;
+}
+function ReverseRGB(n) {
+  return n > 31308e-7 ? 1.055 * Math.pow(n, 1 / 2.4) - 0.055 : 12.92 * n;
+}
+function XYZtoRGB(x, y, z) {
+  if (arguments.length == 1) {
+    var { x, y, z } = arguments[0];
+  }
+  let X = x / 100;
+  let Y = y / 100;
+  let Z = z / 100;
+  let R = X * 3.2406 + Y * -1.5372 + Z * -0.4986;
+  let G = X * -0.9689 + Y * 1.8758 + Z * 0.0415;
+  let B = X * 0.0557 + Y * -0.204 + Z * 1.057;
+  R = ReverseRGB(R);
+  G = ReverseRGB(G);
+  B = ReverseRGB(B);
+  const r = round(R * 255);
+  const g = round(G * 255);
+  const b = round(B * 255);
+  return { r, g, b };
+}
+function LABtoXYZ(l, a, b) {
+  if (arguments.length == 1) {
+    var { l, a, b } = arguments[0];
+  }
+  let Y = (l + 16) / 116;
+  let X = a / 500 + Y;
+  let Z = Y - b / 200;
+  Y = ReverseXyz(Y);
+  X = ReverseXyz(X);
+  Z = ReverseXyz(Z);
+  const x = X * 95.047;
+  const y = Y * 100;
+  const z = Z * 108.883;
+  return { x, y, z };
+}
+function PivotXyz(n) {
+  return n > 8856e-6 ? Math.pow(n, 1 / 3) : (7.787 * n + 16) / 116;
+}
+function XYZtoLAB(x, y, z) {
+  if (arguments.length == 1) {
+    var { x, y, z } = arguments[0];
+  }
+  let X = x / 95.047;
+  let Y = y / 100;
+  let Z = z / 108.883;
+  X = PivotXyz(X);
+  Y = PivotXyz(Y);
+  Z = PivotXyz(Z);
+  const l = 116 * Y - 16;
+  const a = 500 * (X - Y);
+  const b = 200 * (Y - Z);
+  return { l, a, b };
+}
+function LABtoRGB(l, a, b) {
+  if (arguments.length == 1) {
+    var { l, a, b } = arguments[0];
+  }
+  return XYZtoRGB(LABtoXYZ(l, a, b));
+}
+function RGBtoHSV(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  const R1 = r / 255;
+  const G1 = g / 255;
+  const B1 = b / 255;
+  const MaxC = Math.max(R1, G1, B1);
+  const MinC = Math.min(R1, G1, B1);
+  const DeltaC = MaxC - MinC;
+  var H = 0;
+  if (DeltaC == 0) {
+    H = 0;
+  } else if (MaxC == R1) {
+    H = 60 * ((G1 - B1) / DeltaC % 6);
+  } else if (MaxC == G1) {
+    H = 60 * ((B1 - R1) / DeltaC + 2);
+  } else if (MaxC == B1) {
+    H = 60 * ((R1 - G1) / DeltaC + 4);
+  }
+  if (H < 0) {
+    H = 360 + H;
+  }
+  var S = 0;
+  if (MaxC == 0)
+    S = 0;
+  else
+    S = DeltaC / MaxC;
+  var V = MaxC;
+  return { h: H, s: S, v: V };
+}
+function RGBtoCMYK(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  const R1 = r / 255;
+  const G1 = g / 255;
+  const B1 = b / 255;
+  const K = 1 - Math.max(R1, G1, B1);
+  const C = (1 - R1 - K) / (1 - K);
+  const M = (1 - G1 - K) / (1 - K);
+  const Y = (1 - B1 - K) / (1 - K);
+  return { c: C, m: M, y: Y, k: K };
+}
+function RGBtoHSL(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  r /= 255, g /= 255, b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+  if (max == min) {
+    h = s = 0;
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+  return { h: round(h * 360), s: round(s * 100), l: round(l * 100) };
+}
+function c(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return gray((r + g + b) / 3 > 90 ? 0 : 255);
+}
+function gray(gray2) {
+  return { r: gray2, g: gray2, b: gray2 };
+}
+function RGBtoSimpleGray(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return gray(Math.ceil((r + g + b) / 3));
+}
+function RGBtoGray(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return gray(RGBtoYCrCb(r, g, b).y);
+}
+function brightness(r, g, b) {
+  return Math.ceil(r * 0.2126 + g * 0.7152 + b * 0.0722);
+}
+function RGBtoYCrCb(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  const Y = brightness(r, g, b);
+  const Cb = 0.564 * (b - Y);
+  const Cr = 0.713 * (r - Y);
+  return { y: Y, cr: Cr, cb: Cb };
+}
+function PivotRGB(n) {
+  return (n > 0.04045 ? Math.pow((n + 0.055) / 1.055, 2.4) : n / 12.92) * 100;
+}
+function RGBtoXYZ(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  let R = r / 255;
+  let G = g / 255;
+  let B = b / 255;
+  R = PivotRGB(R);
+  G = PivotRGB(G);
+  B = PivotRGB(B);
+  const x = R * 0.4124 + G * 0.3576 + B * 0.1805;
+  const y = R * 0.2126 + G * 0.7152 + B * 0.0722;
+  const z = R * 0.0193 + G * 0.1192 + B * 0.9505;
+  return { x, y, z };
+}
+function RGBtoLAB(r, g, b) {
+  if (arguments.length == 1) {
+    var { r, g, b } = arguments[0];
+  }
+  return XYZtoLAB(RGBtoXYZ(r, g, b));
+}
+function HUEtoRGB(p, q, t) {
+  if (t < 0)
+    t += 1;
+  if (t > 1)
+    t -= 1;
+  if (t < 1 / 6)
+    return p + (q - p) * 6 * t;
+  if (t < 1 / 2)
+    return q;
+  if (t < 2 / 3)
+    return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
+function HSLtoHSV(h, s, l) {
+  if (arguments.length == 1) {
+    var { h, s, l } = arguments[0];
+  }
+  const rgb2 = HSLtoRGB(h, s, l);
+  return RGBtoHSV(rgb2.r, rgb2.g, rgb2.b);
+}
+function HSLtoRGB(h, s, l) {
+  if (arguments.length == 1) {
+    var { h, s, l } = arguments[0];
+  }
+  var r, g, b;
+  h /= 360;
+  s /= 100;
+  l /= 100;
+  if (s == 0) {
+    r = g = b = l;
+  } else {
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+    r = HUEtoRGB(p, q, h + 1 / 3);
+    g = HUEtoRGB(p, q, h);
+    b = HUEtoRGB(p, q, h - 1 / 3);
+  }
+  return { r: round(r * 255), g: round(g * 255), b: round(b * 255) };
 }
 function HSVtoRGB(h, s, v) {
   if (arguments.length == 1) {
@@ -12134,6 +10550,370 @@ function YCrCbtoRGB(y, cr, cb, bit) {
   const G = y - 0.344 * (cb - bit) - 0.714 * (cr - bit);
   const B = y + 1.772 * (cb - bit);
   return { r: Math.ceil(R), g: Math.ceil(G), b: Math.ceil(B) };
+}
+const color_names = {
+  aliceblue: "rgb(240, 248, 255)",
+  antiquewhite: "rgb(250, 235, 215)",
+  aqua: "rgb(0, 255, 255)",
+  aquamarine: "rgb(127, 255, 212)",
+  azure: "rgb(240, 255, 255)",
+  beige: "rgb(245, 245, 220)",
+  bisque: "rgb(255, 228, 196)",
+  black: "rgb(0, 0, 0)",
+  blanchedalmond: "rgb(255, 235, 205)",
+  blue: "rgb(0, 0, 255)",
+  blueviolet: "rgb(138, 43, 226)",
+  brown: "rgb(165, 42, 42)",
+  burlywood: "rgb(222, 184, 135)",
+  cadetblue: "rgb(95, 158, 160)",
+  chartreuse: "rgb(127, 255, 0)",
+  chocolate: "rgb(210, 105, 30)",
+  coral: "rgb(255, 127, 80)",
+  cornflowerblue: "rgb(100, 149, 237)",
+  cornsilk: "rgb(255, 248, 220)",
+  crimson: "rgb(237, 20, 61)",
+  cyan: "rgb(0, 255, 255)",
+  darkblue: "rgb(0, 0, 139)",
+  darkcyan: "rgb(0, 139, 139)",
+  darkgoldenrod: "rgb(184, 134, 11)",
+  darkgray: "rgb(169, 169, 169)",
+  darkgrey: "rgb(169, 169, 169)",
+  darkgreen: "rgb(0, 100, 0)",
+  darkkhaki: "rgb(189, 183, 107)",
+  darkmagenta: "rgb(139, 0, 139)",
+  darkolivegreen: "rgb(85, 107, 47)",
+  darkorange: "rgb(255, 140, 0)",
+  darkorchid: "rgb(153, 50, 204)",
+  darkred: "rgb(139, 0, 0)",
+  darksalmon: "rgb(233, 150, 122)",
+  darkseagreen: "rgb(143, 188, 143)",
+  darkslateblue: "rgb(72, 61, 139)",
+  darkslategray: "rgb(47, 79, 79)",
+  darkslategrey: "rgb(47, 79, 79)",
+  darkturquoise: "rgb(0, 206, 209)",
+  darkviolet: "rgb(148, 0, 211)",
+  deeppink: "rgb(255, 20, 147)",
+  deepskyblue: "rgb(0, 191, 255)",
+  dimgray: "rgb(105, 105, 105)",
+  dimgrey: "rgb(105, 105, 105)",
+  dodgerblue: "rgb(30, 144, 255)",
+  firebrick: "rgb(178, 34, 34)",
+  floralwhite: "rgb(255, 250, 240)",
+  forestgreen: "rgb(34, 139, 34)",
+  fuchsia: "rgb(255, 0, 255)",
+  gainsboro: "rgb(220, 220, 220)",
+  ghostwhite: "rgb(248, 248, 255)",
+  gold: "rgb(255, 215, 0)",
+  goldenrod: "rgb(218, 165, 32)",
+  gray: "rgb(128, 128, 128)",
+  grey: "rgb(128, 128, 128)",
+  green: "rgb(0, 128, 0)",
+  greenyellow: "rgb(173, 255, 47)",
+  honeydew: "rgb(240, 255, 240)",
+  hotpink: "rgb(255, 105, 180)",
+  indianred: "rgb(205, 92, 92)",
+  indigo: "rgb(75, 0, 130)",
+  ivory: "rgb(255, 255, 240)",
+  khaki: "rgb(240, 230, 140)",
+  lavender: "rgb(230, 230, 250)",
+  lavenderblush: "rgb(255, 240, 245)",
+  lawngreen: "rgb(124, 252, 0)",
+  lemonchiffon: "rgb(255, 250, 205)",
+  lightblue: "rgb(173, 216, 230)",
+  lightcoral: "rgb(240, 128, 128)",
+  lightcyan: "rgb(224, 255, 255)",
+  lightgoldenrodyellow: "rgb(250, 250, 210)",
+  lightgreen: "rgb(144, 238, 144)",
+  lightgray: "rgb(211, 211, 211)",
+  lightgrey: "rgb(211, 211, 211)",
+  lightpink: "rgb(255, 182, 193)",
+  lightsalmon: "rgb(255, 160, 122)",
+  lightseagreen: "rgb(32, 178, 170)",
+  lightskyblue: "rgb(135, 206, 250)",
+  lightslategray: "rgb(119, 136, 153)",
+  lightslategrey: "rgb(119, 136, 153)",
+  lightsteelblue: "rgb(176, 196, 222)",
+  lightyellow: "rgb(255, 255, 224)",
+  lime: "rgb(0, 255, 0)",
+  limegreen: "rgb(50, 205, 50)",
+  linen: "rgb(250, 240, 230)",
+  magenta: "rgb(255, 0, 255)",
+  maroon: "rgb(128, 0, 0)",
+  mediumaquamarine: "rgb(102, 205, 170)",
+  mediumblue: "rgb(0, 0, 205)",
+  mediumorchid: "rgb(186, 85, 211)",
+  mediumpurple: "rgb(147, 112, 219)",
+  mediumseagreen: "rgb(60, 179, 113)",
+  mediumslateblue: "rgb(123, 104, 238)",
+  mediumspringgreen: "rgb(0, 250, 154)",
+  mediumturquoise: "rgb(72, 209, 204)",
+  mediumvioletred: "rgb(199, 21, 133)",
+  midnightblue: "rgb(25, 25, 112)",
+  mintcream: "rgb(245, 255, 250)",
+  mistyrose: "rgb(255, 228, 225)",
+  moccasin: "rgb(255, 228, 181)",
+  navajowhite: "rgb(255, 222, 173)",
+  navy: "rgb(0, 0, 128)",
+  oldlace: "rgb(253, 245, 230)",
+  olive: "rgb(128, 128, 0)",
+  olivedrab: "rgb(107, 142, 35)",
+  orange: "rgb(255, 165, 0)",
+  orangered: "rgb(255, 69, 0)",
+  orchid: "rgb(218, 112, 214)",
+  palegoldenrod: "rgb(238, 232, 170)",
+  palegreen: "rgb(152, 251, 152)",
+  paleturquoise: "rgb(175, 238, 238)",
+  palevioletred: "rgb(219, 112, 147)",
+  papayawhip: "rgb(255, 239, 213)",
+  peachpuff: "rgb(255, 218, 185)",
+  peru: "rgb(205, 133, 63)",
+  pink: "rgb(255, 192, 203)",
+  plum: "rgb(221, 160, 221)",
+  powderblue: "rgb(176, 224, 230)",
+  purple: "rgb(128, 0, 128)",
+  rebeccapurple: "rgb(102, 51, 153)",
+  red: "rgb(255, 0, 0)",
+  rosybrown: "rgb(188, 143, 143)",
+  royalblue: "rgb(65, 105, 225)",
+  saddlebrown: "rgb(139, 69, 19)",
+  salmon: "rgb(250, 128, 114)",
+  sandybrown: "rgb(244, 164, 96)",
+  seagreen: "rgb(46, 139, 87)",
+  seashell: "rgb(255, 245, 238)",
+  sienna: "rgb(160, 82, 45)",
+  silver: "rgb(192, 192, 192)",
+  skyblue: "rgb(135, 206, 235)",
+  slateblue: "rgb(106, 90, 205)",
+  slategray: "rgb(112, 128, 144)",
+  slategrey: "rgb(112, 128, 144)",
+  snow: "rgb(255, 250, 250)",
+  springgreen: "rgb(0, 255, 127)",
+  steelblue: "rgb(70, 130, 180)",
+  tan: "rgb(210, 180, 140)",
+  teal: "rgb(0, 128, 128)",
+  thistle: "rgb(216, 191, 216)",
+  tomato: "rgb(255, 99, 71)",
+  turquoise: "rgb(64, 224, 208)",
+  violet: "rgb(238, 130, 238)",
+  wheat: "rgb(245, 222, 179)",
+  white: "rgb(255, 255, 255)",
+  whitesmoke: "rgb(245, 245, 245)",
+  yellow: "rgb(255, 255, 0)",
+  yellowgreen: "rgb(154, 205, 50)",
+  transparent: "rgba(0, 0, 0, 0)",
+  currentColor: "currentColor"
+};
+function isColorName(name) {
+  return !!color_names[name];
+}
+function getColorByName(name) {
+  return color_names[name];
+}
+var ColorNames = {
+  isColorName,
+  getColorByName
+};
+const color_regexp = /(#(?:[\da-f]{3}){1,2}|#(?:[\da-f]{8})|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_-]+))/gi;
+function getColorIndexString(it, prefix = "@") {
+  return `${prefix}${it.startIndex}`.padEnd(10, "0");
+}
+function isColor(str) {
+  const results = matches(str);
+  return !!results.length;
+}
+function matches(str) {
+  const matches2 = str.match(color_regexp);
+  let result = [];
+  if (!matches2) {
+    return result;
+  }
+  for (var i = 0, len2 = matches2.length; i < len2; i++) {
+    if (matches2[i].indexOf("#") > -1 || matches2[i].indexOf("rgb") > -1 || matches2[i].indexOf("hsl") > -1) {
+      result.push({ color: matches2[i] });
+    } else {
+      var nameColor = ColorNames.getColorByName(matches2[i]);
+      if (nameColor) {
+        result.push({ color: matches2[i], nameColor });
+      }
+    }
+  }
+  var pos = { next: 0 };
+  result.forEach((item) => {
+    const startIndex = str.indexOf(item.color, pos.next);
+    item.startIndex = startIndex;
+    item.endIndex = startIndex + item.color.length;
+    pos.next = item.endIndex;
+  });
+  return result;
+}
+function convertMatches(str, prefix = "@") {
+  const m = matches(str);
+  m.forEach((it) => {
+    str = str.replace(it.color, getColorIndexString(it, prefix));
+  });
+  return { str, matches: m };
+}
+function convertMatchesArray(str, splitStr = ",") {
+  const ret = convertMatches(str);
+  return ret.str.split(splitStr).map((it, index2) => {
+    it = trim(it);
+    if (ret.matches[index2]) {
+      it = it.replace(getColorIndexString(ret.matches[index2]), ret.matches[index2].color);
+    }
+    return it;
+  });
+}
+function reverseMatches(str, matches2) {
+  matches2.forEach((it) => {
+    str = str.replace(getColorIndexString(it), it.color);
+  });
+  return str;
+}
+const REG_TRIM = /^\s+|\s+$/g;
+function trim(str) {
+  return str.replace(REG_TRIM, "");
+}
+function parse(str) {
+  if (isString(str)) {
+    if (ColorNames.isColorName(str)) {
+      str = ColorNames.getColorByName(str);
+    }
+    if (str.indexOf("rgb(") > -1) {
+      var arr = str.replace("rgb(", "").replace(")", "").split(",");
+      for (var i = 0, len2 = arr.length; i < len2; i++) {
+        arr[i] = parseInt(trim(arr[i]), 10);
+      }
+      var obj2 = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: 1 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
+    } else if (str.indexOf("rgba(") > -1) {
+      var arr = str.replace("rgba(", "").replace(")", "").split(",");
+      for (var i = 0, len2 = arr.length; i < len2; i++) {
+        if (len2 - 1 == i) {
+          arr[i] = parseFloat(trim(arr[i]));
+        } else {
+          arr[i] = parseInt(trim(arr[i]), 10);
+        }
+      }
+      var obj2 = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: arr[3] };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
+    } else if (str.indexOf("hsl(") > -1) {
+      var arr = str.replace("hsl(", "").replace(")", "").split(",");
+      for (var i = 0, len2 = arr.length; i < len2; i++) {
+        arr[i] = parseFloat(trim(arr[i]));
+      }
+      var obj2 = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: 1 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), HSLtoRGB(obj2));
+      return obj2;
+    } else if (str.indexOf("hsla(") > -1) {
+      var arr = str.replace("hsla(", "").replace(")", "").split(",");
+      for (var i = 0, len2 = arr.length; i < len2; i++) {
+        if (len2 - 1 == i) {
+          arr[i] = parseFloat(trim(arr[i]));
+        } else {
+          arr[i] = parseInt(trim(arr[i]), 10);
+        }
+      }
+      var obj2 = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: arr[3] };
+      obj2 = __spreadValues(__spreadValues({}, obj2), HSLtoRGB(obj2));
+      return obj2;
+    } else if (str.indexOf("#") == 0) {
+      str = str.replace("#", "");
+      var arr = [];
+      var a = 1;
+      if (str.length == 3) {
+        for (var i = 0, len2 = str.length; i < len2; i++) {
+          var char = str.substr(i, 1);
+          arr.push(parseInt(char + char, 16));
+        }
+      } else if (str.length === 8) {
+        for (var i = 0, len2 = str.length; i < len2; i += 2) {
+          arr.push(parseInt(str.substr(i, 2), 16));
+        }
+        a = arr.pop() / 255;
+      } else {
+        for (var i = 0, len2 = str.length; i < len2; i += 2) {
+          arr.push(parseInt(str.substr(i, 2), 16));
+        }
+      }
+      var obj2 = { type: "hex", r: arr[0], g: arr[1], b: arr[2], a };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
+    }
+  } else if (isNumber(str)) {
+    if (0 <= str && str <= 16777215) {
+      const r = (str & 16711680) >> 16;
+      const g = (str & 65280) >> 8;
+      const b = (str & 255) >> 0;
+      var obj2 = { type: "hex", r, g, b, a: 1 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
+    } else if (0 <= str && str <= 4294967295) {
+      const r = (str & 4278190080) >> 24;
+      const g = (str & 16711680) >> 16;
+      const b = (str & 65280) >> 8;
+      const a2 = (str & 255) / 255;
+      var obj2 = { type: "hex", r, g, b, a: a2 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
+    }
+  }
+  return str;
+}
+function parseGradient(colors2) {
+  if (isString(colors2)) {
+    colors2 = convertMatchesArray(colors2);
+  }
+  colors2 = colors2.map((it) => {
+    if (isString(it)) {
+      const ret = convertMatches(it);
+      let arr = trim(ret.str).split(" ");
+      if (arr[1]) {
+        if (arr[1].indexOf("%") > -1) {
+          arr[1] = parseFloat(arr[1].replace(/%/, "")) / 100;
+        } else {
+          arr[1] = parseFloat(arr[1]);
+        }
+      } else {
+        arr[1] = "*";
+      }
+      arr[0] = reverseMatches(arr[0], ret.matches);
+      return arr;
+    } else if (Array.isArray(it)) {
+      if (!it[1]) {
+        it[1] = "*";
+      } else if (isString(it[1])) {
+        if (it[1].indexOf("%") > -1) {
+          it[1] = parseFloat(it[1].replace(/%/, "")) / 100;
+        } else {
+          it[1] = +it[1];
+        }
+      }
+      return [...it];
+    }
+  });
+  const count = colors2.filter((it) => {
+    return it[1] === "*";
+  }).length;
+  if (count > 0) {
+    const sum = colors2.filter((it) => {
+      return it[1] != "*" && it[1] != 1;
+    }).map((it) => it[1]).reduce((total, cur) => {
+      return total + cur;
+    }, 0);
+    const dist2 = (1 - sum) / count;
+    colors2.forEach((it, index2) => {
+      if (it[1] == "*" && index2 > 0) {
+        if (colors2.length - 1 == index2)
+          ;
+        else {
+          it[1] = dist2;
+        }
+      }
+    });
+  }
+  return colors2;
 }
 function interpolateRGB(startColor, endColor, t = 0.5, exportFormat = "hex") {
   var obj2 = interpolateRGBObject(startColor, endColor, t);
@@ -13231,6 +12011,784 @@ class CSSPropertyEditor extends EditorElement {
   }
 }
 var CubicBezierEditor$1 = "";
+const MAX_CACHE_COUNT$2 = 1e3;
+const cachedTransformOriginMap = /* @__PURE__ */ new Map();
+class TransformOriginCache {
+  static has(key) {
+    return cachedTransformOriginMap.has(key);
+  }
+  static get(key) {
+    return cachedTransformOriginMap.get(key);
+  }
+  static set(key, parsedValue) {
+    if (cachedTransformOriginMap.size > MAX_CACHE_COUNT$2) {
+      cachedTransformOriginMap.clear();
+    }
+    cachedTransformOriginMap.set(key, parsedValue);
+  }
+}
+class TransformOrigin {
+  static parseStyle(transformOrigin = "50% 50% 0px") {
+    if (TransformOriginCache.has(transformOrigin)) {
+      return TransformOriginCache.get(transformOrigin);
+    }
+    const origins = transformOrigin.trim().split(" ").filter((it) => it.trim());
+    let parsedTransformOrigin = null;
+    if (origins.length === 1) {
+      parsedTransformOrigin = [origins[0], origins[0]].map((it) => Length.parse(it));
+    } else {
+      parsedTransformOrigin = origins.map((it) => Length.parse(it));
+    }
+    TransformOriginCache.set(transformOrigin, parsedTransformOrigin);
+    return parsedTransformOrigin;
+  }
+  static scale(transformOrigin, width2, height2) {
+    let parsedTransformOrigin = TransformOrigin.parseStyle(transformOrigin);
+    if (width2 === 0 && height2 === 0) {
+      return [0, 0, 0];
+    }
+    const originX = parsedTransformOrigin[0].toPx(width2).value;
+    const originY = parsedTransformOrigin[1].toPx(height2).value;
+    const originZ = parsedTransformOrigin[2].value;
+    return [originX, originY, originZ];
+  }
+  static toPx(transformOrigin, width2, height2, distance2 = 0) {
+    let [transformOriginX, transformOriginY, transformOriginZ] = TransformOrigin.parseStyle(transformOrigin);
+    transformOriginX = transformOriginX.toPx(width2);
+    transformOriginY = transformOriginY.toPx(height2);
+    transformOriginZ = transformOriginZ.toPx(distance2);
+    return `${transformOriginX} ${transformOriginY} ${transformOriginZ}`;
+  }
+}
+function rectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
+  return rx1 + rw1 >= rx2 && rx1 <= rx2 + rw2 && ry1 + rh1 >= ry2 && ry1 <= ry2 + rh2;
+}
+class Rect {
+  constructor(x, y, width2, height2) {
+    this.x = x;
+    this.y = y;
+    this.width = width2;
+    this.height = height2;
+  }
+  get left() {
+    return this.x;
+  }
+  get right() {
+    return this.x + this.width;
+  }
+  get top() {
+    return this.y;
+  }
+  get bottom() {
+    return this.y + this.height;
+  }
+  get centerX() {
+    return this.x + this.width / 2;
+  }
+  get centerY() {
+    return this.y + this.height / 2;
+  }
+  get center() {
+    return [this.centerX, this.centerY];
+  }
+  get topLeft() {
+    return [this.left, this.top];
+  }
+  get topRight() {
+    return [this.right, this.top];
+  }
+  get bottomLeft() {
+    return [this.left, this.bottom];
+  }
+  get bottomRight() {
+    return [this.right, this.bottom];
+  }
+  get vertices() {
+    return [this.topLeft, this.topRight, this.bottomLeft, this.bottomRight];
+  }
+  intersect(rect2) {
+    return intersectRectRect(this, rect2);
+  }
+}
+function intersectRectRect(rect1, rect2) {
+  const minRectX = Math.min(rect1.x, rect2.x);
+  const minRectY = Math.min(rect1.y, rect2.y);
+  const rect1Verties = rectToVerties(rect1.x - minRectX, rect1.y - minRectY, rect1.width, rect1.height);
+  const rect2Verties = rectToVerties(rect2.x - minRectX, rect2.y - minRectY, rect2.width, rect2.height);
+  const startPoint = [
+    Math.max(rect1Verties[0][0], rect2Verties[0][0]),
+    Math.max(rect1Verties[0][1], rect2Verties[0][1]),
+    Math.max(rect1Verties[0][2], rect2Verties[0][2])
+  ];
+  const endPoint = [
+    Math.min(rect1Verties[2][0], rect2Verties[2][0]),
+    Math.min(rect1Verties[2][1], rect2Verties[2][1]),
+    Math.min(rect1Verties[2][2], rect2Verties[2][2])
+  ];
+  const minX = Math.min(startPoint[0], endPoint[0]);
+  const minY = Math.min(startPoint[1], endPoint[1]);
+  const maxX = Math.max(startPoint[0], endPoint[0]);
+  const maxY = Math.max(startPoint[1], endPoint[1]);
+  return new Rect(minX + minRectX, minY + minRectY, maxX - minX, maxY - minY);
+}
+function linePoint(x1, y1, x2, y2, px, py, buffer = 0.1) {
+  const dist1 = Math.hypot(px - x1, py - y1);
+  const dist2 = Math.hypot(px - x2, py - y2);
+  const lineLength = Math.hypot(x1 - x2, y1 - y2);
+  const calcDist = dist1 + dist2;
+  return calcDist >= lineLength - buffer && calcDist <= lineLength + buffer;
+}
+function lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4) {
+  let A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  let B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
+}
+function lineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
+  if (linePoint(x1, y1, x2, y2, x3, y3))
+    return true;
+  else if (linePoint(x1, y1, x2, y2, x4, y4))
+    return true;
+  else if (linePoint(x3, y3, x4, y4, x1, y1))
+    return [x1, y1];
+  else if (linePoint(x3, y3, x4, y4, x2, y2))
+    return [x2, y2];
+  return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4);
+}
+function polyPoint(verties = [], px, py, withoutPoint = false) {
+  let isCollision = false;
+  const len2 = verties.length;
+  if (withoutPoint === false) {
+    for (let i = 0; i < len2; i++) {
+      const v1 = verties[i];
+      const v2 = verties[(i + 1) % len2];
+      if (linePoint(v1[0], v1[1], v2[0], v2[1], px, py)) {
+        isCollision = true;
+        break;
+      }
+    }
+  }
+  if (isCollision)
+    return true;
+  verties.forEach((vector, index2) => {
+    const [cx, cy] = vector;
+    const [nx, ny] = verties[(index2 + 1) % len2];
+    if ((cy >= py && ny < py || cy < py && ny >= py) && px < (nx - cx) * (py - cy) / (ny - cy) + cx) {
+      isCollision = !isCollision;
+    }
+  });
+  return isCollision;
+}
+function polyLine(verties = [], x1, y1, x2, y2, withoutPoint = false) {
+  const len2 = verties.length;
+  return verties.some((vector, index2) => {
+    const [x3, y3] = vector;
+    const [x4, y4] = verties[(index2 + 1) % len2];
+    if (withoutPoint) {
+      return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4);
+    } else {
+      return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+    }
+  });
+}
+function polyPoly(verties = [], targetVerties = [], withoutPoint = false) {
+  const len2 = verties.length;
+  return verties.some((vector, index2) => {
+    const [x1, y1] = vector;
+    const [x2, y2] = verties[(index2 + 1) % len2];
+    let collision = polyLine(targetVerties, x1, y1, x2, y2, withoutPoint);
+    if (collision)
+      return true;
+    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1], withoutPoint);
+    if (collision)
+      return true;
+    return false;
+  });
+}
+function rectToVerties(x, y, width2, height2, origin = "50% 50% 0px") {
+  const center2 = TransformOrigin.scale(origin, width2, height2);
+  return [
+    [x, y, 0],
+    [x + width2, y, 0],
+    [x + width2, y + height2, 0],
+    [x, y + height2, 0],
+    [x + center2[0], y + center2[1], 0]
+  ];
+}
+function getRotatePointer(verties, dist2 = 0) {
+  const topPointer = lerp([], verties[0], verties[1], 0.5);
+  const bottomPointer = lerp([], verties[2], verties[3], 0.5);
+  const rotatePointer = getPointBetweenVerties(bottomPointer, topPointer, dist2);
+  return rotatePointer;
+}
+function rectToVertiesForArea(x, y, width2, height2) {
+  return rectToVerties(x, y, width2, height2);
+}
+function itemsToRectVerties(items = []) {
+  let minX = Number.MAX_SAFE_INTEGER;
+  let minY = Number.MAX_SAFE_INTEGER;
+  let maxX = Number.MIN_SAFE_INTEGER;
+  let maxY = Number.MIN_SAFE_INTEGER;
+  const xList = [];
+  const yList = [];
+  items.forEach((item) => {
+    item.originVerties.forEach((vector) => {
+      xList.push(vector[0]);
+      yList.push(vector[1]);
+    });
+  });
+  minX = Math.min.apply(Math, xList);
+  maxX = Math.max.apply(Math, xList);
+  minY = Math.min.apply(Math, yList);
+  maxY = Math.max.apply(Math, yList);
+  if (minX === Number.MAX_SAFE_INTEGER)
+    minX = 0;
+  if (minY === Number.MAX_SAFE_INTEGER)
+    minY = 0;
+  if (maxX === Number.MIN_SAFE_INTEGER)
+    maxX = 0;
+  if (maxY === Number.MIN_SAFE_INTEGER)
+    maxY = 0;
+  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+function targetItemsToRectVerties(items = []) {
+  let minX = Number.MAX_SAFE_INTEGER;
+  let minY = Number.MAX_SAFE_INTEGER;
+  let maxX = Number.MIN_SAFE_INTEGER;
+  let maxY = Number.MIN_SAFE_INTEGER;
+  const xList = [];
+  const yList = [];
+  items.forEach((item) => {
+    item.targetVerties.forEach((vector) => {
+      xList.push(vector[0]);
+      yList.push(vector[1]);
+    });
+  });
+  minX = Math.min.apply(Math, xList);
+  maxX = Math.max.apply(Math, xList);
+  minY = Math.min.apply(Math, yList);
+  maxY = Math.max.apply(Math, yList);
+  if (minX === Number.MAX_SAFE_INTEGER)
+    minX = 0;
+  if (minY === Number.MAX_SAFE_INTEGER)
+    minY = 0;
+  if (maxX === Number.MIN_SAFE_INTEGER)
+    maxX = 0;
+  if (maxY === Number.MIN_SAFE_INTEGER)
+    maxY = 0;
+  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+function vertiesToRectangle(verties) {
+  const x = verties[0][0];
+  const y = verties[0][1];
+  const width2 = dist(verties[0], verties[1]);
+  const height2 = dist(verties[0], verties[3]);
+  return new Rect(x, y, width2, height2);
+}
+function vertiesToPath(verties = []) {
+  const results = [];
+  for (var i = 0; i < verties.length; i++) {
+    if (i === 0) {
+      results.push(`M ${verties[i][0]} ${verties[i][1]}`);
+    } else {
+      results.push(`L ${verties[i][0]} ${verties[i][1]}`);
+    }
+  }
+  if (results.length) {
+    results.push("Z");
+  }
+  return results.join(" ");
+}
+function toRectVertiesWithoutTransformOrigin(verties) {
+  return toRectVerties(verties).filter((it, index2) => {
+    return index2 < 4;
+  });
+}
+function toRectVerties(verties) {
+  let minX = Number.MAX_SAFE_INTEGER;
+  let minY = Number.MAX_SAFE_INTEGER;
+  let maxX = Number.MIN_SAFE_INTEGER;
+  let maxY = Number.MIN_SAFE_INTEGER;
+  const xList = [];
+  const yList = [];
+  verties.forEach((vector) => {
+    xList.push(vector[0]);
+    yList.push(vector[1]);
+  });
+  minX = Math.min.apply(Math, xList);
+  maxX = Math.max.apply(Math, xList);
+  minY = Math.min.apply(Math, yList);
+  maxY = Math.max.apply(Math, yList);
+  if (minX === Number.MAX_SAFE_INTEGER)
+    minX = 0;
+  if (minY === Number.MAX_SAFE_INTEGER)
+    minY = 0;
+  if (maxX === Number.MIN_SAFE_INTEGER)
+    maxX = 0;
+  if (maxY === Number.MIN_SAFE_INTEGER)
+    maxY = 0;
+  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+const predefinedBezier = {
+  linear: true,
+  ease: true,
+  "ease-in": true,
+  "ease-out": true,
+  "ease-in-out": true
+};
+const bezierObj = {
+  ease: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+  "ease-in": "cubic-bezier(0.42, 0, 1, 1)",
+  "ease-out": "cubic-bezier(0, 0, 0.58, 1)"
+};
+const bezierList = [
+  [0, 0, 1, 1, "linear", true],
+  [0.25, 0.1, 0.25, 1, "ease", true],
+  [0.42, 0, 1, 1, "ease-in", true],
+  [0, 0, 0.58, 1, "ease-out", true],
+  [0.47, 0, 0.745, 0.715, "ease-in-sine"],
+  [0.39, 0.575, 0.565, 1, "ease-out-sine"],
+  [0.445, 0.05, 0.55, 0.95, "ease-in-out-sine"],
+  [0.55, 0.085, 0.68, 0.53, "ease-in-quad"],
+  [0.25, 0.46, 0.45, 0.94, "ease-out-quad"],
+  [0.455, 0.03, 0.515, 0.955, "ease-in-out-quad"],
+  [0.55, 0.055, 0.675, 0.19, "ease-in-cubic"],
+  [0.215, 0.61, 0.355, 1, "ease-out-cubic"],
+  [0.645, 0.045, 0.355, 1, "ease-in-out-cubic"],
+  [0.895, 0.03, 0.685, 0.22, "ease-in-quart"],
+  [0.165, 0.84, 0.44, 1, "ease-out-quart"],
+  [0.77, 0, 0.175, 1, "ease-in-out-quart"],
+  [0.6, 0.04, 0.98, 0.335, "ease-in-circ"],
+  [0.075, 0.82, 0.165, 1, "ease-out-circ"],
+  [0.785, 0.135, 0.15, 0.86, "ease-in-out-circ"],
+  [0.95, 0.05, 0.795, 0.035, "ease-in-expo"],
+  [0.19, 1, 0.22, 1, "ease-out-expo"],
+  [1, 0, 0, 1, "ease-in-out-expo"],
+  [0.755, 0.05, 0.855, 0.06, "ease-in-quint"],
+  [0.23, 1, 0.32, 1, "ease-out-quint"],
+  [0.86, 0, 0.07, 1, "ease-in-out-quint"],
+  [0.6, -0.28, 0.735, 0.045, "ease-in-back"],
+  [0.175, 0.885, 0.32, 1.275, "ease-out-back"],
+  [0.68, -0.55, 0.265, 1.55, "ease-in-out-back"]
+];
+const getPredefinedCubicBezier = (str) => {
+  return [...parseCubicBezier(bezierObj[str] || str)];
+};
+const formatCubicBezier = (arr) => {
+  arr = arr.map((it) => Math.floor(it * 100) / 100);
+  for (var i = 0, len2 = bezierList.length; i < len2; i++) {
+    var bezier = bezierList[i];
+    if (bezier[0] == arr[0] && bezier[1] == arr[1] && bezier[2] == arr[2] && bezier[3] == arr[3] && bezier[5]) {
+      return bezier[4];
+    }
+  }
+  return `cubic-bezier( ${arr.filter((_, index2) => index2 < 4).join(",")} )`;
+};
+function parseCubicBezier(str) {
+  if (typeof str == "string") {
+    if (predefinedBezier[str]) {
+      return bezierList.filter((it) => it[4] === str)[0];
+    } else {
+      var arr = str.replace("cubic-bezier", "").replace("(", "").replace(")", "").split(",");
+      arr = arr.map((it) => parseFloat(it.trim()));
+      return arr;
+    }
+  }
+  return str;
+}
+const createBezier = (C1, C2, C3, C4) => {
+  var points = [C1, C2, C3, C4];
+  return function(t) {
+    return getBezierPointOne(points, t);
+  };
+};
+const createBezierQuard = (C1, C2, C3) => {
+  var points = [C1, C2, C3];
+  return function(t) {
+    return getBezierPointOneQuard(points, t);
+  };
+};
+const createBezierLine = (C1, C2) => {
+  var points = [C1, C2];
+  return function(t) {
+    return getBezierPointOneLine(points, t);
+  };
+};
+const checkDist = (obj2, curve, t, x, y) => {
+  var p = curve(t);
+  var dist2 = getDist(x, y, p.x, p.y);
+  if (dist2 < obj2.minDist) {
+    obj2.minDist = dist2;
+    obj2.minT = t;
+  }
+};
+const getPolygonalDist = (points = []) => {
+  let total = 0;
+  points.forEach((point2, index2) => {
+    var next = points[index2 + 1];
+    if (!next) {
+      return;
+    }
+    var dist$1 = dist(fromValues(point2.x, point2.y, 0), fromValues(next.x, next.y, 0));
+    total += dist$1;
+  });
+  return total;
+};
+const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1e3) => {
+  var curve = createBezier({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: cx2, y: cy2 }, { x: ex, y: ey });
+  var total = 0;
+  var startPoint = curve(0);
+  for (var i = 0; i <= count; i++) {
+    var t = i / count;
+    var xy2 = curve(t);
+    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
+    startPoint = xy2;
+  }
+  return total;
+};
+const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1e3) => {
+  var curve = createBezierQuard({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: ex, y: ey });
+  var total = 0;
+  var startPoint = curve(0);
+  for (var i = 0; i <= count; i++) {
+    var t = i / count;
+    var xy2 = curve(t);
+    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
+    startPoint = xy2;
+  }
+  return total;
+};
+const makeCurveFunction = (curve, count = 10) => {
+  var obj2 = {
+    minDist: Infinity,
+    minT: 0
+  };
+  return function(x, y) {
+    for (var i = 0; i <= count; i++) {
+      checkDist(obj2, curve, i / count, x, y);
+    }
+    var step2 = 1 / (count * 2);
+    var t = obj2.minT;
+    for (var i = 0; i < count; i++) {
+      checkDist(obj2, curve, Math.max(0, t - step2), x, y);
+      checkDist(obj2, curve, Math.min(1, t + step2), x, y);
+      step2 /= 2;
+    }
+    return obj2.minT;
+  };
+};
+const recoverBezier = (C1, C2, C3, C4, count = 20) => {
+  return makeCurveFunction(createBezier(C1, C2, C3, C4), count);
+};
+const recoverBezierQuard = (C1, C2, C3, count = 20) => {
+  return makeCurveFunction(createBezierQuard(C1, C2, C3), count);
+};
+const recoverBezierLine = (C1, C2, count = 20) => {
+  return makeCurveFunction(createBezierLine(C1, C2), count);
+};
+const createBezierForPattern = (bezierString) => {
+  if (bezierString === "linear") {
+    var C1 = { x: 0, y: 0 };
+    var C2 = { x: 1, y: 1 };
+    return createBezierLine(C1, C2);
+  }
+  var bezierList2 = parseCubicBezier(bezierString);
+  var C1 = { x: 0, y: 0 };
+  var C2 = { x: bezierList2[0], y: bezierList2[1] };
+  var C3 = { x: bezierList2[2], y: bezierList2[3] };
+  var C4 = { x: 1, y: 1 };
+  return createBezier(C1, C2, C3, C4);
+};
+const interpolate = (p1, p2, t) => {
+  return {
+    x: p1.x + (p2.x - p1.x) * t,
+    y: p1.y + (p2.y - p1.y) * t
+  };
+};
+const getBezierPointOne = (points, t) => {
+  var p0 = interpolate(points[0], points[1], t);
+  var p1 = interpolate(points[1], points[2], t);
+  var p2 = interpolate(points[2], points[3], t);
+  var p3 = interpolate(p0, p1, t);
+  var p4 = interpolate(p1, p2, t);
+  return interpolate(p3, p4, t);
+};
+const getBezierPointOneQuard = (points, t) => {
+  var p0 = interpolate(points[0], points[1], t);
+  var p1 = interpolate(points[1], points[2], t);
+  return interpolate(p0, p1, t);
+};
+const getBezierPointOneLine = (points, t) => {
+  return interpolate(points[0], points[1], t);
+};
+const getBezierPoints = (points, t) => {
+  var p0 = interpolate(points[0], points[1], t);
+  var p1 = interpolate(points[1], points[2], t);
+  var p2 = interpolate(points[2], points[3], t);
+  var p3 = interpolate(p0, p1, t);
+  var p4 = interpolate(p1, p2, t);
+  var p5 = interpolate(p3, p4, t);
+  return {
+    first: [points[0], p0, p3, p5],
+    second: [p5, p4, p2, points[3]]
+  };
+};
+const getBezierPointsQuard = (points, t) => {
+  var p0 = interpolate(points[0], points[1], t);
+  var p1 = interpolate(points[1], points[2], t);
+  var p2 = interpolate(p0, p1, t);
+  return {
+    first: [points[0], p0, p2],
+    second: [p2, p1, points[2]]
+  };
+};
+const splitBezierPointsByCount = (points, count = 1) => {
+  var result = [];
+  while (count > 0) {
+    const curve = getBezierPoints(points, 1 / count);
+    result.push(curve.first);
+    points = curve.second;
+    count--;
+  }
+  return result;
+};
+const splitBezierPointsQuardByCount = (points, count = 1) => {
+  var result = [];
+  while (count > 0) {
+    const curve = getBezierPointsQuard(points, 1 / count);
+    result.push(curve.first);
+    points = curve.second;
+    count--;
+  }
+  return result;
+};
+const splitBezierPointsLineByCount = (points, count = 1) => {
+  var result = [];
+  const unit = 1 / count;
+  while (count > 0) {
+    const curve = getBezierPointsLine(points, unit);
+    result.push(curve.first);
+    points = curve.second;
+    count--;
+  }
+  return result;
+};
+const getBezierPointsLine = (points, t) => {
+  var p0 = interpolate(points[0], points[1], t);
+  return {
+    first: [points[0], p0],
+    second: [p0, points[1]]
+  };
+};
+const normalizeCurveForLine = (points) => {
+  return [
+    clone(points[0]),
+    [
+      points[0][0] + (points[1][0] - points[0][0]) * 0.33,
+      points[0][1] + (points[1][1] - points[0][1]) * 0.33,
+      0
+    ],
+    [
+      points[0][0] + (points[1][0] - points[0][0]) * 0.66,
+      points[0][1] + (points[1][1] - points[0][1]) * 0.66,
+      0
+    ],
+    clone(points[1])
+  ];
+};
+const normalizeCurveForQuard = (points) => {
+  const twoOfThree = 2 / 3;
+  return [
+    clone(points[0]),
+    fromValues(points[0][0] + twoOfThree * (points[1][0] - points[0][0]), points[0][1] + twoOfThree * (points[1][1] - points[0][1]), 0),
+    fromValues(points[2][0] + twoOfThree * (points[1][0] - points[2][0]), points[2][1] + twoOfThree * (points[1][1] - points[2][1]), 0),
+    clone(points[2])
+  ];
+};
+const polygonalForCurve = (c1, c2, c3, c4, count = 1e3) => {
+  const totalLength = getCurveDist(c1[0], c1[1], c2[0], c2[1], c3[0], c3[1], c4[0], c4[1], count);
+  let samplingCount = 10;
+  let samplingStep = totalLength / samplingCount;
+  let lastLength = 0;
+  let points = [];
+  const bezierPoints = [c1, c2, c3, c4].map((point2) => ({
+    x: point2[0],
+    y: point2[1]
+  }));
+  do {
+    points = [];
+    let currentLength = 0;
+    for (let i = 0; i <= samplingCount; i++) {
+      const nextPoint = getBezierPointOne(bezierPoints, currentLength / totalLength);
+      points.push(nextPoint);
+      currentLength += samplingStep;
+    }
+    lastLength = getPolygonalDist(points);
+    samplingCount += samplingCount * (totalLength - lastLength) / totalLength;
+    samplingStep = totalLength / samplingCount;
+  } while (totalLength - lastLength > 0.25);
+  return points.map((point2) => fromValues(point2.x, point2.y, 0));
+};
+const calculateA = (points) => {
+  const a1 = negate([], points[0]);
+  const a2 = multiply([], [3, 3, 3], points[1]);
+  const a3 = multiply([], [-3, -3, -3], points[2]);
+  const a4 = points[3];
+  const newP = add$1([], add$1([], a1, a2), add$1([], a3, a4));
+  return multiply([], [3, 3, 3], newP);
+};
+const calculateB = (points) => {
+  const b1 = points[0];
+  const b2 = multiply([], [-2, -2, -2], points[1]);
+  const b3 = points[2];
+  const newP = add$1([], add$1([], b1, b2), b3);
+  return multiply([], [6, 6, 6], newP);
+};
+const calculateC = (points) => {
+  const newP = add$1([], points[1], negate([], points[0]));
+  return multiply([], [3, 3, 3], newP);
+};
+const findRootForCurve = (points) => {
+  const a = calculateA(points);
+  const b = calculateB(points);
+  const c2 = calculateC(points);
+  const roots = [];
+  const distX = b[0] * b[0] - 4 * a[0] * c2[0];
+  if (distX < 0)
+    ;
+  else if (distX === 0) {
+    let rootX = -b[0] / (2 * a[0]);
+    if (isNaN(rootX))
+      rootX = 0;
+    if (0 <= rootX && rootX <= 1) {
+      roots.push(rootX);
+    }
+  } else if (distX > 0) {
+    const rootX1 = (-b[0] + Math.sqrt(distX)) / (2 * a[0]);
+    const rootX2 = (-b[0] - Math.sqrt(distX)) / (2 * a[0]);
+    if (0 <= rootX1 && rootX1 <= 1) {
+      roots.push(rootX1);
+    }
+    if (0 <= rootX2 && rootX2 <= 1) {
+      roots.push(rootX2);
+    }
+  }
+  const distY = b[1] * b[1] - 4 * a[1] * c2[1];
+  if (distY < 0)
+    ;
+  else if (distY === 0) {
+    let rootY = -b[1] / (2 * a[1]);
+    if (isNaN(rootY))
+      rootY = 0;
+    if (0 <= rootY && rootY <= 1) {
+      roots.push(rootY);
+    }
+  } else if (distY > 0) {
+    const rootY1 = (-b[1] + Math.sqrt(distY)) / (2 * a[1]);
+    const rootY2 = (-b[1] - Math.sqrt(distY)) / (2 * a[1]);
+    if (0 <= rootY1 && rootY1 <= 1) {
+      roots.push(rootY1);
+    }
+    if (0 <= rootY2 && rootY2 <= 1) {
+      roots.push(rootY2);
+    }
+  }
+  return roots;
+};
+const getCurveBBox = (points) => {
+  const roots = findRootForCurve(points);
+  const xyPoints = points.map((p) => {
+    return { x: p[0], y: p[1] };
+  });
+  roots.push(0, 1);
+  return roots.map((t) => {
+    const { x, y } = getBezierPointOne(xyPoints, t);
+    return [x, y, 0];
+  });
+};
+function randomItem(...args2) {
+  return args2[randomNumber(0, args2.length - 1)];
+}
+function repeat(count) {
+  return [...Array(count)];
+}
+function CSS_TO_STRING(style, postfix = "") {
+  var newStyle = style || {};
+  return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
+}
+function STRING_TO_CSS(str = "", splitChar = ";", keySplitChar = ":") {
+  str = str + "";
+  var style = {};
+  if (str === "")
+    return style;
+  str.split(splitChar).forEach((it) => {
+    var [key, ...value] = it.split(keySplitChar).map((it2) => it2.trim());
+    if (key != "") {
+      style[key] = value.join(keySplitChar);
+    }
+  });
+  return style;
+}
+function OBJECT_TO_PROPERTY(obj2) {
+  const target = obj2 || {};
+  return Object.keys(target).map((key) => {
+    if (key === "class") {
+      if (isObject(obj2[key])) {
+        return `${key}="${classnames(obj2[key])}"`;
+      }
+    }
+    if (key === "style") {
+      if (isObject(obj2[key])) {
+        return `${key}="${CSS_TO_STRING(obj2[key])}"`;
+      }
+    }
+    if (isBoolean(obj2[key]) || isUndefined(obj2[key]) || obj2[key] === "undefined") {
+      if (obj2[key]) {
+        return key;
+      } else {
+        return "";
+      }
+    }
+    return `${key}="${obj2[key]}"`;
+  }).join(" ");
+}
+function TAG_TO_STRING(str) {
+  return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function mapjoin(arr, callback, joinString = "") {
+  return arr.map(callback).join(joinString);
+}
+function isArrayEquals(A, B) {
+  const s = /* @__PURE__ */ new Set([...A, ...B]);
+  return s.size === A.length && s.size === B.length;
+}
+const curveToPath = (timingFunction, width2 = 30, height2 = 30) => {
+  const currentBezier = getPredefinedCubicBezier(timingFunction);
+  return `
+        M0 ${width2} 
+        C 
+        ${currentBezier[0] * width2} ${currentBezier[1] == 0 ? height2 : (1 - currentBezier[1]) * height2},
+        ${currentBezier[2] * width2} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height2},
+        ${width2} 0
+    `;
+};
+const curveToPointLine = (timingFunction, width2 = 30, height2 = 30) => {
+  const currentBezier = getPredefinedCubicBezier(timingFunction);
+  return `
+        M 0 ${width2} 
+        L ${currentBezier[0] * width2} ${currentBezier[1] == 0 ? height2 : (1 - currentBezier[1]) * height2}
+        M ${width2} 0
+        L ${currentBezier[2] * width2} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height2}
+    `;
+};
+const valueFunctionIdentity = (v) => v;
+const valueMap = (obj2, valueFunction = valueFunctionIdentity) => {
+  const newObj = clone$1(obj2);
+  Object.keys(newObj).forEach((key) => {
+    newObj[key] = valueFunction(newObj[key]);
+  });
+  return newObj;
+};
+const objectFloor = (obj2) => valueMap(obj2, Math.floor);
 class CubicBezierEditor extends EditorElement {
   initState() {
     return {
@@ -13641,6 +13199,369 @@ class DirectionEditor extends EditorElement {
   }
 }
 var FilterEditor$1 = "";
+const identity$2 = () => true;
+function _traverse(obj2, filterCallback = identity$2) {
+  var results = [];
+  let len2 = obj2.layers.length;
+  for (let start2 = len2; start2--; ) {
+    let it = obj2.layers[start2];
+    results.push(..._traverse(it.ref, filterCallback));
+  }
+  if (filterCallback(obj2)) {
+    results.push(obj2);
+  }
+  return results;
+}
+class Item {
+  constructor(json = {}) {
+    this.ref = new Proxy(this, {
+      get: (target, key) => {
+        var originMethod = target[key];
+        if (isFunction(originMethod)) {
+          return (...args2) => {
+            return originMethod.apply(target, args2);
+          };
+        } else {
+          return originMethod || target.json[key];
+        }
+      },
+      set: (target, key, value) => {
+        const isDiff = target.json[key] != value;
+        if (isDiff) {
+          target.json[key] = value;
+          this.changed();
+        }
+        return true;
+      }
+    });
+    if (json instanceof Item) {
+      json = json.toJSON();
+    }
+    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
+    this.lastChangedField = {};
+    this.lastChangedFieldKeys = [];
+    this.cachedValue = {};
+    return this.ref;
+  }
+  getDefaultTitle() {
+    return "Item";
+  }
+  getIcon() {
+    return "";
+  }
+  isAttribute() {
+    return false;
+  }
+  isChanged(timestamp) {
+    return this.json.timestamp != Number(timestamp);
+  }
+  changed() {
+    this.json.timestamp = this.json._timestamp + window.performance.now();
+  }
+  get title() {
+    return this.json.name || this.getDefaultTitle();
+  }
+  renameWithCount() {
+    let arr = this.json.name.split(" ");
+    if (arr.length < 2) {
+      return;
+    }
+    let last = arr.pop();
+    let lastNumber = +last;
+    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
+      lastNumber++;
+    } else {
+      lastNumber = last;
+    }
+    const nextName = [...arr, lastNumber].join(" ");
+    this.reset({
+      name: nextName
+    });
+  }
+  get allLayers() {
+    return _traverse(this.ref);
+  }
+  filteredAllLayers(filterCallback) {
+    return _traverse(this.ref, filterCallback);
+  }
+  get id() {
+    return this.json.id;
+  }
+  get layers() {
+    return this.json.layers;
+  }
+  get parent() {
+    return this.json.parent;
+  }
+  setParent(otherParent) {
+    this.json.parent = otherParent;
+  }
+  get depth() {
+    if (!this.parent)
+      return 1;
+    return this.parent.depth + 1;
+  }
+  get top() {
+    if (!this.parent)
+      return this.ref;
+    let localParent = this.parent;
+    do {
+      if (!localParent.parent) {
+        return localParent;
+      }
+      localParent = localParent.parent;
+    } while (localParent);
+  }
+  get project() {
+    return this.path.find((it) => it.is("project"));
+  }
+  get artboard() {
+    return this.path.find((it) => it.is("artboard"));
+  }
+  get path() {
+    if (!this.parent)
+      return [this.ref];
+    const list2 = this.parent.path;
+    list2.push(this.ref);
+    return list2;
+  }
+  getInnerId(postfix = "") {
+    return this.json.id + postfix;
+  }
+  is(checkItemType) {
+    if (!this.json)
+      return false;
+    return checkItemType === this.json.itemType;
+  }
+  isNot(checkItemType) {
+    return this.is(checkItemType) === false;
+  }
+  isSVG() {
+    return false;
+  }
+  addCache(key, value) {
+    this.cachedValue[key] = value;
+  }
+  getCache(key) {
+    return this.cachedValue[key];
+  }
+  computed(key, newValueCallback) {
+    const cachedKey = `__cachedKey_${key}`;
+    const parsedKey = `${cachedKey}__parseValue`;
+    const value = this.json[key];
+    if (this.getCache(key) === value && this.getCache(parsedKey)) {
+      return this.getCache(parsedKey);
+    }
+    this.addCache(key, value);
+    this.addCache(parsedKey, newValueCallback(value, this.ref));
+    return this.getCache(parsedKey);
+  }
+  editable() {
+    return true;
+  }
+  generateListNumber() {
+    this.layers.forEach((it, index2) => {
+      it.no = index2;
+      it.generateListNumber();
+    });
+  }
+  convert(json) {
+    if (json.layers) {
+      json.layers.forEach((layer) => {
+        layer.parent = this.ref;
+      });
+    }
+    return json;
+  }
+  setCache() {
+  }
+  toCloneObject(isDeep = true) {
+    var json = this.attrs("itemType", "name", "elementType", "type", "visible", "lock", "selected");
+    if (isDeep) {
+      json.layers = this.json.layers.map((layer) => layer.clone(isDeep));
+    }
+    return json;
+  }
+  clone(isDeep = true) {
+    var ItemClass = this.constructor;
+    var item = new ItemClass(this.toCloneObject(isDeep));
+    item.setParent(this.json.parent);
+    return item;
+  }
+  reset(obj2) {
+    if (!obj2.__changedId)
+      obj2.__changedId = uuid();
+    if (this.lastChangedField.__changedId !== obj2.__changedId) {
+      this.json = this.convert(Object.assign(this.json, obj2));
+      this.lastChangedField = obj2;
+      this.lastChangedFieldKeys = Object.keys(obj2);
+      this.changed();
+    }
+    return true;
+  }
+  hasChangedField(...args2) {
+    return args2.some((it) => this.lastChangedFieldKeys.includes(it));
+  }
+  getDefaultObject(obj2 = {}) {
+    var id = uuidShort();
+    return __spreadValues({
+      id,
+      _timestamp: Date.now(),
+      _time: window.performance.now(),
+      visible: true,
+      lock: false,
+      selected: false,
+      layers: []
+    }, obj2);
+  }
+  attrs(...args2) {
+    const result = {};
+    args2.forEach((field) => {
+      result[field] = clone$1(this.json[field]);
+    });
+    return result;
+  }
+  hasChildren() {
+    return this.layers.length > 0;
+  }
+  appendChild(layer) {
+    if (layer.parent === this.ref) {
+      return layer;
+    }
+    this.resetMatrix(layer);
+    if (layer.parent) {
+      layer.remove();
+    }
+    layer.setParent(this.ref);
+    this.json.layers.push(layer);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  prependChildItem(layer) {
+    this.resetMatrix(layer);
+    if (layer.parent) {
+      layer.remove();
+    }
+    layer.setParent(this.ref);
+    this.json.layers.unshift(layer);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  resetMatrix() {
+  }
+  refreshMatrixCache() {
+  }
+  insertChild(layer, index2 = 0) {
+    this.resetMatrix(layer);
+    if (layer.parent) {
+      layer.remove();
+    }
+    layer.setParent(this.ref);
+    this.json.layers.splice(index2, 0, layer);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  insertAfter(layer) {
+    const index2 = this.parent.findIndex(this);
+    this.parent.insertChild(layer, index2);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  insertBefore(layer) {
+    const index2 = this.parent.findIndex(this);
+    this.parent.insertChild(layer, index2 - 1);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  setPositionInPlace(position2, item) {
+    this.layers.splice(position2, 0, item);
+  }
+  toggle(field, toggleValue) {
+    if (isUndefined(toggleValue)) {
+      this.json[field] = !this.json[field];
+    } else {
+      this.json[field] = !!toggleValue;
+    }
+  }
+  isTreeItemHide() {
+    let currentParent = this.parent;
+    let collapsedList = [];
+    do {
+      if (currentParent.is("project"))
+        break;
+      collapsedList.push(Boolean(currentParent.collapsed));
+      currentParent = currentParent.parent;
+    } while (currentParent);
+    return Boolean(collapsedList.filter(Boolean).length);
+  }
+  expectJSON(key) {
+    if (key === "parent")
+      return false;
+    if (isUndefined(this.json[key]))
+      return false;
+    return true;
+  }
+  toJSON() {
+    const json = this.json;
+    let newJSON = {};
+    Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
+      newJSON[key] = json[key];
+    });
+    return newJSON;
+  }
+  resize() {
+  }
+  copy(dist2 = 0) {
+    return this.json.parent.copyItem(this.ref, dist2);
+  }
+  findIndex(item) {
+    return this.json.layers.indexOf(item.ref);
+  }
+  copyItem(childItem, dist2 = 10) {
+    var child = childItem.clone();
+    child.renameWithCount();
+    child.move([dist2, dist2, 0]);
+    var childIndex = this.findIndex(childItem);
+    if (childIndex > -1) {
+      this.json.layers.push(child);
+      this.project.addIndexItem(child);
+    }
+    return child;
+  }
+  remove() {
+    this.json.parent.removeChild(this.ref);
+    this.project.removeIndexItem(this.ref);
+  }
+  removeChild(childItem) {
+    const index2 = this.findIndex(childItem);
+    if (index2 > -1) {
+      this.json.layers.splice(index2, 1);
+    }
+  }
+  hasParent(parentId) {
+    var isParent = this.json.parent.id === parentId;
+    if (!isParent && this.json.parent.is("project") === false)
+      return this.json.parent.hasParent(parentId);
+    return isParent;
+  }
+}
+class PropertyItem extends Item {
+  getDefaultObject(obj2 = {}) {
+    return __spreadValues({
+      selected: false,
+      layers: []
+    }, obj2);
+  }
+  isAttribute() {
+    return true;
+  }
+  toCSS() {
+    return {};
+  }
+  toString() {
+    return CSS_TO_STRING(this.toCSS());
+  }
+}
 const FILTER_REG = /((blur|grayscale|drop-shadow|hue-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^)]*)\))/gi;
 class Filter extends PropertyItem {
   getDefaultObject(obj2 = {}) {
@@ -13694,6 +13615,12 @@ class Filter extends PropertyItem {
   }
   static join(list2) {
     return list2.map((it) => Filter.parse(it)).join(" ");
+  }
+  toJSON() {
+    return {
+      type: this.json.type,
+      value: this.json.value
+    };
   }
 }
 class BlurFilter extends Filter {
@@ -13888,6 +13815,15 @@ class DropshadowFilter extends Filter {
     var json = this.json;
     return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color})`;
   }
+  toJSON() {
+    return {
+      type: this.json.type,
+      offsetX: this.json.offsetX,
+      offsetY: this.json.offsetY,
+      blurRadius: this.json.blurRadius,
+      color: this.json.color
+    };
+  }
 }
 DropshadowFilter.spec = {
   offsetX: {
@@ -13970,7 +13906,7 @@ class FilterEditor extends EditorElement {
   initState() {
     return {
       hideLabel: this.props.hideLabel === "true" ? true : false,
-      filters: Filter.parseStyle(this.props.value)
+      filters: this.props.value || []
     };
   }
   template() {
@@ -14138,7 +14074,7 @@ class FilterEditor extends EditorElement {
     this.modifyFilter();
   }
   modifyFilter() {
-    var value = this.state.filters.join(" ");
+    var value = this.state.filters;
     this.parent.trigger(this.props.onchange, this.props.key, value, this.props.params);
   }
   makeFilter(type, opt = {}) {
@@ -14202,20 +14138,14 @@ class FilterEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeDropShadowColor")](key, color2, params) {
     var index2 = +params;
-    this.state.filters[index2].reset({
-      color: color2
-    });
+    this.state.filters[index2].color = color2;
     this.modifyFilter();
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value, params) {
     if (params) {
-      this.state.filters[+key].reset({
-        [params]: value
-      });
+      this.state.filters[+key][params] = value;
     } else {
-      this.state.filters[+key].reset({
-        value
-      });
+      this.state.filters[+key].value = value;
     }
     this.modifyFilter();
   }
@@ -16563,24 +16493,24 @@ class PathParser {
           var list2 = getBezierPoints(closedPointInfo.points, closedPointInfo.t);
           var first = list2.first;
           var firstSegment = Segment.C(first[1].x, first[1].y, first[2].x, first[2].y, first[3].x, first[3].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.C(second2[1].x, second2[1].y, second2[2].x, second2[2].y, second2[3].x, second2[3].y);
+          var second = list2.second;
+          var secondSegment = Segment.C(second[1].x, second[1].y, second[2].x, second[2].y, second[3].x, second[3].y);
           this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
           break;
         case "Q":
           var list2 = getBezierPointsQuard(closedPointInfo.points, closedPointInfo.t);
           var first = list2.first;
           var firstSegment = Segment.Q(first[1].x, first[1].y, first[2].x, first[2].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.Q(second2[1].x, second2[1].y, second2[2].x, second2[2].y);
+          var second = list2.second;
+          var secondSegment = Segment.Q(second[1].x, second[1].y, second[2].x, second[2].y);
           this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
           break;
         case "L":
           var list2 = getBezierPointsLine(closedPointInfo.points, closedPointInfo.t);
           var first = list2.first;
           var firstSegment = Segment.L(first[1].x, first[1].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.L(second2[1].x, second2[1].y);
+          var second = list2.second;
+          var secondSegment = Segment.L(second[1].x, second[1].y);
           this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
           break;
         default:
@@ -20667,12 +20597,12 @@ class PurePathGenerator {
     this.makeMovePositionGuide();
     return this.toSVGString();
   }
-  makeTriangleDistancePointGuide(first, second2) {
-    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
-    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
-    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
-    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
-    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+  makeTriangleDistancePointGuide(first, second) {
+    var minX = Math.min(first.startPoint.x, second.startPoint.x);
+    var maxX = Math.max(first.startPoint.x, second.startPoint.x);
+    var minY = Math.min(first.startPoint.y, second.startPoint.y);
+    var maxY = Math.max(first.startPoint.y, second.startPoint.y);
+    if (first.startPoint.x < second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
       var centerX = minX;
       var centerY = minY;
@@ -20681,11 +20611,11 @@ class PurePathGenerator {
       var { x, y } = getXYInCircle(0, dist2, centerX, centerY);
       var last = getXYInCircle(angle, dist2, centerX, centerY);
       this.segmentManager.addDistanceAngle(last, dist2, dist2, angle, { x, y }, { x: x - dist2, y });
-    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
@@ -21885,81 +21815,10 @@ class TextEditor extends EditorElement {
   }
 }
 var TextShadowEditor$1 = "";
-class TextShadow extends PropertyItem {
-  static parse(obj2) {
-    return new TextShadow(obj2);
-  }
-  static parseStyle(str = "") {
-    var results = convertMatches(str);
-    str = str.trim();
-    var textShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.trim().split(" ");
-      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
-        return reverseMatches(it, results.matches) || "black";
-      });
-      var numbers = values.filter((it) => {
-        return !it.includes("@");
-      });
-      return TextShadow.parse({
-        color: colors2[0] || "rgba(0, 0, 0, 1)",
-        offsetX: Length.parse(numbers[0] || "0px"),
-        offsetY: Length.parse(numbers[1] || "0px"),
-        blurRadius: Length.parse(numbers[2] || "0px")
-      });
-    });
-    return textShadows;
-  }
-  static join(list2) {
-    return list2.map((it) => TextShadow.parse(it)).join(", ");
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "text-shadow",
-      offsetX: "0px",
-      offsetY: "0px",
-      blurRadius: "0px",
-      color: "rgba(0, 0, 0, 1)"
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("offsetX", "offsetY", "blurRadius", "color"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (isNumber(json.offsetX))
-      json.offsetX = Length.px(json.offsetX);
-    else if (json.offsetX)
-      json.offsetX = Length.parse(json.offsetX);
-    if (isNumber(json.offsetY))
-      json.offsetY = Length.px(json.offsetY);
-    else if (json.offsetY)
-      json.offsetY = Length.parse(json.offsetY);
-    if (isNumber(json.blurRadius))
-      json.blurRadius = Length.px(json.blurRadius);
-    else if (json.blurRadius)
-      json.blurRadius = Length.parse(json.blurRadius);
-    return json;
-  }
-  toCSS() {
-    return {
-      "text-shadow": this.toString()
-    };
-  }
-  toString() {
-    var { offsetX, offsetY, blurRadius, color: color2 } = this.json;
-    if (isNumber(offsetX))
-      offsetX = Length.px(offsetX);
-    if (isNumber(offsetY))
-      offsetY = Length.px(offsetY);
-    if (isNumber(blurRadius))
-      blurRadius = Length.px(blurRadius);
-    return `${offsetX} ${offsetY} ${blurRadius} ${color2}`;
-  }
-}
 class TextShadowEditor extends EditorElement {
   initState() {
     return {
-      textShadows: TextShadow.parseStyle(this.props.value)
+      textShadows: this.props.value || []
     };
   }
   template() {
@@ -22016,14 +21875,19 @@ class TextShadowEditor extends EditorElement {
     return arr.join("");
   }
   modifyTextShadow() {
-    var value = this.state.textShadows.join(", ");
+    var value = this.state.textShadows;
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
-  [SUBSCRIBE("add")](shadow2 = "") {
-    if (shadow2) {
-      this.state.textShadows = TextShadow.parseStyle(shadow2);
+  [SUBSCRIBE("add")](shadows) {
+    if (isArray(shadows)) {
+      this.state.textShadows.push(...shadows);
     } else {
-      this.state.textShadows.push(new TextShadow());
+      this.state.textShadows.push({
+        color: "#000000",
+        offsetX: 0,
+        offsetY: 0,
+        blurRadius: 0
+      });
     }
     this.refresh();
     this.modifyTextShadow();
@@ -22056,9 +21920,7 @@ class TextShadowEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value, index2) {
     var shadow2 = this.state.textShadows[index2];
-    shadow2.reset({
-      [key]: value
-    });
+    this.state.textShadows[index2] = __spreadProps(__spreadValues({}, shadow2), { [key]: value });
     this.modifyTextShadow();
   }
 }
@@ -27117,39 +26979,39 @@ class PathKitManager {
   has() {
     return !!this.pathkit;
   }
-  booleanOperation(first, second2, pathOp) {
+  booleanOperation(first, second, pathOp) {
     const PathKit = this.pathkit;
-    return PathKit.MakeFromOp(PathKit.FromSVGString(first), PathKit.FromSVGString(second2), pathOp).toSVGString();
+    return PathKit.MakeFromOp(PathKit.FromSVGString(first), PathKit.FromSVGString(second), pathOp).toSVGString();
   }
-  intersection(first, second2) {
+  intersection(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.INTERSECT));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.INTERSECT));
   }
-  union(first, second2) {
+  union(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.booleanOperation(first, second2, PathKit.PathOp.UNION);
+    return this.booleanOperation(first, second, PathKit.PathOp.UNION);
   }
-  difference(first, second2) {
+  difference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.DIFFERENCE));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.DIFFERENCE));
   }
-  reverseDifference(first, second2) {
+  reverseDifference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.REVERSE_DIFFERENCE));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.REVERSE_DIFFERENCE));
   }
-  xor(first, second2) {
+  xor(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.XOR));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.XOR));
   }
   reversePathString(pathString2) {
     return PathParser.fromSVGString(pathString2).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
@@ -29593,7 +29455,7 @@ class BackdropFilterProperty extends BaseProperty {
         ${createComponent("FilterEditor", {
       ref: "$filterEditor",
       key: "backdropFilter",
-      value,
+      value: clone$1(value),
       hideLabel: true,
       onchange: "changeFilterEditor"
     })}
@@ -29602,7 +29464,7 @@ class BackdropFilterProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
     this.$commands.executeCommand("setAttribute", "change backdrop filter", this.$context.selection.packByValue({
-      [key]: filter2
+      [key]: clone$1(filter2)
     }));
   }
   get editableProperty() {
@@ -30939,55 +30801,50 @@ function boxModel(editor) {
   });
 }
 var boxShadow$1 = [
-  { name: "Box", shadow: `0px 3px 3px 0px rgba(0,0,0,0.2)` },
+  {
+    name: "Box",
+    shadows: [
+      {
+        offsetX: 0,
+        offsetY: 3,
+        blurRadius: 3,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.2)"
+      }
+    ]
+  },
   {
     name: "Shadow-4",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.15), 
-        0px 2px 2px 0px rgba(0,0,0,0.15), 
-        0px 4px 4px 0px rgba(0,0,0,0.15), 
-        0px 8px 8px 0px rgba(0,0,0,0.15)
-    `
-  },
-  {
-    name: "Shadow-5",
-    shadow: `
-        0px  1px 1px 0px rgba(0,0,0,0.12), 
-        0px  2px 2px 0px rgba(0,0,0,0.12), 
-        0px  4px 4px 0px rgba(0,0,0,0.12), 
-        0px  8px 8px 0px rgba(0,0,0,0.12),
-        0px  16px 16px 0px rgba(0,0,0,0.12)
-    `
-  },
-  {
-    name: "Shadow-6",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.11), 
-        0px 2px 2px 0px rgba(0,0,0,0.11), 
-        0px 4px 4px 0px rgba(0,0,0,0.11), 
-        0px 8px 8px 0px rgba(0,0,0,0.11), 
-        0px 16px 16px 0px rgba(0,0,0,0.11), 
-        0px 32px 32px 0px rgba(0,0,0,0.11)
-    `
-  },
-  {
-    name: "Sharp",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.25), 
-        0px 2px 2px 0px rgba(0,0,0,0.20), 
-        0px 4px 4px 0px rgba(0,0,0,0.15), 
-        0px 8px 8px 0px rgba(0,0,0,0.10),
-        0px 16px 16px 0px rgba(0,0,0,0.05)
-    `
-  },
-  {
-    name: "Diffuse",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.08), 
-        0px 2px 2px 0px rgba(0,0,0,0.12), 
-        0px 4px 4px 0px rgba(0,0,0,0.16), 
-        0px 8px 8px 0px rgba(0,0,0,0.20)
-    `
+    shadows: [
+      {
+        offsetX: 0,
+        offsetY: 1,
+        blurRadius: 1,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      },
+      {
+        offsetX: 0,
+        offsetY: 2,
+        blurRadius: 2,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      },
+      {
+        offsetX: 0,
+        offsetY: 4,
+        blurRadius: 4,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      },
+      {
+        offsetX: 0,
+        offsetY: 8,
+        blurRadius: 8,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      }
+    ]
   }
 ];
 var BoxShadowProperty$1 = "";
@@ -31014,17 +30871,17 @@ class BoxShadowProperty extends BaseProperty {
   }
   [CLICK("$add")]() {
     const index2 = +this.refs.$select.value;
-    this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadow);
+    this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadows);
   }
   [LOAD("$shadowList")]() {
     var current = this.$context.selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
       key: "boxShadow",
-      value: current.boxShadow,
+      value: clone$1(current.boxShadow),
       onchange: (key, value) => {
         this.$commands.executeCommand("setAttribute", "change box shadow", this.$context.selection.packByValue({
-          [key]: value
+          [key]: clone$1(value)
         }));
       }
     });
@@ -34429,19 +34286,6 @@ var __glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": fileDropItems
 }, Symbol.toStringTag, { value: "Module" }));
-function second(fps, timecode2) {
-  if (isString(timecode2)) {
-    var [hour, minute, second2, frame] = timecode2.split(":");
-    hour = parseInt(hour, 10);
-    minute = parseInt(minute, 10);
-    second2 = parseInt(second2, 10);
-    frame = parseInt(frame, 10);
-    return hour * 3600 + minute * 60 + second2 + frame * (1 / fps);
-  } else if (isNumber(timecode2)) {
-    return timecode2 / fps;
-  }
-  return 0;
-}
 function timecode(fps, seconds) {
   var h = Math.floor(seconds / 3600);
   var m = Math.floor(seconds / 60 % 60);
@@ -34460,9 +34304,6 @@ function timecode(fps, seconds) {
   return [h, m, s, f].map((t) => {
     return (t + "").padStart(2, "0");
   }).join(":");
-}
-function framesToTimecode(fps, frames, start2 = null) {
-  return timecode(fps, second(fps, frames) - second(fps, start2));
 }
 function makeTimer(opt) {
   var timer2 = {
@@ -39255,6 +39096,8 @@ class DomModel extends GroupModel {
       pattern: "",
       selectors: [],
       svg: [],
+      filter: [],
+      backdropFilter: [],
       gridColumnStart: "",
       gridColumnEnd: "",
       gridRowStart: "",
@@ -41047,1352 +40890,6 @@ class PolygonModel extends SVGModel {
     return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.strokeWidth || 0);
   }
 }
-function makeInterpolateIdentity(layer, property, value) {
-  return () => {
-    return value;
-  };
-}
-function makeInterpolateNumber(layer, property, startNumber, endNumber, unit = void 0) {
-  return (rate, t) => {
-    var result = 0;
-    if (t === 0) {
-      result = startNumber;
-    } else if (t === 1) {
-      result = endNumber;
-    } else {
-      result = startNumber + (endNumber - startNumber) * rate;
-    }
-    if (unit) {
-      return result + unit;
-    }
-    return result;
-  };
-}
-function getRealAttributeValue(layer, property, value, refType = "width", refElement = "parent") {
-  var refObject = null;
-  if (refElement === "parent") {
-    refObject = layer[refElement][refType];
-  } else if (refElement === "self") {
-    refObject = layer[refType];
-  }
-  if (refObject) {
-    return value.toPx(refObject.value);
-  }
-  return value;
-}
-function rollbackRealAttributeValue(layer, property, value, unit, refType = "width", refElement = "parent") {
-  var refObject = null;
-  if (refElement === "parent") {
-    refObject = layer[refElement][refType];
-  } else if (refElement === "self") {
-    refObject = layer[refType];
-  }
-  if (refObject) {
-    return value.to(unit, refObject.value);
-  }
-  return value;
-}
-function makeInterpolateLength(layer, property, startNumber, endNumber, refType = "width", refElement = "parent") {
-  var s = Length.parse(startNumber);
-  var e = Length.parse(endNumber);
-  if (s.unit === e.unit) {
-    return makeInterpolateNumber(layer, property, s.value, e.value, s.unit);
-  } else if (s.equals(e)) {
-    return makeInterpolateIdentity(layer, property, s);
-  }
-  return (rate, t) => {
-    var realStartValue = getRealAttributeValue(layer, property, s, refType, refElement);
-    var realEndValue = getRealAttributeValue(layer, property, e, refType, refElement);
-    if (t === 0) {
-      return realStartValue;
-    } else if (t === 1) {
-      return realEndValue;
-    }
-    return rollbackRealAttributeValue(layer, property, realStartValue.value + (realEndValue.value - realStartValue.value) * rate, s.unit, refType, refElement);
-  };
-}
-function makeInterpolateBoolean(layer, property, s, e) {
-  return (ratio, t) => {
-    if (t === 1) {
-      return e;
-    }
-    return s;
-  };
-}
-function makeInterpolateColor(layer, property, startColor, endColor) {
-  var s = parse(startColor || "rgba(0, 0, 0, 1)");
-  var e = parse(endColor || "rgba(0, 0, 0, 1)");
-  return (rate, t) => {
-    if (t === 0) {
-      return startColor;
-    } else if (t === 1) {
-      return endColor;
-    }
-    return interpolateRGB(s, e, rate, "rgb");
-  };
-}
-function makeInterpolateString(layer, property, startString, endString) {
-  return makeInterpolateBoolean(layer, property, startString, endString);
-}
-function makeInterpolateColorStep(layer, property, startColorStep, endColorStep) {
-  var obj2 = {
-    cut: makeInterpolateBoolean(layer, property, startColorStep.cut, endColorStep.cut),
-    percent: makeInterpolateNumber(layer, property, startColorStep.percent, endColorStep.percent),
-    px: makeInterpolateNumber(layer, property, startColorStep.px, endColorStep.px),
-    em: makeInterpolateNumber(layer, property, startColorStep.em, endColorStep.em),
-    unit: makeInterpolateString(layer, property, startColorStep.unit, endColorStep.unit),
-    color: makeInterpolateColor(layer, property, startColorStep.color, endColorStep.color)
-  };
-  return (rate, t) => {
-    return new ColorStep({
-      cut: obj2.cut(rate, t),
-      percent: obj2.percent(rate, t),
-      px: obj2.px(rate, t),
-      em: obj2.em(rate, t),
-      unit: obj2.unit(rate, t),
-      color: obj2.color(rate, t)
-    });
-  };
-}
-function makeInterpolateColorStepList(layer, property, startColorsteps = [], endColorsteps = []) {
-  var max = Math.max(startColorsteps.length, endColorsteps.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var s = startColorsteps[i];
-    var e = endColorsteps[i];
-    if (s && e) {
-      list2[i] = makeInterpolateColorStep(layer, property, s, e);
-    } else {
-      list2[i] = makeInterpolateBoolean(layer, property, s, e);
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t));
-  };
-}
-function makeInterpolateConicGradient(layer, property, s, e) {
-  var obj2 = {
-    angle: makeInterpolateNumber(layer, property, s.angle, e.angle),
-    radialPositionX: makeInterpolateLength(layer, property, s.radialPosition[0], e.radialPosition[0], "width", "self"),
-    radialPositionY: makeInterpolateLength(layer, property, s.radialPosition[1], e.radialPosition[1], "height", "self"),
-    colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
-  };
-  return (rate, t) => {
-    return new ConicGradient({
-      angle: obj2.angle(rate, t),
-      radialPosition: [
-        obj2.radialPositionX(rate, t),
-        obj2.radialPositionY(rate, t)
-      ],
-      colorsteps: obj2.colorsteps(rate, t)
-    });
-  };
-}
-function makeInterpolateLinearGradient(layer, property, s, e) {
-  var obj2 = {
-    angle: makeInterpolateNumber(layer, property, s.angle, e.angle),
-    colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
-  };
-  return (rate, t) => {
-    var colorsteps = obj2.colorsteps(rate, t);
-    return new LinearGradient({
-      angle: obj2.angle(rate, t),
-      colorsteps
-    });
-  };
-}
-function convertPercent(value, type) {
-  switch (type) {
-    case "width":
-      if (value === "center") {
-        return "50%";
-      } else if (value === "left") {
-        return "0%";
-      } else if (value === "right") {
-        return "100%";
-      }
-      break;
-    case "height":
-      if (value === "center") {
-        return "50%";
-      } else if (value === "top") {
-        return "0%";
-      } else if (value === "bottom") {
-        return "100%";
-      }
-      break;
-  }
-  return value;
-}
-function makeInterpolateRadialGradient(layer, property, s, e) {
-  s.radialPosition[0] = convertPercent(s.radialPosition[0], "width");
-  s.radialPosition[1] = convertPercent(s.radialPosition[1], "height");
-  e.radialPosition[0] = convertPercent(e.radialPosition[0], "width");
-  e.radialPosition[1] = convertPercent(e.radialPosition[1], "height");
-  var obj2 = {
-    radialType: makeInterpolateString(layer, property, s.radialType, e.radialType),
-    radialPositionX: makeInterpolateLength(layer, property, s.radialPosition[0], e.radialPosition[0], "width", "self"),
-    radialPositionY: makeInterpolateLength(layer, property, s.radialPosition[1], e.radialPosition[1], "height", "self"),
-    colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
-  };
-  return (rate, t) => {
-    var results = new RadialGradient({
-      radialType: obj2.radialType(rate, t),
-      radialPosition: [
-        obj2.radialPositionX(rate, t),
-        obj2.radialPositionY(rate, t)
-      ],
-      colorsteps: obj2.colorsteps(rate, t)
-    });
-    return results;
-  };
-}
-function makeInterpolateRepeatingConicGradient(layer, property, s, e) {
-  var func = makeInterpolateConicGradient(layer, property, s, e);
-  return (rate, t) => {
-    var obj2 = func(rate, t);
-    return new RepeatingConicGradient({
-      angle: obj2.angle,
-      radialPosition: obj2.radialPosition,
-      colorsteps: obj2.colorsteps
-    });
-  };
-}
-function makeInterpolateRepeatingLinearGradient(layer, property, s, e) {
-  var func = makeInterpolateLinearGradient(layer, property, s, e);
-  return (rate, t) => {
-    var obj2 = func(rate, t);
-    var results = new RepeatingLinearGradient({
-      angle: obj2.angle,
-      colorsteps: obj2.colorsteps
-    });
-    return results;
-  };
-}
-function makeInterpolateRepeatingRadialGradient(layer, property, s, e) {
-  var func = makeInterpolateRadialGradient(layer, property, s, e);
-  return (rate, t) => {
-    var obj2 = func(rate, t);
-    return new RepeatingRadialGradient({
-      radialType: obj2.radialType,
-      radialPosition: obj2.radialPosition,
-      colorsteps: obj2.colorsteps
-    });
-  };
-}
-function makeInterpolateImageResource(layer, property, s, e) {
-  var obj2 = {
-    image: (rate, t) => {
-      return t;
-    }
-  };
-  if (s.type === "url" || e.type === "url") {
-    obj2.image = makeInterpolateBoolean(layer, property, s, e);
-  } else {
-    if (s.type != e.type) {
-      obj2.image = makeInterpolateBoolean(layer, property, s, e);
-    } else {
-      switch (s.type) {
-        case "linear-gradient":
-          obj2.image = makeInterpolateLinearGradient(layer, property, s, e);
-          break;
-        case "repeating-linear-gradient":
-          obj2.image = makeInterpolateRepeatingLinearGradient(layer, property, s, e);
-          break;
-        case "radial-gradient":
-          obj2.image = makeInterpolateRadialGradient(layer, property, s, e);
-          break;
-        case "repeating-radial-gradient":
-          obj2.image = makeInterpolateRepeatingRadialGradient(layer, property, s, e);
-          break;
-        case "conic-gradient":
-          obj2.image = makeInterpolateConicGradient(layer, property, s, e);
-          break;
-        case "repeating-conic-gradient":
-          obj2.image = makeInterpolateRepeatingConicGradient(layer, property, s, e);
-          break;
-      }
-    }
-  }
-  return (rate, t) => {
-    return obj2.image(rate, t);
-  };
-}
-function makeInterpolateBackgroundImage(layer, property, startValue, endValue) {
-  var s = BackgroundImage.parseStyle(STRING_TO_CSS(startValue));
-  var e = BackgroundImage.parseStyle(STRING_TO_CSS(endValue));
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || null;
-    var endObject = e[i] || null;
-    if (startObject && !endObject) {
-      list2.push({
-        image: makeInterpolateIdentity(layer, property, startObject.image),
-        size: makeInterpolateIdentity(layer, property, startObject.size),
-        width: makeInterpolateIdentity(layer, property, startObject.width),
-        height: makeInterpolateIdentity(layer, property, startObject.height),
-        x: makeInterpolateIdentity(layer, property, startObject.x),
-        y: makeInterpolateIdentity(layer, property, startObject.y),
-        blendMode: makeInterpolateIdentity(layer, property, startObject.blendMode),
-        repeat: makeInterpolateIdentity(layer, property, startObject.repeat)
-      });
-    } else if (!startObject && endObject) {
-      list2.push({
-        image: makeInterpolateIdentity(layer, property, endObject.image),
-        size: makeInterpolateIdentity(layer, property, endObject.size),
-        width: makeInterpolateIdentity(layer, property, endObject.width),
-        height: makeInterpolateIdentity(layer, property, endObject.height),
-        x: makeInterpolateIdentity(layer, property, endObject.x),
-        y: makeInterpolateIdentity(layer, property, endObject.y),
-        blendMode: makeInterpolateIdentity(layer, property, endObject.blendMode),
-        repeat: makeInterpolateIdentity(layer, property, endObject.repeat)
-      });
-    } else if (startObject && endObject) {
-      list2.push({
-        image: makeInterpolateImageResource(layer, property, startObject.image, endObject.image),
-        size: makeInterpolateString(layer, property, startObject.size, endObject.size),
-        width: makeInterpolateLength(layer, property, startObject.width, endObject.width, "width", "self"),
-        height: makeInterpolateLength(layer, property, startObject.height, endObject.height, "height", "self"),
-        x: makeInterpolateLength(layer, property, startObject.x, endObject.x, "width", "self"),
-        y: makeInterpolateLength(layer, property, startObject.y, endObject.y, "height", "self"),
-        blendMode: makeInterpolateString(layer, property, startObject.blendMode, endObject.blendMode),
-        repeat: makeInterpolateString(layer, property, startObject.repeat, endObject.repeat)
-      });
-    }
-  }
-  return (rate, t) => {
-    return BackgroundImage.join(list2.map((it) => {
-      var data = {
-        image: it.image(rate, t),
-        size: it.size(rate, t),
-        x: it.x(rate, t),
-        y: it.y(rate, t),
-        width: it.width(rate, t),
-        height: it.height(rate, t),
-        blendMode: it.blendMode(rate, t),
-        repeat: it.repeat(rate, t)
-      };
-      return data;
-    }));
-  };
-}
-const getBorderRadiusList = (radiusValue) => {
-  var startObject = [];
-  if (radiusValue.isAll) {
-    startObject = [
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px"
-    ];
-  } else {
-    startObject = [
-      radiusValue["border-top-left-radius"] || "0px",
-      radiusValue["border-top-right-radius"] || "0px",
-      radiusValue["border-bottom-right-radius"] || "0px",
-      radiusValue["border-bottom-left-radius"] || "0px"
-    ];
-  }
-  return startObject;
-};
-function makeInterpolateBorderRadius(layer, property, startValue, endValue) {
-  var s = getBorderRadiusList(BorderRadius.parseStyle(startValue));
-  var e = getBorderRadiusList(BorderRadius.parseStyle(endValue));
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    list2[i] = makeInterpolateLength(layer, property, s[i], e[i]);
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t)).join(" ");
-  };
-}
-function makeInterpolateBoxShadow(layer, property, startValue, endValue) {
-  var s = BoxShadow.parseStyle(startValue);
-  var e = BoxShadow.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    var endObject = e[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    list2.push({
-      inset: makeInterpolateBoolean(layer, property, startObject.inset, endObject.inset),
-      offsetX: makeInterpolateLength(layer, property, startObject.offsetX, endObject.offsetX),
-      offsetY: makeInterpolateLength(layer, property, startObject.offsetY, endObject.offsetY),
-      blurRadius: makeInterpolateLength(layer, property, startObject.blurRadius, endObject.blurRadius),
-      spreadRadius: makeInterpolateLength(layer, property, startObject.spreadRadius, endObject.spreadRadius),
-      color: makeInterpolateColor(layer, property, startObject.color, endObject.color)
-    });
-  }
-  return (rate, t) => {
-    return BoxShadow.join(list2.map((it) => {
-      return {
-        inset: it.inset(rate, t),
-        offsetX: it.offsetX(rate, t),
-        offsetY: it.offsetY(rate, t),
-        blurRadius: it.blurRadius(rate, t),
-        spreadRadius: it.spreadRadius(rate, t),
-        color: it.color(rate, t)
-      };
-    }));
-  };
-}
-function makeInterpolateClipPathCircle(layer, property, s, e) {
-  var obj2 = {};
-  if (s.radius === "closest-side" || s.radius === "farthest-side" || e.radius === "closest-side" || e.radius === "farthest-side") {
-    obj2.radius = makeInterpolateBoolean(layer, property, s.radius, e.radius);
-  } else {
-    if (s.radius.unit === e.radius.unit) {
-      obj2.radius = makeInterpolateNumber(layer, property, s.radius.value, e.radius.value, s.radius.unit);
-    } else {
-      obj2.radius = makeInterpolateLength(layer, property, s.radius, e.radius, "width", "self");
-    }
-  }
-  obj2.x = makeInterpolateLength(layer, property, s.x, e.x, "width", "self");
-  obj2.y = makeInterpolateLength(layer, property, s.y, e.y, "height", "self");
-  return (rate, t) => {
-    var radius = obj2.radius(rate, t);
-    var x = obj2.x(rate, t);
-    var y = obj2.y(rate, t);
-    var results = `${x} ${y}`;
-    var radiusString = radius + "";
-    if (radiusString.includes("closest-side")) {
-      radiusString = "closest-side";
-    } else if (radiusString.includes("farthest-side")) {
-      radiusString = "farthest-side";
-    }
-    return radius ? `${radiusString} at ${results}` : `${results}`;
-  };
-}
-function makeInterpolateClipPathEllipse(layer, property, s, e) {
-  var obj2 = {
-    radiusX: makeInterpolateLength(layer, property, s.radiusX, e.radiusX, "width", "self"),
-    radiusY: makeInterpolateLength(layer, property, s.radiusY, e.radiusY, "height", "self"),
-    x: makeInterpolateLength(layer, property, s.x, e.x, "width", "self"),
-    y: makeInterpolateLength(layer, property, s.y, e.y, "height", "self")
-  };
-  return (rate, t) => {
-    var radiusX = obj2.radiusX(rate, t);
-    var radiusY = obj2.radiusY(rate, t);
-    var x = obj2.x(rate, t);
-    var y = obj2.y(rate, t);
-    return `${radiusX} ${radiusY} at ${x} ${y}`;
-  };
-}
-function makeInterpolateClipPathInset(layer, property, s, e) {
-  var obj2 = {
-    top: makeInterpolateNumber(layer, property, s.top.value, e.top.value, s.top.unit),
-    left: makeInterpolateNumber(layer, property, s.left.value, e.left.value, s.left.unit),
-    right: makeInterpolateNumber(layer, property, s.right.value, e.right.value, s.right.unit),
-    bottom: makeInterpolateNumber(layer, property, s.bottom.value, e.bottom.value, s.bottom.unit),
-    round: makeInterpolateBoolean(layer, property, s.round, e.round),
-    topRadius: makeInterpolateNumber(layer, property, s.topRadius.value, e.topRadius.value, s.topRadius.unit),
-    leftRadius: makeInterpolateNumber(layer, property, s.leftRadius.value, e.leftRadius.value, s.leftRadius.unit),
-    rightRadius: makeInterpolateNumber(layer, property, s.rightRadius.value, e.rightRadius.value, s.rightRadius.unit),
-    bottomRadius: makeInterpolateNumber(layer, property, s.bottomRadius.value, e.bottomRadius.value, s.bottomRadius.unit)
-  };
-  return (rate, t) => {
-    var top2 = obj2.top(rate, t);
-    var right2 = obj2.right(rate, t);
-    var bottom2 = obj2.bottom(rate, t);
-    var left2 = obj2.left(rate, t);
-    var round2 = obj2.round(rate, t);
-    var topRadius = obj2.topRadius(rate, t);
-    var leftRadius = obj2.leftRadius(rate, t);
-    var bottomRadius = obj2.bottomRadius(rate, t);
-    var rightRadius = obj2.rightRadius(rate, t);
-    var position2 = [top2, right2, bottom2, left2].join(" ");
-    var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
-    var results = `${position2} ${round2 && radius.trim() ? `round ${radius}` : ""}`;
-    return results;
-  };
-}
-function makeInterpolateClipPathPolygon(layer, property, s, e) {
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    if (startPos && !endPos) {
-      list2.push({
-        x: makeInterpolateIdentity(layer, property, startPos.x),
-        y: makeInterpolateIdentity(layer, property, startPos.y)
-      });
-    } else if (!startPos && endPos) {
-      list2.push({
-        x: makeInterpolateIdentity(layer, property, endPos.x),
-        y: makeInterpolateIdentity(layer, property, endPos.y)
-      });
-    } else {
-      list2.push({
-        x: makeInterpolateLength(layer, property, startPos.x, endPos.x, "width", "self"),
-        y: makeInterpolateLength(layer, property, startPos.y, endPos.y, "height", "self")
-      });
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => {
-      return `${it.x(rate, t)} ${it.y(rate, t)}`;
-    }).join(",");
-  };
-}
-function makeInterpolateClipPath(layer, property, startValue, endValue) {
-  var startObject = ClipPath.parseStyle(startValue);
-  var endObject = ClipPath.parseStyle(endValue);
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startObject.type, startObject.type),
-    value: makeInterpolateBoolean(layer, property, startValue, endValue)
-  };
-  if (startObject.type == endObject.type && startObject != "none") {
-    switch (startObject.type) {
-      case "circle":
-        startObject.value = ClipPath.parseStyleForCircle(startObject.value);
-        endObject.value = ClipPath.parseStyleForCircle(endObject.value);
-        obj2.value = makeInterpolateClipPathCircle(layer, property, startObject.value, endObject.value);
-        break;
-      case "ellipse":
-        startObject.value = ClipPath.parseStyleForEllipse(startObject.value);
-        endObject.value = ClipPath.parseStyleForEllipse(endObject.value);
-        obj2.value = makeInterpolateClipPathEllipse(layer, property, startObject.value, endObject.value);
-        break;
-      case "inset":
-        startObject.value = ClipPath.parseStyleForInset(startObject.value);
-        endObject.value = ClipPath.parseStyleForInset(endObject.value);
-        obj2.value = makeInterpolateClipPathInset(layer, property, startObject.value, endObject.value);
-        break;
-      case "polygon":
-        startObject.value = ClipPath.parseStyleForPolygon(startObject.value);
-        endObject.value = ClipPath.parseStyleForPolygon(endObject.value);
-        obj2.value = makeInterpolateClipPathPolygon(layer, property, startObject.value, endObject.value);
-        break;
-      case "path":
-        startObject.value = ClipPath.parseStyleForPath(startObject.value);
-        endObject.value = ClipPath.parseStyleForPath(endObject.value);
-        break;
-    }
-  }
-  return (rate, t) => {
-    var type = obj2.type(rate, t);
-    var value = obj2.value(rate, t);
-    if (type === "none") {
-      return type;
-    }
-    return `${type}(${value})`;
-  };
-}
-function makeInterpolateFilterItem(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateString(layer, property, startValue.type, endValue.type),
-    value: makeInterpolateBoolean(layer, property, startValue.value, endValue.value)
-  };
-  switch (startValue.type) {
-    case "blur":
-      obj2.value = makeInterpolateLength(layer, property, startValue.value, endValue.value);
-      break;
-    case "grayscale":
-    case "invert":
-    case "brightness":
-    case "contrast":
-    case "opacity":
-    case "saturate":
-    case "sepia":
-    case "hue-rotate":
-      obj2.value = makeInterpolateNumber(layer, property, startValue.value.value, endValue.value.value, startValue.value.unit);
-      break;
-    case "drop-shadow":
-      obj2.offsetX = makeInterpolateLength(layer, property, startValue.offsetX, endValue.offsetX, "width", "self");
-      obj2.offsetY = makeInterpolateLength(layer, property, startValue.offsetY, endValue.offsetY, "height", "self");
-      obj2.blurRadius = makeInterpolateLength(layer, property, startValue.blurRadius, endValue.blurRadius, "width", "self");
-      obj2.spreadRadius = makeInterpolateLength(layer, property, startValue.spreadRadius, endValue.spreadRadius, "width", "self");
-      obj2.color = makeInterpolateColor(layer, property, startValue.color, endValue.color);
-      break;
-  }
-  return (rate, t) => {
-    var type = obj2.type(rate, t);
-    if (type === "drop-shadow") {
-      return {
-        type: obj2.type(rate, t),
-        offsetX: obj2.offsetX(rate, t),
-        offsetY: obj2.offsetY(rate, t),
-        blurRadius: obj2.blurRadius(rate, t),
-        spreadRadius: obj2.spreadRadius(rate, t),
-        color: obj2.color(rate, t)
-      };
-    } else {
-      return {
-        type: obj2.type(rate, t),
-        value: obj2.value(rate, t)
-      };
-    }
-  };
-}
-function makeInterpolateFilter(layer, property, startValue, endValue) {
-  var s = Filter.parseStyle(startValue);
-  var e = Filter.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i];
-    var endObject = e[i];
-    if (startObject && !endObject) {
-      list2.push(makeInterpolateIdentity(layer, property, startObject));
-    } else if (!startObject && endObject) {
-      list2.push(makeInterpolateIdentity(layer, property, endObject));
-    } else {
-      if (startObject.type != endObject.type || startObject.type === "svg" || endObject.type === "svg") {
-        list2.push(makeInterpolateBoolean(layer, property, startObject, endObject));
-      } else {
-        list2.push(makeInterpolateFilterItem(layer, property, startObject, endObject));
-      }
-    }
-  }
-  return (rate, t) => {
-    return Filter.join(list2.map((it) => it(rate, t)));
-  };
-}
-function makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
-  var points = [
-    { x: sx, y: sy },
-    { x: cx1, y: cy1 },
-    { x: cx2, y: cy2 },
-    { x: ex, y: ey }
-  ];
-  return (rate, t) => {
-    return getBezierPointOne(points, t);
-  };
-}
-function makeInterpolateLine(x1, y1, x2, y2) {
-  var obj2 = {
-    x: makeInterpolateNumber("", "", x1, x2),
-    y: makeInterpolateNumber("", "", y1, y2)
-  };
-  return (rate, t) => {
-    var results = {
-      x: obj2.x(rate, t),
-      y: obj2.y(rate, t)
-    };
-    return results;
-  };
-}
-function makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey) {
-  var points = [
-    { x: sx, y: sy },
-    { x: cx1, y: cy1 },
-    { x: ex, y: ey }
-  ];
-  return (rate, t) => {
-    return getBezierPointOneQuard(points, t);
-  };
-}
-function makeInterpolateOffset(segments) {
-  var interpolateList = [];
-  var startPoint = [];
-  segments.forEach((segment) => {
-    switch (segment.command) {
-      case "M":
-        var [ex, ey] = segment.values;
-        startPoint = [ex, ey];
-        break;
-      case "m":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        startPoint = [ex, ey];
-        break;
-      case "L":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, ex, ey],
-          length: getDist(sx, sy, ex, ey),
-          interpolate: makeInterpolateLine(sx, sy, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "l":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, ex, ey],
-          length: getDist(sx, sy, ex, ey),
-          interpolate: makeInterpolateLine(sx, sy, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "C":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "c":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
-        cx1 += sx;
-        cx2 += sx;
-        ex += sx;
-        cy1 += sy;
-        cy2 += sy;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "Q":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, ex, ey],
-          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "q":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, ex, ey] = segment.values;
-        cx1 += sx;
-        ex += sx;
-        cy1 += sy;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, ex, ey],
-          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "S":
-        var [sx, sy] = startPoint;
-        var [cx2, cy2, ex, ey] = segment.values;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
-          var [, , , , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-          });
-          startPoint = [ex, ey];
-          break;
-        }
-      case "s":
-        var [sx, sy] = startPoint;
-        var [cx2, cy2, ex, ey] = segment.values;
-        cx2 += sx;
-        ex += sx;
-        cy2 += sy;
-        ey += sy;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
-          var [, , , , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-          });
-          startPoint = [ex, ey];
-          break;
-        }
-      case "T":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
-          var [, , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, ex, ey],
-            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-          });
-          startPoint = [ex, ey];
-        }
-        break;
-      case "t":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
-          var [, , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, ex, ey],
-            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-          });
-          startPoint = [ex, ey];
-        }
-        break;
-    }
-  });
-  var totalLength = 0;
-  interpolateList.forEach((it) => {
-    totalLength += it.length;
-  });
-  var start2 = 0;
-  interpolateList.forEach((it) => {
-    it.startT = start2 / totalLength;
-    it.endT = (start2 + it.length) / totalLength;
-    it.totalLength = totalLength;
-    start2 += it.length;
-  });
-  return { totalLength, interpolateList };
-}
-function makeInterpolateOffsetPath(layer, property, startValue, endValue, artboard2) {
-  var [id, distance2, rotateStatus, rotate2] = startValue.split(",").map((it) => it.trim());
-  var startObject = {
-    id,
-    distance: Length.parse(distance2 || "0%"),
-    rotateStatus: rotateStatus || "auto",
-    rotate: Length.parse(rotate2 || "0deg")
-  };
-  var innerInterpolate = () => {
-    return {};
-  };
-  var innerInterpolateAngle = (rotateStatus2, currentAngle) => {
-    var resultAngle = 0;
-    switch (rotateStatus2) {
-      case "angle":
-        resultAngle = startObject.rotate.value;
-        break;
-      case "auto angle":
-        resultAngle = currentAngle + startObject.rotate.value;
-        break;
-      case "reverse":
-        resultAngle = currentAngle + 180;
-        break;
-      case "auto":
-        resultAngle = currentAngle;
-        break;
-    }
-    return resultAngle;
-  };
-  var screenX = 0, screenY = 0;
-  if (artboard2) {
-    var pathLayer = artboard2.searchById(startObject.id);
-    if (pathLayer) {
-      screenX = pathLayer.screenX.value;
-      screenY = pathLayer.screenY.value;
-    }
-    innerInterpolate = (rate, t, timing) => {
-      var parser = new PathParser(pathLayer.d || "");
-      var { totalLength, interpolateList } = makeInterpolateOffset(parser.segments);
-      var distance3 = startObject.distance.toPx(totalLength);
-      var dt = distance3 / totalLength;
-      t = t + dt;
-      if (t > 1) {
-        t -= 1;
-      }
-      var obj2 = interpolateList[0];
-      if (t === 0) {
-        obj2 = interpolateList[0];
-      } else if (t === 1) {
-        obj2 = interpolateList[interpolateList.length - 1];
-      }
-      var arr = interpolateList.find((it) => {
-        return it.startT <= t && t < it.endT;
-      });
-      if (arr) {
-        obj2 = arr;
-      }
-      var newT = (t - obj2.startT) / (obj2.endT - obj2.startT);
-      var newRate = timing(newT);
-      return __spreadProps(__spreadValues({}, obj2.interpolate(newRate, newT, timing)), {
-        totalLength: obj2.totalLength
-      });
-    };
-  }
-  return (rate, t, timing) => {
-    var arr = (layer.transformOrigin || "50% 50% 0px").split(" ").map((it) => Length.parse(it));
-    var tx = arr[0].toPx(layer.width);
-    var ty = arr[1].toPx(layer.height);
-    var obj2 = innerInterpolate(rate, t, timing);
-    var results = {
-      x: obj2.x + screenX - tx.value,
-      y: obj2.y + screenY - ty.value
-    };
-    layer.setScreenX(results.x);
-    layer.setScreenY(results.y);
-    if (startObject.rotateStatus === "element")
-      ;
-    else {
-      var current = obj2;
-      var distValue = 0;
-      if (t < 1) {
-        distValue = 1 / obj2.totalLength;
-      }
-      var next = innerInterpolate(rate + distValue, t + distValue, timing);
-      var angle = calculateAngle(next.x - current.x, next.y - current.y);
-      var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle));
-      layer.reset({
-        transform: Transform.rotate(layer.transform, newAngle)
-      });
-    }
-    return results;
-  };
-}
-function makeInterpolatePerspectiveOrigin(layer, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => Length.parse(it));
-  var e = endValue.split(" ").map((it) => Length.parse(it));
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    list2.push(makeInterpolateLength(layer, property, startPos, endPos, "perspective-origin"));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolatePlayTime(layer, property, startValue, endValue, artboard2, layerElement) {
-  const mediaElement = layerElement.$("video").el;
-  let [sTime, , durationTime] = startValue.split(":");
-  const duration = +(durationTime || 1);
-  const startTime = +(sTime || 0) * duration;
-  return (rate, t) => {
-    if (t === 0) {
-      mediaElement.currentTime = startTime;
-      if (mediaElement.paused) {
-        mediaElement.play();
-      }
-    } else if (t === 1) {
-      layer.reset({
-        currentTime: mediaElement.currentTime
-      });
-      mediaElement.pause();
-    } else {
-      if (mediaElement.paused) {
-        mediaElement.play();
-      }
-    }
-  };
-}
-function makeInterpolateRotate(layer, property, startNumber, endNumber) {
-  var startValue = Length.parse(startNumber);
-  var endValue = Length.parse(endNumber);
-  return (rate, t) => {
-    var realStartValue = startValue.value;
-    var realEndValue = endValue.value;
-    if (t === 0) {
-      return Length.deg(realStartValue);
-    } else if (t === 1) {
-      return Length.deg(realEndValue);
-    }
-    return Length.deg(realStartValue + (realEndValue - realStartValue) * rate).to(startValue.unit);
-  };
-}
-function makeInterpolateStrokeDashArrray(layer, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => +it);
-  var e = endValue.split(" ").map((it) => +it);
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    list2.push(makeInterpolateNumber(layer, property, startPos, endPos));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolateText(layer, property, startText, endText) {
-  var max = endText.length - 1;
-  var min = 0;
-  return (rate, t) => {
-    var result = 0;
-    if (t === 0) {
-      result = "";
-    } else if (t === 1) {
-      result = endText;
-    } else {
-      result = endText.substring(min, Math.floor((max - min) * t));
-    }
-    return result;
-  };
-}
-function makeInterpolateTextShadow(layer, property, startValue, endValue) {
-  var s = TextShadow.parseStyle(startValue);
-  var e = TextShadow.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    var endObject = e[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    list2.push({
-      offsetX: makeInterpolateLength(layer, property, startObject.offsetX, endObject.offsetX, "width", "self"),
-      offsetY: makeInterpolateLength(layer, property, startObject.offsetY, endObject.offsetY, "height", "self"),
-      blurRadius: makeInterpolateLength(layer, property, startObject.blurRadius, endObject.blurRadius, "radius"),
-      color: makeInterpolateColor(layer, property, startObject.color, endObject.color)
-    });
-  }
-  return (rate, t) => {
-    return TextShadow.join(list2.map((it) => {
-      return {
-        offsetX: it.offsetX(rate, t),
-        offsetY: it.offsetY(rate, t),
-        blurRadius: it.blurRadius(rate, t),
-        color: it.color(rate, t)
-      };
-    }));
-  };
-}
-function makeInterpolateTransformLength(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var s = startValue.value[i];
-    var e = endValue.value[i];
-    if (s && e) {
-      value.push(makeInterpolateLength(layer, property, s, e, startValue.type));
-    } else {
-      value.push(makeInterpolateLength(layer, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || endValue.value[i - 2], startValue.type));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    return {
-      type: obj2.type(rate, t),
-      value: obj2.value.map((it) => it(rate, t))
-    };
-  };
-}
-function makeInterpolateTransformNumber(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var s = startValue.value[i];
-    var e = endValue.value[i];
-    if (s && e) {
-      value.push(makeInterpolateNumber(layer, property, s.value, e.value));
-    } else {
-      var ss = startValue.value[i].value || startValue.value[i - 1].value || startValue.value[i - 2].value;
-      var ee = endValue.value[i].value || endValue.value[i - 1].value || startValue.value[i - 2].value;
-      value.push(makeInterpolateNumber(layer, property, ss, ee));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    var value2 = obj2.value.map((it) => it(rate, t));
-    var type = obj2.type(rate, t);
-    if (type.includes("matrix") || type.includes("scale")) {
-      value2 = value2.map((it) => {
-        return Length.number(it);
-      });
-    }
-    return { type, value: value2 };
-  };
-}
-function makeInterpolateTransformRotate(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var tempStartValue = startValue.value[i];
-    var tempEndValue = endValue.value[i];
-    if (tempStartValue && tempEndValue) {
-      value.push(makeInterpolateRotate(layer, property, tempStartValue, tempEndValue));
-    } else {
-      value.push(makeInterpolateRotate(layer, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || startValue.value[i - 2]));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    var results = {
-      type: obj2.type(rate, t),
-      value: obj2.value.map((it) => it(rate, t))
-    };
-    return results;
-  };
-}
-function makeInterpolateTransform(layer, property, startValue, endValue) {
-  var startObject = Transform.parseStyle(startValue.trim());
-  var endObject = Transform.parseStyle(endValue.trim());
-  var max = Math.max(startObject.length, endObject.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var s = startObject[i];
-    var e = endObject[i];
-    if (s && !e) {
-      list2.push(makeInterpolateIdentity(layer, property, s));
-    } else if (!s && e) {
-      list2.push(makeInterpolateIdentity(layer, property, e));
-    } else if (s.type != e.type) {
-      list2.push(makeInterpolateBoolean(layer, property, s, e));
-    } else {
-      switch (s.type) {
-        case "translate":
-        case "translateX":
-        case "translateY":
-        case "translateZ":
-        case "translate3d":
-        case "perspective":
-          list2.push(makeInterpolateTransformLength(layer, property, s, e));
-          break;
-        case "rotate":
-        case "rotateX":
-        case "rotateY":
-        case "rotateZ":
-        case "rotate3d":
-          list2.push(makeInterpolateTransformRotate(layer, property, s, e));
-          break;
-        case "scale":
-        case "scaleX":
-        case "scaleY":
-        case "scaleZ":
-        case "scale3d":
-        case "matrix":
-        case "matrix3d":
-          list2.push(makeInterpolateTransformNumber(layer, property, s, e));
-          break;
-      }
-    }
-  }
-  return (rate, t) => {
-    var results = Transform.join(list2.map((it) => {
-      return it(rate, t);
-    }));
-    return results;
-  };
-}
-function makeInterpolateTransformOrigin(layer, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => Length.parse(it));
-  var e = endValue.split(" ").map((it) => Length.parse(it));
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    list2.push(makeInterpolateLength(layer, property, startPos, endPos, "transform-origin"));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolatePathValues(layer, property, s, e) {
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  var startLastPos = s[s.length - 1];
-  var endLastPos = e[e.length - 1];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    if (startPos && !endPos) {
-      list2.push(makeInterpolateNumber(layer, property, startPos, endLastPos));
-    } else if (!startPos && endPos) {
-      list2.push(makeInterpolateNumber(layer, property, startLastPos, endPos));
-    } else {
-      list2.push(makeInterpolateNumber(layer, property, startPos, endPos));
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t));
-  };
-}
-function makeInterpolatePath(layer, property, startValue, endValue) {
-  var returnParser = new PathParser();
-  var s = new PathParser(startValue);
-  var e = new PathParser(endValue);
-  var max = Math.max(s.segments.length, e.segments.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var sc = s.segments[i];
-    var ec = e.segments[i];
-    if (sc.command === ec.command) {
-      if (sc.values.length === ec.values.length) {
-        list2.push({
-          command: makeInterpolateIdentity(layer, property, sc.command),
-          values: makeInterpolatePathValues(layer, property, sc.values, ec.values)
-        });
-      } else {
-        list2.push({
-          command: makeInterpolateIdentity(layer, property, sc.command),
-          values: makeInterpolateIdentity(layer, property, sc.values)
-        });
-      }
-    } else {
-      list2.push({
-        command: makeInterpolateBoolean(layer, property, sc.command, ec.command),
-        values: makeInterpolateBoolean(layer, property, sc.values, ec.values)
-      });
-    }
-  }
-  return (rate, t) => {
-    var segments = list2.map((it) => {
-      return {
-        command: it.command(rate, t),
-        values: it.values(rate, t)
-      };
-    });
-    var results = returnParser.joinPath(segments);
-    return results;
-  };
-}
-function makeInterpolatePolygon(layer, property, startValue, endValue) {
-  var returnParser = new PolygonParser();
-  var s = new PolygonParser(startValue);
-  var e = new PolygonParser(endValue);
-  var max = Math.max(s.segments.length, e.segments.length);
-  var list2 = [];
-  var startLastX = s.segments[s.segments.length - 1].x;
-  var startLastY = s.segments[s.segments.length - 1].y;
-  var endLastX = e.segments[e.segments.length - 1].x;
-  var endLastY = e.segments[e.segments.length - 1].y;
-  for (var i = 0; i < max; i++) {
-    var startPos = s.segments[i];
-    var endPos = e.segments[i];
-    if (startPos && !endPos) {
-      list2.push({
-        x: makeInterpolateNumber(layer, property, startPos.x, endLastX),
-        y: makeInterpolateNumber(layer, property, startPos.y, endLastY)
-      });
-    } else if (!startPos && endPos) {
-      list2.push({
-        x: makeInterpolateNumber(layer, property, startLastX, endPos.x),
-        y: makeInterpolateNumber(layer, property, startLastY, endPos.y)
-      });
-    } else {
-      list2.push({
-        x: makeInterpolateNumber(layer, property, startPos.x, endPos.x),
-        y: makeInterpolateNumber(layer, property, startPos.y, endPos.y)
-      });
-    }
-  }
-  return (rate, t) => {
-    var points = returnParser.joinPoints(list2.map((it) => {
-      return {
-        x: it.x(rate, t),
-        y: it.y(rate, t)
-      };
-    }));
-    return points;
-  };
-}
-const DEFAULT_FUCTION = () => () => {
-};
-function makeInterpolateCustom(property) {
-  switch (property) {
-    case "border-radius":
-      return makeInterpolateBorderRadius;
-    case "box-shadow":
-      return makeInterpolateBoxShadow;
-    case "text-shadow":
-      return makeInterpolateTextShadow;
-    case "background-image":
-    case "BackgroundImageEditor":
-      return makeInterpolateBackgroundImage;
-    case "filter":
-    case "backdrop-filter":
-      return makeInterpolateFilter;
-    case "clip-path":
-      return makeInterpolateClipPath;
-    case "transform":
-      return makeInterpolateTransform;
-    case "transform-origin":
-      return makeInterpolateTransformOrigin;
-    case "perspective-origin":
-      return makeInterpolatePerspectiveOrigin;
-    case "stroke-dasharray":
-      return makeInterpolateStrokeDashArrray;
-    case "d":
-      return makeInterpolatePath;
-    case "points":
-      return makeInterpolatePolygon;
-    case "offset-path":
-      return makeInterpolateOffsetPath;
-    case "text":
-      return makeInterpolateText;
-    case "playTime":
-      return makeInterpolatePlayTime;
-  }
-}
-function makeInterpolate(layer, property, startValue, endValue, editorString, artboard2, layerElement) {
-  var checkField = editorString || property;
-  switch (checkField) {
-    case "width":
-    case "x":
-      return makeInterpolateLength(layer, property, startValue, endValue, "width");
-    case "height":
-    case "y":
-      return makeInterpolateLength(layer, property, startValue, endValue, "height");
-    case "perspective":
-    case "font-size":
-    case "font-weight":
-    case "text-stroke-width":
-    case "RangeEditor":
-    case "textLength":
-    case "startOffset":
-      return makeInterpolateLength(layer, property, startValue, endValue, property);
-    case "fill-opacity":
-    case "opacity":
-    case "stroke-dashoffset":
-    case "currentTime":
-    case "NumberRangeEditor":
-      return makeInterpolateNumber(layer, property, +startValue, +endValue);
-    case "background-color":
-    case "color":
-    case "text-fill-color":
-    case "text-stroke-color":
-    case "fill":
-    case "stroke":
-    case "ColorViewEditor":
-      return makeInterpolateColor(layer, property, startValue, endValue);
-    case "mix-blend-mode":
-    case "fill-rule":
-    case "stroke-linecap":
-    case "stroke-linejoin":
-    case "SelectEditor":
-    case "lengthAdjust":
-      return makeInterpolateString(layer, property, startValue, endValue);
-    case "rotate":
-      return makeInterpolateRotate(layer, property, startValue, endValue);
-  }
-  var func = makeInterpolateCustom(checkField);
-  if (func) {
-    return func(layer, property, startValue, endValue, artboard2, layerElement);
-  }
-  return DEFAULT_FUCTION;
-}
-function createInterpolateFunction(layer, property, startValue, endValue, editorString, artboard2, layerElement) {
-  return makeInterpolate(layer, property, startValue, endValue, editorString, artboard2, layerElement);
-}
 class AssetModel extends BaseModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -42662,546 +41159,8 @@ class AssetModel extends BaseModel {
     return this.addSVGImage(data);
   }
 }
-class TimelineModel extends AssetModel {
-  constructor() {
-    super(...arguments);
-    __privateAdd(this, _compiledTimeline, []);
-  }
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      timeline: [],
-      compiledTimeline: {}
-    }, obj2));
-  }
-  get timeline() {
-    return this.get("timeline");
-  }
-  set timeline(value) {
-    this.set("timeline", value);
-  }
-  expectJSON(key) {
-    if (key === "compiledTimeline")
-      return false;
-    return super.expectJSON(key);
-  }
-  setTimelineInfo(obj2) {
-    var timeline = this.getSelectedTimeline();
-    if (!timeline)
-      return;
-    ["speed", "iterationCount", "direction"].forEach((key) => {
-      if (isNotUndefined(obj2[key])) {
-        timeline[key] = obj2[key];
-      }
-    });
-  }
-  compileAll() {
-    var timeline = this.getSelectedTimeline();
-    __privateSet(this, _compiledTimeline, {});
-    if (timeline) {
-      timeline.animations.forEach((animation2) => {
-        animation2.properties.forEach((property) => {
-          this.compiledTimingFunction(animation2.id, property.property);
-        });
-      });
-    }
-  }
-  searchTimelineOffset(time) {
-    var timeline = this.getSelectedTimeline();
-    var filteredTimeline = [];
-    if (timeline) {
-      timeline.animations.forEach((animation2) => {
-        animation2.properties.forEach((p) => {
-          var list2 = this.getCompiledTimingFunction(animation2.id, p.property);
-          filteredTimeline.push(list2.find((keyframe2) => {
-            if (keyframe2.isOnlyTime && keyframe2.startTime <= time)
-              return true;
-            return keyframe2.startTime <= time && time < keyframe2.endTime;
-          }));
-        });
-      });
-    }
-    return filteredTimeline.filter((it) => it);
-  }
-  getCompiledTimingFunction(layerId, property) {
-    return __privateGet(this, _compiledTimeline)[`${layerId}.${property}`];
-  }
-  compiledTimingFunction(layerId, property) {
-    var artboard2 = this;
-    var p = this.getTimelineProperty(layerId, property);
-    var layer = this.modelManager.get(layerId);
-    var key = `${layerId}.${property}`;
-    if (p.keyframes.length === 1) {
-      __privateGet(this, _compiledTimeline)[key] = [];
-      return;
-    }
-    let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
-    let editorString = p.keyframes.map((it) => it.editor)[0];
-    __privateGet(this, _compiledTimeline)[key] = p.keyframes.map((offset, index2) => {
-      var currentOffset = offset;
-      var nextOffset = p.keyframes[index2 + 1];
-      offset.editor = editorString;
-      if (!nextOffset) {
-        nextOffset = { time: offset.time, value: offset.value };
-      }
-      var it = {
-        layer,
-        layerElement,
-        property: p.property,
-        isOnlyTime: currentOffset.time === nextOffset.time,
-        startTime: offset.time,
-        endTime: nextOffset.time,
-        startValue: offset.value,
-        endValue: nextOffset.value,
-        timing: offset.timing,
-        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor, artboard2, layerElement),
-        timingFunction: createTimingFunction(offset.timing)
-      };
-      it.func = this.makeTimingFunction(it);
-      return it;
-    }).filter((it) => it);
-  }
-  makeTimingFunction(it) {
-    return (time) => {
-      var totalT = it.endTime - it.startTime;
-      var t = 1;
-      if (totalT !== 0) {
-        t = (time - it.startTime) / totalT;
-      }
-      return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
-    };
-  }
-  stop() {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var time = timeline.currentTime;
-      this.searchTimelineOffset(time).forEach((it) => {
-        if (it.property === "playTime") {
-          const $video = it.layerElement.$("video");
-          if ($video) {
-            $video.el.pause();
-          }
-        }
-      });
-    }
-  }
-  seek(frameOrCode, filterFunction = (it) => it) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      if (isNotUndefined(frameOrCode)) {
-        this.setTimelineCurrentTime(frameOrCode);
-      }
-      var time = timeline.currentTime;
-      this.searchTimelineOffset(time).filter(filterFunction).forEach((it) => {
-        if (it.property === "offset-path" || it.property === "playTime") {
-          it.func(time);
-        } else if (it.layer) {
-          it.layer.reset({
-            [it.property]: it.func(time)
-          });
-        }
-      });
-    }
-  }
-  getSelectedTimeline() {
-    var timeline = this.timeline;
-    var a = timeline.filter((it) => it.selected);
-    var selectedTimeline = a.length ? a[0] : timeline[0];
-    return selectedTimeline || null;
-  }
-  getKeyframeListReturnArray() {
-    var timeline = this.getSelectedTimeline();
-    var keyframes = [];
-    if (timeline) {
-      timeline.animations.forEach((a) => {
-        a.properties.forEach((p) => {
-          keyframes.push.apply(keyframes, p.keyframes);
-        });
-      });
-    }
-    return keyframes;
-  }
-  getKeyframeList(callback) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations.forEach((a) => {
-        a.properties.forEach((p) => {
-          p.keyframes.forEach((k) => {
-            callback && callback(timeline, k);
-          });
-        });
-      });
-    }
-  }
-  getSelectedTimelineLastTime() {
-    var time = 0;
-    this.getKeyframeList((timeline, keyframe2) => {
-      time = Math.max(keyframe2.time, time);
-    });
-    return time;
-  }
-  getSelectedTimelineFirstTime() {
-    var time = Number.MAX_SAFE_INTEGER;
-    this.getKeyframeList((timeline, keyframe2) => {
-      time = Math.min(keyframe2.time, time);
-    });
-    return time;
-  }
-  getSelectedTimelinePrevTime() {
-    var time = this.getSelectedTimelineFirstTime();
-    this.getKeyframeList((timeline, keyframe2) => {
-      if (timecode(timeline.fps, keyframe2.time) < timeline.currentTimecode) {
-        time = Math.max(keyframe2.time, time);
-      }
-    });
-    return time;
-  }
-  getSelectedTimelineNextTime() {
-    var time = this.getSelectedTimelineLastTime();
-    this.getKeyframeList((timeline, keyframe2) => {
-      if (timecode(timeline.fps, keyframe2.time) > timeline.currentTimecode) {
-        time = Math.min(keyframe2.time, time);
-      }
-    });
-    return time;
-  }
-  setTimelineTitle(id, text2) {
-    var timeline = this.timeline.find((it) => {
-      return it.id === id;
-    });
-    if (timeline) {
-      timeline.title = text2;
-    }
-  }
-  selectTimeline(id) {
-    if (id) {
-      this.timeline.forEach((it) => {
-        it.selected = it.id === id;
-      });
-    } else {
-      var selectedTimeline = this.timeline.filter((it) => it.selected);
-      if (selectedTimeline.length)
-        ;
-      else {
-        if (this.timeline.length) {
-          this.timeline.selected = true;
-        }
-      }
-    }
-    this.compileAll();
-  }
-  removeAnimation(id) {
-    this.timeline = this.timeline.filter((it) => {
-      return it.id !== id;
-    });
-    if (this.timeline.length) {
-      this.timeline[0].selected = true;
-    }
-    this.compileAll();
-  }
-  addTimeline(fps = 60, endTimecode = "00:00:10:00") {
-    var id = uuidShort();
-    var selectedTimeline = __spreadProps(__spreadValues({
-      id,
-      title: "sample"
-    }, this.getTimelineLayerInfo(fps, endTimecode)), {
-      animations: []
-    });
-    this.timeline.push(selectedTimeline);
-    this.selectTimeline(id);
-    return selectedTimeline;
-  }
-  addTimelineLayer(layerId, fps = 60, endTimecode = "00:00:10:00") {
-    var selectedTimeline = this.getSelectedTimeline();
-    if (!selectedTimeline) {
-      selectedTimeline = this.addTimeline(fps, endTimecode);
-    }
-    selectedTimeline.selected = true;
-    if (layerId) {
-      var layer = selectedTimeline.animations.filter((it) => it.id === layerId);
-      if (!layer[0]) {
-        selectedTimeline.animations.push({
-          id: layerId,
-          properties: []
-        });
-      }
-    }
-  }
-  getTimelineLayerInfo(fps = 60, endTimecode = "00:00:10:00") {
-    var endTime = second(fps, endTimecode);
-    return {
-      fps,
-      speed: 1,
-      direction: "normal",
-      iterationCount: 1,
-      currentTimecode: timecode(fps, 0),
-      totalTimecode: timecode(fps, endTime),
-      currentTime: 0,
-      totalTime: endTime,
-      displayStartTime: 0,
-      displayEndTime: endTime
-    };
-  }
-  setTimelineCurrentTime(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    var { fps, totalTimecode } = timeline;
-    if (timeline) {
-      var frame = frameOrCode;
-      var code2 = frameOrCode;
-      if (+frame + "" === frame) {
-        frame = +frame;
-        code2 = framesToTimecode(fps, frame);
-      }
-      if (code2 > totalTimecode) {
-        code2 = totalTimecode;
-      }
-      var currentTime = second(fps, code2);
-      timeline.currentTime = currentTime;
-      timeline.currentTimecode = timecode(fps, currentTime);
-    }
-  }
-  setDisplayTimeDxRate(dxRate, initStartTime, initEndTime) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var dxTime = dxRate * timeline.totalTime;
-      var startTime = initStartTime + dxTime;
-      var endTime = initEndTime + dxTime;
-      startTime = Math.max(startTime, 0);
-      startTime = Math.min(startTime, endTime);
-      if (startTime === 0) {
-        endTime = initEndTime - initStartTime;
-      }
-      endTime = Math.max(endTime, startTime);
-      endTime = Math.min(endTime, timeline.totalTime);
-      if (endTime === timeline.totalTime) {
-        startTime = timeline.totalTime - (initEndTime - initStartTime);
-      }
-      timeline.displayStartTime = startTime;
-      timeline.displayEndTime = endTime;
-    }
-  }
-  setDisplayStartTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.displayStartTime = rate * timeline.totalTime;
-    }
-  }
-  setDisplayEndTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.displayEndTime = rate * timeline.totalTime;
-    }
-  }
-  setTimelineCurrentTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var { displayStartTime, displayEndTime, fps } = timeline;
-      var currentTime = displayStartTime + (displayEndTime - displayStartTime) * rate;
-      this.setTimelineCurrentTime(timecode(fps, currentTime));
-    }
-  }
-  setTimelineTotalTime(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var frame = frameOrCode;
-      var code2 = frameOrCode;
-      if (+frame + "" === frame) {
-        frame = +frame;
-        code2 = framesToTimecode(timeline.fps, frame);
-      }
-      if (second(timeline.fps, code2) < timeline.displayEndTime) {
-        timeline.displayEndTime = second(timeline.fps, code2);
-        timeline.displayStartTime = 0;
-      }
-      timeline.totalTimecode = code2;
-      timeline.totalTime = second(timeline.fps, code2);
-    }
-  }
-  getTimelineObject(layerId) {
-    var selectedTimeline = this.getSelectedTimeline();
-    if (selectedTimeline) {
-      return selectedTimeline.animations.find((it) => it.id === layerId);
-    }
-  }
-  addTimelineProperty(layerId, property) {
-    this.addTimelineLayer(layerId);
-    var animation2 = this.getTimelineObject(layerId);
-    if (animation2) {
-      var p = animation2.properties.filter((it) => it.property === property);
-      if (!p.length) {
-        animation2.properties.push({
-          property,
-          keyframes: []
-        });
-        this.compiledTimingFunction(layerId, property);
-      }
-    }
-  }
-  getTimelineProperty(layerId, property) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      layerId = layerId || timeline.selectedLayerId;
-      property = property || timeline.selectedProperty;
-      var timelineObject = this.getTimelineObject(layerId);
-      if (timelineObject) {
-        return timelineObject.properties.find((it) => it.property === property);
-      }
-    }
-  }
-  setSelectedOffset(layerId, property, time) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.selectedLayerId = layerId;
-      timeline.selectedProperty = property;
-      timeline.selectedOffsetTime = time;
-      var p = this.getTimelineProperty();
-      p.keyframes.forEach((it) => {
-        it.selected = it.time === time;
-      });
-    }
-  }
-  deleteTimelineKeyframe(layerId, property, offsetId) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      p.keyframes = p.keyframes.filter((it) => it.id != offsetId);
-    }
-  }
-  removeTimelineProperty(layerId, property) {
-    var layer = this.getTimelineObject(layerId);
-    if (layer) {
-      layer.properties = layer.properties.filter((p) => p.property != property);
-    }
-  }
-  removeTimeline(layerId) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations = timeline.animations.filter((ani) => ani.id != layerId);
-    }
-  }
-  setTimelineKeyframeOffsetTime(layerId, property, offsetId, changedTime) {
-    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
-    if (keyframe2) {
-      keyframe2.time = changedTime;
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  setTimelineKeyframeOffsetValue(layerId, property, offsetId, value = void 0, timing = void 0, time = void 0) {
-    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
-    if (keyframe2) {
-      if (isNotUndefined(time)) {
-        keyframe2.time = time;
-      }
-      if (isNotUndefined(value)) {
-        keyframe2.value = value;
-      }
-      if (isNotUndefined(timing)) {
-        keyframe2.timing = timing;
-      }
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  addTimelineKeyframe({
-    layerId,
-    property,
-    value,
-    timing,
-    time: newTime,
-    editor
-  }) {
-    this.addTimelineProperty(layerId, property);
-    var timeline = this.getSelectedTimeline();
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it) => it.time === time);
-      if (!times.length) {
-        value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
-        var obj2 = {
-          id: uuidShort(),
-          layerId,
-          property,
-          time,
-          value,
-          timing: timing || "linear",
-          editor
-        };
-        p.keyframes.push(obj2);
-        p.keyframes.sort((a, b) => {
-          return a.time > b.time ? 1 : -1;
-        });
-        this.compiledTimingFunction(layerId, property);
-        return obj2;
-      }
-    }
-  }
-  getDefaultPropertyValue(property) {
-    switch (property) {
-      case "mix-blend-mode":
-        return "normal";
-      case "rotate":
-        return "0deg";
-      case "box-shadow":
-        return "0px 0px 0px 0px rgba(0, 0, 0, 1)";
-      case "text-shadow":
-        return "0px 0px 0px rgba(0, 0, 0, 1)";
-      case "opacity":
-        return 1;
-      default:
-        return "";
-    }
-  }
-  copyTimelineKeyframe(layerId, property, newTime = null) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      var timeline = this.getSelectedTimeline();
-      var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it) => it.time < time);
-      var value = this.getDefaultPropertyValue(property);
-      var timing = "linear";
-      var editor = "";
-      if (times.length) {
-        times.sort((a, b) => {
-          return a.time > b.time ? -1 : 1;
-        });
-        value = times[0].value + "";
-        timing = times[0].timing + "";
-        editor = times[0].editor;
-      }
-      this.addTimelineKeyframe({ layerId, property, value, timing, editor });
-    }
-  }
-  getTimelineKeyframe(layerId, property, time) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      return p.keyframes.find((it) => it.time === time);
-    }
-  }
-  getTimelineKeyframeById(layerId, property, id) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      return p.keyframes.find((it) => it.id === id);
-    }
-  }
-  sortTimelineKeyframe(layerId, property) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      p.keyframes.sort((a, b) => {
-        return a.time > b.time ? 1 : -1;
-      });
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  setFps(fps) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.fps = fps;
-      timeline.currentTimecode = timecode(fps, timeline.currentTime);
-      timeline.totalTimecode = timecode(fps, timeline.totalTime);
-    }
-  }
-}
-_compiledTimeline = new WeakMap();
 const identity = create$4();
-class Project extends TimelineModel {
+class Project extends AssetModel {
   getDefaultTitle() {
     return "New Project";
   }
@@ -46097,13 +44056,13 @@ class FilterProperty extends BaseProperty {
     return createComponent("FilterEditor", {
       ref: "$filterEditor",
       key: "filter",
-      value,
+      value: clone$1(value),
       onchange: "changeFilterEditor"
     });
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
     this.$commands.executeCommand("setAttribute", "change filter", this.$context.selection.packByValue({
-      [key]: filter2
+      [key]: clone$1(filter2)
     }));
   }
   get editableProperty() {
@@ -54332,12 +52291,12 @@ class PathGenerator {
     this.makeMovePositionGuide();
     return this.toSVGString();
   }
-  makeTriangleDistancePointGuide(first, second2) {
-    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
-    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
-    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
-    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
-    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+  makeTriangleDistancePointGuide(first, second) {
+    var minX = Math.min(first.startPoint.x, second.startPoint.x);
+    var maxX = Math.max(first.startPoint.x, second.startPoint.x);
+    var minY = Math.min(first.startPoint.y, second.startPoint.y);
+    var maxY = Math.max(first.startPoint.y, second.startPoint.y);
+    if (first.startPoint.x < second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
       var centerX = minX;
       var centerY = minY;
@@ -54346,11 +52305,11 @@ class PathGenerator {
       var { x, y } = getXYInCircle(0, dist2, centerX, centerY);
       var last = getXYInCircle(angle, dist2, centerX, centerY);
       this.segmentManager.addDistanceAngle(last, dist2, dist2, angle, { x, y }, { x: x - dist2, y });
-    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
@@ -57871,6 +55830,75 @@ class DomRender extends ItemRender {
       "grid-row-gap": item.gridRowGap
     };
   }
+  toBoxShadowCSS(item) {
+    const boxShadow2 = item.computed("boxShadow", (boxShadow3 = []) => {
+      return boxShadow3.map((shadow2) => {
+        const { inset, color: color2, offsetX, offsetY, blurRadius, spreadRadius } = shadow2;
+        return ` ${inset === "inset" ? "inset" : ""} ${Length.px(offsetX)} ${Length.px(offsetY)} ${Length.px(blurRadius)} ${Length.px(spreadRadius)} ${color2}`;
+      }).join(", ") || void 0;
+    });
+    return {
+      "box-shadow": boxShadow2
+    };
+  }
+  toTextShadowCSS(item) {
+    const textShadow2 = item.computed("textShadow", (textShadow3 = []) => {
+      return textShadow3.map((shadow2) => {
+        const { color: color2, offsetX, offsetY, blurRadius } = shadow2;
+        return ` ${Length.px(offsetX)} ${Length.px(offsetY)} ${Length.px(blurRadius)}  ${color2}`;
+      }).join(", ") || void 0;
+    });
+    return {
+      "text-shadow": textShadow2
+    };
+  }
+  toFilterCSS(item) {
+    const filter2 = item.computed("filter", (filter3 = []) => {
+      return filter3.map((f) => {
+        switch (f.type) {
+          case "blur":
+          case "grayscale":
+          case "sepia":
+          case "invert":
+          case "opacity":
+          case "saturate":
+          case "hue-rotate":
+          case "brightness":
+          case "contrast":
+            return `${f.type}(${f.value})`;
+          case "drop-shadow":
+            return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+        }
+      }).join(" ") || void 0;
+    });
+    return {
+      filter: filter2
+    };
+  }
+  toBackdropFilterCSS(item) {
+    const backdropFilter2 = item.computed("backdropFilter", (filter2 = []) => {
+      filter2 = filter2 || [];
+      return filter2.map((f) => {
+        switch (f.type) {
+          case "blur":
+          case "grayscale":
+          case "sepia":
+          case "invert":
+          case "opacity":
+          case "saturate":
+          case "hue-rotate":
+          case "brightness":
+          case "contrast":
+            return `${f.type}(${f.value})`;
+          case "drop-shadow":
+            return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+        }
+      }).join(" ") || void 0;
+    });
+    return {
+      "backdrop-filter": backdropFilter2
+    };
+  }
   toBorderCSS(item) {
     const borderCSS = item.computed("border", (border2) => {
       const obj2 = __spreadValues({}, STRING_TO_CSS(border2));
@@ -57976,7 +56004,6 @@ class DomRender extends ItemRender {
     result["word-spacing"] = item.wordSpacing;
     result["line-height"] = item.lineHeight;
     result["text-indent"] = item.textIndent;
-    result["text-shadow"] = item.textShadow;
     result["text-overflow"] = item.textOverflow;
     result["text-wrap"] = item.textWrap;
     result["position"] = item.position;
@@ -57987,8 +56014,6 @@ class DomRender extends ItemRender {
     result["transform-origin"] = item.transformOrigin;
     result["border-radius"] = item.borderRadius;
     result["filter"] = item.filter;
-    result["backdrop-filter"] = item.backdropFilter;
-    result["box-shadow"] = item.boxShadow;
     result["animation"] = item.animation;
     result["transition"] = item.transition;
     return result;
@@ -58123,7 +56148,7 @@ class DomRender extends ItemRender {
     return cssString;
   }
   toCSS(item) {
-    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
+    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
   }
   toStyleCode(item) {
     const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);
@@ -62459,24 +60484,16 @@ function text(editor) {
   });
 }
 var textShadow$1 = [
-  { name: "Mystic", shadow: `20px 0px 10px rgb(0, 0, 0)` },
-  { name: "Monoton", shadow: `0px -78px rgb(255, 196, 0)` },
-  { name: "Radioactive", shadow: `-18px -18px 20px rgb(87, 255, 9);` },
-  { name: "Bungee", shadow: `-18px 18px 0 rgb(66, 45, 45)` },
-  { name: "Sprint", shadow: `-20px -108px 0px rgba(255, 255, 255, 0.445)` },
-  { name: "Prickly", shadow: `-18px -18px 2px #777` },
   {
-    name: "Codystar",
-    shadow: `1px 1px 10px rgb(16, 72, 255), 1px 1px 10px rgb(0, 195, 255)`
-  },
-  { name: "Elegant", shadow: `-18px 8px 18px #b4bbbb` },
-  {
-    name: "Playful",
-    shadow: `
-        -2px -2px 0px #888,
-        4px 4px 0px #888,
-        7px 7px 0px #888
-    `
+    name: "Mystic",
+    shadows: [
+      {
+        offsetX: 20,
+        offsetY: 0,
+        blurRadius: 10,
+        color: "rgb(0,0,0)"
+      }
+    ]
   }
 ];
 var TextShadowProperty$1 = "";
@@ -62503,17 +60520,17 @@ class TextShadowProperty extends BaseProperty {
   }
   [CLICK("$add")]() {
     const index2 = +this.refs.$select.value;
-    this.children.$textshadow.trigger("add", textShadow$1[index2].shadow);
+    this.children.$textshadow.trigger("add", textShadow$1[index2].shadows);
   }
   [LOAD("$shadowList")]() {
     var current = this.$context.selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
       key: "textShadow",
-      value: current.textShadow,
+      value: clone$1(current.textShadow),
       onchange: (key, value) => {
         this.$commands.executeCommand("setAttribute", "change text shadow", this.$context.selection.packByValue({
-          [key]: value
+          [key]: clone$1(value)
         }));
       }
     });
@@ -63439,10 +61456,13 @@ class Hue extends EditorElement {
       style: {
         left: Length.makePercent(hue, 360)
       },
-      class: {
-        first: hue <= this.state.minValue,
-        last: hue >= this.state.maxValue
-      }
+      class: [
+        "drag-bar",
+        {
+          first: hue <= this.state.minValue,
+          last: hue >= this.state.maxValue
+        }
+      ]
     };
   }
   [POINTERSTART("$container") + MOVE("movePointer") + END("moveEndPointer")]() {
@@ -63505,10 +61525,13 @@ class Opacity extends EditorElement {
       style: {
         left: Length.percent(opacity2)
       },
-      class: {
-        first: opacity2 <= this.state.minValue,
-        last: opacity2 >= this.state.maxValue
-      }
+      class: [
+        "drag-bar2",
+        {
+          first: opacity2 <= this.state.minValue,
+          last: opacity2 >= this.state.maxValue
+        }
+      ]
     };
   }
   [POINTERSTART("$container") + MOVE("movePointer") + END("moveEndPointer")]() {

@@ -1,4 +1,5 @@
 import {
+  isArray,
   CLICK,
   DRAGOVER,
   DRAGSTART,
@@ -13,13 +14,12 @@ import {
 import "./TextShadowEditor.scss";
 
 import { iconUse } from "elf/editor/icon/icon";
-import { TextShadow } from "elf/editor/property-parser/TextShadow";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class TextShadowEditor extends EditorElement {
   initState() {
     return {
-      textShadows: TextShadow.parseStyle(this.props.value),
+      textShadows: this.props.value || [],
     };
   }
 
@@ -82,16 +82,21 @@ export default class TextShadowEditor extends EditorElement {
   }
 
   modifyTextShadow() {
-    var value = this.state.textShadows.join(", ");
+    var value = this.state.textShadows;
 
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
 
-  [SUBSCRIBE("add")](shadow = "") {
-    if (shadow) {
-      this.state.textShadows = TextShadow.parseStyle(shadow);
+  [SUBSCRIBE("add")](shadows) {
+    if (isArray(shadows)) {
+      this.state.textShadows.push(...shadows);
     } else {
-      this.state.textShadows.push(new TextShadow());
+      this.state.textShadows.push({
+        color: "#000000",
+        offsetX: 0,
+        offsetY: 0,
+        blurRadius: 0,
+      });
     }
 
     this.refresh();
@@ -144,11 +149,7 @@ export default class TextShadowEditor extends EditorElement {
   [SUBSCRIBE_SELF("changeKeyValue")](key, value, index) {
     var shadow = this.state.textShadows[index];
 
-    shadow.reset({
-      [key]: value,
-    });
-
-    // this.refresh();
+    this.state.textShadows[index] = { ...shadow, [key]: value };
 
     this.modifyTextShadow();
   }
