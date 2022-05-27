@@ -11866,32 +11866,52 @@ class CSSPropertyEditor extends EditorElement {
         let step2 = 0.01;
         return `
           <div class='property-editor'>
-            <object refClass="NumberRangeEditor"  
-              ref='$opacity${index2}' 
-              key='${property.key}' 
-              min="${min}"
-              max="${max}"
-              step="${step2}"
-              value="${property.value || 1}"
-              selected-unit='number'
-              removable="true"
-              onchange="changeRangeEditor" />
+            ${createComponent("NumberInputEditor", {
+          ref: `$opacity${index2}`,
+          key: property.key,
+          label: property.key,
+          min,
+          max,
+          step: step2,
+          value: property.value || 1,
+          onchange: "changeRangeEditor"
+        })}
+              
           </div>
         `;
+      case "x":
+      case "y":
+      case "width":
+      case "height":
+        return `
+            <div class='property-editor'>
+              ${createComponent("NumberInputEditor", {
+          ref: `$opacity${index2}`,
+          key: property.key,
+          label: property.key,
+          min: 0,
+          max: 1e3,
+          step: 1,
+          value: property.value || 1,
+          onchange: "changeRangeEditor"
+        })}
+                
+            </div>
+          `;
       case "rotate":
         return `
           <div class='property-editor'>
-            <object refClass="RangeEditor"  
-              ref='rangeEditor${index2}' 
-              key='${property.key}' 
-              value='${property.value}'  
-              min="-2000"
-              max="2000"
-              units="deg" 
-              onChange="changeRangeEditor" />
+            ${createComponent("InputRangeEditor", {
+          ref: `rangeEditor${index2}`,
+          key: property.key,
+          value: property.value,
+          min: -2e3,
+          max: 2e3,
+          units: ["deg"],
+          onChange: "changeRangeEditor"
+        })}
           </div>
         `;
-      case "left":
       case "margin-top":
       case "margin-bottom":
       case "margin-left":
@@ -11900,14 +11920,19 @@ class CSSPropertyEditor extends EditorElement {
       case "padding-bottom":
       case "padding-left":
       case "padding-right":
-      case "width":
-      case "height":
       case "perspective":
       case "text-stroke-width":
       default:
         return `
           <div class='property-editor'>
-            <object refClass="RangeEditor"  ref='rangeEditor${index2}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
+            ${createComponent("InputRangeEditor", {
+          ref: `rangeEditor${index2}`,
+          key: property.key,
+          label: property.key,
+          value: property.value,
+          max: 1e3,
+          onChange: "changeRangeEditor"
+        })}
           </div>
         `;
     }
@@ -11974,24 +11999,21 @@ class CSSPropertyEditor extends EditorElement {
       </select>
     `;
   }
-  [LOAD("$property")]() {
+  [LOAD("$property") + DOMDIFF]() {
     return this.state.properties.map((it, index2) => {
       return `
-        <div class='css-property-item'>
-          <div class='title'>
-            <label>${it.key}</label>
-            <div class='tools'>
-              <button type="button" class='remove' data-index="${index2}">${obj$2.remove2}</button>
-            </div>
-          </div>
-          <div class='title-2'>
-            <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index2}">${obj$2.refresh}</button> Refresh</label>
-            </div>
-          </div>
+        <div class='css-property-item'>   
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index2)}
           </div>
+
+          <button type="button" 
+            class='refresh' 
+            data-index="${index2}">${iconUse("refresh")}</button>
+    
+          <button type="button" 
+            class='remove' 
+            data-index="${index2}">${iconUse("remove2")}</button>
         </div>
       `;
     });
@@ -12802,11 +12824,6 @@ class CubicBezierEditor extends EditorElement {
       baseLineColor: "rgba(117, 117, 117, 0.46)"
     };
   }
-  afterRender() {
-    window.setTimeout(() => {
-      this.refresh();
-    }, 10);
-  }
   template() {
     const linearCurve = curveToPath(this.state.currentBezier, 150, 150);
     const linearCurvePoint = curveToPointLine(this.state.currentBezier, 150, 150);
@@ -12936,8 +12953,8 @@ class CubicBezierEditor extends EditorElement {
   }
   refreshPointer() {
     var currentBezier = getPredefinedCubicBezier(this.state.currentBezier);
-    var width2 = this.refs.$control.width();
-    var height2 = this.refs.$control.height();
+    var width2 = 150;
+    var height2 = 150;
     var left2 = currentBezier[0] * width2;
     var top2 = (1 - currentBezier[1]) * height2;
     this.refs.$pointer1.css({
@@ -19051,131 +19068,7 @@ class InputRangeEditor extends EditorElement {
     this.refs.$range.removeClass("drag");
   }
 }
-var RangeEditor$1 = "";
-class RangeEditor extends EditorElement {
-  initState() {
-    var units = this.props.units || ["px", "em", "%"];
-    var value = Length.parse(this.props.value || 0);
-    return {
-      removable: this.props.removable === "true",
-      calc: this.props.calc === "true" ? true : false,
-      compact: this.props.compact === "true" ? true : false,
-      label: this.props.label || "",
-      min: +this.props.min || 0,
-      max: +this.props.max || 100,
-      step: +this.props.step || 1,
-      key: this.props.key,
-      params: this.props.params || "",
-      layout: this.props.layout || "",
-      units,
-      value
-    };
-  }
-  template() {
-    return `<div class='small-editor' ref='$body'></div>`;
-  }
-  [LOAD("$body")]() {
-    var { min, max, step: step2, label, removable, layout: layout2, compact } = this.state;
-    var value = +this.state.value.value.toString();
-    if (isNaN(value)) {
-      value = 0;
-    }
-    var layoutClass = layout2;
-    var realValue = (+value).toString();
-    if (this.state.units === "%") {
-      throw new Error("%");
-    }
-    var units = this.state.units.map((it) => {
-      let description = it;
-      if (description === "number") {
-        description = "";
-      }
-      return { value: it, text: description };
-    });
-    return `
-        <div 
-            ref="$range"
-            class="${classnames({
-      "elf--range--editor": true,
-      "has-label": !!label,
-      compact: !!compact,
-      "is-removable": removable,
-      [layoutClass]: true
-    })}"
-        >
-            ${label ? `<label title="${label}">${label}</label>` : ""}
-            <div class='range--editor-type' data-type='range'>
-                <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step2}" /> 
-                <div class='area' ref='$rangeArea'>
-                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
-                    ${createComponent("SelectEditor", {
-      ref: "$unit",
-      key: "unit",
-      value: this.state.value.unit,
-      options: units,
-      onchange: "changeUnit"
-    })}
-                </div>
-            </div>
-            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$2.remove}</button>
-        </div>
-    `;
-  }
-  getValue() {
-    return this.state.value.clone();
-  }
-  setValue(value) {
-    this.setState({
-      value: Length.parse(value)
-    });
-  }
-  [FOCUS('$body input[type="number"]')]() {
-    this.refs.$rangeArea.addClass("focused");
-  }
-  [BLUR('$body input[type="number"]')]() {
-    this.refs.$rangeArea.removeClass("focused");
-  }
-  updateData(data) {
-    this.setState(data, false);
-    this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
-  }
-  initValue() {
-    if (this.state.value == "") {
-      this.state.value = new Length(0, this.children.$unit.getValue());
-    }
-  }
-  [INPUT('$body input[type="number"]')]() {
-    var value = +this.refs.$propertyNumber.value;
-    this.getRef("$property").val(value);
-    this.initValue();
-    this.updateData({
-      value: new Length(value, this.children.$unit.getValue())
-    });
-  }
-  [INPUT('$body input[type="range"]')]() {
-    this.trigger("changeRangeValue");
-  }
-  [POINTERSTART('$body input[type="range"]') + END()]() {
-  }
-  end() {
-    this.trigger("changeRangeValue");
-  }
-  [SUBSCRIBE_SELF("changeRangeValue")]() {
-    var value = +this.getRef("$property").value;
-    this.refs.$propertyNumber.val(value);
-    this.initValue();
-    this.updateData({
-      value: new Length(value, this.children.$unit.getValue())
-    });
-  }
-  [SUBSCRIBE_SELF("changeUnit")](key, value) {
-    this.initValue();
-    this.updateData({
-      value: this.state.value.toUnit(value)
-    });
-  }
-}
-class IterationCountEditor extends RangeEditor {
+class IterationCountEditor extends InputRangeEditor {
   initState() {
     var value = this.props.value;
     if (value === "infinite") {
@@ -19324,9 +19217,6 @@ class NumberInputEditor extends EditorElement {
   initState() {
     var value = +this.props.value;
     let label = this.props.label || "";
-    if (obj$2[label]) {
-      label = obj$2[label];
-    }
     const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
     const wide = isBoolean(this.props.wide) ? this.props.wide : this.props.wide === "true";
     const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === "true";
@@ -21494,6 +21384,130 @@ class PolygonDataEditor extends EditorElement {
   }
   [INPUT("$data input[type=number]") + DEBOUNCE(300)]() {
     this.updateData();
+  }
+}
+var RangeEditor$1 = "";
+class RangeEditor extends EditorElement {
+  initState() {
+    var units = this.props.units || ["px", "em", "%"];
+    var value = Length.parse(this.props.value || 0);
+    return {
+      removable: this.props.removable === "true",
+      calc: this.props.calc === "true" ? true : false,
+      compact: this.props.compact === "true" ? true : false,
+      label: this.props.label || "",
+      min: +this.props.min || 0,
+      max: +this.props.max || 100,
+      step: +this.props.step || 1,
+      key: this.props.key,
+      params: this.props.params || "",
+      layout: this.props.layout || "",
+      units,
+      value
+    };
+  }
+  template() {
+    return `<div class='small-editor' ref='$body'></div>`;
+  }
+  [LOAD("$body")]() {
+    var { min, max, step: step2, label, removable, layout: layout2, compact } = this.state;
+    var value = +this.state.value.value.toString();
+    if (isNaN(value)) {
+      value = 0;
+    }
+    var layoutClass = layout2;
+    var realValue = (+value).toString();
+    if (this.state.units === "%") {
+      throw new Error("%");
+    }
+    var units = this.state.units.map((it) => {
+      let description = it;
+      if (description === "number") {
+        description = "";
+      }
+      return { value: it, text: description };
+    });
+    return `
+        <div 
+            ref="$range"
+            class="${classnames({
+      "elf--range--editor": true,
+      "has-label": !!label,
+      compact: !!compact,
+      "is-removable": removable,
+      [layoutClass]: true
+    })}"
+        >
+            ${label ? `<label title="${label}">${label}</label>` : ""}
+            <div class='range--editor-type' data-type='range'>
+                <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step2}" /> 
+                <div class='area' ref='$rangeArea'>
+                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
+                    ${createComponent("SelectEditor", {
+      ref: "$unit",
+      key: "unit",
+      value: this.state.value.unit,
+      options: units,
+      onchange: "changeUnit"
+    })}
+                </div>
+            </div>
+            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$2.remove}</button>
+        </div>
+    `;
+  }
+  getValue() {
+    return this.state.value.clone();
+  }
+  setValue(value) {
+    this.setState({
+      value: Length.parse(value)
+    });
+  }
+  [FOCUS('$body input[type="number"]')]() {
+    this.refs.$rangeArea.addClass("focused");
+  }
+  [BLUR('$body input[type="number"]')]() {
+    this.refs.$rangeArea.removeClass("focused");
+  }
+  updateData(data) {
+    this.setState(data, false);
+    this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
+  }
+  initValue() {
+    if (this.state.value == "") {
+      this.state.value = new Length(0, this.children.$unit.getValue());
+    }
+  }
+  [INPUT('$body input[type="number"]')]() {
+    var value = +this.refs.$propertyNumber.value;
+    this.getRef("$property").val(value);
+    this.initValue();
+    this.updateData({
+      value: new Length(value, this.children.$unit.getValue())
+    });
+  }
+  [INPUT('$body input[type="range"]')]() {
+    this.trigger("changeRangeValue");
+  }
+  [POINTERSTART('$body input[type="range"]') + END()]() {
+  }
+  end() {
+    this.trigger("changeRangeValue");
+  }
+  [SUBSCRIBE_SELF("changeRangeValue")]() {
+    var value = +this.getRef("$property").value;
+    this.refs.$propertyNumber.val(value);
+    this.initValue();
+    this.updateData({
+      value: new Length(value, this.children.$unit.getValue())
+    });
+  }
+  [SUBSCRIBE_SELF("changeUnit")](key, value) {
+    this.initValue();
+    this.updateData({
+      value: this.state.value.toUnit(value)
+    });
   }
 }
 var SelectIconEditor$1 = "";
@@ -28481,173 +28495,12 @@ function alignment(editor) {
   });
 }
 var AnimationProperty$1 = "";
-function getCustomParseIndexString(it, prefix = "@") {
-  return `${prefix}${it.startIndex}`.padEnd(10, "0");
-}
-function customParseMatches(str, regexp) {
-  const matches2 = str.match(regexp);
-  let result = [];
-  if (!matches2) {
-    return result;
-  }
-  for (var i = 0, len2 = matches2.length; i < len2; i++) {
-    result.push({ parsedString: matches2[i] });
-  }
-  var pos = { next: 0 };
-  result.forEach((item) => {
-    const startIndex = str.indexOf(item.parsedString, pos.next);
-    item.startIndex = startIndex;
-    item.endIndex = startIndex + item.parsedString.length;
-    pos.next = item.endIndex;
-  });
-  return result;
-}
-function customParseConvertMatches(str, regexp) {
-  const m = customParseMatches(str, regexp);
-  m.forEach((it) => {
-    str = str.replace(it.parsedString, getCustomParseIndexString(it));
-  });
-  return { str, matches: m };
-}
-function customParseReverseMatches(str, matches2) {
-  matches2.forEach((it) => {
-    str = str.replace(getCustomParseIndexString(it), it.parsedString);
-  });
-  return str;
-}
-const ANIMATION_TIMING_REG = /((cubic-bezier|steps)\(([^)]*)\))/gi;
-class Animation extends PropertyItem {
-  static parse(obj2) {
-    return new Animation(obj2);
-  }
-  getDefaultObject() {
-    return {
-      itemType: "animation",
-      checked: true,
-      name: "none",
-      direction: "normal",
-      duration: Length.second(0),
-      timingFunction: "linear",
-      delay: Length.second(0),
-      iterationCount: Length.string("infinite"),
-      playState: "running",
-      fillMode: "none"
-    };
-  }
-  convert(json) {
-    json = super.convert(json);
-    json.duration = Length.parse(json.duration);
-    json.iterationCount = Length.parse(json.iterationCount);
-    return json;
-  }
-  toCloneObject() {
-    return __spreadValues({}, this.attrs("name", "direction", "duration", "timingFunction", "delay", "iterationCount", "playState", "fillMode"));
-  }
-  togglePlayState(forcedValue) {
-    if (forcedValue) {
-      this.reset({
-        playState: forcedValue === "running" ? "running" : "paused"
-      });
-    } else {
-      if (this.json.playState === "paused") {
-        this.reset({ playState: "running" });
-      } else {
-        this.reset({ playState: "paused" });
-      }
-    }
-  }
-  toCSS() {
-    if (!this.json.name)
-      return {};
-    return {
-      animation: this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return [
-      json.duration,
-      json.timingFunction,
-      json.delay,
-      json.iterationCount,
-      json.direction,
-      json.fillMode,
-      json.playState,
-      json.name
-    ].join(" ");
-  }
-  static join(list2) {
-    return list2.map((it) => new Animation(it).toString()).join(",");
-  }
-  static add(animation2, item = {}) {
-    const list2 = Animation.parseStyle(animation2);
-    list2.push(Animation.parse(item));
-    return Animation.join(list2);
-  }
-  static remove(animation2, removeIndex) {
-    return Animation.filter(animation2, (it, index2) => {
-      return removeIndex != index2;
-    });
-  }
-  static filter(animation2, filterFunction) {
-    return Animation.join(Animation.parseStyle(animation2).filter((it) => filterFunction(it)));
-  }
-  static replace(animation2, replaceIndex, valueObject) {
-    var list2 = Animation.parseStyle(animation2);
-    if (list2[replaceIndex]) {
-      list2[replaceIndex] = valueObject;
-    } else {
-      list2.push(valueObject);
-    }
-    return Animation.join(list2);
-  }
-  static get(animation2, index2) {
-    var arr = Animation.parseStyle(animation2);
-    return arr[index2];
-  }
-  static parseStyle(animation2) {
-    var list2 = [];
-    if (!animation2)
-      return list2;
-    const result = customParseConvertMatches(animation2, ANIMATION_TIMING_REG);
-    list2 = result.str.split(",").map((it) => {
-      const fields2 = it.split(" ").filter(Boolean);
-      if (fields2.length >= 7) {
-        return {
-          duration: Length.parse(fields2[0]),
-          timingFunction: customParseReverseMatches(fields2[1], result.matches),
-          delay: Length.parse(fields2[2]),
-          iterationCount: fields2[3] === "infinite" ? Length.string("infinite") : Length.parse(fields2[3]),
-          direction: fields2[4],
-          fillMode: fields2[5],
-          playState: fields2[6],
-          name: fields2[7]
-        };
-      } else if (fields2.length >= 3) {
-        return {
-          duration: Length.parse(fields2[0]),
-          timingFunction: customParseReverseMatches(fields2[1], result.matches),
-          delay: Length.parse(fields2[2]),
-          name: fields2[3]
-        };
-      } else if (fields2.length >= 1) {
-        return {
-          duration: Length.parse(fields2[0]),
-          name: fields2[1]
-        };
-      } else {
-        return {};
-      }
-    });
-    return list2.map((it) => Animation.parse(it));
-  }
-}
 class AnimationProperty extends BaseProperty {
   getTitle() {
-    return this.$i18n("animation.property.title");
+    return this.$i18n("title");
   }
   getBody() {
-    return `<div class='animation-list' ref='$animationList'></div>`;
+    return `<div class='elf--animation-list' ref='$animationList'></div>`;
   }
   getTools() {
     return `
@@ -28657,11 +28510,14 @@ class AnimationProperty extends BaseProperty {
   isFirstShow() {
     return true;
   }
+  get localeKey() {
+    return "animation.property";
+  }
   [LOAD("$animationList") + DOMDIFF]() {
     var current = this.$context.selection.current;
     if (!current)
       return "";
-    return Animation.parseStyle(current.animation).map((it, index2) => {
+    return current.animation.map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
       return `
@@ -28677,15 +28533,21 @@ class AnimationProperty extends BaseProperty {
             </div>
             <div class='name'>
               <div class='title' ref="animationName${index2}">
-                ${it.name ? it.name : `&lt; ${this.$i18n("animation.property.select a keyframe")} &gt;`}
+                ${it.name ? it.name : `&lt; ${this.$i18n("select a keyframe")} &gt;`}
               </div>
               <div class='labels'>
-                <label class='count' title='${this.$i18n("animation.property.iteration.count")}'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='${this.$i18n("animation.property.delay")}'><small>${it.delay}</small></label>
-                <label class='duration' title='${this.$i18n("animation.property.duration")}'><small>${it.duration}</small></label>
-                <label class='direction' title='${this.$i18n("animation.property.direction")}'><small>${it.direction}</small></label>
-                <label class='fill-mode' title='${this.$i18n("animation.property.fill.mode")}'><small>${it.fillMode}</small></label>
-                <label class='play-state' title='${this.$i18n("animation.property.play.state")}' data-index='${index2}' data-play-state-selected-value="${it.playState}">
+                <label class='count' title='${this.$i18n("iteration.count")}'><small>${it.iterationCount}</small></label>
+                <label class='delay' title='${this.$i18n("delay")}'>
+                  <small>${it.delay}</small>
+                </label>
+                <label class='duration' title='${this.$i18n("duration")}'><small>${it.duration}</small></label>
+                <label class='direction' title='${this.$i18n("direction")}'><small>${it.direction}</small></label>
+                <label class='fill-mode' title='${this.$i18n("fill.mode")}'><small>${it.fillMode}</small></label>
+                <label 
+                  class='play-state' 
+                  title='${this.$i18n("play.state")}' 
+                  data-index='${index2}' 
+                  data-play-state-selected-value="${it.playState}">
                   <small data-play-state-value='running'>${iconUse("play")}</small>
                   <small data-play-state-value='paused'>${iconUse("pause")}</small>
                 </label>
@@ -28701,24 +28563,31 @@ class AnimationProperty extends BaseProperty {
       `;
     });
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
-    const current = this.$context.selection.current;
-    if (current && current.hasChangedField("animation")) {
-      this.refresh();
-    }
-    this.emit("hideAnimationPropertyPopup");
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
+    this.refresh();
   }
   [CLICK("$add")]() {
     var current = this.$context.selection.current;
     if (current) {
+      const animation2 = current.animation || [];
+      animation2.push({
+        itemType: "animation",
+        checked: true,
+        name: "none",
+        direction: "normal",
+        duration: Length.second(0),
+        timingFunction: "linear",
+        delay: Length.second(0),
+        iterationCount: Length.string("infinite"),
+        playState: "running",
+        fillMode: "none"
+      });
       this.$commands.executeCommand("setAttribute", "add animation property", this.$context.selection.packByValue({
-        animation: (item) => Animation.add(item.animation, { name: null })
+        animation: [...animation2]
       }));
       this.nextTick(() => {
-        window.setTimeout(() => {
-          this.refresh();
-        }, 100);
-      });
+        this.refresh();
+      }, 100);
     } else {
       window.alert("Select a layer");
     }
@@ -28728,11 +28597,10 @@ class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    current.reset({
-      animation: Animation.remove(current.animation, removeIndex)
-    });
-    this.$commands.emit("setAttribute", this.$context.selection.packByValue({
-      animation: Animation.remove(current.animation, removeIndex)
+    const animation2 = current.animation || [];
+    animation2.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "remove animation property", this.$context.selection.packByValue({
+      animation: [...animation2]
     }));
     this.refresh();
   }
@@ -28741,13 +28609,13 @@ class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    const list2 = Animation.parseStyle(current.animation);
-    var animation2 = list2[index2];
-    if (animation2) {
-      animation2.togglePlayState();
-      e.$dt.attr("data-play-state-selected-value", animation2.playState);
-      this.$commands.emit("setAttribute", this.$context.selection.packByValue({
-        animation: Animation.join(list2)
+    const animation2 = current.animation || [];
+    var currentAnimation = animation2[index2];
+    if (currentAnimation) {
+      currentAnimation.playState = currentAnimation.playState === "running" ? "paused" : "running";
+      e.$dt.attr("data-play-state-selected-value", currentAnimation.playState);
+      this.$commands.executeCommand("setAttribute", "remove animation property", this.$context.selection.packByValue({
+        animation: [...animation2]
       }));
     }
   }
@@ -28766,7 +28634,9 @@ class AnimationProperty extends BaseProperty {
     this.current = this.$context.selection.current;
     if (!this.current)
       return;
-    this.currentAnimation = Animation.get(this.current.animation, this.selectedIndex);
+    const animation2 = this.current.animation || [];
+    var currentAnimation = animation2[this.selectedIndex];
+    this.currentAnimation = clone$1(currentAnimation);
     this.viewAnimationPropertyPopup();
   }
   viewAnimationPropertyPopup() {
@@ -28775,22 +28645,20 @@ class AnimationProperty extends BaseProperty {
     const animation2 = this.currentAnimation;
     this.emit("showAnimationPropertyPopup", {
       changeEvent: "changeAnimationPropertyPopup",
-      data: animation2.toCloneObject(),
+      data: clone$1(animation2),
       instance: this
     });
   }
   [CLICK("$animationList .preview")](e) {
     this.viewAnimationPicker(e.$dt);
   }
-  getRef(...args2) {
-    return this.refs[args2.join("")];
-  }
   [SUBSCRIBE("changeAnimationPropertyPopup")](data) {
     if (this.currentAnimation) {
-      this.currentAnimation.reset(__spreadValues({}, data));
+      const animation2 = this.current.animation;
+      animation2[this.selectedIndex] = data;
       if (this.current) {
         this.$commands.executeCommand("setAttribute", "change animation property", this.$context.selection.packByValue({
-          animation: (item) => Animation.replace(item.animation, this.selectedIndex, this.currentAnimation)
+          animation: [...animation2]
         }));
         this.refresh();
       }
@@ -28956,15 +28824,15 @@ class AnimationPropertyPopup extends BasePopup {
       </div>
     `;
   }
-  [LOAD("$name")]() {
-    var current = this.$context.selection.currentProject;
+  [LOAD("$name") + DOMDIFF]() {
+    var current = this.$context.selection.current;
     var names2 = [];
+    console.log(current.keyframes);
     if (current && current.keyframes) {
       names2 = current.keyframes.map((it) => {
         return { key: it.name, value: it.name };
       });
     }
-    names2.unshift({ key: "Select a keyframe", value: "" });
     return names2.map((it) => {
       var selected = it.value === this.name ? "selected" : "";
       var label = this.$i18n(it.key);
@@ -29028,7 +28896,7 @@ class AnimationPropertyPopup extends BasePopup {
   templateForDelay() {
     return `
     <div class='delay'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
       ref: "$delay",
       label: this.$i18n("animation.property.popup.delay"),
       key: "delay",
@@ -29042,7 +28910,7 @@ class AnimationPropertyPopup extends BasePopup {
   templateForDuration() {
     return `
     <div class='duration'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
       ref: "$duration",
       label: this.$i18n("animation.property.popup.duration"),
       key: "duration",
@@ -39098,6 +38966,8 @@ class DomModel extends GroupModel {
       svg: [],
       filter: [],
       backdropFilter: [],
+      transition: [],
+      animation: [],
       gridColumnStart: "",
       gridColumnEnd: "",
       gridRowStart: "",
@@ -46957,7 +46827,7 @@ function imageAsset(editor) {
   });
 }
 function inspector(editor) {
-  editor.context.config.set("inspector.selectedValue", "style");
+  editor.context.config.set("inspector.selectedValue", "transition");
   editor.registerUI("inspector.tab", {
     Style: {
       title: editor.$i18n("inspector.tab.title.design"),
@@ -47084,15 +46954,15 @@ class KeyframeProperty extends BaseProperty {
   makeKeyframeTemplate(keyframe2, index2) {
     index2 = index2.toString();
     return `
-      <div class='keyframe-item' data-selected-value='${keyframe2.selectedType}' ref='$keyframeIndex${index2}' data-index='${index2}'>
+      <div class='keyframe-item' data-selected-value='code' ref='$keyframeIndex${index2}' data-index='${index2}'>
         <div class='title'>
           <div class='name'>${keyframe2.name}</div>
           <div class='tools'>
             <div class='group'>
-              <button type="button" data-type='list'>${obj$2.list}</button>
               <button type="button" data-type='code'>${obj$2.code}</button>
             </div>
-            <button type="button" class="del" data-index="${index2}">${obj$2.remove2}</button>
+            <button type="button" class="del" 
+            data-index="${index2}">${obj$2.remove2}</button>
           </div>
         </div>
         <div class='offset-list'>
@@ -47104,13 +46974,8 @@ class KeyframeProperty extends BaseProperty {
     }).join("")}
           </div>
         </div>
-        <div class='keyframe-code' data-type='list'>
-          ${keyframe2.offsets.map((offset) => {
-      return this.makeOffset(offset);
-    }).join("")}
-        </div>
         <div class='keyframe-code' data-type='code'>
-          <pre>${keyframe2.toString().trim()}</pre>
+          <pre>${JSON.stringify(keyframe2, null, 2)}</pre>
         </div>        
       </div>
     `;
@@ -47132,41 +46997,53 @@ class KeyframeProperty extends BaseProperty {
   }
   [CLICK("$keyframeList .keyframe-item .offset-list")](e) {
     var index2 = +e.$dt.closest("keyframe-item").attr("data-index");
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     this.viewKeyframePicker(index2);
   }
   [CLICK("$keyframeList .del") + PREVENT](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     if (!current)
       return;
-    current.removeKeyframe(removeIndex);
-    this.$commands.emit("refreshProject", current);
+    const keyframes = current.keyframes || [];
+    keyframes.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "remove a keyframe", this.$context.selection.packByValue({
+      keyframes: [...keyframes]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
+  }
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
     this.refresh();
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
-    const current = this.$context.selection.current;
-    if (current && current.hasChangedField("keyframes")) {
-      this.refresh();
-    }
-  }
-  [LOAD("$keyframeList")]() {
-    var current = this.$context.selection.currentProject;
+  [LOAD("$keyframeList") + DOMDIFF]() {
+    var current = this.$context.selection.current;
     if (!current)
       return "";
-    var keyframes = current.keyframes || [];
+    const keyframes = current.keyframes || [];
     return keyframes.map((keyframe2, index2) => {
       return this.makeKeyframeTemplate(keyframe2, index2);
     });
   }
   [CLICK("$add")]() {
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     if (current) {
-      current.createKeyframe();
-      this.refresh();
-      this.$commands.emit("refreshProject", current);
+      const keyframes = current.keyframes || [];
+      keyframes.push({
+        id: uuidShort(),
+        checked: true,
+        name: "Keyframe",
+        offsets: []
+      });
+      this.$commands.executeCommand("setAttribute", "add keyframe", this.$context.selection.packByValue({
+        keyframes: [...keyframes]
+      }));
+      this.nextTick(() => {
+        this.refresh();
+      }, 10);
     } else {
       window.alert("Please select a project.");
     }
@@ -47177,7 +47054,7 @@ class KeyframeProperty extends BaseProperty {
     }
     this.selectedIndex = +index2;
     this.selectItem(this.selectedIndex, true);
-    this.current = this.$context.selection.currentProject;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -47195,8 +47072,8 @@ class KeyframeProperty extends BaseProperty {
       });
     }
   }
-  viewKeyframePropertyPopup(position2) {
-    this.current = this.$context.selection.currentProject;
+  viewKeyframePropertyPopup() {
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -47204,21 +47081,22 @@ class KeyframeProperty extends BaseProperty {
     const name = back.name;
     const offsets = back.offsets;
     this.emit("showKeyframePopup", {
-      position: position2,
       name,
       offsets
     });
   }
   [SUBSCRIBE("changeKeyframePopup")](data) {
-    var project2 = this.$context.selection.currentProject;
-    if (!project2)
+    var current = this.$context.selection.current;
+    if (!current)
       return;
-    this.currentKeyframe = project2.keyframes[this.selectedIndex];
-    if (this.currentKeyframe) {
-      this.currentKeyframe.reset(data);
-    }
-    this.refresh();
-    this.$commands.emit("refreshProject", project2);
+    const keyframes = current.keyframes || [];
+    keyframes[this.selectedIndex] = data;
+    this.$commands.executeCommand("setAttribute", "modify keyframe", this.$context.selection.packByValue({
+      keyframes: [...keyframes]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
 }
 class OffsetEditor extends EditorElement {
@@ -47266,7 +47144,7 @@ class OffsetEditor extends EditorElement {
   [SUBSCRIBE("changeRangeEditor")](key, value) {
     var offset = this.state.offsets[this.selectedIndex];
     if (offset) {
-      offset.offset = value.clone();
+      offset.offset = clone$1(value);
       this.refresh();
       this.modifyOffset();
     }
@@ -47312,7 +47190,7 @@ class OffsetEditor extends EditorElement {
       this.children.$offsetInput.setValue(offset.offset);
     }
   }
-  [LOAD("$offset")]() {
+  [LOAD("$offset") + DOMDIFF]() {
     return this.state.offsets.map((it, index2) => {
       return this.makeOffset(it, index2);
     });
@@ -47325,9 +47203,9 @@ class OffsetEditor extends EditorElement {
     this.baseOffsetArea = this.refs.$offset.offset();
     var currentX = e.xy.x;
     var newOffset = Length.percent((currentX - this.baseOffsetArea.left) / this.baseOffsetWidth * 100).round(100);
-    this.state.offsets.push(new Offset({
+    this.state.offsets.push({
       offset: newOffset
-    }));
+    });
     this.selectItem(this.state.offsets.length - 1, true);
     this.refresh();
     this.modifyOffset();
@@ -47363,7 +47241,7 @@ class OffsetEditor extends EditorElement {
       currentX = this.baseOffsetMax;
     }
     var newOffset = Length.percent((currentX - this.baseOffsetMin) / this.baseOffsetWidth * 100).round(100);
-    this.state.offsets[this.currentOffsetIndex].offset.set(newOffset.value);
+    this.state.offsets[this.currentOffsetIndex].offset = newOffset.value;
     this.currentOffset.css("left", newOffset);
     this.refreshOffsetInput();
     this.modifyOffset();
@@ -55899,6 +55777,16 @@ class DomRender extends ItemRender {
       "backdrop-filter": backdropFilter2
     };
   }
+  toTransitionCSS(item) {
+    const transition2 = item.computed("transition", (transition3 = []) => {
+      return transition3.map((t) => {
+        return `${t.name} ${t.duration} ${t.timingFunction} ${t.delay}`;
+      }).join(", ") || void 0;
+    });
+    return {
+      transition: transition2
+    };
+  }
   toBorderCSS(item) {
     const borderCSS = item.computed("border", (border2) => {
       const obj2 = __spreadValues({}, STRING_TO_CSS(border2));
@@ -56015,7 +55903,6 @@ class DomRender extends ItemRender {
     result["border-radius"] = item.borderRadius;
     result["filter"] = item.filter;
     result["animation"] = item.animation;
-    result["transition"] = item.transition;
     return result;
   }
   toVariableCSS(item) {
@@ -56134,6 +56021,7 @@ class DomRender extends ItemRender {
   }
   generateView(item, prefix = "", appendCSS = "") {
     var cssString = `
+      ${this.toKeyframeCSS(item)}
   ${prefix} {  /* ${item.itemType} */
       ${CSS_TO_STRING(this.toCSS(item), "\n    ")}; 
       ${appendCSS}
@@ -56147,8 +56035,50 @@ class DomRender extends ItemRender {
     `;
     return cssString;
   }
+  convertKey(key) {
+    switch (key) {
+      case "x":
+        return "left";
+      case "y":
+        return "top";
+    }
+    return key;
+  }
+  convertValue(key, value) {
+    switch (key) {
+      case "left":
+        return Length.px(value);
+      case "top":
+        return Length.px(value);
+    }
+    return key;
+  }
+  toKeyframeCSS(item) {
+    const keyframes = item.computed("keyframes", (keyframes2) => {
+      const text2 = keyframes2.map((it) => {
+        return `
+          @keyframes ${it.name} {
+            ${it.offsets.map((offset) => {
+          var _a;
+          return `
+              ${offset.offset}% {
+                ${(_a = offset.properties) == null ? void 0 : _a.map((p) => {
+            const key = this.convertKey(p.key);
+            const value = this.convertValue(key, p.value);
+            return `${key}: ${value};`;
+          }).join("\n")}
+              }
+              `;
+        }).join("\n")}
+          }
+          `;
+      }).join("\n");
+      return text2;
+    });
+    return keyframes;
+  }
   toCSS(item) {
-    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
+    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toTransitionCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
   }
   toStyleCode(item) {
     const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);
@@ -60548,97 +60478,6 @@ function textShadow(editor) {
   });
 }
 var TransitionProperty$1 = "";
-const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^)]*)\))/gi;
-class Transition extends PropertyItem {
-  static parse(obj2) {
-    return new Transition(obj2);
-  }
-  getDefaultObject() {
-    return {
-      name: "all",
-      duration: Length.second(0),
-      timingFunction: "linear",
-      delay: Length.second(0)
-    };
-  }
-  toCloneObject() {
-    return {
-      name: this.json.name,
-      duration: this.json.duration + "",
-      timingFunction: this.json.timingFunction,
-      delay: this.json.delay + ""
-    };
-  }
-  toCSS() {
-    return {
-      transition: this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return [json.name, json.duration, json.timingFunction, json.delay].join(" ");
-  }
-  static join(list2) {
-    return list2.map((it) => new Transition(it).toString()).join(",");
-  }
-  static add(transition2, item = {}) {
-    const list2 = Transition.parseStyle(transition2);
-    list2.push(Transition.parse(item));
-    return Transition.join(list2);
-  }
-  static remove(transition2, removeIndex) {
-    return Transition.filter(transition2, (it, index2) => {
-      return removeIndex != index2;
-    });
-  }
-  static filter(transition2, filterFunction) {
-    return Transition.join(Transition.parseStyle(transition2).filter((it) => filterFunction(it)));
-  }
-  static replace(transition2, replaceIndex, valueObject) {
-    var list2 = Transition.parseStyle(transition2);
-    if (list2[replaceIndex]) {
-      list2[replaceIndex] = valueObject;
-    } else {
-      list2.push(valueObject);
-    }
-    return Transition.join(list2);
-  }
-  static get(transition2, index2) {
-    var arr = Transition.parseStyle(transition2);
-    return arr[index2];
-  }
-  static parseStyle(transition2) {
-    var list2 = [];
-    if (!transition2)
-      return list2;
-    const result = customParseConvertMatches(transition2, TRANSITION_TIMING_REG);
-    list2 = result.str.split(",").map((it) => {
-      const fields2 = it.split(" ").filter(Boolean);
-      if (fields2.length >= 4) {
-        return {
-          name: fields2[0],
-          duration: Length.parse(fields2[1]),
-          timingFunction: customParseReverseMatches(fields2[2], result.matches),
-          delay: Length.parse(fields2[3])
-        };
-      } else if (fields2.length >= 3) {
-        return {
-          name: fields2[0],
-          duration: Length.parse(fields2[1]),
-          delay: Length.parse(fields2[2])
-        };
-      } else if (fields2.length >= 1) {
-        return {
-          name: fields2[0],
-          duration: Length.parse(fields2[1])
-        };
-      } else {
-        return {};
-      }
-    });
-    return list2.map((it) => Transition.parse(it));
-  }
-}
 class TransitionProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("transition.property.title");
@@ -60658,7 +60497,7 @@ class TransitionProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return "";
-    return Transition.parseStyle(current.transition).map((it, index2) => {
+    return current.transition.map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
       return `
@@ -60687,36 +60526,43 @@ class TransitionProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE(REFRESH_SELECTION)]() {
-    this.refreshShowIsNot([]);
+    this.refresh();
   }
   [CLICK("$add")]() {
     var current = this.$context.selection.current;
     if (current) {
+      const transition2 = current.transition || [];
+      transition2.push({
+        name: "all",
+        duration: "1s",
+        timingFunction: "linear",
+        delay: "0s"
+      });
       this.$commands.executeCommand("setAttribute", "add transition", this.$context.selection.packByValue({
-        transition: (item) => Transition.add(item.transition)
+        transition: [...transition2]
       }));
       this.nextTick(() => {
-        window.setTimeout(() => {
-          this.refresh();
-        }, 100);
-      });
+        this.refresh();
+      }, 10);
     } else {
       window.alert("Select a layer");
     }
   }
   getCurrentTransition() {
-    return this.current.transitions[this.selectedIndex];
+    return this.current.transition[this.selectedIndex];
   }
   [CLICK("$transitionList .tools .del")](e) {
     var removeIndex = e.$dt.attr("data-index");
     var current = this.$context.selection.current;
     if (!current)
       return;
-    current.reset({
-      transition: Transition.remove(current.transition, removeIndex)
-    });
-    this.emit("refreshElement", current);
-    this.refresh();
+    current.transition.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "add transition", this.$context.selection.packByValue({
+      transition: [...current.transition]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
   selectItem(selectedIndex, isSelected = true) {
     if (isSelected) {
@@ -60733,7 +60579,7 @@ class TransitionProperty extends BaseProperty {
     this.current = this.$context.selection.current;
     if (!this.current)
       return;
-    this.currentTransition = Transition.get(this.current.transition, this.selectedIndex);
+    this.currentTransition = this.current.transition[this.selectedIndex];
     this.viewTransitionPropertyPopup();
   }
   viewTransitionPropertyPopup() {
@@ -60742,25 +60588,24 @@ class TransitionProperty extends BaseProperty {
     const transition2 = this.currentTransition;
     this.emit("showTransitionPropertyPopup", {
       changeEvent: "changeTransitionPropertyPopup",
-      data: transition2.toCloneObject(),
+      data: clone$1(transition2),
       instance: this
     });
   }
   [CLICK("$transitionList .preview")](e) {
     this.viewTransitionPicker(e.$dt);
   }
-  getRef(...args2) {
-    return this.refs[args2.join("")];
-  }
   [SUBSCRIBE("changeTransitionPropertyPopup")](data) {
     if (this.currentTransition) {
-      this.currentTransition.reset(__spreadValues({}, data));
       if (this.current) {
-        this.current.reset({
-          transition: Transition.replace(this.current.transition, this.selectedIndex, this.currentTransition)
-        });
-        this.emit("refreshElement", this.current);
-        this.refresh();
+        const transition2 = this.current.transition;
+        transition2[this.selectedIndex] = data;
+        this.$commands.executeCommand("setAttribute", "add transition", this.$context.selection.packByValue({
+          transition: [...transition2]
+        }));
+        this.nextTick(() => {
+          this.refresh();
+        }, 10);
       }
     }
   }
@@ -60908,7 +60753,7 @@ class TransitionPropertyPopup extends BasePopup {
   templateForDelay() {
     return `
     <div class='delay'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
       ref: "$delay",
       label: "Delay",
       key: "delay",
@@ -60922,7 +60767,7 @@ class TransitionPropertyPopup extends BasePopup {
   templateForDuration() {
     return `
     <div class='duration'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
       ref: "$duration",
       label: "Duration",
       key: "duration",

@@ -5,11 +5,12 @@ import {
   SUBSCRIBE_SELF,
   variable,
   createComponent,
+  DOMDIFF,
 } from "sapa";
 
 import "./CSSPropertyEditor.scss";
 
-import icon from "elf/editor/icon/icon";
+import icon, { iconUse } from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -406,32 +407,52 @@ export default class CSSPropertyEditor extends EditorElement {
 
         return /*html*/ `
           <div class='property-editor'>
-            <object refClass="NumberRangeEditor"  
-              ref='$opacity${index}' 
-              key='${property.key}' 
-              min="${min}"
-              max="${max}"
-              step="${step}"
-              value="${property.value || 1}"
-              selected-unit='number'
-              removable="true"
-              onchange="changeRangeEditor" />
+            ${createComponent("NumberInputEditor", {
+              ref: `$opacity${index}`,
+              key: property.key,
+              label: property.key,
+              min,
+              max,
+              step,
+              value: property.value || 1,
+              onchange: "changeRangeEditor",
+            })}
+              
           </div>
         `;
+      case "x":
+      case "y":
+      case "width":
+      case "height":
+        return /*html*/ `
+            <div class='property-editor'>
+              ${createComponent("NumberInputEditor", {
+                ref: `$opacity${index}`,
+                key: property.key,
+                label: property.key,
+                min: 0,
+                max: 1000,
+                step: 1,
+                value: property.value || 1,
+                onchange: "changeRangeEditor",
+              })}
+                
+            </div>
+          `;
       case "rotate":
         return /*html*/ `
           <div class='property-editor'>
-            <object refClass="RangeEditor"  
-              ref='rangeEditor${index}' 
-              key='${property.key}' 
-              value='${property.value}'  
-              min="-2000"
-              max="2000"
-              units="deg" 
-              onChange="changeRangeEditor" />
+            ${createComponent("InputRangeEditor", {
+              ref: `rangeEditor${index}`,
+              key: property.key,
+              value: property.value,
+              min: -2000,
+              max: 2000,
+              units: ["deg"],
+              onChange: "changeRangeEditor",
+            })}
           </div>
         `;
-      case "left":
       case "margin-top":
       case "margin-bottom":
       case "margin-left":
@@ -440,14 +461,19 @@ export default class CSSPropertyEditor extends EditorElement {
       case "padding-bottom":
       case "padding-left":
       case "padding-right":
-      case "width":
-      case "height":
       case "perspective":
       case "text-stroke-width":
       default:
         return /*html*/ `
           <div class='property-editor'>
-            <object refClass="RangeEditor"  ref='rangeEditor${index}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
+            ${createComponent("InputRangeEditor", {
+              ref: `rangeEditor${index}`,
+              key: property.key,
+              label: property.key,
+              value: property.value,
+              max: 1000,
+              onChange: "changeRangeEditor",
+            })}
           </div>
         `;
     }
@@ -519,28 +545,21 @@ export default class CSSPropertyEditor extends EditorElement {
     `;
   }
 
-  [LOAD("$property")]() {
+  [LOAD("$property") + DOMDIFF]() {
     return this.state.properties.map((it, index) => {
       return /*html*/ `
-        <div class='css-property-item'>
-          <div class='title'>
-            <label>${it.key}</label>
-            <div class='tools'>
-              <button type="button" class='remove' data-index="${index}">${
-        icon.remove2
-      }</button>
-            </div>
-          </div>
-          <div class='title-2'>
-            <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index}">${
-        icon.refresh
-      }</button> Refresh</label>
-            </div>
-          </div>
+        <div class='css-property-item'>   
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index)}
           </div>
+
+          <button type="button" 
+            class='refresh' 
+            data-index="${index}">${iconUse("refresh")}</button>
+    
+          <button type="button" 
+            class='remove' 
+            data-index="${index}">${iconUse("remove2")}</button>
         </div>
       `;
     });

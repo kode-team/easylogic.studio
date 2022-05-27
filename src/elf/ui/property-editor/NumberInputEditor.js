@@ -16,7 +16,6 @@ import {
 import "./NumberInputEditor.scss";
 
 import { round } from "elf/core/math";
-import icon from "elf/editor/icon/icon";
 import { END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
@@ -24,10 +23,6 @@ export default class NumberInputEditor extends EditorElement {
   initState() {
     var value = +this.props.value;
     let label = this.props.label || "";
-
-    if (icon[label]) {
-      label = icon[label];
-    }
 
     const compact = isBoolean(this.props.compact)
       ? this.props.compact

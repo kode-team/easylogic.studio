@@ -1,19 +1,20 @@
-import { LOAD, CLICK, DEBOUNCE, DOMDIFF, SUBSCRIBE } from "sapa";
+import { clone, LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "sapa";
 
 import "./AnimationProperty.scss";
 
 import { curveToPath } from "elf/core/func";
 import { iconUse } from "elf/editor/icon/icon";
-import { Animation } from "elf/editor/property-parser/Animation";
+// import { Animation } from "elf/editor/property-parser/Animation";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
+import { Length } from "elf/editor/unit/Length";
 
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
-    return this.$i18n("animation.property.title");
+    return this.$i18n("title");
   }
   getBody() {
-    return /*html*/ `<div class='animation-list' ref='$animationList'></div>`;
+    return /*html*/ `<div class='elf--animation-list' ref='$animationList'></div>`;
   }
 
   getTools() {
@@ -28,12 +29,16 @@ export default class AnimationProperty extends BaseProperty {
     return true;
   }
 
+  get localeKey() {
+    return "animation.property";
+  }
+
   [LOAD("$animationList") + DOMDIFF]() {
     var current = this.$context.selection.current;
 
     if (!current) return "";
 
-    return Animation.parseStyle(current.animation).map((it, index) => {
+    return current.animation.map((it, index) => {
       const selectedClass =
         this.state.selectedIndex === index ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
@@ -54,32 +59,30 @@ export default class AnimationProperty extends BaseProperty {
                 ${
                   it.name
                     ? it.name
-                    : `&lt; ${this.$i18n(
-                        "animation.property.select a keyframe"
-                      )} &gt;`
+                    : `&lt; ${this.$i18n("select a keyframe")} &gt;`
                 }
               </div>
               <div class='labels'>
                 <label class='count' title='${this.$i18n(
-                  "animation.property.iteration.count"
+                  "iteration.count"
                 )}'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='${this.$i18n(
-                  "animation.property.delay"
-                )}'><small>${it.delay}</small></label>
+                <label class='delay' title='${this.$i18n("delay")}'>
+                  <small>${it.delay}</small>
+                </label>
                 <label class='duration' title='${this.$i18n(
-                  "animation.property.duration"
+                  "duration"
                 )}'><small>${it.duration}</small></label>
                 <label class='direction' title='${this.$i18n(
-                  "animation.property.direction"
+                  "direction"
                 )}'><small>${it.direction}</small></label>
                 <label class='fill-mode' title='${this.$i18n(
-                  "animation.property.fill.mode"
+                  "fill.mode"
                 )}'><small>${it.fillMode}</small></label>
-                <label class='play-state' title='${this.$i18n(
-                  "animation.property.play.state"
-                )}' data-index='${index}' data-play-state-selected-value="${
-        it.playState
-      }">
+                <label 
+                  class='play-state' 
+                  title='${this.$i18n("play.state")}' 
+                  data-index='${index}' 
+                  data-play-state-selected-value="${it.playState}">
                   <small data-play-state-value='running'>${iconUse(
                     "play"
                   )}</small>
@@ -100,31 +103,40 @@ export default class AnimationProperty extends BaseProperty {
     });
   }
 
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
-    const current = this.$context.selection.current;
-    if (current && current.hasChangedField("animation")) {
-      this.refresh();
-    }
-    this.emit("hideAnimationPropertyPopup");
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
+    this.refresh();
   }
 
   [CLICK("$add")]() {
     var current = this.$context.selection.current;
 
     if (current) {
+      const animation = current.animation || [];
+
+      animation.push({
+        itemType: "animation",
+        checked: true,
+        name: "none",
+        direction: "normal",
+        duration: Length.second(0),
+        timingFunction: "linear",
+        delay: Length.second(0),
+        iterationCount: Length.string("infinite"),
+        playState: "running",
+        fillMode: "none",
+      });
+
       this.$commands.executeCommand(
         "setAttribute",
         "add animation property",
         this.$context.selection.packByValue({
-          animation: (item) => Animation.add(item.animation, { name: null }),
+          animation: [...animation],
         })
       );
 
       this.nextTick(() => {
-        window.setTimeout(() => {
-          this.refresh();
-        }, 100);
-      });
+        this.refresh();
+      }, 100);
     } else {
       window.alert("Select a layer");
     }
@@ -135,14 +147,15 @@ export default class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current) return;
 
-    current.reset({
-      animation: Animation.remove(current.animation, removeIndex),
-    });
+    const animation = current.animation || [];
 
-    this.$commands.emit(
+    animation.splice(removeIndex, 1);
+
+    this.$commands.executeCommand(
       "setAttribute",
+      "remove animation property",
       this.$context.selection.packByValue({
-        animation: Animation.remove(current.animation, removeIndex),
+        animation: [...animation],
       })
     );
 
@@ -154,17 +167,20 @@ export default class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current) return;
 
-    const list = Animation.parseStyle(current.animation);
-    var animation = list[index];
-    if (animation) {
-      animation.togglePlayState();
+    const animation = current.animation || [];
 
-      e.$dt.attr("data-play-state-selected-value", animation.playState);
+    var currentAnimation = animation[index];
+    if (currentAnimation) {
+      currentAnimation.playState =
+        currentAnimation.playState === "running" ? "paused" : "running";
 
-      this.$commands.emit(
+      e.$dt.attr("data-play-state-selected-value", currentAnimation.playState);
+
+      this.$commands.executeCommand(
         "setAttribute",
+        "remove animation property",
         this.$context.selection.packByValue({
-          animation: Animation.join(list),
+          animation: [...animation],
         })
       );
     }
@@ -187,10 +203,12 @@ export default class AnimationProperty extends BaseProperty {
     this.current = this.$context.selection.current;
 
     if (!this.current) return;
-    this.currentAnimation = Animation.get(
-      this.current.animation,
-      this.selectedIndex
-    );
+
+    const animation = this.current.animation || [];
+
+    var currentAnimation = animation[this.selectedIndex];
+
+    this.currentAnimation = clone(currentAnimation);
 
     this.viewAnimationPropertyPopup();
   }
@@ -201,7 +219,7 @@ export default class AnimationProperty extends BaseProperty {
     const animation = this.currentAnimation;
     this.emit("showAnimationPropertyPopup", {
       changeEvent: "changeAnimationPropertyPopup",
-      data: animation.toCloneObject(),
+      data: clone(animation),
       instance: this,
     });
   }
@@ -210,25 +228,17 @@ export default class AnimationProperty extends BaseProperty {
     this.viewAnimationPicker(e.$dt);
   }
 
-  getRef(...args) {
-    return this.refs[args.join("")];
-  }
-
   [SUBSCRIBE("changeAnimationPropertyPopup")](data) {
     if (this.currentAnimation) {
-      this.currentAnimation.reset({ ...data });
+      const animation = this.current.animation;
+      animation[this.selectedIndex] = data;
 
       if (this.current) {
         this.$commands.executeCommand(
           "setAttribute",
           "change animation property",
           this.$context.selection.packByValue({
-            animation: (item) =>
-              Animation.replace(
-                item.animation,
-                this.selectedIndex,
-                this.currentAnimation
-              ),
+            animation: [...animation],
           })
         );
 

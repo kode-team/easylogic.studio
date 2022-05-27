@@ -580,9 +580,214 @@ declare module "@easylogic/editor" {
 
   interface PathParser {}
 
-  export class MovableItem extends Item {
-    get isAbsolute(): boolean;
+  interface ModelManager {}
+  export class BaseModel {
+    get manager(): ModelManager;
+    get timestamp(): number;
+    get id(): string;
+    get name(): string;
+    get itemType(): string;
+    get title(): string;
+    get children(): BaseModel[];
+    get parent(): BaseModel;
+    get parentId(): string;
+    get collapsed(): boolean;
+    get visibility(): boolean;
+    get locked(): boolean;
+    get allLayers(): BaseModel[];
+    get layers(): BaseModel[];
+    get depth(): number;
+    get top(): BaseModel;
+    get artboard(): ArtBoard;
+    get project(): BaseModel;
+    get path(): BaseModel[];
+    get pathIds(): string[];
+    get childrenLength(): number;
+    get index(): number;
+    get isFirst(): boolean;
+    get isLast(): boolean;
+    get first(): BaseModel;
+    get last(): BaseModel;
+    get prev(): BaseModel;
+    get next(): BaseModel;
+    get hierarchy(): Hierarchy;
+    get hasChangedHirachy(): boolean;    
+    getInformationForHierarchy(): Hierarchy;
+    filterAllLayers(filter: (layer: BaseModel) => boolean): BaseModel[];
+    setParentId(parentId: string):void;
+    getInnerId(postfix?: string):string;
+    is(checkItemType: string): boolean;
+    isNot(checkItemType: string): boolean;
+    get(key: string): any;
+    removeField(key: string): void;
+    set(key: string, value: any): void;
+    isSVG(): boolean;
+    addCache(key: string, value: any): void;
+    getCache(key: string): any;
+    removeCache(key: string): void;
+    hasCache(key: string): boolean;
+    computed(key: string, newValueCallback: Function, isForce?: boolean): any;
+    computedValue(key: string): any;
+    editable(): boolean;
+    convert(json?: KeyValue): KeyValue;
+    setCache(): void;
+    toCloneObject(isDeep?: boolean): KeyValue;
+    clone(isDeep?: boolean): boolean;
+    reset(obj: KeyValue, context?: IContext): boolean;
+    hasChangedField(...args: any[]): boolean;
+    getDefaultObject(obj?: KeyValue): KeyValue;
+    attrs(...args: string[]): KeyValue;
+    attrsWithId(...args: string[]): KeyValueWithId;
+    hasChildren(): boolean;
+    appendChild(child: BaseModel): void;
+    /**
+     * 새로운 부모를 기준으로 childItem 의 transform 을 맞춘다.
+     *
+     * 1. childItem 의 absoluteMatrix 를 구한다.
+     * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.absoluteMatrixInverse
+     *
+     * childItem 의 좌표를 새로운 parent 로 맞출 때는
+     * itemMatrix (rotateZ) 를 먼저 구하고 offset 을 다시 구하는 순서로 간다.
+     */    
+    resetMatrix(childItem: BaseModel): void;
+    refreshMatrixCache(): void;
+    insertChild(child: BaseModel, index?: number): BaseModel;
+    insertAfter(child: BaseModel): BaseModel;
+    insertBefore(child: BaseModel): BaseModel;
+    toggle(field: string, toggleValue?: boolean): void;
+    isTreeItemHide(): boolean;
+    expectJSON(key: string): boolean;
+    toJSON(): KeyValue;
+    resize(): void;
+    copy(): BaseModel;
+    findIndex(child: BaseModel): number;
+    find(id: string): BaseModel;
+    copyItem(childItem: BaseModel, dist: number): BaseModel;
+    remove(): void;
+    removeChild(childId: string): BaseModel;
+    hasParent(findParentId: string): boolean;
+    hasPathOf(targetItems: BaseModel[]): boolean;
+    hasChild(childId: string): boolean;
+    sendBackward(targetId: string): void;
+    sendBack(targetId: string): void;
+    bringForward(targetId: string): void;
+    bringFront(targetId: string): void;
+  }
 
+  export interface KeyValueWithId {
+    [key: string]: KeyValue;
+  }
+  export interface IContext {
+    [key: string]: any;
+    origin?: string;
+  }
+
+  export interface Hierarchy {
+    id: string;
+    index: number; 
+    parentId: string; 
+    prev: BaseModel;
+    next: BaseModel;
+    attrs: KeyValue
+  }
+
+  interface OffsetProperty {
+    key: string;
+    value: any;
+  }
+
+  interface Offset {
+    offset: number;
+    properties: OffsetProperty[];
+  }
+
+  interface Keyframe {
+    id: string;
+    name: string;
+    offsets: Offset[];
+  }
+  export class BaseAssetModel extends BaseModel {
+    get keyframes(): Keyframe[];
+  }
+
+  export class MovableModel extends BaseAssetModel {
+    get isAbsolute(): boolean;
+    get isDragSelectable(): boolean;
+    get isBooleanItem(): boolean;
+    get resizableWitChildren(): boolean;
+
+    get perspective(): string;
+    get perspectiveOrigin(): string;
+
+    get transform(): string;
+    get localMatrix(): mat4;
+    get localMatrixInverse(): mat4;
+
+    get transformWithTranslate(): vec3[];
+    get transformWithTranslateToTranspose(): vec3[];
+    get transformWithTranslateInverse(): vec3[];
+
+    get itemMatrix(): mat4;
+    get itemMatrixInverse(): mat4;
+
+    get absoluteMatrix(): mat4;
+    get absoluteMatrixInverse(): mat4;
+
+    get relativeMatrix(): mat4;
+    get relativeMatrixInverse(): mat4;
+    get verties(): vec3[];
+
+    get contentVerties(): vec3[];
+    get originVerties(): vec3[];
+
+    get localVerties(): vec3[];
+
+    get guideVerties(): vec3[];
+    get xList(): number[];
+    get yList(): number[];
+
+    get areaPosition(): any[];
+    get screenX(): number;
+    get screenY(): number;
+    get offsetX(): number;
+    get offsetY(): number;
+    get screenWidth(): number;
+    get screenHeight(): number;
+
+    get y(): number;
+    set y(value: number);
+    get x(): number;
+    set x(value: number);
+
+    get width(): number;
+    set width(value: number);
+    get height(): number;
+    set height(value: number);
+    get angle(): number;
+    set angle(value: number);
+    get position(): string;
+    set position(value: string);
+
+    get transformOrigin(): string;
+    set transformOrigin(value: string);
+
+    /** translate vector */
+    get translate(): vec3;
+
+    /** scale vector */
+    get scale(): vec3;
+
+    /** rotate vector */
+    get rotate(): vec3;
+
+    /** origin vector */
+    get origin(): vec3;
+
+    /** absolute origin vector */
+    get absoluteOrigin():vec3;
+
+    /** quaternion(사원수) */
+    get quat(): quat;
     toCloneObject(isDeep: boolean): KeyValue;
 
     convert(json: KeyValue): KeyValue;
@@ -593,12 +798,6 @@ declare module "@easylogic/editor" {
     //
     ///////////////////////
 
-    get screenX(): Length;
-    get screenY(): Length;
-    get offsetX(): Length;
-    get offsetY(): Length;
-    get screenWidth(): Length;
-    get screenHeight(): Length;
 
     setScreenX(value: number): void;
     setScreenY(value: number): void;
@@ -675,10 +874,8 @@ declare module "@easylogic/editor" {
     getAbsoluteMatrix(): mat4;
     getAbsoluteMatrixInverse(): mat4;
 
-    verties(width: Length, height: Length): vec3[];
     selectionVerties(): vec3[];
     rectVerties(): vec3[];
-    guideVerties(): vec3[];
 
     get matrix(): ICachedMatrix;
 
@@ -727,29 +924,10 @@ declare module "@easylogic/editor" {
 
     getTransformOriginMatrixInverse(): mat4;
 
-    /**
-     * 새로운 부모를 기준으로 childItem 의 transform 을 맞춘다.
-     *
-     * 1. childItem 의 absoluteMatrix 를 구한다.
-     * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.absoluteMatrixInverse
-     *
-     * childItem 의 좌표를 새로운 parent 로 맞출 때는
-     * itemMatrix (rotateZ) 를 먼저 구하고 offset 을 다시 구하는 순서로 간다.
-     *
-     * @param {Item} childItem
-     */
-    resetMatrix(childItem: Item): void;
-
     /** order by  */
 
     getIndex(): number;
     setOrder(targetIndex: number): void;
-
-    // get next sibiling item
-    next(): MovableItem;
-
-    // get prev sibiling item
-    prev(): MovableItem;
 
     /**
      * 레이어를 현재의 다음으로 보낸다.
@@ -757,9 +935,6 @@ declare module "@easylogic/editor" {
      */
     orderNext(): void;
 
-    isFirst(): boolean;
-
-    isLast(): boolean;
     /**
      * 레이어를 현재의 이전으로 보낸다.
      * 즉, 화면상에 렌더링 영역에서 내려간다.
@@ -778,7 +953,7 @@ declare module "@easylogic/editor" {
     orderBottom(): void;
   }
 
-  export class GroupItem extends MovableItem {
+  export class GroupModel extends MovableModel {
     get isGroup(): boolean;
 
     isLayoutItem(): boolean;
@@ -796,13 +971,249 @@ declare module "@easylogic/editor" {
     isInFlex(): boolean;
   }
 
-  export class DomItem extends GroupItem {}
+  interface Transition {
+    name: string;
+    duration: string;
+    timingFunction: string;
+    delay: string;
 
-  export class Layer extends DomItem {}
+  }
 
-  export class Component extends Layer {
+  interface BoxShadow {
+    offsetX: number;
+    offsetY: number;
+    blurRadius: number;
+    spreadRadius: number;
+    color: string;
+  }
+
+  interface TextShadow {
+    offsetX: number;
+    offsetY: number;
+    blurRadius: number;
+    color: string;
+  }
+
+  interface Pattern {
+
+  }
+
+  interface Selector {
+
+  }
+
+  interface Variable {
+
+  }
+
+  interface Filter {}
+  export class DomModel extends GroupModel {
+    get gridColumnStart(): number;
+    set gridColumnStart(value: number);
+  
+    get gridColumnEnd(): number;
+    set gridColumnEnd(value: number);
+  
+    get gridRowStart(): number;
+    set gridRowStart(value: number);
+  
+    get gridRowEnd(): number;
+    set gridRowEnd(value: number);
+  
+    get gridColumnGap(): string;
+    set gridColumnGap(value: string);
+  
+    get gridRowGap(): string;
+    set gridRowGap(value: string);
+  
+    get pattern(): Pattern[];
+    set pattern(value: Pattern[]);
+  
+    get selectors(): Selector[];
+    set selectors(value: Selector[]);
+  
+    get svg(): any;
+    set svg(value: any);
+
+    get rootVariable(): Variable[];
+    set rootVariable(value: Variable[]);
+  
+    get variable(): Variable[];
+    set variable(value: Variable[]);
+  
+    get filter(): Filter[];
+    set filter(value: Filter[]);
+  
+    get backdropFilter(): Filter[];
+    set backdropFilter(value: Filter[]);
+  
+    get backgroundColor(): string;
+    set backgroundColor(value: string);
+  
+    get backgroundImage(): string;
+    set backgroundImage(value: string);
+  
+    get textClip(): string;
+    set textClip(value: string);
+  
+    get borderRadius(): string;
+    set borderRadius(value: string);
+  
+    get border(): string;
+    set border(value: string);
+  
+    get boxShadow(): BoxShadow[];
+    set boxShadow(value: BoxShadow[]);
+  
+    get textShadow(): TextShadow[];
+    set textShadow(value: TextShadow[]);
+  
+    get clipPath(): string;
+    set clipPath(value: string);
+  
+    get color(): string;
+    set color(value: string);
+  
+    get opacity(): string;
+    set opacity(value: string);
+
+    get transformStyle(): string;
+    set transformStyle(value: string);
+  
+    get fontSize():string;
+    set fontSize(value: string);
+  
+    get fontFamily():string;
+    set fontFamily(value: string);
+  
+    get fontWeight(): string;
+    set fontWeight(value: string);
+  
+    get fontStyle(): string;
+    set fontStyle(value: string);
+  
+    get fontVariant(): string;
+    set fontVariant(value: string);
+  
+    get fontStretch(): string;
+    set fontStretch(value: string);
+  
+    get lineHeight(): string;
+    set lineHeight(value: string);
+  
+    get letterSpacing(): string;
+    set letterSpacing(value: string);
+  
+    get wordSpacing(): string;
+    set wordSpacing(value: string);
+  
+    get textDecoration(): string;
+    set textDecoration(value: string);
+  
+    get textAlign(): string;
+    set textAlign(value: string);
+  
+    get textTransform(): string;
+    set textTransform(value: string);
+  
+    get textOverflow(): string;
+    set textOverflow(value: string);
+  
+    get textIndent(): string;
+    set textIndent(value: string);
+  
+    get mixBlendMode(): string;
+    set mixBlendMode(value: string);
+    
+    get zIndex(): number;
+    set zIndex(value: number);
+
+    get overflow(): string;
+    set overflow(value: string);
+  
+    get animation(): Animation[];
+    set animation(value: Animation[]);
+  
+    get transition(): Transition[];
+    set transition(value: Transition[]);
+  
+    get marginTop(): string;
+    set marginTop(value: string);
+  
+    get marginRight(): string;
+    set marginRight(value: string);
+  
+    get marginBottom(): string;
+    set marginBottom(value: string);
+
+    get marginLeft(): string;
+    set marginLeft(value: string);
+  
+    get paddingTop(): string;
+    set paddingTop(value: string);
+  
+    get paddingRight(): string;
+    set paddingRight(value: string);
+  
+    get paddingBottom(): string;
+    set paddingBottom(value: string);
+  
+    get paddingLeft(): string;
+    set paddingLeft(value: string);
+
+    get changedBoxModel(): boolean;
+    get changedFlexLayout(): boolean;
+    get changedGridLayout(): boolean;
+    get changedLayoutItem(): boolean;
+    get changedLayout(): boolean;
+
+    get borderWidth(): {
+      borderLeftWidth: number;
+      borderRightWidth: number;
+      borderTopWidth: number;
+      borderBottomWidth: number;
+    };
+
+    get contentBox(): {
+      width: number;
+      height: number;
+      x: number;
+      y: number;
+    }
+
+    getGradientLineLength(width: number, height: number, angle: number): number;
+
+    createBackgroundImageMatrix(index: number): {
+      backRect: any;
+      backVerties: vec3[];
+      absoluteMatrix: vec3[];
+      backgroundImage: any;
+      radialCenterPosition?:vec3;
+      radialCenterStick?: vec3;
+      radialCenterPoint?: vec3;
+      startPoint: vec3;
+      endPoint: vec3;
+      shapePoint: vec3;
+      colorsteps: {
+        id: string;
+        cut: boolean;
+        color: string;
+        timing: string;
+        timingCount: number;
+        pos: vec3;
+      }[];
+      areaStartPoint?: vec3;
+      areaEndPoint?: vec3;
+    };
+  }
+
+  export class LayerModel extends DomModel {}
+
+  export class Component extends LayerModel {
     static createComponent: (params: IComponentParams) => Component;
   }
+
+  export class ArtBoard extends LayerModel { }
 
   export class EventMachine {
     protected opt: KeyValue;

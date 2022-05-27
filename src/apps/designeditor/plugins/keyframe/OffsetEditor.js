@@ -7,10 +7,12 @@ import {
   SUBSCRIBE,
   Dom,
   isUndefined,
+  clone,
   createComponent,
+  DOMDIFF,
 } from "sapa";
 
-import { Offset } from "elf/editor/property-parser/Offset";
+// import { Offset } from "elf/editor/property-parser/Offset";
 import { END, MOVE } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -65,7 +67,7 @@ export default class OffsetEditor extends EditorElement {
   [SUBSCRIBE("changeRangeEditor")](key, value) {
     var offset = this.state.offsets[this.selectedIndex];
     if (offset) {
-      offset.offset = value.clone();
+      offset.offset = clone(value);
       this.refresh();
       this.modifyOffset();
     }
@@ -125,7 +127,7 @@ export default class OffsetEditor extends EditorElement {
     }
   }
 
-  [LOAD("$offset")]() {
+  [LOAD("$offset") + DOMDIFF]() {
     return this.state.offsets.map((it, index) => {
       return this.makeOffset(it, index);
     });
@@ -144,11 +146,9 @@ export default class OffsetEditor extends EditorElement {
       ((currentX - this.baseOffsetArea.left) / this.baseOffsetWidth) * 100
     ).round(100);
 
-    this.state.offsets.push(
-      new Offset({
-        offset: newOffset,
-      })
-    );
+    this.state.offsets.push({
+      offset: newOffset,
+    });
 
     this.selectItem(this.state.offsets.length - 1, true);
     this.refresh();
@@ -198,7 +198,7 @@ export default class OffsetEditor extends EditorElement {
       ((currentX - this.baseOffsetMin) / this.baseOffsetWidth) * 100
     ).round(100);
 
-    this.state.offsets[this.currentOffsetIndex].offset.set(newOffset.value);
+    this.state.offsets[this.currentOffsetIndex].offset = newOffset.value;
     this.currentOffset.css("left", newOffset);
     this.refreshOffsetInput();
     this.modifyOffset();

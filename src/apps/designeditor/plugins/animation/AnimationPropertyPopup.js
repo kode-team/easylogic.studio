@@ -1,4 +1,11 @@
-import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, createComponent } from "sapa";
+import {
+  DOMDIFF,
+  LOAD,
+  CHANGE,
+  SUBSCRIBE,
+  SUBSCRIBE_SELF,
+  createComponent,
+} from "sapa";
 
 import "./AnimationPropertyPopup.scss";
 
@@ -69,16 +76,24 @@ export default class AnimationPropertyPopup extends BasePopup {
     `;
   }
 
-  [LOAD("$name")]() {
-    var current = this.$context.selection.currentProject;
+  /**
+   *
+   * keyframes 목록을 보여준다.
+   *
+   * domdiff 를 사용해서 적용 한지 제대로 확인 해야함
+   * @returns
+   */
+  [LOAD("$name") + DOMDIFF]() {
+    var current = this.$context.selection.current;
     var names = [];
+    console.log(current.keyframes);
     if (current && current.keyframes) {
       names = current.keyframes.map((it) => {
         return { key: it.name, value: it.name };
       });
     }
 
-    names.unshift({ key: "Select a keyframe", value: "" });
+    // names.unshift({ key: "Select a keyframe", value: "" });
 
     return names.map((it) => {
       var selected = it.value === this.name ? "selected" : "";
@@ -157,7 +172,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDelay() {
     return /*html*/ `
     <div class='delay'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
         ref: "$delay",
         label: this.$i18n("animation.property.popup.delay"),
         key: "delay",
@@ -172,7 +187,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDuration() {
     return /*html*/ `
     <div class='duration'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
         ref: "$duration",
         label: this.$i18n("animation.property.popup.duration"),
         key: "duration",

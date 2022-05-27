@@ -157,7 +157,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDelay() {
     return /*html*/ `
     <div class='delay'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
         ref: "$delay",
         label: "Delay",
         key: "delay",
@@ -172,7 +172,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDuration() {
     return /*html*/ `
     <div class='duration'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
         ref: "$duration",
         label: "Duration",
         key: "duration",

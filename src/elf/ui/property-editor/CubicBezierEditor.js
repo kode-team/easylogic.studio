@@ -31,12 +31,6 @@ export default class CubicBezierEditor extends EditorElement {
     };
   }
 
-  afterRender() {
-    window.setTimeout(() => {
-      this.refresh();
-    }, 10);
-  }
-
   template() {
     const linearCurve = curveToPath(this.state.currentBezier, 150, 150);
     const linearCurvePoint = curveToPointLine(
@@ -198,8 +192,8 @@ export default class CubicBezierEditor extends EditorElement {
 
   refreshPointer() {
     var currentBezier = getPredefinedCubicBezier(this.state.currentBezier);
-    var width = this.refs.$control.width();
-    var height = this.refs.$control.height();
+    var width = 150;
+    var height = 150;
 
     var left = currentBezier[0] * width;
     var top = (1 - currentBezier[1]) * height;

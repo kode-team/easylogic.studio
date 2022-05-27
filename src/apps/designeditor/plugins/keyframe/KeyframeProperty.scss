@@ -2,7 +2,7 @@
     display: block;
   
     .keyframe-item {
-      border: 1px solid var(--elf--border-color);
+      border: 1px solid var(--elf--property-border-color);
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
@@ -12,7 +12,7 @@
       }
 
       &.selected {
-        background-color: var(--elf--border-color);
+        border-color: var(--elf--selected-color);
       }
 
 

@@ -6,9 +6,10 @@
     grid-template-columns: 30px 1fr 20px ; 
     grid-column-gap: 4px;
     
-    padding: 5px 0px;
+    margin-bottom: 5px;
 
     text-align: center;
+    align-items: center;
     &.selected {
       background-color: var(--elf--border-color);
     }
@@ -22,11 +23,11 @@
     .timing {
       border-radius: 3px;
       background-color: var(--elf--animation-item-background-color);
-      width: 100%;
+      width: 30px;
       height: 30px;
       vertical-align: middle;
       cursor: pointer;
-      margin-top: 3px; 
+      // margin-top: 3px; 
      
       canvas {
         border-radius: 3px;
@@ -35,17 +36,19 @@
 
     .labels {
       // margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
 
       label {
         // border: 1px solid var(--elf--border-color);
         background-color: var(--elf--border-color);
         padding: 1px 2px;
         border-radius: 2px;
-        color: var(--elf--border-color);
         text-transform: uppercase;
-        font-weight: bold;        
+        // font-weight: bold;        
         small {
-          color: var(--elf--font-color);
+          font-size: 13px;
+          color: var(--elf--selected-font-color);
           text-transform: lowercase;
         }      
 

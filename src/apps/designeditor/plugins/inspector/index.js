@@ -1,5 +1,5 @@
 export default function (editor) {
-  editor.context.config.set("inspector.selectedValue", "style");
+  editor.context.config.set("inspector.selectedValue", "transition");
 
   editor.registerUI("inspector.tab", {
     Style: {

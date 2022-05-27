@@ -1,8 +1,8 @@
-import RangeEditor from "./RangeEditor";
+import InputRangeEditor from "./InputRangeEditor";
 
 import { Length } from "elf/editor/unit/Length";
 
-export default class IterationCountEditor extends RangeEditor {
+export default class IterationCountEditor extends InputRangeEditor {
   initState() {
     var value = this.props.value;
 

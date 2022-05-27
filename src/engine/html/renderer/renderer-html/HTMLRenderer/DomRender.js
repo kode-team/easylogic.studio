@@ -364,6 +364,22 @@ export default class DomRender extends ItemRender {
     };
   }
 
+  toTransitionCSS(item) {
+    const transition = item.computed("transition", (transition = []) => {
+      return (
+        transition
+          .map((t) => {
+            return `${t.name} ${t.duration} ${t.timingFunction} ${t.delay}`;
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      transition: transition,
+    };
+  }
+
   /**
    * border 정보 캐슁하기
    *
@@ -525,7 +541,7 @@ export default class DomRender extends ItemRender {
     // result["backdrop-filter"] = item.backdropFilter;
     // result["box-shadow"] = item.boxShadow;
     result["animation"] = item.animation;
-    result["transition"] = item.transition;
+    // result["transition"] = item.transition;
 
     return result;
   }
@@ -752,6 +768,7 @@ export default class DomRender extends ItemRender {
     //2. 원본이 하나의 객체가 아니라 복합 객체일때 중첩 CSS 를 자체 정의해서 생성
     //3. 이외에 selector 로 생성할 수 있는 css 를 생성 (:hover, :active 등등 )
     var cssString = `
+      ${this.toKeyframeCSS(item)}
   ${prefix} {  /* ${item.itemType} */
       ${CSS_TO_STRING(this.toCSS(item), "\n    ")}; 
       ${appendCSS}
@@ -766,6 +783,59 @@ export default class DomRender extends ItemRender {
   ${this.toSelectorString(item, prefix)}
     `;
     return cssString;
+  }
+
+  convertKey(key) {
+    switch (key) {
+      case "x":
+        return "left";
+      case "y":
+        return "top";
+    }
+
+    return key;
+  }
+
+  convertValue(key, value) {
+    switch (key) {
+      case "left":
+        return Length.px(value);
+      case "top":
+        return Length.px(value);
+    }
+
+    return key;
+  }
+
+  toKeyframeCSS(item) {
+    const keyframes = item.computed("keyframes", (keyframes) => {
+      const text = keyframes
+        .map((it) => {
+          return `
+          @keyframes ${it.name} {
+            ${it.offsets
+              .map((offset) => {
+                return `
+              ${offset.offset}% {
+                ${offset.properties
+                  ?.map((p) => {
+                    const key = this.convertKey(p.key);
+                    const value = this.convertValue(key, p.value);
+
+                    return `${key}: ${value};`;
+                  })
+                  .join("\n")}
+              }
+              `;
+              })
+              .join("\n")}
+          }
+          `;
+        })
+        .join("\n");
+      return text;
+    });
+    return keyframes;
   }
 
   /**
@@ -789,6 +859,7 @@ export default class DomRender extends ItemRender {
         this.toTextShadowCSS(item),
         this.toFilterCSS(item),
         this.toBackdropFilterCSS(item),
+        this.toTransitionCSS(item),
         this.toLayoutCSS(item),
         this.toSizeCSS(item),
         this.toTransformCSS(item),
