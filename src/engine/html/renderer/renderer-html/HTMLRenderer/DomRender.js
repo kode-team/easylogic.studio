@@ -380,6 +380,31 @@ export default class DomRender extends ItemRender {
     };
   }
 
+  toAnimationCSS(item) {
+    const animation = item.computed("animation", (animation = []) => {
+      return (
+        animation
+          .map((t) => {
+            return [
+              t.duration,
+              t.timingFunction,
+              t.delay,
+              t.iterationCount,
+              t.direction,
+              t.fillMode,
+              t.playState,
+              t.name,
+            ].join(" ");
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      animation,
+    };
+  }
+
   /**
    * border 정보 캐슁하기
    *
@@ -537,10 +562,10 @@ export default class DomRender extends ItemRender {
     result["mix-blend-mode"] = item.mixBlendMode;
     result["transform-origin"] = item.transformOrigin;
     result["border-radius"] = item.borderRadius;
-    result["filter"] = item.filter;
+    // result["filter"] = item.filter;
     // result["backdrop-filter"] = item.backdropFilter;
     // result["box-shadow"] = item.boxShadow;
-    result["animation"] = item.animation;
+    // result["animation"] = item.animation;
     // result["transition"] = item.transition;
 
     return result;
@@ -860,6 +885,7 @@ export default class DomRender extends ItemRender {
         this.toFilterCSS(item),
         this.toBackdropFilterCSS(item),
         this.toTransitionCSS(item),
+        this.toAnimationCSS(item),
         this.toLayoutCSS(item),
         this.toSizeCSS(item),
         this.toTransformCSS(item),

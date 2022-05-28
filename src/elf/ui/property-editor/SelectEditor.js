@@ -68,22 +68,11 @@ export default class SelectEditor extends EditorElement {
       label = iconUse(label);
     }
 
-    return /*html*/ `
-            <div class='elf--select-editor ${hasLabel} ${compact}'>
-                ${label ? `<label title="${title}">${label}</label>` : ""}
-                <div class="editor-view">
-                    <select ref='$options' ${hasTabIndex}>
-                        ${this.getOptionString()}
-                    </select>
-                    <div class='selected-value'>
-                        <span class='value' ref="$selectedValue">${value}</span>
-                        <span class='expand' ref='$expand'>${iconUse(
-                          "expand_more"
-                        )}</span>
-                    </div>
-                </div>
-            </div>
-        `;
+    return /*html*/ `<div class='elf--select-editor ${hasLabel} ${compact}'>${
+      label ? `<label title="${title}">${label}</label>` : ""
+    }<div class="editor-view"><select ref='$options' ${hasTabIndex}>${this.getOptionString()}</select><div class='selected-value'><span class='value' ref="$selectedValue">${value}</span><span class='expand' ref='$expand'>${iconUse(
+      "expand_more"
+    )}</span></div></div></div>`;
   }
 
   getValue() {

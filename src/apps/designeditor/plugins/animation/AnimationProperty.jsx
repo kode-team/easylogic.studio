@@ -14,15 +14,15 @@ export default class AnimationProperty extends BaseProperty {
     return this.$i18n("title");
   }
   getBody() {
-    return /*html*/ `<div class='elf--animation-list' ref='$animationList'></div>`;
+    return <div class="elf--animation-list" ref="$animationList"></div>;
   }
 
   getTools() {
-    return /*html*/ `
-        <button type="button" ref="$add" title="add Fill">${iconUse(
-          "add"
-        )}</button>
-    `;
+    return (
+      <button type="button" ref="$add" title="add Fill">
+        {iconUse("add")}
+      </button>
+    );
   }
 
   isFirstShow() {
@@ -43,63 +43,72 @@ export default class AnimationProperty extends BaseProperty {
         this.state.selectedIndex === index ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
 
-      return /*html*/ `
-      <div class='animation-group-item'>
-        <div class='animation-item ${selectedClass}' 
-             data-index='${index}' 
-             ref="animationIndex${index}" 
+      return (
+        <div class="animation-group-item">
+          <div
+            class={`animation-item ${selectedClass}`}
+            data-index={index}
+            ref={`animationIndex${index}`}
           >
-            <div class='timing preview' data-index='${index}' ref='$preview${index}'>
-              <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                <path d="${path}" stroke="white" stroke-width="1" fill='none' />
+            <div
+              class="timing preview"
+              data-index={index}
+              ref={`$preview${index}`}
+            >
+              <svg
+                class="item-canvas"
+                width="30"
+                height="30"
+                viewBox="0 0 30 30"
+              >
+                <path d={path} stroke="white" stroke-width="1" fill="none" />
               </svg>
             </div>
-            <div class='name'>
-              <div class='title' ref="animationName${index}">
-                ${
-                  it.name
-                    ? it.name
-                    : `&lt; ${this.$i18n("select a keyframe")} &gt;`
-                }
+            <div class="name">
+              <div class="title">
+                {it.name
+                  ? it.name
+                  : `&lt; ${this.$i18n("select a keyframe")} &gt;`}
               </div>
-              <div class='labels'>
-                <label class='count' title='${this.$i18n(
-                  "iteration.count"
-                )}'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='${this.$i18n("delay")}'>
-                  <small>${it.delay}</small>
+              <div class="labels">
+                <label class="count" title={this.$i18n("iteration.count")}>
+                  <small>{it.iterationCount}</small>
                 </label>
-                <label class='duration' title='${this.$i18n(
-                  "duration"
-                )}'><small>${it.duration}</small></label>
-                <label class='direction' title='${this.$i18n(
-                  "direction"
-                )}'><small>${it.direction}</small></label>
-                <label class='fill-mode' title='${this.$i18n(
-                  "fill.mode"
-                )}'><small>${it.fillMode}</small></label>
-                <label 
-                  class='play-state' 
-                  title='${this.$i18n("play.state")}' 
-                  data-index='${index}' 
-                  data-play-state-selected-value="${it.playState}">
-                  <small data-play-state-value='running'>${iconUse(
-                    "play"
-                  )}</small>
-                  <small data-play-state-value='paused'>${iconUse(
-                    "pause"
-                  )}</small>
+                <label class="delay" title={this.$i18n("delay")}>
+                  <small>{it.delay}</small>
+                </label>
+                <label class="duration" title={this.$i18n("duration")}>
+                  <small>{it.duration}</small>
+                </label>
+                <label class="direction" title={this.$i18n("direction")}>
+                  <small>{it.direction}</small>
+                </label>
+                <label class="fill-mode" title={this.$i18n("fill.mode")}>
+                  <small>{it.fillMode}</small>
+                </label>
+                <label
+                  class="play-state"
+                  title={this.$i18n("play.state")}
+                  data-index={index}
+                  data-play-state-selected-value={it.playState}
+                >
+                  <small data-play-state-value="running">
+                    {iconUse("play")}
+                  </small>
+                  <small data-play-state-value="paused">
+                    {iconUse("pause")}
+                  </small>
                 </label>
               </div>
             </div>
-            <div class='tools'>
-                <button type="button" class="del" data-index="${index}">
-                  ${iconUse("remove2")}
-                </button>
+            <div class="tools">
+              <button type="button" class="del" data-index={index}>
+                {iconUse("remove2")}
+              </button>
             </div>
+          </div>
         </div>
-      </div>        
-      `;
+      );
     });
   }
 
@@ -242,7 +251,9 @@ export default class AnimationProperty extends BaseProperty {
           })
         );
 
-        this.refresh();
+        this.nextTick(() => {
+          this.refresh();
+        }, 10);
       }
     }
   }

@@ -52,40 +52,30 @@ export default class LayoutProperty extends BaseProperty {
 
   [LOAD("$layoutProperty") + DOMDIFF]() {
     var current = this.$context.selection.current || { layout: "default" };
-    return /*html*/ `
-      <div class='layout-list' ref='$layoutList'>
-        <div data-value='default' class='${
-          current.layout === "default" ? "selected" : ""
-        }'></div>
-        <div data-value='flex' class='${
-          current.layout === "flex" ? "selected" : ""
-        }'>
-          ${createComponent("FlexLayoutEditor", {
-            ref: "$flex",
-            key: "flex-layout",
-            value: {
-              flexDirection: current.flexDirection,
-              flexWrap: current.flexWrap,
-              justifyContent: current.justifyContent,
-              alignItems: current.alignItems,
-              alignContent: current.alignContent,
-              gap: current.gap,
-            },
-            onchange: "changeLayoutInfo",
-          })}
-        </div>
-        <div data-value='grid' class='${
-          current.layout === "grid" ? "selected" : ""
-        }'>
-          ${createComponent("GridLayoutEditor", {
-            ref: "$grid",
-            key: "grid-layout",
-            value: current["grid-layout"] || "",
-            onchange: "changeLayoutInfo",
-          })}
-        </div>
-      </div>
-    `;
+    return /*html*/ `<div class='layout-list' ref='$layoutList'><div data-value='default' class='${
+      current.layout === "default" ? "selected" : ""
+    }'></div><div data-value='flex' class='${
+      current.layout === "flex" ? "selected" : ""
+    }'>${createComponent("FlexLayoutEditor", {
+      ref: "$flex",
+      key: "flex-layout",
+      value: {
+        flexDirection: current.flexDirection,
+        flexWrap: current.flexWrap,
+        justifyContent: current.justifyContent,
+        alignItems: current.alignItems,
+        alignContent: current.alignContent,
+        gap: current.gap,
+      },
+      onchange: "changeLayoutInfo",
+    })}</div><div data-value='grid' class='${
+      current.layout === "grid" ? "selected" : ""
+    }'>${createComponent("GridLayoutEditor", {
+      ref: "$grid",
+      key: "grid-layout",
+      value: current["grid-layout"] || "",
+      onchange: "changeLayoutInfo",
+    })}</div></div>`;
   }
 
   [SUBSCRIBE_SELF("changeLayoutInfo")](key, value) {

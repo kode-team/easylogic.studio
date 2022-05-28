@@ -18,6 +18,7 @@ export default class ColorViewEditor extends EditorElement {
 
     return {
       label: this.props.label,
+      title: this.props.title,
       value,
       compact,
       mini,
@@ -94,11 +95,15 @@ export default class ColorViewEditor extends EditorElement {
   }
 
   template() {
-    var { label } = this.state;
+    var { label, title } = this.state;
 
     return /*html*/ `
             <div class='elf--color-view-editor'>
-                ${label ? `<label>${label}</label>` : ""}            
+                ${
+                  label
+                    ? `<label data-tooltip="${title}"><span>${label}</span></label>`
+                    : ""
+                }            
                 <div class='color-code' ref="$container">
                     <div class='preview' ref='$preview'>
                         <div class='mini-view'>

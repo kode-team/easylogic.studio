@@ -83,6 +83,53 @@ export default class CSSPropertyEditor extends EditorElement {
     }
   }
 
+  getDefinedKey(key) {
+    switch (key) {
+      case "animation-timing-function":
+        return "animationTimingFunction";
+      case "box-shadow":
+        return "boxShadow";
+      case "text-shadow":
+        return "textShadow";
+      case "color":
+        return "color";
+      case "background-image":
+        return "backgroundImage";
+      case "background-color":
+        return "backgroundColor";
+      case "text-fill-color":
+        return "textFillColor";
+      case "text-stroke-color":
+        return "textStrokeColor";
+      case "filter":
+        return "filter";
+      case "backdrop-filter":
+        return "backdropFilter";
+      case "var":
+        return "var";
+      case "transform":
+        return "transform";
+      case "transform-origin":
+        return "transformOrigin";
+      case "perspective-origin":
+        return "perspectiveOrigin";
+      case "playTime":
+        return "playTime";
+      case "offset-distance":
+        return "offsetDistance";
+      case "rotate":
+        return "rotate";
+      case "mix-blend-mode":
+        return "mixBlendMode";
+      case "clip-path":
+        return "clipPath";
+      case "opacity":
+        return "opacity";
+      default:
+        return key;
+    }
+  }
+
   [CLICK("$addProperty")]() {
     var key = this.getRef("$propertySelect").value;
 
@@ -100,7 +147,7 @@ export default class CSSPropertyEditor extends EditorElement {
     var current = this.$context.selection.current;
 
     if (current) {
-      value = current[key];
+      value = current[this.getDefinedKey(key)];
     }
 
     this.state.properties.push({ key, value });
@@ -110,25 +157,28 @@ export default class CSSPropertyEditor extends EditorElement {
   }
 
   makeIndivisualPropertyColorEditor(property, index) {
-    var key = property.key.split("-").join("");
-    return /*html*/ `
-      <div class='property-editor'>
-        <object refClass="ColorViewEditor" ref='$${key}${index}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
-      </div>
-    `;
+    var key = property.key;
+    return /*html*/ `<div class='property-editor'>
+    ${createComponent("ColorViewEditor", {
+      ref: `${key}${index}`,
+      label: property.key,
+      title: property.key,
+      value: property.value,
+      key: property.key,
+      onChange: "changeColorProperty",
+    })}
+  </div>`;
   }
 
   makeCustomePropertyEditor(property, index) {
-    return /*html*/ `
-      <div class='property-editor'>
+    return /*html*/ `<div class='property-editor'>
         ${createComponent(property.editor, {
           onchange: "changeSelect",
           ref: `$customProperty${index}`,
           key: property.key,
           value: property.value,
         })}
-      </div>
-    `;
+      </div>`;
   }
 
   makeIndivisualPropertyEditor(property, index) {
@@ -430,8 +480,8 @@ export default class CSSPropertyEditor extends EditorElement {
                 ref: `$opacity${index}`,
                 key: property.key,
                 label: property.key,
-                min: 0,
-                max: 1000,
+                min: -20000,
+                max: 20000,
                 step: 1,
                 value: property.value || 1,
                 onchange: "changeRangeEditor",
@@ -552,11 +602,6 @@ export default class CSSPropertyEditor extends EditorElement {
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index)}
           </div>
-
-          <button type="button" 
-            class='refresh' 
-            data-index="${index}">${iconUse("refresh")}</button>
-    
           <button type="button" 
             class='remove' 
             data-index="${index}">${iconUse("remove2")}</button>

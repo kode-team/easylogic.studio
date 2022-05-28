@@ -259,6 +259,9 @@ function getProps(attributes) {
   return results;
 }
 function checkAllHTML(newEl, oldEl) {
+  if (newEl.nodeType == window.Node.TEXT_NODE || oldEl.nodeType === window.Node.TEXT_NODE) {
+    return false;
+  }
   return newEl.outerHTML == oldEl.outerHTML;
 }
 function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
@@ -9385,20 +9388,7 @@ class SelectEditor extends EditorElement {
     if (obj$2[label]) {
       label = iconUse(label);
     }
-    return `
-            <div class='elf--select-editor ${hasLabel} ${compact}'>
-                ${label ? `<label title="${title2}">${label}</label>` : ""}
-                <div class="editor-view">
-                    <select ref='$options' ${hasTabIndex}>
-                        ${this.getOptionString()}
-                    </select>
-                    <div class='selected-value'>
-                        <span class='value' ref="$selectedValue">${value}</span>
-                        <span class='expand' ref='$expand'>${iconUse("expand_more")}</span>
-                    </div>
-                </div>
-            </div>
-        `;
+    return `<div class='elf--select-editor ${hasLabel} ${compact}'>${label ? `<label title="${title2}">${label}</label>` : ""}<div class="editor-view"><select ref='$options' ${hasTabIndex}>${this.getOptionString()}</select><div class='selected-value'><span class='value' ref="$selectedValue">${value}</span><span class='expand' ref='$expand'>${iconUse("expand_more")}</span></div></div></div>`;
   }
   getValue() {
     return this.refs.$options.value;
@@ -11221,6 +11211,7 @@ class ColorViewEditor extends EditorElement {
     const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === "true";
     return {
       label: this.props.label,
+      title: this.props.title,
       value,
       compact,
       mini,
@@ -11274,10 +11265,10 @@ class ColorViewEditor extends EditorElement {
     this.bindData("$miniView2");
   }
   template() {
-    var { label } = this.state;
+    var { label, title: title2 } = this.state;
     return `
             <div class='elf--color-view-editor'>
-                ${label ? `<label>${label}</label>` : ""}            
+                ${label ? `<label data-tooltip="${title2}"><span>${label}</span></label>` : ""}            
                 <div class='color-code' ref="$container">
                     <div class='preview' ref='$preview'>
                         <div class='mini-view'>
@@ -11572,6 +11563,52 @@ class CSSPropertyEditor extends EditorElement {
         return 0;
     }
   }
+  getDefinedKey(key) {
+    switch (key) {
+      case "animation-timing-function":
+        return "animationTimingFunction";
+      case "box-shadow":
+        return "boxShadow";
+      case "text-shadow":
+        return "textShadow";
+      case "color":
+        return "color";
+      case "background-image":
+        return "backgroundImage";
+      case "background-color":
+        return "backgroundColor";
+      case "text-fill-color":
+        return "textFillColor";
+      case "text-stroke-color":
+        return "textStrokeColor";
+      case "filter":
+        return "filter";
+      case "backdrop-filter":
+        return "backdropFilter";
+      case "var":
+        return "var";
+      case "transform":
+        return "transform";
+      case "transform-origin":
+        return "transformOrigin";
+      case "perspective-origin":
+        return "perspectiveOrigin";
+      case "playTime":
+        return "playTime";
+      case "offset-distance":
+        return "offsetDistance";
+      case "rotate":
+        return "rotate";
+      case "mix-blend-mode":
+        return "mixBlendMode";
+      case "clip-path":
+        return "clipPath";
+      case "opacity":
+        return "opacity";
+      default:
+        return key;
+    }
+  }
   [CLICK("$addProperty")]() {
     var key = this.getRef("$propertySelect").value;
     var searchItem = this.state.properties.find((it) => {
@@ -11584,31 +11621,34 @@ class CSSPropertyEditor extends EditorElement {
     var value = this.getPropertyDefaultValue(key);
     var current = this.$context.selection.current;
     if (current) {
-      value = current[key];
+      value = current[this.getDefinedKey(key)];
     }
     this.state.properties.push({ key, value });
     this.refresh();
     this.modifyProperty();
   }
   makeIndivisualPropertyColorEditor(property, index2) {
-    var key = property.key.split("-").join("");
-    return `
-      <div class='property-editor'>
-        <object refClass="ColorViewEditor" ref='$${key}${index2}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
-      </div>
-    `;
+    var key = property.key;
+    return `<div class='property-editor'>
+    ${createComponent("ColorViewEditor", {
+      ref: `${key}${index2}`,
+      label: property.key,
+      title: property.key,
+      value: property.value,
+      key: property.key,
+      onChange: "changeColorProperty"
+    })}
+  </div>`;
   }
   makeCustomePropertyEditor(property, index2) {
-    return `
-      <div class='property-editor'>
+    return `<div class='property-editor'>
         ${createComponent(property.editor, {
       onchange: "changeSelect",
       ref: `$customProperty${index2}`,
       key: property.key,
       value: property.value
     })}
-      </div>
-    `;
+      </div>`;
   }
   makeIndivisualPropertyEditor(property, index2) {
     if (property.key === "background-image") {
@@ -11889,8 +11929,8 @@ class CSSPropertyEditor extends EditorElement {
           ref: `$opacity${index2}`,
           key: property.key,
           label: property.key,
-          min: 0,
-          max: 1e3,
+          min: -2e4,
+          max: 2e4,
           step: 1,
           value: property.value || 1,
           onchange: "changeRangeEditor"
@@ -12006,11 +12046,6 @@ class CSSPropertyEditor extends EditorElement {
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index2)}
           </div>
-
-          <button type="button" 
-            class='refresh' 
-            data-index="${index2}">${iconUse("refresh")}</button>
-    
           <button type="button" 
             class='remove' 
             data-index="${index2}">${iconUse("remove2")}</button>
@@ -12833,54 +12868,119 @@ class CubicBezierEditor extends EditorElement {
     const easeInCurvePoint = curveToPointLine("ease-in", 30, 30);
     const easeOutCurve = curveToPath("ease-out", 30, 30);
     const easeOutCurvePoint = curveToPointLine("ease-out", 30, 30);
-    return `
-            <div class='elf--cubic-bezier-editor'>
-                <div class='predefined'>
-                    <div class='left' ref='$left'>${obj$2.chevron_left}</div>
-                    <div class='predefined-text' ref='$text'></div>
-                    <div class='right' ref='$right'>${obj$2.chevron_right}</div>
-                </div>
-                <div class='animation' ref='$animationArea'>
-                    <canvas 
-                        class='animation-canvas' 
-                        ref='$animationCanvas' 
-                        title='Click and Replay point animation' 
-                        width='230px' 
-                        height='20px'
-                    ></canvas>
-                </div>
-                <div class='item-list' ref='$itemList' data-selected-value=''>
-                    <div class='item' data-bezier='ease' title='ease'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
-                        </svg>
-                    </div>
-                    <div class='item' data-bezier='ease-in' title='ease-in'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeInCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeInCurvePoint}" stroke="gray" stroke-width="1" fill='none' /> 
-                        </svg>
-                    </div>
-                    <div class='item' data-bezier='ease-out' title='ease-out'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeOutCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeOutCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
-                        </svg>
-                    </div>
-                </div>
-                <div class='bezier'>
-                    <svg class='bezier-canvas' width="150" height="150" viewBox="0 0 150 150" overflow="visible">
-                        <path d="${linearCurve}" stroke="black" stroke-width="1" fill='none' ref='$bezierCanvas' />
-                        <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
-                    </svg>                
-                    <div class='control' ref='$control'>
-                        <div class='pointer1' ref='$pointer1'></div>
-                        <div class='pointer2' ref='$pointer2'></div>
-                    </div>
-                </div>
-            </div>
-        `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--cubic-bezier-editor"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "predefined"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "left",
+      ref: "$left"
+    }, obj$2.chevron_left), /* @__PURE__ */ createElementJsx("div", {
+      class: "predefined-text",
+      ref: "$text"
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "right",
+      ref: "$right"
+    }, obj$2.chevron_right)), /* @__PURE__ */ createElementJsx("div", {
+      class: "animation",
+      ref: "$animationArea"
+    }, /* @__PURE__ */ createElementJsx("canvas", {
+      class: "animation-canvas",
+      ref: "$animationCanvas",
+      title: "Click and Replay point animation",
+      width: "230px",
+      height: "20px"
+    })), /* @__PURE__ */ createElementJsx("div", {
+      class: "item-list",
+      ref: "$itemList",
+      "data-selected-value": ""
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "item",
+      "data-bezier": "ease",
+      title: "ease"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "item-canvas",
+      width: "30",
+      height: "30",
+      viewBox: "0 0 30 30"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: easeCurve,
+      stroke: "white",
+      "stroke-width": "1",
+      fill: "none"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: easeCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none"
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "item",
+      "data-bezier": "ease-in",
+      title: "ease-in"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "item-canvas",
+      width: "30",
+      height: "30",
+      viewBox: "0 0 30 30"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: easeInCurve,
+      stroke: "white",
+      "stroke-width": "1",
+      fill: "none"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: easeInCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none"
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "item",
+      "data-bezier": "ease-out",
+      title: "ease-out"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "item-canvas",
+      width: "30",
+      height: "30",
+      viewBox: "0 0 30 30"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: easeOutCurve,
+      stroke: "white",
+      "stroke-width": "1",
+      fill: "none"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: easeOutCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none"
+    })))), /* @__PURE__ */ createElementJsx("div", {
+      class: "bezier"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "bezier-canvas",
+      width: "150",
+      height: "150",
+      viewBox: "0 0 150 150",
+      overflow: "visible"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: linearCurve,
+      stroke: "black",
+      "stroke-width": "1",
+      fill: "none",
+      ref: "$bezierCanvas"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: linearCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none",
+      ref: "$bezierCanvasPoint"
+    })), /* @__PURE__ */ createElementJsx("div", {
+      class: "control",
+      ref: "$control"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "pointer1",
+      ref: "$pointer1"
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "pointer2",
+      ref: "$pointer2"
+    }))));
   }
   [BIND("$animationArea")]() {
     return {
@@ -18955,8 +19055,7 @@ class InputRangeEditor extends EditorElement {
     var layoutClass = layout2;
     var realValue = (+value).toString();
     const units = this.state.units;
-    return `
-        <div 
+    return `<div 
             ref="$range",
             class="${classnames({
       "elf--input-range-editor": true,
@@ -18967,27 +19066,15 @@ class InputRangeEditor extends EditorElement {
       disabled,
       [layoutClass]: true
     })}"
-        >
-            ${label ? `<label title="${title2}">${label}</label>` : ""}
-            <div class='range--editor-type' data-type='range'>
-                <div class='area'>
-                    <input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
-                    
-                    ${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : createComponent("SelectEditor", {
+        >${label ? `<label title="${title2}">${label}</label>` : ""}<div class='range--editor-type' 
+        data-type='range'><div class='area'><input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : createComponent("SelectEditor", {
       ref: "$unit",
       key: "unit",
       compact: true,
       value: this.state.selectedUnit || this.state.value.unit,
       options: this.state.units,
       onchange: "changeUnit"
-    })}
-                    
-                    
-                </div>
-            </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${obj$2.remove}</button>
-        </div>
-    `;
+    })}</div></div><button type='button' class='remove' ref='$remove' title='Remove'>${obj$2.remove}</button></div>`;
   }
   getValue() {
     return this.state.value.clone();
@@ -28500,12 +28587,17 @@ class AnimationProperty extends BaseProperty {
     return this.$i18n("title");
   }
   getBody() {
-    return `<div class='elf--animation-list' ref='$animationList'></div>`;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--animation-list",
+      ref: "$animationList"
+    });
   }
   getTools() {
-    return `
-        <button type="button" ref="$add" title="add Fill">${iconUse("add")}</button>
-    `;
+    return /* @__PURE__ */ createElementJsx("button", {
+      type: "button",
+      ref: "$add",
+      title: "add Fill"
+    }, iconUse("add"));
   }
   isFirstShow() {
     return true;
@@ -28520,47 +28612,63 @@ class AnimationProperty extends BaseProperty {
     return current.animation.map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
-      return `
-      <div class='animation-group-item'>
-        <div class='animation-item ${selectedClass}' 
-             data-index='${index2}' 
-             ref="animationIndex${index2}" 
-          >
-            <div class='timing preview' data-index='${index2}' ref='$preview${index2}'>
-              <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                <path d="${path}" stroke="white" stroke-width="1" fill='none' />
-              </svg>
-            </div>
-            <div class='name'>
-              <div class='title' ref="animationName${index2}">
-                ${it.name ? it.name : `&lt; ${this.$i18n("select a keyframe")} &gt;`}
-              </div>
-              <div class='labels'>
-                <label class='count' title='${this.$i18n("iteration.count")}'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='${this.$i18n("delay")}'>
-                  <small>${it.delay}</small>
-                </label>
-                <label class='duration' title='${this.$i18n("duration")}'><small>${it.duration}</small></label>
-                <label class='direction' title='${this.$i18n("direction")}'><small>${it.direction}</small></label>
-                <label class='fill-mode' title='${this.$i18n("fill.mode")}'><small>${it.fillMode}</small></label>
-                <label 
-                  class='play-state' 
-                  title='${this.$i18n("play.state")}' 
-                  data-index='${index2}' 
-                  data-play-state-selected-value="${it.playState}">
-                  <small data-play-state-value='running'>${iconUse("play")}</small>
-                  <small data-play-state-value='paused'>${iconUse("pause")}</small>
-                </label>
-              </div>
-            </div>
-            <div class='tools'>
-                <button type="button" class="del" data-index="${index2}">
-                  ${iconUse("remove2")}
-                </button>
-            </div>
-        </div>
-      </div>        
-      `;
+      return /* @__PURE__ */ createElementJsx("div", {
+        class: "animation-group-item"
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: `animation-item ${selectedClass}`,
+        "data-index": index2,
+        ref: `animationIndex${index2}`
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: "timing preview",
+        "data-index": index2,
+        ref: `$preview${index2}`
+      }, /* @__PURE__ */ createElementJsx("svg", {
+        class: "item-canvas",
+        width: "30",
+        height: "30",
+        viewBox: "0 0 30 30"
+      }, /* @__PURE__ */ createElementJsx("path", {
+        d: path,
+        stroke: "white",
+        "stroke-width": "1",
+        fill: "none"
+      }))), /* @__PURE__ */ createElementJsx("div", {
+        class: "name"
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: "title"
+      }, it.name ? it.name : `&lt; ${this.$i18n("select a keyframe")} &gt;`), /* @__PURE__ */ createElementJsx("div", {
+        class: "labels"
+      }, /* @__PURE__ */ createElementJsx("label", {
+        class: "count",
+        title: this.$i18n("iteration.count")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.iterationCount)), /* @__PURE__ */ createElementJsx("label", {
+        class: "delay",
+        title: this.$i18n("delay")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.delay)), /* @__PURE__ */ createElementJsx("label", {
+        class: "duration",
+        title: this.$i18n("duration")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.duration)), /* @__PURE__ */ createElementJsx("label", {
+        class: "direction",
+        title: this.$i18n("direction")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.direction)), /* @__PURE__ */ createElementJsx("label", {
+        class: "fill-mode",
+        title: this.$i18n("fill.mode")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.fillMode)), /* @__PURE__ */ createElementJsx("label", {
+        class: "play-state",
+        title: this.$i18n("play.state"),
+        "data-index": index2,
+        "data-play-state-selected-value": it.playState
+      }, /* @__PURE__ */ createElementJsx("small", {
+        "data-play-state-value": "running"
+      }, iconUse("play")), /* @__PURE__ */ createElementJsx("small", {
+        "data-play-state-value": "paused"
+      }, iconUse("pause"))))), /* @__PURE__ */ createElementJsx("div", {
+        class: "tools"
+      }, /* @__PURE__ */ createElementJsx("button", {
+        type: "button",
+        class: "del",
+        "data-index": index2
+      }, iconUse("remove2")))));
     });
   }
   [SUBSCRIBE(REFRESH_SELECTION)]() {
@@ -28660,7 +28768,9 @@ class AnimationProperty extends BaseProperty {
         this.$commands.executeCommand("setAttribute", "change animation property", this.$context.selection.packByValue({
           animation: [...animation2]
         }));
-        this.refresh();
+        this.nextTick(() => {
+          this.refresh();
+        }, 10);
       }
     }
   }
@@ -28785,59 +28895,49 @@ class AnimationPropertyPopup extends BasePopup {
     }
   }
   getBody() {
-    return `<div class='elf--animation-property-popup' ref='$popup'></div>`;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--animation-property-popup",
+      ref: "$popup"
+    });
   }
-  [LOAD("$popup")]() {
-    return `
-      <div class="box">
-        ${this.templateForKeyframe()}
-        ${this.templateForTimingFunction()}
-        ${this.templateForIterationCount()}
-        ${this.templateForDelay()}
-        ${this.templateForDuration()}
-        ${this.templateForDirection()}
-        ${this.templateForFillMode()}
-        ${this.templateForPlayState()}
-      </div>
-    `;
+  [LOAD("$popup") + DOMDIFF]() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "box"
+    }, this.templateForKeyframe(), this.templateForTimingFunction(), this.templateForIterationCount(), this.templateForDelay(), this.templateForDuration(), this.templateForDirection(), this.templateForFillMode(), this.templateForPlayState());
   }
   templateForTimingFunction() {
-    return `
-    <div class='timing-function'>
-      <label>${this.$i18n("animation.property.popup.timing.function")}</label>
-      ${createComponent("CubicBezierEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "timing-function"
+    }, /* @__PURE__ */ createElementJsx("label", null, this.$i18n("animation.property.popup.timing.function")), createComponent("CubicBezierEditor", {
       ref: "$cubicBezierEditor",
       key: "timingFunction",
       value: this.state.data.timingFunction || "linear",
       onChange: "changeCubicBezier"
-    })}
-    </div>
-    `;
+    }));
   }
   templateForKeyframe() {
-    return `
-      <div class='name'>
-        <label>${this.$i18n("animation.property.popup.keyframe")}</label>
-        <div class='input grid-1'>
-          <select ref='$name'></select>
-        </div>
-      </div>
-    `;
-  }
-  [LOAD("$name") + DOMDIFF]() {
     var current = this.$context.selection.current;
     var names2 = [];
-    console.log(current.keyframes);
     if (current && current.keyframes) {
       names2 = current.keyframes.map((it) => {
         return { key: it.name, value: it.name };
       });
     }
-    return names2.map((it) => {
-      var selected = it.value === this.name ? "selected" : "";
+    names2.unshift({ key: "Select a keyframe", value: "" });
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "name"
+    }, /* @__PURE__ */ createElementJsx("label", null, this.$i18n("animation.property.popup.keyframe")), /* @__PURE__ */ createElementJsx("div", {
+      class: "input grid-1"
+    }, /* @__PURE__ */ createElementJsx("select", {
+      ref: "$name"
+    }, names2.map((it) => {
+      var selected = it.value === this.state.data.name ? true : void 0;
       var label = this.$i18n(it.key);
-      return `<option value='${it.value}' ${selected}>${label}</option>`;
-    });
+      return /* @__PURE__ */ createElementJsx("option", {
+        value: it.value,
+        selected
+      }, label);
+    }))));
   }
   [CHANGE("$name")]() {
     this.updateData({ name: this.refs.$name.value });
@@ -28846,94 +28946,82 @@ class AnimationPropertyPopup extends BasePopup {
     var options2 = "normal,reverse,alternate,alternate-reverse".split(",").map((it) => {
       return `${it}:${this.$i18n(it)}`;
     }).join(",");
-    return `
-      <div class='direction'>
-        ${createComponent("SelectEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "direction"
+    }, createComponent("SelectEditor", {
       label: this.$i18n("animation.property.popup.direction"),
       ref: "$direction",
       key: "direction",
       value: this.state.data.direction,
       options: options2,
       onChange: "changeSelect"
-    })}
-      </div>
-    `;
+    }));
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
     this.updateData({ [key]: value });
   }
   templateForPlayState() {
-    return `
-    <div class='play-state'>
-      ${createComponent("SelectEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "play-state"
+    }, createComponent("SelectEditor", {
       label: this.$i18n("animation.property.popup.play.state"),
       ref: "$playState",
       key: "playState",
       value: this.state.data.playState,
       options: ["paused", "running"],
       onChange: "changeSelect"
-    })}
-    </div>
-  `;
+    }));
   }
   templateForFillMode() {
     var options2 = "none,forwards,backwards,both".split(",").map((it) => {
       return `${it}:${this.$i18n(it)}`;
     }).join(",");
-    return `
-    <div class='fill-mode'>
-      ${createComponent("SelectEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "fill-mode"
+    }, createComponent("SelectEditor", {
       label: this.$i18n("animation.property.popup.fill.mode"),
       ref: "$fillMode",
       key: "fillMode",
       value: this.state.data.fillMode,
       options: options2,
       onChange: "changeSelect"
-    })}
-    </div>
-  `;
+    }));
   }
   templateForDelay() {
-    return `
-    <div class='delay'>
-      ${createComponent("InputRangeEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "delay"
+    }, createComponent("InputRangeEditor", {
       ref: "$delay",
       label: this.$i18n("animation.property.popup.delay"),
       key: "delay",
       value: this.state.data.delay,
       units: ["s", "ms"],
       onChange: "changeRangeEditor"
-    })} 
-    </div>
-    `;
+    }));
   }
   templateForDuration() {
-    return `
-    <div class='duration'>
-      ${createComponent("InputRangeEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "duration"
+    }, createComponent("InputRangeEditor", {
       ref: "$duration",
       label: this.$i18n("animation.property.popup.duration"),
       key: "duration",
       value: this.state.data.duration,
       units: ["s", "ms"],
       onChange: "changeRangeEditor"
-    })} 
-    </div>
-    `;
+    }));
   }
   templateForIterationCount() {
-    return `
-      <div class='iteration-count'>
-        ${createComponent("IterationCountEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "iteration-count"
+    }, createComponent("IterationCountEditor", {
       ref: "$iterationCount",
       label: this.$i18n("animation.property.popup.iteration"),
       key: "iterationCount",
       value: this.state.iterationCount || 0,
       units: ["normal", "infinite"],
       onChange: "changeRangeEditor"
-    })}
-      </div>
-    `;
+    }));
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
     if (key === "iterationCount") {
@@ -49210,9 +49298,7 @@ class FlexLayoutEditor extends EditorElement {
         `;
   }
   template() {
-    return `
-            <div class='flex-layout-editor' ref='$body' ></div>
-        `;
+    return `<div class='flex-layout-editor' ref='$body' ></div>`;
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
     this.setState({
@@ -50261,11 +50347,7 @@ class LayoutProperty extends BaseProperty {
   }
   [LOAD("$layoutProperty") + DOMDIFF]() {
     var current = this.$context.selection.current || { layout: "default" };
-    return `
-      <div class='layout-list' ref='$layoutList'>
-        <div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div>
-        <div data-value='flex' class='${current.layout === "flex" ? "selected" : ""}'>
-          ${createComponent("FlexLayoutEditor", {
+    return `<div class='layout-list' ref='$layoutList'><div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div><div data-value='flex' class='${current.layout === "flex" ? "selected" : ""}'>${createComponent("FlexLayoutEditor", {
       ref: "$flex",
       key: "flex-layout",
       value: {
@@ -50277,18 +50359,12 @@ class LayoutProperty extends BaseProperty {
         gap: current.gap
       },
       onchange: "changeLayoutInfo"
-    })}
-        </div>
-        <div data-value='grid' class='${current.layout === "grid" ? "selected" : ""}'>
-          ${createComponent("GridLayoutEditor", {
+    })}</div><div data-value='grid' class='${current.layout === "grid" ? "selected" : ""}'>${createComponent("GridLayoutEditor", {
       ref: "$grid",
       key: "grid-layout",
       value: current["grid-layout"] || "",
       onchange: "changeLayoutInfo"
-    })}
-        </div>
-      </div>
-    `;
+    })}</div></div>`;
   }
   [SUBSCRIBE_SELF("changeLayoutInfo")](key, value) {
     if (key === "padding") {
@@ -55787,6 +55863,25 @@ class DomRender extends ItemRender {
       transition: transition2
     };
   }
+  toAnimationCSS(item) {
+    const animation2 = item.computed("animation", (animation3 = []) => {
+      return animation3.map((t) => {
+        return [
+          t.duration,
+          t.timingFunction,
+          t.delay,
+          t.iterationCount,
+          t.direction,
+          t.fillMode,
+          t.playState,
+          t.name
+        ].join(" ");
+      }).join(", ") || void 0;
+    });
+    return {
+      animation: animation2
+    };
+  }
   toBorderCSS(item) {
     const borderCSS = item.computed("border", (border2) => {
       const obj2 = __spreadValues({}, STRING_TO_CSS(border2));
@@ -55901,8 +55996,6 @@ class DomRender extends ItemRender {
     result["mix-blend-mode"] = item.mixBlendMode;
     result["transform-origin"] = item.transformOrigin;
     result["border-radius"] = item.borderRadius;
-    result["filter"] = item.filter;
-    result["animation"] = item.animation;
     return result;
   }
   toVariableCSS(item) {
@@ -56078,7 +56171,7 @@ class DomRender extends ItemRender {
     return keyframes;
   }
   toCSS(item) {
-    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toTransitionCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
+    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toTransitionCSS(item), this.toAnimationCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
   }
   toStyleCode(item) {
     const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);

@@ -48,6 +48,14 @@
             vertical-align: middle;
             padding: 6px 4px 2px 2px;
             line-height: 1.6;
+
+            span {
+                width: 100%;
+                display: inline-block;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
         }
     }    
 
