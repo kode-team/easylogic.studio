@@ -262,9 +262,6 @@ function checkAllHTML(newEl, oldEl) {
   if (newEl.nodeType == window.Node.TEXT_NODE || oldEl.nodeType === window.Node.TEXT_NODE) {
     return false;
   }
-  if (!newEl.getAttribute("style") || !oldEl.getAttribute("style")) {
-    return false;
-  }
   return newEl.outerHTML == oldEl.outerHTML;
 }
 function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {

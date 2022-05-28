@@ -116,11 +116,6 @@ function checkAllHTML(newEl, oldEl) {
     return false;
   }
 
-  // style 속성이 있는지 체크
-  if (!newEl.getAttribute("style") || !oldEl.getAttribute("style")) {
-    return false;
-  }
-
   return newEl.outerHTML == oldEl.outerHTML;
 }
 
