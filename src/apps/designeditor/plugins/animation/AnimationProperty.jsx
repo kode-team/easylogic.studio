@@ -69,6 +69,19 @@ export default class AnimationProperty extends BaseProperty {
                 {it.name
                   ? it.name
                   : `&lt; ${this.$i18n("select a keyframe")} &gt;`}
+                <label
+                  class="play-state"
+                  title={this.$i18n("play.state")}
+                  data-index={index}
+                  data-play-state-selected-value={it.playState}
+                >
+                  <small data-play-state-value="running">
+                    {iconUse("play")}
+                  </small>
+                  <small data-play-state-value="paused">
+                    {iconUse("pause")}
+                  </small>
+                </label>
               </div>
               <div class="labels">
                 <label class="count" title={this.$i18n("iteration.count")}>
@@ -85,19 +98,6 @@ export default class AnimationProperty extends BaseProperty {
                 </label>
                 <label class="fill-mode" title={this.$i18n("fill.mode")}>
                   <small>{it.fillMode}</small>
-                </label>
-                <label
-                  class="play-state"
-                  title={this.$i18n("play.state")}
-                  data-index={index}
-                  data-play-state-selected-value={it.playState}
-                >
-                  <small data-play-state-value="running">
-                    {iconUse("play")}
-                  </small>
-                  <small data-play-state-value="paused">
-                    {iconUse("pause")}
-                  </small>
                 </label>
               </div>
             </div>

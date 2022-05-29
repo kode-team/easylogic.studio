@@ -8,11 +8,23 @@
     flex-direction: column;
 
     > *:first-child {
-        flex: 0 0 140px;
+        flex: none;
+        height: 140px;
     }
 
-    > *:last-child {
+    > *:last-child:not(:first-child) {
         margin-top: auto;
-        flex: 1 1 0;
+        flex: 1 1 auto;
+    }
+
+    > * {
+
+        > .elf--property {
+            margin: 0px !important; 
+
+            > .property-title {
+                margin-top: 0px !important;
+            }
+        }        
     }
 }

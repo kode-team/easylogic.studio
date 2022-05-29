@@ -60,10 +60,6 @@ function filterKeyName(str) {
     .trim();
 }
 
-function modifyNewLine(str) {
-  return str.replace(/;/gi, ";\n").trim();
-}
-
 export default class HTMLRenderer {
   #id;
   #renderers = {};
@@ -152,6 +148,10 @@ export default class HTMLRenderer {
     });
 
     return css;
+  }
+
+  toKeyframeCSS(item) {
+    return this.to("toKeyframeCSS", item);
   }
 
   /**
@@ -252,9 +252,6 @@ export default class HTMLRenderer {
     }
 
     const currentProject = item.project;
-    let keyframeCode = modifyNewLine(
-      filterKeyName(currentProject ? currentProject.toKeyframeString() : "")
-    );
     let rootVariable = currentProject
       ? CSS_TO_STRING(currentProject.toRootVariableCSS())
       : "";
@@ -265,6 +262,7 @@ export default class HTMLRenderer {
     const cssCode = filterKeyName(
       current ? TAG_TO_STRING(CSS_TO_STRING(this.toCSS(current))) : ""
     );
+    const keyframeCode = this.toKeyframeCSS(current);
     const nestedCssCode = current
       ? this.toNestedCSS(current).map((it) => {
           var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css);
@@ -273,7 +271,7 @@ export default class HTMLRenderer {
     }`;
         })
       : [];
-    const selectorCode = current ? current.selectors : [];
+    // const selectorCode = current ? current.selectors : [];
 
     return /*html*/ `
 <div >
@@ -285,21 +283,6 @@ ${nestedCssCode
     return /*html*/ `<div><pre title='CSS'>${it}</pre></div>`;
   })
   .join("")}
-
-${
-  (selectorCode || []).length
-    ? /*html*/ `<div>
-    ${selectorCode
-      .map((selector) => {
-        return `<pre title='${
-          selector.selector
-        }'>${selector.toPropertyString()}</pre>`;
-      })
-      .join("")}
-    
-    </div>`
-    : ""
-}
 
 ${
   keyframeCode &&
