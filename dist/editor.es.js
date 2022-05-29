@@ -28636,7 +28636,16 @@ class AnimationProperty extends BaseProperty {
         class: "name"
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "title"
-      }, it.name ? it.name : `&lt; ${this.$i18n("select a keyframe")} &gt;`), /* @__PURE__ */ createElementJsx("div", {
+      }, it.name ? it.name : `&lt; ${this.$i18n("select a keyframe")} &gt;`, /* @__PURE__ */ createElementJsx("label", {
+        class: "play-state",
+        title: this.$i18n("play.state"),
+        "data-index": index2,
+        "data-play-state-selected-value": it.playState
+      }, /* @__PURE__ */ createElementJsx("small", {
+        "data-play-state-value": "running"
+      }, iconUse("play")), /* @__PURE__ */ createElementJsx("small", {
+        "data-play-state-value": "paused"
+      }, iconUse("pause")))), /* @__PURE__ */ createElementJsx("div", {
         class: "labels"
       }, /* @__PURE__ */ createElementJsx("label", {
         class: "count",
@@ -28653,16 +28662,7 @@ class AnimationProperty extends BaseProperty {
       }, /* @__PURE__ */ createElementJsx("small", null, it.direction)), /* @__PURE__ */ createElementJsx("label", {
         class: "fill-mode",
         title: this.$i18n("fill.mode")
-      }, /* @__PURE__ */ createElementJsx("small", null, it.fillMode)), /* @__PURE__ */ createElementJsx("label", {
-        class: "play-state",
-        title: this.$i18n("play.state"),
-        "data-index": index2,
-        "data-play-state-selected-value": it.playState
-      }, /* @__PURE__ */ createElementJsx("small", {
-        "data-play-state-value": "running"
-      }, iconUse("play")), /* @__PURE__ */ createElementJsx("small", {
-        "data-play-state-value": "paused"
-      }, iconUse("pause"))))), /* @__PURE__ */ createElementJsx("div", {
+      }, /* @__PURE__ */ createElementJsx("small", null, it.fillMode)))), /* @__PURE__ */ createElementJsx("div", {
         class: "tools"
       }, /* @__PURE__ */ createElementJsx("button", {
         type: "button",
@@ -56149,26 +56149,29 @@ class DomRender extends ItemRender {
   toKeyframeCSS(item) {
     const keyframes = item.computed("keyframes", (keyframes2) => {
       const text2 = keyframes2.map((it) => {
-        return `
-          @keyframes ${it.name} {
-            ${it.offsets.map((offset) => {
+        return `@keyframes ${it.name} {
+${it.offsets.map((offset) => {
           var _a;
-          return `
-              ${offset.offset}% {
-                ${(_a = offset.properties) == null ? void 0 : _a.map((p) => {
+          return `${offset.offset}% {
+    ${(_a = offset.properties) == null ? void 0 : _a.map((p) => {
             const key = this.convertKey(p.key);
             const value = this.convertValue(key, p.value);
             return `${key}: ${value};`;
           }).join("\n")}
-              }
-              `;
+  }`;
         }).join("\n")}
-          }
-          `;
+}`;
       }).join("\n");
       return text2;
     });
     return keyframes;
+  }
+  toSelectorCSS(item, prefix = "") {
+    const selectors = item.computed("selectors", (selectors2) => {
+      console.log(selectors2);
+      return "";
+    });
+    return selectors;
   }
   toCSS(item) {
     return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toTransitionCSS(item), this.toAnimationCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
@@ -58111,8 +58114,11 @@ class SelectorProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    current.removeSelector(removeIndex);
-    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
+    const selectors = current.selectors || [];
+    selectors.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.packByValue({
+      selectors
+    }));
     this.refresh();
   }
   [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
@@ -58128,8 +58134,8 @@ class SelectorProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return "";
-    var selectors = current.selector ? Selector.parseStyle(current) : current.selectors;
-    return (selectors || []).map((selector2, index2) => {
+    var selectors = current.selectors || [];
+    return selectors.map((selector2, index2) => {
       return this.makeSelectorTemplate(selector2, index2);
     });
   }
@@ -58144,7 +58150,9 @@ class SelectorProperty extends BaseProperty {
     if (!current)
       return;
     current.sortSelector(this.startIndex, targetIndex);
-    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
+    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.packByValue({
+      selectors: [...current.selectors]
+    }));
     this.refresh();
   }
   [CLICK("$add")]() {
@@ -58153,7 +58161,9 @@ class SelectorProperty extends BaseProperty {
       current.createSelector({
         selector: this.children.$select.getValue()
       });
-      this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
+      this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.packByValue({
+        selectors: [...current.selectors]
+      }));
     }
     this.refresh();
   }
@@ -58199,12 +58209,13 @@ class SelectorProperty extends BaseProperty {
     this.current = this.$context.selection.current;
     if (!this.current)
       return;
-    this.currentselector = this.current.selectors[this.selectedIndex];
-    if (this.currentSelector) {
-      this.currentSelector.reset(data);
-    }
-    this.refresh();
-    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack("selectors"));
+    this.current.selectors[this.selectedIndex] = data;
+    this.$commands.executeCommand("setAttribute", "change selectors", this.$context.selection.pack({
+      selectors: [...this.current.selectors]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
 }
 function selector(editor) {
@@ -62372,9 +62383,6 @@ function filterKeyName(str) {
     return `<div class="block"><strong>${key}</strong><span>:&nbsp;</span><span class="value">${replaceKeyword(value)}</span><span>;</span></div>`;
   }).join("").trim();
 }
-function modifyNewLine(str) {
-  return str.replace(/;/gi, ";\n").trim();
-}
 class HTMLRenderer {
   constructor(editor) {
     __privateAdd(this, _id, void 0);
@@ -62429,6 +62437,9 @@ class HTMLRenderer {
     });
     return css;
   }
+  toKeyframeCSS(item) {
+    return this.to("toKeyframeCSS", item);
+  }
   toNestedCSS(item) {
     return this.to("toNestedCSS", item);
   }
@@ -62477,17 +62488,16 @@ class HTMLRenderer {
       return "";
     }
     const currentProject = item.project;
-    let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ""));
     let rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : "";
     const current = item;
     const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING(this.toCSS(current))) : "");
+    const keyframeCode = this.toKeyframeCSS(current);
     const nestedCssCode = current ? this.toNestedCSS(current).map((it) => {
       var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css);
       return `${it.selector} { 
     ${filterKeyName(TAG_TO_STRING(cssText))}
     }`;
     }) : [];
-    const selectorCode = current ? current.selectors : [];
     return `
 <div >
 
@@ -62496,13 +62506,6 @@ ${cssCode && `<div><pre title='CSS'>${cssCode}</pre></div>`}
 ${nestedCssCode.map((it) => {
       return `<div><pre title='CSS'>${it}</pre></div>`;
     }).join("")}
-
-${(selectorCode || []).length ? `<div>
-    ${selectorCode.map((selector2) => {
-      return `<pre title='${selector2.selector}'>${selector2.toPropertyString()}</pre>`;
-    }).join("")}
-    
-    </div>` : ""}
 
 ${keyframeCode && `<div><pre title='Keyframe'>${keyframeCode}</pre></div>`}
 

@@ -836,31 +836,35 @@ export default class DomRender extends ItemRender {
     const keyframes = item.computed("keyframes", (keyframes) => {
       const text = keyframes
         .map((it) => {
-          return `
-          @keyframes ${it.name} {
-            ${it.offsets
-              .map((offset) => {
-                return `
-              ${offset.offset}% {
-                ${offset.properties
-                  ?.map((p) => {
-                    const key = this.convertKey(p.key);
-                    const value = this.convertValue(key, p.value);
+          return `@keyframes ${it.name} {
+${it.offsets
+  .map((offset) => {
+    return `${offset.offset}% {
+    ${offset.properties
+      ?.map((p) => {
+        const key = this.convertKey(p.key);
+        const value = this.convertValue(key, p.value);
 
-                    return `${key}: ${value};`;
-                  })
-                  .join("\n")}
-              }
-              `;
-              })
-              .join("\n")}
-          }
-          `;
+        return `${key}: ${value};`;
+      })
+      .join("\n")}
+  }`;
+  })
+  .join("\n")}
+}`;
         })
         .join("\n");
       return text;
     });
     return keyframes;
+  }
+
+  toSelectorCSS(item) {
+    const selectors = item.computed("selectors", (selectors) => {
+      console.log(selectors);
+      return "";
+    });
+    return selectors;
   }
 
   /**

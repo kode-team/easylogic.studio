@@ -14,7 +14,7 @@ import {
 import "./SelectorProperty.scss";
 
 import icon from "elf/editor/icon/icon";
-import { Selector } from "elf/editor/property-parser/Selector";
+// import { Selector } from "elf/editor/property-parser/Selector";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
@@ -39,7 +39,7 @@ export default class SelectorProperty extends BaseProperty {
     return this.$i18n("selector.property.title");
   }
   getBody() {
-    return `<div class='elf--selector-list' ref='$selectorList'></div>`;
+    return /*html*/ `<div class='elf--selector-list' ref='$selectorList'></div>`;
   }
 
   getTools() {
@@ -91,12 +91,16 @@ export default class SelectorProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current) return;
 
-    current.removeSelector(removeIndex);
+    const selectors = current.selectors || [];
+
+    selectors.splice(removeIndex, 1);
 
     this.$commands.executeCommand(
       "setAttribute",
       "change selectors",
-      this.$context.selection.pack("selectors")
+      this.$context.selection.packByValue({
+        selectors,
+      })
     );
 
     this.refresh();
@@ -117,14 +121,9 @@ export default class SelectorProperty extends BaseProperty {
 
     if (!current) return "";
 
-    var selectors = current.selector
-      ? Selector.parseStyle(current)
-      : current.selectors;
+    var selectors = current.selectors || [];
 
-    // current.selector = "";
-    // current.selectors = selectors;
-
-    return (selectors || []).map((selector, index) => {
+    return selectors.map((selector, index) => {
       return this.makeSelectorTemplate(selector, index);
     });
   }
@@ -149,7 +148,9 @@ export default class SelectorProperty extends BaseProperty {
     this.$commands.executeCommand(
       "setAttribute",
       "change selectors",
-      this.$context.selection.pack("selectors")
+      this.$context.selection.packByValue({
+        selectors: [...current.selectors],
+      })
     );
 
     this.refresh();
@@ -165,7 +166,9 @@ export default class SelectorProperty extends BaseProperty {
       this.$commands.executeCommand(
         "setAttribute",
         "change selectors",
-        this.$context.selection.pack("selectors")
+        this.$context.selection.packByValue({
+          selectors: [...current.selectors],
+        })
       );
     }
 
@@ -225,17 +228,19 @@ export default class SelectorProperty extends BaseProperty {
     this.current = this.$context.selection.current;
 
     if (!this.current) return;
-    this.currentselector = this.current.selectors[this.selectedIndex];
 
-    if (this.currentSelector) {
-      this.currentSelector.reset(data);
-    }
+    this.current.selectors[this.selectedIndex] = data;
 
-    this.refresh();
     this.$commands.executeCommand(
       "setAttribute",
       "change selectors",
-      this.$context.selection.pack("selectors")
+      this.$context.selection.pack({
+        selectors: [...this.current.selectors],
+      })
     );
+
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
 }

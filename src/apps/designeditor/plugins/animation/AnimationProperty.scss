@@ -18,6 +18,34 @@
       padding: 2px 0px;
       text-align: left;
       vertical-align: middle;
+
+      .play-state {
+        background-color: transparent;
+        cursor: pointer;
+        [data-play-state-value] {
+          vertical-align: middle;
+          display: none; 
+          color: var(--elf--font-color); 
+
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        [data-play-state-value=pause] {
+          color: red; 
+        }
+
+        @each $play-state in paused, running {
+          &[data-play-state-selected-value="#{$play-state}"] {
+            [data-play-state-value="#{$play-state}"] {
+              display: inline-block;
+            }
+          }
+        }
+
+      }
     }
 
     .timing {
@@ -52,33 +80,7 @@
           text-transform: lowercase;
         }      
 
-        &.play-state {
-          background-color: transparent;
-          cursor: pointer;
-          [data-play-state-value] {
-            vertical-align: middle;
-            display: none; 
-            color: var(--elf--font-color); 
 
-            svg {
-              width: 16px;
-              height: 16px;
-            }
-          }
-
-          [data-play-state-value=pause] {
-            color: red; 
-          }
-
-          @each $play-state in paused, running {
-            &[data-play-state-selected-value="#{$play-state}"] {
-              [data-play-state-value="#{$play-state}"] {
-                display: inline-block;
-              }
-            }
-          }
-
-        }
       }
     }
 
