@@ -14,7 +14,7 @@ import {
 import "./SelectorProperty.scss";
 
 import icon from "elf/editor/icon/icon";
-import { Selector } from "elf/editor/property-parser/Selector";
+// import { Selector } from "elf/editor/property-parser/Selector";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 

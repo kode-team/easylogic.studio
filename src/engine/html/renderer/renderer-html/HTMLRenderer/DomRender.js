@@ -859,7 +859,7 @@ ${it.offsets
     return keyframes;
   }
 
-  toSelectorCSS(item, prefix = "") {
+  toSelectorCSS(item) {
     const selectors = item.computed("selectors", (selectors) => {
       console.log(selectors);
       return "";
