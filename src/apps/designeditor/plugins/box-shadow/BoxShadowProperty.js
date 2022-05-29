@@ -1,4 +1,12 @@
-import { CLICK, DEBOUNCE, IF, LOAD, SUBSCRIBE, createComponent } from "sapa";
+import {
+  clone,
+  CLICK,
+  DEBOUNCE,
+  IF,
+  LOAD,
+  SUBSCRIBE,
+  createComponent,
+} from "sapa";
 
 import boxShadow from "../../preset/box-shadow";
 import "./BoxShadowProperty.scss";
@@ -35,7 +43,7 @@ export default class BoxShadowProperty extends BaseProperty {
 
   [CLICK("$add")]() {
     const index = +this.refs.$select.value;
-    this.children.$boxshadow.trigger("add", boxShadow[index].shadow);
+    this.children.$boxshadow.trigger("add", boxShadow[index].shadows);
   }
 
   [LOAD("$shadowList")]() {
@@ -43,13 +51,13 @@ export default class BoxShadowProperty extends BaseProperty {
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
       key: "boxShadow",
-      value: current.boxShadow,
+      value: clone(current.boxShadow),
       onchange: (key, value) => {
         this.$commands.executeCommand(
           "setAttribute",
           "change box shadow",
           this.$context.selection.packByValue({
-            [key]: value,
+            [key]: clone(value),
           })
         );
       },

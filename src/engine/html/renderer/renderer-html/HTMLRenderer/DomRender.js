@@ -262,6 +262,149 @@ export default class DomRender extends ItemRender {
     };
   }
 
+  toBoxShadowCSS(item) {
+    const boxShadow = item.computed("boxShadow", (boxShadow = []) => {
+      return (
+        boxShadow
+          .map((shadow) => {
+            const { inset, color, offsetX, offsetY, blurRadius, spreadRadius } =
+              shadow;
+
+            return ` ${inset === "inset" ? "inset" : ""} ${Length.px(
+              offsetX
+            )} ${Length.px(offsetY)} ${Length.px(blurRadius)} ${Length.px(
+              spreadRadius
+            )} ${color}`;
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      "box-shadow": boxShadow,
+    };
+  }
+
+  toTextShadowCSS(item) {
+    const textShadow = item.computed("textShadow", (textShadow = []) => {
+      return (
+        textShadow
+          .map((shadow) => {
+            const { color, offsetX, offsetY, blurRadius } = shadow;
+
+            return ` ${Length.px(offsetX)} ${Length.px(offsetY)} ${Length.px(
+              blurRadius
+            )}  ${color}`;
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      "text-shadow": textShadow,
+    };
+  }
+
+  toFilterCSS(item) {
+    const filter = item.computed("filter", (filter = []) => {
+      return (
+        filter
+          .map((f) => {
+            switch (f.type) {
+              case "blur":
+              case "grayscale":
+              case "sepia":
+              case "invert":
+              case "opacity":
+              case "saturate":
+              case "hue-rotate":
+              case "brightness":
+              case "contrast":
+                return `${f.type}(${f.value})`;
+              case "drop-shadow":
+                return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+            }
+          })
+          .join(" ") || undefined
+      );
+    });
+
+    return {
+      filter,
+    };
+  }
+
+  toBackdropFilterCSS(item) {
+    const backdropFilter = item.computed("backdropFilter", (filter = []) => {
+      filter = filter || [];
+      return (
+        filter
+          .map((f) => {
+            switch (f.type) {
+              case "blur":
+              case "grayscale":
+              case "sepia":
+              case "invert":
+              case "opacity":
+              case "saturate":
+              case "hue-rotate":
+              case "brightness":
+              case "contrast":
+                return `${f.type}(${f.value})`;
+              case "drop-shadow":
+                return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+            }
+          })
+          .join(" ") || undefined
+      );
+    });
+
+    return {
+      "backdrop-filter": backdropFilter,
+    };
+  }
+
+  toTransitionCSS(item) {
+    const transition = item.computed("transition", (transition = []) => {
+      return (
+        transition
+          .map((t) => {
+            return `${t.name} ${t.duration} ${t.timingFunction} ${t.delay}`;
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      transition: transition,
+    };
+  }
+
+  toAnimationCSS(item) {
+    const animation = item.computed("animation", (animation = []) => {
+      return (
+        animation
+          .map((t) => {
+            return [
+              t.duration,
+              t.timingFunction,
+              t.delay,
+              t.iterationCount,
+              t.direction,
+              t.fillMode,
+              t.playState,
+              t.name,
+            ].join(" ");
+          })
+          .join(", ") || undefined
+      );
+    });
+
+    return {
+      animation,
+    };
+  }
+
   /**
    * border 정보 캐슁하기
    *
@@ -409,7 +552,7 @@ export default class DomRender extends ItemRender {
     result["word-spacing"] = item.wordSpacing;
     result["line-height"] = item.lineHeight;
     result["text-indent"] = item.textIndent;
-    result["text-shadow"] = item.textShadow;
+    // result["text-shadow"] = item.textShadow;
     result["text-overflow"] = item.textOverflow;
     result["text-wrap"] = item.textWrap;
     result["position"] = item.position;
@@ -419,11 +562,11 @@ export default class DomRender extends ItemRender {
     result["mix-blend-mode"] = item.mixBlendMode;
     result["transform-origin"] = item.transformOrigin;
     result["border-radius"] = item.borderRadius;
-    result["filter"] = item.filter;
-    result["backdrop-filter"] = item.backdropFilter;
-    result["box-shadow"] = item.boxShadow;
-    result["animation"] = item.animation;
-    result["transition"] = item.transition;
+    // result["filter"] = item.filter;
+    // result["backdrop-filter"] = item.backdropFilter;
+    // result["box-shadow"] = item.boxShadow;
+    // result["animation"] = item.animation;
+    // result["transition"] = item.transition;
 
     return result;
   }
@@ -650,6 +793,7 @@ export default class DomRender extends ItemRender {
     //2. 원본이 하나의 객체가 아니라 복합 객체일때 중첩 CSS 를 자체 정의해서 생성
     //3. 이외에 selector 로 생성할 수 있는 css 를 생성 (:hover, :active 등등 )
     var cssString = `
+      ${this.toKeyframeCSS(item)}
   ${prefix} {  /* ${item.itemType} */
       ${CSS_TO_STRING(this.toCSS(item), "\n    ")}; 
       ${appendCSS}
@@ -664,6 +808,59 @@ export default class DomRender extends ItemRender {
   ${this.toSelectorString(item, prefix)}
     `;
     return cssString;
+  }
+
+  convertKey(key) {
+    switch (key) {
+      case "x":
+        return "left";
+      case "y":
+        return "top";
+    }
+
+    return key;
+  }
+
+  convertValue(key, value) {
+    switch (key) {
+      case "left":
+        return Length.px(value);
+      case "top":
+        return Length.px(value);
+    }
+
+    return key;
+  }
+
+  toKeyframeCSS(item) {
+    const keyframes = item.computed("keyframes", (keyframes) => {
+      const text = keyframes
+        .map((it) => {
+          return `
+          @keyframes ${it.name} {
+            ${it.offsets
+              .map((offset) => {
+                return `
+              ${offset.offset}% {
+                ${offset.properties
+                  ?.map((p) => {
+                    const key = this.convertKey(p.key);
+                    const value = this.convertValue(key, p.value);
+
+                    return `${key}: ${value};`;
+                  })
+                  .join("\n")}
+              }
+              `;
+              })
+              .join("\n")}
+          }
+          `;
+        })
+        .join("\n");
+      return text;
+    });
+    return keyframes;
   }
 
   /**
@@ -683,6 +880,12 @@ export default class DomRender extends ItemRender {
         this.toBoxModelCSS(item),
         this.toBorderCSS(item),
         this.toBackgroundImageCSS(item),
+        this.toBoxShadowCSS(item),
+        this.toTextShadowCSS(item),
+        this.toFilterCSS(item),
+        this.toBackdropFilterCSS(item),
+        this.toTransitionCSS(item),
+        this.toAnimationCSS(item),
         this.toLayoutCSS(item),
         this.toSizeCSS(item),
         this.toTransformCSS(item),

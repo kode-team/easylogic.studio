@@ -69,6 +69,10 @@ export class DomModel extends GroupModel {
       pattern: "",
       selectors: [],
       svg: [],
+      filter: [],
+      backdropFilter: [],
+      transition: [],
+      animation: [],
       gridColumnStart: "",
       gridColumnEnd: "",
       gridRowStart: "",
@@ -584,58 +588,6 @@ export class DomModel extends GroupModel {
       paddingLeft: value,
     });
   }
-
-  // toCloneObject() {
-  //   return {
-  //     ...super.toCloneObject(),
-  //     ...this.attrs(
-  //       "rootVariable",
-  //       "variable",
-  //       "filter",
-  //       "backdropFilter",
-  //       "backgroundColor",
-  //       "backgroundImage",
-  //       "textClip",
-  //       "borderRadius",
-  //       "border",
-  //       "borderTop",
-  //       "borderLeft",
-  //       "borderRight",
-  //       "borderBottom",
-  //       "boxShadow",
-  //       "textShadow",
-  //       "clipPath",
-  //       "color",
-  //       "fontSize",
-  //       "lineHeight",
-  //       "textAlign",
-  //       "textTransform",
-  //       "textDecoration",
-  //       "letterSpacing",
-  //       "wordSpacing",
-  //       "textIndent",
-  //       "transformStyle",
-  //       "mixBlendMode",
-  //       "overflow",
-  //       "opacity",
-  //       "animation",
-  //       "transition",
-  //       "marginTop",
-  //       "marginLeft",
-  //       "marginRight",
-  //       "marginBottom",
-  //       "paddingTop",
-  //       "paddingRight",
-  //       "paddingLeft",
-  //       "paddingBottom"
-  //     ),
-
-  //     // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% backgroundImage backgroundImage:linear-gradient(to right, black, yellow 100%)',
-  //     // keyframes: json.keyframes.map(keyframe => keyframe.clone()),
-  //     selectors: this.selectors.map((selector) => selector.clone()),
-  //     svg: this.svg.map((svg) => svg.clone()),
-  //   };
-  // }
 
   editable(editablePropertyName) {
     switch (editablePropertyName) {

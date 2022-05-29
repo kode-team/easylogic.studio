@@ -9,22 +9,10 @@
       > .title {
         display: none; 
       }
-
-      .css-property-item {
-        > .title {
-          label {
-            display: none; 
-          }
-        }
-      }
     }
 
     &.hide-refresh {
-      .css-property-item {
-        .title-2 {
-          display: none; 
-        } 
-      }
+
     }
 
     .title {
@@ -47,26 +35,17 @@
     }    
 
     .css-property-item {
-      
-      border: 1px solid var(--elf--selected-color-2); 
-      border-radius: 4px;
-      margin-top: 5px;
+      display: grid;
+      grid-template-columns: 1fr 20px;
+      grid-column-gap: 4px;
+      margin-bottom: 5px;
       box-sizing: border-box;
-      padding: 2px;
+      margin-top: 5px;
 
-      > .title {
-        grid-template-columns: 1fr 30px;
-        background-color: transparent;
-        color: var(--elf--selected-color);         
-        border-radius: 3px;
-        padding: 3px 0px; 
-        margin-bottom: 2px;
-        font-weight: 900;
-      }
-
-      .value-editor {
-        // border: 1px solid rgba(0, 0, 0, 0.3);
-        padding:2px;
+      > button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }    
 

@@ -250,6 +250,10 @@ export class EventMachine {
     return this.#propsKeys;
   }
 
+  get ref() {
+    return this.props.ref;
+  }
+
   /**
    * render 를 할 수 있는지 체크한다.
    *
@@ -849,6 +853,51 @@ export class EventMachine {
     return this.props.contentChildren.filter(
       (it) => it.component === BaseComponent
     );
+  }
+
+  /**
+   * unique ref 를 통해서 자식 컴포넌트를 찾는다.
+   *
+   * @param {string} ref
+   * @returns
+   */
+  findChildByRef(ref) {
+    const result = [];
+
+    Object.keys(this.children).forEach((key) => {
+      const child = this.children[key];
+
+      if (child.ref === ref) {
+        result.push(child);
+      }
+
+      if (Object.keys(child.children).length) {
+        result.push(...child.findChildByRef(ref));
+      }
+    });
+
+    return result;
+  }
+
+  findRef(callback) {
+    const result = [];
+
+    Object.keys(this.children).forEach((key) => {
+      const child = this.children[key];
+      if (callback(child)) {
+        result.push(child);
+      }
+
+      if (result.length) return result;
+
+      if (child.children) {
+        result.push(...child.findNestedChildren(callback));
+      }
+
+      if (result.length) return result;
+    });
+
+    return result;
   }
 
   /**

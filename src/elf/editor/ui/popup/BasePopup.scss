@@ -7,6 +7,7 @@
     border-radius: 2px;
     box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.5);
     color: var(--elf--font-color);
+    // padding: 8px;
   
     &.compact {
       .popup-body {
@@ -18,14 +19,13 @@
     .popup-title {
       font-size: 12px;
       font-weight: bold;
-      padding: 8px ;
+      padding: 8px 8px 8px 8px;
       display: flex;
       pointer-events: all;
       height: 32px;
-      margin-top: 8px;
-      margin-right: 8px;
-      margin-left: 8px;
-      // border-bottom: 1px solid var(--elf--border-color);
+
+      // margin-top: 8px;  
+      border-bottom: 1px solid var(--elf--property-border-color);
   
       > * {
         flex: 1 1 auto;
@@ -35,7 +35,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;        
-        padding-right: 10px;
+        // padding-right: 10px;
 
         button {
           border:0px;
@@ -57,7 +57,7 @@
     }
   
     .popup-body {
-      padding: 8px 12px;    
+      padding: 8px 8px;    
             
       .popup-item {
         margin-bottom: 5px;

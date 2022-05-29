@@ -6,8 +6,7 @@
     display: grid;
     grid-template-columns: 30px 1fr 20px ; 
     grid-column-gap: 4px;
-    
-    padding: 5px 0px;
+    margin-bottom: 5px;
 
     &.selected {
       background-color: var(--elf--border-color);

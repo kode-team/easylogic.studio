@@ -1,10 +1,9 @@
-import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "sapa";
+import { clone, LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "sapa";
 
 import "./TransitionProperty.scss";
 
 import { curveToPath } from "elf/core/func";
 import { iconUse } from "elf/editor/icon/icon";
-import { Transition } from "elf/editor/property-parser/Transition";
 import { REFRESH_SELECTION } from "elf/editor/types/event";
 import { BaseProperty } from "elf/editor/ui/property/BaseProperty";
 
@@ -34,9 +33,10 @@ export default class TransitionProperty extends BaseProperty {
 
     if (!current) return "";
 
-    return Transition.parseStyle(current.transition).map((it, index) => {
+    return current.transition.map((it, index) => {
       const selectedClass =
         this.state.selectedIndex === index ? "selected" : "";
+
       const path = curveToPath(it.timingFunction, 30, 30);
 
       return /*html*/ `
@@ -70,33 +70,39 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [SUBSCRIBE(REFRESH_SELECTION)]() {
-    this.refreshShowIsNot([]);
+    this.refresh();
   }
 
   [CLICK("$add")]() {
     var current = this.$context.selection.current;
 
     if (current) {
+      const transition = current.transition || [];
+
+      transition.push({
+        name: "all",
+        duration: "1s",
+        timingFunction: "linear",
+        delay: "0s",
+      });
       this.$commands.executeCommand(
         "setAttribute",
         "add transition",
         this.$context.selection.packByValue({
-          transition: (item) => Transition.add(item.transition),
+          transition: [...transition],
         })
       );
 
       this.nextTick(() => {
-        window.setTimeout(() => {
-          this.refresh();
-        }, 100);
-      });
+        this.refresh();
+      }, 10);
     } else {
       window.alert("Select a layer");
     }
   }
 
   getCurrentTransition() {
-    return this.current.transitions[this.selectedIndex];
+    return this.current.transition[this.selectedIndex];
   }
 
   [CLICK("$transitionList .tools .del")](e) {
@@ -104,13 +110,19 @@ export default class TransitionProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current) return;
 
-    current.reset({
-      transition: Transition.remove(current.transition, removeIndex),
-    });
+    current.transition.splice(removeIndex, 1);
 
-    this.emit("refreshElement", current);
+    this.$commands.executeCommand(
+      "setAttribute",
+      "add transition",
+      this.$context.selection.packByValue({
+        transition: [...current.transition],
+      })
+    );
 
-    this.refresh();
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
 
   // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
@@ -132,10 +144,7 @@ export default class TransitionProperty extends BaseProperty {
     this.current = this.$context.selection.current;
 
     if (!this.current) return;
-    this.currentTransition = Transition.get(
-      this.current.transition,
-      this.selectedIndex
-    );
+    this.currentTransition = this.current.transition[this.selectedIndex];
 
     this.viewTransitionPropertyPopup();
   }
@@ -146,7 +155,7 @@ export default class TransitionProperty extends BaseProperty {
     const transition = this.currentTransition;
     this.emit("showTransitionPropertyPopup", {
       changeEvent: "changeTransitionPropertyPopup",
-      data: transition.toCloneObject(),
+      data: clone(transition),
       instance: this,
     });
   }
@@ -155,25 +164,23 @@ export default class TransitionProperty extends BaseProperty {
     this.viewTransitionPicker(e.$dt);
   }
 
-  getRef(...args) {
-    return this.refs[args.join("")];
-  }
-
   [SUBSCRIBE("changeTransitionPropertyPopup")](data) {
     if (this.currentTransition) {
-      this.currentTransition.reset({ ...data });
-
       if (this.current) {
-        this.current.reset({
-          transition: Transition.replace(
-            this.current.transition,
-            this.selectedIndex,
-            this.currentTransition
-          ),
-        });
+        const transition = this.current.transition;
+        transition[this.selectedIndex] = data;
 
-        this.emit("refreshElement", this.current);
-        this.refresh();
+        this.$commands.executeCommand(
+          "setAttribute",
+          "add transition",
+          this.$context.selection.packByValue({
+            transition: [...transition],
+          })
+        );
+
+        this.nextTick(() => {
+          this.refresh();
+        }, 10);
       }
     }
   }

@@ -5,11 +5,12 @@ import {
   SUBSCRIBE_SELF,
   variable,
   createComponent,
+  DOMDIFF,
 } from "sapa";
 
 import "./CSSPropertyEditor.scss";
 
-import icon from "elf/editor/icon/icon";
+import icon, { iconUse } from "elf/editor/icon/icon";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
 
@@ -82,6 +83,53 @@ export default class CSSPropertyEditor extends EditorElement {
     }
   }
 
+  getDefinedKey(key) {
+    switch (key) {
+      case "animation-timing-function":
+        return "animationTimingFunction";
+      case "box-shadow":
+        return "boxShadow";
+      case "text-shadow":
+        return "textShadow";
+      case "color":
+        return "color";
+      case "background-image":
+        return "backgroundImage";
+      case "background-color":
+        return "backgroundColor";
+      case "text-fill-color":
+        return "textFillColor";
+      case "text-stroke-color":
+        return "textStrokeColor";
+      case "filter":
+        return "filter";
+      case "backdrop-filter":
+        return "backdropFilter";
+      case "var":
+        return "var";
+      case "transform":
+        return "transform";
+      case "transform-origin":
+        return "transformOrigin";
+      case "perspective-origin":
+        return "perspectiveOrigin";
+      case "playTime":
+        return "playTime";
+      case "offset-distance":
+        return "offsetDistance";
+      case "rotate":
+        return "rotate";
+      case "mix-blend-mode":
+        return "mixBlendMode";
+      case "clip-path":
+        return "clipPath";
+      case "opacity":
+        return "opacity";
+      default:
+        return key;
+    }
+  }
+
   [CLICK("$addProperty")]() {
     var key = this.getRef("$propertySelect").value;
 
@@ -99,7 +147,7 @@ export default class CSSPropertyEditor extends EditorElement {
     var current = this.$context.selection.current;
 
     if (current) {
-      value = current[key];
+      value = current[this.getDefinedKey(key)];
     }
 
     this.state.properties.push({ key, value });
@@ -109,25 +157,28 @@ export default class CSSPropertyEditor extends EditorElement {
   }
 
   makeIndivisualPropertyColorEditor(property, index) {
-    var key = property.key.split("-").join("");
-    return /*html*/ `
-      <div class='property-editor'>
-        <object refClass="ColorViewEditor" ref='$${key}${index}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
-      </div>
-    `;
+    var key = property.key;
+    return /*html*/ `<div class='property-editor'>
+    ${createComponent("ColorViewEditor", {
+      ref: `${key}${index}`,
+      label: property.key,
+      title: property.key,
+      value: property.value,
+      key: property.key,
+      onChange: "changeColorProperty",
+    })}
+  </div>`;
   }
 
   makeCustomePropertyEditor(property, index) {
-    return /*html*/ `
-      <div class='property-editor'>
+    return /*html*/ `<div class='property-editor'>
         ${createComponent(property.editor, {
           onchange: "changeSelect",
           ref: `$customProperty${index}`,
           key: property.key,
           value: property.value,
         })}
-      </div>
-    `;
+      </div>`;
   }
 
   makeIndivisualPropertyEditor(property, index) {
@@ -406,32 +457,52 @@ export default class CSSPropertyEditor extends EditorElement {
 
         return /*html*/ `
           <div class='property-editor'>
-            <object refClass="NumberRangeEditor"  
-              ref='$opacity${index}' 
-              key='${property.key}' 
-              min="${min}"
-              max="${max}"
-              step="${step}"
-              value="${property.value || 1}"
-              selected-unit='number'
-              removable="true"
-              onchange="changeRangeEditor" />
+            ${createComponent("NumberInputEditor", {
+              ref: `$opacity${index}`,
+              key: property.key,
+              label: property.key,
+              min,
+              max,
+              step,
+              value: property.value || 1,
+              onchange: "changeRangeEditor",
+            })}
+              
           </div>
         `;
+      case "x":
+      case "y":
+      case "width":
+      case "height":
+        return /*html*/ `
+            <div class='property-editor'>
+              ${createComponent("NumberInputEditor", {
+                ref: `$opacity${index}`,
+                key: property.key,
+                label: property.key,
+                min: -20000,
+                max: 20000,
+                step: 1,
+                value: property.value || 1,
+                onchange: "changeRangeEditor",
+              })}
+                
+            </div>
+          `;
       case "rotate":
         return /*html*/ `
           <div class='property-editor'>
-            <object refClass="RangeEditor"  
-              ref='rangeEditor${index}' 
-              key='${property.key}' 
-              value='${property.value}'  
-              min="-2000"
-              max="2000"
-              units="deg" 
-              onChange="changeRangeEditor" />
+            ${createComponent("InputRangeEditor", {
+              ref: `rangeEditor${index}`,
+              key: property.key,
+              value: property.value,
+              min: -2000,
+              max: 2000,
+              units: ["deg"],
+              onChange: "changeRangeEditor",
+            })}
           </div>
         `;
-      case "left":
       case "margin-top":
       case "margin-bottom":
       case "margin-left":
@@ -440,14 +511,19 @@ export default class CSSPropertyEditor extends EditorElement {
       case "padding-bottom":
       case "padding-left":
       case "padding-right":
-      case "width":
-      case "height":
       case "perspective":
       case "text-stroke-width":
       default:
         return /*html*/ `
           <div class='property-editor'>
-            <object refClass="RangeEditor"  ref='rangeEditor${index}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
+            ${createComponent("InputRangeEditor", {
+              ref: `rangeEditor${index}`,
+              key: property.key,
+              label: property.key,
+              value: property.value,
+              max: 1000,
+              onChange: "changeRangeEditor",
+            })}
           </div>
         `;
     }
@@ -519,28 +595,16 @@ export default class CSSPropertyEditor extends EditorElement {
     `;
   }
 
-  [LOAD("$property")]() {
+  [LOAD("$property") + DOMDIFF]() {
     return this.state.properties.map((it, index) => {
       return /*html*/ `
-        <div class='css-property-item'>
-          <div class='title'>
-            <label>${it.key}</label>
-            <div class='tools'>
-              <button type="button" class='remove' data-index="${index}">${
-        icon.remove2
-      }</button>
-            </div>
-          </div>
-          <div class='title-2'>
-            <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index}">${
-        icon.refresh
-      }</button> Refresh</label>
-            </div>
-          </div>
+        <div class='css-property-item'>   
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index)}
           </div>
+          <button type="button" 
+            class='remove' 
+            data-index="${index}">${iconUse("remove2")}</button>
         </div>
       `;
     });

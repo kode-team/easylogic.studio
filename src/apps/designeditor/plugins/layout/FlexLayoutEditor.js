@@ -233,9 +233,7 @@ export default class FlexLayoutEditor extends EditorElement {
   }
 
   template() {
-    return /*html*/ `
-            <div class='flex-layout-editor' ref='$body' ></div>
-        `;
+    return /*html*/ `<div class='flex-layout-editor' ref='$body' ></div>`;
   }
 
   [SUBSCRIBE_SELF("changeKeyValue")](key, value) {

@@ -31,12 +31,6 @@ export default class CubicBezierEditor extends EditorElement {
     };
   }
 
-  afterRender() {
-    window.setTimeout(() => {
-      this.refresh();
-    }, 10);
-  }
-
   template() {
     const linearCurve = curveToPath(this.state.currentBezier, 150, 150);
     const linearCurvePoint = curveToPointLine(
@@ -51,54 +45,101 @@ export default class CubicBezierEditor extends EditorElement {
     const easeOutCurve = curveToPath("ease-out", 30, 30);
     const easeOutCurvePoint = curveToPointLine("ease-out", 30, 30);
 
-    return /*html*/ `
-            <div class='elf--cubic-bezier-editor'>
-                <div class='predefined'>
-                    <div class='left' ref='$left'>${icon.chevron_left}</div>
-                    <div class='predefined-text' ref='$text'></div>
-                    <div class='right' ref='$right'>${icon.chevron_right}</div>
-                </div>
-                <div class='animation' ref='$animationArea'>
-                    <canvas 
-                        class='animation-canvas' 
-                        ref='$animationCanvas' 
-                        title='Click and Replay point animation' 
-                        width='230px' 
-                        height='20px'
-                    ></canvas>
-                </div>
-                <div class='item-list' ref='$itemList' data-selected-value=''>
-                    <div class='item' data-bezier='ease' title='ease'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
-                        </svg>
-                    </div>
-                    <div class='item' data-bezier='ease-in' title='ease-in'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeInCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeInCurvePoint}" stroke="gray" stroke-width="1" fill='none' /> 
-                        </svg>
-                    </div>
-                    <div class='item' data-bezier='ease-out' title='ease-out'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeOutCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeOutCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
-                        </svg>
-                    </div>
-                </div>
-                <div class='bezier'>
-                    <svg class='bezier-canvas' width="150" height="150" viewBox="0 0 150 150" overflow="visible">
-                        <path d="${linearCurve}" stroke="black" stroke-width="1" fill='none' ref='$bezierCanvas' />
-                        <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
-                    </svg>                
-                    <div class='control' ref='$control'>
-                        <div class='pointer1' ref='$pointer1'></div>
-                        <div class='pointer2' ref='$pointer2'></div>
-                    </div>
-                </div>
-            </div>
-        `;
+    return (
+      <div class="elf--cubic-bezier-editor">
+        <div class="predefined">
+          <div class="left" ref="$left">
+            {icon.chevron_left}
+          </div>
+          <div class="predefined-text" ref="$text"></div>
+          <div class="right" ref="$right">
+            {icon.chevron_right}
+          </div>
+        </div>
+        <div class="animation" ref="$animationArea">
+          <canvas
+            class="animation-canvas"
+            ref="$animationCanvas"
+            title="Click and Replay point animation"
+            width="230px"
+            height="20px"
+          ></canvas>
+        </div>
+        <div class="item-list" ref="$itemList" data-selected-value="">
+          <div class="item" data-bezier="ease" title="ease">
+            <svg class="item-canvas" width="30" height="30" viewBox="0 0 30 30">
+              <path d={easeCurve} stroke="white" stroke-width="1" fill="none" />
+              <path
+                d={easeCurvePoint}
+                stroke="gray"
+                stroke-width="1"
+                fill="none"
+              />
+            </svg>
+          </div>
+          <div class="item" data-bezier="ease-in" title="ease-in">
+            <svg class="item-canvas" width="30" height="30" viewBox="0 0 30 30">
+              <path
+                d={easeInCurve}
+                stroke="white"
+                stroke-width="1"
+                fill="none"
+              />
+              <path
+                d={easeInCurvePoint}
+                stroke="gray"
+                stroke-width="1"
+                fill="none"
+              />
+            </svg>
+          </div>
+          <div class="item" data-bezier="ease-out" title="ease-out">
+            <svg class="item-canvas" width="30" height="30" viewBox="0 0 30 30">
+              <path
+                d={easeOutCurve}
+                stroke="white"
+                stroke-width="1"
+                fill="none"
+              />
+              <path
+                d={easeOutCurvePoint}
+                stroke="gray"
+                stroke-width="1"
+                fill="none"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="bezier">
+          <svg
+            class="bezier-canvas"
+            width="150"
+            height="150"
+            viewBox="0 0 150 150"
+            overflow="visible"
+          >
+            <path
+              d={linearCurve}
+              stroke="black"
+              stroke-width="1"
+              fill="none"
+              ref="$bezierCanvas"
+            />
+            <path
+              d={linearCurvePoint}
+              stroke="gray"
+              stroke-width="1"
+              fill="none"
+              ref="$bezierCanvasPoint"
+            />
+          </svg>
+          <div class="control" ref="$control">
+            <div class="pointer1" ref="$pointer1"></div>
+            <div class="pointer2" ref="$pointer2"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   [BIND("$animationArea")]() {
@@ -198,8 +239,8 @@ export default class CubicBezierEditor extends EditorElement {
 
   refreshPointer() {
     var currentBezier = getPredefinedCubicBezier(this.state.currentBezier);
-    var width = this.refs.$control.width();
-    var height = this.refs.$control.height();
+    var width = 150;
+    var height = 150;
 
     var left = currentBezier[0] * width;
     var top = (1 - currentBezier[1]) * height;

@@ -76,8 +76,7 @@ export default class InputRangeEditor extends EditorElement {
     var realValue = (+value).toString();
     const units = this.state.units;
 
-    return /*html*/ `
-        <div 
+    return /*html*/ `<div 
             ref="$range",
             class="${classnames({
               "elf--input-range-editor": true,
@@ -88,34 +87,23 @@ export default class InputRangeEditor extends EditorElement {
               disabled: disabled,
               [layoutClass]: true,
             })}"
-        >
-            ${label ? `<label title="${title}">${label}</label>` : ""}
-            <div class='range--editor-type' data-type='range'>
-                <div class='area'>
-                    <input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
-                    
-                    ${
-                      units.length === 1
-                        ? `<span class='unit'>${units[0]}</span>`
-                        : createComponent("SelectEditor", {
-                            ref: "$unit",
-                            key: "unit",
-                            compact: true,
-                            value:
-                              this.state.selectedUnit || this.state.value.unit,
-                            options: this.state.units,
-                            onchange: "changeUnit",
-                          })
-                    }
-                    
-                    
-                </div>
-            </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${
-              icon.remove
-            }</button>
-        </div>
-    `;
+        >${
+          label ? `<label title="${title}">${label}</label>` : ""
+        }<div class='range--editor-type' 
+        data-type='range'><div class='area'><input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />${
+      units.length === 1
+        ? `<span class='unit'>${units[0]}</span>`
+        : createComponent("SelectEditor", {
+            ref: "$unit",
+            key: "unit",
+            compact: true,
+            value: this.state.selectedUnit || this.state.value.unit,
+            options: this.state.units,
+            onchange: "changeUnit",
+          })
+    }</div></div><button type='button' class='remove' ref='$remove' title='Remove'>${
+      icon.remove
+    }</button></div>`;
   }
 
   getValue() {

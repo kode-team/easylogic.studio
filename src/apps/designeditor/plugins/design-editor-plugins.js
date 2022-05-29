@@ -18,6 +18,7 @@ import commands from "./commands";
 import configs from "./configs";
 import defaultItems from "./default-items";
 import defaultPatterns from "./default-patterns";
+import depth from "./depth";
 import exportResource from "./export-resource";
 import fillEditorView from "./fill-editor-view";
 import filter from "./filter";
@@ -93,7 +94,7 @@ export default [
   layertab,
   inspector,
 
-  // depth,
+  depth,
   alignment,
   position,
   layout,

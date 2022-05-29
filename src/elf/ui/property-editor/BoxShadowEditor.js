@@ -9,19 +9,19 @@ import {
   createComponent,
   DOMDIFF,
   SUBSCRIBE_SELF,
+  isArray,
 } from "sapa";
 
 import "./BoxShadowEditor.scss";
 
 import { iconUse } from "elf/editor/icon/icon";
-import { BoxShadow } from "elf/editor/property-parser/BoxShadow";
 import { BoxShadowStyle } from "elf/editor/types/model";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 
 export default class BoxShadowEditor extends EditorElement {
   initState() {
     return {
-      boxShadows: BoxShadow.parseStyle(this.props.value || ""),
+      boxShadows: this.props.value || [],
     };
   }
 
@@ -106,23 +106,23 @@ export default class BoxShadowEditor extends EditorElement {
   }
 
   modifyBoxShadow() {
-    var value = this.state.boxShadows.join(", ");
+    var value = this.state.boxShadows;
 
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
 
-  [SUBSCRIBE("add")](shadow = "") {
-    if (shadow) {
-      this.state.boxShadows = BoxShadow.parseStyle(shadow);
+  [SUBSCRIBE("add")](shadows = undefined) {
+    if (isArray(shadows)) {
+      this.state.boxShadows.push(...shadows);
     } else {
-      const shadowObj = new BoxShadow({
+      const shadowObj = {
         color: "black",
         inset: BoxShadowStyle.OUTSET,
         offsetX: 2,
         offsetY: 2,
         blurRadius: 3,
         spreadRadius: 1,
-      });
+      };
 
       this.state.boxShadows.push(shadowObj);
     }
@@ -177,9 +177,7 @@ export default class BoxShadowEditor extends EditorElement {
   [SUBSCRIBE_SELF("changeKeyValue")](key, value, index) {
     var shadow = this.state.boxShadows[index];
 
-    shadow.reset({
-      [key]: value,
-    });
+    this.state.boxShadows[index] = { ...shadow, [key]: value };
 
     this.modifyBoxShadow();
   }

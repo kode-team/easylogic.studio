@@ -107,7 +107,15 @@ function getProps(attributes) {
 }
 
 function checkAllHTML(newEl, oldEl) {
-  // console.log(newEl.outerHTML, oldEl.outerHTML);
+  // text node 는 html 체크를 하지 않는다.
+  // text node 의 outerHTML 은 undefined 만 나온다.
+  if (
+    newEl.nodeType == window.Node.TEXT_NODE ||
+    oldEl.nodeType === window.Node.TEXT_NODE
+  ) {
+    return false;
+  }
+
   return newEl.outerHTML == oldEl.outerHTML;
 }
 

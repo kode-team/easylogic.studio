@@ -49,7 +49,7 @@ export default class FilterEditor extends EditorElement {
   initState() {
     return {
       hideLabel: this.props.hideLabel === "true" ? true : false,
-      filters: Filter.parseStyle(this.props.value),
+      filters: this.props.value || [],
     };
   }
 
@@ -272,7 +272,7 @@ export default class FilterEditor extends EditorElement {
   }
 
   modifyFilter() {
-    var value = this.state.filters.join(" ");
+    var value = this.state.filters;
 
     this.parent.trigger(
       this.props.onchange,
@@ -379,22 +379,15 @@ export default class FilterEditor extends EditorElement {
   [SUBSCRIBE_SELF("changeDropShadowColor")](key, color, params) {
     var index = +params;
 
-    this.state.filters[index].reset({
-      color,
-    });
-
+    this.state.filters[index].color = color;
     this.modifyFilter();
   }
 
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value, params) {
     if (params) {
-      this.state.filters[+key].reset({
-        [params]: value,
-      });
+      this.state.filters[+key][params] = value;
     } else {
-      this.state.filters[+key].reset({
-        value,
-      });
+      this.state.filters[+key].value = value;
     }
 
     this.modifyFilter();

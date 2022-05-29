@@ -2,11 +2,11 @@ import { mat4 } from "gl-matrix";
 
 import { itemsToRectVerties } from "elf/core/collision";
 import { calculateMatrix } from "elf/core/math";
-import { TimelineModel } from "elf/editor/model/TimelineModel";
+import { AssetModel } from "elf/editor/model/AssetModel";
 
 const identity = mat4.create();
 
-export class Project extends TimelineModel {
+export class Project extends AssetModel {
   getDefaultTitle() {
     return "New Project";
   }

@@ -49,7 +49,7 @@ var __privateMethod = (obj2, member, method) => {
   __accessCheck(obj2, member, "access private method");
   return method;
 };
-var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _compiledTimeline, _id, _renderers;
+var _state, _prevState, _localTimestamp, _loadMethods, _timestamp, _cachedMethodList, _props, _propsKeys, _isServer, _propsKeyList, _refreshTimestamp, refreshTimestamp_fn, _setProps, setProps_fn, _getProp, getProp_fn, _storeInstance, _modelManager, _json, _cachedValue, _timestamp2, _lastChangedField, _collapsed, _id, _renderers;
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -259,6 +259,9 @@ function getProps(attributes) {
   return results;
 }
 function checkAllHTML(newEl, oldEl) {
+  if (newEl.nodeType == window.Node.TEXT_NODE || oldEl.nodeType === window.Node.TEXT_NODE) {
+    return false;
+  }
   return newEl.outerHTML == oldEl.outerHTML;
 }
 function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
@@ -2574,6 +2577,9 @@ const _EventMachine = class {
   get propKeys() {
     return __privateGet(this, _propsKeys);
   }
+  get ref() {
+    return this.props.ref;
+  }
   get isPreLoaded() {
     return true;
   }
@@ -2898,6 +2904,36 @@ const _EventMachine = class {
   }
   findChildren(BaseComponent) {
     return this.props.contentChildren.filter((it) => it.component === BaseComponent);
+  }
+  findChildByRef(ref) {
+    const result = [];
+    Object.keys(this.children).forEach((key) => {
+      const child = this.children[key];
+      if (child.ref === ref) {
+        result.push(child);
+      }
+      if (Object.keys(child.children).length) {
+        result.push(...child.findChildByRef(ref));
+      }
+    });
+    return result;
+  }
+  findRef(callback) {
+    const result = [];
+    Object.keys(this.children).forEach((key) => {
+      const child = this.children[key];
+      if (callback(child)) {
+        result.push(child);
+      }
+      if (result.length)
+        return result;
+      if (child.children) {
+        result.push(...child.findNestedChildren(callback));
+      }
+      if (result.length)
+        return result;
+    });
+    return result;
   }
   getChildContent(filterCallback, defaultValue2 = "") {
     var _a;
@@ -6240,12 +6276,12 @@ var __glob_0_217 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePr
   __proto__: null,
   "default": title
 }, Symbol.toStringTag, { value: "Module" }));
-var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
+var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" class="target" /><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
 var __glob_0_218 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": to_back
 }, Symbol.toStringTag, { value: "Module" }));
-var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
+var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path class="target" d="M 7 7L 22 7L 22 22L 7 22L 7 7Z"/>`, { width: 30, height: 30 });
 var __glob_0_219 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": to_front
@@ -6475,7 +6511,8 @@ class ToolbarButtonMenuItem extends EditorElement {
   [LOAD("$el") + DOMDIFF]() {
     let result = "";
     if (this.props.icon) {
-      result += `<span class="icon">${iconUse(this.props.icon)}</span>`;
+      const iconName = isFunction(this.props.icon) ? this.props.icon(this.$editor) : this.props.icon;
+      result += `<span class="icon">${iconUse(iconName)}</span>`;
     }
     if (this.props.title) {
       result += `<span class="title">${this.props.title}</span>`;
@@ -7604,127 +7641,10 @@ class ToolBarRenderer extends EditorElement {
     }), [item.content]);
   }
 }
-const DEFAULT_TITLE = "";
-const DEFAULT_ICON = "";
-const DEFAULT_CHECKED = false;
-class MenuItem extends EditorElement {
-  template() {
-    return `
-        <button 
-            type="button" 
-            class='elf--menu-item ${this.getClassName()}' 
-            data-no-title="${this.isHideTitle()}" 
-            ${this.isHideTitle() && this.isHideTooltip() === false ? `data-tooltip="${this.getTitle()}"` : ""} 
-            checked="${this.getChecked() ? "checked" : ""}"
-            ${this.isDisabled() ? "disabled" : ""}
-            data-direction="${this.getDirection()}"
-        >
-            <div class="icon ${this.getIcon()}" ref="$icon">${obj$2[this.getIconString()] || this.getIconString() || ""}</div>
-            ${this.isHideTitle() ? "" : `<div class="title">${this.getTitle()}</div>`}
-            
-        </button>
-        `;
-  }
-  getClassName() {
-    return "";
-  }
-  clickButton() {
-  }
-  getChecked() {
-    return DEFAULT_CHECKED;
-  }
-  isDisabled() {
-    return false;
-  }
-  setSelected(isSelected) {
-    this.$el.toggleClass("selected", isSelected);
-  }
-  getTitle() {
-    return DEFAULT_TITLE;
-  }
-  getIcon() {
-    return DEFAULT_ICON;
-  }
-  setIcon(iconString) {
-    this.refs.$icon.html(obj$2[iconString] || iconString || "");
-  }
-  getIconString() {
-    return DEFAULT_ICON;
-  }
-  isHideTitle() {
-    return false;
-  }
-  isHideTooltip() {
-    return true;
-  }
-  [CLICK()](e) {
-    this.clickButton(e);
-  }
-  getDirection() {
-    return this.props.direction || "";
-  }
-  static createMenuItem(opt = {}) {
-    return class extends MenuItem {
-      getIconString() {
-        return opt.iconString || "add_box";
-      }
-      getTitle() {
-        return opt.title || "New Item";
-      }
-      isHideTitle() {
-        return opt.isHideTitle || true;
-      }
-      clickButton(e) {
-        opt.clickButton(e);
-      }
-      getDirection() {
-        return opt.direction;
-      }
-    };
-  }
-}
-class ExportView extends MenuItem {
-  getIconString() {
-    return "launch";
-  }
-  getTitle() {
-    return this.$i18n("menu.item.export.title");
-  }
-  clickButton() {
-    this.emit("showExportView");
-  }
-}
-class ThemeChanger extends MenuItem {
-  getIconString() {
-    if (this.$config.is("editor.theme", "dark")) {
-      return "dark";
-    } else {
-      return "light";
-    }
-  }
-  getTitle() {
-    return "Theme";
-  }
-  isHideTitle() {
-    return true;
-  }
-  clickButton() {
-    if (this.$config.get("editor.theme") === "dark") {
-      this.$config.set("editor.theme", "light");
-      this.setIcon("light");
-    } else {
-      this.$config.set("editor.theme", "dark");
-      this.setIcon("dark");
-    }
-  }
-}
 class BlankToolBar extends EditorElement {
   components() {
     return {
-      ToolBarRenderer,
-      ThemeChanger,
-      ExportView,
-      DropdownMenu
+      ToolBarRenderer
     };
   }
   template() {
@@ -7750,10 +7670,9 @@ class BlankToolBar extends EditorElement {
                 </div>
                 <div class='right'>
                     ${createComponent("ToolBarRenderer", {
-      items: this.$menu.getTargetMenu("toolbar.right")
+      items: this.$menu.getTargetMenu("toolbar.right", "desc")
     })}                
                     ${this.$injectManager.generate("toolbar.right")}                    
-                    ${createComponent("ThemeChanger")}
                 </div>
               </div>
             </div>
@@ -9469,20 +9388,7 @@ class SelectEditor extends EditorElement {
     if (obj$2[label]) {
       label = iconUse(label);
     }
-    return `
-            <div class='elf--select-editor ${hasLabel} ${compact}'>
-                ${label ? `<label title="${title2}">${label}</label>` : ""}
-                <div class="editor-view">
-                    <select ref='$options' ${hasTabIndex}>
-                        ${this.getOptionString()}
-                    </select>
-                    <div class='selected-value'>
-                        <span class='value' ref="$selectedValue">${value}</span>
-                        <span class='expand' ref='$expand'>${iconUse("expand_more")}</span>
-                    </div>
-                </div>
-            </div>
-        `;
+    return `<div class='elf--select-editor ${hasLabel} ${compact}'>${label ? `<label title="${title2}">${label}</label>` : ""}<div class="editor-view"><select ref='$options' ${hasTabIndex}>${this.getOptionString()}</select><div class='selected-value'><span class='value' ref="$selectedValue">${value}</span><span class='expand' ref='$expand'>${iconUse("expand_more")}</span></div></div></div>`;
   }
   getValue() {
     return this.refs.$options.value;
@@ -9546,168 +9452,815 @@ class BlendSelectEditor extends SelectEditor {
   }
 }
 var BoxShadowEditor$1 = "";
-const color_names = {
-  aliceblue: "rgb(240, 248, 255)",
-  antiquewhite: "rgb(250, 235, 215)",
-  aqua: "rgb(0, 255, 255)",
-  aquamarine: "rgb(127, 255, 212)",
-  azure: "rgb(240, 255, 255)",
-  beige: "rgb(245, 245, 220)",
-  bisque: "rgb(255, 228, 196)",
-  black: "rgb(0, 0, 0)",
-  blanchedalmond: "rgb(255, 235, 205)",
-  blue: "rgb(0, 0, 255)",
-  blueviolet: "rgb(138, 43, 226)",
-  brown: "rgb(165, 42, 42)",
-  burlywood: "rgb(222, 184, 135)",
-  cadetblue: "rgb(95, 158, 160)",
-  chartreuse: "rgb(127, 255, 0)",
-  chocolate: "rgb(210, 105, 30)",
-  coral: "rgb(255, 127, 80)",
-  cornflowerblue: "rgb(100, 149, 237)",
-  cornsilk: "rgb(255, 248, 220)",
-  crimson: "rgb(237, 20, 61)",
-  cyan: "rgb(0, 255, 255)",
-  darkblue: "rgb(0, 0, 139)",
-  darkcyan: "rgb(0, 139, 139)",
-  darkgoldenrod: "rgb(184, 134, 11)",
-  darkgray: "rgb(169, 169, 169)",
-  darkgrey: "rgb(169, 169, 169)",
-  darkgreen: "rgb(0, 100, 0)",
-  darkkhaki: "rgb(189, 183, 107)",
-  darkmagenta: "rgb(139, 0, 139)",
-  darkolivegreen: "rgb(85, 107, 47)",
-  darkorange: "rgb(255, 140, 0)",
-  darkorchid: "rgb(153, 50, 204)",
-  darkred: "rgb(139, 0, 0)",
-  darksalmon: "rgb(233, 150, 122)",
-  darkseagreen: "rgb(143, 188, 143)",
-  darkslateblue: "rgb(72, 61, 139)",
-  darkslategray: "rgb(47, 79, 79)",
-  darkslategrey: "rgb(47, 79, 79)",
-  darkturquoise: "rgb(0, 206, 209)",
-  darkviolet: "rgb(148, 0, 211)",
-  deeppink: "rgb(255, 20, 147)",
-  deepskyblue: "rgb(0, 191, 255)",
-  dimgray: "rgb(105, 105, 105)",
-  dimgrey: "rgb(105, 105, 105)",
-  dodgerblue: "rgb(30, 144, 255)",
-  firebrick: "rgb(178, 34, 34)",
-  floralwhite: "rgb(255, 250, 240)",
-  forestgreen: "rgb(34, 139, 34)",
-  fuchsia: "rgb(255, 0, 255)",
-  gainsboro: "rgb(220, 220, 220)",
-  ghostwhite: "rgb(248, 248, 255)",
-  gold: "rgb(255, 215, 0)",
-  goldenrod: "rgb(218, 165, 32)",
-  gray: "rgb(128, 128, 128)",
-  grey: "rgb(128, 128, 128)",
-  green: "rgb(0, 128, 0)",
-  greenyellow: "rgb(173, 255, 47)",
-  honeydew: "rgb(240, 255, 240)",
-  hotpink: "rgb(255, 105, 180)",
-  indianred: "rgb(205, 92, 92)",
-  indigo: "rgb(75, 0, 130)",
-  ivory: "rgb(255, 255, 240)",
-  khaki: "rgb(240, 230, 140)",
-  lavender: "rgb(230, 230, 250)",
-  lavenderblush: "rgb(255, 240, 245)",
-  lawngreen: "rgb(124, 252, 0)",
-  lemonchiffon: "rgb(255, 250, 205)",
-  lightblue: "rgb(173, 216, 230)",
-  lightcoral: "rgb(240, 128, 128)",
-  lightcyan: "rgb(224, 255, 255)",
-  lightgoldenrodyellow: "rgb(250, 250, 210)",
-  lightgreen: "rgb(144, 238, 144)",
-  lightgray: "rgb(211, 211, 211)",
-  lightgrey: "rgb(211, 211, 211)",
-  lightpink: "rgb(255, 182, 193)",
-  lightsalmon: "rgb(255, 160, 122)",
-  lightseagreen: "rgb(32, 178, 170)",
-  lightskyblue: "rgb(135, 206, 250)",
-  lightslategray: "rgb(119, 136, 153)",
-  lightslategrey: "rgb(119, 136, 153)",
-  lightsteelblue: "rgb(176, 196, 222)",
-  lightyellow: "rgb(255, 255, 224)",
-  lime: "rgb(0, 255, 0)",
-  limegreen: "rgb(50, 205, 50)",
-  linen: "rgb(250, 240, 230)",
-  magenta: "rgb(255, 0, 255)",
-  maroon: "rgb(128, 0, 0)",
-  mediumaquamarine: "rgb(102, 205, 170)",
-  mediumblue: "rgb(0, 0, 205)",
-  mediumorchid: "rgb(186, 85, 211)",
-  mediumpurple: "rgb(147, 112, 219)",
-  mediumseagreen: "rgb(60, 179, 113)",
-  mediumslateblue: "rgb(123, 104, 238)",
-  mediumspringgreen: "rgb(0, 250, 154)",
-  mediumturquoise: "rgb(72, 209, 204)",
-  mediumvioletred: "rgb(199, 21, 133)",
-  midnightblue: "rgb(25, 25, 112)",
-  mintcream: "rgb(245, 255, 250)",
-  mistyrose: "rgb(255, 228, 225)",
-  moccasin: "rgb(255, 228, 181)",
-  navajowhite: "rgb(255, 222, 173)",
-  navy: "rgb(0, 0, 128)",
-  oldlace: "rgb(253, 245, 230)",
-  olive: "rgb(128, 128, 0)",
-  olivedrab: "rgb(107, 142, 35)",
-  orange: "rgb(255, 165, 0)",
-  orangered: "rgb(255, 69, 0)",
-  orchid: "rgb(218, 112, 214)",
-  palegoldenrod: "rgb(238, 232, 170)",
-  palegreen: "rgb(152, 251, 152)",
-  paleturquoise: "rgb(175, 238, 238)",
-  palevioletred: "rgb(219, 112, 147)",
-  papayawhip: "rgb(255, 239, 213)",
-  peachpuff: "rgb(255, 218, 185)",
-  peru: "rgb(205, 133, 63)",
-  pink: "rgb(255, 192, 203)",
-  plum: "rgb(221, 160, 221)",
-  powderblue: "rgb(176, 224, 230)",
-  purple: "rgb(128, 0, 128)",
-  rebeccapurple: "rgb(102, 51, 153)",
-  red: "rgb(255, 0, 0)",
-  rosybrown: "rgb(188, 143, 143)",
-  royalblue: "rgb(65, 105, 225)",
-  saddlebrown: "rgb(139, 69, 19)",
-  salmon: "rgb(250, 128, 114)",
-  sandybrown: "rgb(244, 164, 96)",
-  seagreen: "rgb(46, 139, 87)",
-  seashell: "rgb(255, 245, 238)",
-  sienna: "rgb(160, 82, 45)",
-  silver: "rgb(192, 192, 192)",
-  skyblue: "rgb(135, 206, 235)",
-  slateblue: "rgb(106, 90, 205)",
-  slategray: "rgb(112, 128, 144)",
-  slategrey: "rgb(112, 128, 144)",
-  snow: "rgb(255, 250, 250)",
-  springgreen: "rgb(0, 255, 127)",
-  steelblue: "rgb(70, 130, 180)",
-  tan: "rgb(210, 180, 140)",
-  teal: "rgb(0, 128, 128)",
-  thistle: "rgb(216, 191, 216)",
-  tomato: "rgb(255, 99, 71)",
-  turquoise: "rgb(64, 224, 208)",
-  violet: "rgb(238, 130, 238)",
-  wheat: "rgb(245, 222, 179)",
-  white: "rgb(255, 255, 255)",
-  whitesmoke: "rgb(245, 245, 245)",
-  yellow: "rgb(255, 255, 0)",
-  yellowgreen: "rgb(154, 205, 50)",
-  transparent: "rgba(0, 0, 0, 0)",
-  currentColor: "currentColor"
-};
-function isColorName(name) {
-  return !!color_names[name];
+class BoxShadowEditor extends EditorElement {
+  initState() {
+    return {
+      boxShadows: this.props.value || []
+    };
+  }
+  template() {
+    return `
+      <div class="elf--box-shadow-editor" >
+        <div class='box-shadow-list' ref='$shadowList'></div>
+      </div>
+    `;
+  }
+  [LOAD("$shadowList") + DOMDIFF]() {
+    var arr = this.state.boxShadows.map((shadow2, index2) => {
+      return `
+        <div class="shadow-item real" data-index="${index2}">
+            <label draggable="true" data-index="${index2}">${iconUse("drag_indicator")}</label>
+            <div class="shadow-content">
+            ${createComponent("ColorViewEditor", {
+        mini: true,
+        key: "color",
+        value: shadow2.color,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetX",
+        label: "X",
+        value: shadow2.offsetX,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}          
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetY",
+        label: "Y",
+        value: shadow2.offsetY,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
+            ${createComponent("ToggleButton", {
+        mini: true,
+        key: "inset",
+        value: shadow2.inset,
+        params: index2,
+        onChange: "changeKeyValue",
+        checkedValue: BoxShadowStyle.INSET,
+        toggleLabels: [iconUse("border_style"), iconUse("border_style")],
+        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
+        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
+      })}            
+
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "B",
+        key: "blurRadius",
+        value: shadow2.blurRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })} 
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "S",
+        key: "spreadRadius",
+        value: shadow2.spreadRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}             
+          </div>
+          <div class="tools">
+            <button type="button" class="remove" data-index="${index2}">
+              ${iconUse("remove2")}
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    return arr.join("");
+  }
+  modifyBoxShadow() {
+    var value = this.state.boxShadows;
+    this.parent.trigger(this.props.onchange, this.props.key, value);
+  }
+  [SUBSCRIBE("add")](shadows = void 0) {
+    if (isArray(shadows)) {
+      this.state.boxShadows.push(...shadows);
+    } else {
+      const shadowObj = {
+        color: "black",
+        inset: BoxShadowStyle.OUTSET,
+        offsetX: 2,
+        offsetY: 2,
+        blurRadius: 3,
+        spreadRadius: 1
+      };
+      this.state.boxShadows.push(shadowObj);
+    }
+    this.refresh();
+    this.modifyBoxShadow();
+  }
+  [CLICK("$add")]() {
+    this.trigger("add");
+  }
+  [DRAGSTART("$shadowList .shadow-item > label")](e) {
+    this.startIndex = +e.$dt.attr("data-index");
+  }
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT]() {
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortBoxShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.boxShadows, startIndex, targetIndex);
+  }
+  [DROP("$shadowList .shadow-item") + PREVENT](e) {
+    var targetIndex = +e.$dt.attr("data-index");
+    this.sortBoxShadow(this.startIndex, targetIndex);
+    this.refresh();
+    this.modifyBoxShadow();
+  }
+  [CLICK("$shadowList .remove")](e) {
+    var index2 = +e.$dt.attr("data-index");
+    this.state.boxShadows.splice(index2, 1);
+    this.refresh();
+    this.modifyBoxShadow();
+  }
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value, index2) {
+    var shadow2 = this.state.boxShadows[index2];
+    this.state.boxShadows[index2] = __spreadProps(__spreadValues({}, shadow2), { [key]: value });
+    this.modifyBoxShadow();
+  }
 }
-function getColorByName(name) {
-  return color_names[name];
-}
-var ColorNames = {
-  isColorName,
-  getColorByName
+const colors$k = [
+  "#FFF8E1",
+  "#FFECB3",
+  "#FFE082",
+  "#FFD54F",
+  "#FFCA28",
+  "#FFC107",
+  "#FFB300",
+  "#FFA000",
+  "#FF8F00",
+  "#FF6F00",
+  "#FFE57F",
+  "#FFD740",
+  "#FFC400",
+  "#FFAB00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialAmber = {
+  title: "material amber",
+  key: "material-amber",
+  execute: function() {
+    return colors$k;
+  }
 };
+var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialAmber
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$j = [
+  "#e3f2fd",
+  "#bbdefb",
+  "#90caf9",
+  "#64b5f6",
+  "#42a5f5",
+  "#2196f3",
+  "#1e88e5",
+  "#1976d2",
+  "#1565c0",
+  "#0d47a1",
+  "#2196f3",
+  "#82b1ff",
+  "#448aff",
+  "#2979ff",
+  "#2962ff"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialBlue = {
+  title: "material blue",
+  key: "material-blue",
+  execute: function() {
+    return colors$j;
+  }
+};
+var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialBlue
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$i = [
+  "#ECEFF1",
+  "#CFD8DC",
+  "#B0BEC5",
+  "#90A4AE",
+  "#78909C",
+  "#607D8B",
+  "#546E7A",
+  "#455A64",
+  "#37474F",
+  "#263238"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialBluegray = {
+  title: "material bluegray",
+  key: "material-bluegray",
+  execute: function() {
+    return colors$i;
+  }
+};
+var __glob_0_2$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialBluegray
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$h = [
+  "#EFEBE9",
+  "#D7CCC8",
+  "#BCAAA4",
+  "#A1887F",
+  "#8D6E63",
+  "#795548",
+  "#6D4C41",
+  "#5D4037",
+  "#4E342E",
+  "#3E2723"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialBrown = {
+  title: "material brown",
+  key: "material-brown",
+  execute: function() {
+    return colors$h;
+  }
+};
+var __glob_0_3$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialBrown
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$g = [
+  "#e0f7fa",
+  "#b2ebf2",
+  "#80deea",
+  "#4dd0e1",
+  "#26c6da",
+  "#00bcd4",
+  "#00acc1",
+  "#0097a7",
+  "#00838f",
+  "#006064",
+  "#00bcd4",
+  "#84ffff",
+  "#18ffff",
+  "#00e5ff",
+  "#00b8d4"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialCyan = {
+  title: "material cyan",
+  key: "material-cyan",
+  execute: function() {
+    return colors$g;
+  }
+};
+var __glob_0_4$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialCyan
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$f = [
+  "#FBE9E7",
+  "#FFCCBC",
+  "#FFAB91",
+  "#FF8A65",
+  "#FF7043",
+  "#FF5722",
+  "#F4511E",
+  "#E64A19",
+  "#D84315",
+  "#BF360C",
+  "#FF9E80",
+  "#FF6E40",
+  "#FF3D00",
+  "#DD2C00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialDeeporange = {
+  title: "material deep orange",
+  key: "material-deeporange",
+  execute: function() {
+    return colors$f;
+  }
+};
+var __glob_0_5$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialDeeporange
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$e = [
+  "#ede7f6",
+  "#d1c4e9",
+  "#b39ddb",
+  "#9575cd",
+  "#7e57c2",
+  "#673ab7",
+  "#5e35b1",
+  "#512da8",
+  "#4527a0",
+  "#311b92",
+  "#673ab7",
+  "#b388ff",
+  "#7c4dff",
+  "#651fff",
+  "#6200ea"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialDeeppurple = {
+  title: "material deep purple",
+  key: "material-deeppurple",
+  execute: function() {
+    return colors$e;
+  }
+};
+var __glob_0_6$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialDeeppurple
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$d = [
+  "#FAFAFA",
+  "#F5F5F5",
+  "#EEEEEE",
+  "#E0E0E0",
+  "#BDBDBD",
+  "#9E9E9E",
+  "#757575",
+  "#616161",
+  "#424242",
+  "#212121"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialGray = {
+  title: "material gray",
+  key: "material-gray",
+  execute: function() {
+    return colors$d;
+  }
+};
+var __glob_0_7$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialGray
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$c = [
+  "#E8F5E9",
+  "#C8E6C9",
+  "#A5D6A7",
+  "#81C784",
+  "#66BB6A",
+  "#4CAF50",
+  "#43A047",
+  "#388E3C",
+  "#2E7D32",
+  "#1B5E20",
+  "#B9F6CA",
+  "#69F0AE",
+  "#00E676",
+  "#00C853"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialGreen = {
+  title: "material green",
+  key: "material-green",
+  execute: function() {
+    return colors$c;
+  }
+};
+var __glob_0_8$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialGreen
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$b = [
+  "#e8eaf6",
+  "#c5cae9",
+  "#9fa8da",
+  "#7986cb",
+  "#5c6bc0",
+  "#3f51b5",
+  "#3949ab",
+  "#303f9f",
+  "#283593",
+  "#1a237e",
+  "#3f51b5",
+  "#8c9eff",
+  "#536dfe",
+  "#3d5afe",
+  "#304ffe"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialIndigo = {
+  title: "material indigo",
+  key: "material-indigo",
+  execute: function() {
+    return colors$b;
+  }
+};
+var __glob_0_9$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialIndigo
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$a = [
+  "#e1f5fe",
+  "#b3e5fc",
+  "#81d4fa",
+  "#4fc3f7",
+  "#29b6f6",
+  "#03a9f4",
+  "#039be5",
+  "#0288d1",
+  "#0277bd",
+  "#01579b",
+  "#03a9f4",
+  "#80d8ff",
+  "#40c4ff",
+  "#00b0ff",
+  "#0091ea"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialLightblue = {
+  title: "material light blue",
+  key: "material-lightblue",
+  execute: function() {
+    return colors$a;
+  }
+};
+var __glob_0_10$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialLightblue
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$9 = [
+  "#F1F8E9",
+  "#DCEDC8",
+  "#C5E1A5",
+  "#AED581",
+  "#9CCC65",
+  "#8BC34A",
+  "#7CB342",
+  "#689F38",
+  "#558B2F",
+  "#33691E",
+  "#CCFF90",
+  "#B2FF59",
+  "#76FF03",
+  "#64DD17"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialLightgreen = {
+  title: "material lightgreen",
+  key: "material-lightgreen",
+  execute: function() {
+    return colors$9;
+  }
+};
+var __glob_0_11$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialLightgreen
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$8 = [
+  "#F9FBE7",
+  "#F0F4C3",
+  "#E6EE9C",
+  "#DCE775",
+  "#D4E157",
+  "#CDDC39",
+  "#C0CA33",
+  "#AFB42B",
+  "#9E9D24",
+  "#827717",
+  "#F4FF81",
+  "#EEFF41",
+  "#C6FF00",
+  "#AEEA00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialLime = {
+  title: "material lime",
+  key: "material-lime",
+  execute: function() {
+    return colors$8;
+  }
+};
+var __glob_0_12$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialLime
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$7 = [
+  "#FFF3E0",
+  "#FFE0B2",
+  "#FFCC80",
+  "#FFB74D",
+  "#FFA726",
+  "#FF9800",
+  "#FB8C00",
+  "#F57C00",
+  "#EF6C00",
+  "#E65100",
+  "#FFD180",
+  "#FFAB40",
+  "#FF9100",
+  "#FF6D00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialOrange = {
+  title: "material orange",
+  key: "material-orange",
+  execute: function() {
+    return colors$7;
+  }
+};
+var __glob_0_13$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialOrange
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$6 = [
+  "#fce4ec",
+  "#f8bbd0",
+  "#f48fb1",
+  "#f06292",
+  "#ec407a",
+  "#e91e63",
+  "#d81b60",
+  "#c2185b",
+  "#ad1457",
+  "#880e4f",
+  "#e91e63",
+  "#ff80ab",
+  "#ff4081",
+  "#f50057",
+  "#c51162"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialPink = {
+  title: "material pink",
+  key: "material-pink",
+  execute: function() {
+    return colors$6;
+  }
+};
+var __glob_0_14$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialPink
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$5 = [
+  "#f3e5f5",
+  "#e1bee7",
+  "#ce93d8",
+  "#ba68c8",
+  "#ab47bc",
+  "#9c27b0",
+  "#8e24aa",
+  "#7b1fa2",
+  "#6a1b9a",
+  "#4a148c",
+  "#9c27b0",
+  "#ea80fc",
+  "#e040fb",
+  "#d500f9",
+  "#aa00ff"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialPurple = {
+  title: "material purple",
+  key: "material-purple",
+  execute: function() {
+    return colors$5;
+  }
+};
+var __glob_0_15$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialPurple
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$4 = [
+  "#ffebee",
+  "#ffcdd2",
+  "#ef9a9a",
+  "#e57373",
+  "#ef5350",
+  "#f44336",
+  "#e53935",
+  "#d32f2f",
+  "#c62828",
+  "#b71c1c",
+  "#f44336",
+  "#ff8a80",
+  "#ff5252",
+  "#ff1744",
+  "#d50000"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialRed = {
+  title: "material red",
+  key: "material-red",
+  execute: function() {
+    return colors$4;
+  }
+};
+var __glob_0_16$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialRed
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$3 = [
+  "#e0f2f1",
+  "#b2dfdb",
+  "#80cbc4",
+  "#4db6ac",
+  "#26a69a",
+  "#009688",
+  "#00897b",
+  "#00796b",
+  "#00695c",
+  "#004d40",
+  "#009688",
+  "#a7ffeb",
+  "#64ffda",
+  "#1de9b6",
+  "#00bfa5"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialTeal = {
+  title: "material teal",
+  key: "material-teal",
+  execute: function() {
+    return colors$3;
+  }
+};
+var __glob_0_17$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialTeal
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$2 = [
+  "#FFFDE7",
+  "#FFF9C4",
+  "#FFF59D",
+  "#FFF176",
+  "#FFEE58",
+  "#FFEB3B",
+  "#FDD835",
+  "#FBC02D",
+  "#F9A825",
+  "#F57F17",
+  "#FFFF8D",
+  "#FFFF00",
+  "#FFEA00",
+  "#FFD600"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialYellow = {
+  title: "material yellow",
+  key: "material-yellow",
+  execute: function() {
+    return colors$2;
+  }
+};
+var __glob_0_18$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": materialYellow
+}, Symbol.toStringTag, { value: "Module" }));
+const colors$1 = [
+  "#f8f9fa",
+  "#f1f3f5",
+  "#e9ecef",
+  "#dee2e6",
+  "#ced4da",
+  "#adb5bd",
+  "#868e96",
+  "#495057",
+  "#343a40",
+  "#212529"
+].map((color2) => {
+  return { color: color2 };
+});
+var opencolorGray = {
+  title: "opencolor gray",
+  resource: "https://yeun.github.io/open-color/",
+  key: "opencolor-gray",
+  execute: function() {
+    return colors$1;
+  }
+};
+var __glob_0_19$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": opencolorGray
+}, Symbol.toStringTag, { value: "Module" }));
+function format(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  if (type == "hex") {
+    return hex(obj2);
+  } else if (type == "rgb") {
+    return rgb(obj2, defaultColor);
+  } else if (type == "hsl") {
+    return hsl(obj2);
+  }
+  return obj2;
+}
+function formatWithoutAlpha(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
+  const newColorObj = clone$1(obj2);
+  newColorObj.a = 1;
+  return format(newColorObj, type, defaultColor);
+}
+function hex(obj2) {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  var r = obj2.r.toString(16);
+  if (obj2.r < 16)
+    r = "0" + r;
+  var g = obj2.g.toString(16);
+  if (obj2.g < 16)
+    g = "0" + g;
+  var b = obj2.b.toString(16);
+  if (obj2.b < 16)
+    b = "0" + b;
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    return `#${r}${g}${b}`;
+  } else {
+    const alpha2 = Math.ceil(obj2.a * 255);
+    var a = alpha2.toString(16);
+    if (alpha2 < 16)
+      a = "0" + a;
+    return `#${r}${g}${b}${a}`;
+  }
+}
+function rgb(obj2, defaultColor = "rgba(0, 0, 0, 0)") {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  if (typeof obj2 === "undefined") {
+    return void 0;
+  }
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    if (isNaN(obj2.r)) {
+      return defaultColor;
+    }
+    return `rgb(${obj2.r},${obj2.g},${obj2.b})`;
+  } else {
+    return `rgba(${obj2.r},${obj2.g},${obj2.b},${obj2.a})`;
+  }
+}
+function hsl(obj2) {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
+  }
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    return `hsl(${obj2.h},${obj2.s}%,${obj2.l}%)`;
+  } else {
+    return `hsla(${obj2.h},${obj2.s}%,${obj2.l}%,${obj2.a})`;
+  }
+}
+function randomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randomByCount(count = 1) {
+  let arr = [];
+  for (var i = 0; i < count; i++) {
+    arr[arr.length] = random$1();
+  }
+  return arr;
+}
+function random$1() {
+  return rgb({
+    r: randomNumber(0, 255),
+    g: randomNumber(0, 255),
+    b: randomNumber(0, 255)
+  });
+}
+function randomRGBA() {
+  return rgb({
+    r: randomNumber(0, 255),
+    g: randomNumber(0, 255),
+    b: randomNumber(0, 255),
+    a: randomNumber(0, 1e3) / 1e3
+  });
+}
+function CMYKtoRGB(c2, m, y, k) {
+  if (arguments.length == 1) {
+    var { c: c2, m, y, k } = arguments[0];
+  }
+  const R = 255 * (1 - c2) * (1 - k);
+  const G = 255 * (1 - m) * (1 - k);
+  const B = 255 * (1 - y) * (1 - k);
+  return { r: R, g: G, b: B };
+}
 function ReverseXyz(n) {
   return Math.pow(n, 3) > 8856e-6 ? Math.pow(n, 3) : (n - 16 / 116) / 7.787;
 }
@@ -9938,6 +10491,218 @@ function HSLtoRGB(h, s, l) {
   }
   return { r: round(r * 255), g: round(g * 255), b: round(b * 255) };
 }
+function HSVtoRGB(h, s, v) {
+  if (arguments.length == 1) {
+    var { h, s, v } = arguments[0];
+  }
+  var H = h;
+  var S = s;
+  var V = v;
+  if (H >= 360) {
+    H = 0;
+  }
+  const C = S * V;
+  const X = C * (1 - Math.abs(H / 60 % 2 - 1));
+  const m = V - C;
+  let temp = [];
+  if (0 <= H && H < 60) {
+    temp = [C, X, 0];
+  } else if (60 <= H && H < 120) {
+    temp = [X, C, 0];
+  } else if (120 <= H && H < 180) {
+    temp = [0, C, X];
+  } else if (180 <= H && H < 240) {
+    temp = [0, X, C];
+  } else if (240 <= H && H < 300) {
+    temp = [X, 0, C];
+  } else if (300 <= H && H < 360) {
+    temp = [C, 0, X];
+  }
+  return {
+    r: round((temp[0] + m) * 255),
+    g: round((temp[1] + m) * 255),
+    b: round((temp[2] + m) * 255)
+  };
+}
+function HSVtoHSL(h, s, v) {
+  if (arguments.length == 1) {
+    var { h, s, v } = arguments[0];
+  }
+  const rgb2 = HSVtoRGB(h, s, v);
+  return RGBtoHSL(rgb2.r, rgb2.g, rgb2.b);
+}
+function YCrCbtoRGB(y, cr, cb, bit) {
+  if (arguments.length == 1) {
+    var { y, cr, cb, bit } = arguments[0];
+    bit = bit || 0;
+  }
+  const R = y + 1.402 * (cr - bit);
+  const G = y - 0.344 * (cb - bit) - 0.714 * (cr - bit);
+  const B = y + 1.772 * (cb - bit);
+  return { r: Math.ceil(R), g: Math.ceil(G), b: Math.ceil(B) };
+}
+const color_names = {
+  aliceblue: "rgb(240, 248, 255)",
+  antiquewhite: "rgb(250, 235, 215)",
+  aqua: "rgb(0, 255, 255)",
+  aquamarine: "rgb(127, 255, 212)",
+  azure: "rgb(240, 255, 255)",
+  beige: "rgb(245, 245, 220)",
+  bisque: "rgb(255, 228, 196)",
+  black: "rgb(0, 0, 0)",
+  blanchedalmond: "rgb(255, 235, 205)",
+  blue: "rgb(0, 0, 255)",
+  blueviolet: "rgb(138, 43, 226)",
+  brown: "rgb(165, 42, 42)",
+  burlywood: "rgb(222, 184, 135)",
+  cadetblue: "rgb(95, 158, 160)",
+  chartreuse: "rgb(127, 255, 0)",
+  chocolate: "rgb(210, 105, 30)",
+  coral: "rgb(255, 127, 80)",
+  cornflowerblue: "rgb(100, 149, 237)",
+  cornsilk: "rgb(255, 248, 220)",
+  crimson: "rgb(237, 20, 61)",
+  cyan: "rgb(0, 255, 255)",
+  darkblue: "rgb(0, 0, 139)",
+  darkcyan: "rgb(0, 139, 139)",
+  darkgoldenrod: "rgb(184, 134, 11)",
+  darkgray: "rgb(169, 169, 169)",
+  darkgrey: "rgb(169, 169, 169)",
+  darkgreen: "rgb(0, 100, 0)",
+  darkkhaki: "rgb(189, 183, 107)",
+  darkmagenta: "rgb(139, 0, 139)",
+  darkolivegreen: "rgb(85, 107, 47)",
+  darkorange: "rgb(255, 140, 0)",
+  darkorchid: "rgb(153, 50, 204)",
+  darkred: "rgb(139, 0, 0)",
+  darksalmon: "rgb(233, 150, 122)",
+  darkseagreen: "rgb(143, 188, 143)",
+  darkslateblue: "rgb(72, 61, 139)",
+  darkslategray: "rgb(47, 79, 79)",
+  darkslategrey: "rgb(47, 79, 79)",
+  darkturquoise: "rgb(0, 206, 209)",
+  darkviolet: "rgb(148, 0, 211)",
+  deeppink: "rgb(255, 20, 147)",
+  deepskyblue: "rgb(0, 191, 255)",
+  dimgray: "rgb(105, 105, 105)",
+  dimgrey: "rgb(105, 105, 105)",
+  dodgerblue: "rgb(30, 144, 255)",
+  firebrick: "rgb(178, 34, 34)",
+  floralwhite: "rgb(255, 250, 240)",
+  forestgreen: "rgb(34, 139, 34)",
+  fuchsia: "rgb(255, 0, 255)",
+  gainsboro: "rgb(220, 220, 220)",
+  ghostwhite: "rgb(248, 248, 255)",
+  gold: "rgb(255, 215, 0)",
+  goldenrod: "rgb(218, 165, 32)",
+  gray: "rgb(128, 128, 128)",
+  grey: "rgb(128, 128, 128)",
+  green: "rgb(0, 128, 0)",
+  greenyellow: "rgb(173, 255, 47)",
+  honeydew: "rgb(240, 255, 240)",
+  hotpink: "rgb(255, 105, 180)",
+  indianred: "rgb(205, 92, 92)",
+  indigo: "rgb(75, 0, 130)",
+  ivory: "rgb(255, 255, 240)",
+  khaki: "rgb(240, 230, 140)",
+  lavender: "rgb(230, 230, 250)",
+  lavenderblush: "rgb(255, 240, 245)",
+  lawngreen: "rgb(124, 252, 0)",
+  lemonchiffon: "rgb(255, 250, 205)",
+  lightblue: "rgb(173, 216, 230)",
+  lightcoral: "rgb(240, 128, 128)",
+  lightcyan: "rgb(224, 255, 255)",
+  lightgoldenrodyellow: "rgb(250, 250, 210)",
+  lightgreen: "rgb(144, 238, 144)",
+  lightgray: "rgb(211, 211, 211)",
+  lightgrey: "rgb(211, 211, 211)",
+  lightpink: "rgb(255, 182, 193)",
+  lightsalmon: "rgb(255, 160, 122)",
+  lightseagreen: "rgb(32, 178, 170)",
+  lightskyblue: "rgb(135, 206, 250)",
+  lightslategray: "rgb(119, 136, 153)",
+  lightslategrey: "rgb(119, 136, 153)",
+  lightsteelblue: "rgb(176, 196, 222)",
+  lightyellow: "rgb(255, 255, 224)",
+  lime: "rgb(0, 255, 0)",
+  limegreen: "rgb(50, 205, 50)",
+  linen: "rgb(250, 240, 230)",
+  magenta: "rgb(255, 0, 255)",
+  maroon: "rgb(128, 0, 0)",
+  mediumaquamarine: "rgb(102, 205, 170)",
+  mediumblue: "rgb(0, 0, 205)",
+  mediumorchid: "rgb(186, 85, 211)",
+  mediumpurple: "rgb(147, 112, 219)",
+  mediumseagreen: "rgb(60, 179, 113)",
+  mediumslateblue: "rgb(123, 104, 238)",
+  mediumspringgreen: "rgb(0, 250, 154)",
+  mediumturquoise: "rgb(72, 209, 204)",
+  mediumvioletred: "rgb(199, 21, 133)",
+  midnightblue: "rgb(25, 25, 112)",
+  mintcream: "rgb(245, 255, 250)",
+  mistyrose: "rgb(255, 228, 225)",
+  moccasin: "rgb(255, 228, 181)",
+  navajowhite: "rgb(255, 222, 173)",
+  navy: "rgb(0, 0, 128)",
+  oldlace: "rgb(253, 245, 230)",
+  olive: "rgb(128, 128, 0)",
+  olivedrab: "rgb(107, 142, 35)",
+  orange: "rgb(255, 165, 0)",
+  orangered: "rgb(255, 69, 0)",
+  orchid: "rgb(218, 112, 214)",
+  palegoldenrod: "rgb(238, 232, 170)",
+  palegreen: "rgb(152, 251, 152)",
+  paleturquoise: "rgb(175, 238, 238)",
+  palevioletred: "rgb(219, 112, 147)",
+  papayawhip: "rgb(255, 239, 213)",
+  peachpuff: "rgb(255, 218, 185)",
+  peru: "rgb(205, 133, 63)",
+  pink: "rgb(255, 192, 203)",
+  plum: "rgb(221, 160, 221)",
+  powderblue: "rgb(176, 224, 230)",
+  purple: "rgb(128, 0, 128)",
+  rebeccapurple: "rgb(102, 51, 153)",
+  red: "rgb(255, 0, 0)",
+  rosybrown: "rgb(188, 143, 143)",
+  royalblue: "rgb(65, 105, 225)",
+  saddlebrown: "rgb(139, 69, 19)",
+  salmon: "rgb(250, 128, 114)",
+  sandybrown: "rgb(244, 164, 96)",
+  seagreen: "rgb(46, 139, 87)",
+  seashell: "rgb(255, 245, 238)",
+  sienna: "rgb(160, 82, 45)",
+  silver: "rgb(192, 192, 192)",
+  skyblue: "rgb(135, 206, 235)",
+  slateblue: "rgb(106, 90, 205)",
+  slategray: "rgb(112, 128, 144)",
+  slategrey: "rgb(112, 128, 144)",
+  snow: "rgb(255, 250, 250)",
+  springgreen: "rgb(0, 255, 127)",
+  steelblue: "rgb(70, 130, 180)",
+  tan: "rgb(210, 180, 140)",
+  teal: "rgb(0, 128, 128)",
+  thistle: "rgb(216, 191, 216)",
+  tomato: "rgb(255, 99, 71)",
+  turquoise: "rgb(64, 224, 208)",
+  violet: "rgb(238, 130, 238)",
+  wheat: "rgb(245, 222, 179)",
+  white: "rgb(255, 255, 255)",
+  whitesmoke: "rgb(245, 245, 245)",
+  yellow: "rgb(255, 255, 0)",
+  yellowgreen: "rgb(154, 205, 50)",
+  transparent: "rgba(0, 0, 0, 0)",
+  currentColor: "currentColor"
+};
+function isColorName(name) {
+  return !!color_names[name];
+}
+function getColorByName(name) {
+  return color_names[name];
+}
+var ColorNames = {
+  isColorName,
+  getColorByName
+};
 const color_regexp = /(#(?:[\da-f]{3}){1,2}|#(?:[\da-f]{8})|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_-]+))/gi;
 function getColorIndexString(it, prefix = "@") {
   return `${prefix}${it.startIndex}`.padEnd(10, "0");
@@ -10140,352 +10905,1169 @@ function parseGradient(colors2) {
   }
   return colors2;
 }
-const identity$2 = () => true;
-function _traverse(obj2, filterCallback = identity$2) {
-  var results = [];
-  let len2 = obj2.layers.length;
-  for (let start2 = len2; start2--; ) {
-    let it = obj2.layers[start2];
-    results.push(..._traverse(it.ref, filterCallback));
+function interpolateRGB(startColor, endColor, t = 0.5, exportFormat = "hex") {
+  var obj2 = interpolateRGBObject(startColor, endColor, t);
+  return format(obj2, exportFormat);
+}
+function interpolateRGBObject(startColor, endColor, t = 0.5) {
+  const startColorAlpha = typeof startColor.a === "undefined" ? 1 : startColor.a;
+  const endColorAlpha = typeof endColor.a === "undefined" ? 1 : endColor.a;
+  return {
+    r: round(startColor.r + (endColor.r - startColor.r) * t),
+    g: round(startColor.g + (endColor.g - startColor.g) * t),
+    b: round(startColor.b + (endColor.b - startColor.b) * t),
+    a: round(startColorAlpha + (endColorAlpha - startColorAlpha) * t, 100)
+  };
+}
+function scale(scale2, count = 5) {
+  if (!scale2)
+    return [];
+  if (typeof scale2 === "string") {
+    scale2 = convertMatchesArray(scale2);
   }
-  if (filterCallback(obj2)) {
-    results.push(obj2);
+  scale2 = scale2 || [];
+  var len2 = scale2.length;
+  var colors2 = [];
+  for (var i = 0; i < len2 - 1; i++) {
+    for (var index2 = 0; index2 < count; index2++) {
+      colors2.push(blend(scale2[i], scale2[i + 1], index2 / count));
+    }
+  }
+  return colors2;
+}
+function blend(startColor, endColor, ratio = 0.5, format2 = "hex") {
+  var s = parse(startColor);
+  var e = parse(endColor);
+  return interpolateRGB(s, e, ratio, format2);
+}
+function mix(startcolor, endColor, ratio = 0.5, format2 = "hex") {
+  return blend(startcolor, endColor, ratio, format2);
+}
+function contrast(c2) {
+  c2 = parse(c2);
+  return (Math.round(c2.r * 299) + Math.round(c2.g * 587) + Math.round(c2.b * 114)) / 1e3;
+}
+function contrastColor(c2) {
+  return contrast(c2) >= 128 ? "black" : "white";
+}
+function gradient$1(colors2, count = 10) {
+  colors2 = parseGradient(colors2);
+  let newColors = [];
+  let maxCount = count - (colors2.length - 1);
+  let allCount = maxCount;
+  for (var i = 1, len2 = colors2.length; i < len2; i++) {
+    var startColor = colors2[i - 1][0];
+    var endColor = colors2[i][0];
+    var rate = i == 1 ? colors2[i][1] : colors2[i][1] - colors2[i - 1][1];
+    var colorCount = i == colors2.length - 1 ? allCount : Math.floor(rate * maxCount);
+    newColors = newColors.concat(scale([startColor, endColor], colorCount), [
+      endColor
+    ]);
+    allCount -= colorCount;
+  }
+  return newColors;
+}
+function scaleHSV(color2, target = "h", count = 9, exportFormat = "rgb", min = 0, max = 1, dist2 = 100) {
+  var colorObj = parse(color2);
+  var hsv = RGBtoHSV(colorObj);
+  var unit = (max - min) * dist2 / count;
+  var results = [];
+  for (var i = 1; i <= count; i++) {
+    hsv[target] = Math.abs((dist2 - unit * i) / dist2);
+    results.push(format(HSVtoRGB(hsv), exportFormat));
   }
   return results;
 }
-class Item {
-  constructor(json = {}) {
-    this.ref = new Proxy(this, {
-      get: (target, key) => {
-        var originMethod = target[key];
-        if (isFunction(originMethod)) {
-          return (...args2) => {
-            return originMethod.apply(target, args2);
-          };
-        } else {
-          return originMethod || target.json[key];
-        }
-      },
-      set: (target, key, value) => {
-        const isDiff = target.json[key] != value;
-        if (isDiff) {
-          target.json[key] = value;
-          this.changed();
-        }
-        return true;
-      }
+function scaleH(color2, count = 9, exportFormat = "rgb", min = 0, max = 360) {
+  return scaleHSV(color2, "h", count, exportFormat, min, max, 1);
+}
+function scaleS(color2, count = 9, exportFormat = "rgb", min = 0, max = 1) {
+  return scaleHSV(color2, "s", count, exportFormat, min, max, 100);
+}
+function scaleV(color2, count = 9, exportFormat = "rgb", min = 0, max = 1) {
+  return scaleHSV(color2, "v", count, exportFormat, min, max, 100);
+}
+scale.parula = function(count) {
+  return scale(["#352a87", "#0f5cdd", "#00b5a6", "#ffc337", "#fdff00"], count);
+};
+scale.jet = function(count) {
+  return scale([
+    "#00008f",
+    "#0020ff",
+    "#00ffff",
+    "#51ff77",
+    "#fdff00",
+    "#ff0000",
+    "#800000"
+  ], count);
+};
+scale.hsv = function(count) {
+  return scale([
+    "#ff0000",
+    "#ffff00",
+    "#00ff00",
+    "#00ffff",
+    "#0000ff",
+    "#ff00ff",
+    "#ff0000"
+  ], count);
+};
+scale.hot = function(count) {
+  return scale(["#0b0000", "#ff0000", "#ffff00", "#ffffff"], count);
+};
+scale.pink = function(count) {
+  return scale(["#1e0000", "#bd7b7b", "#e7e5b2", "#ffffff"], count);
+};
+scale.bone = function(count) {
+  return scale(["#000000", "#4a4a68", "#a6c6c6", "#ffffff"], count);
+};
+scale.copper = function(count) {
+  return scale(["#000000", "#3d2618", "#9d623e", "#ffa167", "#ffc77f"], count);
+};
+const hue_color = [
+  { rgb: "#ff0000", start: 0 },
+  { rgb: "#ffff00", start: 0.17 },
+  { rgb: "#00ff00", start: 0.33 },
+  { rgb: "#00ffff", start: 0.5 },
+  { rgb: "#0000ff", start: 0.67 },
+  { rgb: "#ff00ff", start: 0.83 },
+  { rgb: "#ff0000", start: 1 }
+];
+function checkHueColor(p) {
+  var startColor, endColor;
+  for (var i = 0; i < hue_color.length; i++) {
+    if (hue_color[i].start >= p) {
+      startColor = hue_color[i - 1];
+      endColor = hue_color[i];
+      break;
+    }
+  }
+  if (startColor && endColor) {
+    return mix(startColor, endColor, (p - startColor.start) / (endColor.start - startColor.start));
+  }
+  return hue_color[0].rgb;
+}
+function initHueColors() {
+  for (var i = 0, len2 = hue_color.length; i < len2; i++) {
+    var hue = hue_color[i];
+    var obj2 = parse(hue.rgb);
+    hue.r = obj2.r;
+    hue.g = obj2.g;
+    hue.b = obj2.b;
+  }
+}
+initHueColors();
+var random = {
+  title: "random",
+  key: "random",
+  execute: function(count = 42) {
+    const colorList = randomByCount(count).map((color2) => {
+      return { color: color2 };
     });
-    if (json instanceof Item) {
-      json = json.toJSON();
+    colorList.sort((a, b) => {
+      const localA = parse(a.color);
+      const localB = parse(b.color);
+      return localA.h > localB.h ? 1 : -1;
+    });
+    return colorList;
+  }
+};
+var __glob_0_20$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": random
+}, Symbol.toStringTag, { value: "Module" }));
+const modules$4 = { "./colors_list/material-amber.js": __glob_0_0$4, "./colors_list/material-blue.js": __glob_0_1$4, "./colors_list/material-bluegray.js": __glob_0_2$4, "./colors_list/material-brown.js": __glob_0_3$4, "./colors_list/material-cyan.js": __glob_0_4$4, "./colors_list/material-deeporange.js": __glob_0_5$4, "./colors_list/material-deeppurple.js": __glob_0_6$4, "./colors_list/material-gray.js": __glob_0_7$4, "./colors_list/material-green.js": __glob_0_8$4, "./colors_list/material-indigo.js": __glob_0_9$4, "./colors_list/material-lightblue.js": __glob_0_10$4, "./colors_list/material-lightgreen.js": __glob_0_11$4, "./colors_list/material-lime.js": __glob_0_12$4, "./colors_list/material-orange.js": __glob_0_13$4, "./colors_list/material-pink.js": __glob_0_14$4, "./colors_list/material-purple.js": __glob_0_15$3, "./colors_list/material-red.js": __glob_0_16$3, "./colors_list/material-teal.js": __glob_0_17$3, "./colors_list/material-yellow.js": __glob_0_18$3, "./colors_list/opencolor-gray.js": __glob_0_19$3, "./colors_list/random.js": __glob_0_20$3 };
+var colors = Object.values(modules$4).map((it) => it.default);
+var ColorAssetsEditor$1 = "";
+class ColorAssetsEditor extends EditorElement {
+  initState() {
+    return {
+      mode: "grid",
+      preset: "random",
+      isLoaded: false,
+      colors
+    };
+  }
+  getTools() {
+    return `<div ref="$tools"></div>`;
+  }
+  [LOAD("$tools")]() {
+    const options2 = this.state.colors.map((it) => {
+      return { value: it.key, text: it.title };
+    });
+    return createComponent("SelectEditor", {
+      key: "preset",
+      value: this.state.preset,
+      options: options2,
+      onchange: "changePreset"
+    });
+  }
+  [SUBSCRIBE("changePreset")](key, value) {
+    this.setState({
+      [key]: value
+    });
+  }
+  template() {
+    return `
+      <div class='elf--color-assets-editor'>
+        <div class='color-assets-head'>
+          <div class='tools'>${this.getTools()}</div>
+        </div>
+        <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
+      </div>
+    `;
+  }
+  [CLICK("$title")]() {
+    this.$el.toggleClass("is-open");
+  }
+  [LOAD("$colorList")]() {
+    var preset = this.state.colors.find((it) => it.key === this.state.preset);
+    if (!preset) {
+      return "";
     }
-    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-    this.lastChangedField = {};
-    this.lastChangedFieldKeys = [];
-    this.cachedValue = {};
-    return this.ref;
+    var results = preset.execute().map((item, index2) => {
+      return `<div class='color-item' data-index="${index2}" data-color="${item.color}"><div class='preview' title="${item.color}" data-index="${index2}"><div class='color-view' style='background-color: ${item.color};'></div></div></div>`;
+    });
+    return results;
   }
-  getDefaultTitle() {
-    return "Item";
-  }
-  getIcon() {
-    return "";
-  }
-  isAttribute() {
-    return false;
-  }
-  isChanged(timestamp) {
-    return this.json.timestamp != Number(timestamp);
-  }
-  changed() {
-    this.json.timestamp = this.json._timestamp + window.performance.now();
-  }
-  get title() {
-    return this.json.name || this.getDefaultTitle();
-  }
-  renameWithCount() {
-    let arr = this.json.name.split(" ");
-    if (arr.length < 2) {
-      return;
-    }
-    let last = arr.pop();
-    let lastNumber = +last;
-    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
-      lastNumber++;
+  executeColor(callback, isRefresh = true, isEmit = true) {
+    var project2 = this.$context.selection.currentProject;
+    if (project2) {
+      callback && callback(project2);
+      if (isRefresh)
+        this.refresh();
+      if (isEmit)
+        this.emit("refreshColorAssets");
     } else {
-      lastNumber = last;
+      window.alert("Please select a project.");
     }
-    const nextName = [...arr, lastNumber].join(" ");
-    this.reset({
-      name: nextName
-    });
   }
-  get allLayers() {
-    return _traverse(this.ref);
+  [CLICK("$colorList .preview")](e) {
+    const color2 = e.$dt.$(".color-view").css("background-color");
+    this.modifyColorPicker(color2);
   }
-  filteredAllLayers(filterCallback) {
-    return _traverse(this.ref, filterCallback);
+  modifyColorPicker(color2) {
+    this.parent.trigger(this.props.onchange, this.props.key, color2, this.props.params);
   }
-  get id() {
-    return this.json.id;
+}
+var ColorSingleEditor$1 = "";
+class ColorSingleEditor extends EditorElement {
+  initState() {
+    return {
+      params: this.props.params,
+      color: this.props.color || "rgba(0, 0, 0, 1)"
+    };
   }
-  get layers() {
-    return this.json.layers;
+  updateData(opt = {}) {
+    this.setState(opt, false);
+    this.modifyColor();
   }
-  get parent() {
-    return this.json.parent;
+  modifyColor() {
+    this.parent.trigger(this.props.onchange, this.props.key, this.state.color, this.state.params);
   }
-  setParent(otherParent) {
-    this.json.parent = otherParent;
+  changeColor(color2) {
+    this.setState({ color: color2 });
   }
-  get depth() {
-    if (!this.parent)
-      return 1;
-    return this.parent.depth + 1;
+  setValue(color2) {
+    this.changeColor(color2);
   }
-  get top() {
-    if (!this.parent)
-      return this.ref;
-    let localParent = this.parent;
-    do {
-      if (!localParent.parent) {
-        return localParent;
+  [BIND("$miniView")]() {
+    return {
+      style: {
+        "background-color": this.state.color
       }
-      localParent = localParent.parent;
-    } while (localParent);
+    };
   }
-  get project() {
-    return this.path.find((it) => it.is("project"));
+  template() {
+    return `
+            <div class='elf--color-single-editor'>
+                <div class='preview' ref='$preview'>
+                    <div class='mini-view'>
+                        <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>
+                    </div>
+                </div>
+            </div>
+        `;
   }
-  get artboard() {
-    return this.path.find((it) => it.is("artboard"));
+  [CLICK("$preview")]() {
+    this.viewColorPicker();
   }
-  get path() {
-    if (!this.parent)
-      return [this.ref];
-    const list2 = this.parent.path;
-    list2.push(this.ref);
-    return list2;
-  }
-  getInnerId(postfix = "") {
-    return this.json.id + postfix;
-  }
-  is(checkItemType) {
-    if (!this.json)
-      return false;
-    return checkItemType === this.json.itemType;
-  }
-  isNot(checkItemType) {
-    return this.is(checkItemType) === false;
-  }
-  isSVG() {
-    return false;
-  }
-  addCache(key, value) {
-    this.cachedValue[key] = value;
-  }
-  getCache(key) {
-    return this.cachedValue[key];
-  }
-  computed(key, newValueCallback) {
-    const cachedKey = `__cachedKey_${key}`;
-    const parsedKey = `${cachedKey}__parseValue`;
-    const value = this.json[key];
-    if (this.getCache(key) === value && this.getCache(parsedKey)) {
-      return this.getCache(parsedKey);
-    }
-    this.addCache(key, value);
-    this.addCache(parsedKey, newValueCallback(value, this.ref));
-    return this.getCache(parsedKey);
-  }
-  editable() {
-    return true;
-  }
-  generateListNumber() {
-    this.layers.forEach((it, index2) => {
-      it.no = index2;
-      it.generateListNumber();
+  viewColorPicker() {
+    this.emit("showColorPickerPopup", {
+      target: this,
+      changeEvent: (color2) => {
+        this.refs.$miniView.cssText(`background-color: ${color2}`);
+        this.updateData({ color: color2 });
+      },
+      color: this.state.color
     });
   }
-  convert(json) {
-    if (json.layers) {
-      json.layers.forEach((layer) => {
-        layer.parent = this.ref;
+}
+var ColorViewEditor$1 = "";
+class ColorViewEditor extends EditorElement {
+  initState() {
+    const value = this.props.value || "rgba(0, 0, 0, 1)";
+    const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
+    const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === "true";
+    return {
+      label: this.props.label,
+      title: this.props.title,
+      value,
+      compact,
+      mini,
+      color: parse(value),
+      colorFocus: false,
+      opacityFocus: false
+    };
+  }
+  updateData(opt = {}) {
+    this.setState(opt);
+    this.modifyColor();
+  }
+  updateEndData(opt = {}) {
+    this.setState(opt);
+    this.modifyEndColor();
+  }
+  getValue() {
+    return this.state.value;
+  }
+  setValue(value) {
+    this.changeColor(value);
+  }
+  modifyColor() {
+    this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
+  }
+  modifyEndColor() {
+    this.parent.trigger(this.props.onchangeend, this.props.key, this.state.value, this.props.params);
+  }
+  changeColor(value) {
+    this.setState({
+      value,
+      color: parse(value)
+    });
+  }
+  get alpha() {
+    return this.state.color.a * 100;
+  }
+  get hexColor() {
+    return formatWithoutAlpha(this.state.color, "hex");
+  }
+  get fullColor() {
+    return format(this.state.color, this.state.color.type);
+  }
+  refresh() {
+    this.refreshColorView();
+    this.refs.$colorCode.val(this.state.value);
+    this.refs.$opacityCode.val(this.alpha);
+  }
+  refreshColorView() {
+    this.bindData("$miniView1");
+    this.bindData("$miniView2");
+  }
+  template() {
+    var { label, title: title2 } = this.state;
+    return `
+            <div class='elf--color-view-editor'>
+                ${label ? `<label data-tooltip="${title2}"><span>${label}</span></label>` : ""}            
+                <div class='color-code' ref="$container">
+                    <div class='preview' ref='$preview'>
+                        <div class='mini-view'>
+                            <div class='color-view' ref='$miniView1'></div>
+                            <div class='color-view' ref='$miniView2'></div>
+                        </div>
+                    </div>                
+                    <div class="color-input">
+                        <input type="text" ref='$colorCode' value='${this.state.value}' tabIndex="1" />
+                    </div>
+                    <div class="opacity-input">                    
+                        <input type="number" ref='$opacityCode' value='${this.alpha}' tabIndex="2" max="100" min="0" step="0.1" />
+                    </div>                    
+                </div>
+            </div>
+        `;
+  }
+  [BIND("$el")]() {
+    var { label, compact, mini, colorFocus, opacityFocus } = this.state;
+    return {
+      class: [
+        "elf--color-view-editor",
+        {
+          "has-label": label,
+          compact,
+          mini
+        },
+        {
+          focused: colorFocus || opacityFocus
+        }
+      ]
+    };
+  }
+  [BIND("$miniView1")]() {
+    return {
+      style: {
+        "background-color": this.hexColor
+      }
+    };
+  }
+  [BIND("$miniView2")]() {
+    return {
+      style: {
+        "background-color": this.fullColor
+      }
+    };
+  }
+  [BIND("$colorCode")]() {
+    return {
+      value: this.props.format ? this.hexColor : this.state.value
+    };
+  }
+  [BIND("$opacityCode")]() {
+    return {
+      value: this.alpha
+    };
+  }
+  [FOCUSIN("$colorCode")]() {
+    this.setState({
+      colorFocus: true
+    });
+    this.refs.$colorCode.select();
+  }
+  [FOCUSOUT("$colorCode")]() {
+    this.setState({
+      colorFocus: false
+    });
+  }
+  [FOCUSIN("$opacityCode")]() {
+    this.setState({
+      opacityFocus: true
+    });
+    this.refs.$opacityCode.select();
+  }
+  [FOCUSOUT("$opacityCode")]() {
+    this.setState({
+      opacityFocus: false
+    });
+  }
+  [CLICK("$preview")]() {
+    this.viewColorPicker();
+  }
+  viewColorPicker() {
+    this.emit("showColorPickerPopup", {
+      target: this,
+      changeEvent: (color2) => {
+        this.updateData({ value: color2, color: parse(color2) });
+      },
+      changeEndEvent: (color2) => {
+        this.updateEndData({ value: color2, color: parse(color2) });
+      },
+      color: this.state.value
+    }, null, this.$el.rect());
+  }
+  [CLICK("$remove")]() {
+    this.updateData({ value: "" });
+  }
+  [INPUT("$el .color-input input")](e) {
+    var color2 = e.$dt.value;
+    this.updateData({
+      value: color2,
+      color: parse(color2)
+    });
+    this.refreshColorView();
+  }
+  [INPUT("$el .opacity-input input")](e) {
+    var opacity2 = +e.$dt.value;
+    opacity2 = Math.max(0, Math.min(100, opacity2));
+    const color2 = parse(this.state.value);
+    color2.a = round(opacity2 / 100, 1e3);
+    const value = format(color2, color2.type);
+    this.updateData({
+      value,
+      color: color2
+    });
+    this.refreshColorView();
+  }
+}
+var ComponentEditor$1 = "";
+class ComponentEditor extends EditorElement {
+  initState() {
+    return {
+      inspector: this.props.inspector
+    };
+  }
+  template() {
+    return `
+      <div ref='$body' class="component-editor"></div>
+    `;
+  }
+  getPropertyEditor(index2, childEditor) {
+    if (childEditor.type === "folder") {
+      return `
+        <div class='component-folder'>
+          <label>${iconUse("chevron_right")} ${childEditor.label}</label>
+          <ul>
+            ${childEditor.children.map((it, itemIndex) => {
+        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it)}</li>`;
+      }).join("")}
+          </ul>
+        </div>
+      `;
+    } else if (childEditor.type === "column") {
+      const size2 = (childEditor.size || [2]).join("-");
+      return `
+        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap || 0}px; --row-gap: ${childEditor.rowGap || 0}px" >
+          ${childEditor.columns.map((it, itemIndex) => {
+        if (it === "-") {
+          return `<div class="column-item"></div>`;
+        } else if (it.type === "label") {
+          return `<div class="column-item">
+                    <label>${it.label}</label>
+                  </div>`;
+        }
+        return `
+                  <div class='column-item'>
+                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
+                  </div>
+                `;
+      }).join("")}  
+        </div>
+      `;
+    }
+    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
+      onchange: (key, value) => {
+        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
+        this.trigger("changeComponentValue", key, newValue);
+      },
+      ref: `${childEditor.key}${index2}`,
+      key: childEditor.key,
+      value: childEditor.defaultValue
+    }));
+  }
+  [LOAD("$body")]() {
+    const inspector2 = this.state.inspector;
+    var self2 = inspector2.map((it, index2) => {
+      if (isString(it) || it.type === "label") {
+        const title2 = it.label || it;
+        return `
+          <div class='component-item'> 
+            <label>${title2}</label>
+          </div>`;
+      } else if (it.type === "folder") {
+        return `
+          <div class='component-item'>
+            ${this.getPropertyEditor(index2, it)}
+          </div>
+        `;
+      } else {
+        return `
+            <div class='component-item'> 
+              ${this.getPropertyEditor(index2, it)}
+            </div>
+          `;
+      }
+    });
+    return self2;
+  }
+  setInspector(inspector2) {
+    this.setState({
+      inspector: inspector2
+    });
+  }
+  setValue(obj2 = {}) {
+    Object.keys(obj2).forEach((key) => {
+      const value = obj2[key];
+      this.eachChildren((child) => {
+        if (child.setValue && child.props.key === key) {
+          child.setValue(value);
+        }
       });
-    }
-    return json;
+    });
   }
-  setCache() {
-  }
-  toCloneObject(isDeep = true) {
-    var json = this.attrs("itemType", "name", "elementType", "type", "visible", "lock", "selected");
-    if (isDeep) {
-      json.layers = this.json.layers.map((layer) => layer.clone(isDeep));
-    }
-    return json;
-  }
-  clone(isDeep = true) {
-    var ItemClass = this.constructor;
-    var item = new ItemClass(this.toCloneObject(isDeep));
-    item.setParent(this.json.parent);
-    return item;
-  }
-  reset(obj2) {
-    if (!obj2.__changedId)
-      obj2.__changedId = uuid();
-    if (this.lastChangedField.__changedId !== obj2.__changedId) {
-      this.json = this.convert(Object.assign(this.json, obj2));
-      this.lastChangedField = obj2;
-      this.lastChangedFieldKeys = Object.keys(obj2);
-      this.changed();
-    }
-    return true;
-  }
-  hasChangedField(...args2) {
-    return args2.some((it) => this.lastChangedFieldKeys.includes(it));
-  }
-  getDefaultObject(obj2 = {}) {
-    var id = uuidShort();
-    return __spreadValues({
-      id,
-      _timestamp: Date.now(),
-      _time: window.performance.now(),
-      visible: true,
-      lock: false,
-      selected: false,
-      layers: []
-    }, obj2);
-  }
-  attrs(...args2) {
+  getValue() {
     const result = {};
-    args2.forEach((field) => {
-      result[field] = clone$1(this.json[field]);
+    this.eachChildren((child) => {
+      if (isFunction(child.getValue) && child.props.key) {
+        result[child.props.key] = child.getValue();
+      }
     });
     return result;
   }
-  hasChildren() {
-    return this.layers.length > 0;
+  [SUBSCRIBE_SELF("changeComponentValue")](key, value) {
+    this.parent.trigger(this.props.onchange, key, value);
   }
-  appendChild(layer) {
-    if (layer.parent === this.ref) {
-      return layer;
-    }
-    this.resetMatrix(layer);
-    if (layer.parent) {
-      layer.remove();
-    }
-    layer.setParent(this.ref);
-    this.json.layers.push(layer);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  prependChildItem(layer) {
-    this.resetMatrix(layer);
-    if (layer.parent) {
-      layer.remove();
-    }
-    layer.setParent(this.ref);
-    this.json.layers.unshift(layer);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  resetMatrix() {
-  }
-  refreshMatrixCache() {
-  }
-  insertChild(layer, index2 = 0) {
-    this.resetMatrix(layer);
-    if (layer.parent) {
-      layer.remove();
-    }
-    layer.setParent(this.ref);
-    this.json.layers.splice(index2, 0, layer);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  insertAfter(layer) {
-    const index2 = this.parent.findIndex(this);
-    this.parent.insertChild(layer, index2);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  insertBefore(layer) {
-    const index2 = this.parent.findIndex(this);
-    this.parent.insertChild(layer, index2 - 1);
-    this.project.addIndexItem(layer);
-    return layer;
-  }
-  setPositionInPlace(position2, item) {
-    this.layers.splice(position2, 0, item);
-  }
-  toggle(field, toggleValue) {
-    if (isUndefined(toggleValue)) {
-      this.json[field] = !this.json[field];
-    } else {
-      this.json[field] = !!toggleValue;
-    }
-  }
-  isTreeItemHide() {
-    let currentParent = this.parent;
-    let collapsedList = [];
-    do {
-      if (currentParent.is("project"))
-        break;
-      collapsedList.push(Boolean(currentParent.collapsed));
-      currentParent = currentParent.parent;
-    } while (currentParent);
-    return Boolean(collapsedList.filter(Boolean).length);
-  }
-  expectJSON(key) {
-    if (key === "parent")
-      return false;
-    if (isUndefined(this.json[key]))
-      return false;
-    return true;
-  }
-  toJSON() {
-    const json = this.json;
-    let newJSON = {};
-    Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
-      newJSON[key] = json[key];
-    });
-    return newJSON;
-  }
-  resize() {
-  }
-  copy(dist2 = 0) {
-    return this.json.parent.copyItem(this.ref, dist2);
-  }
-  findIndex(item) {
-    return this.json.layers.indexOf(item.ref);
-  }
-  copyItem(childItem, dist2 = 10) {
-    var child = childItem.clone();
-    child.renameWithCount();
-    child.move([dist2, dist2, 0]);
-    var childIndex = this.findIndex(childItem);
-    if (childIndex > -1) {
-      this.json.layers.push(child);
-      this.project.addIndexItem(child);
-    }
-    return child;
-  }
-  remove() {
-    this.json.parent.removeChild(this.ref);
-    this.project.removeIndexItem(this.ref);
-  }
-  removeChild(childItem) {
-    const index2 = this.findIndex(childItem);
-    if (index2 > -1) {
-      this.json.layers.splice(index2, 1);
-    }
-  }
-  hasParent(parentId) {
-    var isParent = this.json.parent.id === parentId;
-    if (!isParent && this.json.parent.is("project") === false)
-      return this.json.parent.hasParent(parentId);
-    return isParent;
+  [CLICK("$el .component-folder > label")](e) {
+    const $target = e.$dt.closest("component-folder");
+    $target.toggleClass("close");
   }
 }
+var CSSPropertyEditor$1 = "";
+class CSSPropertyEditor extends EditorElement {
+  initState() {
+    return {
+      hideTitle: this.props["hide-title"] === "true",
+      hideRefresh: this.props["hide-refresh"] === "true",
+      properties: []
+    };
+  }
+  updateData(opt) {
+    this.setState(opt, false);
+    this.modifyProperty();
+  }
+  modifyProperty() {
+    this.parent.trigger(this.props.onchange, this.state.properties);
+  }
+  template() {
+    const hideTitleClass = this.state.hideTitle ? "hide-title" : "";
+    const hideRefreshClass = this.state.hideRefresh ? "hide-refresh" : "";
+    return `
+      <div class='elf--css-property-editor ${hideTitleClass} ${hideRefreshClass}'>
+        <div class='title'>
+          <label>${this.$i18n("css.property.editor.properties")}</label>
+          <div class='tools'>
+            ${this.makePropertySelect()}
+            <button type="button" ref='$addProperty'>${obj$2.add}</button>
+          </div>
+        </div>
+        <div class='input grid-1 css-property-list' ref='$property'></div>
+      </div>
+    `;
+  }
+  getPropertyDefaultValue(key) {
+    switch (key) {
+      case "animation-timing-function":
+      case "box-shadow":
+      case "text-shadow":
+      case "color":
+      case "background-image":
+      case "background-color":
+      case "text-fill-color":
+      case "text-stroke-color":
+      case "filter":
+      case "backdrop-filter":
+      case "var":
+      case "transform":
+      case "transform-origin":
+      case "perspective-origin":
+      case "playTime":
+        return Length.string("");
+      case "offset-distance":
+        return Length.percent(0);
+      case "rotate":
+        return Length.deg(0);
+      case "mix-blend-mode":
+        return "normal";
+      case "clip-path":
+        return "";
+      case "opacity":
+        return 1;
+      default:
+        return 0;
+    }
+  }
+  getDefinedKey(key) {
+    switch (key) {
+      case "animation-timing-function":
+        return "animationTimingFunction";
+      case "box-shadow":
+        return "boxShadow";
+      case "text-shadow":
+        return "textShadow";
+      case "color":
+        return "color";
+      case "background-image":
+        return "backgroundImage";
+      case "background-color":
+        return "backgroundColor";
+      case "text-fill-color":
+        return "textFillColor";
+      case "text-stroke-color":
+        return "textStrokeColor";
+      case "filter":
+        return "filter";
+      case "backdrop-filter":
+        return "backdropFilter";
+      case "var":
+        return "var";
+      case "transform":
+        return "transform";
+      case "transform-origin":
+        return "transformOrigin";
+      case "perspective-origin":
+        return "perspectiveOrigin";
+      case "playTime":
+        return "playTime";
+      case "offset-distance":
+        return "offsetDistance";
+      case "rotate":
+        return "rotate";
+      case "mix-blend-mode":
+        return "mixBlendMode";
+      case "clip-path":
+        return "clipPath";
+      case "opacity":
+        return "opacity";
+      default:
+        return key;
+    }
+  }
+  [CLICK("$addProperty")]() {
+    var key = this.getRef("$propertySelect").value;
+    var searchItem = this.state.properties.find((it) => {
+      return it.key === key;
+    });
+    if (searchItem) {
+      window.alert(`${key} is already added.`);
+      return;
+    }
+    var value = this.getPropertyDefaultValue(key);
+    var current = this.$context.selection.current;
+    if (current) {
+      value = current[this.getDefinedKey(key)];
+    }
+    this.state.properties.push({ key, value });
+    this.refresh();
+    this.modifyProperty();
+  }
+  makeIndivisualPropertyColorEditor(property, index2) {
+    var key = property.key;
+    return `<div class='property-editor'>
+    ${createComponent("ColorViewEditor", {
+      ref: `${key}${index2}`,
+      label: property.key,
+      title: property.key,
+      value: property.value,
+      key: property.key,
+      onChange: "changeColorProperty"
+    })}
+  </div>`;
+  }
+  makeCustomePropertyEditor(property, index2) {
+    return `<div class='property-editor'>
+        ${createComponent(property.editor, {
+      onchange: "changeSelect",
+      ref: `$customProperty${index2}`,
+      key: property.key,
+      value: property.value
+    })}
+      </div>`;
+  }
+  makeIndivisualPropertyEditor(property, index2) {
+    if (property.key === "background-image") {
+      return `
+        <div class='property-editor'>
+          ${createComponent("BackgroundImageEditor", {
+        ref: `$backgroundImage${index2}`,
+        key: property.key,
+        "hide-title": this.state.hideTitle,
+        value: property.value,
+        onchange: "changeKeyValue"
+      })}
+        </div>
+      `;
+    } else if (property.key === "filter") {
+      return `
+        <div class='property-editor'>
+          <object refClass="FilterEditor" ref='$filter${index2}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
+        </div>
+      `;
+    } else if (property.key === "backdrop-filter") {
+      return `
+        <div class='property-editor'>
+          <object refClass="FilterEditor" ref='$backdropFilter${index2}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
+        </div>
+      `;
+    } else if (property.key === "box-shadow") {
+      return `
+        <div class='property-editor'>
+          <object refClass="BoxShadowEditor" ref='$boxshadow${index2}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
+        </div>
+      `;
+    } else if (property.key === "text-shadow") {
+      return `
+        <div class='property-editor'>
+          <object refClass="TextShadowEditor" ref='$textshadow${index2}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
+        </div>
+      `;
+    } else if (property.key === "var") {
+      return `
+        <div class='property-editor'>
+          <object refClass="VarEditor" ref='$var${index2}' value="${property.value}" onChange="changeVar" />
+        </div>
+      `;
+    } else if (property.key === "transform") {
+      return `
+        <div class='property-editor'>
+          <object refClass="TransformEditor" ref='$transform${index2}' value="${property.value}" onChange="changeTransform" />
+        </div>
+      `;
+    } else if (property.key === "transform-origin") {
+      return `
+        <div class='property-editor'>
+          <object refClass="TransformOriginEditor" ref='$transformOrigin${index2}' value="${property.value}" onChange="changeTransformOrigin" />
+        </div>
+      `;
+    } else if (property.key === "perspective-origin") {
+      return `
+        <div class='property-editor'>
+          <object refClass="PerspectiveOriginEditor" ref='$perspectiveOrigin${index2}' value="${property.value}" onChange="changePerspectiveOrigin" />
+        </div>
+      `;
+    } else if (property.key === "fill-rule") {
+      return `
+        <div class='property-editor'>
+          <object refClass="SelectEditor"  
+          ref='$fillRule${index2}' 
+          key='fill-rule' 
+          icon="true" 
+          options=${variable$4(["nonzero", "evenodd"])}
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `;
+    } else if (property.key === "stroke-linecap") {
+      return `
+        <div class='property-editor'>
+          <object refClass="SelectEditor"  
+          ref='$strokeLinecap${index2}' 
+          key='stroke-linecap' 
+          icon="true" 
+          options=${variable$4(["butt", "round", "square"])}          
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `;
+    } else if (property.key === "stroke-linejoin") {
+      return `
+        <div class='property-editor'>
+          <object refClass="SelectEditor"  
+          ref='$strokeLinejoin${index2}' 
+          key='stroke-linejoin' 
+          icon="true" 
+          options=${variable$4([
+        "miter",
+        "arcs",
+        "bevel",
+        "miter-clip",
+        "round"
+      ])}                    
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `;
+    } else if (property.key === "mix-blend-mode") {
+      return `
+        <div class='property-editor'>
+          <object refClass="BlendSelectEditor" 
+          ref='$mixBlendMode${index2}' 
+          key='mix-blend-mode' 
+          icon="true" 
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `;
+    } else if (property.key === "stroke-dasharray") {
+      return `
+        <object refClass="StrokeDashArrayEditor" 
+          ref='$strokeDashArray${index2}' 
+          key='stroke-dasharray'
+          value='${property.value}' 
+          onchange='changeSelect' 
+        />
+      `;
+    } else if (property.key === "border-radius") {
+      return `
+        <object refClass="BorderRadiusEditor"
+          ref='$borderRadius${index2}' 
+          key='border-radius'
+          value='${property.value}' 
+          onchange='changeBorderRadius' 
+        />
+      `;
+    } else if (property.key === "border") {
+      return `
+        <object refClass="BorderEditor"
+          ref='$border${index2}' 
+          key='border'
+          value='${property.value}' 
+          onchange='changeKeyValue' 
+        />
+      `;
+    } else if (property.key === "clip-path") {
+      return `
+        <object refClass="ClipPathEditor"
+          ref='$clipPath${index2}' 
+          key='clip-path'
+          value='${property.value}' 
+          onchange='changeClipPath' 
+        />
+      `;
+    } else if (property.key === "d") {
+      return `
+        <object refClass="PathDataEditor" ref='$pathData${index2}' key='d' value='${property.value}' onchange='changeSelect' />
+      `;
+    } else if (property.key === "points") {
+      return `
+        <object refClass="PolygonDataEditor" ref='$polygonData${index2}' key='points' value='${property.value}' onchange='changeSelect' />
+      `;
+    } else if (property.key === "playTime") {
+      return `
+        <object refClass="MediaProgressEditor" ref='$playTime${index2}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
+      `;
+    }
+    return `
+      <div class='property-editor'>
+        ???
+
+      </div>
+    `;
+  }
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
+    this.modifyPropertyValue(key, value);
+  }
+  [SUBSCRIBE_SELF("changeBorderRadius")](value) {
+    this.modifyPropertyValue("border-radius", value);
+  }
+  [SUBSCRIBE_SELF("changeClipPath")](value) {
+    this.modifyPropertyValue("clip-path", value);
+  }
+  [SUBSCRIBE_SELF("changeColorProperty")](key, color2) {
+    this.modifyPropertyValue(key, color2);
+  }
+  [SUBSCRIBE_SELF("changeBackgroundImageProperty")](key, backgroundImage2) {
+    this.modifyPropertyValue(key, backgroundImage2);
+  }
+  [SUBSCRIBE_SELF("changeFilterProperty")](filter2) {
+    this.modifyPropertyValue("filter", filter2);
+  }
+  [SUBSCRIBE_SELF("changeBackdropFilterProperty")](filter2) {
+    this.modifyPropertyValue("backdrop-filter", filter2);
+  }
+  [SUBSCRIBE_SELF("changeBoxShadowProperty")](boxshadow) {
+    this.modifyPropertyValue("box-shadow", boxshadow);
+  }
+  [SUBSCRIBE_SELF("changeTextShadowProperty")](textShadow2) {
+    this.modifyPropertyValue("text-shadow", textShadow2);
+  }
+  [SUBSCRIBE_SELF("changeVar")](value) {
+    this.modifyPropertyValue("var", value);
+  }
+  [SUBSCRIBE_SELF("changeTransform")](value) {
+    this.modifyPropertyValue("transform", value);
+  }
+  [SUBSCRIBE_SELF("changeTransformOrigin")](value) {
+    this.modifyPropertyValue("transform-origin", value);
+  }
+  [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
+    this.modifyPropertyValue("perspective-origin", value);
+  }
+  [SUBSCRIBE_SELF("changeSelect")](key, value) {
+    this.modifyPropertyValue(key, value);
+  }
+  makePropertyEditor(property, index2) {
+    if (property.editor) {
+      return this.makeCustomePropertyEditor(property, index2);
+    }
+    switch (property.key) {
+      case "animation-timing-function":
+      case "box-shadow":
+      case "text-shadow":
+      case "background-image":
+      case "filter":
+      case "backdrop-filter":
+      case "var":
+      case "transform":
+      case "transform-origin":
+      case "perspective-origin":
+      case "mix-blend-mode":
+      case "border":
+      case "border-radius":
+      case "clip-path":
+      case "fill-rule":
+      case "stroke-linecap":
+      case "stroke-linejoin":
+      case "stroke-dasharray":
+      case "d":
+      case "points":
+      case "offset-path":
+      case "playTime":
+        return this.makeIndivisualPropertyEditor(property, index2);
+      case "color":
+      case "background-color":
+      case "text-fill-color":
+      case "text-stroke-color":
+      case "stroke":
+      case "fill":
+        return this.makeIndivisualPropertyColorEditor(property, index2);
+      case "opacity":
+      case "fill-opacity":
+      case "stroke-dashoffset":
+      case "offset-distance":
+        let min = 0;
+        let max = 1;
+        let step2 = 0.01;
+        return `
+          <div class='property-editor'>
+            ${createComponent("NumberInputEditor", {
+          ref: `$opacity${index2}`,
+          key: property.key,
+          label: property.key,
+          min,
+          max,
+          step: step2,
+          value: property.value || 1,
+          onchange: "changeRangeEditor"
+        })}
+              
+          </div>
+        `;
+      case "x":
+      case "y":
+      case "width":
+      case "height":
+        return `
+            <div class='property-editor'>
+              ${createComponent("NumberInputEditor", {
+          ref: `$opacity${index2}`,
+          key: property.key,
+          label: property.key,
+          min: -2e4,
+          max: 2e4,
+          step: 1,
+          value: property.value || 1,
+          onchange: "changeRangeEditor"
+        })}
+                
+            </div>
+          `;
+      case "rotate":
+        return `
+          <div class='property-editor'>
+            ${createComponent("InputRangeEditor", {
+          ref: `rangeEditor${index2}`,
+          key: property.key,
+          value: property.value,
+          min: -2e3,
+          max: 2e3,
+          units: ["deg"],
+          onChange: "changeRangeEditor"
+        })}
+          </div>
+        `;
+      case "margin-top":
+      case "margin-bottom":
+      case "margin-left":
+      case "margin-right":
+      case "padding-top":
+      case "padding-bottom":
+      case "padding-left":
+      case "padding-right":
+      case "perspective":
+      case "text-stroke-width":
+      default:
+        return `
+          <div class='property-editor'>
+            ${createComponent("InputRangeEditor", {
+          ref: `rangeEditor${index2}`,
+          key: property.key,
+          label: property.key,
+          value: property.value,
+          max: 1e3,
+          onChange: "changeRangeEditor"
+        })}
+          </div>
+        `;
+    }
+  }
+  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
+    this.modifyPropertyValue(key, value + "");
+  }
+  searchKey(key, callback) {
+    this.state.properties.filter((it) => it.key === key).forEach(callback);
+  }
+  modifyPropertyValue(key, value) {
+    this.searchKey(key, (it) => {
+      it.value = value;
+    });
+    this.modifyProperty();
+  }
+  makePropertySelect() {
+    return `
+      <select class='property-select' ref='$propertySelect'>
+        <optgroup label='Position'>
+          <option value='x'>x</option>
+          <option value='y'>y</option>        
+        </optgroup>
+        <optgroup label='Size'>
+          <option value='width'>width</option>
+          <option value='height'>height</option>
+        </optgroup>      
+        <optgroup label='Box Model'>
+          <option value='margin-left'>margin-left</option>
+          <option value='margin-right'>margin-right</option>
+          <option value='margin-bottom'>margin-bottom</option>
+          <option value='margin-top'>margin-top</option>
+          <option value='padding-left'>padding-left</option>
+          <option value='padding-right'>padding-right</option>
+          <option value='padding-bottom'>padding-bottom</option>
+          <option value='padding-top'>padding-top</option>       
+        </optgroup>
+        <optgroup label='Border'>
+          <option value='border'>border</option>
+          <option value='border-radius'>border-radius</option>
+        </optgroup>        
+        <optgroup label='Style'>
+          <option value='background-color'>background-color</option>
+          <option value='background-image'>background-image</option>
+          <option value='box-shadow'>box-shadow</option>
+          <option value='text-shadow'>text-shadow</option>
+          <option value='filter'>filter</option>      
+          <option value='backdrop-filter'>backdrop-filter</option>
+          <option value='mix-blend-mode'>mix-blend-mode</option>
+        </optgroup>            
+        <optgroup label='Transform'>
+          <option value='transform'>transform</option>
+          <option value='transform-origin'>transform-origin</option>
+          <option value='perspective'>perspective</option>
+          <option value='perspective-origin'>perspective-origin</option>
+        </optgroup>
+        <optgroup label='Font'>
+          <option value='font-size'>font-size</option>
+          <option value='font-weight'>font-weight</option>          
+        </optgroup>
+        <optgroup label='Animation'>
+          <option value='animation-timing-function'>timing-function</option>
+        </optgroup>        
+      </select>
+    `;
+  }
+  [LOAD("$property") + DOMDIFF]() {
+    return this.state.properties.map((it, index2) => {
+      return `
+        <div class='css-property-item'>   
+          <div class='value-editor'>
+            ${this.makePropertyEditor(it, index2)}
+          </div>
+          <button type="button" 
+            class='remove' 
+            data-index="${index2}">${iconUse("remove2")}</button>
+        </div>
+      `;
+    });
+  }
+  [SUBSCRIBE("showCSSPropertyEditor")](properties = []) {
+    this.setState({ properties });
+    this.refresh();
+  }
+  [CLICK("$property .remove")](e) {
+    var index2 = +e.$dt.attr("data-index");
+    this.state.properties.splice(index2, 1);
+    this.refresh();
+    this.modifyProperty();
+  }
+  [CLICK("$property .refresh")]() {
+    this.parent.trigger("refreshPropertyValue");
+  }
+}
+var CubicBezierEditor$1 = "";
 const MAX_CACHE_COUNT$2 = 1e3;
 const cachedTransformOriginMap = /* @__PURE__ */ new Map();
 class TransformOriginCache {
@@ -11180,98 +12762,6 @@ const getCurveBBox = (points) => {
     return [x, y, 0];
   });
 };
-function format(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  if (type == "hex") {
-    return hex(obj2);
-  } else if (type == "rgb") {
-    return rgb(obj2, defaultColor);
-  } else if (type == "hsl") {
-    return hsl(obj2);
-  }
-  return obj2;
-}
-function formatWithoutAlpha(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
-  const newColorObj = clone$1(obj2);
-  newColorObj.a = 1;
-  return format(newColorObj, type, defaultColor);
-}
-function hex(obj2) {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  var r = obj2.r.toString(16);
-  if (obj2.r < 16)
-    r = "0" + r;
-  var g = obj2.g.toString(16);
-  if (obj2.g < 16)
-    g = "0" + g;
-  var b = obj2.b.toString(16);
-  if (obj2.b < 16)
-    b = "0" + b;
-  if (obj2.a == 1 || typeof obj2.a === "undefined") {
-    return `#${r}${g}${b}`;
-  } else {
-    const alpha2 = Math.ceil(obj2.a * 255);
-    var a = alpha2.toString(16);
-    if (alpha2 < 16)
-      a = "0" + a;
-    return `#${r}${g}${b}${a}`;
-  }
-}
-function rgb(obj2, defaultColor = "rgba(0, 0, 0, 0)") {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  if (typeof obj2 === "undefined") {
-    return void 0;
-  }
-  if (obj2.a == 1 || typeof obj2.a === "undefined") {
-    if (isNaN(obj2.r)) {
-      return defaultColor;
-    }
-    return `rgb(${obj2.r},${obj2.g},${obj2.b})`;
-  } else {
-    return `rgba(${obj2.r},${obj2.g},${obj2.b},${obj2.a})`;
-  }
-}
-function hsl(obj2) {
-  if (Array.isArray(obj2)) {
-    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
-  }
-  if (obj2.a == 1 || typeof obj2.a === "undefined") {
-    return `hsl(${obj2.h},${obj2.s}%,${obj2.l}%)`;
-  } else {
-    return `hsla(${obj2.h},${obj2.s}%,${obj2.l}%,${obj2.a})`;
-  }
-}
-function randomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function randomByCount(count = 1) {
-  let arr = [];
-  for (var i = 0; i < count; i++) {
-    arr[arr.length] = random$1();
-  }
-  return arr;
-}
-function random$1() {
-  return rgb({
-    r: randomNumber(0, 255),
-    g: randomNumber(0, 255),
-    b: randomNumber(0, 255)
-  });
-}
-function randomRGBA() {
-  return rgb({
-    r: randomNumber(0, 255),
-    g: randomNumber(0, 255),
-    b: randomNumber(0, 255),
-    a: randomNumber(0, 1e3) / 1e3
-  });
-}
 function randomItem(...args2) {
   return args2[randomNumber(0, args2.length - 1)];
 }
@@ -11356,1965 +12846,6 @@ const valueMap = (obj2, valueFunction = valueFunctionIdentity) => {
   return newObj;
 };
 const objectFloor = (obj2) => valueMap(obj2, Math.floor);
-class PropertyItem extends Item {
-  getDefaultObject(obj2 = {}) {
-    return __spreadValues({
-      selected: false,
-      layers: []
-    }, obj2);
-  }
-  isAttribute() {
-    return true;
-  }
-  toCSS() {
-    return {};
-  }
-  toString() {
-    return CSS_TO_STRING(this.toCSS());
-  }
-}
-class BoxShadow extends PropertyItem {
-  static parse(obj2) {
-    return new BoxShadow(obj2);
-  }
-  static parseStyle(str) {
-    var boxShadows = [];
-    str = str.trim();
-    if (!str)
-      return boxShadows;
-    var results = convertMatches(str);
-    boxShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.trim().split(" ");
-      var insets = values.filter((it) => it === BoxShadowStyle.INSET);
-      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
-        return reverseMatches(it, results.matches);
-      });
-      var numbers = values.filter((it) => {
-        return it !== BoxShadowStyle.INSET && !it.includes("@");
-      });
-      return BoxShadow.parse({
-        inset: insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
-        color: colors2[0] || "rgba(0, 0, 0, 1)",
-        offsetX: Length.parse(numbers[0] || "0px"),
-        offsetY: Length.parse(numbers[1] || "0px"),
-        blurRadius: Length.parse(numbers[2] || "0px"),
-        spreadRadius: Length.parse(numbers[3] || "0px")
-      });
-    });
-    return boxShadows;
-  }
-  static join(list2) {
-    return list2.map((it) => BoxShadow.parse(it)).join(", ");
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "box-shadow",
-      inset: false,
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0,
-      spreadRadius: 0,
-      color: "rgba(0, 0, 0, 1)"
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("inset", "offsetX", "offsetY", "blurRadius", "spreadRadius", "color"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (isNumber(json.offsetX))
-      json.offsetX = Length.px(json.offsetX);
-    else if (json.offsetX)
-      json.offsetX = Length.parse(json.offsetX);
-    if (isNumber(json.offsetY))
-      json.offsetY = Length.px(json.offsetY);
-    else if (json.offsetY)
-      json.offsetY = Length.parse(json.offsetY);
-    if (isNumber(json.blurRadius))
-      json.blurRadius = Length.px(json.blurRadius);
-    else if (json.blurRadius)
-      json.blurRadius = Length.parse(json.blurRadius);
-    if (isNumber(json.spreadRadius))
-      json.spreadRadius = Length.px(json.spreadRadius);
-    else if (json.spreadRadius)
-      json.spreadRadius = Length.parse(json.spreadRadius);
-    return json;
-  }
-  toCSS() {
-    return {
-      "box-shadow": this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return `${json.inset === BoxShadowStyle.INSET ? "inset " : ""}${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
-  }
-}
-class BoxShadowEditor extends EditorElement {
-  initState() {
-    return {
-      boxShadows: BoxShadow.parseStyle(this.props.value || "")
-    };
-  }
-  template() {
-    return `
-      <div class="elf--box-shadow-editor" >
-        <div class='box-shadow-list' ref='$shadowList'></div>
-      </div>
-    `;
-  }
-  [LOAD("$shadowList") + DOMDIFF]() {
-    var arr = this.state.boxShadows.map((shadow2, index2) => {
-      return `
-        <div class="shadow-item real" data-index="${index2}">
-            <label draggable="true" data-index="${index2}">${iconUse("drag_indicator")}</label>
-            <div class="shadow-content">
-            ${createComponent("ColorViewEditor", {
-        mini: true,
-        key: "color",
-        value: shadow2.color,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        key: "offsetX",
-        label: "X",
-        value: shadow2.offsetX,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}          
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        key: "offsetY",
-        label: "Y",
-        value: shadow2.offsetY,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}                    
-            ${createComponent("ToggleButton", {
-        mini: true,
-        key: "inset",
-        value: shadow2.inset,
-        params: index2,
-        onChange: "changeKeyValue",
-        checkedValue: BoxShadowStyle.INSET,
-        toggleLabels: [iconUse("border_style"), iconUse("border_style")],
-        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
-        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
-      })}            
-
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        label: "B",
-        key: "blurRadius",
-        value: shadow2.blurRadius,
-        params: index2,
-        onchange: "changeKeyValue"
-      })} 
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        label: "S",
-        key: "spreadRadius",
-        value: shadow2.spreadRadius,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}             
-          </div>
-          <div class="tools">
-            <button type="button" class="remove" data-index="${index2}">
-              ${iconUse("remove2")}
-            </button>
-          </div>
-        </div>
-      `;
-    });
-    return arr.join("");
-  }
-  modifyBoxShadow() {
-    var value = this.state.boxShadows.join(", ");
-    this.parent.trigger(this.props.onchange, this.props.key, value);
-  }
-  [SUBSCRIBE("add")](shadow2 = "") {
-    if (shadow2) {
-      this.state.boxShadows = BoxShadow.parseStyle(shadow2);
-    } else {
-      const shadowObj = new BoxShadow({
-        color: "black",
-        inset: BoxShadowStyle.OUTSET,
-        offsetX: 2,
-        offsetY: 2,
-        blurRadius: 3,
-        spreadRadius: 1
-      });
-      this.state.boxShadows.push(shadowObj);
-    }
-    this.refresh();
-    this.modifyBoxShadow();
-  }
-  [CLICK("$add")]() {
-    this.trigger("add");
-  }
-  [DRAGSTART("$shadowList .shadow-item > label")](e) {
-    this.startIndex = +e.$dt.attr("data-index");
-  }
-  [DRAGOVER("$shadowList .shadow-item") + PREVENT]() {
-  }
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
-  }
-  sortBoxShadow(startIndex, targetIndex) {
-    this.sortItem(this.state.boxShadows, startIndex, targetIndex);
-  }
-  [DROP("$shadowList .shadow-item") + PREVENT](e) {
-    var targetIndex = +e.$dt.attr("data-index");
-    this.sortBoxShadow(this.startIndex, targetIndex);
-    this.refresh();
-    this.modifyBoxShadow();
-  }
-  [CLICK("$shadowList .remove")](e) {
-    var index2 = +e.$dt.attr("data-index");
-    this.state.boxShadows.splice(index2, 1);
-    this.refresh();
-    this.modifyBoxShadow();
-  }
-  [SUBSCRIBE_SELF("changeKeyValue")](key, value, index2) {
-    var shadow2 = this.state.boxShadows[index2];
-    shadow2.reset({
-      [key]: value
-    });
-    this.modifyBoxShadow();
-  }
-}
-const colors$k = [
-  "#FFF8E1",
-  "#FFECB3",
-  "#FFE082",
-  "#FFD54F",
-  "#FFCA28",
-  "#FFC107",
-  "#FFB300",
-  "#FFA000",
-  "#FF8F00",
-  "#FF6F00",
-  "#FFE57F",
-  "#FFD740",
-  "#FFC400",
-  "#FFAB00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialAmber = {
-  title: "material amber",
-  key: "material-amber",
-  execute: function() {
-    return colors$k;
-  }
-};
-var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialAmber
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$j = [
-  "#e3f2fd",
-  "#bbdefb",
-  "#90caf9",
-  "#64b5f6",
-  "#42a5f5",
-  "#2196f3",
-  "#1e88e5",
-  "#1976d2",
-  "#1565c0",
-  "#0d47a1",
-  "#2196f3",
-  "#82b1ff",
-  "#448aff",
-  "#2979ff",
-  "#2962ff"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialBlue = {
-  title: "material blue",
-  key: "material-blue",
-  execute: function() {
-    return colors$j;
-  }
-};
-var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialBlue
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$i = [
-  "#ECEFF1",
-  "#CFD8DC",
-  "#B0BEC5",
-  "#90A4AE",
-  "#78909C",
-  "#607D8B",
-  "#546E7A",
-  "#455A64",
-  "#37474F",
-  "#263238"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialBluegray = {
-  title: "material bluegray",
-  key: "material-bluegray",
-  execute: function() {
-    return colors$i;
-  }
-};
-var __glob_0_2$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialBluegray
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$h = [
-  "#EFEBE9",
-  "#D7CCC8",
-  "#BCAAA4",
-  "#A1887F",
-  "#8D6E63",
-  "#795548",
-  "#6D4C41",
-  "#5D4037",
-  "#4E342E",
-  "#3E2723"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialBrown = {
-  title: "material brown",
-  key: "material-brown",
-  execute: function() {
-    return colors$h;
-  }
-};
-var __glob_0_3$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialBrown
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$g = [
-  "#e0f7fa",
-  "#b2ebf2",
-  "#80deea",
-  "#4dd0e1",
-  "#26c6da",
-  "#00bcd4",
-  "#00acc1",
-  "#0097a7",
-  "#00838f",
-  "#006064",
-  "#00bcd4",
-  "#84ffff",
-  "#18ffff",
-  "#00e5ff",
-  "#00b8d4"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialCyan = {
-  title: "material cyan",
-  key: "material-cyan",
-  execute: function() {
-    return colors$g;
-  }
-};
-var __glob_0_4$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialCyan
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$f = [
-  "#FBE9E7",
-  "#FFCCBC",
-  "#FFAB91",
-  "#FF8A65",
-  "#FF7043",
-  "#FF5722",
-  "#F4511E",
-  "#E64A19",
-  "#D84315",
-  "#BF360C",
-  "#FF9E80",
-  "#FF6E40",
-  "#FF3D00",
-  "#DD2C00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialDeeporange = {
-  title: "material deep orange",
-  key: "material-deeporange",
-  execute: function() {
-    return colors$f;
-  }
-};
-var __glob_0_5$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialDeeporange
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$e = [
-  "#ede7f6",
-  "#d1c4e9",
-  "#b39ddb",
-  "#9575cd",
-  "#7e57c2",
-  "#673ab7",
-  "#5e35b1",
-  "#512da8",
-  "#4527a0",
-  "#311b92",
-  "#673ab7",
-  "#b388ff",
-  "#7c4dff",
-  "#651fff",
-  "#6200ea"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialDeeppurple = {
-  title: "material deep purple",
-  key: "material-deeppurple",
-  execute: function() {
-    return colors$e;
-  }
-};
-var __glob_0_6$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialDeeppurple
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$d = [
-  "#FAFAFA",
-  "#F5F5F5",
-  "#EEEEEE",
-  "#E0E0E0",
-  "#BDBDBD",
-  "#9E9E9E",
-  "#757575",
-  "#616161",
-  "#424242",
-  "#212121"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialGray = {
-  title: "material gray",
-  key: "material-gray",
-  execute: function() {
-    return colors$d;
-  }
-};
-var __glob_0_7$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialGray
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$c = [
-  "#E8F5E9",
-  "#C8E6C9",
-  "#A5D6A7",
-  "#81C784",
-  "#66BB6A",
-  "#4CAF50",
-  "#43A047",
-  "#388E3C",
-  "#2E7D32",
-  "#1B5E20",
-  "#B9F6CA",
-  "#69F0AE",
-  "#00E676",
-  "#00C853"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialGreen = {
-  title: "material green",
-  key: "material-green",
-  execute: function() {
-    return colors$c;
-  }
-};
-var __glob_0_8$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialGreen
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$b = [
-  "#e8eaf6",
-  "#c5cae9",
-  "#9fa8da",
-  "#7986cb",
-  "#5c6bc0",
-  "#3f51b5",
-  "#3949ab",
-  "#303f9f",
-  "#283593",
-  "#1a237e",
-  "#3f51b5",
-  "#8c9eff",
-  "#536dfe",
-  "#3d5afe",
-  "#304ffe"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialIndigo = {
-  title: "material indigo",
-  key: "material-indigo",
-  execute: function() {
-    return colors$b;
-  }
-};
-var __glob_0_9$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialIndigo
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$a = [
-  "#e1f5fe",
-  "#b3e5fc",
-  "#81d4fa",
-  "#4fc3f7",
-  "#29b6f6",
-  "#03a9f4",
-  "#039be5",
-  "#0288d1",
-  "#0277bd",
-  "#01579b",
-  "#03a9f4",
-  "#80d8ff",
-  "#40c4ff",
-  "#00b0ff",
-  "#0091ea"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialLightblue = {
-  title: "material light blue",
-  key: "material-lightblue",
-  execute: function() {
-    return colors$a;
-  }
-};
-var __glob_0_10$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialLightblue
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$9 = [
-  "#F1F8E9",
-  "#DCEDC8",
-  "#C5E1A5",
-  "#AED581",
-  "#9CCC65",
-  "#8BC34A",
-  "#7CB342",
-  "#689F38",
-  "#558B2F",
-  "#33691E",
-  "#CCFF90",
-  "#B2FF59",
-  "#76FF03",
-  "#64DD17"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialLightgreen = {
-  title: "material lightgreen",
-  key: "material-lightgreen",
-  execute: function() {
-    return colors$9;
-  }
-};
-var __glob_0_11$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialLightgreen
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$8 = [
-  "#F9FBE7",
-  "#F0F4C3",
-  "#E6EE9C",
-  "#DCE775",
-  "#D4E157",
-  "#CDDC39",
-  "#C0CA33",
-  "#AFB42B",
-  "#9E9D24",
-  "#827717",
-  "#F4FF81",
-  "#EEFF41",
-  "#C6FF00",
-  "#AEEA00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialLime = {
-  title: "material lime",
-  key: "material-lime",
-  execute: function() {
-    return colors$8;
-  }
-};
-var __glob_0_12$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialLime
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$7 = [
-  "#FFF3E0",
-  "#FFE0B2",
-  "#FFCC80",
-  "#FFB74D",
-  "#FFA726",
-  "#FF9800",
-  "#FB8C00",
-  "#F57C00",
-  "#EF6C00",
-  "#E65100",
-  "#FFD180",
-  "#FFAB40",
-  "#FF9100",
-  "#FF6D00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialOrange = {
-  title: "material orange",
-  key: "material-orange",
-  execute: function() {
-    return colors$7;
-  }
-};
-var __glob_0_13$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialOrange
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$6 = [
-  "#fce4ec",
-  "#f8bbd0",
-  "#f48fb1",
-  "#f06292",
-  "#ec407a",
-  "#e91e63",
-  "#d81b60",
-  "#c2185b",
-  "#ad1457",
-  "#880e4f",
-  "#e91e63",
-  "#ff80ab",
-  "#ff4081",
-  "#f50057",
-  "#c51162"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialPink = {
-  title: "material pink",
-  key: "material-pink",
-  execute: function() {
-    return colors$6;
-  }
-};
-var __glob_0_14$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialPink
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$5 = [
-  "#f3e5f5",
-  "#e1bee7",
-  "#ce93d8",
-  "#ba68c8",
-  "#ab47bc",
-  "#9c27b0",
-  "#8e24aa",
-  "#7b1fa2",
-  "#6a1b9a",
-  "#4a148c",
-  "#9c27b0",
-  "#ea80fc",
-  "#e040fb",
-  "#d500f9",
-  "#aa00ff"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialPurple = {
-  title: "material purple",
-  key: "material-purple",
-  execute: function() {
-    return colors$5;
-  }
-};
-var __glob_0_15$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialPurple
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$4 = [
-  "#ffebee",
-  "#ffcdd2",
-  "#ef9a9a",
-  "#e57373",
-  "#ef5350",
-  "#f44336",
-  "#e53935",
-  "#d32f2f",
-  "#c62828",
-  "#b71c1c",
-  "#f44336",
-  "#ff8a80",
-  "#ff5252",
-  "#ff1744",
-  "#d50000"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialRed = {
-  title: "material red",
-  key: "material-red",
-  execute: function() {
-    return colors$4;
-  }
-};
-var __glob_0_16$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialRed
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$3 = [
-  "#e0f2f1",
-  "#b2dfdb",
-  "#80cbc4",
-  "#4db6ac",
-  "#26a69a",
-  "#009688",
-  "#00897b",
-  "#00796b",
-  "#00695c",
-  "#004d40",
-  "#009688",
-  "#a7ffeb",
-  "#64ffda",
-  "#1de9b6",
-  "#00bfa5"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialTeal = {
-  title: "material teal",
-  key: "material-teal",
-  execute: function() {
-    return colors$3;
-  }
-};
-var __glob_0_17$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialTeal
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$2 = [
-  "#FFFDE7",
-  "#FFF9C4",
-  "#FFF59D",
-  "#FFF176",
-  "#FFEE58",
-  "#FFEB3B",
-  "#FDD835",
-  "#FBC02D",
-  "#F9A825",
-  "#F57F17",
-  "#FFFF8D",
-  "#FFFF00",
-  "#FFEA00",
-  "#FFD600"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialYellow = {
-  title: "material yellow",
-  key: "material-yellow",
-  execute: function() {
-    return colors$2;
-  }
-};
-var __glob_0_18$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": materialYellow
-}, Symbol.toStringTag, { value: "Module" }));
-const colors$1 = [
-  "#f8f9fa",
-  "#f1f3f5",
-  "#e9ecef",
-  "#dee2e6",
-  "#ced4da",
-  "#adb5bd",
-  "#868e96",
-  "#495057",
-  "#343a40",
-  "#212529"
-].map((color2) => {
-  return { color: color2 };
-});
-var opencolorGray = {
-  title: "opencolor gray",
-  resource: "https://yeun.github.io/open-color/",
-  key: "opencolor-gray",
-  execute: function() {
-    return colors$1;
-  }
-};
-var __glob_0_19$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": opencolorGray
-}, Symbol.toStringTag, { value: "Module" }));
-function CMYKtoRGB(c2, m, y, k) {
-  if (arguments.length == 1) {
-    var { c: c2, m, y, k } = arguments[0];
-  }
-  const R = 255 * (1 - c2) * (1 - k);
-  const G = 255 * (1 - m) * (1 - k);
-  const B = 255 * (1 - y) * (1 - k);
-  return { r: R, g: G, b: B };
-}
-function HSVtoRGB(h, s, v) {
-  if (arguments.length == 1) {
-    var { h, s, v } = arguments[0];
-  }
-  var H = h;
-  var S = s;
-  var V = v;
-  if (H >= 360) {
-    H = 0;
-  }
-  const C = S * V;
-  const X = C * (1 - Math.abs(H / 60 % 2 - 1));
-  const m = V - C;
-  let temp = [];
-  if (0 <= H && H < 60) {
-    temp = [C, X, 0];
-  } else if (60 <= H && H < 120) {
-    temp = [X, C, 0];
-  } else if (120 <= H && H < 180) {
-    temp = [0, C, X];
-  } else if (180 <= H && H < 240) {
-    temp = [0, X, C];
-  } else if (240 <= H && H < 300) {
-    temp = [X, 0, C];
-  } else if (300 <= H && H < 360) {
-    temp = [C, 0, X];
-  }
-  return {
-    r: round((temp[0] + m) * 255),
-    g: round((temp[1] + m) * 255),
-    b: round((temp[2] + m) * 255)
-  };
-}
-function HSVtoHSL(h, s, v) {
-  if (arguments.length == 1) {
-    var { h, s, v } = arguments[0];
-  }
-  const rgb2 = HSVtoRGB(h, s, v);
-  return RGBtoHSL(rgb2.r, rgb2.g, rgb2.b);
-}
-function YCrCbtoRGB(y, cr, cb, bit) {
-  if (arguments.length == 1) {
-    var { y, cr, cb, bit } = arguments[0];
-    bit = bit || 0;
-  }
-  const R = y + 1.402 * (cr - bit);
-  const G = y - 0.344 * (cb - bit) - 0.714 * (cr - bit);
-  const B = y + 1.772 * (cb - bit);
-  return { r: Math.ceil(R), g: Math.ceil(G), b: Math.ceil(B) };
-}
-function interpolateRGB(startColor, endColor, t = 0.5, exportFormat = "hex") {
-  var obj2 = interpolateRGBObject(startColor, endColor, t);
-  return format(obj2, exportFormat);
-}
-function interpolateRGBObject(startColor, endColor, t = 0.5) {
-  const startColorAlpha = typeof startColor.a === "undefined" ? 1 : startColor.a;
-  const endColorAlpha = typeof endColor.a === "undefined" ? 1 : endColor.a;
-  return {
-    r: round(startColor.r + (endColor.r - startColor.r) * t),
-    g: round(startColor.g + (endColor.g - startColor.g) * t),
-    b: round(startColor.b + (endColor.b - startColor.b) * t),
-    a: round(startColorAlpha + (endColorAlpha - startColorAlpha) * t, 100)
-  };
-}
-function scale(scale2, count = 5) {
-  if (!scale2)
-    return [];
-  if (typeof scale2 === "string") {
-    scale2 = convertMatchesArray(scale2);
-  }
-  scale2 = scale2 || [];
-  var len2 = scale2.length;
-  var colors2 = [];
-  for (var i = 0; i < len2 - 1; i++) {
-    for (var index2 = 0; index2 < count; index2++) {
-      colors2.push(blend(scale2[i], scale2[i + 1], index2 / count));
-    }
-  }
-  return colors2;
-}
-function blend(startColor, endColor, ratio = 0.5, format2 = "hex") {
-  var s = parse(startColor);
-  var e = parse(endColor);
-  return interpolateRGB(s, e, ratio, format2);
-}
-function mix(startcolor, endColor, ratio = 0.5, format2 = "hex") {
-  return blend(startcolor, endColor, ratio, format2);
-}
-function contrast(c2) {
-  c2 = parse(c2);
-  return (Math.round(c2.r * 299) + Math.round(c2.g * 587) + Math.round(c2.b * 114)) / 1e3;
-}
-function contrastColor(c2) {
-  return contrast(c2) >= 128 ? "black" : "white";
-}
-function gradient$1(colors2, count = 10) {
-  colors2 = parseGradient(colors2);
-  let newColors = [];
-  let maxCount = count - (colors2.length - 1);
-  let allCount = maxCount;
-  for (var i = 1, len2 = colors2.length; i < len2; i++) {
-    var startColor = colors2[i - 1][0];
-    var endColor = colors2[i][0];
-    var rate = i == 1 ? colors2[i][1] : colors2[i][1] - colors2[i - 1][1];
-    var colorCount = i == colors2.length - 1 ? allCount : Math.floor(rate * maxCount);
-    newColors = newColors.concat(scale([startColor, endColor], colorCount), [
-      endColor
-    ]);
-    allCount -= colorCount;
-  }
-  return newColors;
-}
-function scaleHSV(color2, target = "h", count = 9, exportFormat = "rgb", min = 0, max = 1, dist2 = 100) {
-  var colorObj = parse(color2);
-  var hsv = RGBtoHSV(colorObj);
-  var unit = (max - min) * dist2 / count;
-  var results = [];
-  for (var i = 1; i <= count; i++) {
-    hsv[target] = Math.abs((dist2 - unit * i) / dist2);
-    results.push(format(HSVtoRGB(hsv), exportFormat));
-  }
-  return results;
-}
-function scaleH(color2, count = 9, exportFormat = "rgb", min = 0, max = 360) {
-  return scaleHSV(color2, "h", count, exportFormat, min, max, 1);
-}
-function scaleS(color2, count = 9, exportFormat = "rgb", min = 0, max = 1) {
-  return scaleHSV(color2, "s", count, exportFormat, min, max, 100);
-}
-function scaleV(color2, count = 9, exportFormat = "rgb", min = 0, max = 1) {
-  return scaleHSV(color2, "v", count, exportFormat, min, max, 100);
-}
-scale.parula = function(count) {
-  return scale(["#352a87", "#0f5cdd", "#00b5a6", "#ffc337", "#fdff00"], count);
-};
-scale.jet = function(count) {
-  return scale([
-    "#00008f",
-    "#0020ff",
-    "#00ffff",
-    "#51ff77",
-    "#fdff00",
-    "#ff0000",
-    "#800000"
-  ], count);
-};
-scale.hsv = function(count) {
-  return scale([
-    "#ff0000",
-    "#ffff00",
-    "#00ff00",
-    "#00ffff",
-    "#0000ff",
-    "#ff00ff",
-    "#ff0000"
-  ], count);
-};
-scale.hot = function(count) {
-  return scale(["#0b0000", "#ff0000", "#ffff00", "#ffffff"], count);
-};
-scale.pink = function(count) {
-  return scale(["#1e0000", "#bd7b7b", "#e7e5b2", "#ffffff"], count);
-};
-scale.bone = function(count) {
-  return scale(["#000000", "#4a4a68", "#a6c6c6", "#ffffff"], count);
-};
-scale.copper = function(count) {
-  return scale(["#000000", "#3d2618", "#9d623e", "#ffa167", "#ffc77f"], count);
-};
-const hue_color = [
-  { rgb: "#ff0000", start: 0 },
-  { rgb: "#ffff00", start: 0.17 },
-  { rgb: "#00ff00", start: 0.33 },
-  { rgb: "#00ffff", start: 0.5 },
-  { rgb: "#0000ff", start: 0.67 },
-  { rgb: "#ff00ff", start: 0.83 },
-  { rgb: "#ff0000", start: 1 }
-];
-function checkHueColor(p) {
-  var startColor, endColor;
-  for (var i = 0; i < hue_color.length; i++) {
-    if (hue_color[i].start >= p) {
-      startColor = hue_color[i - 1];
-      endColor = hue_color[i];
-      break;
-    }
-  }
-  if (startColor && endColor) {
-    return mix(startColor, endColor, (p - startColor.start) / (endColor.start - startColor.start));
-  }
-  return hue_color[0].rgb;
-}
-function initHueColors() {
-  for (var i = 0, len2 = hue_color.length; i < len2; i++) {
-    var hue = hue_color[i];
-    var obj2 = parse(hue.rgb);
-    hue.r = obj2.r;
-    hue.g = obj2.g;
-    hue.b = obj2.b;
-  }
-}
-initHueColors();
-var random = {
-  title: "random",
-  key: "random",
-  execute: function(count = 42) {
-    const colorList = randomByCount(count).map((color2) => {
-      return { color: color2 };
-    });
-    colorList.sort((a, b) => {
-      const localA = parse(a.color);
-      const localB = parse(b.color);
-      return localA.h > localB.h ? 1 : -1;
-    });
-    return colorList;
-  }
-};
-var __glob_0_20$3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": random
-}, Symbol.toStringTag, { value: "Module" }));
-const modules$4 = { "./colors_list/material-amber.js": __glob_0_0$4, "./colors_list/material-blue.js": __glob_0_1$4, "./colors_list/material-bluegray.js": __glob_0_2$4, "./colors_list/material-brown.js": __glob_0_3$4, "./colors_list/material-cyan.js": __glob_0_4$4, "./colors_list/material-deeporange.js": __glob_0_5$4, "./colors_list/material-deeppurple.js": __glob_0_6$4, "./colors_list/material-gray.js": __glob_0_7$4, "./colors_list/material-green.js": __glob_0_8$4, "./colors_list/material-indigo.js": __glob_0_9$4, "./colors_list/material-lightblue.js": __glob_0_10$4, "./colors_list/material-lightgreen.js": __glob_0_11$4, "./colors_list/material-lime.js": __glob_0_12$4, "./colors_list/material-orange.js": __glob_0_13$4, "./colors_list/material-pink.js": __glob_0_14$4, "./colors_list/material-purple.js": __glob_0_15$3, "./colors_list/material-red.js": __glob_0_16$3, "./colors_list/material-teal.js": __glob_0_17$3, "./colors_list/material-yellow.js": __glob_0_18$3, "./colors_list/opencolor-gray.js": __glob_0_19$3, "./colors_list/random.js": __glob_0_20$3 };
-var colors = Object.values(modules$4).map((it) => it.default);
-var ColorAssetsEditor$1 = "";
-class ColorAssetsEditor extends EditorElement {
-  initState() {
-    return {
-      mode: "grid",
-      preset: "random",
-      isLoaded: false,
-      colors
-    };
-  }
-  getTools() {
-    return `<div ref="$tools"></div>`;
-  }
-  [LOAD("$tools")]() {
-    const options2 = this.state.colors.map((it) => {
-      return { value: it.key, text: it.title };
-    });
-    return createComponent("SelectEditor", {
-      key: "preset",
-      value: this.state.preset,
-      options: options2,
-      onchange: "changePreset"
-    });
-  }
-  [SUBSCRIBE("changePreset")](key, value) {
-    this.setState({
-      [key]: value
-    });
-  }
-  template() {
-    return `
-      <div class='elf--color-assets-editor'>
-        <div class='color-assets-head'>
-          <div class='tools'>${this.getTools()}</div>
-        </div>
-        <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
-      </div>
-    `;
-  }
-  [CLICK("$title")]() {
-    this.$el.toggleClass("is-open");
-  }
-  [LOAD("$colorList")]() {
-    var preset = this.state.colors.find((it) => it.key === this.state.preset);
-    if (!preset) {
-      return "";
-    }
-    var results = preset.execute().map((item, index2) => {
-      return `<div class='color-item' data-index="${index2}" data-color="${item.color}"><div class='preview' title="${item.color}" data-index="${index2}"><div class='color-view' style='background-color: ${item.color};'></div></div></div>`;
-    });
-    return results;
-  }
-  executeColor(callback, isRefresh = true, isEmit = true) {
-    var project2 = this.$context.selection.currentProject;
-    if (project2) {
-      callback && callback(project2);
-      if (isRefresh)
-        this.refresh();
-      if (isEmit)
-        this.emit("refreshColorAssets");
-    } else {
-      window.alert("Please select a project.");
-    }
-  }
-  [CLICK("$colorList .preview")](e) {
-    const color2 = e.$dt.$(".color-view").css("background-color");
-    this.modifyColorPicker(color2);
-  }
-  modifyColorPicker(color2) {
-    this.parent.trigger(this.props.onchange, this.props.key, color2, this.props.params);
-  }
-}
-var ColorSingleEditor$1 = "";
-class ColorSingleEditor extends EditorElement {
-  initState() {
-    return {
-      params: this.props.params,
-      color: this.props.color || "rgba(0, 0, 0, 1)"
-    };
-  }
-  updateData(opt = {}) {
-    this.setState(opt, false);
-    this.modifyColor();
-  }
-  modifyColor() {
-    this.parent.trigger(this.props.onchange, this.props.key, this.state.color, this.state.params);
-  }
-  changeColor(color2) {
-    this.setState({ color: color2 });
-  }
-  setValue(color2) {
-    this.changeColor(color2);
-  }
-  [BIND("$miniView")]() {
-    return {
-      style: {
-        "background-color": this.state.color
-      }
-    };
-  }
-  template() {
-    return `
-            <div class='elf--color-single-editor'>
-                <div class='preview' ref='$preview'>
-                    <div class='mini-view'>
-                        <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>
-                    </div>
-                </div>
-            </div>
-        `;
-  }
-  [CLICK("$preview")]() {
-    this.viewColorPicker();
-  }
-  viewColorPicker() {
-    this.emit("showColorPickerPopup", {
-      target: this,
-      changeEvent: (color2) => {
-        this.refs.$miniView.cssText(`background-color: ${color2}`);
-        this.updateData({ color: color2 });
-      },
-      color: this.state.color
-    });
-  }
-}
-var ColorViewEditor$1 = "";
-class ColorViewEditor extends EditorElement {
-  initState() {
-    const value = this.props.value || "rgba(0, 0, 0, 1)";
-    const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
-    const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === "true";
-    return {
-      label: this.props.label,
-      value,
-      compact,
-      mini,
-      color: parse(value),
-      colorFocus: false,
-      opacityFocus: false
-    };
-  }
-  updateData(opt = {}) {
-    this.setState(opt);
-    this.modifyColor();
-  }
-  updateEndData(opt = {}) {
-    this.setState(opt);
-    this.modifyEndColor();
-  }
-  getValue() {
-    return this.state.value;
-  }
-  setValue(value) {
-    this.changeColor(value);
-  }
-  modifyColor() {
-    this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
-  }
-  modifyEndColor() {
-    this.parent.trigger(this.props.onchangeend, this.props.key, this.state.value, this.props.params);
-  }
-  changeColor(value) {
-    this.setState({
-      value,
-      color: parse(value)
-    });
-  }
-  get alpha() {
-    return this.state.color.a * 100;
-  }
-  get hexColor() {
-    return formatWithoutAlpha(this.state.color, "hex");
-  }
-  get fullColor() {
-    return format(this.state.color, this.state.color.type);
-  }
-  refresh() {
-    this.refreshColorView();
-    this.refs.$colorCode.val(this.state.value);
-    this.refs.$opacityCode.val(this.alpha);
-  }
-  refreshColorView() {
-    this.bindData("$miniView1");
-    this.bindData("$miniView2");
-  }
-  template() {
-    var { label } = this.state;
-    return `
-            <div class='elf--color-view-editor'>
-                ${label ? `<label>${label}</label>` : ""}            
-                <div class='color-code' ref="$container">
-                    <div class='preview' ref='$preview'>
-                        <div class='mini-view'>
-                            <div class='color-view' ref='$miniView1'></div>
-                            <div class='color-view' ref='$miniView2'></div>
-                        </div>
-                    </div>                
-                    <div class="color-input">
-                        <input type="text" ref='$colorCode' value='${this.state.value}' tabIndex="1" />
-                    </div>
-                    <div class="opacity-input">                    
-                        <input type="number" ref='$opacityCode' value='${this.alpha}' tabIndex="2" max="100" min="0" step="0.1" />
-                    </div>                    
-                </div>
-            </div>
-        `;
-  }
-  [BIND("$el")]() {
-    var { label, compact, mini, colorFocus, opacityFocus } = this.state;
-    return {
-      class: [
-        "elf--color-view-editor",
-        {
-          "has-label": label,
-          compact,
-          mini
-        },
-        {
-          focused: colorFocus || opacityFocus
-        }
-      ]
-    };
-  }
-  [BIND("$miniView1")]() {
-    return {
-      style: {
-        "background-color": this.hexColor
-      }
-    };
-  }
-  [BIND("$miniView2")]() {
-    return {
-      style: {
-        "background-color": this.fullColor
-      }
-    };
-  }
-  [BIND("$colorCode")]() {
-    return {
-      value: this.props.format ? this.hexColor : this.state.value
-    };
-  }
-  [BIND("$opacityCode")]() {
-    return {
-      value: this.alpha
-    };
-  }
-  [FOCUSIN("$colorCode")]() {
-    this.setState({
-      colorFocus: true
-    });
-    this.refs.$colorCode.select();
-  }
-  [FOCUSOUT("$colorCode")]() {
-    this.setState({
-      colorFocus: false
-    });
-  }
-  [FOCUSIN("$opacityCode")]() {
-    this.setState({
-      opacityFocus: true
-    });
-    this.refs.$opacityCode.select();
-  }
-  [FOCUSOUT("$opacityCode")]() {
-    this.setState({
-      opacityFocus: false
-    });
-  }
-  [CLICK("$preview")]() {
-    this.viewColorPicker();
-  }
-  viewColorPicker() {
-    this.emit("showColorPickerPopup", {
-      target: this,
-      changeEvent: (color2) => {
-        this.updateData({ value: color2, color: parse(color2) });
-      },
-      changeEndEvent: (color2) => {
-        this.updateEndData({ value: color2, color: parse(color2) });
-      },
-      color: this.state.value
-    }, null, this.$el.rect());
-  }
-  [CLICK("$remove")]() {
-    this.updateData({ value: "" });
-  }
-  [INPUT("$el .color-input input")](e) {
-    var color2 = e.$dt.value;
-    this.updateData({
-      value: color2,
-      color: parse(color2)
-    });
-    this.refreshColorView();
-  }
-  [INPUT("$el .opacity-input input")](e) {
-    var opacity2 = +e.$dt.value;
-    opacity2 = Math.max(0, Math.min(100, opacity2));
-    const color2 = parse(this.state.value);
-    color2.a = round(opacity2 / 100, 1e3);
-    const value = format(color2, color2.type);
-    this.updateData({
-      value,
-      color: color2
-    });
-    this.refreshColorView();
-  }
-}
-var ComponentEditor$1 = "";
-class ComponentEditor extends EditorElement {
-  initState() {
-    return {
-      inspector: this.props.inspector
-    };
-  }
-  template() {
-    return `
-      <div ref='$body' class="component-editor"></div>
-    `;
-  }
-  getPropertyEditor(index2, childEditor) {
-    if (childEditor.type === "folder") {
-      return `
-        <div class='component-folder'>
-          <label>${iconUse("chevron_right")} ${childEditor.label}</label>
-          <ul>
-            ${childEditor.children.map((it, itemIndex) => {
-        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it)}</li>`;
-      }).join("")}
-          </ul>
-        </div>
-      `;
-    } else if (childEditor.type === "column") {
-      const size2 = (childEditor.size || [2]).join("-");
-      return `
-        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap || 0}px; --row-gap: ${childEditor.rowGap || 0}px" >
-          ${childEditor.columns.map((it, itemIndex) => {
-        if (it === "-") {
-          return `<div class="column-item"></div>`;
-        } else if (it.type === "label") {
-          return `<div class="column-item">
-                    <label>${it.label}</label>
-                  </div>`;
-        }
-        return `
-                  <div class='column-item'>
-                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
-                  </div>
-                `;
-      }).join("")}  
-        </div>
-      `;
-    }
-    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
-      onchange: (key, value) => {
-        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
-        this.trigger("changeComponentValue", key, newValue);
-      },
-      ref: `${childEditor.key}${index2}`,
-      key: childEditor.key,
-      value: childEditor.defaultValue
-    }));
-  }
-  [LOAD("$body")]() {
-    const inspector2 = this.state.inspector;
-    var self2 = inspector2.map((it, index2) => {
-      if (isString(it) || it.type === "label") {
-        const title2 = it.label || it;
-        return `
-          <div class='component-item'> 
-            <label>${title2}</label>
-          </div>`;
-      } else if (it.type === "folder") {
-        return `
-          <div class='component-item'>
-            ${this.getPropertyEditor(index2, it)}
-          </div>
-        `;
-      } else {
-        return `
-            <div class='component-item'> 
-              ${this.getPropertyEditor(index2, it)}
-            </div>
-          `;
-      }
-    });
-    return self2;
-  }
-  setInspector(inspector2) {
-    this.setState({
-      inspector: inspector2
-    });
-  }
-  setValue(obj2 = {}) {
-    Object.keys(obj2).forEach((key) => {
-      const value = obj2[key];
-      this.eachChildren((child) => {
-        if (child.setValue && child.props.key === key) {
-          child.setValue(value);
-        }
-      });
-    });
-  }
-  getValue() {
-    const result = {};
-    this.eachChildren((child) => {
-      if (isFunction(child.getValue) && child.props.key) {
-        result[child.props.key] = child.getValue();
-      }
-    });
-    return result;
-  }
-  [SUBSCRIBE_SELF("changeComponentValue")](key, value) {
-    this.parent.trigger(this.props.onchange, key, value);
-  }
-  [CLICK("$el .component-folder > label")](e) {
-    const $target = e.$dt.closest("component-folder");
-    $target.toggleClass("close");
-  }
-}
-var CSSPropertyEditor$1 = "";
-class CSSPropertyEditor extends EditorElement {
-  initState() {
-    return {
-      hideTitle: this.props["hide-title"] === "true",
-      hideRefresh: this.props["hide-refresh"] === "true",
-      properties: []
-    };
-  }
-  updateData(opt) {
-    this.setState(opt, false);
-    this.modifyProperty();
-  }
-  modifyProperty() {
-    this.parent.trigger(this.props.onchange, this.state.properties);
-  }
-  template() {
-    const hideTitleClass = this.state.hideTitle ? "hide-title" : "";
-    const hideRefreshClass = this.state.hideRefresh ? "hide-refresh" : "";
-    return `
-      <div class='elf--css-property-editor ${hideTitleClass} ${hideRefreshClass}'>
-        <div class='title'>
-          <label>${this.$i18n("css.property.editor.properties")}</label>
-          <div class='tools'>
-            ${this.makePropertySelect()}
-            <button type="button" ref='$addProperty'>${obj$2.add}</button>
-          </div>
-        </div>
-        <div class='input grid-1 css-property-list' ref='$property'></div>
-      </div>
-    `;
-  }
-  getPropertyDefaultValue(key) {
-    switch (key) {
-      case "animation-timing-function":
-      case "box-shadow":
-      case "text-shadow":
-      case "color":
-      case "background-image":
-      case "background-color":
-      case "text-fill-color":
-      case "text-stroke-color":
-      case "filter":
-      case "backdrop-filter":
-      case "var":
-      case "transform":
-      case "transform-origin":
-      case "perspective-origin":
-      case "playTime":
-        return Length.string("");
-      case "offset-distance":
-        return Length.percent(0);
-      case "rotate":
-        return Length.deg(0);
-      case "mix-blend-mode":
-        return "normal";
-      case "clip-path":
-        return "";
-      case "opacity":
-        return 1;
-      default:
-        return 0;
-    }
-  }
-  [CLICK("$addProperty")]() {
-    var key = this.getRef("$propertySelect").value;
-    var searchItem = this.state.properties.find((it) => {
-      return it.key === key;
-    });
-    if (searchItem) {
-      window.alert(`${key} is already added.`);
-      return;
-    }
-    var value = this.getPropertyDefaultValue(key);
-    var current = this.$context.selection.current;
-    if (current) {
-      value = current[key];
-    }
-    this.state.properties.push({ key, value });
-    this.refresh();
-    this.modifyProperty();
-  }
-  makeIndivisualPropertyColorEditor(property, index2) {
-    var key = property.key.split("-").join("");
-    return `
-      <div class='property-editor'>
-        <object refClass="ColorViewEditor" ref='$${key}${index2}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
-      </div>
-    `;
-  }
-  makeCustomePropertyEditor(property, index2) {
-    return `
-      <div class='property-editor'>
-        ${createComponent(property.editor, {
-      onchange: "changeSelect",
-      ref: `$customProperty${index2}`,
-      key: property.key,
-      value: property.value
-    })}
-      </div>
-    `;
-  }
-  makeIndivisualPropertyEditor(property, index2) {
-    if (property.key === "background-image") {
-      return `
-        <div class='property-editor'>
-          ${createComponent("BackgroundImageEditor", {
-        ref: `$backgroundImage${index2}`,
-        key: property.key,
-        "hide-title": this.state.hideTitle,
-        value: property.value,
-        onchange: "changeKeyValue"
-      })}
-        </div>
-      `;
-    } else if (property.key === "filter") {
-      return `
-        <div class='property-editor'>
-          <object refClass="FilterEditor" ref='$filter${index2}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
-        </div>
-      `;
-    } else if (property.key === "backdrop-filter") {
-      return `
-        <div class='property-editor'>
-          <object refClass="FilterEditor" ref='$backdropFilter${index2}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
-        </div>
-      `;
-    } else if (property.key === "box-shadow") {
-      return `
-        <div class='property-editor'>
-          <object refClass="BoxShadowEditor" ref='$boxshadow${index2}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
-        </div>
-      `;
-    } else if (property.key === "text-shadow") {
-      return `
-        <div class='property-editor'>
-          <object refClass="TextShadowEditor" ref='$textshadow${index2}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
-        </div>
-      `;
-    } else if (property.key === "var") {
-      return `
-        <div class='property-editor'>
-          <object refClass="VarEditor" ref='$var${index2}' value="${property.value}" onChange="changeVar" />
-        </div>
-      `;
-    } else if (property.key === "transform") {
-      return `
-        <div class='property-editor'>
-          <object refClass="TransformEditor" ref='$transform${index2}' value="${property.value}" onChange="changeTransform" />
-        </div>
-      `;
-    } else if (property.key === "transform-origin") {
-      return `
-        <div class='property-editor'>
-          <object refClass="TransformOriginEditor" ref='$transformOrigin${index2}' value="${property.value}" onChange="changeTransformOrigin" />
-        </div>
-      `;
-    } else if (property.key === "perspective-origin") {
-      return `
-        <div class='property-editor'>
-          <object refClass="PerspectiveOriginEditor" ref='$perspectiveOrigin${index2}' value="${property.value}" onChange="changePerspectiveOrigin" />
-        </div>
-      `;
-    } else if (property.key === "fill-rule") {
-      return `
-        <div class='property-editor'>
-          <object refClass="SelectEditor"  
-          ref='$fillRule${index2}' 
-          key='fill-rule' 
-          icon="true" 
-          options=${variable$4(["nonzero", "evenodd"])}
-          value="${property.value}"
-          onchange="changeSelect" />
-        </div>
-      `;
-    } else if (property.key === "stroke-linecap") {
-      return `
-        <div class='property-editor'>
-          <object refClass="SelectEditor"  
-          ref='$strokeLinecap${index2}' 
-          key='stroke-linecap' 
-          icon="true" 
-          options=${variable$4(["butt", "round", "square"])}          
-          value="${property.value}"
-          onchange="changeSelect" />
-        </div>
-      `;
-    } else if (property.key === "stroke-linejoin") {
-      return `
-        <div class='property-editor'>
-          <object refClass="SelectEditor"  
-          ref='$strokeLinejoin${index2}' 
-          key='stroke-linejoin' 
-          icon="true" 
-          options=${variable$4([
-        "miter",
-        "arcs",
-        "bevel",
-        "miter-clip",
-        "round"
-      ])}                    
-          value="${property.value}"
-          onchange="changeSelect" />
-        </div>
-      `;
-    } else if (property.key === "mix-blend-mode") {
-      return `
-        <div class='property-editor'>
-          <object refClass="BlendSelectEditor" 
-          ref='$mixBlendMode${index2}' 
-          key='mix-blend-mode' 
-          icon="true" 
-          value="${property.value}"
-          onchange="changeSelect" />
-        </div>
-      `;
-    } else if (property.key === "stroke-dasharray") {
-      return `
-        <object refClass="StrokeDashArrayEditor" 
-          ref='$strokeDashArray${index2}' 
-          key='stroke-dasharray'
-          value='${property.value}' 
-          onchange='changeSelect' 
-        />
-      `;
-    } else if (property.key === "border-radius") {
-      return `
-        <object refClass="BorderRadiusEditor"
-          ref='$borderRadius${index2}' 
-          key='border-radius'
-          value='${property.value}' 
-          onchange='changeBorderRadius' 
-        />
-      `;
-    } else if (property.key === "border") {
-      return `
-        <object refClass="BorderEditor"
-          ref='$border${index2}' 
-          key='border'
-          value='${property.value}' 
-          onchange='changeKeyValue' 
-        />
-      `;
-    } else if (property.key === "clip-path") {
-      return `
-        <object refClass="ClipPathEditor"
-          ref='$clipPath${index2}' 
-          key='clip-path'
-          value='${property.value}' 
-          onchange='changeClipPath' 
-        />
-      `;
-    } else if (property.key === "d") {
-      return `
-        <object refClass="PathDataEditor" ref='$pathData${index2}' key='d' value='${property.value}' onchange='changeSelect' />
-      `;
-    } else if (property.key === "points") {
-      return `
-        <object refClass="PolygonDataEditor" ref='$polygonData${index2}' key='points' value='${property.value}' onchange='changeSelect' />
-      `;
-    } else if (property.key === "playTime") {
-      return `
-        <object refClass="MediaProgressEditor" ref='$playTime${index2}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
-      `;
-    }
-    return `
-      <div class='property-editor'>
-        ???
-
-      </div>
-    `;
-  }
-  [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
-    this.modifyPropertyValue(key, value);
-  }
-  [SUBSCRIBE_SELF("changeBorderRadius")](value) {
-    this.modifyPropertyValue("border-radius", value);
-  }
-  [SUBSCRIBE_SELF("changeClipPath")](value) {
-    this.modifyPropertyValue("clip-path", value);
-  }
-  [SUBSCRIBE_SELF("changeColorProperty")](key, color2) {
-    this.modifyPropertyValue(key, color2);
-  }
-  [SUBSCRIBE_SELF("changeBackgroundImageProperty")](key, backgroundImage2) {
-    this.modifyPropertyValue(key, backgroundImage2);
-  }
-  [SUBSCRIBE_SELF("changeFilterProperty")](filter2) {
-    this.modifyPropertyValue("filter", filter2);
-  }
-  [SUBSCRIBE_SELF("changeBackdropFilterProperty")](filter2) {
-    this.modifyPropertyValue("backdrop-filter", filter2);
-  }
-  [SUBSCRIBE_SELF("changeBoxShadowProperty")](boxshadow) {
-    this.modifyPropertyValue("box-shadow", boxshadow);
-  }
-  [SUBSCRIBE_SELF("changeTextShadowProperty")](textShadow2) {
-    this.modifyPropertyValue("text-shadow", textShadow2);
-  }
-  [SUBSCRIBE_SELF("changeVar")](value) {
-    this.modifyPropertyValue("var", value);
-  }
-  [SUBSCRIBE_SELF("changeTransform")](value) {
-    this.modifyPropertyValue("transform", value);
-  }
-  [SUBSCRIBE_SELF("changeTransformOrigin")](value) {
-    this.modifyPropertyValue("transform-origin", value);
-  }
-  [SUBSCRIBE_SELF("changePerspectiveOrigin")](value) {
-    this.modifyPropertyValue("perspective-origin", value);
-  }
-  [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.modifyPropertyValue(key, value);
-  }
-  makePropertyEditor(property, index2) {
-    if (property.editor) {
-      return this.makeCustomePropertyEditor(property, index2);
-    }
-    switch (property.key) {
-      case "animation-timing-function":
-      case "box-shadow":
-      case "text-shadow":
-      case "background-image":
-      case "filter":
-      case "backdrop-filter":
-      case "var":
-      case "transform":
-      case "transform-origin":
-      case "perspective-origin":
-      case "mix-blend-mode":
-      case "border":
-      case "border-radius":
-      case "clip-path":
-      case "fill-rule":
-      case "stroke-linecap":
-      case "stroke-linejoin":
-      case "stroke-dasharray":
-      case "d":
-      case "points":
-      case "offset-path":
-      case "playTime":
-        return this.makeIndivisualPropertyEditor(property, index2);
-      case "color":
-      case "background-color":
-      case "text-fill-color":
-      case "text-stroke-color":
-      case "stroke":
-      case "fill":
-        return this.makeIndivisualPropertyColorEditor(property, index2);
-      case "opacity":
-      case "fill-opacity":
-      case "stroke-dashoffset":
-      case "offset-distance":
-        let min = 0;
-        let max = 1;
-        let step2 = 0.01;
-        return `
-          <div class='property-editor'>
-            <object refClass="NumberRangeEditor"  
-              ref='$opacity${index2}' 
-              key='${property.key}' 
-              min="${min}"
-              max="${max}"
-              step="${step2}"
-              value="${property.value || 1}"
-              selected-unit='number'
-              removable="true"
-              onchange="changeRangeEditor" />
-          </div>
-        `;
-      case "rotate":
-        return `
-          <div class='property-editor'>
-            <object refClass="RangeEditor"  
-              ref='rangeEditor${index2}' 
-              key='${property.key}' 
-              value='${property.value}'  
-              min="-2000"
-              max="2000"
-              units="deg" 
-              onChange="changeRangeEditor" />
-          </div>
-        `;
-      case "left":
-      case "margin-top":
-      case "margin-bottom":
-      case "margin-left":
-      case "margin-right":
-      case "padding-top":
-      case "padding-bottom":
-      case "padding-left":
-      case "padding-right":
-      case "width":
-      case "height":
-      case "perspective":
-      case "text-stroke-width":
-      default:
-        return `
-          <div class='property-editor'>
-            <object refClass="RangeEditor"  ref='rangeEditor${index2}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
-          </div>
-        `;
-    }
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    this.modifyPropertyValue(key, value + "");
-  }
-  searchKey(key, callback) {
-    this.state.properties.filter((it) => it.key === key).forEach(callback);
-  }
-  modifyPropertyValue(key, value) {
-    this.searchKey(key, (it) => {
-      it.value = value;
-    });
-    this.modifyProperty();
-  }
-  makePropertySelect() {
-    return `
-      <select class='property-select' ref='$propertySelect'>
-        <optgroup label='Position'>
-          <option value='x'>x</option>
-          <option value='y'>y</option>        
-        </optgroup>
-        <optgroup label='Size'>
-          <option value='width'>width</option>
-          <option value='height'>height</option>
-        </optgroup>      
-        <optgroup label='Box Model'>
-          <option value='margin-left'>margin-left</option>
-          <option value='margin-right'>margin-right</option>
-          <option value='margin-bottom'>margin-bottom</option>
-          <option value='margin-top'>margin-top</option>
-          <option value='padding-left'>padding-left</option>
-          <option value='padding-right'>padding-right</option>
-          <option value='padding-bottom'>padding-bottom</option>
-          <option value='padding-top'>padding-top</option>       
-        </optgroup>
-        <optgroup label='Border'>
-          <option value='border'>border</option>
-          <option value='border-radius'>border-radius</option>
-        </optgroup>        
-        <optgroup label='Style'>
-          <option value='background-color'>background-color</option>
-          <option value='background-image'>background-image</option>
-          <option value='box-shadow'>box-shadow</option>
-          <option value='text-shadow'>text-shadow</option>
-          <option value='filter'>filter</option>      
-          <option value='backdrop-filter'>backdrop-filter</option>
-          <option value='mix-blend-mode'>mix-blend-mode</option>
-        </optgroup>            
-        <optgroup label='Transform'>
-          <option value='transform'>transform</option>
-          <option value='transform-origin'>transform-origin</option>
-          <option value='perspective'>perspective</option>
-          <option value='perspective-origin'>perspective-origin</option>
-        </optgroup>
-        <optgroup label='Font'>
-          <option value='font-size'>font-size</option>
-          <option value='font-weight'>font-weight</option>          
-        </optgroup>
-        <optgroup label='Animation'>
-          <option value='animation-timing-function'>timing-function</option>
-        </optgroup>        
-      </select>
-    `;
-  }
-  [LOAD("$property")]() {
-    return this.state.properties.map((it, index2) => {
-      return `
-        <div class='css-property-item'>
-          <div class='title'>
-            <label>${it.key}</label>
-            <div class='tools'>
-              <button type="button" class='remove' data-index="${index2}">${obj$2.remove2}</button>
-            </div>
-          </div>
-          <div class='title-2'>
-            <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index2}">${obj$2.refresh}</button> Refresh</label>
-            </div>
-          </div>
-          <div class='value-editor'>
-            ${this.makePropertyEditor(it, index2)}
-          </div>
-        </div>
-      `;
-    });
-  }
-  [SUBSCRIBE("showCSSPropertyEditor")](properties = []) {
-    this.setState({ properties });
-    this.refresh();
-  }
-  [CLICK("$property .remove")](e) {
-    var index2 = +e.$dt.attr("data-index");
-    this.state.properties.splice(index2, 1);
-    this.refresh();
-    this.modifyProperty();
-  }
-  [CLICK("$property .refresh")]() {
-    this.parent.trigger("refreshPropertyValue");
-  }
-}
-var CubicBezierEditor$1 = "";
 class CubicBezierEditor extends EditorElement {
   initState() {
     return {
@@ -13328,11 +12859,6 @@ class CubicBezierEditor extends EditorElement {
       baseLineColor: "rgba(117, 117, 117, 0.46)"
     };
   }
-  afterRender() {
-    window.setTimeout(() => {
-      this.refresh();
-    }, 10);
-  }
   template() {
     const linearCurve = curveToPath(this.state.currentBezier, 150, 150);
     const linearCurvePoint = curveToPointLine(this.state.currentBezier, 150, 150);
@@ -13342,54 +12868,119 @@ class CubicBezierEditor extends EditorElement {
     const easeInCurvePoint = curveToPointLine("ease-in", 30, 30);
     const easeOutCurve = curveToPath("ease-out", 30, 30);
     const easeOutCurvePoint = curveToPointLine("ease-out", 30, 30);
-    return `
-            <div class='elf--cubic-bezier-editor'>
-                <div class='predefined'>
-                    <div class='left' ref='$left'>${obj$2.chevron_left}</div>
-                    <div class='predefined-text' ref='$text'></div>
-                    <div class='right' ref='$right'>${obj$2.chevron_right}</div>
-                </div>
-                <div class='animation' ref='$animationArea'>
-                    <canvas 
-                        class='animation-canvas' 
-                        ref='$animationCanvas' 
-                        title='Click and Replay point animation' 
-                        width='230px' 
-                        height='20px'
-                    ></canvas>
-                </div>
-                <div class='item-list' ref='$itemList' data-selected-value=''>
-                    <div class='item' data-bezier='ease' title='ease'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
-                        </svg>
-                    </div>
-                    <div class='item' data-bezier='ease-in' title='ease-in'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeInCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeInCurvePoint}" stroke="gray" stroke-width="1" fill='none' /> 
-                        </svg>
-                    </div>
-                    <div class='item' data-bezier='ease-out' title='ease-out'>
-                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                            <path d="${easeOutCurve}" stroke="white" stroke-width="1" fill='none' />
-                            <path d="${easeOutCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
-                        </svg>
-                    </div>
-                </div>
-                <div class='bezier'>
-                    <svg class='bezier-canvas' width="150" height="150" viewBox="0 0 150 150" overflow="visible">
-                        <path d="${linearCurve}" stroke="black" stroke-width="1" fill='none' ref='$bezierCanvas' />
-                        <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
-                    </svg>                
-                    <div class='control' ref='$control'>
-                        <div class='pointer1' ref='$pointer1'></div>
-                        <div class='pointer2' ref='$pointer2'></div>
-                    </div>
-                </div>
-            </div>
-        `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--cubic-bezier-editor"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "predefined"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "left",
+      ref: "$left"
+    }, obj$2.chevron_left), /* @__PURE__ */ createElementJsx("div", {
+      class: "predefined-text",
+      ref: "$text"
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "right",
+      ref: "$right"
+    }, obj$2.chevron_right)), /* @__PURE__ */ createElementJsx("div", {
+      class: "animation",
+      ref: "$animationArea"
+    }, /* @__PURE__ */ createElementJsx("canvas", {
+      class: "animation-canvas",
+      ref: "$animationCanvas",
+      title: "Click and Replay point animation",
+      width: "230px",
+      height: "20px"
+    })), /* @__PURE__ */ createElementJsx("div", {
+      class: "item-list",
+      ref: "$itemList",
+      "data-selected-value": ""
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "item",
+      "data-bezier": "ease",
+      title: "ease"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "item-canvas",
+      width: "30",
+      height: "30",
+      viewBox: "0 0 30 30"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: easeCurve,
+      stroke: "white",
+      "stroke-width": "1",
+      fill: "none"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: easeCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none"
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "item",
+      "data-bezier": "ease-in",
+      title: "ease-in"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "item-canvas",
+      width: "30",
+      height: "30",
+      viewBox: "0 0 30 30"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: easeInCurve,
+      stroke: "white",
+      "stroke-width": "1",
+      fill: "none"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: easeInCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none"
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "item",
+      "data-bezier": "ease-out",
+      title: "ease-out"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "item-canvas",
+      width: "30",
+      height: "30",
+      viewBox: "0 0 30 30"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: easeOutCurve,
+      stroke: "white",
+      "stroke-width": "1",
+      fill: "none"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: easeOutCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none"
+    })))), /* @__PURE__ */ createElementJsx("div", {
+      class: "bezier"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      class: "bezier-canvas",
+      width: "150",
+      height: "150",
+      viewBox: "0 0 150 150",
+      overflow: "visible"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: linearCurve,
+      stroke: "black",
+      "stroke-width": "1",
+      fill: "none",
+      ref: "$bezierCanvas"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: linearCurvePoint,
+      stroke: "gray",
+      "stroke-width": "1",
+      fill: "none",
+      ref: "$bezierCanvasPoint"
+    })), /* @__PURE__ */ createElementJsx("div", {
+      class: "control",
+      ref: "$control"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "pointer1",
+      ref: "$pointer1"
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "pointer2",
+      ref: "$pointer2"
+    }))));
   }
   [BIND("$animationArea")]() {
     return {
@@ -13462,8 +13053,8 @@ class CubicBezierEditor extends EditorElement {
   }
   refreshPointer() {
     var currentBezier = getPredefinedCubicBezier(this.state.currentBezier);
-    var width2 = this.refs.$control.width();
-    var height2 = this.refs.$control.height();
+    var width2 = 150;
+    var height2 = 150;
     var left2 = currentBezier[0] * width2;
     var top2 = (1 - currentBezier[1]) * height2;
     this.refs.$pointer1.css({
@@ -13725,6 +13316,369 @@ class DirectionEditor extends EditorElement {
   }
 }
 var FilterEditor$1 = "";
+const identity$2 = () => true;
+function _traverse(obj2, filterCallback = identity$2) {
+  var results = [];
+  let len2 = obj2.layers.length;
+  for (let start2 = len2; start2--; ) {
+    let it = obj2.layers[start2];
+    results.push(..._traverse(it.ref, filterCallback));
+  }
+  if (filterCallback(obj2)) {
+    results.push(obj2);
+  }
+  return results;
+}
+class Item {
+  constructor(json = {}) {
+    this.ref = new Proxy(this, {
+      get: (target, key) => {
+        var originMethod = target[key];
+        if (isFunction(originMethod)) {
+          return (...args2) => {
+            return originMethod.apply(target, args2);
+          };
+        } else {
+          return originMethod || target.json[key];
+        }
+      },
+      set: (target, key, value) => {
+        const isDiff = target.json[key] != value;
+        if (isDiff) {
+          target.json[key] = value;
+          this.changed();
+        }
+        return true;
+      }
+    });
+    if (json instanceof Item) {
+      json = json.toJSON();
+    }
+    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
+    this.lastChangedField = {};
+    this.lastChangedFieldKeys = [];
+    this.cachedValue = {};
+    return this.ref;
+  }
+  getDefaultTitle() {
+    return "Item";
+  }
+  getIcon() {
+    return "";
+  }
+  isAttribute() {
+    return false;
+  }
+  isChanged(timestamp) {
+    return this.json.timestamp != Number(timestamp);
+  }
+  changed() {
+    this.json.timestamp = this.json._timestamp + window.performance.now();
+  }
+  get title() {
+    return this.json.name || this.getDefaultTitle();
+  }
+  renameWithCount() {
+    let arr = this.json.name.split(" ");
+    if (arr.length < 2) {
+      return;
+    }
+    let last = arr.pop();
+    let lastNumber = +last;
+    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
+      lastNumber++;
+    } else {
+      lastNumber = last;
+    }
+    const nextName = [...arr, lastNumber].join(" ");
+    this.reset({
+      name: nextName
+    });
+  }
+  get allLayers() {
+    return _traverse(this.ref);
+  }
+  filteredAllLayers(filterCallback) {
+    return _traverse(this.ref, filterCallback);
+  }
+  get id() {
+    return this.json.id;
+  }
+  get layers() {
+    return this.json.layers;
+  }
+  get parent() {
+    return this.json.parent;
+  }
+  setParent(otherParent) {
+    this.json.parent = otherParent;
+  }
+  get depth() {
+    if (!this.parent)
+      return 1;
+    return this.parent.depth + 1;
+  }
+  get top() {
+    if (!this.parent)
+      return this.ref;
+    let localParent = this.parent;
+    do {
+      if (!localParent.parent) {
+        return localParent;
+      }
+      localParent = localParent.parent;
+    } while (localParent);
+  }
+  get project() {
+    return this.path.find((it) => it.is("project"));
+  }
+  get artboard() {
+    return this.path.find((it) => it.is("artboard"));
+  }
+  get path() {
+    if (!this.parent)
+      return [this.ref];
+    const list2 = this.parent.path;
+    list2.push(this.ref);
+    return list2;
+  }
+  getInnerId(postfix = "") {
+    return this.json.id + postfix;
+  }
+  is(checkItemType) {
+    if (!this.json)
+      return false;
+    return checkItemType === this.json.itemType;
+  }
+  isNot(checkItemType) {
+    return this.is(checkItemType) === false;
+  }
+  isSVG() {
+    return false;
+  }
+  addCache(key, value) {
+    this.cachedValue[key] = value;
+  }
+  getCache(key) {
+    return this.cachedValue[key];
+  }
+  computed(key, newValueCallback) {
+    const cachedKey = `__cachedKey_${key}`;
+    const parsedKey = `${cachedKey}__parseValue`;
+    const value = this.json[key];
+    if (this.getCache(key) === value && this.getCache(parsedKey)) {
+      return this.getCache(parsedKey);
+    }
+    this.addCache(key, value);
+    this.addCache(parsedKey, newValueCallback(value, this.ref));
+    return this.getCache(parsedKey);
+  }
+  editable() {
+    return true;
+  }
+  generateListNumber() {
+    this.layers.forEach((it, index2) => {
+      it.no = index2;
+      it.generateListNumber();
+    });
+  }
+  convert(json) {
+    if (json.layers) {
+      json.layers.forEach((layer) => {
+        layer.parent = this.ref;
+      });
+    }
+    return json;
+  }
+  setCache() {
+  }
+  toCloneObject(isDeep = true) {
+    var json = this.attrs("itemType", "name", "elementType", "type", "visible", "lock", "selected");
+    if (isDeep) {
+      json.layers = this.json.layers.map((layer) => layer.clone(isDeep));
+    }
+    return json;
+  }
+  clone(isDeep = true) {
+    var ItemClass = this.constructor;
+    var item = new ItemClass(this.toCloneObject(isDeep));
+    item.setParent(this.json.parent);
+    return item;
+  }
+  reset(obj2) {
+    if (!obj2.__changedId)
+      obj2.__changedId = uuid();
+    if (this.lastChangedField.__changedId !== obj2.__changedId) {
+      this.json = this.convert(Object.assign(this.json, obj2));
+      this.lastChangedField = obj2;
+      this.lastChangedFieldKeys = Object.keys(obj2);
+      this.changed();
+    }
+    return true;
+  }
+  hasChangedField(...args2) {
+    return args2.some((it) => this.lastChangedFieldKeys.includes(it));
+  }
+  getDefaultObject(obj2 = {}) {
+    var id = uuidShort();
+    return __spreadValues({
+      id,
+      _timestamp: Date.now(),
+      _time: window.performance.now(),
+      visible: true,
+      lock: false,
+      selected: false,
+      layers: []
+    }, obj2);
+  }
+  attrs(...args2) {
+    const result = {};
+    args2.forEach((field) => {
+      result[field] = clone$1(this.json[field]);
+    });
+    return result;
+  }
+  hasChildren() {
+    return this.layers.length > 0;
+  }
+  appendChild(layer) {
+    if (layer.parent === this.ref) {
+      return layer;
+    }
+    this.resetMatrix(layer);
+    if (layer.parent) {
+      layer.remove();
+    }
+    layer.setParent(this.ref);
+    this.json.layers.push(layer);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  prependChildItem(layer) {
+    this.resetMatrix(layer);
+    if (layer.parent) {
+      layer.remove();
+    }
+    layer.setParent(this.ref);
+    this.json.layers.unshift(layer);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  resetMatrix() {
+  }
+  refreshMatrixCache() {
+  }
+  insertChild(layer, index2 = 0) {
+    this.resetMatrix(layer);
+    if (layer.parent) {
+      layer.remove();
+    }
+    layer.setParent(this.ref);
+    this.json.layers.splice(index2, 0, layer);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  insertAfter(layer) {
+    const index2 = this.parent.findIndex(this);
+    this.parent.insertChild(layer, index2);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  insertBefore(layer) {
+    const index2 = this.parent.findIndex(this);
+    this.parent.insertChild(layer, index2 - 1);
+    this.project.addIndexItem(layer);
+    return layer;
+  }
+  setPositionInPlace(position2, item) {
+    this.layers.splice(position2, 0, item);
+  }
+  toggle(field, toggleValue) {
+    if (isUndefined(toggleValue)) {
+      this.json[field] = !this.json[field];
+    } else {
+      this.json[field] = !!toggleValue;
+    }
+  }
+  isTreeItemHide() {
+    let currentParent = this.parent;
+    let collapsedList = [];
+    do {
+      if (currentParent.is("project"))
+        break;
+      collapsedList.push(Boolean(currentParent.collapsed));
+      currentParent = currentParent.parent;
+    } while (currentParent);
+    return Boolean(collapsedList.filter(Boolean).length);
+  }
+  expectJSON(key) {
+    if (key === "parent")
+      return false;
+    if (isUndefined(this.json[key]))
+      return false;
+    return true;
+  }
+  toJSON() {
+    const json = this.json;
+    let newJSON = {};
+    Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
+      newJSON[key] = json[key];
+    });
+    return newJSON;
+  }
+  resize() {
+  }
+  copy(dist2 = 0) {
+    return this.json.parent.copyItem(this.ref, dist2);
+  }
+  findIndex(item) {
+    return this.json.layers.indexOf(item.ref);
+  }
+  copyItem(childItem, dist2 = 10) {
+    var child = childItem.clone();
+    child.renameWithCount();
+    child.move([dist2, dist2, 0]);
+    var childIndex = this.findIndex(childItem);
+    if (childIndex > -1) {
+      this.json.layers.push(child);
+      this.project.addIndexItem(child);
+    }
+    return child;
+  }
+  remove() {
+    this.json.parent.removeChild(this.ref);
+    this.project.removeIndexItem(this.ref);
+  }
+  removeChild(childItem) {
+    const index2 = this.findIndex(childItem);
+    if (index2 > -1) {
+      this.json.layers.splice(index2, 1);
+    }
+  }
+  hasParent(parentId) {
+    var isParent = this.json.parent.id === parentId;
+    if (!isParent && this.json.parent.is("project") === false)
+      return this.json.parent.hasParent(parentId);
+    return isParent;
+  }
+}
+class PropertyItem extends Item {
+  getDefaultObject(obj2 = {}) {
+    return __spreadValues({
+      selected: false,
+      layers: []
+    }, obj2);
+  }
+  isAttribute() {
+    return true;
+  }
+  toCSS() {
+    return {};
+  }
+  toString() {
+    return CSS_TO_STRING(this.toCSS());
+  }
+}
 const FILTER_REG = /((blur|grayscale|drop-shadow|hue-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^)]*)\))/gi;
 class Filter extends PropertyItem {
   getDefaultObject(obj2 = {}) {
@@ -13778,6 +13732,12 @@ class Filter extends PropertyItem {
   }
   static join(list2) {
     return list2.map((it) => Filter.parse(it)).join(" ");
+  }
+  toJSON() {
+    return {
+      type: this.json.type,
+      value: this.json.value
+    };
   }
 }
 class BlurFilter extends Filter {
@@ -13972,6 +13932,15 @@ class DropshadowFilter extends Filter {
     var json = this.json;
     return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color})`;
   }
+  toJSON() {
+    return {
+      type: this.json.type,
+      offsetX: this.json.offsetX,
+      offsetY: this.json.offsetY,
+      blurRadius: this.json.blurRadius,
+      color: this.json.color
+    };
+  }
 }
 DropshadowFilter.spec = {
   offsetX: {
@@ -14054,7 +14023,7 @@ class FilterEditor extends EditorElement {
   initState() {
     return {
       hideLabel: this.props.hideLabel === "true" ? true : false,
-      filters: Filter.parseStyle(this.props.value)
+      filters: this.props.value || []
     };
   }
   template() {
@@ -14222,7 +14191,7 @@ class FilterEditor extends EditorElement {
     this.modifyFilter();
   }
   modifyFilter() {
-    var value = this.state.filters.join(" ");
+    var value = this.state.filters;
     this.parent.trigger(this.props.onchange, this.props.key, value, this.props.params);
   }
   makeFilter(type, opt = {}) {
@@ -14286,20 +14255,14 @@ class FilterEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeDropShadowColor")](key, color2, params) {
     var index2 = +params;
-    this.state.filters[index2].reset({
-      color: color2
-    });
+    this.state.filters[index2].color = color2;
     this.modifyFilter();
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value, params) {
     if (params) {
-      this.state.filters[+key].reset({
-        [params]: value
-      });
+      this.state.filters[+key][params] = value;
     } else {
-      this.state.filters[+key].reset({
-        value
-      });
+      this.state.filters[+key].value = value;
     }
     this.modifyFilter();
   }
@@ -16647,24 +16610,24 @@ class PathParser {
           var list2 = getBezierPoints(closedPointInfo.points, closedPointInfo.t);
           var first = list2.first;
           var firstSegment = Segment.C(first[1].x, first[1].y, first[2].x, first[2].y, first[3].x, first[3].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.C(second2[1].x, second2[1].y, second2[2].x, second2[2].y, second2[3].x, second2[3].y);
+          var second = list2.second;
+          var secondSegment = Segment.C(second[1].x, second[1].y, second[2].x, second[2].y, second[3].x, second[3].y);
           this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
           break;
         case "Q":
           var list2 = getBezierPointsQuard(closedPointInfo.points, closedPointInfo.t);
           var first = list2.first;
           var firstSegment = Segment.Q(first[1].x, first[1].y, first[2].x, first[2].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.Q(second2[1].x, second2[1].y, second2[2].x, second2[2].y);
+          var second = list2.second;
+          var secondSegment = Segment.Q(second[1].x, second[1].y, second[2].x, second[2].y);
           this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
           break;
         case "L":
           var list2 = getBezierPointsLine(closedPointInfo.points, closedPointInfo.t);
           var first = list2.first;
           var firstSegment = Segment.L(first[1].x, first[1].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.L(second2[1].x, second2[1].y);
+          var second = list2.second;
+          var secondSegment = Segment.L(second[1].x, second[1].y);
           this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
           break;
         default:
@@ -19092,8 +19055,7 @@ class InputRangeEditor extends EditorElement {
     var layoutClass = layout2;
     var realValue = (+value).toString();
     const units = this.state.units;
-    return `
-        <div 
+    return `<div 
             ref="$range",
             class="${classnames({
       "elf--input-range-editor": true,
@@ -19104,27 +19066,15 @@ class InputRangeEditor extends EditorElement {
       disabled,
       [layoutClass]: true
     })}"
-        >
-            ${label ? `<label title="${title2}">${label}</label>` : ""}
-            <div class='range--editor-type' data-type='range'>
-                <div class='area'>
-                    <input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
-                    
-                    ${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : createComponent("SelectEditor", {
+        >${label ? `<label title="${title2}">${label}</label>` : ""}<div class='range--editor-type' 
+        data-type='range'><div class='area'><input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : createComponent("SelectEditor", {
       ref: "$unit",
       key: "unit",
       compact: true,
       value: this.state.selectedUnit || this.state.value.unit,
       options: this.state.units,
       onchange: "changeUnit"
-    })}
-                    
-                    
-                </div>
-            </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${obj$2.remove}</button>
-        </div>
-    `;
+    })}</div></div><button type='button' class='remove' ref='$remove' title='Remove'>${obj$2.remove}</button></div>`;
   }
   getValue() {
     return this.state.value.clone();
@@ -19205,131 +19155,7 @@ class InputRangeEditor extends EditorElement {
     this.refs.$range.removeClass("drag");
   }
 }
-var RangeEditor$1 = "";
-class RangeEditor extends EditorElement {
-  initState() {
-    var units = this.props.units || ["px", "em", "%"];
-    var value = Length.parse(this.props.value || 0);
-    return {
-      removable: this.props.removable === "true",
-      calc: this.props.calc === "true" ? true : false,
-      compact: this.props.compact === "true" ? true : false,
-      label: this.props.label || "",
-      min: +this.props.min || 0,
-      max: +this.props.max || 100,
-      step: +this.props.step || 1,
-      key: this.props.key,
-      params: this.props.params || "",
-      layout: this.props.layout || "",
-      units,
-      value
-    };
-  }
-  template() {
-    return `<div class='small-editor' ref='$body'></div>`;
-  }
-  [LOAD("$body")]() {
-    var { min, max, step: step2, label, removable, layout: layout2, compact } = this.state;
-    var value = +this.state.value.value.toString();
-    if (isNaN(value)) {
-      value = 0;
-    }
-    var layoutClass = layout2;
-    var realValue = (+value).toString();
-    if (this.state.units === "%") {
-      throw new Error("%");
-    }
-    var units = this.state.units.map((it) => {
-      let description = it;
-      if (description === "number") {
-        description = "";
-      }
-      return { value: it, text: description };
-    });
-    return `
-        <div 
-            ref="$range"
-            class="${classnames({
-      "elf--range--editor": true,
-      "has-label": !!label,
-      compact: !!compact,
-      "is-removable": removable,
-      [layoutClass]: true
-    })}"
-        >
-            ${label ? `<label title="${label}">${label}</label>` : ""}
-            <div class='range--editor-type' data-type='range'>
-                <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step2}" /> 
-                <div class='area' ref='$rangeArea'>
-                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
-                    ${createComponent("SelectEditor", {
-      ref: "$unit",
-      key: "unit",
-      value: this.state.value.unit,
-      options: units,
-      onchange: "changeUnit"
-    })}
-                </div>
-            </div>
-            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$2.remove}</button>
-        </div>
-    `;
-  }
-  getValue() {
-    return this.state.value.clone();
-  }
-  setValue(value) {
-    this.setState({
-      value: Length.parse(value)
-    });
-  }
-  [FOCUS('$body input[type="number"]')]() {
-    this.refs.$rangeArea.addClass("focused");
-  }
-  [BLUR('$body input[type="number"]')]() {
-    this.refs.$rangeArea.removeClass("focused");
-  }
-  updateData(data) {
-    this.setState(data, false);
-    this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
-  }
-  initValue() {
-    if (this.state.value == "") {
-      this.state.value = new Length(0, this.children.$unit.getValue());
-    }
-  }
-  [INPUT('$body input[type="number"]')]() {
-    var value = +this.refs.$propertyNumber.value;
-    this.getRef("$property").val(value);
-    this.initValue();
-    this.updateData({
-      value: new Length(value, this.children.$unit.getValue())
-    });
-  }
-  [INPUT('$body input[type="range"]')]() {
-    this.trigger("changeRangeValue");
-  }
-  [POINTERSTART('$body input[type="range"]') + END()]() {
-  }
-  end() {
-    this.trigger("changeRangeValue");
-  }
-  [SUBSCRIBE_SELF("changeRangeValue")]() {
-    var value = +this.getRef("$property").value;
-    this.refs.$propertyNumber.val(value);
-    this.initValue();
-    this.updateData({
-      value: new Length(value, this.children.$unit.getValue())
-    });
-  }
-  [SUBSCRIBE_SELF("changeUnit")](key, value) {
-    this.initValue();
-    this.updateData({
-      value: this.state.value.toUnit(value)
-    });
-  }
-}
-class IterationCountEditor extends RangeEditor {
+class IterationCountEditor extends InputRangeEditor {
   initState() {
     var value = this.props.value;
     if (value === "infinite") {
@@ -19478,9 +19304,6 @@ class NumberInputEditor extends EditorElement {
   initState() {
     var value = +this.props.value;
     let label = this.props.label || "";
-    if (obj$2[label]) {
-      label = obj$2[label];
-    }
     const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
     const wide = isBoolean(this.props.wide) ? this.props.wide : this.props.wide === "true";
     const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === "true";
@@ -20751,12 +20574,12 @@ class PurePathGenerator {
     this.makeMovePositionGuide();
     return this.toSVGString();
   }
-  makeTriangleDistancePointGuide(first, second2) {
-    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
-    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
-    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
-    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
-    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+  makeTriangleDistancePointGuide(first, second) {
+    var minX = Math.min(first.startPoint.x, second.startPoint.x);
+    var maxX = Math.max(first.startPoint.x, second.startPoint.x);
+    var minY = Math.min(first.startPoint.y, second.startPoint.y);
+    var maxY = Math.max(first.startPoint.y, second.startPoint.y);
+    if (first.startPoint.x < second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
       var centerX = minX;
       var centerY = minY;
@@ -20765,11 +20588,11 @@ class PurePathGenerator {
       var { x, y } = getXYInCircle(0, dist2, centerX, centerY);
       var last = getXYInCircle(angle, dist2, centerX, centerY);
       this.segmentManager.addDistanceAngle(last, dist2, dist2, angle, { x, y }, { x: x - dist2, y });
-    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
@@ -21650,6 +21473,130 @@ class PolygonDataEditor extends EditorElement {
     this.updateData();
   }
 }
+var RangeEditor$1 = "";
+class RangeEditor extends EditorElement {
+  initState() {
+    var units = this.props.units || ["px", "em", "%"];
+    var value = Length.parse(this.props.value || 0);
+    return {
+      removable: this.props.removable === "true",
+      calc: this.props.calc === "true" ? true : false,
+      compact: this.props.compact === "true" ? true : false,
+      label: this.props.label || "",
+      min: +this.props.min || 0,
+      max: +this.props.max || 100,
+      step: +this.props.step || 1,
+      key: this.props.key,
+      params: this.props.params || "",
+      layout: this.props.layout || "",
+      units,
+      value
+    };
+  }
+  template() {
+    return `<div class='small-editor' ref='$body'></div>`;
+  }
+  [LOAD("$body")]() {
+    var { min, max, step: step2, label, removable, layout: layout2, compact } = this.state;
+    var value = +this.state.value.value.toString();
+    if (isNaN(value)) {
+      value = 0;
+    }
+    var layoutClass = layout2;
+    var realValue = (+value).toString();
+    if (this.state.units === "%") {
+      throw new Error("%");
+    }
+    var units = this.state.units.map((it) => {
+      let description = it;
+      if (description === "number") {
+        description = "";
+      }
+      return { value: it, text: description };
+    });
+    return `
+        <div 
+            ref="$range"
+            class="${classnames({
+      "elf--range--editor": true,
+      "has-label": !!label,
+      compact: !!compact,
+      "is-removable": removable,
+      [layoutClass]: true
+    })}"
+        >
+            ${label ? `<label title="${label}">${label}</label>` : ""}
+            <div class='range--editor-type' data-type='range'>
+                <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step2}" /> 
+                <div class='area' ref='$rangeArea'>
+                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
+                    ${createComponent("SelectEditor", {
+      ref: "$unit",
+      key: "unit",
+      value: this.state.value.unit,
+      options: units,
+      onchange: "changeUnit"
+    })}
+                </div>
+            </div>
+            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj$2.remove}</button>
+        </div>
+    `;
+  }
+  getValue() {
+    return this.state.value.clone();
+  }
+  setValue(value) {
+    this.setState({
+      value: Length.parse(value)
+    });
+  }
+  [FOCUS('$body input[type="number"]')]() {
+    this.refs.$rangeArea.addClass("focused");
+  }
+  [BLUR('$body input[type="number"]')]() {
+    this.refs.$rangeArea.removeClass("focused");
+  }
+  updateData(data) {
+    this.setState(data, false);
+    this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
+  }
+  initValue() {
+    if (this.state.value == "") {
+      this.state.value = new Length(0, this.children.$unit.getValue());
+    }
+  }
+  [INPUT('$body input[type="number"]')]() {
+    var value = +this.refs.$propertyNumber.value;
+    this.getRef("$property").val(value);
+    this.initValue();
+    this.updateData({
+      value: new Length(value, this.children.$unit.getValue())
+    });
+  }
+  [INPUT('$body input[type="range"]')]() {
+    this.trigger("changeRangeValue");
+  }
+  [POINTERSTART('$body input[type="range"]') + END()]() {
+  }
+  end() {
+    this.trigger("changeRangeValue");
+  }
+  [SUBSCRIBE_SELF("changeRangeValue")]() {
+    var value = +this.getRef("$property").value;
+    this.refs.$propertyNumber.val(value);
+    this.initValue();
+    this.updateData({
+      value: new Length(value, this.children.$unit.getValue())
+    });
+  }
+  [SUBSCRIBE_SELF("changeUnit")](key, value) {
+    this.initValue();
+    this.updateData({
+      value: this.state.value.toUnit(value)
+    });
+  }
+}
 var SelectIconEditor$1 = "";
 class SelectIconEditor extends EditorElement {
   initState() {
@@ -21969,81 +21916,10 @@ class TextEditor extends EditorElement {
   }
 }
 var TextShadowEditor$1 = "";
-class TextShadow extends PropertyItem {
-  static parse(obj2) {
-    return new TextShadow(obj2);
-  }
-  static parseStyle(str = "") {
-    var results = convertMatches(str);
-    str = str.trim();
-    var textShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.trim().split(" ");
-      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
-        return reverseMatches(it, results.matches) || "black";
-      });
-      var numbers = values.filter((it) => {
-        return !it.includes("@");
-      });
-      return TextShadow.parse({
-        color: colors2[0] || "rgba(0, 0, 0, 1)",
-        offsetX: Length.parse(numbers[0] || "0px"),
-        offsetY: Length.parse(numbers[1] || "0px"),
-        blurRadius: Length.parse(numbers[2] || "0px")
-      });
-    });
-    return textShadows;
-  }
-  static join(list2) {
-    return list2.map((it) => TextShadow.parse(it)).join(", ");
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "text-shadow",
-      offsetX: "0px",
-      offsetY: "0px",
-      blurRadius: "0px",
-      color: "rgba(0, 0, 0, 1)"
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("offsetX", "offsetY", "blurRadius", "color"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (isNumber(json.offsetX))
-      json.offsetX = Length.px(json.offsetX);
-    else if (json.offsetX)
-      json.offsetX = Length.parse(json.offsetX);
-    if (isNumber(json.offsetY))
-      json.offsetY = Length.px(json.offsetY);
-    else if (json.offsetY)
-      json.offsetY = Length.parse(json.offsetY);
-    if (isNumber(json.blurRadius))
-      json.blurRadius = Length.px(json.blurRadius);
-    else if (json.blurRadius)
-      json.blurRadius = Length.parse(json.blurRadius);
-    return json;
-  }
-  toCSS() {
-    return {
-      "text-shadow": this.toString()
-    };
-  }
-  toString() {
-    var { offsetX, offsetY, blurRadius, color: color2 } = this.json;
-    if (isNumber(offsetX))
-      offsetX = Length.px(offsetX);
-    if (isNumber(offsetY))
-      offsetY = Length.px(offsetY);
-    if (isNumber(blurRadius))
-      blurRadius = Length.px(blurRadius);
-    return `${offsetX} ${offsetY} ${blurRadius} ${color2}`;
-  }
-}
 class TextShadowEditor extends EditorElement {
   initState() {
     return {
-      textShadows: TextShadow.parseStyle(this.props.value)
+      textShadows: this.props.value || []
     };
   }
   template() {
@@ -22100,14 +21976,19 @@ class TextShadowEditor extends EditorElement {
     return arr.join("");
   }
   modifyTextShadow() {
-    var value = this.state.textShadows.join(", ");
+    var value = this.state.textShadows;
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
-  [SUBSCRIBE("add")](shadow2 = "") {
-    if (shadow2) {
-      this.state.textShadows = TextShadow.parseStyle(shadow2);
+  [SUBSCRIBE("add")](shadows) {
+    if (isArray(shadows)) {
+      this.state.textShadows.push(...shadows);
     } else {
-      this.state.textShadows.push(new TextShadow());
+      this.state.textShadows.push({
+        color: "#000000",
+        offsetX: 0,
+        offsetY: 0,
+        blurRadius: 0
+      });
     }
     this.refresh();
     this.modifyTextShadow();
@@ -22140,9 +22021,7 @@ class TextShadowEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value, index2) {
     var shadow2 = this.state.textShadows[index2];
-    shadow2.reset({
-      [key]: value
-    });
+    this.state.textShadows[index2] = __spreadProps(__spreadValues({}, shadow2), { [key]: value });
     this.modifyTextShadow();
   }
 }
@@ -22998,7 +22877,10 @@ class MenuManager {
     });
     this.editor.emit("updateMenu", target);
   }
-  getTargetMenu(target) {
+  getTargetMenu(target, sort = "asc") {
+    if (sort === "desc") {
+      return this.menus[target].reverse();
+    }
     return this.menus[target] || [];
   }
 }
@@ -27198,39 +27080,39 @@ class PathKitManager {
   has() {
     return !!this.pathkit;
   }
-  booleanOperation(first, second2, pathOp) {
+  booleanOperation(first, second, pathOp) {
     const PathKit = this.pathkit;
-    return PathKit.MakeFromOp(PathKit.FromSVGString(first), PathKit.FromSVGString(second2), pathOp).toSVGString();
+    return PathKit.MakeFromOp(PathKit.FromSVGString(first), PathKit.FromSVGString(second), pathOp).toSVGString();
   }
-  intersection(first, second2) {
+  intersection(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.INTERSECT));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.INTERSECT));
   }
-  union(first, second2) {
+  union(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.booleanOperation(first, second2, PathKit.PathOp.UNION);
+    return this.booleanOperation(first, second, PathKit.PathOp.UNION);
   }
-  difference(first, second2) {
+  difference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.DIFFERENCE));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.DIFFERENCE));
   }
-  reverseDifference(first, second2) {
+  reverseDifference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.REVERSE_DIFFERENCE));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.REVERSE_DIFFERENCE));
   }
-  xor(first, second2) {
+  xor(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.XOR));
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.XOR));
   }
   reversePathString(pathString2) {
     return PathParser.fromSVGString(pathString2).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
@@ -28321,6 +28203,85 @@ class ContextMenuView extends EditorElement {
   }
 }
 var AlignmentProperty$1 = "";
+const DEFAULT_TITLE = "";
+const DEFAULT_ICON = "";
+const DEFAULT_CHECKED = false;
+class MenuItem extends EditorElement {
+  template() {
+    return `
+        <button 
+            type="button" 
+            class='elf--menu-item ${this.getClassName()}' 
+            data-no-title="${this.isHideTitle()}" 
+            ${this.isHideTitle() && this.isHideTooltip() === false ? `data-tooltip="${this.getTitle()}"` : ""} 
+            checked="${this.getChecked() ? "checked" : ""}"
+            ${this.isDisabled() ? "disabled" : ""}
+            data-direction="${this.getDirection()}"
+        >
+            <div class="icon ${this.getIcon()}" ref="$icon">${obj$2[this.getIconString()] || this.getIconString() || ""}</div>
+            ${this.isHideTitle() ? "" : `<div class="title">${this.getTitle()}</div>`}
+            
+        </button>
+        `;
+  }
+  getClassName() {
+    return "";
+  }
+  clickButton() {
+  }
+  getChecked() {
+    return DEFAULT_CHECKED;
+  }
+  isDisabled() {
+    return false;
+  }
+  setSelected(isSelected) {
+    this.$el.toggleClass("selected", isSelected);
+  }
+  getTitle() {
+    return DEFAULT_TITLE;
+  }
+  getIcon() {
+    return DEFAULT_ICON;
+  }
+  setIcon(iconString) {
+    this.refs.$icon.html(obj$2[iconString] || iconString || "");
+  }
+  getIconString() {
+    return DEFAULT_ICON;
+  }
+  isHideTitle() {
+    return false;
+  }
+  isHideTooltip() {
+    return true;
+  }
+  [CLICK()](e) {
+    this.clickButton(e);
+  }
+  getDirection() {
+    return this.props.direction || "";
+  }
+  static createMenuItem(opt = {}) {
+    return class extends MenuItem {
+      getIconString() {
+        return opt.iconString || "add_box";
+      }
+      getTitle() {
+        return opt.title || "New Item";
+      }
+      isHideTitle() {
+        return opt.isHideTitle || true;
+      }
+      clickButton(e) {
+        opt.clickButton(e);
+      }
+      getDirection() {
+        return opt.direction;
+      }
+    };
+  }
+}
 class BottomAlign extends MenuItem {
   getIconString() {
     return "align_vertical_bottom";
@@ -28621,244 +28582,120 @@ function alignment(editor) {
   });
 }
 var AnimationProperty$1 = "";
-function getCustomParseIndexString(it, prefix = "@") {
-  return `${prefix}${it.startIndex}`.padEnd(10, "0");
-}
-function customParseMatches(str, regexp) {
-  const matches2 = str.match(regexp);
-  let result = [];
-  if (!matches2) {
-    return result;
-  }
-  for (var i = 0, len2 = matches2.length; i < len2; i++) {
-    result.push({ parsedString: matches2[i] });
-  }
-  var pos = { next: 0 };
-  result.forEach((item) => {
-    const startIndex = str.indexOf(item.parsedString, pos.next);
-    item.startIndex = startIndex;
-    item.endIndex = startIndex + item.parsedString.length;
-    pos.next = item.endIndex;
-  });
-  return result;
-}
-function customParseConvertMatches(str, regexp) {
-  const m = customParseMatches(str, regexp);
-  m.forEach((it) => {
-    str = str.replace(it.parsedString, getCustomParseIndexString(it));
-  });
-  return { str, matches: m };
-}
-function customParseReverseMatches(str, matches2) {
-  matches2.forEach((it) => {
-    str = str.replace(getCustomParseIndexString(it), it.parsedString);
-  });
-  return str;
-}
-const ANIMATION_TIMING_REG = /((cubic-bezier|steps)\(([^)]*)\))/gi;
-class Animation extends PropertyItem {
-  static parse(obj2) {
-    return new Animation(obj2);
-  }
-  getDefaultObject() {
-    return {
-      itemType: "animation",
-      checked: true,
-      name: "none",
-      direction: "normal",
-      duration: Length.second(0),
-      timingFunction: "linear",
-      delay: Length.second(0),
-      iterationCount: Length.string("infinite"),
-      playState: "running",
-      fillMode: "none"
-    };
-  }
-  convert(json) {
-    json = super.convert(json);
-    json.duration = Length.parse(json.duration);
-    json.iterationCount = Length.parse(json.iterationCount);
-    return json;
-  }
-  toCloneObject() {
-    return __spreadValues({}, this.attrs("name", "direction", "duration", "timingFunction", "delay", "iterationCount", "playState", "fillMode"));
-  }
-  togglePlayState(forcedValue) {
-    if (forcedValue) {
-      this.reset({
-        playState: forcedValue === "running" ? "running" : "paused"
-      });
-    } else {
-      if (this.json.playState === "paused") {
-        this.reset({ playState: "running" });
-      } else {
-        this.reset({ playState: "paused" });
-      }
-    }
-  }
-  toCSS() {
-    if (!this.json.name)
-      return {};
-    return {
-      animation: this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return [
-      json.duration,
-      json.timingFunction,
-      json.delay,
-      json.iterationCount,
-      json.direction,
-      json.fillMode,
-      json.playState,
-      json.name
-    ].join(" ");
-  }
-  static join(list2) {
-    return list2.map((it) => new Animation(it).toString()).join(",");
-  }
-  static add(animation2, item = {}) {
-    const list2 = Animation.parseStyle(animation2);
-    list2.push(Animation.parse(item));
-    return Animation.join(list2);
-  }
-  static remove(animation2, removeIndex) {
-    return Animation.filter(animation2, (it, index2) => {
-      return removeIndex != index2;
-    });
-  }
-  static filter(animation2, filterFunction) {
-    return Animation.join(Animation.parseStyle(animation2).filter((it) => filterFunction(it)));
-  }
-  static replace(animation2, replaceIndex, valueObject) {
-    var list2 = Animation.parseStyle(animation2);
-    if (list2[replaceIndex]) {
-      list2[replaceIndex] = valueObject;
-    } else {
-      list2.push(valueObject);
-    }
-    return Animation.join(list2);
-  }
-  static get(animation2, index2) {
-    var arr = Animation.parseStyle(animation2);
-    return arr[index2];
-  }
-  static parseStyle(animation2) {
-    var list2 = [];
-    if (!animation2)
-      return list2;
-    const result = customParseConvertMatches(animation2, ANIMATION_TIMING_REG);
-    list2 = result.str.split(",").map((it) => {
-      const fields2 = it.split(" ").filter(Boolean);
-      if (fields2.length >= 7) {
-        return {
-          duration: Length.parse(fields2[0]),
-          timingFunction: customParseReverseMatches(fields2[1], result.matches),
-          delay: Length.parse(fields2[2]),
-          iterationCount: fields2[3] === "infinite" ? Length.string("infinite") : Length.parse(fields2[3]),
-          direction: fields2[4],
-          fillMode: fields2[5],
-          playState: fields2[6],
-          name: fields2[7]
-        };
-      } else if (fields2.length >= 3) {
-        return {
-          duration: Length.parse(fields2[0]),
-          timingFunction: customParseReverseMatches(fields2[1], result.matches),
-          delay: Length.parse(fields2[2]),
-          name: fields2[3]
-        };
-      } else if (fields2.length >= 1) {
-        return {
-          duration: Length.parse(fields2[0]),
-          name: fields2[1]
-        };
-      } else {
-        return {};
-      }
-    });
-    return list2.map((it) => Animation.parse(it));
-  }
-}
 class AnimationProperty extends BaseProperty {
   getTitle() {
-    return this.$i18n("animation.property.title");
+    return this.$i18n("title");
   }
   getBody() {
-    return `<div class='animation-list' ref='$animationList'></div>`;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--animation-list",
+      ref: "$animationList"
+    });
   }
   getTools() {
-    return `
-        <button type="button" ref="$add" title="add Fill">${iconUse("add")}</button>
-    `;
+    return /* @__PURE__ */ createElementJsx("button", {
+      type: "button",
+      ref: "$add",
+      title: "add Fill"
+    }, iconUse("add"));
   }
   isFirstShow() {
     return true;
+  }
+  get localeKey() {
+    return "animation.property";
   }
   [LOAD("$animationList") + DOMDIFF]() {
     var current = this.$context.selection.current;
     if (!current)
       return "";
-    return Animation.parseStyle(current.animation).map((it, index2) => {
+    return current.animation.map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
-      return `
-      <div class='animation-group-item'>
-        <div class='animation-item ${selectedClass}' 
-             data-index='${index2}' 
-             ref="animationIndex${index2}" 
-          >
-            <div class='timing preview' data-index='${index2}' ref='$preview${index2}'>
-              <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
-                <path d="${path}" stroke="white" stroke-width="1" fill='none' />
-              </svg>
-            </div>
-            <div class='name'>
-              <div class='title' ref="animationName${index2}">
-                ${it.name ? it.name : `&lt; ${this.$i18n("animation.property.select a keyframe")} &gt;`}
-              </div>
-              <div class='labels'>
-                <label class='count' title='${this.$i18n("animation.property.iteration.count")}'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='${this.$i18n("animation.property.delay")}'><small>${it.delay}</small></label>
-                <label class='duration' title='${this.$i18n("animation.property.duration")}'><small>${it.duration}</small></label>
-                <label class='direction' title='${this.$i18n("animation.property.direction")}'><small>${it.direction}</small></label>
-                <label class='fill-mode' title='${this.$i18n("animation.property.fill.mode")}'><small>${it.fillMode}</small></label>
-                <label class='play-state' title='${this.$i18n("animation.property.play.state")}' data-index='${index2}' data-play-state-selected-value="${it.playState}">
-                  <small data-play-state-value='running'>${iconUse("play")}</small>
-                  <small data-play-state-value='paused'>${iconUse("pause")}</small>
-                </label>
-              </div>
-            </div>
-            <div class='tools'>
-                <button type="button" class="del" data-index="${index2}">
-                  ${iconUse("remove2")}
-                </button>
-            </div>
-        </div>
-      </div>        
-      `;
+      return /* @__PURE__ */ createElementJsx("div", {
+        class: "animation-group-item"
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: `animation-item ${selectedClass}`,
+        "data-index": index2,
+        ref: `animationIndex${index2}`
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: "timing preview",
+        "data-index": index2,
+        ref: `$preview${index2}`
+      }, /* @__PURE__ */ createElementJsx("svg", {
+        class: "item-canvas",
+        width: "30",
+        height: "30",
+        viewBox: "0 0 30 30"
+      }, /* @__PURE__ */ createElementJsx("path", {
+        d: path,
+        stroke: "white",
+        "stroke-width": "1",
+        fill: "none"
+      }))), /* @__PURE__ */ createElementJsx("div", {
+        class: "name"
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: "title"
+      }, it.name ? it.name : `&lt; ${this.$i18n("select a keyframe")} &gt;`), /* @__PURE__ */ createElementJsx("div", {
+        class: "labels"
+      }, /* @__PURE__ */ createElementJsx("label", {
+        class: "count",
+        title: this.$i18n("iteration.count")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.iterationCount)), /* @__PURE__ */ createElementJsx("label", {
+        class: "delay",
+        title: this.$i18n("delay")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.delay)), /* @__PURE__ */ createElementJsx("label", {
+        class: "duration",
+        title: this.$i18n("duration")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.duration)), /* @__PURE__ */ createElementJsx("label", {
+        class: "direction",
+        title: this.$i18n("direction")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.direction)), /* @__PURE__ */ createElementJsx("label", {
+        class: "fill-mode",
+        title: this.$i18n("fill.mode")
+      }, /* @__PURE__ */ createElementJsx("small", null, it.fillMode)), /* @__PURE__ */ createElementJsx("label", {
+        class: "play-state",
+        title: this.$i18n("play.state"),
+        "data-index": index2,
+        "data-play-state-selected-value": it.playState
+      }, /* @__PURE__ */ createElementJsx("small", {
+        "data-play-state-value": "running"
+      }, iconUse("play")), /* @__PURE__ */ createElementJsx("small", {
+        "data-play-state-value": "paused"
+      }, iconUse("pause"))))), /* @__PURE__ */ createElementJsx("div", {
+        class: "tools"
+      }, /* @__PURE__ */ createElementJsx("button", {
+        type: "button",
+        class: "del",
+        "data-index": index2
+      }, iconUse("remove2")))));
     });
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
-    const current = this.$context.selection.current;
-    if (current && current.hasChangedField("animation")) {
-      this.refresh();
-    }
-    this.emit("hideAnimationPropertyPopup");
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
+    this.refresh();
   }
   [CLICK("$add")]() {
     var current = this.$context.selection.current;
     if (current) {
+      const animation2 = current.animation || [];
+      animation2.push({
+        itemType: "animation",
+        checked: true,
+        name: "none",
+        direction: "normal",
+        duration: Length.second(0),
+        timingFunction: "linear",
+        delay: Length.second(0),
+        iterationCount: Length.string("infinite"),
+        playState: "running",
+        fillMode: "none"
+      });
       this.$commands.executeCommand("setAttribute", "add animation property", this.$context.selection.packByValue({
-        animation: (item) => Animation.add(item.animation, { name: null })
+        animation: [...animation2]
       }));
       this.nextTick(() => {
-        window.setTimeout(() => {
-          this.refresh();
-        }, 100);
-      });
+        this.refresh();
+      }, 100);
     } else {
       window.alert("Select a layer");
     }
@@ -28868,11 +28705,10 @@ class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    current.reset({
-      animation: Animation.remove(current.animation, removeIndex)
-    });
-    this.$commands.emit("setAttribute", this.$context.selection.packByValue({
-      animation: Animation.remove(current.animation, removeIndex)
+    const animation2 = current.animation || [];
+    animation2.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "remove animation property", this.$context.selection.packByValue({
+      animation: [...animation2]
     }));
     this.refresh();
   }
@@ -28881,13 +28717,13 @@ class AnimationProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return;
-    const list2 = Animation.parseStyle(current.animation);
-    var animation2 = list2[index2];
-    if (animation2) {
-      animation2.togglePlayState();
-      e.$dt.attr("data-play-state-selected-value", animation2.playState);
-      this.$commands.emit("setAttribute", this.$context.selection.packByValue({
-        animation: Animation.join(list2)
+    const animation2 = current.animation || [];
+    var currentAnimation = animation2[index2];
+    if (currentAnimation) {
+      currentAnimation.playState = currentAnimation.playState === "running" ? "paused" : "running";
+      e.$dt.attr("data-play-state-selected-value", currentAnimation.playState);
+      this.$commands.executeCommand("setAttribute", "remove animation property", this.$context.selection.packByValue({
+        animation: [...animation2]
       }));
     }
   }
@@ -28906,7 +28742,9 @@ class AnimationProperty extends BaseProperty {
     this.current = this.$context.selection.current;
     if (!this.current)
       return;
-    this.currentAnimation = Animation.get(this.current.animation, this.selectedIndex);
+    const animation2 = this.current.animation || [];
+    var currentAnimation = animation2[this.selectedIndex];
+    this.currentAnimation = clone$1(currentAnimation);
     this.viewAnimationPropertyPopup();
   }
   viewAnimationPropertyPopup() {
@@ -28915,24 +28753,24 @@ class AnimationProperty extends BaseProperty {
     const animation2 = this.currentAnimation;
     this.emit("showAnimationPropertyPopup", {
       changeEvent: "changeAnimationPropertyPopup",
-      data: animation2.toCloneObject(),
+      data: clone$1(animation2),
       instance: this
     });
   }
   [CLICK("$animationList .preview")](e) {
     this.viewAnimationPicker(e.$dt);
   }
-  getRef(...args2) {
-    return this.refs[args2.join("")];
-  }
   [SUBSCRIBE("changeAnimationPropertyPopup")](data) {
     if (this.currentAnimation) {
-      this.currentAnimation.reset(__spreadValues({}, data));
+      const animation2 = this.current.animation;
+      animation2[this.selectedIndex] = data;
       if (this.current) {
         this.$commands.executeCommand("setAttribute", "change animation property", this.$context.selection.packByValue({
-          animation: (item) => Animation.replace(item.animation, this.selectedIndex, this.currentAnimation)
+          animation: [...animation2]
         }));
-        this.refresh();
+        this.nextTick(() => {
+          this.refresh();
+        }, 10);
       }
     }
   }
@@ -29057,47 +28895,28 @@ class AnimationPropertyPopup extends BasePopup {
     }
   }
   getBody() {
-    return `<div class='elf--animation-property-popup' ref='$popup'></div>`;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--animation-property-popup",
+      ref: "$popup"
+    });
   }
-  [LOAD("$popup")]() {
-    return `
-      <div class="box">
-        ${this.templateForKeyframe()}
-        ${this.templateForTimingFunction()}
-        ${this.templateForIterationCount()}
-        ${this.templateForDelay()}
-        ${this.templateForDuration()}
-        ${this.templateForDirection()}
-        ${this.templateForFillMode()}
-        ${this.templateForPlayState()}
-      </div>
-    `;
+  [LOAD("$popup") + DOMDIFF]() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "box"
+    }, this.templateForKeyframe(), this.templateForTimingFunction(), this.templateForIterationCount(), this.templateForDelay(), this.templateForDuration(), this.templateForDirection(), this.templateForFillMode(), this.templateForPlayState());
   }
   templateForTimingFunction() {
-    return `
-    <div class='timing-function'>
-      <label>${this.$i18n("animation.property.popup.timing.function")}</label>
-      ${createComponent("CubicBezierEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "timing-function"
+    }, /* @__PURE__ */ createElementJsx("label", null, this.$i18n("animation.property.popup.timing.function")), createComponent("CubicBezierEditor", {
       ref: "$cubicBezierEditor",
       key: "timingFunction",
       value: this.state.data.timingFunction || "linear",
       onChange: "changeCubicBezier"
-    })}
-    </div>
-    `;
+    }));
   }
   templateForKeyframe() {
-    return `
-      <div class='name'>
-        <label>${this.$i18n("animation.property.popup.keyframe")}</label>
-        <div class='input grid-1'>
-          <select ref='$name'></select>
-        </div>
-      </div>
-    `;
-  }
-  [LOAD("$name")]() {
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     var names2 = [];
     if (current && current.keyframes) {
       names2 = current.keyframes.map((it) => {
@@ -29105,11 +28924,20 @@ class AnimationPropertyPopup extends BasePopup {
       });
     }
     names2.unshift({ key: "Select a keyframe", value: "" });
-    return names2.map((it) => {
-      var selected = it.value === this.name ? "selected" : "";
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "name"
+    }, /* @__PURE__ */ createElementJsx("label", null, this.$i18n("animation.property.popup.keyframe")), /* @__PURE__ */ createElementJsx("div", {
+      class: "input grid-1"
+    }, /* @__PURE__ */ createElementJsx("select", {
+      ref: "$name"
+    }, names2.map((it) => {
+      var selected = it.value === this.state.data.name ? true : void 0;
       var label = this.$i18n(it.key);
-      return `<option value='${it.value}' ${selected}>${label}</option>`;
-    });
+      return /* @__PURE__ */ createElementJsx("option", {
+        value: it.value,
+        selected
+      }, label);
+    }))));
   }
   [CHANGE("$name")]() {
     this.updateData({ name: this.refs.$name.value });
@@ -29118,94 +28946,82 @@ class AnimationPropertyPopup extends BasePopup {
     var options2 = "normal,reverse,alternate,alternate-reverse".split(",").map((it) => {
       return `${it}:${this.$i18n(it)}`;
     }).join(",");
-    return `
-      <div class='direction'>
-        ${createComponent("SelectEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "direction"
+    }, createComponent("SelectEditor", {
       label: this.$i18n("animation.property.popup.direction"),
       ref: "$direction",
       key: "direction",
       value: this.state.data.direction,
       options: options2,
       onChange: "changeSelect"
-    })}
-      </div>
-    `;
+    }));
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
     this.updateData({ [key]: value });
   }
   templateForPlayState() {
-    return `
-    <div class='play-state'>
-      ${createComponent("SelectEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "play-state"
+    }, createComponent("SelectEditor", {
       label: this.$i18n("animation.property.popup.play.state"),
       ref: "$playState",
       key: "playState",
       value: this.state.data.playState,
       options: ["paused", "running"],
       onChange: "changeSelect"
-    })}
-    </div>
-  `;
+    }));
   }
   templateForFillMode() {
     var options2 = "none,forwards,backwards,both".split(",").map((it) => {
       return `${it}:${this.$i18n(it)}`;
     }).join(",");
-    return `
-    <div class='fill-mode'>
-      ${createComponent("SelectEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "fill-mode"
+    }, createComponent("SelectEditor", {
       label: this.$i18n("animation.property.popup.fill.mode"),
       ref: "$fillMode",
       key: "fillMode",
       value: this.state.data.fillMode,
       options: options2,
       onChange: "changeSelect"
-    })}
-    </div>
-  `;
+    }));
   }
   templateForDelay() {
-    return `
-    <div class='delay'>
-      ${createComponent("RangeEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "delay"
+    }, createComponent("InputRangeEditor", {
       ref: "$delay",
       label: this.$i18n("animation.property.popup.delay"),
       key: "delay",
       value: this.state.data.delay,
       units: ["s", "ms"],
       onChange: "changeRangeEditor"
-    })} 
-    </div>
-    `;
+    }));
   }
   templateForDuration() {
-    return `
-    <div class='duration'>
-      ${createComponent("RangeEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "duration"
+    }, createComponent("InputRangeEditor", {
       ref: "$duration",
       label: this.$i18n("animation.property.popup.duration"),
       key: "duration",
       value: this.state.data.duration,
       units: ["s", "ms"],
       onChange: "changeRangeEditor"
-    })} 
-    </div>
-    `;
+    }));
   }
   templateForIterationCount() {
-    return `
-      <div class='iteration-count'>
-        ${createComponent("IterationCountEditor", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "iteration-count"
+    }, createComponent("IterationCountEditor", {
       ref: "$iterationCount",
       label: this.$i18n("animation.property.popup.iteration"),
       key: "iterationCount",
       value: this.state.iterationCount || 0,
       units: ["normal", "infinite"],
       onChange: "changeRangeEditor"
-    })}
-      </div>
-    `;
+    }));
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
     if (key === "iterationCount") {
@@ -29595,7 +29411,7 @@ class BackdropFilterProperty extends BaseProperty {
         ${createComponent("FilterEditor", {
       ref: "$filterEditor",
       key: "backdropFilter",
-      value,
+      value: clone$1(value),
       hideLabel: true,
       onchange: "changeFilterEditor"
     })}
@@ -29604,7 +29420,7 @@ class BackdropFilterProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
     this.$commands.executeCommand("setAttribute", "change backdrop filter", this.$context.selection.packByValue({
-      [key]: filter2
+      [key]: clone$1(filter2)
     }));
   }
   get editableProperty() {
@@ -30941,55 +30757,50 @@ function boxModel(editor) {
   });
 }
 var boxShadow$1 = [
-  { name: "Box", shadow: `0px 3px 3px 0px rgba(0,0,0,0.2)` },
+  {
+    name: "Box",
+    shadows: [
+      {
+        offsetX: 0,
+        offsetY: 3,
+        blurRadius: 3,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.2)"
+      }
+    ]
+  },
   {
     name: "Shadow-4",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.15), 
-        0px 2px 2px 0px rgba(0,0,0,0.15), 
-        0px 4px 4px 0px rgba(0,0,0,0.15), 
-        0px 8px 8px 0px rgba(0,0,0,0.15)
-    `
-  },
-  {
-    name: "Shadow-5",
-    shadow: `
-        0px  1px 1px 0px rgba(0,0,0,0.12), 
-        0px  2px 2px 0px rgba(0,0,0,0.12), 
-        0px  4px 4px 0px rgba(0,0,0,0.12), 
-        0px  8px 8px 0px rgba(0,0,0,0.12),
-        0px  16px 16px 0px rgba(0,0,0,0.12)
-    `
-  },
-  {
-    name: "Shadow-6",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.11), 
-        0px 2px 2px 0px rgba(0,0,0,0.11), 
-        0px 4px 4px 0px rgba(0,0,0,0.11), 
-        0px 8px 8px 0px rgba(0,0,0,0.11), 
-        0px 16px 16px 0px rgba(0,0,0,0.11), 
-        0px 32px 32px 0px rgba(0,0,0,0.11)
-    `
-  },
-  {
-    name: "Sharp",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.25), 
-        0px 2px 2px 0px rgba(0,0,0,0.20), 
-        0px 4px 4px 0px rgba(0,0,0,0.15), 
-        0px 8px 8px 0px rgba(0,0,0,0.10),
-        0px 16px 16px 0px rgba(0,0,0,0.05)
-    `
-  },
-  {
-    name: "Diffuse",
-    shadow: `
-        0px 1px 1px 0px rgba(0,0,0,0.08), 
-        0px 2px 2px 0px rgba(0,0,0,0.12), 
-        0px 4px 4px 0px rgba(0,0,0,0.16), 
-        0px 8px 8px 0px rgba(0,0,0,0.20)
-    `
+    shadows: [
+      {
+        offsetX: 0,
+        offsetY: 1,
+        blurRadius: 1,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      },
+      {
+        offsetX: 0,
+        offsetY: 2,
+        blurRadius: 2,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      },
+      {
+        offsetX: 0,
+        offsetY: 4,
+        blurRadius: 4,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      },
+      {
+        offsetX: 0,
+        offsetY: 8,
+        blurRadius: 8,
+        spreadRadius: 0,
+        color: "rgba(0,0,0,0.15)"
+      }
+    ]
   }
 ];
 var BoxShadowProperty$1 = "";
@@ -31016,17 +30827,17 @@ class BoxShadowProperty extends BaseProperty {
   }
   [CLICK("$add")]() {
     const index2 = +this.refs.$select.value;
-    this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadow);
+    this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadows);
   }
   [LOAD("$shadowList")]() {
     var current = this.$context.selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
       key: "boxShadow",
-      value: current.boxShadow,
+      value: clone$1(current.boxShadow),
       onchange: (key, value) => {
         this.$commands.executeCommand("setAttribute", "change box shadow", this.$context.selection.packByValue({
-          [key]: value
+          [key]: clone$1(value)
         }));
       }
     });
@@ -34431,19 +34242,6 @@ var __glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   __proto__: null,
   "default": fileDropItems
 }, Symbol.toStringTag, { value: "Module" }));
-function second(fps, timecode2) {
-  if (isString(timecode2)) {
-    var [hour, minute, second2, frame] = timecode2.split(":");
-    hour = parseInt(hour, 10);
-    minute = parseInt(minute, 10);
-    second2 = parseInt(second2, 10);
-    frame = parseInt(frame, 10);
-    return hour * 3600 + minute * 60 + second2 + frame * (1 / fps);
-  } else if (isNumber(timecode2)) {
-    return timecode2 / fps;
-  }
-  return 0;
-}
 function timecode(fps, seconds) {
   var h = Math.floor(seconds / 3600);
   var m = Math.floor(seconds / 60 % 60);
@@ -34462,9 +34260,6 @@ function timecode(fps, seconds) {
   return [h, m, s, f].map((t) => {
     return (t + "").padStart(2, "0");
   }).join(":");
-}
-function framesToTimecode(fps, frames, start2 = null) {
-  return timecode(fps, second(fps, frames) - second(fps, start2));
 }
 function makeTimer(opt) {
   var timer2 = {
@@ -39257,6 +39052,10 @@ class DomModel extends GroupModel {
       pattern: "",
       selectors: [],
       svg: [],
+      filter: [],
+      backdropFilter: [],
+      transition: [],
+      animation: [],
       gridColumnStart: "",
       gridColumnEnd: "",
       gridRowStart: "",
@@ -41049,1352 +40848,6 @@ class PolygonModel extends SVGModel {
     return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.strokeWidth || 0);
   }
 }
-function makeInterpolateIdentity(layer, property, value) {
-  return () => {
-    return value;
-  };
-}
-function makeInterpolateNumber(layer, property, startNumber, endNumber, unit = void 0) {
-  return (rate, t) => {
-    var result = 0;
-    if (t === 0) {
-      result = startNumber;
-    } else if (t === 1) {
-      result = endNumber;
-    } else {
-      result = startNumber + (endNumber - startNumber) * rate;
-    }
-    if (unit) {
-      return result + unit;
-    }
-    return result;
-  };
-}
-function getRealAttributeValue(layer, property, value, refType = "width", refElement = "parent") {
-  var refObject = null;
-  if (refElement === "parent") {
-    refObject = layer[refElement][refType];
-  } else if (refElement === "self") {
-    refObject = layer[refType];
-  }
-  if (refObject) {
-    return value.toPx(refObject.value);
-  }
-  return value;
-}
-function rollbackRealAttributeValue(layer, property, value, unit, refType = "width", refElement = "parent") {
-  var refObject = null;
-  if (refElement === "parent") {
-    refObject = layer[refElement][refType];
-  } else if (refElement === "self") {
-    refObject = layer[refType];
-  }
-  if (refObject) {
-    return value.to(unit, refObject.value);
-  }
-  return value;
-}
-function makeInterpolateLength(layer, property, startNumber, endNumber, refType = "width", refElement = "parent") {
-  var s = Length.parse(startNumber);
-  var e = Length.parse(endNumber);
-  if (s.unit === e.unit) {
-    return makeInterpolateNumber(layer, property, s.value, e.value, s.unit);
-  } else if (s.equals(e)) {
-    return makeInterpolateIdentity(layer, property, s);
-  }
-  return (rate, t) => {
-    var realStartValue = getRealAttributeValue(layer, property, s, refType, refElement);
-    var realEndValue = getRealAttributeValue(layer, property, e, refType, refElement);
-    if (t === 0) {
-      return realStartValue;
-    } else if (t === 1) {
-      return realEndValue;
-    }
-    return rollbackRealAttributeValue(layer, property, realStartValue.value + (realEndValue.value - realStartValue.value) * rate, s.unit, refType, refElement);
-  };
-}
-function makeInterpolateBoolean(layer, property, s, e) {
-  return (ratio, t) => {
-    if (t === 1) {
-      return e;
-    }
-    return s;
-  };
-}
-function makeInterpolateColor(layer, property, startColor, endColor) {
-  var s = parse(startColor || "rgba(0, 0, 0, 1)");
-  var e = parse(endColor || "rgba(0, 0, 0, 1)");
-  return (rate, t) => {
-    if (t === 0) {
-      return startColor;
-    } else if (t === 1) {
-      return endColor;
-    }
-    return interpolateRGB(s, e, rate, "rgb");
-  };
-}
-function makeInterpolateString(layer, property, startString, endString) {
-  return makeInterpolateBoolean(layer, property, startString, endString);
-}
-function makeInterpolateColorStep(layer, property, startColorStep, endColorStep) {
-  var obj2 = {
-    cut: makeInterpolateBoolean(layer, property, startColorStep.cut, endColorStep.cut),
-    percent: makeInterpolateNumber(layer, property, startColorStep.percent, endColorStep.percent),
-    px: makeInterpolateNumber(layer, property, startColorStep.px, endColorStep.px),
-    em: makeInterpolateNumber(layer, property, startColorStep.em, endColorStep.em),
-    unit: makeInterpolateString(layer, property, startColorStep.unit, endColorStep.unit),
-    color: makeInterpolateColor(layer, property, startColorStep.color, endColorStep.color)
-  };
-  return (rate, t) => {
-    return new ColorStep({
-      cut: obj2.cut(rate, t),
-      percent: obj2.percent(rate, t),
-      px: obj2.px(rate, t),
-      em: obj2.em(rate, t),
-      unit: obj2.unit(rate, t),
-      color: obj2.color(rate, t)
-    });
-  };
-}
-function makeInterpolateColorStepList(layer, property, startColorsteps = [], endColorsteps = []) {
-  var max = Math.max(startColorsteps.length, endColorsteps.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var s = startColorsteps[i];
-    var e = endColorsteps[i];
-    if (s && e) {
-      list2[i] = makeInterpolateColorStep(layer, property, s, e);
-    } else {
-      list2[i] = makeInterpolateBoolean(layer, property, s, e);
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t));
-  };
-}
-function makeInterpolateConicGradient(layer, property, s, e) {
-  var obj2 = {
-    angle: makeInterpolateNumber(layer, property, s.angle, e.angle),
-    radialPositionX: makeInterpolateLength(layer, property, s.radialPosition[0], e.radialPosition[0], "width", "self"),
-    radialPositionY: makeInterpolateLength(layer, property, s.radialPosition[1], e.radialPosition[1], "height", "self"),
-    colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
-  };
-  return (rate, t) => {
-    return new ConicGradient({
-      angle: obj2.angle(rate, t),
-      radialPosition: [
-        obj2.radialPositionX(rate, t),
-        obj2.radialPositionY(rate, t)
-      ],
-      colorsteps: obj2.colorsteps(rate, t)
-    });
-  };
-}
-function makeInterpolateLinearGradient(layer, property, s, e) {
-  var obj2 = {
-    angle: makeInterpolateNumber(layer, property, s.angle, e.angle),
-    colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
-  };
-  return (rate, t) => {
-    var colorsteps = obj2.colorsteps(rate, t);
-    return new LinearGradient({
-      angle: obj2.angle(rate, t),
-      colorsteps
-    });
-  };
-}
-function convertPercent(value, type) {
-  switch (type) {
-    case "width":
-      if (value === "center") {
-        return "50%";
-      } else if (value === "left") {
-        return "0%";
-      } else if (value === "right") {
-        return "100%";
-      }
-      break;
-    case "height":
-      if (value === "center") {
-        return "50%";
-      } else if (value === "top") {
-        return "0%";
-      } else if (value === "bottom") {
-        return "100%";
-      }
-      break;
-  }
-  return value;
-}
-function makeInterpolateRadialGradient(layer, property, s, e) {
-  s.radialPosition[0] = convertPercent(s.radialPosition[0], "width");
-  s.radialPosition[1] = convertPercent(s.radialPosition[1], "height");
-  e.radialPosition[0] = convertPercent(e.radialPosition[0], "width");
-  e.radialPosition[1] = convertPercent(e.radialPosition[1], "height");
-  var obj2 = {
-    radialType: makeInterpolateString(layer, property, s.radialType, e.radialType),
-    radialPositionX: makeInterpolateLength(layer, property, s.radialPosition[0], e.radialPosition[0], "width", "self"),
-    radialPositionY: makeInterpolateLength(layer, property, s.radialPosition[1], e.radialPosition[1], "height", "self"),
-    colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
-  };
-  return (rate, t) => {
-    var results = new RadialGradient({
-      radialType: obj2.radialType(rate, t),
-      radialPosition: [
-        obj2.radialPositionX(rate, t),
-        obj2.radialPositionY(rate, t)
-      ],
-      colorsteps: obj2.colorsteps(rate, t)
-    });
-    return results;
-  };
-}
-function makeInterpolateRepeatingConicGradient(layer, property, s, e) {
-  var func = makeInterpolateConicGradient(layer, property, s, e);
-  return (rate, t) => {
-    var obj2 = func(rate, t);
-    return new RepeatingConicGradient({
-      angle: obj2.angle,
-      radialPosition: obj2.radialPosition,
-      colorsteps: obj2.colorsteps
-    });
-  };
-}
-function makeInterpolateRepeatingLinearGradient(layer, property, s, e) {
-  var func = makeInterpolateLinearGradient(layer, property, s, e);
-  return (rate, t) => {
-    var obj2 = func(rate, t);
-    var results = new RepeatingLinearGradient({
-      angle: obj2.angle,
-      colorsteps: obj2.colorsteps
-    });
-    return results;
-  };
-}
-function makeInterpolateRepeatingRadialGradient(layer, property, s, e) {
-  var func = makeInterpolateRadialGradient(layer, property, s, e);
-  return (rate, t) => {
-    var obj2 = func(rate, t);
-    return new RepeatingRadialGradient({
-      radialType: obj2.radialType,
-      radialPosition: obj2.radialPosition,
-      colorsteps: obj2.colorsteps
-    });
-  };
-}
-function makeInterpolateImageResource(layer, property, s, e) {
-  var obj2 = {
-    image: (rate, t) => {
-      return t;
-    }
-  };
-  if (s.type === "url" || e.type === "url") {
-    obj2.image = makeInterpolateBoolean(layer, property, s, e);
-  } else {
-    if (s.type != e.type) {
-      obj2.image = makeInterpolateBoolean(layer, property, s, e);
-    } else {
-      switch (s.type) {
-        case "linear-gradient":
-          obj2.image = makeInterpolateLinearGradient(layer, property, s, e);
-          break;
-        case "repeating-linear-gradient":
-          obj2.image = makeInterpolateRepeatingLinearGradient(layer, property, s, e);
-          break;
-        case "radial-gradient":
-          obj2.image = makeInterpolateRadialGradient(layer, property, s, e);
-          break;
-        case "repeating-radial-gradient":
-          obj2.image = makeInterpolateRepeatingRadialGradient(layer, property, s, e);
-          break;
-        case "conic-gradient":
-          obj2.image = makeInterpolateConicGradient(layer, property, s, e);
-          break;
-        case "repeating-conic-gradient":
-          obj2.image = makeInterpolateRepeatingConicGradient(layer, property, s, e);
-          break;
-      }
-    }
-  }
-  return (rate, t) => {
-    return obj2.image(rate, t);
-  };
-}
-function makeInterpolateBackgroundImage(layer, property, startValue, endValue) {
-  var s = BackgroundImage.parseStyle(STRING_TO_CSS(startValue));
-  var e = BackgroundImage.parseStyle(STRING_TO_CSS(endValue));
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || null;
-    var endObject = e[i] || null;
-    if (startObject && !endObject) {
-      list2.push({
-        image: makeInterpolateIdentity(layer, property, startObject.image),
-        size: makeInterpolateIdentity(layer, property, startObject.size),
-        width: makeInterpolateIdentity(layer, property, startObject.width),
-        height: makeInterpolateIdentity(layer, property, startObject.height),
-        x: makeInterpolateIdentity(layer, property, startObject.x),
-        y: makeInterpolateIdentity(layer, property, startObject.y),
-        blendMode: makeInterpolateIdentity(layer, property, startObject.blendMode),
-        repeat: makeInterpolateIdentity(layer, property, startObject.repeat)
-      });
-    } else if (!startObject && endObject) {
-      list2.push({
-        image: makeInterpolateIdentity(layer, property, endObject.image),
-        size: makeInterpolateIdentity(layer, property, endObject.size),
-        width: makeInterpolateIdentity(layer, property, endObject.width),
-        height: makeInterpolateIdentity(layer, property, endObject.height),
-        x: makeInterpolateIdentity(layer, property, endObject.x),
-        y: makeInterpolateIdentity(layer, property, endObject.y),
-        blendMode: makeInterpolateIdentity(layer, property, endObject.blendMode),
-        repeat: makeInterpolateIdentity(layer, property, endObject.repeat)
-      });
-    } else if (startObject && endObject) {
-      list2.push({
-        image: makeInterpolateImageResource(layer, property, startObject.image, endObject.image),
-        size: makeInterpolateString(layer, property, startObject.size, endObject.size),
-        width: makeInterpolateLength(layer, property, startObject.width, endObject.width, "width", "self"),
-        height: makeInterpolateLength(layer, property, startObject.height, endObject.height, "height", "self"),
-        x: makeInterpolateLength(layer, property, startObject.x, endObject.x, "width", "self"),
-        y: makeInterpolateLength(layer, property, startObject.y, endObject.y, "height", "self"),
-        blendMode: makeInterpolateString(layer, property, startObject.blendMode, endObject.blendMode),
-        repeat: makeInterpolateString(layer, property, startObject.repeat, endObject.repeat)
-      });
-    }
-  }
-  return (rate, t) => {
-    return BackgroundImage.join(list2.map((it) => {
-      var data = {
-        image: it.image(rate, t),
-        size: it.size(rate, t),
-        x: it.x(rate, t),
-        y: it.y(rate, t),
-        width: it.width(rate, t),
-        height: it.height(rate, t),
-        blendMode: it.blendMode(rate, t),
-        repeat: it.repeat(rate, t)
-      };
-      return data;
-    }));
-  };
-}
-const getBorderRadiusList = (radiusValue) => {
-  var startObject = [];
-  if (radiusValue.isAll) {
-    startObject = [
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px"
-    ];
-  } else {
-    startObject = [
-      radiusValue["border-top-left-radius"] || "0px",
-      radiusValue["border-top-right-radius"] || "0px",
-      radiusValue["border-bottom-right-radius"] || "0px",
-      radiusValue["border-bottom-left-radius"] || "0px"
-    ];
-  }
-  return startObject;
-};
-function makeInterpolateBorderRadius(layer, property, startValue, endValue) {
-  var s = getBorderRadiusList(BorderRadius.parseStyle(startValue));
-  var e = getBorderRadiusList(BorderRadius.parseStyle(endValue));
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    list2[i] = makeInterpolateLength(layer, property, s[i], e[i]);
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t)).join(" ");
-  };
-}
-function makeInterpolateBoxShadow(layer, property, startValue, endValue) {
-  var s = BoxShadow.parseStyle(startValue);
-  var e = BoxShadow.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    var endObject = e[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    list2.push({
-      inset: makeInterpolateBoolean(layer, property, startObject.inset, endObject.inset),
-      offsetX: makeInterpolateLength(layer, property, startObject.offsetX, endObject.offsetX),
-      offsetY: makeInterpolateLength(layer, property, startObject.offsetY, endObject.offsetY),
-      blurRadius: makeInterpolateLength(layer, property, startObject.blurRadius, endObject.blurRadius),
-      spreadRadius: makeInterpolateLength(layer, property, startObject.spreadRadius, endObject.spreadRadius),
-      color: makeInterpolateColor(layer, property, startObject.color, endObject.color)
-    });
-  }
-  return (rate, t) => {
-    return BoxShadow.join(list2.map((it) => {
-      return {
-        inset: it.inset(rate, t),
-        offsetX: it.offsetX(rate, t),
-        offsetY: it.offsetY(rate, t),
-        blurRadius: it.blurRadius(rate, t),
-        spreadRadius: it.spreadRadius(rate, t),
-        color: it.color(rate, t)
-      };
-    }));
-  };
-}
-function makeInterpolateClipPathCircle(layer, property, s, e) {
-  var obj2 = {};
-  if (s.radius === "closest-side" || s.radius === "farthest-side" || e.radius === "closest-side" || e.radius === "farthest-side") {
-    obj2.radius = makeInterpolateBoolean(layer, property, s.radius, e.radius);
-  } else {
-    if (s.radius.unit === e.radius.unit) {
-      obj2.radius = makeInterpolateNumber(layer, property, s.radius.value, e.radius.value, s.radius.unit);
-    } else {
-      obj2.radius = makeInterpolateLength(layer, property, s.radius, e.radius, "width", "self");
-    }
-  }
-  obj2.x = makeInterpolateLength(layer, property, s.x, e.x, "width", "self");
-  obj2.y = makeInterpolateLength(layer, property, s.y, e.y, "height", "self");
-  return (rate, t) => {
-    var radius = obj2.radius(rate, t);
-    var x = obj2.x(rate, t);
-    var y = obj2.y(rate, t);
-    var results = `${x} ${y}`;
-    var radiusString = radius + "";
-    if (radiusString.includes("closest-side")) {
-      radiusString = "closest-side";
-    } else if (radiusString.includes("farthest-side")) {
-      radiusString = "farthest-side";
-    }
-    return radius ? `${radiusString} at ${results}` : `${results}`;
-  };
-}
-function makeInterpolateClipPathEllipse(layer, property, s, e) {
-  var obj2 = {
-    radiusX: makeInterpolateLength(layer, property, s.radiusX, e.radiusX, "width", "self"),
-    radiusY: makeInterpolateLength(layer, property, s.radiusY, e.radiusY, "height", "self"),
-    x: makeInterpolateLength(layer, property, s.x, e.x, "width", "self"),
-    y: makeInterpolateLength(layer, property, s.y, e.y, "height", "self")
-  };
-  return (rate, t) => {
-    var radiusX = obj2.radiusX(rate, t);
-    var radiusY = obj2.radiusY(rate, t);
-    var x = obj2.x(rate, t);
-    var y = obj2.y(rate, t);
-    return `${radiusX} ${radiusY} at ${x} ${y}`;
-  };
-}
-function makeInterpolateClipPathInset(layer, property, s, e) {
-  var obj2 = {
-    top: makeInterpolateNumber(layer, property, s.top.value, e.top.value, s.top.unit),
-    left: makeInterpolateNumber(layer, property, s.left.value, e.left.value, s.left.unit),
-    right: makeInterpolateNumber(layer, property, s.right.value, e.right.value, s.right.unit),
-    bottom: makeInterpolateNumber(layer, property, s.bottom.value, e.bottom.value, s.bottom.unit),
-    round: makeInterpolateBoolean(layer, property, s.round, e.round),
-    topRadius: makeInterpolateNumber(layer, property, s.topRadius.value, e.topRadius.value, s.topRadius.unit),
-    leftRadius: makeInterpolateNumber(layer, property, s.leftRadius.value, e.leftRadius.value, s.leftRadius.unit),
-    rightRadius: makeInterpolateNumber(layer, property, s.rightRadius.value, e.rightRadius.value, s.rightRadius.unit),
-    bottomRadius: makeInterpolateNumber(layer, property, s.bottomRadius.value, e.bottomRadius.value, s.bottomRadius.unit)
-  };
-  return (rate, t) => {
-    var top2 = obj2.top(rate, t);
-    var right2 = obj2.right(rate, t);
-    var bottom2 = obj2.bottom(rate, t);
-    var left2 = obj2.left(rate, t);
-    var round2 = obj2.round(rate, t);
-    var topRadius = obj2.topRadius(rate, t);
-    var leftRadius = obj2.leftRadius(rate, t);
-    var bottomRadius = obj2.bottomRadius(rate, t);
-    var rightRadius = obj2.rightRadius(rate, t);
-    var position2 = [top2, right2, bottom2, left2].join(" ");
-    var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
-    var results = `${position2} ${round2 && radius.trim() ? `round ${radius}` : ""}`;
-    return results;
-  };
-}
-function makeInterpolateClipPathPolygon(layer, property, s, e) {
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    if (startPos && !endPos) {
-      list2.push({
-        x: makeInterpolateIdentity(layer, property, startPos.x),
-        y: makeInterpolateIdentity(layer, property, startPos.y)
-      });
-    } else if (!startPos && endPos) {
-      list2.push({
-        x: makeInterpolateIdentity(layer, property, endPos.x),
-        y: makeInterpolateIdentity(layer, property, endPos.y)
-      });
-    } else {
-      list2.push({
-        x: makeInterpolateLength(layer, property, startPos.x, endPos.x, "width", "self"),
-        y: makeInterpolateLength(layer, property, startPos.y, endPos.y, "height", "self")
-      });
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => {
-      return `${it.x(rate, t)} ${it.y(rate, t)}`;
-    }).join(",");
-  };
-}
-function makeInterpolateClipPath(layer, property, startValue, endValue) {
-  var startObject = ClipPath.parseStyle(startValue);
-  var endObject = ClipPath.parseStyle(endValue);
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startObject.type, startObject.type),
-    value: makeInterpolateBoolean(layer, property, startValue, endValue)
-  };
-  if (startObject.type == endObject.type && startObject != "none") {
-    switch (startObject.type) {
-      case "circle":
-        startObject.value = ClipPath.parseStyleForCircle(startObject.value);
-        endObject.value = ClipPath.parseStyleForCircle(endObject.value);
-        obj2.value = makeInterpolateClipPathCircle(layer, property, startObject.value, endObject.value);
-        break;
-      case "ellipse":
-        startObject.value = ClipPath.parseStyleForEllipse(startObject.value);
-        endObject.value = ClipPath.parseStyleForEllipse(endObject.value);
-        obj2.value = makeInterpolateClipPathEllipse(layer, property, startObject.value, endObject.value);
-        break;
-      case "inset":
-        startObject.value = ClipPath.parseStyleForInset(startObject.value);
-        endObject.value = ClipPath.parseStyleForInset(endObject.value);
-        obj2.value = makeInterpolateClipPathInset(layer, property, startObject.value, endObject.value);
-        break;
-      case "polygon":
-        startObject.value = ClipPath.parseStyleForPolygon(startObject.value);
-        endObject.value = ClipPath.parseStyleForPolygon(endObject.value);
-        obj2.value = makeInterpolateClipPathPolygon(layer, property, startObject.value, endObject.value);
-        break;
-      case "path":
-        startObject.value = ClipPath.parseStyleForPath(startObject.value);
-        endObject.value = ClipPath.parseStyleForPath(endObject.value);
-        break;
-    }
-  }
-  return (rate, t) => {
-    var type = obj2.type(rate, t);
-    var value = obj2.value(rate, t);
-    if (type === "none") {
-      return type;
-    }
-    return `${type}(${value})`;
-  };
-}
-function makeInterpolateFilterItem(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateString(layer, property, startValue.type, endValue.type),
-    value: makeInterpolateBoolean(layer, property, startValue.value, endValue.value)
-  };
-  switch (startValue.type) {
-    case "blur":
-      obj2.value = makeInterpolateLength(layer, property, startValue.value, endValue.value);
-      break;
-    case "grayscale":
-    case "invert":
-    case "brightness":
-    case "contrast":
-    case "opacity":
-    case "saturate":
-    case "sepia":
-    case "hue-rotate":
-      obj2.value = makeInterpolateNumber(layer, property, startValue.value.value, endValue.value.value, startValue.value.unit);
-      break;
-    case "drop-shadow":
-      obj2.offsetX = makeInterpolateLength(layer, property, startValue.offsetX, endValue.offsetX, "width", "self");
-      obj2.offsetY = makeInterpolateLength(layer, property, startValue.offsetY, endValue.offsetY, "height", "self");
-      obj2.blurRadius = makeInterpolateLength(layer, property, startValue.blurRadius, endValue.blurRadius, "width", "self");
-      obj2.spreadRadius = makeInterpolateLength(layer, property, startValue.spreadRadius, endValue.spreadRadius, "width", "self");
-      obj2.color = makeInterpolateColor(layer, property, startValue.color, endValue.color);
-      break;
-  }
-  return (rate, t) => {
-    var type = obj2.type(rate, t);
-    if (type === "drop-shadow") {
-      return {
-        type: obj2.type(rate, t),
-        offsetX: obj2.offsetX(rate, t),
-        offsetY: obj2.offsetY(rate, t),
-        blurRadius: obj2.blurRadius(rate, t),
-        spreadRadius: obj2.spreadRadius(rate, t),
-        color: obj2.color(rate, t)
-      };
-    } else {
-      return {
-        type: obj2.type(rate, t),
-        value: obj2.value(rate, t)
-      };
-    }
-  };
-}
-function makeInterpolateFilter(layer, property, startValue, endValue) {
-  var s = Filter.parseStyle(startValue);
-  var e = Filter.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i];
-    var endObject = e[i];
-    if (startObject && !endObject) {
-      list2.push(makeInterpolateIdentity(layer, property, startObject));
-    } else if (!startObject && endObject) {
-      list2.push(makeInterpolateIdentity(layer, property, endObject));
-    } else {
-      if (startObject.type != endObject.type || startObject.type === "svg" || endObject.type === "svg") {
-        list2.push(makeInterpolateBoolean(layer, property, startObject, endObject));
-      } else {
-        list2.push(makeInterpolateFilterItem(layer, property, startObject, endObject));
-      }
-    }
-  }
-  return (rate, t) => {
-    return Filter.join(list2.map((it) => it(rate, t)));
-  };
-}
-function makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
-  var points = [
-    { x: sx, y: sy },
-    { x: cx1, y: cy1 },
-    { x: cx2, y: cy2 },
-    { x: ex, y: ey }
-  ];
-  return (rate, t) => {
-    return getBezierPointOne(points, t);
-  };
-}
-function makeInterpolateLine(x1, y1, x2, y2) {
-  var obj2 = {
-    x: makeInterpolateNumber("", "", x1, x2),
-    y: makeInterpolateNumber("", "", y1, y2)
-  };
-  return (rate, t) => {
-    var results = {
-      x: obj2.x(rate, t),
-      y: obj2.y(rate, t)
-    };
-    return results;
-  };
-}
-function makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey) {
-  var points = [
-    { x: sx, y: sy },
-    { x: cx1, y: cy1 },
-    { x: ex, y: ey }
-  ];
-  return (rate, t) => {
-    return getBezierPointOneQuard(points, t);
-  };
-}
-function makeInterpolateOffset(segments) {
-  var interpolateList = [];
-  var startPoint = [];
-  segments.forEach((segment) => {
-    switch (segment.command) {
-      case "M":
-        var [ex, ey] = segment.values;
-        startPoint = [ex, ey];
-        break;
-      case "m":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        startPoint = [ex, ey];
-        break;
-      case "L":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, ex, ey],
-          length: getDist(sx, sy, ex, ey),
-          interpolate: makeInterpolateLine(sx, sy, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "l":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, ex, ey],
-          length: getDist(sx, sy, ex, ey),
-          interpolate: makeInterpolateLine(sx, sy, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "C":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "c":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
-        cx1 += sx;
-        cx2 += sx;
-        ex += sx;
-        cy1 += sy;
-        cy2 += sy;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "Q":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, ex, ey],
-          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "q":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, ex, ey] = segment.values;
-        cx1 += sx;
-        ex += sx;
-        cy1 += sy;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, ex, ey],
-          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "S":
-        var [sx, sy] = startPoint;
-        var [cx2, cy2, ex, ey] = segment.values;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
-          var [, , , , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-          });
-          startPoint = [ex, ey];
-          break;
-        }
-      case "s":
-        var [sx, sy] = startPoint;
-        var [cx2, cy2, ex, ey] = segment.values;
-        cx2 += sx;
-        ex += sx;
-        cy2 += sy;
-        ey += sy;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
-          var [, , , , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-          });
-          startPoint = [ex, ey];
-          break;
-        }
-      case "T":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
-          var [, , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, ex, ey],
-            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-          });
-          startPoint = [ex, ey];
-        }
-        break;
-      case "t":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
-          var [, , preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, ex, ey],
-            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-          });
-          startPoint = [ex, ey];
-        }
-        break;
-    }
-  });
-  var totalLength = 0;
-  interpolateList.forEach((it) => {
-    totalLength += it.length;
-  });
-  var start2 = 0;
-  interpolateList.forEach((it) => {
-    it.startT = start2 / totalLength;
-    it.endT = (start2 + it.length) / totalLength;
-    it.totalLength = totalLength;
-    start2 += it.length;
-  });
-  return { totalLength, interpolateList };
-}
-function makeInterpolateOffsetPath(layer, property, startValue, endValue, artboard2) {
-  var [id, distance2, rotateStatus, rotate2] = startValue.split(",").map((it) => it.trim());
-  var startObject = {
-    id,
-    distance: Length.parse(distance2 || "0%"),
-    rotateStatus: rotateStatus || "auto",
-    rotate: Length.parse(rotate2 || "0deg")
-  };
-  var innerInterpolate = () => {
-    return {};
-  };
-  var innerInterpolateAngle = (rotateStatus2, currentAngle) => {
-    var resultAngle = 0;
-    switch (rotateStatus2) {
-      case "angle":
-        resultAngle = startObject.rotate.value;
-        break;
-      case "auto angle":
-        resultAngle = currentAngle + startObject.rotate.value;
-        break;
-      case "reverse":
-        resultAngle = currentAngle + 180;
-        break;
-      case "auto":
-        resultAngle = currentAngle;
-        break;
-    }
-    return resultAngle;
-  };
-  var screenX = 0, screenY = 0;
-  if (artboard2) {
-    var pathLayer = artboard2.searchById(startObject.id);
-    if (pathLayer) {
-      screenX = pathLayer.screenX.value;
-      screenY = pathLayer.screenY.value;
-    }
-    innerInterpolate = (rate, t, timing) => {
-      var parser = new PathParser(pathLayer.d || "");
-      var { totalLength, interpolateList } = makeInterpolateOffset(parser.segments);
-      var distance3 = startObject.distance.toPx(totalLength);
-      var dt = distance3 / totalLength;
-      t = t + dt;
-      if (t > 1) {
-        t -= 1;
-      }
-      var obj2 = interpolateList[0];
-      if (t === 0) {
-        obj2 = interpolateList[0];
-      } else if (t === 1) {
-        obj2 = interpolateList[interpolateList.length - 1];
-      }
-      var arr = interpolateList.find((it) => {
-        return it.startT <= t && t < it.endT;
-      });
-      if (arr) {
-        obj2 = arr;
-      }
-      var newT = (t - obj2.startT) / (obj2.endT - obj2.startT);
-      var newRate = timing(newT);
-      return __spreadProps(__spreadValues({}, obj2.interpolate(newRate, newT, timing)), {
-        totalLength: obj2.totalLength
-      });
-    };
-  }
-  return (rate, t, timing) => {
-    var arr = (layer.transformOrigin || "50% 50% 0px").split(" ").map((it) => Length.parse(it));
-    var tx = arr[0].toPx(layer.width);
-    var ty = arr[1].toPx(layer.height);
-    var obj2 = innerInterpolate(rate, t, timing);
-    var results = {
-      x: obj2.x + screenX - tx.value,
-      y: obj2.y + screenY - ty.value
-    };
-    layer.setScreenX(results.x);
-    layer.setScreenY(results.y);
-    if (startObject.rotateStatus === "element")
-      ;
-    else {
-      var current = obj2;
-      var distValue = 0;
-      if (t < 1) {
-        distValue = 1 / obj2.totalLength;
-      }
-      var next = innerInterpolate(rate + distValue, t + distValue, timing);
-      var angle = calculateAngle(next.x - current.x, next.y - current.y);
-      var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle));
-      layer.reset({
-        transform: Transform.rotate(layer.transform, newAngle)
-      });
-    }
-    return results;
-  };
-}
-function makeInterpolatePerspectiveOrigin(layer, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => Length.parse(it));
-  var e = endValue.split(" ").map((it) => Length.parse(it));
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    list2.push(makeInterpolateLength(layer, property, startPos, endPos, "perspective-origin"));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolatePlayTime(layer, property, startValue, endValue, artboard2, layerElement) {
-  const mediaElement = layerElement.$("video").el;
-  let [sTime, , durationTime] = startValue.split(":");
-  const duration = +(durationTime || 1);
-  const startTime = +(sTime || 0) * duration;
-  return (rate, t) => {
-    if (t === 0) {
-      mediaElement.currentTime = startTime;
-      if (mediaElement.paused) {
-        mediaElement.play();
-      }
-    } else if (t === 1) {
-      layer.reset({
-        currentTime: mediaElement.currentTime
-      });
-      mediaElement.pause();
-    } else {
-      if (mediaElement.paused) {
-        mediaElement.play();
-      }
-    }
-  };
-}
-function makeInterpolateRotate(layer, property, startNumber, endNumber) {
-  var startValue = Length.parse(startNumber);
-  var endValue = Length.parse(endNumber);
-  return (rate, t) => {
-    var realStartValue = startValue.value;
-    var realEndValue = endValue.value;
-    if (t === 0) {
-      return Length.deg(realStartValue);
-    } else if (t === 1) {
-      return Length.deg(realEndValue);
-    }
-    return Length.deg(realStartValue + (realEndValue - realStartValue) * rate).to(startValue.unit);
-  };
-}
-function makeInterpolateStrokeDashArrray(layer, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => +it);
-  var e = endValue.split(" ").map((it) => +it);
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    list2.push(makeInterpolateNumber(layer, property, startPos, endPos));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolateText(layer, property, startText, endText) {
-  var max = endText.length - 1;
-  var min = 0;
-  return (rate, t) => {
-    var result = 0;
-    if (t === 0) {
-      result = "";
-    } else if (t === 1) {
-      result = endText;
-    } else {
-      result = endText.substring(min, Math.floor((max - min) * t));
-    }
-    return result;
-  };
-}
-function makeInterpolateTextShadow(layer, property, startValue, endValue) {
-  var s = TextShadow.parseStyle(startValue);
-  var e = TextShadow.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    var endObject = e[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    list2.push({
-      offsetX: makeInterpolateLength(layer, property, startObject.offsetX, endObject.offsetX, "width", "self"),
-      offsetY: makeInterpolateLength(layer, property, startObject.offsetY, endObject.offsetY, "height", "self"),
-      blurRadius: makeInterpolateLength(layer, property, startObject.blurRadius, endObject.blurRadius, "radius"),
-      color: makeInterpolateColor(layer, property, startObject.color, endObject.color)
-    });
-  }
-  return (rate, t) => {
-    return TextShadow.join(list2.map((it) => {
-      return {
-        offsetX: it.offsetX(rate, t),
-        offsetY: it.offsetY(rate, t),
-        blurRadius: it.blurRadius(rate, t),
-        color: it.color(rate, t)
-      };
-    }));
-  };
-}
-function makeInterpolateTransformLength(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var s = startValue.value[i];
-    var e = endValue.value[i];
-    if (s && e) {
-      value.push(makeInterpolateLength(layer, property, s, e, startValue.type));
-    } else {
-      value.push(makeInterpolateLength(layer, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || endValue.value[i - 2], startValue.type));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    return {
-      type: obj2.type(rate, t),
-      value: obj2.value.map((it) => it(rate, t))
-    };
-  };
-}
-function makeInterpolateTransformNumber(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var s = startValue.value[i];
-    var e = endValue.value[i];
-    if (s && e) {
-      value.push(makeInterpolateNumber(layer, property, s.value, e.value));
-    } else {
-      var ss = startValue.value[i].value || startValue.value[i - 1].value || startValue.value[i - 2].value;
-      var ee = endValue.value[i].value || endValue.value[i - 1].value || startValue.value[i - 2].value;
-      value.push(makeInterpolateNumber(layer, property, ss, ee));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    var value2 = obj2.value.map((it) => it(rate, t));
-    var type = obj2.type(rate, t);
-    if (type.includes("matrix") || type.includes("scale")) {
-      value2 = value2.map((it) => {
-        return Length.number(it);
-      });
-    }
-    return { type, value: value2 };
-  };
-}
-function makeInterpolateTransformRotate(layer, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var tempStartValue = startValue.value[i];
-    var tempEndValue = endValue.value[i];
-    if (tempStartValue && tempEndValue) {
-      value.push(makeInterpolateRotate(layer, property, tempStartValue, tempEndValue));
-    } else {
-      value.push(makeInterpolateRotate(layer, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || startValue.value[i - 2]));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    var results = {
-      type: obj2.type(rate, t),
-      value: obj2.value.map((it) => it(rate, t))
-    };
-    return results;
-  };
-}
-function makeInterpolateTransform(layer, property, startValue, endValue) {
-  var startObject = Transform.parseStyle(startValue.trim());
-  var endObject = Transform.parseStyle(endValue.trim());
-  var max = Math.max(startObject.length, endObject.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var s = startObject[i];
-    var e = endObject[i];
-    if (s && !e) {
-      list2.push(makeInterpolateIdentity(layer, property, s));
-    } else if (!s && e) {
-      list2.push(makeInterpolateIdentity(layer, property, e));
-    } else if (s.type != e.type) {
-      list2.push(makeInterpolateBoolean(layer, property, s, e));
-    } else {
-      switch (s.type) {
-        case "translate":
-        case "translateX":
-        case "translateY":
-        case "translateZ":
-        case "translate3d":
-        case "perspective":
-          list2.push(makeInterpolateTransformLength(layer, property, s, e));
-          break;
-        case "rotate":
-        case "rotateX":
-        case "rotateY":
-        case "rotateZ":
-        case "rotate3d":
-          list2.push(makeInterpolateTransformRotate(layer, property, s, e));
-          break;
-        case "scale":
-        case "scaleX":
-        case "scaleY":
-        case "scaleZ":
-        case "scale3d":
-        case "matrix":
-        case "matrix3d":
-          list2.push(makeInterpolateTransformNumber(layer, property, s, e));
-          break;
-      }
-    }
-  }
-  return (rate, t) => {
-    var results = Transform.join(list2.map((it) => {
-      return it(rate, t);
-    }));
-    return results;
-  };
-}
-function makeInterpolateTransformOrigin(layer, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => Length.parse(it));
-  var e = endValue.split(" ").map((it) => Length.parse(it));
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    list2.push(makeInterpolateLength(layer, property, startPos, endPos, "transform-origin"));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolatePathValues(layer, property, s, e) {
-  var max = Math.max(s.length, e.length);
-  var list2 = [];
-  var startLastPos = s[s.length - 1];
-  var endLastPos = e[e.length - 1];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e[i];
-    if (startPos && !endPos) {
-      list2.push(makeInterpolateNumber(layer, property, startPos, endLastPos));
-    } else if (!startPos && endPos) {
-      list2.push(makeInterpolateNumber(layer, property, startLastPos, endPos));
-    } else {
-      list2.push(makeInterpolateNumber(layer, property, startPos, endPos));
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t));
-  };
-}
-function makeInterpolatePath(layer, property, startValue, endValue) {
-  var returnParser = new PathParser();
-  var s = new PathParser(startValue);
-  var e = new PathParser(endValue);
-  var max = Math.max(s.segments.length, e.segments.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var sc = s.segments[i];
-    var ec = e.segments[i];
-    if (sc.command === ec.command) {
-      if (sc.values.length === ec.values.length) {
-        list2.push({
-          command: makeInterpolateIdentity(layer, property, sc.command),
-          values: makeInterpolatePathValues(layer, property, sc.values, ec.values)
-        });
-      } else {
-        list2.push({
-          command: makeInterpolateIdentity(layer, property, sc.command),
-          values: makeInterpolateIdentity(layer, property, sc.values)
-        });
-      }
-    } else {
-      list2.push({
-        command: makeInterpolateBoolean(layer, property, sc.command, ec.command),
-        values: makeInterpolateBoolean(layer, property, sc.values, ec.values)
-      });
-    }
-  }
-  return (rate, t) => {
-    var segments = list2.map((it) => {
-      return {
-        command: it.command(rate, t),
-        values: it.values(rate, t)
-      };
-    });
-    var results = returnParser.joinPath(segments);
-    return results;
-  };
-}
-function makeInterpolatePolygon(layer, property, startValue, endValue) {
-  var returnParser = new PolygonParser();
-  var s = new PolygonParser(startValue);
-  var e = new PolygonParser(endValue);
-  var max = Math.max(s.segments.length, e.segments.length);
-  var list2 = [];
-  var startLastX = s.segments[s.segments.length - 1].x;
-  var startLastY = s.segments[s.segments.length - 1].y;
-  var endLastX = e.segments[e.segments.length - 1].x;
-  var endLastY = e.segments[e.segments.length - 1].y;
-  for (var i = 0; i < max; i++) {
-    var startPos = s.segments[i];
-    var endPos = e.segments[i];
-    if (startPos && !endPos) {
-      list2.push({
-        x: makeInterpolateNumber(layer, property, startPos.x, endLastX),
-        y: makeInterpolateNumber(layer, property, startPos.y, endLastY)
-      });
-    } else if (!startPos && endPos) {
-      list2.push({
-        x: makeInterpolateNumber(layer, property, startLastX, endPos.x),
-        y: makeInterpolateNumber(layer, property, startLastY, endPos.y)
-      });
-    } else {
-      list2.push({
-        x: makeInterpolateNumber(layer, property, startPos.x, endPos.x),
-        y: makeInterpolateNumber(layer, property, startPos.y, endPos.y)
-      });
-    }
-  }
-  return (rate, t) => {
-    var points = returnParser.joinPoints(list2.map((it) => {
-      return {
-        x: it.x(rate, t),
-        y: it.y(rate, t)
-      };
-    }));
-    return points;
-  };
-}
-const DEFAULT_FUCTION = () => () => {
-};
-function makeInterpolateCustom(property) {
-  switch (property) {
-    case "border-radius":
-      return makeInterpolateBorderRadius;
-    case "box-shadow":
-      return makeInterpolateBoxShadow;
-    case "text-shadow":
-      return makeInterpolateTextShadow;
-    case "background-image":
-    case "BackgroundImageEditor":
-      return makeInterpolateBackgroundImage;
-    case "filter":
-    case "backdrop-filter":
-      return makeInterpolateFilter;
-    case "clip-path":
-      return makeInterpolateClipPath;
-    case "transform":
-      return makeInterpolateTransform;
-    case "transform-origin":
-      return makeInterpolateTransformOrigin;
-    case "perspective-origin":
-      return makeInterpolatePerspectiveOrigin;
-    case "stroke-dasharray":
-      return makeInterpolateStrokeDashArrray;
-    case "d":
-      return makeInterpolatePath;
-    case "points":
-      return makeInterpolatePolygon;
-    case "offset-path":
-      return makeInterpolateOffsetPath;
-    case "text":
-      return makeInterpolateText;
-    case "playTime":
-      return makeInterpolatePlayTime;
-  }
-}
-function makeInterpolate(layer, property, startValue, endValue, editorString, artboard2, layerElement) {
-  var checkField = editorString || property;
-  switch (checkField) {
-    case "width":
-    case "x":
-      return makeInterpolateLength(layer, property, startValue, endValue, "width");
-    case "height":
-    case "y":
-      return makeInterpolateLength(layer, property, startValue, endValue, "height");
-    case "perspective":
-    case "font-size":
-    case "font-weight":
-    case "text-stroke-width":
-    case "RangeEditor":
-    case "textLength":
-    case "startOffset":
-      return makeInterpolateLength(layer, property, startValue, endValue, property);
-    case "fill-opacity":
-    case "opacity":
-    case "stroke-dashoffset":
-    case "currentTime":
-    case "NumberRangeEditor":
-      return makeInterpolateNumber(layer, property, +startValue, +endValue);
-    case "background-color":
-    case "color":
-    case "text-fill-color":
-    case "text-stroke-color":
-    case "fill":
-    case "stroke":
-    case "ColorViewEditor":
-      return makeInterpolateColor(layer, property, startValue, endValue);
-    case "mix-blend-mode":
-    case "fill-rule":
-    case "stroke-linecap":
-    case "stroke-linejoin":
-    case "SelectEditor":
-    case "lengthAdjust":
-      return makeInterpolateString(layer, property, startValue, endValue);
-    case "rotate":
-      return makeInterpolateRotate(layer, property, startValue, endValue);
-  }
-  var func = makeInterpolateCustom(checkField);
-  if (func) {
-    return func(layer, property, startValue, endValue, artboard2, layerElement);
-  }
-  return DEFAULT_FUCTION;
-}
-function createInterpolateFunction(layer, property, startValue, endValue, editorString, artboard2, layerElement) {
-  return makeInterpolate(layer, property, startValue, endValue, editorString, artboard2, layerElement);
-}
 class AssetModel extends BaseModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -42664,546 +41117,8 @@ class AssetModel extends BaseModel {
     return this.addSVGImage(data);
   }
 }
-class TimelineModel extends AssetModel {
-  constructor() {
-    super(...arguments);
-    __privateAdd(this, _compiledTimeline, []);
-  }
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      timeline: [],
-      compiledTimeline: {}
-    }, obj2));
-  }
-  get timeline() {
-    return this.get("timeline");
-  }
-  set timeline(value) {
-    this.set("timeline", value);
-  }
-  expectJSON(key) {
-    if (key === "compiledTimeline")
-      return false;
-    return super.expectJSON(key);
-  }
-  setTimelineInfo(obj2) {
-    var timeline = this.getSelectedTimeline();
-    if (!timeline)
-      return;
-    ["speed", "iterationCount", "direction"].forEach((key) => {
-      if (isNotUndefined(obj2[key])) {
-        timeline[key] = obj2[key];
-      }
-    });
-  }
-  compileAll() {
-    var timeline = this.getSelectedTimeline();
-    __privateSet(this, _compiledTimeline, {});
-    if (timeline) {
-      timeline.animations.forEach((animation2) => {
-        animation2.properties.forEach((property) => {
-          this.compiledTimingFunction(animation2.id, property.property);
-        });
-      });
-    }
-  }
-  searchTimelineOffset(time) {
-    var timeline = this.getSelectedTimeline();
-    var filteredTimeline = [];
-    if (timeline) {
-      timeline.animations.forEach((animation2) => {
-        animation2.properties.forEach((p) => {
-          var list2 = this.getCompiledTimingFunction(animation2.id, p.property);
-          filteredTimeline.push(list2.find((keyframe2) => {
-            if (keyframe2.isOnlyTime && keyframe2.startTime <= time)
-              return true;
-            return keyframe2.startTime <= time && time < keyframe2.endTime;
-          }));
-        });
-      });
-    }
-    return filteredTimeline.filter((it) => it);
-  }
-  getCompiledTimingFunction(layerId, property) {
-    return __privateGet(this, _compiledTimeline)[`${layerId}.${property}`];
-  }
-  compiledTimingFunction(layerId, property) {
-    var artboard2 = this;
-    var p = this.getTimelineProperty(layerId, property);
-    var layer = this.modelManager.get(layerId);
-    var key = `${layerId}.${property}`;
-    if (p.keyframes.length === 1) {
-      __privateGet(this, _compiledTimeline)[key] = [];
-      return;
-    }
-    let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
-    let editorString = p.keyframes.map((it) => it.editor)[0];
-    __privateGet(this, _compiledTimeline)[key] = p.keyframes.map((offset, index2) => {
-      var currentOffset = offset;
-      var nextOffset = p.keyframes[index2 + 1];
-      offset.editor = editorString;
-      if (!nextOffset) {
-        nextOffset = { time: offset.time, value: offset.value };
-      }
-      var it = {
-        layer,
-        layerElement,
-        property: p.property,
-        isOnlyTime: currentOffset.time === nextOffset.time,
-        startTime: offset.time,
-        endTime: nextOffset.time,
-        startValue: offset.value,
-        endValue: nextOffset.value,
-        timing: offset.timing,
-        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor, artboard2, layerElement),
-        timingFunction: createTimingFunction(offset.timing)
-      };
-      it.func = this.makeTimingFunction(it);
-      return it;
-    }).filter((it) => it);
-  }
-  makeTimingFunction(it) {
-    return (time) => {
-      var totalT = it.endTime - it.startTime;
-      var t = 1;
-      if (totalT !== 0) {
-        t = (time - it.startTime) / totalT;
-      }
-      return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
-    };
-  }
-  stop() {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var time = timeline.currentTime;
-      this.searchTimelineOffset(time).forEach((it) => {
-        if (it.property === "playTime") {
-          const $video = it.layerElement.$("video");
-          if ($video) {
-            $video.el.pause();
-          }
-        }
-      });
-    }
-  }
-  seek(frameOrCode, filterFunction = (it) => it) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      if (isNotUndefined(frameOrCode)) {
-        this.setTimelineCurrentTime(frameOrCode);
-      }
-      var time = timeline.currentTime;
-      this.searchTimelineOffset(time).filter(filterFunction).forEach((it) => {
-        if (it.property === "offset-path" || it.property === "playTime") {
-          it.func(time);
-        } else if (it.layer) {
-          it.layer.reset({
-            [it.property]: it.func(time)
-          });
-        }
-      });
-    }
-  }
-  getSelectedTimeline() {
-    var timeline = this.timeline;
-    var a = timeline.filter((it) => it.selected);
-    var selectedTimeline = a.length ? a[0] : timeline[0];
-    return selectedTimeline || null;
-  }
-  getKeyframeListReturnArray() {
-    var timeline = this.getSelectedTimeline();
-    var keyframes = [];
-    if (timeline) {
-      timeline.animations.forEach((a) => {
-        a.properties.forEach((p) => {
-          keyframes.push.apply(keyframes, p.keyframes);
-        });
-      });
-    }
-    return keyframes;
-  }
-  getKeyframeList(callback) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations.forEach((a) => {
-        a.properties.forEach((p) => {
-          p.keyframes.forEach((k) => {
-            callback && callback(timeline, k);
-          });
-        });
-      });
-    }
-  }
-  getSelectedTimelineLastTime() {
-    var time = 0;
-    this.getKeyframeList((timeline, keyframe2) => {
-      time = Math.max(keyframe2.time, time);
-    });
-    return time;
-  }
-  getSelectedTimelineFirstTime() {
-    var time = Number.MAX_SAFE_INTEGER;
-    this.getKeyframeList((timeline, keyframe2) => {
-      time = Math.min(keyframe2.time, time);
-    });
-    return time;
-  }
-  getSelectedTimelinePrevTime() {
-    var time = this.getSelectedTimelineFirstTime();
-    this.getKeyframeList((timeline, keyframe2) => {
-      if (timecode(timeline.fps, keyframe2.time) < timeline.currentTimecode) {
-        time = Math.max(keyframe2.time, time);
-      }
-    });
-    return time;
-  }
-  getSelectedTimelineNextTime() {
-    var time = this.getSelectedTimelineLastTime();
-    this.getKeyframeList((timeline, keyframe2) => {
-      if (timecode(timeline.fps, keyframe2.time) > timeline.currentTimecode) {
-        time = Math.min(keyframe2.time, time);
-      }
-    });
-    return time;
-  }
-  setTimelineTitle(id, text2) {
-    var timeline = this.timeline.find((it) => {
-      return it.id === id;
-    });
-    if (timeline) {
-      timeline.title = text2;
-    }
-  }
-  selectTimeline(id) {
-    if (id) {
-      this.timeline.forEach((it) => {
-        it.selected = it.id === id;
-      });
-    } else {
-      var selectedTimeline = this.timeline.filter((it) => it.selected);
-      if (selectedTimeline.length)
-        ;
-      else {
-        if (this.timeline.length) {
-          this.timeline.selected = true;
-        }
-      }
-    }
-    this.compileAll();
-  }
-  removeAnimation(id) {
-    this.timeline = this.timeline.filter((it) => {
-      return it.id !== id;
-    });
-    if (this.timeline.length) {
-      this.timeline[0].selected = true;
-    }
-    this.compileAll();
-  }
-  addTimeline(fps = 60, endTimecode = "00:00:10:00") {
-    var id = uuidShort();
-    var selectedTimeline = __spreadProps(__spreadValues({
-      id,
-      title: "sample"
-    }, this.getTimelineLayerInfo(fps, endTimecode)), {
-      animations: []
-    });
-    this.timeline.push(selectedTimeline);
-    this.selectTimeline(id);
-    return selectedTimeline;
-  }
-  addTimelineLayer(layerId, fps = 60, endTimecode = "00:00:10:00") {
-    var selectedTimeline = this.getSelectedTimeline();
-    if (!selectedTimeline) {
-      selectedTimeline = this.addTimeline(fps, endTimecode);
-    }
-    selectedTimeline.selected = true;
-    if (layerId) {
-      var layer = selectedTimeline.animations.filter((it) => it.id === layerId);
-      if (!layer[0]) {
-        selectedTimeline.animations.push({
-          id: layerId,
-          properties: []
-        });
-      }
-    }
-  }
-  getTimelineLayerInfo(fps = 60, endTimecode = "00:00:10:00") {
-    var endTime = second(fps, endTimecode);
-    return {
-      fps,
-      speed: 1,
-      direction: "normal",
-      iterationCount: 1,
-      currentTimecode: timecode(fps, 0),
-      totalTimecode: timecode(fps, endTime),
-      currentTime: 0,
-      totalTime: endTime,
-      displayStartTime: 0,
-      displayEndTime: endTime
-    };
-  }
-  setTimelineCurrentTime(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    var { fps, totalTimecode } = timeline;
-    if (timeline) {
-      var frame = frameOrCode;
-      var code2 = frameOrCode;
-      if (+frame + "" === frame) {
-        frame = +frame;
-        code2 = framesToTimecode(fps, frame);
-      }
-      if (code2 > totalTimecode) {
-        code2 = totalTimecode;
-      }
-      var currentTime = second(fps, code2);
-      timeline.currentTime = currentTime;
-      timeline.currentTimecode = timecode(fps, currentTime);
-    }
-  }
-  setDisplayTimeDxRate(dxRate, initStartTime, initEndTime) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var dxTime = dxRate * timeline.totalTime;
-      var startTime = initStartTime + dxTime;
-      var endTime = initEndTime + dxTime;
-      startTime = Math.max(startTime, 0);
-      startTime = Math.min(startTime, endTime);
-      if (startTime === 0) {
-        endTime = initEndTime - initStartTime;
-      }
-      endTime = Math.max(endTime, startTime);
-      endTime = Math.min(endTime, timeline.totalTime);
-      if (endTime === timeline.totalTime) {
-        startTime = timeline.totalTime - (initEndTime - initStartTime);
-      }
-      timeline.displayStartTime = startTime;
-      timeline.displayEndTime = endTime;
-    }
-  }
-  setDisplayStartTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.displayStartTime = rate * timeline.totalTime;
-    }
-  }
-  setDisplayEndTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.displayEndTime = rate * timeline.totalTime;
-    }
-  }
-  setTimelineCurrentTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var { displayStartTime, displayEndTime, fps } = timeline;
-      var currentTime = displayStartTime + (displayEndTime - displayStartTime) * rate;
-      this.setTimelineCurrentTime(timecode(fps, currentTime));
-    }
-  }
-  setTimelineTotalTime(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var frame = frameOrCode;
-      var code2 = frameOrCode;
-      if (+frame + "" === frame) {
-        frame = +frame;
-        code2 = framesToTimecode(timeline.fps, frame);
-      }
-      if (second(timeline.fps, code2) < timeline.displayEndTime) {
-        timeline.displayEndTime = second(timeline.fps, code2);
-        timeline.displayStartTime = 0;
-      }
-      timeline.totalTimecode = code2;
-      timeline.totalTime = second(timeline.fps, code2);
-    }
-  }
-  getTimelineObject(layerId) {
-    var selectedTimeline = this.getSelectedTimeline();
-    if (selectedTimeline) {
-      return selectedTimeline.animations.find((it) => it.id === layerId);
-    }
-  }
-  addTimelineProperty(layerId, property) {
-    this.addTimelineLayer(layerId);
-    var animation2 = this.getTimelineObject(layerId);
-    if (animation2) {
-      var p = animation2.properties.filter((it) => it.property === property);
-      if (!p.length) {
-        animation2.properties.push({
-          property,
-          keyframes: []
-        });
-        this.compiledTimingFunction(layerId, property);
-      }
-    }
-  }
-  getTimelineProperty(layerId, property) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      layerId = layerId || timeline.selectedLayerId;
-      property = property || timeline.selectedProperty;
-      var timelineObject = this.getTimelineObject(layerId);
-      if (timelineObject) {
-        return timelineObject.properties.find((it) => it.property === property);
-      }
-    }
-  }
-  setSelectedOffset(layerId, property, time) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.selectedLayerId = layerId;
-      timeline.selectedProperty = property;
-      timeline.selectedOffsetTime = time;
-      var p = this.getTimelineProperty();
-      p.keyframes.forEach((it) => {
-        it.selected = it.time === time;
-      });
-    }
-  }
-  deleteTimelineKeyframe(layerId, property, offsetId) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      p.keyframes = p.keyframes.filter((it) => it.id != offsetId);
-    }
-  }
-  removeTimelineProperty(layerId, property) {
-    var layer = this.getTimelineObject(layerId);
-    if (layer) {
-      layer.properties = layer.properties.filter((p) => p.property != property);
-    }
-  }
-  removeTimeline(layerId) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations = timeline.animations.filter((ani) => ani.id != layerId);
-    }
-  }
-  setTimelineKeyframeOffsetTime(layerId, property, offsetId, changedTime) {
-    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
-    if (keyframe2) {
-      keyframe2.time = changedTime;
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  setTimelineKeyframeOffsetValue(layerId, property, offsetId, value = void 0, timing = void 0, time = void 0) {
-    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
-    if (keyframe2) {
-      if (isNotUndefined(time)) {
-        keyframe2.time = time;
-      }
-      if (isNotUndefined(value)) {
-        keyframe2.value = value;
-      }
-      if (isNotUndefined(timing)) {
-        keyframe2.timing = timing;
-      }
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  addTimelineKeyframe({
-    layerId,
-    property,
-    value,
-    timing,
-    time: newTime,
-    editor
-  }) {
-    this.addTimelineProperty(layerId, property);
-    var timeline = this.getSelectedTimeline();
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it) => it.time === time);
-      if (!times.length) {
-        value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
-        var obj2 = {
-          id: uuidShort(),
-          layerId,
-          property,
-          time,
-          value,
-          timing: timing || "linear",
-          editor
-        };
-        p.keyframes.push(obj2);
-        p.keyframes.sort((a, b) => {
-          return a.time > b.time ? 1 : -1;
-        });
-        this.compiledTimingFunction(layerId, property);
-        return obj2;
-      }
-    }
-  }
-  getDefaultPropertyValue(property) {
-    switch (property) {
-      case "mix-blend-mode":
-        return "normal";
-      case "rotate":
-        return "0deg";
-      case "box-shadow":
-        return "0px 0px 0px 0px rgba(0, 0, 0, 1)";
-      case "text-shadow":
-        return "0px 0px 0px rgba(0, 0, 0, 1)";
-      case "opacity":
-        return 1;
-      default:
-        return "";
-    }
-  }
-  copyTimelineKeyframe(layerId, property, newTime = null) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      var timeline = this.getSelectedTimeline();
-      var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it) => it.time < time);
-      var value = this.getDefaultPropertyValue(property);
-      var timing = "linear";
-      var editor = "";
-      if (times.length) {
-        times.sort((a, b) => {
-          return a.time > b.time ? -1 : 1;
-        });
-        value = times[0].value + "";
-        timing = times[0].timing + "";
-        editor = times[0].editor;
-      }
-      this.addTimelineKeyframe({ layerId, property, value, timing, editor });
-    }
-  }
-  getTimelineKeyframe(layerId, property, time) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      return p.keyframes.find((it) => it.time === time);
-    }
-  }
-  getTimelineKeyframeById(layerId, property, id) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      return p.keyframes.find((it) => it.id === id);
-    }
-  }
-  sortTimelineKeyframe(layerId, property) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      p.keyframes.sort((a, b) => {
-        return a.time > b.time ? 1 : -1;
-      });
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  setFps(fps) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.fps = fps;
-      timeline.currentTimecode = timecode(fps, timeline.currentTime);
-      timeline.totalTimecode = timecode(fps, timeline.totalTime);
-    }
-  }
-}
-_compiledTimeline = new WeakMap();
 const identity = create$4();
-class Project extends TimelineModel {
+class Project extends AssetModel {
   getDefaultTitle() {
     return "New Project";
   }
@@ -45100,6 +43015,82 @@ function defaultPatterns(editor) {
     TextureView
   });
 }
+var DepthProperty$1 = "";
+class OrderDown extends MenuItem {
+  getIconString() {
+    return "to_back";
+  }
+  getTitle() {
+    return "To Back";
+  }
+  clickButton() {
+    this.commands.executeCommand("send.backward", "send backward", this.$context.selection.current);
+  }
+}
+class OrderFirst extends MenuItem {
+  getIconString() {
+    return "to_front";
+  }
+  getTitle() {
+    return "To First";
+  }
+  clickButton() {
+    this.$commands.executeCommand("send.back", "send back", this.$context.selection.current);
+  }
+}
+class OrderLast extends MenuItem {
+  getIconString() {
+    return "to_back";
+  }
+  getTitle() {
+    return "To Last";
+  }
+  clickButton() {
+    this.$commands.executeCommand("bring.front", "bring front", this.$context.selection.current);
+  }
+}
+class OrderTop extends MenuItem {
+  getIconString() {
+    return "to_front";
+  }
+  getTitle() {
+    return "To Front";
+  }
+  clickButton() {
+    this.commands.executeCommand("bring.forward", "bring forward", this.$context.selection.current);
+  }
+}
+class DepthProperty extends BaseProperty {
+  components() {
+    return {
+      OrderTop,
+      OrderDown,
+      OrderFirst,
+      OrderLast
+    };
+  }
+  getTitle() {
+    return this.$i18n("alignment.property.title");
+  }
+  isHideHeader() {
+    return true;
+  }
+  getBody() {
+    return `
+      <div class="elf--depth-item">
+        ${createComponent("OrderTop")}
+        ${createComponent("OrderDown")}
+        ${createComponent("OrderFirst")}
+        ${createComponent("OrderLast")}
+      </div>
+    `;
+  }
+}
+function depth(editor) {
+  editor.registerUI("inspector.tab.style", {
+    DepthProperty
+  });
+}
 var ExportProperty$1 = "";
 class ExportProperty extends BaseProperty {
   getTitle() {
@@ -46023,13 +44014,13 @@ class FilterProperty extends BaseProperty {
     return createComponent("FilterEditor", {
       ref: "$filterEditor",
       key: "filter",
-      value,
+      value: clone$1(value),
       onchange: "changeFilterEditor"
     });
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
     this.$commands.executeCommand("setAttribute", "change filter", this.$context.selection.packByValue({
-      [key]: filter2
+      [key]: clone$1(filter2)
     }));
   }
   get editableProperty() {
@@ -48924,7 +46915,7 @@ function imageAsset(editor) {
   });
 }
 function inspector(editor) {
-  editor.context.config.set("inspector.selectedValue", "style");
+  editor.context.config.set("inspector.selectedValue", "transition");
   editor.registerUI("inspector.tab", {
     Style: {
       title: editor.$i18n("inspector.tab.title.design"),
@@ -49051,15 +47042,15 @@ class KeyframeProperty extends BaseProperty {
   makeKeyframeTemplate(keyframe2, index2) {
     index2 = index2.toString();
     return `
-      <div class='keyframe-item' data-selected-value='${keyframe2.selectedType}' ref='$keyframeIndex${index2}' data-index='${index2}'>
+      <div class='keyframe-item' data-selected-value='code' ref='$keyframeIndex${index2}' data-index='${index2}'>
         <div class='title'>
           <div class='name'>${keyframe2.name}</div>
           <div class='tools'>
             <div class='group'>
-              <button type="button" data-type='list'>${obj$2.list}</button>
               <button type="button" data-type='code'>${obj$2.code}</button>
             </div>
-            <button type="button" class="del" data-index="${index2}">${obj$2.remove2}</button>
+            <button type="button" class="del" 
+            data-index="${index2}">${obj$2.remove2}</button>
           </div>
         </div>
         <div class='offset-list'>
@@ -49071,13 +47062,8 @@ class KeyframeProperty extends BaseProperty {
     }).join("")}
           </div>
         </div>
-        <div class='keyframe-code' data-type='list'>
-          ${keyframe2.offsets.map((offset) => {
-      return this.makeOffset(offset);
-    }).join("")}
-        </div>
         <div class='keyframe-code' data-type='code'>
-          <pre>${keyframe2.toString().trim()}</pre>
+          <pre>${JSON.stringify(keyframe2, null, 2)}</pre>
         </div>        
       </div>
     `;
@@ -49099,41 +47085,53 @@ class KeyframeProperty extends BaseProperty {
   }
   [CLICK("$keyframeList .keyframe-item .offset-list")](e) {
     var index2 = +e.$dt.closest("keyframe-item").attr("data-index");
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     if (!current)
       return;
     this.viewKeyframePicker(index2);
   }
   [CLICK("$keyframeList .del") + PREVENT](e) {
     var removeIndex = e.$dt.attr("data-index");
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     if (!current)
       return;
-    current.removeKeyframe(removeIndex);
-    this.$commands.emit("refreshProject", current);
+    const keyframes = current.keyframes || [];
+    keyframes.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "remove a keyframe", this.$context.selection.packByValue({
+      keyframes: [...keyframes]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
+  }
+  [SUBSCRIBE(REFRESH_SELECTION)]() {
     this.refresh();
   }
-  [SUBSCRIBE(REFRESH_SELECTION) + DEBOUNCE(100)]() {
-    const current = this.$context.selection.current;
-    if (current && current.hasChangedField("keyframes")) {
-      this.refresh();
-    }
-  }
-  [LOAD("$keyframeList")]() {
-    var current = this.$context.selection.currentProject;
+  [LOAD("$keyframeList") + DOMDIFF]() {
+    var current = this.$context.selection.current;
     if (!current)
       return "";
-    var keyframes = current.keyframes || [];
+    const keyframes = current.keyframes || [];
     return keyframes.map((keyframe2, index2) => {
       return this.makeKeyframeTemplate(keyframe2, index2);
     });
   }
   [CLICK("$add")]() {
-    var current = this.$context.selection.currentProject;
+    var current = this.$context.selection.current;
     if (current) {
-      current.createKeyframe();
-      this.refresh();
-      this.$commands.emit("refreshProject", current);
+      const keyframes = current.keyframes || [];
+      keyframes.push({
+        id: uuidShort(),
+        checked: true,
+        name: "Keyframe",
+        offsets: []
+      });
+      this.$commands.executeCommand("setAttribute", "add keyframe", this.$context.selection.packByValue({
+        keyframes: [...keyframes]
+      }));
+      this.nextTick(() => {
+        this.refresh();
+      }, 10);
     } else {
       window.alert("Please select a project.");
     }
@@ -49144,7 +47142,7 @@ class KeyframeProperty extends BaseProperty {
     }
     this.selectedIndex = +index2;
     this.selectItem(this.selectedIndex, true);
-    this.current = this.$context.selection.currentProject;
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -49162,8 +47160,8 @@ class KeyframeProperty extends BaseProperty {
       });
     }
   }
-  viewKeyframePropertyPopup(position2) {
-    this.current = this.$context.selection.currentProject;
+  viewKeyframePropertyPopup() {
+    this.current = this.$context.selection.current;
     if (!this.current)
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
@@ -49171,21 +47169,22 @@ class KeyframeProperty extends BaseProperty {
     const name = back.name;
     const offsets = back.offsets;
     this.emit("showKeyframePopup", {
-      position: position2,
       name,
       offsets
     });
   }
   [SUBSCRIBE("changeKeyframePopup")](data) {
-    var project2 = this.$context.selection.currentProject;
-    if (!project2)
+    var current = this.$context.selection.current;
+    if (!current)
       return;
-    this.currentKeyframe = project2.keyframes[this.selectedIndex];
-    if (this.currentKeyframe) {
-      this.currentKeyframe.reset(data);
-    }
-    this.refresh();
-    this.$commands.emit("refreshProject", project2);
+    const keyframes = current.keyframes || [];
+    keyframes[this.selectedIndex] = data;
+    this.$commands.executeCommand("setAttribute", "modify keyframe", this.$context.selection.packByValue({
+      keyframes: [...keyframes]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
 }
 class OffsetEditor extends EditorElement {
@@ -49233,7 +47232,7 @@ class OffsetEditor extends EditorElement {
   [SUBSCRIBE("changeRangeEditor")](key, value) {
     var offset = this.state.offsets[this.selectedIndex];
     if (offset) {
-      offset.offset = value.clone();
+      offset.offset = clone$1(value);
       this.refresh();
       this.modifyOffset();
     }
@@ -49279,7 +47278,7 @@ class OffsetEditor extends EditorElement {
       this.children.$offsetInput.setValue(offset.offset);
     }
   }
-  [LOAD("$offset")]() {
+  [LOAD("$offset") + DOMDIFF]() {
     return this.state.offsets.map((it, index2) => {
       return this.makeOffset(it, index2);
     });
@@ -49292,9 +47291,9 @@ class OffsetEditor extends EditorElement {
     this.baseOffsetArea = this.refs.$offset.offset();
     var currentX = e.xy.x;
     var newOffset = Length.percent((currentX - this.baseOffsetArea.left) / this.baseOffsetWidth * 100).round(100);
-    this.state.offsets.push(new Offset({
+    this.state.offsets.push({
       offset: newOffset
-    }));
+    });
     this.selectItem(this.state.offsets.length - 1, true);
     this.refresh();
     this.modifyOffset();
@@ -49330,7 +47329,7 @@ class OffsetEditor extends EditorElement {
       currentX = this.baseOffsetMax;
     }
     var newOffset = Length.percent((currentX - this.baseOffsetMin) / this.baseOffsetWidth * 100).round(100);
-    this.state.offsets[this.currentOffsetIndex].offset.set(newOffset.value);
+    this.state.offsets[this.currentOffsetIndex].offset = newOffset.value;
     this.currentOffset.css("left", newOffset);
     this.refreshOffsetInput();
     this.modifyOffset();
@@ -49911,7 +47910,7 @@ class LayerTreeProperty extends BaseProperty {
     }
     return this.$icon.get(item.itemType, item);
   }
-  makeLayerList(parentObject, depth = 0) {
+  makeLayerList(parentObject, depth2 = 0) {
     if (!parentObject.layers)
       return "";
     const layers2 = parentObject.layers;
@@ -49930,11 +47929,11 @@ class LayerTreeProperty extends BaseProperty {
         title2 = this.$i18n("layer.tree.property.layout.title." + layer.layout);
       }
       const isHide = layer.isTreeItemHide();
-      const depthPadding = depth * 20;
+      const depthPadding = depth2 * 20;
       const hasChildren = layer.hasChildren();
       const lock2 = this.$lockManager.get(layer.id);
       const visible2 = this.$visibleManager.get(layer.id);
-      data[data.length] = `<div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true"><div class='detail'><label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' ><div class='folder ${layer.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse("arrow_right") : ""}</div><span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span><span class='name'>${name}</span></label><div class="tools"><button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse("lock") : iconUse("lock_open")}</button><button type="button" class="visible" data-visible="${visible2}" title='Visible'>${iconUse("visible")}</button><button type="button" class="remove" title='Remove'>${iconUse("remove2")}</button></div></div></div>${this.makeLayerList(layer, depth + 1)}`;
+      data[data.length] = `<div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth2}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true"><div class='detail'><label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' ><div class='folder ${layer.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse("arrow_right") : ""}</div><span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span><span class='name'>${name}</span></label><div class="tools"><button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse("lock") : iconUse("lock_open")}</button><button type="button" class="visible" data-visible="${visible2}" title='Visible'>${iconUse("visible")}</button><button type="button" class="remove" title='Remove'>${iconUse("remove2")}</button></div></div></div>${this.makeLayerList(layer, depth2 + 1)}`;
     }
     return data.join("");
   }
@@ -51299,9 +49298,7 @@ class FlexLayoutEditor extends EditorElement {
         `;
   }
   template() {
-    return `
-            <div class='flex-layout-editor' ref='$body' ></div>
-        `;
+    return `<div class='flex-layout-editor' ref='$body' ></div>`;
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
     this.setState({
@@ -52350,11 +50347,7 @@ class LayoutProperty extends BaseProperty {
   }
   [LOAD("$layoutProperty") + DOMDIFF]() {
     var current = this.$context.selection.current || { layout: "default" };
-    return `
-      <div class='layout-list' ref='$layoutList'>
-        <div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div>
-        <div data-value='flex' class='${current.layout === "flex" ? "selected" : ""}'>
-          ${createComponent("FlexLayoutEditor", {
+    return `<div class='layout-list' ref='$layoutList'><div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div><div data-value='flex' class='${current.layout === "flex" ? "selected" : ""}'>${createComponent("FlexLayoutEditor", {
       ref: "$flex",
       key: "flex-layout",
       value: {
@@ -52366,18 +50359,12 @@ class LayoutProperty extends BaseProperty {
         gap: current.gap
       },
       onchange: "changeLayoutInfo"
-    })}
-        </div>
-        <div data-value='grid' class='${current.layout === "grid" ? "selected" : ""}'>
-          ${createComponent("GridLayoutEditor", {
+    })}</div><div data-value='grid' class='${current.layout === "grid" ? "selected" : ""}'>${createComponent("GridLayoutEditor", {
       ref: "$grid",
       key: "grid-layout",
       value: current["grid-layout"] || "",
       onchange: "changeLayoutInfo"
-    })}
-        </div>
-      </div>
-    `;
+    })}</div></div>`;
   }
   [SUBSCRIBE_SELF("changeLayoutInfo")](key, value) {
     if (key === "padding") {
@@ -52722,308 +50709,6 @@ function lineView(editor) {
     LineView
   });
 }
-var DefaultMenu = [
-  {
-    type: "button",
-    icon: "navigation",
-    events: ["config:editing.mode"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.SELECT);
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "select");
-      editor.context.config.is("editing.mode.itemType", EditingMode.SELECT);
-    }
-  },
-  {
-    type: "button",
-    icon: "artboard",
-    events: ["config:editing.mode", "config:editing.mode.itemType"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "artboard");
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "artboard");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
-    },
-    items: [
-      {
-        icon: iconUse("rect"),
-        title: "Rect Layer",
-        key: "rect",
-        command: "addLayerView",
-        args: [
-          "rect",
-          {
-            backgroundColor: "#ececec"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "rect");
-        },
-        shortcut: KeyStringMaker({ key: "R" })
-      },
-      {
-        icon: iconUse("lens"),
-        title: "Circle Layer",
-        key: "circle",
-        command: "addLayerView",
-        args: ["circle"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "circle");
-        },
-        shortcut: KeyStringMaker({ key: "O" })
-      },
-      {
-        icon: iconUse("image"),
-        title: "Image",
-        key: "image",
-        command: "addLayerView",
-        args: ["image"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "image");
-        },
-        shortcut: KeyStringMaker({ key: "I" })
-      },
-      "-",
-      {
-        icon: iconUse("video"),
-        title: "Video",
-        key: "video",
-        command: "addLayerView",
-        args: ["video"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "video");
-        },
-        shortcut: KeyStringMaker({ key: "V" })
-      },
-      {
-        icon: iconUse("iframe"),
-        title: "IFrame",
-        key: "iframe",
-        command: "addLayerView",
-        args: ["iframe"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "iframe");
-        },
-        shortcut: KeyStringMaker({ key: "F" })
-      },
-      {
-        icon: iconUse("rect"),
-        title: "SampleLayer",
-        key: "sample",
-        command: "addLayerView",
-        args: ["sample"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.css.itemType", "sample");
-        }
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.css.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "rect") || editor.context.config.is("editing.mode.itemType", "circle") || editor.context.config.is("editing.mode.itemType", "image") || editor.context.config.is("editing.mode.itemType", "video") || editor.context.config.is("editing.mode.itemType", "iframe"));
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.css.itemType");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
-    },
-    items: [
-      {
-        icon: iconUse("pentool"),
-        title: "Pen",
-        key: "path",
-        command: "addLayerView",
-        args: ["path"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.draw.itemType", "path");
-        },
-        shortcut: KeyStringMaker({ key: "P" })
-      },
-      {
-        icon: iconUse("brush"),
-        title: "Pencil",
-        key: "brush",
-        command: "addLayerView",
-        args: ["brush"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.draw.itemType", "brush");
-        },
-        shortcut: KeyStringMaker({ key: "B" })
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.draw.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode.itemType", "path") || editor.context.config.is("editing.mode.itemType", "draw");
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.draw.itemType");
-    }
-  },
-  {
-    type: "dropdown",
-    icon: (editor, dropdown) => {
-      var _a;
-      return ((_a = dropdown.findItem(editor.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
-    },
-    items: [
-      {
-        icon: iconUse("outline_rect"),
-        title: "Rectangle",
-        key: "svg-rect",
-        command: "addLayerView",
-        args: ["svg-rect"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-rect");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+R" })
-      },
-      {
-        icon: iconUse("outline_circle"),
-        title: "Circle",
-        key: "svg-circle",
-        command: "addLayerView",
-        args: ["svg-circle"],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-circle");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+O" })
-      },
-      {
-        icon: iconUse("polygon"),
-        title: "Polygon",
-        key: "svg-polygon",
-        command: "addLayerView",
-        args: [
-          "polygon",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "polygon");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+P" })
-      },
-      {
-        icon: iconUse("star"),
-        title: "Star",
-        key: "star",
-        command: "addLayerView",
-        args: [
-          "star",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "star");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+S" })
-      },
-      "-",
-      {
-        icon: iconUse("smooth"),
-        title: "Spline",
-        key: "spline",
-        command: "addLayerView",
-        args: [
-          "spline",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "spline");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+L" })
-      },
-      {
-        icon: iconUse("text_rotate"),
-        title: "TextPath",
-        key: "svg-texpath",
-        command: "addLayerView",
-        args: [
-          "svg-textpath",
-          {
-            backgroundColor: "transparent"
-          }
-        ],
-        closable: true,
-        nextTick: (editor) => {
-          editor.context.config.set("editing.svg.itemType", "svg-textpath");
-        },
-        shortcut: KeyStringMaker({ key: "Shift+T" })
-      }
-    ],
-    events: [
-      "config:editing.mode",
-      "config:editing.mode.itemType",
-      "config:editing.svg.itemType"
-    ],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && (editor.context.config.is("editing.mode.itemType", "svg-rect") || editor.context.config.is("editing.mode.itemType", "svg-circle") || editor.context.config.is("editing.mode.itemType", "polygon") || editor.context.config.is("editing.mode.itemType", "star") || editor.context.config.is("editing.mode.itemType", "spline") || editor.context.config.is("editing.mode.itemType", "svg-textpath"));
-    },
-    selectedKey: (editor) => {
-      return editor.context.config.get("editing.svg.itemType");
-    }
-  },
-  {
-    type: "button",
-    icon: "title",
-    events: ["config:editing.mode", "config:editing.mode.itemType"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.APPEND) && editor.context.config.is("editing.mode.itemType", "text");
-    },
-    action: (editor) => {
-      editor.context.commands.emit("addLayerView", "text");
-    }
-  },
-  {
-    type: "button",
-    tooltip: "Handle",
-    icon: "pantool",
-    events: ["config:editing.mode"],
-    selected: (editor) => {
-      return editor.context.config.is("editing.mode", EditingMode.HAND);
-    },
-    action: (editor) => {
-      editor.context.commands.emit("toggleHandTool");
-    }
-  }
-];
 function menus(editor) {
   editor.registerMenu("toolbar.logo", [
     {
@@ -53098,7 +50783,324 @@ function menus(editor) {
       ]
     }
   ]);
-  editor.registerMenu("toolbar.left", DefaultMenu);
+  editor.registerMenu("toolbar.left", [
+    {
+      type: "button",
+      icon: "navigation",
+      events: ["config:editing.mode"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.SELECT);
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("addLayerView", "select");
+        editor2.context.config.is("editing.mode.itemType", EditingMode.SELECT);
+      }
+    },
+    {
+      type: "button",
+      icon: "artboard",
+      events: ["config:editing.mode", "config:editing.mode.itemType"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && editor2.context.config.is("editing.mode.itemType", "artboard");
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("addLayerView", "artboard");
+      }
+    },
+    {
+      type: "dropdown",
+      icon: (editor2, dropdown) => {
+        var _a;
+        return ((_a = dropdown.findItem(editor2.context.config.get("editing.css.itemType"))) == null ? void 0 : _a.icon) || iconUse("rect");
+      },
+      items: [
+        {
+          icon: iconUse("rect"),
+          title: "Rect Layer",
+          key: "rect",
+          command: "addLayerView",
+          args: [
+            "rect",
+            {
+              backgroundColor: "#ececec"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "rect");
+          },
+          shortcut: KeyStringMaker({ key: "R" })
+        },
+        {
+          icon: iconUse("lens"),
+          title: "Circle Layer",
+          key: "circle",
+          command: "addLayerView",
+          args: ["circle"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "circle");
+          },
+          shortcut: KeyStringMaker({ key: "O" })
+        },
+        {
+          icon: iconUse("image"),
+          title: "Image",
+          key: "image",
+          command: "addLayerView",
+          args: ["image"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "image");
+          },
+          shortcut: KeyStringMaker({ key: "I" })
+        },
+        "-",
+        {
+          icon: iconUse("video"),
+          title: "Video",
+          key: "video",
+          command: "addLayerView",
+          args: ["video"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "video");
+          },
+          shortcut: KeyStringMaker({ key: "V" })
+        },
+        {
+          icon: iconUse("iframe"),
+          title: "IFrame",
+          key: "iframe",
+          command: "addLayerView",
+          args: ["iframe"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "iframe");
+          },
+          shortcut: KeyStringMaker({ key: "F" })
+        },
+        {
+          icon: iconUse("rect"),
+          title: "SampleLayer",
+          key: "sample",
+          command: "addLayerView",
+          args: ["sample"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.css.itemType", "sample");
+          }
+        }
+      ],
+      events: [
+        "config:editing.mode",
+        "config:editing.mode.itemType",
+        "config:editing.css.itemType"
+      ],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && (editor2.context.config.is("editing.mode.itemType", "rect") || editor2.context.config.is("editing.mode.itemType", "circle") || editor2.context.config.is("editing.mode.itemType", "image") || editor2.context.config.is("editing.mode.itemType", "video") || editor2.context.config.is("editing.mode.itemType", "iframe"));
+      },
+      selectedKey: (editor2) => {
+        return editor2.context.config.get("editing.css.itemType");
+      }
+    },
+    {
+      type: "dropdown",
+      icon: (editor2, dropdown) => {
+        var _a;
+        return ((_a = dropdown.findItem(editor2.context.config.get("editing.draw.itemType"))) == null ? void 0 : _a.icon) || iconUse("pentool");
+      },
+      items: [
+        {
+          icon: iconUse("pentool"),
+          title: "Pen",
+          key: "path",
+          command: "addLayerView",
+          args: ["path"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.draw.itemType", "path");
+          },
+          shortcut: KeyStringMaker({ key: "P" })
+        },
+        {
+          icon: iconUse("brush"),
+          title: "Pencil",
+          key: "brush",
+          command: "addLayerView",
+          args: ["brush"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.draw.itemType", "brush");
+          },
+          shortcut: KeyStringMaker({ key: "B" })
+        }
+      ],
+      events: [
+        "config:editing.mode",
+        "config:editing.mode.itemType",
+        "config:editing.draw.itemType"
+      ],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode.itemType", "path") || editor2.context.config.is("editing.mode.itemType", "draw");
+      },
+      selectedKey: (editor2) => {
+        return editor2.context.config.get("editing.draw.itemType");
+      }
+    },
+    {
+      type: "dropdown",
+      icon: (editor2, dropdown) => {
+        var _a;
+        return ((_a = dropdown.findItem(editor2.context.config.get("editing.svg.itemType"))) == null ? void 0 : _a.icon) || iconUse("outline_rect");
+      },
+      items: [
+        {
+          icon: iconUse("outline_rect"),
+          title: "Rectangle",
+          key: "svg-rect",
+          command: "addLayerView",
+          args: ["svg-rect"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "svg-rect");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+R" })
+        },
+        {
+          icon: iconUse("outline_circle"),
+          title: "Circle",
+          key: "svg-circle",
+          command: "addLayerView",
+          args: ["svg-circle"],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "svg-circle");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+O" })
+        },
+        {
+          icon: iconUse("polygon"),
+          title: "Polygon",
+          key: "svg-polygon",
+          command: "addLayerView",
+          args: [
+            "polygon",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "polygon");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+P" })
+        },
+        {
+          icon: iconUse("star"),
+          title: "Star",
+          key: "star",
+          command: "addLayerView",
+          args: [
+            "star",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "star");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+S" })
+        },
+        "-",
+        {
+          icon: iconUse("smooth"),
+          title: "Spline",
+          key: "spline",
+          command: "addLayerView",
+          args: [
+            "spline",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "spline");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+L" })
+        },
+        {
+          icon: iconUse("text_rotate"),
+          title: "TextPath",
+          key: "svg-texpath",
+          command: "addLayerView",
+          args: [
+            "svg-textpath",
+            {
+              backgroundColor: "transparent"
+            }
+          ],
+          closable: true,
+          nextTick: (editor2) => {
+            editor2.context.config.set("editing.svg.itemType", "svg-textpath");
+          },
+          shortcut: KeyStringMaker({ key: "Shift+T" })
+        }
+      ],
+      events: [
+        "config:editing.mode",
+        "config:editing.mode.itemType",
+        "config:editing.svg.itemType"
+      ],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && (editor2.context.config.is("editing.mode.itemType", "svg-rect") || editor2.context.config.is("editing.mode.itemType", "svg-circle") || editor2.context.config.is("editing.mode.itemType", "polygon") || editor2.context.config.is("editing.mode.itemType", "star") || editor2.context.config.is("editing.mode.itemType", "spline") || editor2.context.config.is("editing.mode.itemType", "svg-textpath"));
+      },
+      selectedKey: (editor2) => {
+        return editor2.context.config.get("editing.svg.itemType");
+      }
+    },
+    {
+      type: "button",
+      icon: "title",
+      events: ["config:editing.mode", "config:editing.mode.itemType"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.APPEND) && editor2.context.config.is("editing.mode.itemType", "text");
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("addLayerView", "text");
+      }
+    },
+    {
+      type: "button",
+      tooltip: "Handle",
+      icon: "pantool",
+      events: ["config:editing.mode"],
+      selected: (editor2) => {
+        return editor2.context.config.is("editing.mode", EditingMode.HAND);
+      },
+      action: (editor2) => {
+        editor2.context.commands.emit("toggleHandTool");
+      }
+    }
+  ]);
+  editor.registerMenu("toolbar.right", [
+    {
+      type: "button",
+      icon: (editor2) => {
+        if (editor2.context.config.is("editor.theme", "dark")) {
+          return "dark";
+        } else {
+          return "light";
+        }
+      },
+      events: ["config:editor.theme"],
+      action: (editor2) => {
+        editor2.context.config.toggleWith("editor.theme", "light", "dark");
+      }
+    }
+  ]);
 }
 var DrawManager$1 = "";
 class DrawManager extends EditorElement {
@@ -54243,12 +52245,12 @@ class PathGenerator {
     this.makeMovePositionGuide();
     return this.toSVGString();
   }
-  makeTriangleDistancePointGuide(first, second2) {
-    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
-    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
-    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
-    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
-    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+  makeTriangleDistancePointGuide(first, second) {
+    var minX = Math.min(first.startPoint.x, second.startPoint.x);
+    var maxX = Math.max(first.startPoint.x, second.startPoint.x);
+    var minY = Math.min(first.startPoint.y, second.startPoint.y);
+    var maxY = Math.max(first.startPoint.y, second.startPoint.y);
+    if (first.startPoint.x < second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
       var centerX = minX;
       var centerY = minY;
@@ -54257,11 +52259,11 @@ class PathGenerator {
       var { x, y } = getXYInCircle(0, dist2, centerX, centerY);
       var last = getXYInCircle(angle, dist2, centerX, centerY);
       this.segmentManager.addDistanceAngle(last, dist2, dist2, angle, { x, y }, { x: x - dist2, y });
-    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y > second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+    } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y < second.startPoint.y) {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
@@ -57782,6 +55784,104 @@ class DomRender extends ItemRender {
       "grid-row-gap": item.gridRowGap
     };
   }
+  toBoxShadowCSS(item) {
+    const boxShadow2 = item.computed("boxShadow", (boxShadow3 = []) => {
+      return boxShadow3.map((shadow2) => {
+        const { inset, color: color2, offsetX, offsetY, blurRadius, spreadRadius } = shadow2;
+        return ` ${inset === "inset" ? "inset" : ""} ${Length.px(offsetX)} ${Length.px(offsetY)} ${Length.px(blurRadius)} ${Length.px(spreadRadius)} ${color2}`;
+      }).join(", ") || void 0;
+    });
+    return {
+      "box-shadow": boxShadow2
+    };
+  }
+  toTextShadowCSS(item) {
+    const textShadow2 = item.computed("textShadow", (textShadow3 = []) => {
+      return textShadow3.map((shadow2) => {
+        const { color: color2, offsetX, offsetY, blurRadius } = shadow2;
+        return ` ${Length.px(offsetX)} ${Length.px(offsetY)} ${Length.px(blurRadius)}  ${color2}`;
+      }).join(", ") || void 0;
+    });
+    return {
+      "text-shadow": textShadow2
+    };
+  }
+  toFilterCSS(item) {
+    const filter2 = item.computed("filter", (filter3 = []) => {
+      return filter3.map((f) => {
+        switch (f.type) {
+          case "blur":
+          case "grayscale":
+          case "sepia":
+          case "invert":
+          case "opacity":
+          case "saturate":
+          case "hue-rotate":
+          case "brightness":
+          case "contrast":
+            return `${f.type}(${f.value})`;
+          case "drop-shadow":
+            return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+        }
+      }).join(" ") || void 0;
+    });
+    return {
+      filter: filter2
+    };
+  }
+  toBackdropFilterCSS(item) {
+    const backdropFilter2 = item.computed("backdropFilter", (filter2 = []) => {
+      filter2 = filter2 || [];
+      return filter2.map((f) => {
+        switch (f.type) {
+          case "blur":
+          case "grayscale":
+          case "sepia":
+          case "invert":
+          case "opacity":
+          case "saturate":
+          case "hue-rotate":
+          case "brightness":
+          case "contrast":
+            return `${f.type}(${f.value})`;
+          case "drop-shadow":
+            return `drop-shadow(${f.offsetX} ${f.offsetY} ${f.blurRadius} ${f.color})`;
+        }
+      }).join(" ") || void 0;
+    });
+    return {
+      "backdrop-filter": backdropFilter2
+    };
+  }
+  toTransitionCSS(item) {
+    const transition2 = item.computed("transition", (transition3 = []) => {
+      return transition3.map((t) => {
+        return `${t.name} ${t.duration} ${t.timingFunction} ${t.delay}`;
+      }).join(", ") || void 0;
+    });
+    return {
+      transition: transition2
+    };
+  }
+  toAnimationCSS(item) {
+    const animation2 = item.computed("animation", (animation3 = []) => {
+      return animation3.map((t) => {
+        return [
+          t.duration,
+          t.timingFunction,
+          t.delay,
+          t.iterationCount,
+          t.direction,
+          t.fillMode,
+          t.playState,
+          t.name
+        ].join(" ");
+      }).join(", ") || void 0;
+    });
+    return {
+      animation: animation2
+    };
+  }
   toBorderCSS(item) {
     const borderCSS = item.computed("border", (border2) => {
       const obj2 = __spreadValues({}, STRING_TO_CSS(border2));
@@ -57887,7 +55987,6 @@ class DomRender extends ItemRender {
     result["word-spacing"] = item.wordSpacing;
     result["line-height"] = item.lineHeight;
     result["text-indent"] = item.textIndent;
-    result["text-shadow"] = item.textShadow;
     result["text-overflow"] = item.textOverflow;
     result["text-wrap"] = item.textWrap;
     result["position"] = item.position;
@@ -57897,11 +55996,6 @@ class DomRender extends ItemRender {
     result["mix-blend-mode"] = item.mixBlendMode;
     result["transform-origin"] = item.transformOrigin;
     result["border-radius"] = item.borderRadius;
-    result["filter"] = item.filter;
-    result["backdrop-filter"] = item.backdropFilter;
-    result["box-shadow"] = item.boxShadow;
-    result["animation"] = item.animation;
-    result["transition"] = item.transition;
     return result;
   }
   toVariableCSS(item) {
@@ -58020,6 +56114,7 @@ class DomRender extends ItemRender {
   }
   generateView(item, prefix = "", appendCSS = "") {
     var cssString = `
+      ${this.toKeyframeCSS(item)}
   ${prefix} {  /* ${item.itemType} */
       ${CSS_TO_STRING(this.toCSS(item), "\n    ")}; 
       ${appendCSS}
@@ -58033,8 +56128,50 @@ class DomRender extends ItemRender {
     `;
     return cssString;
   }
+  convertKey(key) {
+    switch (key) {
+      case "x":
+        return "left";
+      case "y":
+        return "top";
+    }
+    return key;
+  }
+  convertValue(key, value) {
+    switch (key) {
+      case "left":
+        return Length.px(value);
+      case "top":
+        return Length.px(value);
+    }
+    return key;
+  }
+  toKeyframeCSS(item) {
+    const keyframes = item.computed("keyframes", (keyframes2) => {
+      const text2 = keyframes2.map((it) => {
+        return `
+          @keyframes ${it.name} {
+            ${it.offsets.map((offset) => {
+          var _a;
+          return `
+              ${offset.offset}% {
+                ${(_a = offset.properties) == null ? void 0 : _a.map((p) => {
+            const key = this.convertKey(p.key);
+            const value = this.convertValue(key, p.value);
+            return `${key}: ${value};`;
+          }).join("\n")}
+              }
+              `;
+        }).join("\n")}
+          }
+          `;
+      }).join("\n");
+      return text2;
+    });
+    return keyframes;
+  }
   toCSS(item) {
-    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
+    return valueFilter(Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toBoxModelCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toBoxShadowCSS(item), this.toTextShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toTransitionCSS(item), this.toAnimationCSS(item), this.toLayoutCSS(item), this.toSizeCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item)));
   }
   toStyleCode(item) {
     const cssString = this.generateView(item, `[data-renderer-id='${this.renderer.id}'] .element-item[data-id='${item.id}']`);
@@ -62370,24 +60507,16 @@ function text(editor) {
   });
 }
 var textShadow$1 = [
-  { name: "Mystic", shadow: `20px 0px 10px rgb(0, 0, 0)` },
-  { name: "Monoton", shadow: `0px -78px rgb(255, 196, 0)` },
-  { name: "Radioactive", shadow: `-18px -18px 20px rgb(87, 255, 9);` },
-  { name: "Bungee", shadow: `-18px 18px 0 rgb(66, 45, 45)` },
-  { name: "Sprint", shadow: `-20px -108px 0px rgba(255, 255, 255, 0.445)` },
-  { name: "Prickly", shadow: `-18px -18px 2px #777` },
   {
-    name: "Codystar",
-    shadow: `1px 1px 10px rgb(16, 72, 255), 1px 1px 10px rgb(0, 195, 255)`
-  },
-  { name: "Elegant", shadow: `-18px 8px 18px #b4bbbb` },
-  {
-    name: "Playful",
-    shadow: `
-        -2px -2px 0px #888,
-        4px 4px 0px #888,
-        7px 7px 0px #888
-    `
+    name: "Mystic",
+    shadows: [
+      {
+        offsetX: 20,
+        offsetY: 0,
+        blurRadius: 10,
+        color: "rgb(0,0,0)"
+      }
+    ]
   }
 ];
 var TextShadowProperty$1 = "";
@@ -62414,17 +60543,17 @@ class TextShadowProperty extends BaseProperty {
   }
   [CLICK("$add")]() {
     const index2 = +this.refs.$select.value;
-    this.children.$textshadow.trigger("add", textShadow$1[index2].shadow);
+    this.children.$textshadow.trigger("add", textShadow$1[index2].shadows);
   }
   [LOAD("$shadowList")]() {
     var current = this.$context.selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
       key: "textShadow",
-      value: current.textShadow,
+      value: clone$1(current.textShadow),
       onchange: (key, value) => {
         this.$commands.executeCommand("setAttribute", "change text shadow", this.$context.selection.packByValue({
-          [key]: value
+          [key]: clone$1(value)
         }));
       }
     });
@@ -62442,97 +60571,6 @@ function textShadow(editor) {
   });
 }
 var TransitionProperty$1 = "";
-const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^)]*)\))/gi;
-class Transition extends PropertyItem {
-  static parse(obj2) {
-    return new Transition(obj2);
-  }
-  getDefaultObject() {
-    return {
-      name: "all",
-      duration: Length.second(0),
-      timingFunction: "linear",
-      delay: Length.second(0)
-    };
-  }
-  toCloneObject() {
-    return {
-      name: this.json.name,
-      duration: this.json.duration + "",
-      timingFunction: this.json.timingFunction,
-      delay: this.json.delay + ""
-    };
-  }
-  toCSS() {
-    return {
-      transition: this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return [json.name, json.duration, json.timingFunction, json.delay].join(" ");
-  }
-  static join(list2) {
-    return list2.map((it) => new Transition(it).toString()).join(",");
-  }
-  static add(transition2, item = {}) {
-    const list2 = Transition.parseStyle(transition2);
-    list2.push(Transition.parse(item));
-    return Transition.join(list2);
-  }
-  static remove(transition2, removeIndex) {
-    return Transition.filter(transition2, (it, index2) => {
-      return removeIndex != index2;
-    });
-  }
-  static filter(transition2, filterFunction) {
-    return Transition.join(Transition.parseStyle(transition2).filter((it) => filterFunction(it)));
-  }
-  static replace(transition2, replaceIndex, valueObject) {
-    var list2 = Transition.parseStyle(transition2);
-    if (list2[replaceIndex]) {
-      list2[replaceIndex] = valueObject;
-    } else {
-      list2.push(valueObject);
-    }
-    return Transition.join(list2);
-  }
-  static get(transition2, index2) {
-    var arr = Transition.parseStyle(transition2);
-    return arr[index2];
-  }
-  static parseStyle(transition2) {
-    var list2 = [];
-    if (!transition2)
-      return list2;
-    const result = customParseConvertMatches(transition2, TRANSITION_TIMING_REG);
-    list2 = result.str.split(",").map((it) => {
-      const fields2 = it.split(" ").filter(Boolean);
-      if (fields2.length >= 4) {
-        return {
-          name: fields2[0],
-          duration: Length.parse(fields2[1]),
-          timingFunction: customParseReverseMatches(fields2[2], result.matches),
-          delay: Length.parse(fields2[3])
-        };
-      } else if (fields2.length >= 3) {
-        return {
-          name: fields2[0],
-          duration: Length.parse(fields2[1]),
-          delay: Length.parse(fields2[2])
-        };
-      } else if (fields2.length >= 1) {
-        return {
-          name: fields2[0],
-          duration: Length.parse(fields2[1])
-        };
-      } else {
-        return {};
-      }
-    });
-    return list2.map((it) => Transition.parse(it));
-  }
-}
 class TransitionProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("transition.property.title");
@@ -62552,7 +60590,7 @@ class TransitionProperty extends BaseProperty {
     var current = this.$context.selection.current;
     if (!current)
       return "";
-    return Transition.parseStyle(current.transition).map((it, index2) => {
+    return current.transition.map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
       return `
@@ -62581,36 +60619,43 @@ class TransitionProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE(REFRESH_SELECTION)]() {
-    this.refreshShowIsNot([]);
+    this.refresh();
   }
   [CLICK("$add")]() {
     var current = this.$context.selection.current;
     if (current) {
+      const transition2 = current.transition || [];
+      transition2.push({
+        name: "all",
+        duration: "1s",
+        timingFunction: "linear",
+        delay: "0s"
+      });
       this.$commands.executeCommand("setAttribute", "add transition", this.$context.selection.packByValue({
-        transition: (item) => Transition.add(item.transition)
+        transition: [...transition2]
       }));
       this.nextTick(() => {
-        window.setTimeout(() => {
-          this.refresh();
-        }, 100);
-      });
+        this.refresh();
+      }, 10);
     } else {
       window.alert("Select a layer");
     }
   }
   getCurrentTransition() {
-    return this.current.transitions[this.selectedIndex];
+    return this.current.transition[this.selectedIndex];
   }
   [CLICK("$transitionList .tools .del")](e) {
     var removeIndex = e.$dt.attr("data-index");
     var current = this.$context.selection.current;
     if (!current)
       return;
-    current.reset({
-      transition: Transition.remove(current.transition, removeIndex)
-    });
-    this.emit("refreshElement", current);
-    this.refresh();
+    current.transition.splice(removeIndex, 1);
+    this.$commands.executeCommand("setAttribute", "add transition", this.$context.selection.packByValue({
+      transition: [...current.transition]
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
   selectItem(selectedIndex, isSelected = true) {
     if (isSelected) {
@@ -62627,7 +60672,7 @@ class TransitionProperty extends BaseProperty {
     this.current = this.$context.selection.current;
     if (!this.current)
       return;
-    this.currentTransition = Transition.get(this.current.transition, this.selectedIndex);
+    this.currentTransition = this.current.transition[this.selectedIndex];
     this.viewTransitionPropertyPopup();
   }
   viewTransitionPropertyPopup() {
@@ -62636,25 +60681,24 @@ class TransitionProperty extends BaseProperty {
     const transition2 = this.currentTransition;
     this.emit("showTransitionPropertyPopup", {
       changeEvent: "changeTransitionPropertyPopup",
-      data: transition2.toCloneObject(),
+      data: clone$1(transition2),
       instance: this
     });
   }
   [CLICK("$transitionList .preview")](e) {
     this.viewTransitionPicker(e.$dt);
   }
-  getRef(...args2) {
-    return this.refs[args2.join("")];
-  }
   [SUBSCRIBE("changeTransitionPropertyPopup")](data) {
     if (this.currentTransition) {
-      this.currentTransition.reset(__spreadValues({}, data));
       if (this.current) {
-        this.current.reset({
-          transition: Transition.replace(this.current.transition, this.selectedIndex, this.currentTransition)
-        });
-        this.emit("refreshElement", this.current);
-        this.refresh();
+        const transition2 = this.current.transition;
+        transition2[this.selectedIndex] = data;
+        this.$commands.executeCommand("setAttribute", "add transition", this.$context.selection.packByValue({
+          transition: [...transition2]
+        }));
+        this.nextTick(() => {
+          this.refresh();
+        }, 10);
       }
     }
   }
@@ -62802,7 +60846,7 @@ class TransitionPropertyPopup extends BasePopup {
   templateForDelay() {
     return `
     <div class='delay'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
       ref: "$delay",
       label: "Delay",
       key: "delay",
@@ -62816,7 +60860,7 @@ class TransitionPropertyPopup extends BasePopup {
   templateForDuration() {
     return `
     <div class='duration'>
-      ${createComponent("RangeEditor", {
+      ${createComponent("InputRangeEditor", {
       ref: "$duration",
       label: "Duration",
       key: "duration",
@@ -63350,10 +61394,13 @@ class Hue extends EditorElement {
       style: {
         left: Length.makePercent(hue, 360)
       },
-      class: {
-        first: hue <= this.state.minValue,
-        last: hue >= this.state.maxValue
-      }
+      class: [
+        "drag-bar",
+        {
+          first: hue <= this.state.minValue,
+          last: hue >= this.state.maxValue
+        }
+      ]
     };
   }
   [POINTERSTART("$container") + MOVE("movePointer") + END("moveEndPointer")]() {
@@ -63416,10 +61463,13 @@ class Opacity extends EditorElement {
       style: {
         left: Length.percent(opacity2)
       },
-      class: {
-        first: opacity2 <= this.state.minValue,
-        last: opacity2 >= this.state.maxValue
-      }
+      class: [
+        "drag-bar2",
+        {
+          first: opacity2 <= this.state.minValue,
+          last: opacity2 >= this.state.maxValue
+        }
+      ]
     };
   }
   [POINTERSTART("$container") + MOVE("movePointer") + END("moveEndPointer")]() {
@@ -63907,6 +61957,7 @@ var designEditorPlugins = [
   gradient,
   layertab,
   inspector,
+  depth,
   alignment,
   position,
   layout,
@@ -65344,7 +63395,6 @@ class SVGRender extends DomRender {
       "word-spacing": item.wordSpacing,
       "line-height": item.lineHeight,
       "text-indent": item.textIndent,
-      "text-shadow": item.textShadow,
       "text-overflow": item.textOverflow,
       "text-wrap": item.textWrap,
       "z-index": item.zIndex,
@@ -65352,15 +63402,12 @@ class SVGRender extends DomRender {
       "mix-blend-mode": item.mixBlendMode,
       "transform-origin": item.transformOrigin,
       "border-radius": item.borderRadius,
-      filter: item.filter,
-      "backdrop-filter": item.backdropFilter,
-      "box-shadow": item.boxShadow,
       animation: item.animation,
       transition: item.transition
     };
   }
   toCSS(item) {
-    const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toLayoutCSS(item));
+    const css = Object.assign({}, this.toVariableCSS(item), this.toDefaultCSS(item), this.toClipPathCSS(item), this.toWebkitCSS(item), this.toTextClipCSS(item), this.toTransformCSS(item), this.toLayoutItemCSS(item), this.toBorderCSS(item), this.toBackgroundImageCSS(item), this.toTextShadowCSS(item), this.toBoxShadowCSS(item), this.toFilterCSS(item), this.toBackdropFilterCSS(item), this.toLayoutCSS(item));
     delete css.left;
     delete css.top;
     delete css.width;

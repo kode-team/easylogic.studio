@@ -1,3 +1,5 @@
+// import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
+
 import {
   CLICK,
   LOAD,
@@ -14,9 +16,8 @@ import {
   classnames,
 } from "sapa";
 
-import { PathParser } from "elf/core/parser/PathParser";
+// import { PathParser } from "elf/core/parser/PathParser";
 import { timecode, second } from "elf/core/time";
-import makeInterpolateOffset from "elf/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import { MOVE, END, RESIZE_WINDOW } from "elf/editor/types/event";
 import { EditorElement } from "elf/editor/ui/common/EditorElement";
 import { Length } from "elf/editor/unit/Length";
@@ -40,36 +41,31 @@ export default class TimelineKeyframeList extends EditorElement {
     return this.rect.totalWidth * rate + PADDING / 2;
   }
 
-  makeSubOffset(property, value) {
-    var subOffset = [];
-
-    if (property === "offset-path") {
-      var [id] = value.split(",").map((it) => it.trim());
-      var pathLayer = this.$model.get(id);
-      if (pathLayer) {
-        value = pathLayer.d;
-      }
-    } else {
-      value = null;
-    }
-
-    if (value) {
-      var parser = new PathParser(value);
-      var { totalLength, interpolateList } = makeInterpolateOffset(
-        parser.segments
-      );
-
-      var prevLength = 0;
-      subOffset = interpolateList.map((it) => {
-        var obj = { totalLength, length: it.length + prevLength };
-        prevLength += it.length;
-        return obj;
-      });
-
-      subOffset.pop(); // delete last length
-    }
-
-    return subOffset;
+  makeSubOffset(/*property, value*/) {
+    // var subOffset = [];
+    // if (property === "offset-path") {
+    //   var [id] = value.split(",").map((it) => it.trim());
+    //   var pathLayer = this.$model.get(id);
+    //   if (pathLayer) {
+    //     value = pathLayer.d;
+    //   }
+    // } else {
+    //   value = null;
+    // }
+    // if (value) {
+    //   var parser = new PathParser(value);
+    //   // var { totalLength, interpolateList } = makeInterpolateOffset(
+    //   //   parser.segments
+    //   // );
+    //   var prevLength = 0;
+    //   subOffset = interpolateList.map((it) => {
+    //     var obj = { totalLength, length: it.length + prevLength };
+    //     prevLength += it.length;
+    //     return obj;
+    //   });
+    //   subOffset.pop(); // delete last length
+    // }
+    // return subOffset;
   }
 
   makeKeyframe(layerId, timeline, property) {
