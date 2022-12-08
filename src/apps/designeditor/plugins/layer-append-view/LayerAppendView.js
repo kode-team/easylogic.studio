@@ -99,7 +99,7 @@ export default class LayerAppendView extends EditorElement {
       : this.$viewport.getWorldPosition(e);
 
     this.state.dragStart = true;
-    this.state.color = "#C4C4C4"; //Color.random()
+    this.state.color = "#ececec"; //Color.random()
     this.state.text = "";
 
     const minX = this.initMousePoint[0];
