@@ -54,7 +54,7 @@
     "vite-plugin-dts": "^1.0.5",
     "vite-plugin-eslint": "^1.5.2",
     "vite-plugin-replace": "^0.1.1",
-    "vitest": "0.0.107"
+    "vitest": "4.1.0"
   },
   "scripts": {
     "render": "node ./saparo/index.js",
